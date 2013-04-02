@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/project.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE project SYSTEM "project.dtd">
+
+    <project>
+    ...
+    </project>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT project (processor-list|datasource-list|description)*>
+<!ATTLIST project
+    name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT description (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT datasource-list (datasource)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT datasource (target-list|format-list|property-list|position|description)*>
+<!ATTLIST datasource
+    class-name CDATA #IMPLIED
+    name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT position EMPTY>
+<!ATTLIST position
+    y CDATA #IMPLIED
+    x CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT property-list (property)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT property (#PCDATA)>
+<!ATTLIST property
+    type CDATA #IMPLIED
+    name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT format-list (format-entry)*>
+<!ATTLIST format-list
+    direction CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT format-entry (format)*>
+<!ATTLIST format-entry
+    direction CDATA #IMPLIED
+    name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT format (format|property)*>
+<!ATTLIST format
+    type CDATA #IMPLIED
+    form CDATA #IMPLIED
+    name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT target-list (target)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT target EMPTY>
+<!ATTLIST target
+    name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT processor-list (processor)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT processor (transform-rule-list|target-list|position)*>
+<!ATTLIST processor
+    class-name CDATA #IMPLIED
+    name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT transform-rule-list (transform-rule-entry)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT transform-rule-entry (transform-rule)*>
+<!ATTLIST transform-rule-entry
+    target-name CDATA #IMPLIED
+    source-name CDATA #IMPLIED
+    name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT transform-rule (transform-rule-item)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT transform-rule-item (script|transform-rule-item)*>
+<!ATTLIST transform-rule-item
+    format-name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT script (#PCDATA)>
