@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="tool/jquery/js/jquery-1.9.0.js"></script>
+        <script type="text/javascript" src="tool/jquery/js/jquery-ui-1.10.0.custom.js"></script>
+        <!-- Splitter plug-in -->
+        <link rel="stylesheet" type="text/css" href="tool/splitter/splitter.css"/>
+        <script type="text/javascript" src="tool/splitter/splitter.js"></script>
+        <!--tree-->
+        <link rel="stylesheet" href="tool/tree/skin-vista/ui.dynatree.css" type="text/css"/>
+        <script type="text/javascript" src="tool/tree/jquery.cookie.js"></script>
+        <script type="text/javascript" src="tool/tree/jquery.dynatree.js"></script>
+        <!-- D3 -->
+        <script type="text/javascript" src="tool/d3/d3.js"></script>
+        <!--lumens-->
+        <link rel="stylesheet" type="text/css" href="lumens/styles/lumens.css"/>
+        <script type="text/javascript" src="lumens/controls.js"></script>
+        <script type="text/javascript" src="lumens/lumens.js"></script>
+        <style>
+            body {
+                padding: 0px;
+                margin: 0px;
+            }
+
+            #holder {
+                width: 100%;
+                height: 100%;
+            }
+
+            .datasource-wizard {
+                border: 1px solid rgb(220, 220, 220);
+                width:100%;
+                height:100%;
+                display: table;
+                border-spacing: 0;
+            }
+
+            .wizard-title {
+                font-size: 14px;
+                text-decoration: none;
+                color: rgba(255,255,255,1);
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+                padding-left: 5px;
+            }
+
+            .wizard-title-icon {
+                margin: 2px 2px 0 10px;
+                vertical-align: middle;
+                background-repeat: no-repeat;
+            }
+            .wizard-list-item {
+                height: 30px;
+                padding-left: 5px;
+                cursor: pointer;
+                font-size: 14px;
+                text-decoration: none;
+                text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.25);
+            }
+
+            .wizard-list-item:hover {
+                color: rgba(255,255,255,1);
+                background-color: #b1b3b5;
+                background-position: 0 -15px;
+                -webkit-transition: background-position 0.1s linear;
+                -moz-transition: background-position 0.1s linear;
+                -o-transition: background-position 0.1s linear;
+                transition: background-position 0.1s linear;
+            }
+
+            .wizard-data-list-item {
+                display: list-item;
+                height: 40px;
+                padding-left: 5px;
+                cursor: pointer;
+                font-size: 14px;
+                text-decoration: none;
+                text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.25);
+                list-style: none;
+                line-height: 14px;
+                text-align: left;
+                white-space: nowrap;
+                outline: 0;
+                list-style-type: none;
+            }
+
+            .wizard-data-list-item:hover {
+                background-color: #b1b3b5;
+                background-position: 0 -15px;
+                -webkit-transition: background-position 0.1s linear;
+                -moz-transition: background-position 0.1s linear;
+                -o-transition: background-position 0.1s linear;
+                transition: background-position 0.1s linear;
+            }
+        </style>
+        <script type="text/javascript">
+            jQuery(function() {
+                //var dsCreator = DatasourceCreator.create("dscreator", $("#dscreatorHolder"));
+                $(".wizard-data-list-item").css("display", "block");
+                $(".wizard-data-list-item").click(function() {
+                    var ul = $(this).find("ul");
+                    ul.slideToggle(200);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="dscreatorHolder" style="width:800px;height:400px">
+            <table border="0" class="datasource-wizard" width="100%" height="100%">
+                <tr>
+                    <td height="30px" style="background-color:#157FCC; border-bottom: 1px solid rgb(120, 120, 120)" colspan="2">
+                        <img class="wizard-title-icon" src="lumens/images/component/transform.png">
+                        <span class="wizard-title">Datasource Wizard</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color: rgb(236, 236, 236)" width="150px">
+                        <div style="height:100%;border-bottom: 1px solid rgb(220, 220, 220);overflow: auto">
+                            <ul style="margin: 0px;list-style-type: none; font-size:14px; padding-top: 5px;">
+                                <li class="wizard-list-item"><div style="padding-top:6px;">Protocols</div></li>
+                                <li class="wizard-list-item"><div style="padding-top:6px;">Databases</div></li>
+                                <li class="wizard-list-item"><div style="padding-top:6px;">Applications</div></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td width="650px">
+                        <div style="background-color: rgb(250, 250, 250);overflow:auto;float:left;width:75%;height:100%;border-bottom: 1px solid rgb(220, 220, 220);">
+                            <ul>
+                                <li class="wizard-data-list-item">
+                                    <span><div style="padding-top:12px;padding-left:20px;">SOAP WebService</div></span>
+                                    <ul style="padding-left:20px;list-style-type: none; display: none">
+                                        <li class="dimension">SOAP 1.1</li>
+                                        <li class="dimension">SOAP 1.2</li>
+                                    </ul>
+                                </li>
+                                <li class="wizard-data-list-item">
+                                    <span><div style="padding-top:12px;padding-left:20px;">SOAP WebService</div></span>
+                                    <ul style="padding-left:20px;list-style-type: none; display: none">
+                                        <li>SOAP 1.1</li>
+                                        <li>SOAP 1.2</li>
+                                    </ul>
+                                </li>
+                                <li class="wizard-data-list-item">
+                                    <span><div style="padding-top:12px;padding-left:20px;">SOAP WebService</div></span>
+                                    <ul style="padding-left:20px;list-style-type: none; display: none">
+                                        <li>SOAP 1.1</li>
+                                        <li>SOAP 1.2</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div style="background-color: rgb(236, 236, 236);float:left;width:25%;height:100%;border-bottom: 1px solid rgb(220, 220, 220);">
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 100px; width: 100%;">
+                        <div style="width:100%;height:100%;background-color: rgb(250, 250, 250);"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

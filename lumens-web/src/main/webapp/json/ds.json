@@ -1,0 +1,64 @@
+{
+    "ds":[
+    {
+        "title": "Protocol",
+        "isFolder": true,
+        "icon": "../../../lumens/images/component/protocol.png",
+        "children": [
+        {
+            "title": "SOAP",
+            "icon": "../../../lumens/images/component/soap.png",
+            "addClass": "component-node"
+        },
+
+        {
+            "title": "REST",
+            "icon": "../../../lumens/images/component/rest.png",
+            "addClass": "component-node"
+        }
+        ]
+    },
+    {
+        "title": "Application",
+        "isFolder": true,
+        "icon": "../../../lumens/images/component/apps.png",
+        "children": [
+        {
+            "title": "Database",
+            "icon": "../../../lumens/images/component/database.png",
+            "addClass": "component-node"
+        }
+        ]
+    },
+    {
+        "title": "File",
+        "isFolder": true,
+        "icon": "../../../lumens/images/component/file.png",
+        "children": [
+        {
+            "title": "XML",
+            "icon": "../../../lumens/images/component/xml.png",
+            "addClass": "component-node"
+        },
+
+        {
+            "title": "Text",
+            "icon": "../../../lumens/images/component/text.png",
+            "addClass": "component-node"
+        }
+        ]
+    },
+    {
+        "title": "Processor",
+        "isFolder": true,
+        "icon": "../../../lumens/images/component/processor.png",
+        "children": [
+        {
+            "title": "Transform",
+            "icon": "../../../lumens/images/component/transform.png",
+            "addClass": "component-node"
+        }
+        ]
+    }
+    ]
+}

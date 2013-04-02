@@ -1,0 +1,64 @@
+{
+    "ds":[
+    {
+        "title": "aaaaaa",
+        "isFolder": true,
+        "icon": "../../../lumens/images/component/protocol.png",
+        "children": [
+        {
+            "title": "aaaaaaa",
+            "icon": "../../../lumens/images/component/soap.png",
+            "addClass": "component-node"
+        },
+
+        {
+            "title": "aaaaaa",
+            "icon": "../../../lumens/images/component/rest.png",
+            "addClass": "component-node"
+        }
+        ]
+    },
+    {
+        "title": "bbbbbbb",
+        "isFolder": true,
+        "icon": "../../../lumens/images/component/apps.png",
+        "children": [
+        {
+            "title": "bbbbbbbb",
+            "icon": "../../../lumens/images/component/database.png",
+            "addClass": "component-node"
+        }
+        ]
+    },
+    {
+        "title": "ccccccc",
+        "isFolder": true,
+        "icon": "../../../lumens/images/component/file.png",
+        "children": [
+        {
+            "title": "ccccccc",
+            "icon": "../../../lumens/images/component/xml.png",
+            "addClass": "component-node"
+        },
+
+        {
+            "title": "ddddddd",
+            "icon": "../../../lumens/images/component/text.png",
+            "addClass": "component-node"
+        }
+        ]
+    },
+    {
+        "title": "eeeeeee",
+        "isFolder": true,
+        "icon": "../../../lumens/images/component/transform.png",
+        "children": [
+        {
+            "title": "eeeeeee",
+            "icon": "../../../lumens/images/component/transform.png",
+            "addClass": "component-node"
+        }
+        ]
+    }
+    ]
+}
