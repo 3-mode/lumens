@@ -1,0 +1,5 @@
+var newName = @asset.computer.name + "-HP" + "@asset.computer.name"
+            + @asset.computer.price + @asset.'a.b.c'.name;
+if (@person.name != "james")
+    newName="james";
+return newName + "-test-script";

@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/transform-rule.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE transform-rule-list SYSTEM "transform-rule.dtd">
+
+    <transform-rule-list>
+    ...
+    </transform-rule-list>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT transform-rule-list (transform-rule)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT transform-rule (transform-rule-item)*>
+<!ATTLIST transform-rule
+    name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT transform-rule-item (script|transform-rule-item)*>
+<!ATTLIST transform-rule-item
+    array-iteration-path CDATA #IMPLIED
+    format-name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT script (#PCDATA)>
