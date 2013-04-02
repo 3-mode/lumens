@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/format.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE format-list SYSTEM "format.dtd">
+
+    <format-list>
+    ...
+    </format-list>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT format-list (format)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT format (format|property)*>
+<!ATTLIST format
+    type CDATA #IMPLIED
+    form CDATA #IMPLIED
+    name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT property (#PCDATA)>
+<!ATTLIST property
+    type CDATA #IMPLIED
+    name CDATA #IMPLIED
+  >
