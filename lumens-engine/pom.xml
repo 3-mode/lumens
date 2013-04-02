@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>lumens</artifactId>
+    <groupId>com.lumens</groupId>
+    <version>1.0</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.lumens.engine</groupId>
+  <artifactId>lumens-engine</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+
+  <name>lumens-engine</name>
+    <dependencies>
+        <dependency>
+            <groupId>com.lumens.connector</groupId>
+            <artifactId>lumens-connector</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lumens.io</groupId>
+            <artifactId>lumens-io</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
+</project>
