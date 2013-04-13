@@ -524,13 +524,13 @@ Lumens.RuleTreeEditor.create = function(args) {
     var _barWidth = 200;
     var _scrollbar_width = 10;
     /**
-                     * args = {
-                     *   _holderId: "#yourId",
-                     *   rightItemDropped: function(data_src, data_dst) {},
-                     *   rightItemSelected: function(data_dst) {},
-                     *   leftItemSelected: function(data_src) {}
-                     * }
-                     */
+     * args = {
+     *   _holderId: "#yourId",
+     *   rightItemDropped: function(data_src, data_dst) {},
+     *   rightItemSelected: function(data_dst) {},
+     *   leftItemSelected: function(data_src) {}
+     * }
+    */
     var _rightItemDropped = args.rightItemDropped;
     var _rightItemSelected = args.rightItemSelected;
     var _leftItemSelected = args.leftItemSelected;
