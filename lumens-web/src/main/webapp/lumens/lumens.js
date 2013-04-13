@@ -2,21 +2,18 @@
  * Copyright Lumens Team, Inc. All Rights Reserved.
  * Author: shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-var Lumens = {
-    version: 1.0
-};
 
 Lumens.create = function(parentId) {
     var lumensApp = {};
     var parent = $(parentId);
     // Build the web header
-    var header = Header.create(parent);
-    var navigator = Navigator.create("navigator", parent);
+    var header = Lumens.Header.create(parent);
+    var navigator = Lumens.Navigator.create("navigator", parent);
     navigator.setText("Welcome: Guest");
     // Initialize the splitter pane of the workspace
     $(parent).append('<div id="SplitterPane" class="layout-content splitter-pane-container" style="overflow:hidden;"></div>');
     var splitterPane = $('#SplitterPane');
-    splitterPane.append('<div id="LeftPane" style="position: absolute; z-index: 1; overflow-x: hidden; overflow-y: auto; left: 0px; width: 300px; height: 100%;"/>');
+    splitterPane.append('<div id="LeftPane" style="position: absolute; z-index: 1; overflow-x: hidden; overflow-y: auto; left: 0px; width: 200px; height: 100%;"/>');
     splitterPane.append('<div id="RightPane" style="position: absolute; z-index: 1; width: 100%; height: 100%; overflow: hidden"/>');
     splitterPane.splitter({
         splitVertical: true,
@@ -32,12 +29,12 @@ Lumens.create = function(parentId) {
     });
 
     // Load these settings from server ?
-    var accordian = Accordian.create(splitterPane.find("#LeftPane"), "Toolbox", "toolbar",
+    var accordian = Lumens.Accordian.create(splitterPane.find("#LeftPane"), "Toolbox", "toolbar",
         ["Datasource", "Project", "Settings"]);
     // Build compononet tree UI
-    var componentTree = ComponentTree.create(accordian.item(0), "componentTree", "SplitterPane");
+    var componentTree = Lumens.ComponentTree.create(accordian.item(0), "componentTree", "SplitterPane");
     var topPane = $("#TopPane");
-    var componentPane = ComponentPane.create(topPane, "100%", "100%");
+    var componentPane = Lumens.ComponentPane.create(topPane, "100%", "100%");
     // Add three demo component here
     /*
     var c1 = componentPane.addComponent("SOAP", "source", 100, 100);

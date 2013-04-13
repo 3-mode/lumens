@@ -12,7 +12,9 @@
 }
 
 body {
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-width: 800px;
 }
 
 /****************/
@@ -62,6 +64,38 @@ html,body {
     letter-spacing: 5px;
     color: rgba(255,255,255,1);
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.header-module-icon {
+    margin-top: 8px;
+    width:32px;
+    height:32px;
+}
+
+.header-module-icon-offset {
+    margin-left: 20px;
+}
+
+.header-module-nav {
+    float:right;
+    height: 100%;
+    width: 500px;
+}
+
+.header-tab-button {
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    text-align: center;
+    border-top: solid 1px rgb(18, 103, 165);
+    border-left: solid 1px rgb(18, 103, 165);
+    border-right: solid 1px rgb(18, 103, 165);
+    height:25px;
+    width:100px;
+    float:right;
+    margin-top:20px;
+    margin-right:10px;
+    background-color:rgb(240, 240, 240);
 }
 
 .navigator-bar {
@@ -120,13 +154,13 @@ html,body {
 .even {
     border-top: 1px solid rgb(220, 220, 220);
     border-bottom: 1px solid rgb(200, 200, 200);
-    background-color: #e3e1e1;
+    background-color: rgb(240, 240, 240);
 }
 
 .even:hover {
     font-size: 14px;
     text-decoration: none;
-    background-color: #b1b3b5;
+    background-color: #e3e1e1;
     background-position: 0 -15px;
     -webkit-transition: background-position 0.1s linear;
     -moz-transition: background-position 0.1s linear;

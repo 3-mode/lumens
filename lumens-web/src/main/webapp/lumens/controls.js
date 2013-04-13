@@ -2,19 +2,39 @@
  * Copyright Lumens Team, Inc. All Rights Reserved.
  * Author     : shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-
+var Lumens = {
+    version: 1.0
+};
 // Initialize the header class component first
-var Header = {};
-Header.create = function(parentObj) {
+Lumens.Header = {};
+Lumens.Header.create = function(parentObj) {
     var parent = parentObj;
     parent.append('<div class="layout-header"/>');
     var headerDiv = parent.find('.layout-header');
     headerDiv.append('<div class="header-logo"><div class="header-log-text">LUMENS<div class="logo-bag"/></div></div>');
+    //var moduleNav = $('<div class="header-module-nav"/>');
+    //moduleNav.appendTo(headerDiv);
+
+    var performance_tab = $('<div class="header-tab-button" style="opacity:.5;"/>');
+    var text = $('<div style="padding-top:5px;"/>');
+    performance_tab.appendTo(headerDiv);
+    text.appendTo(performance_tab);
+    text.html("Performance");
+    var designer_tab = $('<div class="header-tab-button"/>');
+    designer_tab.appendTo(headerDiv);
+    text = $('<div style="padding-top:5px;"/>');
+    text.appendTo(designer_tab);
+    text.html("Designer");
+    var manage_tab = $('<div class="header-tab-button" style="opacity:.5;"/>');
+    manage_tab.appendTo(headerDiv);
+    text = $('<div style="padding-top:5px;"/>');
+    text.appendTo(manage_tab);
+    text.html("Management");
 }
 
 // Initialize the body class component
-var Accordian = {};
-Accordian.create = function(parentObj, titleText, accordionIdText, itemObjList) {
+Lumens.Accordian = {};
+Lumens.Accordian.create = function(parentObj, titleText, accordionIdText, itemObjList) {
     var tThis = {};
     var parent = parentObj;
     var itemList = null;
@@ -109,8 +129,8 @@ Accordian.create = function(parentObj, titleText, accordionIdText, itemObjList) 
     return tThis;
 }
 
-var ComponentTree = {};
-ComponentTree.create = function(parentObj, strTreeIdText, strDragDropParentId) {
+Lumens.ComponentTree = {};
+Lumens.ComponentTree.create = function(parentObj, strTreeIdText, strDragDropParentId) {
     var tThis = {};
     var parent = parentObj;
     var strTreeId = strTreeIdText;
@@ -148,8 +168,8 @@ ComponentTree.create = function(parentObj, strTreeIdText, strDragDropParentId) {
     return tThis;
 }
 
-var ComponentPane = {};
-ComponentPane.create = function(holder, width, height) {
+Lumens.ComponentPane = {};
+Lumens.ComponentPane.create = function(holder, width, height) {
     var tThis = {};
     var COMP_List = [];
     holder.append('<div id="holderElement"/>');
@@ -494,10 +514,10 @@ ComponentPane.create = function(holder, width, height) {
     return tThis;
 }
 
-var RuleTreeEditor = {
+Lumens.RuleTreeEditor = {
     version: 1.0
 };
-RuleTreeEditor.create = function(args) {
+Lumens.RuleTreeEditor.create = function(args) {
     var RuleTreeEditorScrollBar = {};
     var _duration = 200;
     var _barHeight = 20;
@@ -1341,8 +1361,8 @@ RuleTreeEditor.create = function(args) {
     return tThis;
 };
 
-var Navigator = {};
-Navigator.create = function(id, holder) {
+Lumens.Navigator = {};
+Lumens.Navigator.create = function(id, holder) {
     var tThis = {};
     var myId = "#" + id;
     var parent = holder;
