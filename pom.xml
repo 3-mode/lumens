@@ -12,7 +12,6 @@
         <module>lumens-connector</module>
         <module>lumens-engine</module>
         <module>lumens-server</module>
-        <module>lumens-client</module>
         <module>lumens-log</module>
         <module>lumens-io</module>
         <module>lumens-web</module>
