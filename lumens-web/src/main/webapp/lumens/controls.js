@@ -60,7 +60,7 @@ Lumens.Accordian.create = function(parentObj, titleText, accordionIdText, itemOb
     // Build all item of the accordian
     for (var i = 0; i < itemObjList.length; ++i) {
         var itemHtml = '<li><div style="padding-top: 5px; position: absolute;">' + itemObjList[i] + '</div></li>'
-                + '<li><div id="' + itemPrefix + i + '" style="width: 100%; height:100%"/></li>';
+        + '<li><div id="' + itemPrefix + i + '" style="width: 100%; height:100%"/></li>';
         ul.append(itemHtml);
     }
     // Hide all the content except the first
@@ -180,15 +180,15 @@ Lumens.ComponentPane.create = function(holder, width, height) {
     SVGhodlerElement = d3.select("#holderElement");
     // Initailize the SVG object
     var SVG = SVGhodlerElement.append("svg")
-            .attr("width", holderElement.width() - 20)
-            .attr("height", holderElement.height() - 20);
+    .attr("width", holderElement.width() - 20)
+    .attr("height", holderElement.height() - 20);
 
     holder.droppable({
         drop: function(event, ui) {
             var paneOffset = $(this).offset();
             var offset = ui.helper.offset();
             tThis.addComponent(ui.helper.find('a').html(), "Untitled " + COMP_List.length,
-                    offset.left - paneOffset.left, offset.top - paneOffset.top);
+            offset.left - paneOffset.left, offset.top - paneOffset.top);
         }
     });
 
@@ -237,7 +237,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
             }
             // Build composition component UI unit
             thisG.call(d3.behavior.drag()
-                    .on("dragstart", function(d) {
+            .on("dragstart", function(d) {
                 // Move the G to front
                 this.parentNode.appendChild(this);
                 // event handling
@@ -249,12 +249,12 @@ Lumens.ComponentPane.create = function(holder, width, height) {
             }).on("drag", dragmove));
             // Body
             thisG.append('rect')
-                    .attr({
+            .attr({
                 "height": height_body_constant,
                 "width": width_constant,
                 "y": height_title_constant
             })
-                    .style({
+            .style({
                 "fill": "rgb(236, 236, 236)",
                 "stroke": "rgb(177, 177, 177)",
                 "stroke-width": .3
@@ -264,14 +264,14 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 "height": height_title_constant,
                 "width": width_constant
             })
-                    .style({
+            .style({
                 "fill": "rgb(214, 214, 214)",
                 "stroke": "rgb(177, 177, 177)",
                 "stroke-width": .5,
                 "cursor": "move"
             });
             thisG.append("image")
-                    .attr({
+            .attr({
                 "xlink:href": "lumens/images/status/16/disconnect.png",
                 "x": 8,
                 "y": 4,
@@ -279,7 +279,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 "height": 16
             });
             thisG.append("image")
-                    .attr({// TODO here need to refine to load the image dynamicly
+            .attr({// TODO here need to refine to load the image dynamicly
                 "xlink:href": "lumens/images/component/" + name.toLowerCase() + ".png",
                 "x": 4,
                 "y": 28,
@@ -287,27 +287,27 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 "height": 24
             });
             thisG.append("text")
-                    .attr({
+            .attr({
                 "x": 36,
                 "y": 18
             })
-                    .style({
+            .style({
                 "font-size": "14px",
                 "cursor": "move"
             })
-                    .text(name);
+            .text(name);
 
             thisG.append("text")
-                    .attr({
+            .attr({
                 "x": 40,
                 "y": 46
             })
-                    .style({
+            .style({
                 "font-size": "12px",
                 "overflow": "hidden",
                 "cursor": "default"
             })
-                    .text(label);
+            .text(label);
             // TODO if the label is a long text, need to trim it as a correct length
             //======================================End=========================================
 
@@ -343,7 +343,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                     var delta = 0;
 
                     if (s_right < t_center_x &&
-                            s_center_y > (t_bottom + delta)) {
+                    s_center_y > (t_bottom + delta)) {
                         // s_right --> t_bottom
                         return [{
                                 x: s_right,
@@ -359,8 +359,8 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                             }];
                     }
                     else if (s_right <= t_center_x &&
-                            s_center_y <= (t_bottom + delta) &&
-                            s_center_y >= (t_top - delta)) {
+                    s_center_y <= (t_bottom + delta) &&
+                    s_center_y >= (t_top - delta)) {
                         // s_right --> t_left
                         var ty = (s_center_y + t_center_y) / 2;
                         return [{
@@ -373,7 +373,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                             }];
                     }
                     else if (s_right < t_center_x &&
-                            s_center_y < t_top) {
+                    s_center_y < t_top) {
                         //s_right --> t_top
                         return  [{
                                 x: s_right,
@@ -386,8 +386,8 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                                 y: t_top
                             }];
                     } else if (s_bottom <= t_top &&
-                            s_right >= t_center_x &&
-                            s_left <= t_center_x) {
+                    s_right >= t_center_x &&
+                    s_left <= t_center_x) {
                         // s_bottom --> t_top
                         var tx = (s_center_x + t_center_x) / 2;
                         return [{
@@ -398,7 +398,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                                 y: t_top
                             }];
                     } else if (t_center_x < s_left &&
-                            t_top > (s_center_y + delta)) {
+                    t_top > (s_center_y + delta)) {
                         // s_left --> t_top
                         return [{
                                 x: s_left,
@@ -411,8 +411,8 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                                 y: t_top
                             }];
                     } else if (t_right <= s_left &&
-                            s_center_y <= (t_bottom + delta) &&
-                            s_center_y >= (t_top - delta)) {
+                    s_center_y <= (t_bottom + delta) &&
+                    s_center_y >= (t_top - delta)) {
                         // s_left --> out_right
                         ty = (s_center_y + t_center_y) / 2;
                         return [{
@@ -423,7 +423,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                                 y: ty
                             }];
                     } else if (t_center_x < s_left &&
-                            t_top < s_center_y) {
+                    t_top < s_center_y) {
                         // s_left --> t_bottom
                         return [{
                                 x: s_left,
@@ -436,8 +436,8 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                                 y: t_bottom
                             }];
                     } else if (s_top >= t_bottom &&
-                            t_center_x >= s_left &&
-                            t_center_x <= s_right) {
+                    t_center_x >= s_left &&
+                    t_center_x <= s_right) {
                         // s_top --> t_bottom
                         tx = (s_center_x + t_center_x) / 2;
                         return [{
@@ -471,16 +471,16 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 links.push(link);
                 c.links.push(link);
                 var line = d3.svg.line()
-                        .x(function(d) {
+                .x(function(d) {
                     return d.x;
                 })
-                        .y(function(d) {
+                .y(function(d) {
                     return d.y;
                 })
-                        .interpolate("linear");
+                .interpolate("linear");
                 link.L = link.G.append("svg:path");
                 link.L.attr("d", line(build_line_info(s, t, size)))
-                        .style({
+                .style({
                     "stroke-width": .5,
                     "stroke": "rgb(170, 170, 170)",
                     "fill": "none"
@@ -493,12 +493,11 @@ Lumens.ComponentPane.create = function(holder, width, height) {
             }
             tThis.setPosition = function(x, y) {
                 updateSVG(x, y);
-                thisG
-                        .data([{
+                thisG.data([{
                         x: x,
                         y: y
                     }])
-                        .attr("transform", function(d) {
+                .attr("transform", function(d) {
                     return "translate(" + d.x + "," + d.y + ")";
                 });
             }
@@ -578,13 +577,14 @@ Lumens.RuleTreeEditor.create = function(args) {
                 vGripG = vBarG.append('svg:g');
                 vGrip = vGripG.append('svg:rect');
                 vGripG.call(d3.behavior.drag()
-                        .on("dragstart", dragstart_v)
-                        .on("drag", dragmove_vbar_grip)
-                        .on("dragend", dragend_v))
-                        .on("mouseover", function(e) {
+                .on("dragstart", dragstart_v)
+                .on("drag", dragmove_vbar_grip)
+                .on("dragend", dragend_v))
+                .on("mouseover", function(e) {
                     vGrip.attr("class", "grip-active");
                     bOut = false;
-                }).on("mouseout", function(e) {
+                })
+                .on("mouseout", function(e) {
                     if (!bVDragging)
                         vGrip.attr("class", "grip-normal");
                     bOut = true;
@@ -592,7 +592,8 @@ Lumens.RuleTreeEditor.create = function(args) {
                 vGripBackground.on("mouseover", function(e) {
                     vGrip.attr("class", "grip-active");
                     bOut = false;
-                }).on("mouseout", function(e) {
+                })
+                .on("mouseout", function(e) {
                     if (!bVDragging)
                         vGrip.attr("class", "grip-normal");
                     bOut = true;
@@ -602,20 +603,22 @@ Lumens.RuleTreeEditor.create = function(args) {
                 hGripG = hBarG.append('svg:g');
                 hGrip = hGripG.append('svg:rect');
                 hGripG.call(d3.behavior.drag()
-                        .on("dragstart", dragstart_h)
-                        .on("drag", dragmove_hbar_grip)
-                        .on("dragend", dragend_h))
-                        .on("mouseover", function(e) {
+                .on("dragstart", dragstart_h)
+                .on("drag", dragmove_hbar_grip)
+                .on("dragend", dragend_h))
+                .on("mouseover", function(e) {
                     hGrip.attr("class", "grip-active");
                     bOut = false;
-                }).on("mouseout", function(e) {
+                })
+                .on("mouseout", function(e) {
                     if (!bHDragging)
                         hGrip.attr("class", "grip-normal");
                     bOut = true;
                 });
                 hGripBackground.on("mouseover", function(e) {
                     hGrip.attr("class", "grip-active");
-                }).on("mouseout", function(e) {
+                })
+                .on("mouseout", function(e) {
                     if (!bHDragging)
                         hGrip.attr("class", "grip-normal");
                 });
@@ -647,7 +650,7 @@ Lumens.RuleTreeEditor.create = function(args) {
             function dragmove_vbar_grip(d) {
                 var y = d.y + d3.event.dy;
                 if (y < (scb.scroll_v_y_limit)
-                        && y >= scb.scroll_origin_v_y) {
+                && y >= scb.scroll_origin_v_y) {
                     d.y = y;
                     vGripG.attr("transform", "translate(" + d.x + "," + d.y + ")");
                     treeG.attr("transform", function(n) {
@@ -664,12 +667,12 @@ Lumens.RuleTreeEditor.create = function(args) {
             }
             function check_in_scroll_range_x(x) {
                 if (scrollInfo.isLeft
-                        && x <= scb.scroll_h_x_limit
-                        && x >= scb.scroll_origin_h_x)
+                && x <= scb.scroll_h_x_limit
+                && x >= scb.scroll_origin_h_x)
                     return true;
                 else if (!scrollInfo.isLeft
-                        && x <= (scb.scroll_origin_h_x)
-                        && x >= scb.scroll_h_x_limit)
+                && x <= (scb.scroll_origin_h_x)
+                && x >= scb.scroll_h_x_limit)
                     return true;
                 return false;
             }
@@ -755,7 +758,7 @@ Lumens.RuleTreeEditor.create = function(args) {
                         x: scb.scroll_v_x,
                         y: scb.scroll_v_y
                     }])
-                        .attr("transform", "translate(" + scb.scroll_v_x + "," + scb.scroll_v_y + ")");
+                .attr("transform", "translate(" + scb.scroll_v_x + "," + scb.scroll_v_y + ")");
                 vGrip.attr({
                     "width": grip_w,
                     "height": scb.grip_v_l,
@@ -767,7 +770,7 @@ Lumens.RuleTreeEditor.create = function(args) {
                         x: scb.scroll_h_x,
                         y: scb.scroll_h_y
                     }])
-                        .attr("transform", "translate(" + scb.scroll_h_x + "," + scb.scroll_h_y + ")")
+                .attr("transform", "translate(" + scb.scroll_h_x + "," + scb.scroll_h_y + ")")
                 hGrip.attr({
                     "width": scb.grip_h_l,
                     "height": grip_w,
@@ -798,7 +801,7 @@ Lumens.RuleTreeEditor.create = function(args) {
         var size = editorPaneSize();
         size.view_origin_left_x = _scrollbar_width + 2;
         size.view_origin_right_x = size.width - _scrollbar_width - 2,
-                size.view_origin_y = _scrollbar_width + 2;
+        size.view_origin_y = _scrollbar_width + 2;
         return size;
     }
 
@@ -888,13 +891,13 @@ Lumens.RuleTreeEditor.create = function(args) {
 
     var _currentDragElement = null;
     var line = d3.svg.line()
-            .x(function(d) {
+    .x(function(d) {
         return d.x;
     })
-            .y(function(d) {
+    .y(function(d) {
         return d.y;
     })
-            .interpolate("basis");
+    .interpolate("basis");
     function editorShowRelationshipLinks(data) {
         if (data.path_array !== undefined) {
             var have_right_link = false;
@@ -913,7 +916,7 @@ Lumens.RuleTreeEditor.create = function(args) {
                 if (Math.abs(end_x) < size.width)
                     end_x = size.width;
                 leftTreeG.append("svg:path")
-                        .attr({
+                .attr({
                     "class": "relation",
                     "d": line([
                         {
@@ -933,7 +936,7 @@ Lumens.RuleTreeEditor.create = function(args) {
                     if (Math.abs(end_x) < size.width)
                         end_x = -size.width - 2;
                     rightTreeG.append("svg:path")
-                            .attr({
+                    .attr({
                         "class": "relation",
                         "d": line([
                             {
@@ -962,8 +965,8 @@ Lumens.RuleTreeEditor.create = function(args) {
                         }
                     ];
                     centerG.append('svg:path')
-                            .data([dat])
-                            .attr({
+                    .data([dat])
+                    .attr({
                         "class": "relation",
                         "d": line(dat)
                     })
@@ -1008,14 +1011,14 @@ Lumens.RuleTreeEditor.create = function(args) {
         var size = editorAxisOrign();
         var isLeft = (leftTreeG === treeG);
         var diagonal = d3.svg.diagonal()
-                .projection(function(d) {
+        .projection(function(d) {
             return [(isLeft ? d.y : (d.y + _barWidth)), d.x + _barHeight];
         });
         var tree = d3.layout.tree();
         var x = isLeft ? size.view_origin_left_x : size.view_origin_right_x;
         var vis = treeG.attr("transform", "translate(" + x + "," + size.view_origin_y + ")"),
-                i = 0, btn_size = 8,
-                root, to_map_children = true;
+        i = 0, btn_size = 8,
+        root, to_map_children = true;
 
         d3.json(jsonData, function(json) {
             json.x0 = 0;
@@ -1039,80 +1042,79 @@ Lumens.RuleTreeEditor.create = function(args) {
                 if (to_map_children) {
                     n.children_map = {};
                     for (var idx = 0; (n.children !== null && n.children !== undefined
-                            && idx < n.children.length); ++idx)
+                    && idx < n.children.length); ++idx)
                         n.children_map[n.children[idx].name] = n.children[idx];
                 }
             });
 
-            // Update the nodes…
+            // Update the nodesï¿½
             var node = vis.selectAll("g.node")
-                    .data(nodes, function(d) {
+            .data(nodes, function(d) {
                 return d.id || (d.id = ++i);
             });
 
             var nodeEnter = node.enter().append("svg:g")
-                    .attr("class", "node")
-                    .attr("transform", function(d) {
+            .attr("class", "node")
+            .attr("transform", function(d) {
                 return "translate(" + source.y0 + "," + source.x0 + ")";
             })
-                    .style("opacity", 1e-6);
+            .style("opacity", 1e-6);
 
             // Enter any new nodes at the parent's previous position.
             nodeEnter.append("svg:rect")
-                    .attr({
+            .attr({
                 "height": _barHeight,
                 "width": _barHeight,
                 "transform": "translate(" + (isLeft ? 0 : _barWidth - _barHeight) + ", 0)"
             })
-                    .style({
+            .style({
                 "fill": color,
                 "cursor": "pointer"
             })
-                    .on("click", click);
+            .on("click", click);
 
             nodeEnter.append("svg:rect")
-                    .attr({
+            .attr({
                 "height": btn_size,
                 "width": btn_size,
                 "y": _barHeight - btn_size,
                 "x": isLeft ? 0 : _barWidth - btn_size
             })
-                    .style({
+            .style({
                 "fill": "gray",
                 "opacity": .5,
                 "cursor": "pointer"
             })
-                    .on("click", click);
+            .on("click", click);
 
             // =====================================================================
             // TODO need to display data format data type
             // Build data node and event
             nodeEnter.append("svg:rect")
-                    .style({
+            .style({
                 "fill": "rgba(206, 206, 206, .4)",
                 "opacity": 1e-6,
                 "cursor": "pointer"
             })
-                    .attr({
+            .attr({
                 "height": _barHeight,
                 "width": function(d) {
                     //------------------------------------------------------------------
                     var t_w = 0;
                     var bagNode = d3.select(this);
                     this.text = d3.select(this.parentNode).append("svg:text")
-                            .attr({
+                    .attr({
                         "dy": 12.5,
                         "class": function(d) {
                             return d.script !== undefined ? "item-text-used-style" : "item-text-normal-style";
                         }
-                    })
-                            .text(function(d) {
+                    }).text(function(d) {
                         // TODO drop event triggered not good, some time not work, need to try serval times
                         if (!d.children)
                             return isLeft ? "[string] " + d.name : d.name + " [string]";
                         return d.name;
                     })
-                            .attr("dx", function(d) {
+                    .attr("dx", function(d) {
                         t_w = d.bbox_width = this.getBBox().width + 2;
                         var t_x = isLeft ? (_barHeight + 2) : (_barWidth - t_w - _barHeight - 2);
                         bagNode.attr({
@@ -1120,12 +1122,12 @@ Lumens.RuleTreeEditor.create = function(args) {
                         });
                         return t_x;
                     })
-                            .node();
+                    .node();
 
                     if (isLeft) {
                         function item_clone() {
                             return $('<div id="draggable-item" style="width:' + (d.bbox_width + 2) + 'px;">'
-                                    + (!d.children ? "[string] " + d.name : d.name) + '</>');
+                            + (!d.children ? "[string] " + d.name : d.name) + '</>');
                         }
                         $(this).draggable({
                             addClasses: false,
@@ -1143,17 +1145,17 @@ Lumens.RuleTreeEditor.create = function(args) {
                     return t_w;
                 }
             })
-                    .on("mouseover", function(n) {
+            .on("mouseover", function(n) {
                 /** Note: It is a workaround, d3 doesn't support drop down event
                  * use _currentDragElement to save the drag stop information
                  **/
                 if (_currentDragElement !== null && !isLeft) {
                     d3.select(this.text)
-                            .attr({
+                    .attr({
                         "class": "item-text-used-style"
                     });
                     d3.select(_currentDragElement.text)
-                            .attr({
+                    .attr({
                         "class": "item-text-used-style"
                     });
                     if (_rightItemDropped !== undefined) {
@@ -1166,11 +1168,11 @@ Lumens.RuleTreeEditor.create = function(args) {
                 }
                 d3.select(this).style("opacity", 1);
             })
-                    .on("mouseout", function(n) {
+            .on("mouseout", function(n) {
                 if (tree_item_selected !== this)
                     d3.select(this).style("opacity", 1e-6);
             })
-                    .on("click", function(n) {
+            .on("click", function(n) {
                 if (tree_item_selected !== null) {
                     // cancel current selected
                     d3.select(tree_item_selected).style("opacity", 1e-6);
@@ -1198,29 +1200,29 @@ Lumens.RuleTreeEditor.create = function(args) {
             }
             // Transition nodes to their new position.
             nodeEnter.transition()
-                    .duration(_duration)
-                    .attr("transform", function(d) {
+            .duration(_duration)
+            .attr("transform", function(d) {
                 return "translate(" + d.y + "," + d.x + ")";
             })
-                    .style("opacity", opacityFilter);
+            .style("opacity", opacityFilter);
 
             node.transition()
-                    .duration(_duration)
-                    .attr("transform", function(d) {
+            .duration(_duration)
+            .attr("transform", function(d) {
                 return "translate(" + d.y + "," + d.x + ")";
             })
-                    .style("opacity", opacityFilter)
-                    .select("rect")
-                    .style("fill", color);
+            .style("opacity", opacityFilter)
+            .select("rect")
+            .style("fill", color);
 
             // Transition exiting nodes to the parent's new position.
             node.exit().transition()
-                    .duration(_duration)
-                    .attr("transform", function(d) {
+            .duration(_duration)
+            .attr("transform", function(d) {
                 return "translate(" + source.y + "," + source.x + ")";
             })
-                    .style("opacity", 1e-6)
-                    .remove();
+            .style("opacity", 1e-6)
+            .remove();
 
             // Stash the old positions for transition.
             nodes.forEach(function(d) {
@@ -1230,18 +1232,18 @@ Lumens.RuleTreeEditor.create = function(args) {
 
             // Update the links
             var link = vis.selectAll("path.link")
-                    .data(tree.links(nodes), function(d) {
+            .data(tree.links(nodes), function(d) {
                 return d.target.id;
             });
 
             // Enter any new links at the parent's previous position.
             link.enter().insert("svg:path", "g")
-                    .attr("class", function(d) {
+            .attr("class", function(d) {
                 if (d.source.id === 1)
                     return "linkhidden";
                 return "link";
             })
-                    .attr("d", function(d) {
+            .attr("d", function(d) {
                 var o = {
                     x: source.x0,
                     y: source.y0
@@ -1251,19 +1253,19 @@ Lumens.RuleTreeEditor.create = function(args) {
                     target: o
                 });
             })
-                    .transition()
-                    .duration(_duration)
-                    .attr("d", diagonal);
+            .transition()
+            .duration(_duration)
+            .attr("d", diagonal);
 
             // Transition links to their new position.
             link.transition()
-                    .duration(_duration)
-                    .attr("d", diagonal);
+            .duration(_duration)
+            .attr("d", diagonal);
 
             // Transition exiting nodes to the parent's new position.
             link.exit().transition()
-                    .duration(_duration)
-                    .attr("d", function(d) {
+            .duration(_duration)
+            .attr("d", function(d) {
                 var o = {
                     x: source.x,
                     y: source.y
@@ -1273,7 +1275,7 @@ Lumens.RuleTreeEditor.create = function(args) {
                     target: o
                 });
             })
-                    .remove();
+            .remove();
             //= Compute tree bbox size =============================================
             treeG.width = 0;
             treeG.height = 0;
