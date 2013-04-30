@@ -88,5 +88,5 @@ public interface Format
 
     public Format clone();
 
-    public Format deepClone();
+    public Format recursiveClone();
 }

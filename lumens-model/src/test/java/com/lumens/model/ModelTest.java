@@ -98,7 +98,7 @@ public class ModelTest
         asset.addChild("vendor", Form.STRUCT).addChild("name", Form.FIELD,
                                                        Type.STRING);
 
-        Format clonedRoot = root.deepClone();
+        Format clonedRoot = root.recursiveClone();
         assertEquals("name", clonedRoot.getChildByPath("Person.name").getName());
         assertEquals("name", clonedRoot.getChildByPath(
                 "Person.asset.vendor.name").getName());

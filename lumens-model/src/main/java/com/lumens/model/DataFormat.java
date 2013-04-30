@@ -55,13 +55,13 @@ public class DataFormat implements Format
     }
 
     @Override
-    public Format deepClone()
+    public Format recursiveClone()
     {
         Format cloned = clone();
         if (childList != null)
         {
             for (Format child : childList)
-                cloned.addChild(child.deepClone());
+                cloned.addChild(child.recursiveClone());
         }
 
         return cloned;
