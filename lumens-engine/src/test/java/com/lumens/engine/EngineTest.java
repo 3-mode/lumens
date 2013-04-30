@@ -36,12 +36,10 @@ public class EngineTest extends TestCase
         int nameCounter = 1;
         // Create ws connector to read data
         HashMap<String, Value> props = new HashMap<String, Value>();
-        props.put(WebServiceConnector.WSDL, new Value(getClass().getResource(
-                "/wsdl/ChinaOpenFundWS.asmx").toString()));
+        props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/wsdl/ChinaOpenFundWS.asmx").toString()));
         //props.put(WebServiceConnector.PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
         //props.put(WebServiceConnector.PROXY_PORT, new Value(8080));
-        DataSource datasource = new DataSource(WebServiceConnector.class.
-                getName());
+        DataSource datasource = new DataSource(WebServiceConnector.class.getName());
         datasource.setName("ChinaMobile-WebService-SOAP");
         datasource.setPropertyList(props);
         datasource.open();
@@ -51,29 +49,26 @@ public class EngineTest extends TestCase
         //*******************************************************************************************
         Map<String, Format> consumes = datasource.getFormatList(Direction.IN);
         Connector connector = datasource.getConnector();
-        Format getOpenFundStringRequest = connector.getFormat(
-                consumes.get("getOpenFundString"),
-                "getOpenFundString.userID",
-                Direction.IN);
+        Format getOpenFundStringRequest = connector.getFormat(consumes.get("getOpenFundString"),
+        "getOpenFundString.userID", Direction.IN);
         Map<String, Format> produces = datasource.getFormatList(Direction.OUT);
         Format getOpenFundStringResponse = connector.getFormat(
-                produces.get("getOpenFundString"),
-                "getOpenFundStringResponse.getOpenFundStringResult.string",
-                Direction.OUT);
+        produces.get("getOpenFundString"), "getOpenFundStringResponse.getOpenFundStringResult.string", Direction.OUT);
         // Register format
         String targetName = getOpenFundStringRequest.getName() + (nameCounter++);
-        getOpenFundStringRequest = getOpenFundStringRequest.deepClone();
-        getOpenFundStringResponse = getOpenFundStringResponse.deepClone();
+        // The code is used to create a format copy for registered request
+        getOpenFundStringRequest = getOpenFundStringRequest.recursiveClone();
+        getOpenFundStringResponse = getOpenFundStringResponse.recursiveClone();
         datasource.registerFormat(targetName,
-                                  getOpenFundStringRequest, Direction.IN);
+        getOpenFundStringRequest, Direction.IN);
         datasource.registerFormat(targetName,
-                                  getOpenFundStringResponse, Direction.OUT);
+        getOpenFundStringResponse, Direction.OUT);
 
         String targetName2 = getOpenFundStringRequest.getName() + (nameCounter++);
         datasource.registerFormat(targetName2,
-                                  getOpenFundStringRequest, Direction.IN);
+        getOpenFundStringRequest, Direction.IN);
         datasource.registerFormat(targetName2,
-                                  getOpenFundStringResponse, Direction.OUT);
+        getOpenFundStringResponse, Direction.OUT);
 
         //******************************************************************************************
         // Create transformation to a data source
@@ -93,16 +88,13 @@ public class EngineTest extends TestCase
         // Create start point transformation
         String startPoint = "DataDriven";
         TransformRule rule1 = new TransformRule(getOpenFundStringRequest);
-        rule1.getRuleItem("getOpenFundString.userID").setScript(
-                "\"123\"");
+        rule1.getRuleItem("getOpenFundString.userID").setScript("\"123\"");
         callGetOpenFundString.registerRule(new TransformRuleEntry(startPoint, targetName, rule1));
 
         // Create the loop transformation datasource->transformation->datasource
         TransformRule rule2 = new TransformRule(getOpenFundStringRequest);
-        rule2.getRuleItem("getOpenFundString.userID").setScript(
-                "@getOpenFundStringResponse.getOpenFundStringResult.string");
-        callGetOpenFundString2.registerRule(new TransformRuleEntry(targetName,
-                                                                   targetName2, rule2));
+        rule2.getRuleItem("getOpenFundString.userID").setScript("@getOpenFundStringResponse.getOpenFundStringResult.string");
+        callGetOpenFundString2.registerRule(new TransformRuleEntry(targetName, targetName2, rule2));
 
         //*************Test project********************************************
         TransformProject project = new TransformProject();
@@ -117,8 +109,7 @@ public class EngineTest extends TestCase
         //**********************************************************************
         // Execute all start rules to drive the ws connector
         SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
-        executorStack.push(new TransformExecutor(callGetOpenFundString,
-                                                 new TransformExecuteContext(null, startPoint)));
+        executorStack.push(new TransformExecutor(callGetOpenFundString, new TransformExecuteContext(null, startPoint)));
         while (!executorStack.isEmpty())
         {
             Executor executor = executorStack.pop();
