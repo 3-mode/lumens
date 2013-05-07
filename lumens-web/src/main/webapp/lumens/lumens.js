@@ -7,7 +7,7 @@ Lumens.create = function(parentId) {
     var lumensApp = {};
     var parent = $(parentId);
     // Build the web header
-    var header = Lumens.Header.create(parent);
+    //var header = Lumens.Header.create(parent);
     var navigator = Lumens.Navigator.create("navigator", parent);
     navigator.setText("Welcome: Guest");
     // Initialize the splitter pane of the workspace
@@ -21,8 +21,8 @@ Lumens.create = function(parentId) {
     });
 
     var rightPane = $("#RightPane");
-    rightPane.append('<div id="TopPane" style="position: absolute; z-index: 1; overflow: auto; top: 0px; width: 100%; height: 85%;"/>');
-    rightPane.append('<div id="BottomPane" style="position: absolute; z-index: 1; width: 100%; height:15%; overflow: hidden"/>');
+    rightPane.append('<div id="TopPane" style="position: absolute; z-index: 1; overflow: auto; top: 0px; width: 100%; height: 100%;"/>');
+    rightPane.append('<div id="BottomPane" style="position: absolute; z-index: 1; width: 100%; height:200px; overflow: hidden"/>');
     rightPane.splitter({
         splitHorizontal: true,
         sizeBottom: true
@@ -37,9 +37,9 @@ Lumens.create = function(parentId) {
     var componentPane = Lumens.ComponentPane.create(topPane, "100%", "100%");
     // Add three demo component here
     /*
-    var c1 = componentPane.addComponent("SOAP", "source", 100, 100);
-    var c2 = componentPane.addComponent("Transform", "transform", 400, 200);
-    var c3 = componentPane.addComponent("Database", "target", 700, 100);
+    var c1 = componentPane.addComponent({name:"SOAP", label:"source", x:100, y:100});
+    var c2 = componentPane.addComponent({name:"Transform", label:"transform", x:400, y:200);
+    var c3 = componentPane.addComponent({name:"Database", label:"target", x:700, y:100});
     var p = c1.getPosition();
     var link = c1.link(c2).target.link(c3);//*/
     lumensApp.run = function() {

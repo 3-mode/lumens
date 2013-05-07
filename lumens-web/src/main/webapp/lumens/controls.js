@@ -180,15 +180,20 @@ Lumens.ComponentPane.create = function(holder, width, height) {
     SVGhodlerElement = d3.select("#holderElement");
     // Initailize the SVG object
     var SVG = SVGhodlerElement.append("svg")
-    .attr("width", holderElement.width() - 20)
-    .attr("height", holderElement.height() - 20);
+    .attr("width", holderElement.width()-30)
+    .attr("height", holderElement.height()-30);
 
     holder.droppable({
         drop: function(event, ui) {
             var paneOffset = $(this).offset();
             var offset = ui.helper.offset();
-            tThis.addComponent(ui.helper.find('a').html(), "Untitled " + COMP_List.length,
-            offset.left - paneOffset.left, offset.top - paneOffset.top);
+            tThis.addComponent(
+            {
+                name:ui.helper.find('a').html(),
+                lalbel:"Untitled " + COMP_List.length,
+                x:offset.left - paneOffset.left,
+                y:offset.top - paneOffset.top
+            });
         }
     });
 
@@ -200,7 +205,14 @@ Lumens.ComponentPane.create = function(holder, width, height) {
         SVG.selectAll('g').remove();
     }
 
-    tThis.addComponent = function(name, label, x, y) {
+    tThis.addComponent = function(args) {
+        var name = args.name;
+        var label = args.label;
+        var x = args.x;
+        var y = args.y;
+        var status_icon = args.status_icon !== undefined ? args.status_icon : "lumens/images/status/16/disconnect.png";
+        var component_icon = args.component_icon !== undefined ? args.component_icon : "lumens/images/component/" + name.toLowerCase() + ".png";
+
         var Component = {};
         Component.create = function(SVG, name) {
             var tThis = {};
@@ -272,7 +284,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
             });
             thisG.append("image")
             .attr({
-                "xlink:href": "lumens/images/status/16/disconnect.png",
+                "xlink:href": status_icon,
                 "x": 8,
                 "y": 4,
                 "width": 16,
@@ -280,7 +292,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
             });
             thisG.append("image")
             .attr({// TODO here need to refine to load the image dynamicly
-                "xlink:href": "lumens/images/component/" + name.toLowerCase() + ".png",
+                "xlink:href": component_icon,
                 "x": 4,
                 "y": 28,
                 "width": 24,
