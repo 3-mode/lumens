@@ -162,7 +162,7 @@
             })
             .bind("keydown", function(e){
                 var key = e.which || e.keyCode;
-                var dir = key==opts["key"+opts.side1]? 1 : key==opts["key"+opts.side2]? -1 : 0;
+                var dir = key===opts["key"+opts.side1]? 1 : key===opts["key"+opts.side2]? -1 : 0;
                 if ( dir )
                     resplit(A[0][opts.pxSplit]+dir*opts.pxPerKey, false);
             })
@@ -225,7 +225,7 @@
 
             function splitterResize(e, size) {
                 // Custom events bubble in jQuery 1.3; don't get into a Yo Dawg
-                if ( e.target != this ) return;
+                if ( e.target !== this ) return;
                 // Determine new width/height of splitterPane container
                 splitterPane._DF = splitterPane[0][opts.pxFixed] - splitterPane._PBF;
                 splitterPane._DA = splitterPane[0][opts.pxSplit] - splitterPane._PBA;
@@ -244,7 +244,7 @@
                 splitterPane._hadjust = dimSum(splitterPane, "borderTopWidth", "borderBottomWidth", "marginBottom");
                 splitterPane._hmin = Math.max(dimSum(splitterPane, "minHeight"), 20);
                 function windowResize(e) {
-                    if ( e.target != this ) return;
+                    if ( e.target !== this ) return;
                     var top = splitterPane.offset().top;
                     var wh = $(window).height();
                     splitterPane.css("height", Math.max(wh-top-splitterPane._hadjust, splitterPane._hmin)+"px");
