@@ -7,7 +7,7 @@ Lumens.create = function(parentId) {
     var lumensApp = {};
     var parent = $(parentId);
     // Build the web header
-    //var header = Lumens.Header.create(parent);
+    var header = Lumens.Header.create(parent);
     var navigator = Lumens.Navigator.create("navigator", parent);
     navigator.setText("Welcome: Guest");
     // Initialize the splitter pane of the workspace
