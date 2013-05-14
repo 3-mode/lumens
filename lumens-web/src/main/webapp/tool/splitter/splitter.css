@@ -12,7 +12,7 @@
   * height is fixed and the width is the full width of the body,
   * less the margin on the splitter itself.
 */
-#SplitterPane {
+.SplitterPane {
     border: 0px;
     /* No padding allowed */
 }
@@ -62,24 +62,24 @@
  * mouse is over the splitter or the splitter is focused
  * via the keyboard taborder or an accessKey.
 */
-#SplitterPane .vsplitbar {
+.SplitterPane .vsplitbar {
     width: 2px;
     height: 100%;
     cursor: e-resize;	/* in case col-resize isn't supported */
     cursor: col-resize;
     background: #ffffff url('./vgrabber2-normal.gif') repeat-y left;
 }
-#SplitterPane .vsplitbar.active, #SplitterPane .vsplitbar:hover {
+.SplitterPane .vsplitbar.active, .SplitterPane .vsplitbar:hover {
     background: #ffffff url('./vgrabber2-active.gif') repeat-y left;
 }
 
-#SplitterPane .hsplitbar {
+.SplitterPane .hsplitbar {
     width: 100%;
     height: 2px;
     cursor: n-resize;	/* in case col-resize isn't supported */
     cursor: row-resize;
     background: #ffffff url('./hgrabber2-normal.gif') repeat-x top;
 }
-#SplitterPane .hsplitbar.active, #SplitterPane .hsplitbar:hover {
+.SplitterPane .hsplitbar.active, .SplitterPane .hsplitbar:hover {
     background: #ffffff url('./hgrabber2-active.gif') repeat-x top;
 }

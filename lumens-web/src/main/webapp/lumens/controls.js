@@ -5,31 +5,78 @@
 var Lumens = {
     version: 1.0
 };
+
+Lumens.Tabbar = {};
+Lumens.Tabbar.create = function(parentObj) {
+    var tThis = {};
+    var tabItems = [];
+    var activeIndex = -1;
+
+    tThis.addTabTitles = function(tabTitles) {
+        function addTab(tabTitle) {
+            tabItems.push({
+                tab: $('<div class="header-tab-button" style="opacity: .5;"/>'),
+                title: $('<div style="padding-top: 5px;"/>')
+            });
+            var tabItem = tabItems[tabItems.length - 1];
+            tabItem.tab.prependTo(parentObj);
+            tabItem.title.appendTo(tabItem.tab);
+            tabItem.title.html(tabTitle);
+            tabItem.title.get(0).myIndex = tabItems.length - 1;
+            tabItem.getTabTitle = function() {
+                return tabItem.title.html();
+            }
+            tabItem.setTabTitle = function(title) {
+                tabItem.title.html(title);
+            }
+            tabItem.addEvent = function(event, evtFunction) {
+                tabItem.title.bind(event, evtFunction);
+            }
+            tabItem.setActive = function(active) {
+                tabItem.tab.css("opacity", active ? "1" : ".5");
+                activeIndex = this.title.get(0).myIndex;
+            }
+            tabItem.title.bind("click", function() {
+                if (activeIndex >= 0) {
+                    var active = tabItems[activeIndex];
+                    active.setActive(false);
+                }
+                activeIndex = $(this).get(0).myIndex;
+                active = tabItems[activeIndex];
+                active.setActive(true);
+            })
+        }
+        for (var i = 0; i < tabTitles.length; ++i)
+            addTab(tabTitles[i]);
+    }
+
+    tThis.getTab = function(index) {
+        return tabItems[index];
+    }
+
+    tThis.getTabCount = function() {
+        return tabItems.length;
+    }
+
+    return tThis;
+}
+
 // Initialize the header class component first
 Lumens.Header = {};
-Lumens.Header.create = function(parentObj) {
+Lumens.Header.create = function(myId, parentObj) {
+    var tThis = {};
+    var headerId = myId;
     var parent = parentObj;
-    parent.append('<div class="layout-header"/>');
-    var headerDiv = parent.find('.layout-header');
-    headerDiv.append('<div class="header-logo"><div class="header-log-text">LUMENS<div class="logo-bag"/></div></div>');
-    //var moduleNav = $('<div class="header-module-nav"/>');
-    //moduleNav.appendTo(headerDiv);
-
-    var performance_tab = $('<div class="header-tab-button" style="opacity:.5;"/>');
-    var text = $('<div style="padding-top:5px;"/>');
-    performance_tab.appendTo(headerDiv);
-    text.appendTo(performance_tab);
-    text.html("Performance");
-    var designer_tab = $('<div class="header-tab-button"/>');
-    designer_tab.appendTo(headerDiv);
-    text = $('<div style="padding-top:5px;"/>');
-    text.appendTo(designer_tab);
-    text.html("Designer");
-    var manage_tab = $('<div class="header-tab-button" style="opacity:.5;"/>');
-    manage_tab.appendTo(headerDiv);
-    text = $('<div style="padding-top:5px;"/>');
-    text.appendTo(manage_tab);
-    text.html("Management");
+    var headerDiv = $('<div id="' + myId + '" class="layout-header"/>');
+    headerDiv.appendTo(parent);
+    headerDiv.append('<div class="header-logo"><div class="header-logo-text">LUMENS<div class="logo-bag"/></div></div>');
+    tThis.getId = function() {
+        return headerId;
+    }
+    tThis.getHtmlElement = function() {
+        return headerDiv;
+    }
+    return tThis;
 }
 
 // Initialize the body class component
@@ -135,8 +182,8 @@ Lumens.ComponentTree.create = function(parentObj, strTreeIdText, strDragDropPare
     var parent = parentObj;
     var strTreeId = strTreeIdText;
 
-    parent.append('<div id="' + strTreeId + '"/>');
-    var dsTree = tThis.dsTree = parent.find('#' + strTreeId);
+    parent.append('<div id="' + strTreeId.substring(1) + '"/>');
+    var dsTree = tThis.dsTree = parent.find(strTreeId);
     _canLog = false;
     tThis.loadData = function() {
         // Make the data loading as a json
@@ -153,7 +200,7 @@ Lumens.ComponentTree.create = function(parentObj, strTreeIdText, strDragDropPare
                             return cloned;
                         }
                         clone_obj.draggable({
-                            appendTo: "#" + strDragDropParentId,
+                            appendTo: strDragDropParentId,
                             helper: item_clone
                         });
                     }
@@ -172,27 +219,30 @@ Lumens.ComponentPane = {};
 Lumens.ComponentPane.create = function(holder, width, height) {
     var tThis = {};
     var COMP_List = [];
+    var currentDraggableLinkNode = null;
     holder.append('<div id="holderElement"/>');
     var holderElement = holder.find("#holderElement");
     holderElement.attr({
         style: "height:" + height + ";width:" + width + ";overflow:auto;"
     });
-    SVGhodlerElement = d3.select("#holderElement");
     // Initailize the SVG object
-    var SVG = SVGhodlerElement.append("svg")
-    .attr("width", holderElement.width()-30)
-    .attr("height", holderElement.height()-30);
+    var SVG = d3.select("#holderElement").append("svg")
+    .attr("id", "componentHolder")
+    .attr("width", holderElement.width() - 30)
+    .attr("height", holderElement.height() - 30);
 
     holder.droppable({
+        accept: ".component-node",
         drop: function(event, ui) {
+            event.preventDefault();
             var paneOffset = $(this).offset();
             var offset = ui.helper.offset();
             tThis.addComponent(
             {
-                name:ui.helper.find('a').html(),
-                lalbel:"Untitled " + COMP_List.length,
-                x:offset.left - paneOffset.left,
-                y:offset.top - paneOffset.top
+                name: ui.helper.find('a').html(),
+                label: "Untitled " + COMP_List.length,
+                x: offset.left - paneOffset.left,
+                y: offset.top - paneOffset.top
             });
         }
     });
@@ -221,7 +271,8 @@ Lumens.ComponentPane.create = function(holder, width, height) {
             var height_body_constant = 32;
             var height_constant = height_title_constant + height_body_constant;
             var parentSVG = SVG;
-            var thisG = parentSVG.append('g');
+            var thisG = parentSVG.append('svg:g');
+            var statusImg = null;
             var links = tThis.links = [];
 
             //======================================Init========================================
@@ -254,13 +305,17 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 this.parentNode.appendChild(this);
                 // event handling
                 var y = d3.event.sourceEvent.layerY;
-                if (y > (d.y + height_title_constant))
+                var x = d3.event.sourceEvent.layerX;
+                var y_boundary = d.y + height_title_constant;
+                var x_boundary = d.x + (width_constant - 20);
+                if (y > y_boundary || (y < y_boundary && x > x_boundary))
                     draggable = false;
                 else
                     draggable = true;
-            }).on("drag", dragmove));
+            })
+            .on("drag", dragmove));
             // Body
-            thisG.append('rect')
+            thisG.append('svg:rect')
             .attr({
                 "height": height_body_constant,
                 "width": width_constant,
@@ -271,18 +326,27 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 "stroke": "rgb(177, 177, 177)",
                 "stroke-width": .3
             });
+
             // Title
-            thisG.append('rect').attr({
+            var titleBar = thisG.append('svg:rect')
+            .attr({
                 "height": height_title_constant,
                 "width": width_constant
             })
             .style({
                 "fill": "rgb(214, 214, 214)",
                 "stroke": "rgb(177, 177, 177)",
-                "stroke-width": .5,
-                "cursor": "move"
+                "stroke-width": .5
             });
-            thisG.append("image")
+            holderElement.droppable({
+                accept: ".link-node",
+                drop: function(event, ui) {
+                    console.log("Stop");
+                    console.log(this);
+                }
+            });
+
+            statusImg = thisG.append("svg:image")
             .attr({
                 "xlink:href": status_icon,
                 "x": 8,
@@ -290,7 +354,40 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 "width": 16,
                 "height": 16
             });
-            thisG.append("image")
+
+            var linkImg = thisG.append("svg:image")
+            .attr({
+                "xlink:href": function(n) {
+                    function linkDraggable() {
+                        // Cache the source component
+                        currentDraggableLinkNode = tThis;
+                        console.log("Start");
+                        console.log(tThis);
+                        return $('<div class="link-node"></div>');
+                    }
+                    $(this).draggable({
+                        appendTo: holderElement,
+                        helper: linkDraggable,
+                        stop: function(event, ui) {
+                            console.log(tThis);
+                        }
+                    });
+                    return "lumens/images/component/link-inactive.png"
+                },
+                "x": width_constant - 20,
+                "y": 4,
+                "width": 16,
+                "height": 16
+            });
+            linkImg
+            .on("mouseout", function(e) {
+                linkImg.attr("xlink:href", "lumens/images/component/link-inactive.png");
+            })
+            .on("mouseover", function(e) {
+                linkImg.attr("xlink:href", "lumens/images/component/link.png");
+            });
+
+            thisG.append("svg:image")
             .attr({// TODO here need to refine to load the image dynamicly
                 "xlink:href": component_icon,
                 "x": 4,
@@ -298,7 +395,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 "width": 24,
                 "height": 24
             });
-            thisG.append("text")
+            thisG.append("svg:text")
             .attr({
                 "x": 36,
                 "y": 18
@@ -309,7 +406,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
             })
             .text(name);
 
-            thisG.append("text")
+            thisG.append("svg:text")
             .attr({
                 "x": 40,
                 "y": 46
@@ -322,7 +419,6 @@ Lumens.ComponentPane.create = function(holder, width, height) {
             .text(label);
             // TODO if the label is a long text, need to trim it as a correct length
             //======================================End=========================================
-
             tThis.getSize = function() {
                 return {
                     width: width_constant,
@@ -1059,7 +1155,7 @@ Lumens.RuleTreeEditor.create = function(args) {
                 }
             });
 
-            // Update the nodes�
+            // Update the nodes
             var node = vis.selectAll("g.node")
             .data(nodes, function(d) {
                 return d.id || (d.id = ++i);
@@ -1121,7 +1217,6 @@ Lumens.RuleTreeEditor.create = function(args) {
                             return d.script !== undefined ? "item-text-used-style" : "item-text-normal-style";
                         }
                     }).text(function(d) {
-                        // TODO drop event triggered not good, some time not work, need to try serval times
                         if (!d.children)
                             return isLeft ? "[string] " + d.name : d.name + " [string]";
                         return d.name;
@@ -1137,14 +1232,13 @@ Lumens.RuleTreeEditor.create = function(args) {
                     .node();
 
                     if (isLeft) {
-                        function item_clone() {
+                        function formatDraggable() {
                             return $('<div id="draggable-item" style="width:' + (d.bbox_width + 2) + 'px;">'
                             + (!d.children ? "[string] " + d.name : d.name) + '</>');
                         }
                         $(this).draggable({
-                            addClasses: false,
                             appendTo: _domHolder,
-                            helper: item_clone,
+                            helper: formatDraggable,
                             stop: function(event, ui) {
                                 _currentDragElement = {
                                     data: d3.select(event.target).datum(),
@@ -1379,16 +1473,17 @@ Lumens.RuleTreeEditor.create = function(args) {
 
 Lumens.Navigator = {};
 Lumens.Navigator.create = function(id, holder) {
+    // Private members
     var tThis = {};
-    var myId = "#" + id;
     var parent = holder;
-    parent.append('<div id="' + id + '"/>');
-    var navigatorBar = $(myId);
+    // Initailize controls of navigator
+    var navigatorBar = $(('<div id="' + id + '"/>'));
+    navigatorBar.appendTo(parent);
     navigatorBar.attr("class", "navigator-bar");
     var label = $('<div/>');
     label.appendTo(navigatorBar);
     label.attr("class", "navigator-text");
-
+    // ================= Public methods =================
     tThis.setText = function(text) {
         label.html(text);
     }

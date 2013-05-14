@@ -14,28 +14,7 @@
                 // TODO ajax loading
                 // TODO When scroll to bottom and then copllase the nodes, behaviour not correct
                 // Tree is ok
-                var dsTree = $('#tree');
-                _canLog = false;
-                tThis.loadData = function() {
-                    // Make the data loading as a json
-                    $.getJSON("./json/ds.json", function(json) {
-                        dsTree.dynatree({
-                            onCreate: function(node) {
-                                if( !node.data.isFolder ) {
-                                    $(node.span).draggable({
-                                        appendTo: "#RightPane",
-                                        helper: "clone"
-                                    });
-                                }
-                            },
-                            persist: true,
-                            children: json.ds,
-                            debugLevel:0
-                        });
-                    });
-                }
-                return;
-                var rt = RuleTreeEditor.create({
+                var rt = Lumens.RuleTreeEditor.create({
                     holderId: "#rule-editor",
                     rightItemDropped: function(a, b) {
                         var path = a.name;

@@ -55,10 +55,9 @@ html,body {
     background-repeat: no-repeat;
 }
 
-.header-log-text {
+.header-logo-text {
     padding-top: 10px;
     padding-left: 28px;
-    float: center;
     font-size: 15px;
     font-weight: bolder;
     letter-spacing: 5px;
@@ -272,6 +271,13 @@ div#draggable-item {
     text-indent: 2px;
     padding-top: 2px;
     cursor: pointer;
+}
+
+div.link-node {
+    background-image:url(../images/component/link.png);
+    background-repeat:no-repeat;
+    width:24px;
+    height:24px;
 }
 
 text.item-text-used-style {

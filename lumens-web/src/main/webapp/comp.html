@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="tool/jquery/js/jquery.js"></script>
+    <script type="text/javascript" src="tool/jquery/js/jquery-ui.js"></script>
+    <!-- D3 -->
+    <script type="text/javascript" src="tool/d3/d3.js"></script>
+    <!--lumens-->
+    <link rel="stylesheet" type="text/css" href="lumens/styles/lumens.css"/>
+    <script type="text/javascript" src="lumens/controls.js"></script>
+    <script type="text/javascript">
+        jQuery(function() {
+            var componentPane = Lumens.ComponentPane.create($("body"), "100%", "100%");
+            // Add three demo component here
+            var c1 = componentPane.addComponent({name: "SOAP", label: "source", x: 100, y: 100});
+            var c2 = componentPane.addComponent({name: "Transform", label: "transform", x: 400, y: 100});
+            var c3 = componentPane.addComponent({name: "Database", label: "target", x: 700, y: 100});
+            /*var p = c1.getPosition();
+             var link = c1.link(c2).target.link(c3);//*/
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>

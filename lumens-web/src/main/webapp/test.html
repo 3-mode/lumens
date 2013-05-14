@@ -2,8 +2,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script type="text/javascript" src="tool/jquery/js/jquery-1.9.0.js"></script>
-        <script type="text/javascript" src="tool/jquery/js/jquery-ui-1.10.0.custom.js"></script>
+        <script type="text/javascript" src="tool/jquery/js/jquery.js"></script>
+        <script type="text/javascript" src="tool/jquery/js/jquery-ui.js"></script>
         <!-- Splitter plug-in -->
         <link rel="stylesheet" type="text/css" href="tool/splitter/splitter.css"/>
         <script type="text/javascript" src="tool/splitter/splitter.js"></script>
@@ -85,29 +85,29 @@
         </style>
         <script type="text/javascript">
             /*
-            $(function(){
-                var svg = d3.select("#test").append("svg").attr("transform", "translate(100, 100)");
-                svg.attr({
-                    "xmlns": "http://www.w3.org/2000/svg",
-                    "version":"1.1"
-                });
-                svg.data([{x: 100, y: 100}]);
-                var node = svg.node(); // DOM element
-                $(node).click(function(e){console.log("clicked")});// jQuery
-                var x = svg.datum().x;
-                svg.append("svg:foreignObject")
-                .attr({
-                    "height": 50,
-                    "width": 200
-                })
-                .append("div")
-                .style({
-                    "width": "100%",
-                    "height": "100%"
-                }).text("test");
-
-
-            })//*/
+             $(function(){
+             var svg = d3.select("#test").append("svg").attr("transform", "translate(100, 100)");
+             svg.attr({
+             "xmlns": "http://www.w3.org/2000/svg",
+             "version":"1.1"
+             });
+             svg.data([{x: 100, y: 100}]);
+             var node = svg.node(); // DOM element
+             $(node).click(function(e){console.log("clicked")});// jQuery
+             var x = svg.datum().x;
+             svg.append("svg:foreignObject")
+             .attr({
+             "height": 50,
+             "width": 200
+             })
+             .append("div")
+             .style({
+             "width": "100%",
+             "height": "100%"
+             }).text("test");
+             
+             
+             })//*/
         </script>
         <style>
             .s_edge {
@@ -129,13 +129,17 @@
             $(function() {
                 var obj = $.parseJSON('[{"name": "james", "id": 1}, {"name" : "tom", "id": 2}]');
                 var div = d3.select("body").selectAll("div");
-                var divData = div.data([1, 2, 4, 8, 16, 32], function(d) { return d; });
+                var divData = div.data([1, 2, 4, 8, 16, 32], function(d) {
+                    return d;
+                });
                 var divEnter = divData.enter();
-                var node = divEnter.insert("div").text(function(d) {return d;});
+                var node = divEnter.insert("div").text(function(d) {
+                    return d;
+                });
                 // divData.exit().remove();
                 function assign(id, value) {
                     var t = $(id);
-                    t.get(0).value != undefined ? t.val(value):t.text(value);
+                    t.get(0).value != undefined ? t.val(value) : t.text(value);
                 }
                 assign("#text", "text");
                 assign("#text2", "text2");
@@ -169,7 +173,6 @@
                 "height": "50px"
             });
             $(rr.node()).draggable({
-                addClasses: false,
                 appendTo: $("#jevent_test"),
                 helper: item_clone
             });
@@ -182,12 +185,11 @@
             }).text("Hello World");
 
             $(tt.node()).droppable({
-                addClasses: false,
                 drop: function(e, u) {
-                    console.log(u);
+                    console.log(this);
                 }
             });
-            $(tt.node()).mousedown(function(){
+            $(tt.node()).mousedown(function() {
                 console.log("mousedown");
             });
 
@@ -219,16 +221,19 @@
             .attr("fill", "red")
             .call(d3.behavior.drag().on("drag", move));
 
-            function move(){
+            function move() {
                 this.parentNode.appendChild(this);
                 var dragTarget = d3.select(this);
                 dragTarget
-                .attr("cx", function(){return d3.event.dx + parseInt(dragTarget.attr("cx"))})
-                .attr("cy", function(){
+                .attr("cx", function() {
+                    return d3.event.dx + parseInt(dragTarget.attr("cx"))
+                })
+                .attr("cy", function() {
                     var y = parseInt(dragTarget.attr("cy"));
                     return d3.event.dy + y
                 });
-            };
+            }
+            ;
         </script>
     </body>
 </html>
