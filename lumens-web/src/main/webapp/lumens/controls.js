@@ -227,9 +227,11 @@ Lumens.ComponentPane.create = function(holder, width, height) {
     });
     // Initailize the SVG object
     var SVG = d3.select("#holderElement").append("svg")
-    .attr("id", "componentHolder")
-    .attr("width", holderElement.width() - 30)
-    .attr("height", holderElement.height() - 30);
+    .attr({
+        "id": "componentHolder",
+        "width": "100%",
+        "height": "100%"
+    });
 
     holder.droppable({
         accept: ".component-node",
@@ -253,6 +255,53 @@ Lumens.ComponentPane.create = function(holder, width, height) {
 
     tThis.removeAll = function() {
         SVG.selectAll('g').remove();
+    }
+
+
+    tThis.addComponentEx = function(args) {
+        var name = args.name;
+        var label = args.label;
+        var x = args.x;
+        var y = args.y;
+        var status_icon = args.status_icon !== undefined ? args.status_icon : "lumens/images/status/16/disconnect.png";
+        var component_icon = args.component_icon !== undefined ? args.component_icon : "lumens/images/component/" + name.toLowerCase() + ".png";
+        var Component = {};
+        Component.create = function() {
+            var tThis = {};
+            var width_constant = 140;
+            var height_title_constant = 25;
+            var height_body_constant = 32;
+            var height_constant = height_title_constant + height_body_constant;
+            var parentSVG = SVG;
+            var thisG = parentSVG.append('svg:g');
+            var statusImg = null;
+            var links = tThis.links = [];
+            var componentInstance = $('<table border="0" class="component">'
+            + '<tr><td>'
+            + '<div id="component-title" style="border:1px solid rgba(177, 177, 177, .5);background-color:rgb(214, 214, 214);float:top; width:140px; height:25px">'
+            + '<img style = "padding-top:3px;padding-left:3px;" src = "lumens/images/status/16/disconnect.png" />'
+            + '</div>'
+            + '</td></tr>'
+            + '<tr><td>'
+            + '<div style="border:1px solid rgba(177, 177, 177, .3);background-color:rgb(236, 236, 236);width:140px; height:32px">'
+            + '</div>'
+            + '</td></tr>'
+            );
+            componentInstance.appendTo(holderElement);
+            tThis.setPosition = function(x, y) {
+                componentInstance.css("left", x);
+                componentInstance.css("top", y);
+            }
+
+            tThis.getPosition = function() {
+
+            }
+            //========End===============================
+            return tThis;
+        }
+        var component = Component.create();
+        component.setPosition(x, y);
+        COMP_List.push(component);
     }
 
     tThis.addComponent = function(args) {
