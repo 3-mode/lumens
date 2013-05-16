@@ -189,6 +189,93 @@ html,body {
 
 }
 
+div.component-link-node {
+    background-image: url(../images/component/link.png);
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+    z-index: 2000;
+    position: relative;
+}
+
+div.component {
+    display: table;
+    width:140px;
+    height:57px;
+    position: absolute;
+}
+
+table.component-layout {
+    width:140px;
+    height:57px;
+    display: table;
+    border-spacing: 0;
+}
+
+div.component-title-container {
+    width:140px;
+    height:25px;
+    border:1px solid rgba(177, 177, 177, .5);
+    background-color:rgb(214, 214, 214);
+}
+
+table#component-title {
+    width:100%;
+    height:100%;
+    display: table;
+    border-spacing: 0;
+}
+
+div#component-title-text {
+    width:92px;
+    height:25px;
+    cursor: move;
+    margin-top: 4px;
+    margin-left: 8px;
+    font-size: 14px;
+}
+
+img#component-status-img {
+    padding-top:3px;
+    padding-left:5px;
+}
+
+div#component-link-img {
+    width:16px;
+    height:16px;
+    padding-top: 3px;
+    padding-right: 2px;
+}
+
+div#component-lablel {
+    padding-left: 32px;
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+div.component-link-img-normal {
+    background-repeat: no-repeat;
+    background-image: url(../images/component/link-inactive.png);
+}
+
+.component-link-img-normal > div:hover {
+    background-repeat: no-repeat;
+    background-image: url(../images/component/link.png);
+}
+
+img#component-img {
+    padding-top:3px;
+    padding-left:2px;
+    float: left;
+}
+
+div#component-body {
+    border:1px solid rgba(177, 177, 177, .3);
+    background-color:rgb(236, 236, 236);
+    width:140px;
+    height:32px;
+}
+
 .item-active {
     /*Dumy*/
 }
@@ -271,13 +358,6 @@ div#draggable-item {
     text-indent: 2px;
     padding-top: 2px;
     cursor: pointer;
-}
-
-div.link-node {
-    background-image:url(../images/component/link.png);
-    background-repeat:no-repeat;
-    width:24px;
-    height:24px;
 }
 
 text.item-text-used-style {
