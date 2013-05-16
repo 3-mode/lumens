@@ -228,7 +228,6 @@ Lumens.ComponentPane.create = function(holder, width, height) {
     var svgHolderElement = d3.select("#holderElement");
     var thisSVG = svgHolderElement.append("svg")
     .style({
-        "position": "absolute",
         "z-index": "-100",
         "left": "0",
         "top": "0"
@@ -337,10 +336,11 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 componentInstance.css("top", y);
             }
             tThis.getPosition = function() {
-                var p = componentInstance.offset();
+                var px = componentInstance.css("left");
+                var py = componentInstance.css("top");
                 return {
-                    x: p.left,
-                    y: p.top
+                    x: parseFloat(px.substring(0, px.length - 2)),
+                    y: parseFloat(py.substring(0, py.length - 2))
                 }
             }
             tThis.getSize = function() {
@@ -358,30 +358,17 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 return d.y;
             })
             .interpolate("linear");
+            var linkG = thisSVG.append('svg:g');
             tThis.link = function(c) {
                 var link = {
                     source: tThis,
                     target: c,
-                    G: thisSVG.append('svg:g'),
-                    L: thisSVG.append("svg:path"),
+                    L: linkG.append("svg:path"),
                     update: function() {
                         var s = this.source.getPosition();
                         var t = this.target.getPosition();
                         var size = this.source.getSize();
-                        var svg_xy = {};
-                        svg_xy.left = s.x < t.x ? (s.x + size.width / 2) - 5 : (t.x + size.width / 2) - 5;
-                        svg_xy.top = s.y < t.y ? (s.y + size.height / 2) - 5 : (t.y + size.height / 2) - 5;
-                        svg_xy.width = (Math.abs(s.x - t.x)) + 10;
-                        svg_xy.height = (Math.abs(s.y - t.y)) + 10;
-                        this.SVG.style({
-                            "left": svg_xy.left,
-                            "top": svg_xy.top
-                        })
-                        .attr({
-                            "width": svg_xy.width,
-                            "height": svg_xy.height
-                        });
-                        this.L.attr("d", line(Lumens.Utils.buildPathV1(s, t, size, svg_xy)));
+                        this.L.attr("d", line(Lumens.Utils.buildPathV0(s, t, size)));
                         return this;
                     }
                 };
