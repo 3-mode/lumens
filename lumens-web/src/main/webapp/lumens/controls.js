@@ -223,14 +223,19 @@ Lumens.ComponentPane.create = function(holder, width, height) {
     holder.append('<div id="holderElement"/>');
     var holderElement = holder.find("#holderElement");
     holderElement.attr({
-        style: "height:" + height + ";width:" + width + ";overflow:auto;"
+        style: "height:" + height + ";width:" + width + ";overflow:auto;position:absolute;"
     });
-    // Initailize the SVG object
-    var SVG = d3.select("#holderElement").append("svg")
+    var svgHolderElement = d3.select("#holderElement");
+    var thisSVG = svgHolderElement.append("svg")
+    .style({
+        "position": "absolute",
+        "z-index": "-100",
+        "left": "0",
+        "top": "0"
+    })
     .attr({
-        "id": "componentHolder",
-        "width": "100%",
-        "height": "100%"
+        "width": holderElement.width() - 25,
+        "height": holderElement.height() - 25
     });
 
     holder.droppable({
@@ -254,47 +259,140 @@ Lumens.ComponentPane.create = function(holder, width, height) {
     }
 
     tThis.removeAll = function() {
-        SVG.selectAll('g').remove();
+        svgHolderElement.selectAll('svg').remove();
+        holderElement.find(".component").remove();
     }
 
+    tThis.addComponent = function(args) {
+        return addComponentV1(args);
+    }
 
-    tThis.addComponentEx = function(args) {
+    function addComponentV1(args) {
         var name = args.name;
         var label = args.label;
         var x = args.x;
         var y = args.y;
-        var status_icon = args.status_icon !== undefined ? args.status_icon : "lumens/images/status/16/disconnect.png";
+        var status_disconnect_icon = "lumens/images/status/16/disconnect.png";
+        var status_connect_icon = "lumens/images/status/16/connect.png";
         var component_icon = args.component_icon !== undefined ? args.component_icon : "lumens/images/component/" + name.toLowerCase() + ".png";
         var Component = {};
         Component.create = function() {
             var tThis = {};
-            var width_constant = 140;
-            var height_title_constant = 25;
-            var height_body_constant = 32;
-            var height_constant = height_title_constant + height_body_constant;
-            var parentSVG = SVG;
-            var thisG = parentSVG.append('svg:g');
-            var statusImg = null;
+            var width_constant = 140; // Default value
+            var height_constant = 57; // Default value
             var links = tThis.links = [];
-            var componentInstance = $('<table border="0" class="component">'
+            var componentInstance = $('<div class="component"><table border="0" class="component-layout">'
             + '<tr><td>'
-            + '<div id="component-title" style="border:1px solid rgba(177, 177, 177, .5);background-color:rgb(214, 214, 214);float:top; width:140px; height:25px">'
-            + '<img style = "padding-top:3px;padding-left:3px;" src = "lumens/images/status/16/disconnect.png" />'
-            + '</div>'
+            + '<div class="component-title-container"><table id="component-title" border="0"><tr>'
+            + '<td><img id="component-status-img"/></td>'
+            + '<td><div id="component-title-text"></div></td>'
+            + '<td><div id="component-link-img" class="component-link-img-normal"/></td>'
+            + '</tr></table></div>'
             + '</td></tr>'
             + '<tr><td>'
-            + '<div style="border:1px solid rgba(177, 177, 177, .3);background-color:rgb(236, 236, 236);width:140px; height:32px">'
-            + '</div>'
-            + '</td></tr>'
+            + '<div id="component-body"><img id="component-img"/><div id="component-lablel"></div></div>'
+            + '</td></tr></table></div>'
             );
             componentInstance.appendTo(holderElement);
+            var compTitle = componentInstance.find('#component-title');
+            var compStatusImg = componentInstance.find("#component-status-img");
+            var compImg = componentInstance.find("#component-img");
+            var compLinkImg = componentInstance.find("#component-link-img");
+            var compTitleText = componentInstance.find("#component-title-text");
+            var compLabel = componentInstance.find("#component-lablel");
+            compStatusImg.attr("src", status_disconnect_icon);
+            compImg.attr("src", component_icon);
+            compTitleText.text(name);
+            compLabel.text(label);
+            componentInstance.droppable({
+                drop: function(event, ui) {
+                    event.preventDefault();
+                    if (!ui.helper.hasClass("component-link-node"))
+                        return;
+                    console.log(ui.helper);
+                }
+            });
+            function linkDraggable() {
+                return $('<div class="component-link-node"></div>');
+            }
+            compLinkImg.draggable({
+                appendTo: holderElement,
+                helper: linkDraggable
+            });
+            width_constant = componentInstance.width();
+            height_constant = componentInstance.height();
+            componentInstance.draggable({
+                disabled: false,
+                scroll: true,
+                handle: compTitle,
+                stack: ".component",
+                drag: function(event, ui) {
+                    for (var i = 0; i < links.length; ++i)
+                        links[i].update();
+                }
+            });
+
             tThis.setPosition = function(x, y) {
                 componentInstance.css("left", x);
                 componentInstance.css("top", y);
             }
-
             tThis.getPosition = function() {
-
+                var p = componentInstance.offset();
+                return {
+                    x: p.left,
+                    y: p.top
+                }
+            }
+            tThis.getSize = function() {
+                return {
+                    width: width_constant,
+                    height: height_constant
+                };
+            }
+            //Initailize the SVG object for links
+            var line = d3.svg.line()
+            .x(function(d) {
+                return d.x;
+            })
+            .y(function(d) {
+                return d.y;
+            })
+            .interpolate("linear");
+            tThis.link = function(c) {
+                var link = {
+                    source: tThis,
+                    target: c,
+                    G: thisSVG.append('svg:g'),
+                    L: thisSVG.append("svg:path"),
+                    update: function() {
+                        var s = this.source.getPosition();
+                        var t = this.target.getPosition();
+                        var size = this.source.getSize();
+                        var svg_xy = {};
+                        svg_xy.left = s.x < t.x ? (s.x + size.width / 2) - 5 : (t.x + size.width / 2) - 5;
+                        svg_xy.top = s.y < t.y ? (s.y + size.height / 2) - 5 : (t.y + size.height / 2) - 5;
+                        svg_xy.width = (Math.abs(s.x - t.x)) + 10;
+                        svg_xy.height = (Math.abs(s.y - t.y)) + 10;
+                        this.SVG.style({
+                            "left": svg_xy.left,
+                            "top": svg_xy.top
+                        })
+                        .attr({
+                            "width": svg_xy.width,
+                            "height": svg_xy.height
+                        });
+                        this.L.attr("d", line(Lumens.Utils.buildPathV1(s, t, size, svg_xy)));
+                        return this;
+                    }
+                };
+                links.push(link);
+                c.links.push(link);
+                link.L.style({
+                    "stroke-width": .5,
+                    "stroke": "rgb(170, 170, 170)",
+                    "fill": "none"
+                });
+                return link.update();
             }
             //========End===============================
             return tThis;
@@ -302,9 +400,10 @@ Lumens.ComponentPane.create = function(holder, width, height) {
         var component = Component.create();
         component.setPosition(x, y);
         COMP_List.push(component);
+        return component;
     }
 
-    tThis.addComponent = function(args) {
+    function addComponentV0(args) {
         var name = args.name;
         var label = args.label;
         var x = args.x;
@@ -424,9 +523,9 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                     return "lumens/images/component/link-inactive.png"
                 },
                 "x": width_constant - 20,
-                "y": 4,
-                "width": 16,
-                "height": 16
+                "y": 5,
+                "width": 14,
+                "height": 14
             });
             linkImg
             .on("mouseout", function(e) {
@@ -478,141 +577,6 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 var s = tThis.getPosition();
                 var t = c.getPosition();
                 var size = tThis.getSize();
-                function build_line_info(s, t, size) {
-                    var s_left = s.x;
-                    var s_top = s.y;
-                    var s_width = size.width;
-                    var s_height = size.height;
-                    var s_right = s.x + size.width;
-                    var s_bottom = s.y + size.height;
-
-                    var t_left = t.x;
-                    var t_top = t.y;
-                    var t_width = size.width;
-                    var t_height = size.height;
-                    var t_right = t.x + size.width;
-                    var t_bottom = t.y + size.height;
-
-                    var s_center_x = s.x + s_width / 2;
-                    var s_center_y = s.y + s_height / 2;
-                    var t_center_x = t_left + t_width / 2;
-                    var t_center_y = t_top + t_height / 2;
-                    var delta = 0;
-
-                    if (s_right < t_center_x &&
-                    s_center_y > (t_bottom + delta)) {
-                        // s_right --> t_bottom
-                        return [{
-                                x: s_right,
-                                y: s_center_y
-                            },
-                            {
-                                x: t_center_x,
-                                y: s_center_y
-                            },
-                            {
-                                x: t_center_x,
-                                y: t_bottom
-                            }];
-                    }
-                    else if (s_right <= t_center_x &&
-                    s_center_y <= (t_bottom + delta) &&
-                    s_center_y >= (t_top - delta)) {
-                        // s_right --> t_left
-                        var ty = (s_center_y + t_center_y) / 2;
-                        return [{
-                                x: s_right,
-                                y: ty
-                            },
-                            {
-                                x: t_left,
-                                y: ty
-                            }];
-                    }
-                    else if (s_right < t_center_x &&
-                    s_center_y < t_top) {
-                        //s_right --> t_top
-                        return  [{
-                                x: s_right,
-                                y: s_center_y
-                            }, {
-                                x: t_center_x,
-                                y: s_center_y
-                            }, {
-                                x: t_center_x,
-                                y: t_top
-                            }];
-                    } else if (s_bottom <= t_top &&
-                    s_right >= t_center_x &&
-                    s_left <= t_center_x) {
-                        // s_bottom --> t_top
-                        var tx = (s_center_x + t_center_x) / 2;
-                        return [{
-                                x: tx,
-                                y: s_bottom
-                            }, {
-                                x: tx,
-                                y: t_top
-                            }];
-                    } else if (t_center_x < s_left &&
-                    t_top > (s_center_y + delta)) {
-                        // s_left --> t_top
-                        return [{
-                                x: s_left,
-                                y: s_center_y
-                            }, {
-                                x: t_center_x,
-                                y: s_center_y
-                            }, {
-                                x: t_center_x,
-                                y: t_top
-                            }];
-                    } else if (t_right <= s_left &&
-                    s_center_y <= (t_bottom + delta) &&
-                    s_center_y >= (t_top - delta)) {
-                        // s_left --> out_right
-                        ty = (s_center_y + t_center_y) / 2;
-                        return [{
-                                x: s_left,
-                                y: ty
-                            }, {
-                                x: t_right,
-                                y: ty
-                            }];
-                    } else if (t_center_x < s_left &&
-                    t_top < s_center_y) {
-                        // s_left --> t_bottom
-                        return [{
-                                x: s_left,
-                                y: s_center_y
-                            }, {
-                                x: t_center_x,
-                                y: s_center_y
-                            }, {
-                                x: t_center_x,
-                                y: t_bottom
-                            }];
-                    } else if (s_top >= t_bottom &&
-                    t_center_x >= s_left &&
-                    t_center_x <= s_right) {
-                        // s_top --> t_bottom
-                        tx = (s_center_x + t_center_x) / 2;
-                        return [{
-                                x: tx,
-                                y: s_top
-                            }, {
-                                x: tx,
-                                y: t_bottom
-                            }];
-                    }
-                    return [{
-                            x: 0,
-                            y: 0
-                        }, {
-                            x: 0,
-                            y: 0
-                        }];
-                }
                 var link = {
                     source: tThis,
                     target: c,
@@ -622,7 +586,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                         var s = this.source.getPosition();
                         var t = this.target.getPosition();
                         var size = this.source.getSize();
-                        this.L.attr("d", line(build_line_info(s, t, size)))
+                        this.L.attr("d", line(Lumens.Utils.buildPathV0(s, t, size)))
                     }
                 };
                 links.push(link);
@@ -636,7 +600,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 })
                 .interpolate("linear");
                 link.L = link.G.append("svg:path");
-                link.L.attr("d", line(build_line_info(s, t, size)))
+                link.L.attr("d", line(Lumens.Utils.buildPathV0(s, t, size)))
                 .style({
                     "stroke-width": .5,
                     "stroke": "rgb(170, 170, 170)",
@@ -1287,6 +1251,7 @@ Lumens.RuleTreeEditor.create = function(args) {
                         }
                         $(this).draggable({
                             appendTo: _domHolder,
+                            containment: _domHolder,
                             helper: formatDraggable,
                             stop: function(event, ui) {
                                 _currentDragElement = {
@@ -1550,4 +1515,151 @@ DatasourceCreator.create = function(id, parentHolder) {
     wizard.attr("class", "datasource-wizard");
     //==================DatasourceCreator End=======================================================
     return tThis;
+}
+
+Lumens.Utils = {}
+Lumens.Utils.buildPathV0 = function(s, t, size) {
+    var s_left = s.x;
+    var s_top = s.y;
+    var s_width = size.width;
+    var s_height = size.height;
+    var s_right = s.x + size.width;
+    var s_bottom = s.y + size.height;
+
+    var t_left = t.x;
+    var t_top = t.y;
+    var t_width = size.width;
+    var t_height = size.height;
+    var t_right = t.x + size.width;
+    var t_bottom = t.y + size.height;
+
+    var s_center_x = s.x + s_width / 2;
+    var s_center_y = s.y + s_height / 2;
+    var t_center_x = t_left + t_width / 2;
+    var t_center_y = t_top + t_height / 2;
+    var delta = 0;
+
+    if (s_right < t_center_x &&
+    s_center_y > (t_bottom + delta)) {
+        // s_right --> t_bottom
+        return [{
+                x: s_right,
+                y: s_center_y
+            },
+            {
+                x: t_center_x,
+                y: s_center_y
+            },
+            {
+                x: t_center_x,
+                y: t_bottom
+            }];
+    }
+    else if (s_right <= t_center_x &&
+    s_center_y <= (t_bottom + delta) &&
+    s_center_y >= (t_top - delta)) {
+        // s_right --> t_left
+        var ty = (s_center_y + t_center_y) / 2;
+        return [{
+                x: s_right,
+                y: ty
+            },
+            {
+                x: t_left,
+                y: ty
+            }];
+    }
+    else if (s_right < t_center_x &&
+    s_center_y < t_top) {
+        //s_right --> t_top
+        return  [{
+                x: s_right,
+                y: s_center_y
+            }, {
+                x: t_center_x,
+                y: s_center_y
+            }, {
+                x: t_center_x,
+                y: t_top
+            }];
+    } else if (s_bottom <= t_top &&
+    s_right >= t_center_x &&
+    s_left <= t_center_x) {
+        // s_bottom --> t_top
+        var tx = (s_center_x + t_center_x) / 2;
+        return [{
+                x: tx,
+                y: s_bottom
+            }, {
+                x: tx,
+                y: t_top
+            }];
+    } else if (t_center_x < s_left &&
+    t_top > (s_center_y + delta)) {
+        // s_left --> t_top
+        return [{
+                x: s_left,
+                y: s_center_y
+            }, {
+                x: t_center_x,
+                y: s_center_y
+            }, {
+                x: t_center_x,
+                y: t_top
+            }];
+    } else if (t_right <= s_left &&
+    s_center_y <= (t_bottom + delta) &&
+    s_center_y >= (t_top - delta)) {
+        // s_left --> out_right
+        ty = (s_center_y + t_center_y) / 2;
+        return [{
+                x: s_left,
+                y: ty
+            }, {
+                x: t_right,
+                y: ty
+            }];
+    } else if (t_center_x < s_left &&
+    t_top < s_center_y) {
+        // s_left --> t_bottom
+        return [{
+                x: s_left,
+                y: s_center_y
+            }, {
+                x: t_center_x,
+                y: s_center_y
+            }, {
+                x: t_center_x,
+                y: t_bottom
+            }];
+    } else if (s_top >= t_bottom &&
+    t_center_x >= s_left &&
+    t_center_x <= s_right) {
+        // s_top --> t_bottom
+        tx = (s_center_x + t_center_x) / 2;
+        return [{
+                x: tx,
+                y: s_top
+            }, {
+                x: tx,
+                y: t_bottom
+            }];
+    }
+    return [{
+            x: 0,
+            y: 0
+        }, {
+            x: 0,
+            y: 0
+        }];
+}
+
+Lumens.Utils.buildPathV1 = function(s, t, size, svg_xy) {
+    var p_array = Lumens.Utils.buildPathV0(s, t, size);
+    for (var i = 0; i < p_array.length; ++i) {
+        var p = p_array[i];
+        p.x -= svg_xy.left;
+        p.y -= svg_xy.top;
+    }
+    return p_array;
 }
