@@ -222,21 +222,11 @@ Lumens.ComponentPane.create = function(holder, width, height) {
     var currentDraggableLinkNode = null;
     holder.append('<div id="holderElement"/>');
     var holderElement = holder.find("#holderElement");
+    var svgHolderElement = d3.select("#holderElement");
+
     holderElement.attr({
         style: "height:" + height + ";width:" + width + ";overflow:auto;position:absolute;"
     });
-    var svgHolderElement = d3.select("#holderElement");
-    var thisSVG = svgHolderElement.append("svg")
-    .style({
-        "z-index": "-100",
-        "left": "0",
-        "top": "0"
-    })
-    .attr({
-        "width": holderElement.width() - 25,
-        "height": holderElement.height() - 25
-    });
-
     holder.droppable({
         accept: ".component-node",
         drop: function(event, ui) {
@@ -274,12 +264,45 @@ Lumens.ComponentPane.create = function(holder, width, height) {
         var status_disconnect_icon = "lumens/images/status/16/disconnect.png";
         var status_connect_icon = "lumens/images/status/16/connect.png";
         var component_icon = args.component_icon !== undefined ? args.component_icon : "lumens/images/component/" + name.toLowerCase() + ".png";
+        var ComponentBase = {};
+        ComponentBase.create = function(domObj) {
+            var tThis = {};
+            var links = tThis.links = [];
+            var dom = tThis.dom = domObj;
+            tThis.setPosition = function(x, y) {
+                dom.css("left", x + "px");
+                dom.css("top", y + "px");
+            }
+            tThis.getPosition = function() {
+                var px = dom.css("left");
+                var py = dom.css("top");
+                if (px === "")
+                    px = "0px";
+                if (py === "")
+                    py = "0px";
+                return {
+                    x: parseFloat(px.substring(0, px.length - 2)),
+                    y: parseFloat(py.substring(0, py.length - 2))
+                };
+            }
+            tThis.getSize = function() {
+                return  {
+                    width: dom.width(),
+                    height: dom.height()
+                };
+            }
+
+            dom.on("drag", function(event, ui) {
+                for (var i = 0; i < links.length; ++i)
+                    links[i].update();
+            });
+            return tThis;
+        }
+
         var Component = {};
         Component.create = function() {
-            var tThis = {};
             var width_constant = 140; // Default value
             var height_constant = 57; // Default value
-            var links = tThis.links = [];
             var componentInstance = $('<div class="component"><table border="0" class="component-layout">'
             + '<tr><td>'
             + '<div class="component-title-container"><table id="component-title" border="0"><tr>'
@@ -293,6 +316,12 @@ Lumens.ComponentPane.create = function(holder, width, height) {
             + '</td></tr></table></div>'
             );
             componentInstance.appendTo(holderElement);
+            //============================================================
+            // Initialize this object to expand the position parent class
+            var tThis = ComponentBase.create(componentInstance);
+            var links = tThis.links;
+            var virtualLinkObj = null;
+            //============================================================
             var compTitle = componentInstance.find('#component-title');
             var compStatusImg = componentInstance.find("#component-status-img");
             var compImg = componentInstance.find("#component-img");
@@ -308,11 +337,18 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                     event.preventDefault();
                     if (!ui.helper.hasClass("component-link-node"))
                         return;
-                    console.log(ui.helper);
+                    var draggable = ui.helper.data("draggable");
+                    if (draggable === tThis)
+                        return;
+                    draggable.link(tThis);
                 }
             });
             function linkDraggable() {
-                return $('<div class="component-link-node"></div>');
+                var draggable = $('<div class="component-link-node"></div>');
+                draggable.data("draggable", tThis);
+                var draggableElem = ComponentBase.create(draggable);
+                tThis.virtualLink(draggableElem);
+                return draggable;
             }
             compLinkImg.draggable({
                 appendTo: holderElement,
@@ -324,31 +360,8 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 disabled: false,
                 scroll: true,
                 handle: compTitle,
-                stack: ".component",
-                drag: function(event, ui) {
-                    for (var i = 0; i < links.length; ++i)
-                        links[i].update();
-                }
+                stack: ".component"
             });
-
-            tThis.setPosition = function(x, y) {
-                componentInstance.css("left", x);
-                componentInstance.css("top", y);
-            }
-            tThis.getPosition = function() {
-                var px = componentInstance.css("left");
-                var py = componentInstance.css("top");
-                return {
-                    x: parseFloat(px.substring(0, px.length - 2)),
-                    y: parseFloat(py.substring(0, py.length - 2))
-                }
-            }
-            tThis.getSize = function() {
-                return {
-                    width: width_constant,
-                    height: height_constant
-                };
-            }
             //Initailize the SVG object for links
             var line = d3.svg.line()
             .x(function(d) {
@@ -358,28 +371,50 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                 return d.y;
             })
             .interpolate("linear");
-            var linkG = thisSVG.append('svg:g');
-            tThis.link = function(c) {
+            tThis.link = function(t) {
+                var thisSVG = svgHolderElement.append("svg")
+                .style({
+                    "position": "absolute",
+                    "z-index": "-100"
+                });
                 var link = {
                     source: tThis,
-                    target: c,
-                    L: linkG.append("svg:path"),
+                    target: t,
+                    L: thisSVG.append("svg:path"),
                     update: function() {
                         var s = this.source.getPosition();
                         var t = this.target.getPosition();
-                        var size = this.source.getSize();
-                        this.L.attr("d", line(Lumens.Utils.buildPathV0(s, t, size)));
+                        var size = this.target.getSize();
+                        var svg_xy = {};
+                        svg_xy.left = s.x < t.x ? (s.x + size.width / 2) - 5 : (t.x + size.width / 2) - 5;
+                        svg_xy.top = s.y < t.y ? (s.y + size.height / 2) - 5 : (t.y + size.height / 2) - 5;
+                        svg_xy.width = (Math.abs(s.x - t.x)) + 10;
+                        svg_xy.height = (Math.abs(s.y - t.y)) + 10;
+                        thisSVG.style({
+                            "left": svg_xy.left + "px",
+                            "top": svg_xy.top + "px"
+                        })
+                        .attr({
+                            "width": svg_xy.width,
+                            "height": svg_xy.height
+                        });
+                        this.L.attr("d", line(Lumens.Utils.buildPathV1(s, t, size, svg_xy)));
                         return this;
                     }
-                };
+                }
                 links.push(link);
-                c.links.push(link);
+                t.links.push(link);
                 link.L.style({
                     "stroke-width": .5,
                     "stroke": "rgb(170, 170, 170)",
                     "fill": "none"
                 });
                 return link.update();
+            }
+
+            tThis.virtualLink = function(virtualObj) {
+                this.link(virtualObj);
+                virtualLinkObj = virtualObj;
             }
             //========End===============================
             return tThis;
