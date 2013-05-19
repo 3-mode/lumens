@@ -332,6 +332,27 @@ Lumens.ComponentPane.create = function(holder, width, height) {
             compImg.attr("src", component_icon);
             compTitleText.text(name);
             compLabel.text(label);
+
+            function linkDraggable() {
+                var draggable = $('<div class="component-link-node"></div>');
+                draggable.data("draggable", tThis);
+                var draggableElem = ComponentBase.create(draggable);
+                tThis.virtualLink(draggableElem);
+                return draggable;
+            }
+            compLinkImg.draggable({
+                appendTo: holderElement,
+                helper: linkDraggable,
+                stop: function(event, ui) {
+                    // Remove virtualLinkObj
+                    if (virtualLinkObj !== null) {
+                        var vLinks = virtualLinkObj.links;
+                        if (vLinks.length === 1)
+                            vLinks[0].remove();
+                        virtualLinkObj = null;
+                    }
+                }
+            });
             componentInstance.droppable({
                 drop: function(event, ui) {
                     event.preventDefault();
@@ -343,19 +364,6 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                     draggable.link(tThis);
                 }
             });
-            function linkDraggable() {
-                var draggable = $('<div class="component-link-node"></div>');
-                draggable.data("draggable", tThis);
-                var draggableElem = ComponentBase.create(draggable);
-                tThis.virtualLink(draggableElem);
-                return draggable;
-            }
-            compLinkImg.draggable({
-                appendTo: holderElement,
-                helper: linkDraggable
-            });
-            width_constant = componentInstance.width();
-            height_constant = componentInstance.height();
             componentInstance.draggable({
                 disabled: false,
                 scroll: true,
@@ -400,6 +408,19 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                         });
                         this.L.attr("d", line(Lumens.Utils.buildPathV1(s, t, size, svg_xy)));
                         return this;
+                    },
+                    remove: function() {
+                        function removeFromArray(array, elem) {
+                            var length = array.length;
+                            while (length > 0) {
+                                if (array[--length] === elem)
+                                    break;
+                            }
+                            array.splice(length, 1);
+                        }
+                        removeFromArray(this.source.links, this);
+                        removeFromArray(this.target.links, this);
+                        thisSVG.remove();
                     }
                 }
                 links.push(link);
