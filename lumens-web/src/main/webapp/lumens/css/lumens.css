@@ -29,7 +29,7 @@ html,body {
     height: 45px;
     width:100%;
     float: top;
-    background-color: #157FCC;
+    background-color: #1b5c8b;
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-bottom-color: rgba(0, 0, 0, .3);
@@ -44,14 +44,14 @@ html,body {
     height: 45px;
     width: 150px;
     float: left;
-    background-color: #157FCC;
+    background-color: #1b5c8b;
 }
 .logo-bag {
     width: 135px;
     height: 26px;
     margin-top: -15px;
     margin-left: -23px;
-    background-image: url(../images/ui/logo-bag.png);
+    background-image: url(images/ui/logo-bag.png);
     background-repeat: no-repeat;
 }
 
@@ -190,12 +190,12 @@ html,body {
 }
 
 div.component-link-node {
-    background-image: url(../images/component/link.png);
+    background-image: url(images/component/link.png);
     background-repeat: no-repeat;
     width: 24px;
     height: 24px;
     z-index: 2000;
-    position: relative;
+    position: absolute;
 }
 
 div.component {
@@ -255,12 +255,12 @@ div#component-lablel {
 
 div.component-link-img-normal {
     background-repeat: no-repeat;
-    background-image: url(../images/component/link-inactive.png);
+    background-image: url(images/component/link-inactive.png);
 }
 
 .component-link-img-normal > div:hover {
     background-repeat: no-repeat;
-    background-image: url(../images/component/link.png);
+    background-image: url(images/component/link.png);
 }
 
 img#component-img {

@@ -54,14 +54,8 @@ Lumens.create = function(parentId) {
     // TODO
     var componentTree = Lumens.ComponentTree.create(accordian.item(0), "#componentTree", "#SplitterPaneDesignerView");
     var topPane = $("#TopPane");
-    var componentPane = Lumens.ComponentPane.create(topPane, "100%", "100%");
-    // Add three demo component here
-    /*
-     var c1 = componentPane.addComponent({name:"SOAP", label:"source", x:100, y:100});
-     var c2 = componentPane.addComponent({name:"Transform", label:"transform", x:400, y:200});
-     var c3 = componentPane.addComponent({name:"Database", label:"target", x:700, y:100});
-     var p = c1.getPosition();
-     var link = c1.link(c2).target.link(c3);//*/
+    Lumens.ComponentPane.create(topPane, "100%", "100%");
+    
     lumensApp.run = function() {
         // Load the mandory data from server first
         // Do some settings on the web page, such status and so on

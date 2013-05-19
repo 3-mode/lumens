@@ -261,9 +261,9 @@ Lumens.ComponentPane.create = function(holder, width, height) {
         var label = args.label;
         var x = args.x;
         var y = args.y;
-        var status_disconnect_icon = "lumens/images/status/16/disconnect.png";
-        var status_connect_icon = "lumens/images/status/16/connect.png";
-        var component_icon = args.component_icon !== undefined ? args.component_icon : "lumens/images/component/" + name.toLowerCase() + ".png";
+        var status_disconnect_icon = "lumens/css/images/status/16/disconnect.png";
+        var status_connect_icon = "lumens/css/images/status/16/connect.png";
+        var component_icon = args.component_icon !== undefined ? args.component_icon : "lumens/css/images/component/" + name.toLowerCase() + ".png";
         var ComponentBase = {};
         ComponentBase.create = function(domObj) {
             var tThis = {};
@@ -301,8 +301,6 @@ Lumens.ComponentPane.create = function(holder, width, height) {
 
         var Component = {};
         Component.create = function() {
-            var width_constant = 140; // Default value
-            var height_constant = 57; // Default value
             var componentInstance = $('<div class="component"><table border="0" class="component-layout">'
             + '<tr><td>'
             + '<div class="component-title-container"><table id="component-title" border="0"><tr>'
@@ -451,8 +449,8 @@ Lumens.ComponentPane.create = function(holder, width, height) {
         var label = args.label;
         var x = args.x;
         var y = args.y;
-        var status_icon = args.status_icon !== undefined ? args.status_icon : "lumens/images/status/16/disconnect.png";
-        var component_icon = args.component_icon !== undefined ? args.component_icon : "lumens/images/component/" + name.toLowerCase() + ".png";
+        var status_icon = args.status_icon !== undefined ? args.status_icon : "lumens/css/images/status/16/disconnect.png";
+        var component_icon = args.component_icon !== undefined ? args.component_icon : "lumens/css/images/component/" + name.toLowerCase() + ".png";
 
         var Component = {};
         Component.create = function(SVG, name) {
@@ -563,7 +561,7 @@ Lumens.ComponentPane.create = function(holder, width, height) {
                             console.log(tThis);
                         }
                     });
-                    return "lumens/images/component/link-inactive.png"
+                    return "lumens/css/images/component/link-inactive.png"
                 },
                 "x": width_constant - 20,
                 "y": 5,
@@ -572,10 +570,10 @@ Lumens.ComponentPane.create = function(holder, width, height) {
             });
             linkImg
             .on("mouseout", function(e) {
-                linkImg.attr("xlink:href", "lumens/images/component/link-inactive.png");
+                linkImg.attr("xlink:href", "lumens/css/images/component/link-inactive.png");
             })
             .on("mouseover", function(e) {
-                linkImg.attr("xlink:href", "lumens/images/component/link.png");
+                linkImg.attr("xlink:href", "lumens/css/images/component/link.png");
             });
 
             thisG.append("svg:image")
