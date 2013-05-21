@@ -6,11 +6,9 @@ $(function() {
         var tThis = {};
         var rootContainer = containerObj;
         var heaerContainer = null;
-        rootContainer.attr("class", "hrcms");
+        rootContainer.addClass("hrcms");
         function layoutHeader(parentContainer) {
-            var headerCon = $('<div class="hrcms-header-constainer"/>');
-            headerCon.appendTo(parentContainer);
-            return headerCon;
+            return $('<div class="hrcms-header-constainer"/>').appendTo(parentContainer);
         }
         tThis.load = function() {
             console.log("Loading HRCMS !");
@@ -59,8 +57,7 @@ $(function() {
     Hrcms.Header = {};
     Hrcms.Header.create = function(containerObj) {
         var tThis = {};
-        var header = $('<div class="hrcms-header"/>');
-        header.appendTo(containerObj);
+        var header = $('<div class="hrcms-header"/>').appendTo(containerObj);
         header.append('<table><tr><td><div class="hrcms-logo"/></td><td><div id="hrcms-system-title"></div></td></tr></table>');
         var sysTitle = $("#hrcms-system-title");
         tThis.setSysTitle = function(text) {
@@ -75,10 +72,8 @@ $(function() {
     Hrcms.Toolbar.create = function(containerObj) {
         var tThis = {};
         var container = containerObj;
-        var toolbar = $('<div class="hrcms-toolbar"/>');
-        toolbar.appendTo(container);
-        var toolbarContent = $('<ul/>');
-        toolbarContent.appendTo(toolbar);
+        var toolbar = $('<div class="hrcms-toolbar"/>').appendTo(container);
+        var toolbarContent = $('<ul/>').appendTo(toolbar);
         var buttonList = [];
         var activeItem = null;
         function activeButton(event) {
@@ -89,8 +84,7 @@ $(function() {
         }
         tThis.configure = function(buttons) {
             for (var i = 0; i < buttons.length; ++i) {
-                var button = $('<li><a><span class="hrcms-toolbar-button-text"></span></a></li>');
-                button.appendTo(toolbarContent);
+                var button = $('<li><a><span class="hrcms-toolbar-button-text"></span></a></li>').appendTo(toolbarContent);
                 button.find('span').html(buttons[i].title);
                 button.on('click', activeButton);
                 button.on('click', buttons[i].click);
@@ -106,25 +100,20 @@ $(function() {
     Hrcms.NavMenu = {};
     Hrcms.NavMenu.create = function(args) {
         var tThis = {};
-        var nav = $('<div class="hrcms-secondary-menu"/>');
-        nav.appendTo(args.container);
+        var nav = $('<div class="hrcms-secondary-menu"/>').appendTo(args.container);
         nav.css("width", args.width);
         nav.css("height", args.height);
         var activeItem = null;
         var Section = {};
         Section.create = function(sectionName) {
             var tThis = {};
-            var section = $('<div/>');
-            section.appendTo(nav);
-            var sectionTitle = $('<div class="hrcms-secondary-menu-section"></div>');
-            sectionTitle.appendTo(section);
+            var section = $('<div/>').appendTo(nav);
+            var sectionTitle = $('<div class="hrcms-secondary-menu-section"></div>').appendTo(section);
             sectionTitle.html(sectionName);
-            var sectionContent = $('<ul class="hrcms-secondary-submenu"/>');
-            sectionContent.appendTo(section);
+            var sectionContent = $('<ul class="hrcms-secondary-submenu"/>').appendTo(section);
             //Operation functions
             tThis.addItem = function(itemName) {
-                var item = $('<li><a><span class="hrcms-secondary-menu-text"/></a></li>');
-                item.appendTo(sectionContent);
+                var item = $('<li><a><span class="hrcms-secondary-menu-text"/></a></li>').appendTo(sectionContent);
                 item.on('click', function(event, ui) {
                     if (activeItem !== null)
                         activeItem.toggleClass('hrcms-h-active');
@@ -151,25 +140,63 @@ $(function() {
         return tThis;
     }
 
+    Hrcms.DataNavBar = {};
+    Hrcms.DataNavBar.create = function(args) {
+        var tThis = {};
+        var container = args.container;
+        var workspaceHeader = $('<div class="hrcms-workspace-header">').appendTo(container);
+        // end
+        return tThis;
+        /*
+         <div class="hrcms-workspace-header">
+         <div class="hrcms-workspace-nav hrcms-workspace-nav-padding">
+         <a style="text-decoration:none; cursor:pointer;"><span>Home</span></a>
+         <span>/</span>
+         <span>NO10001</span>
+         </div>
+         <div class="hrcms-workspace-toolbar"></div>
+         </div>//*/
+    }
+
     Hrcms.DataGrid = {}
     Hrcms.DataGrid.create = function(args) {
         var tThis = {};
         var container = args.container;
-        var gridContainer = $('<div class="hrcms-datagrid-container" />')
-        gridContainer.appendTo(container);
-        var table = $('<table border="0" class="hrcms-datagrid"/>');
-        table.appendTo(gridContainer);
+        var gridContainer = $('<div class="hrcms-datagrid-container" />').appendTo(container);
+        var table = $('<table class="hrcms-datagrid"/>').appendTo(gridContainer);
         table.css("width", args.width);
         table.css("height", args.height);
+        var tableBody = null;
+        var dataFieldNames = null;
         tThis.configure = function(args) {
-            var thead = $('<thead><tr></tr></thead>');
-            thead.appendTo(table);
+            var thead = $('<thead><tr></tr></thead>').appendTo(table);
             thead = thead.find('tr');
             var columns = args.columns;
+            dataFieldNames = [];
             for (var i = 0; i < columns.length; ++i) {
-                thead.append('<th><div style="width:' + columns[i].width + '">' + columns[i].name + '</div></th>');
+                var th = $('<th/>').appendTo(thead);
+                th.addClass("hrcms-datagrid-sort");
+                var div = $('<div/>').appendTo(th);
+                th.css("width", columns[i].width);
+                div.attr("field-name", columns[i].field);
+                div.html(columns[i].name);
+                dataFieldNames.push(columns[i].field);
             }
+            tableBody = $('<tbody/>').appendTo(table);
             table.append('<tfoot><tr><td colspan="' + columns.length + '"></td></tr></tfoot>');
+        }
+        tThis.data = function(records) {
+            for (var i = 0; i < records.length; ++i) {
+                var tr = $('<tr/>').appendTo(tableBody);
+                tr.addClass("hrcms-datagrid-row");
+                tr.attr('row-number', i);
+                var record = records[i].record;
+                for (var j = 0; j < dataFieldNames.length; ++j) {
+                    td = $('<td/>').appendTo(tr);
+                    td.attr('field-name', dataFieldNames[j]);
+                    td.html(record[j]);
+                }
+            }
         }
         // end
         return tThis;
@@ -180,13 +207,10 @@ $(function() {
     Hrcms.ContentView.create = function(container) {
         var tThis = {};
         var layoutContent = tThis.layoutContent = function(parentContainer) {
-            var contentCon = $('<div class="hrcms-content-constainer"/>');
-            contentCon.appendTo(parentContainer);
-            return contentCon;
+            return $('<div class="hrcms-content-constainer"/>').appendTo(parentContainer);
         }
         var layoutNavMenu = tThis.layoutNavMenu = function(parentContainer) {
-            var menuContainer = $('<div class="hrcms-secondary-menu-container"/>');
-            menuContainer.appendTo(parentContainer);
+            var menuContainer = $('<div class="hrcms-secondary-menu-container"/>').appendTo(parentContainer);
             menuContainer.append('<div id="place-holder" style="width:220px;height:10px;float:top;"/>');
             return Hrcms.NavMenu.create({
                 container: menuContainer,
@@ -196,8 +220,7 @@ $(function() {
         }
 
         var contentContainer = layoutContent(container);
-        var splitterContainer = $('<div class="SplitterPane layout-content splitter-pane-container" style="overflow:hidden;"></div>');
-        splitterContainer.appendTo(contentContainer);
+        var splitterContainer = $('<div class="SplitterPane layout-content splitter-pane-container" style="overflow:hidden;"></div>').appendTo(contentContainer);
         splitterContainer.append('<div id="LeftPane" style="position: absolute; z-index: 1; overflow-x: hidden; overflow-y: auto; left: 0px; width: 200px; height: 100%;"/>');
         splitterContainer.append('<div id="RightPane" style="position: absolute; z-index: 1; width: 100%; height: 100%; overflow: hidden"/>');
         splitterContainer.splitter({
@@ -335,9 +358,8 @@ $(function() {
                 ]
             }
         ]);
-        var workspaceContainer = $('<div class="hrcms-workspace-container"/>');
-        workspaceContainer.appendTo(rightContainer);
-
+        var workspaceContainer = $('<div class="hrcms-workspace-container"/>').appendTo(rightContainer);
+        var workspaceHeader = Hrcms.DataNavBar.create({container: workspaceContainer});
         var dataGrid = Hrcms.DataGrid.create({
             container: workspaceContainer,
             width: "100%",
@@ -346,25 +368,34 @@ $(function() {
         dataGrid.configure({
             columns: [
                 {
-                    name: "test 1",
-                    width: "100px",
+                    name: "所在单位",
+                    field: "field-1",
+                    width: "20%",
                     click: function(event) {
                     }
                 },
                 {
-                    name: "test 2",
-                    width: "100px",
+                    name: "员工号",
+                    field: "field-2",
+                    width: "20%",
                     click: function(event) {
                     }
                 },
                 {
-                    name: "test 3",
-                    width: "100px",
+                    name: "身份证号",
+                    field: "field-3",
+                    width: "60%",
                     click: function(event) {
                     }
                 }
             ]
-        }); //*/
+        });
+        dataGrid.data([
+            {record: ["张三", "NO1001", "12121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]}
+        ]);
+        //*/
         // TODO ContentTitle
         /** Content end */
         // TODO ContentTable
