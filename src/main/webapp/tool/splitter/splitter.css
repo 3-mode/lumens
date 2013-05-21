@@ -1,0 +1,85 @@
+/*
+    Document   : splitter
+    Created on : Jan 29, 2013, 5:48:04 PM
+    Author     : shaofeng wang (shaofeng.cjpw@gmail.com)
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/*
+  * Splitter container. Set this to the desired width and height
+  * of the combined left and right panes. In this example, the
+  * height is fixed and the width is the full width of the body,
+  * less the margin on the splitter itself.
+*/
+.SplitterPane {
+    border: 0px;
+    /* No padding allowed */
+}
+/*
+ * Left-side element of the splitter. Use pixel units for the
+ * min-width and max-width; the splitter plugin parses them to
+ * determine the splitter movement limits. Set the width to
+ * the desired initial width of the element; the plugin changes
+ * the width of this element dynamically.
+*/
+#LeftPane {
+    background: #ffffff;
+    overflow: auto;
+    width: 200px;	/* optional, initial splitbar position */
+    min-width: 200px;	/* optional */
+    /* No margin or border allowed */
+}
+/*
+ * Right-side element of the splitter.
+*/
+#RightPane {
+    background: #ffffff;
+    overflow: auto;
+    min-width: 600px;
+    /* No margin or border allowed */
+}
+
+#TopPane {
+    background: #ffffff;
+    overflow: auto;
+    width: 100%;	/* optional, initial splitbar position */
+    min-height: 300px;	/* optional */
+    /* No margin or border allowed */
+}
+/*
+ * Right-side element of the splitter.
+*/
+#BottomPane {
+    width: 100%;
+    background: #ffffff;
+    overflow: auto;
+    min-height: 100px;
+    /* No margin or border allowed */
+}
+/*
+ * Splitter bar style; the .active class is added when the
+ * mouse is over the splitter or the splitter is focused
+ * via the keyboard taborder or an accessKey.
+*/
+.SplitterPane .vsplitbar {
+    width: 2px;
+    height: 100%;
+    cursor: e-resize;	/* in case col-resize isn't supported */
+    cursor: col-resize;
+    background: #ffffff url('./vgrabber2-normal.gif') repeat-y left;
+}
+.SplitterPane .vsplitbar.active, .SplitterPane .vsplitbar:hover {
+    background: #ffffff url('./vgrabber2-active.gif') repeat-y left;
+}
+
+.SplitterPane .hsplitbar {
+    width: 100%;
+    height: 2px;
+    cursor: n-resize;	/* in case col-resize isn't supported */
+    cursor: row-resize;
+    background: #ffffff url('./hgrabber2-normal.gif') repeat-x top;
+}
+.SplitterPane .hsplitbar.active, .SplitterPane .hsplitbar:hover {
+    background: #ffffff url('./hgrabber2-active.gif') repeat-x top;
+}
