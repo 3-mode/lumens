@@ -229,6 +229,7 @@ body {
 .hrcms .hrcms-datagrid {
     border-top: 1px solid rgba(255, 255, 255, .8);
     display: table;
+    border-spacing: 2px;
 }
 .hrcms .hrcms-datagrid thead {
     display: table-header-group;
@@ -238,16 +239,33 @@ body {
     line-height: 20px;
     height: 20px;
 }
+.hrcms .hrmcs-datagrid tbody {
+    display: table-row-group;
+}
 .hrcms .hrcms-datagrid tr {
     display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;
+    line-height: 20px;
+    height: 20px;
 }
-.hrcms .hrcms-datagrid th, .hrcms .hrcms-datagrid td {
+.hrcms .hrcms-datagrid-row {
+    border-top: 1px solid #dddddd;
+}
+.hrcms .hrcms-datagrid-sort {
+    cursor: pointer;
+}
+.hrcms .hrcms-datagrid th {
     display: table-cell;
     text-align: left;
     line-height: 20px;
     height: 20px;
+    padding: 3px 6px;
+    border-left: 1px solid #dfdfdf;
+}
+.hrcms .hrcms-datagrid td {
+    display: table-cell;
+    text-align: left;
+    line-height: 18px;
+    height: 18px;
     padding: 3px 6px;
     border-left: 1px solid #dfdfdf;
 }
