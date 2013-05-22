@@ -144,18 +144,36 @@ $(function() {
     Hrcms.DataNavBar.create = function(args) {
         var tThis = {};
         var container = args.container;
-        var workspaceHeader = $('<div class="hrcms-workspace-header">').appendTo(container);
+        var workspaceHeader = $('<div class="hrcms-workspace-header"/>').appendTo(container);
+        var headerNav = $('<div class="hrcms-workspace-nav-padding"/>').appendTo(workspaceHeader);
+        var workspaceToolbar = $('<div class="hrcms-workspace-toolbar"/>').appendTo(workspaceHeader);
+        var nav = $('<div class="hrcms-workspace-nav"><span class="hrcms-workspace-nav-current">'
+        + args.title + '</span></div>').appendTo(headerNav);
+        var btn = $('<button class="hrcms-button"></button>').appendTo($('<div style="margin-left:15px;"/>').appendTo(workspaceToolbar));
+        btn.button();
+        btn.text("添加");
+        tThis.goTo = function(text) {
+            var last = nav.find('span').last();
+            last.toggleClass('hrcms-workspace-nav-back');
+            last.toggleClass('hrcms-workspace-nav-current');
+            last.on('click', function(event, ui) {
+                tThis.goBack();
+            });
+            nav.append('<span style="padding-left: 4px; padding-right:4px;">/</span><span class="hrcms-workspace-nav-current">'
+            + text + '</span>');
+        }
+        tThis.goBack = function() {
+            var canGoBack = nav.find('.hrcms-workspace-nav-back');
+            if (canGoBack.length === 0)
+                return;
+            nav.find('span').last().remove();
+            nav.find('span').last().remove();
+            var last = nav.find('span').last();
+            last.toggleClass('hrcms-workspace-nav-back');
+            last.toggleClass('hrcms-workspace-nav-current');
+        }
         // end
         return tThis;
-        /*
-         <div class="hrcms-workspace-header">
-         <div class="hrcms-workspace-nav hrcms-workspace-nav-padding">
-         <a style="text-decoration:none; cursor:pointer;"><span>Home</span></a>
-         <span>/</span>
-         <span>NO10001</span>
-         </div>
-         <div class="hrcms-workspace-toolbar"></div>
-         </div>//*/
     }
 
     Hrcms.DataGrid = {}
@@ -164,6 +182,8 @@ $(function() {
         var container = args.container;
         var gridContainer = $('<div class="hrcms-datagrid-container" />').appendTo(container);
         var table = $('<table class="hrcms-datagrid"/>').appendTo(gridContainer);
+        gridContainer.css("width", args.width);
+        gridContainer.css("height", args.height);
         table.css("width", args.width);
         table.css("height", args.height);
         var tableBody = null;
@@ -177,13 +197,14 @@ $(function() {
                 var th = $('<th/>').appendTo(thead);
                 th.addClass("hrcms-datagrid-sort");
                 var div = $('<div/>').appendTo(th);
-                th.css("width", columns[i].width);
+                th.css("padding-left", "20px");
+                th.css("padding-right", "20px");
                 div.attr("field-name", columns[i].field);
                 div.html(columns[i].name);
                 dataFieldNames.push(columns[i].field);
             }
             tableBody = $('<tbody/>').appendTo(table);
-            table.append('<tfoot><tr><td colspan="' + columns.length + '"></td></tr></tfoot>');
+            table.append('<tfoot><tr><td class="hrcms-datagrid-tfoot" colspan="' + columns.length + '"></td></tr></tfoot>');
         }
         tThis.data = function(records) {
             for (var i = 0; i < records.length; ++i) {
@@ -359,7 +380,11 @@ $(function() {
             }
         ]);
         var workspaceContainer = $('<div class="hrcms-workspace-container"/>').appendTo(rightContainer);
-        var workspaceHeader = Hrcms.DataNavBar.create({container: workspaceContainer});
+        var workspaceHeader = Hrcms.DataNavBar.create({
+            container: workspaceContainer,
+            title: I18N.ContentNavMenu.Info.Person
+        });
+        workspaceHeader.goTo('NO10001');
         var dataGrid = Hrcms.DataGrid.create({
             container: workspaceContainer,
             width: "100%",
@@ -368,23 +393,181 @@ $(function() {
         dataGrid.configure({
             columns: [
                 {
-                    name: "所在单位",
+                    name: "员工名字",
                     field: "field-1",
-                    width: "20%",
                     click: function(event) {
                     }
                 },
                 {
                     name: "员工号",
                     field: "field-2",
-                    width: "20%",
                     click: function(event) {
                     }
                 },
                 {
                     name: "身份证号",
                     field: "field-3",
-                    width: "60%",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工名字",
+                    field: "field-1",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工号",
+                    field: "field-2",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "身份证号",
+                    field: "field-3",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工名字",
+                    field: "field-1",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工号",
+                    field: "field-2",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "身份证号",
+                    field: "field-3",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工名字",
+                    field: "field-1",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工号",
+                    field: "field-2",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "身份证号",
+                    field: "field-3",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工名字",
+                    field: "field-1",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工号",
+                    field: "field-2",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "身份证号",
+                    field: "field-3",
+                    click: function(event) {
+                    }
+                }, {
+                    name: "员工名字",
+                    field: "field-1",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工号",
+                    field: "field-2",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "身份证号",
+                    field: "field-3",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工名字",
+                    field: "field-1",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工号",
+                    field: "field-2",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "身份证号",
+                    field: "field-3",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工名字",
+                    field: "field-1",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工号",
+                    field: "field-2",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "身份证号",
+                    field: "field-3",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工名字",
+                    field: "field-1",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工号",
+                    field: "field-2",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "身份证号",
+                    field: "field-3",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工名字",
+                    field: "field-1",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "员工号",
+                    field: "field-2",
+                    click: function(event) {
+                    }
+                },
+                {
+                    name: "身份证号",
+                    field: "field-3",
                     click: function(event) {
                     }
                 }
