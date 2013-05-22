@@ -149,9 +149,6 @@ $(function() {
         var workspaceToolbar = $('<div class="hrcms-workspace-toolbar"/>').appendTo(workspaceHeader);
         var nav = $('<div class="hrcms-workspace-nav"><span class="hrcms-workspace-nav-current">'
         + args.title + '</span></div>').appendTo(headerNav);
-        var btn = $('<button class="hrcms-button"></button>').appendTo($('<div style="margin-left:15px;"/>').appendTo(workspaceToolbar));
-        btn.button();
-        btn.text("添加");
         tThis.goTo = function(text) {
             var last = nav.find('span').last();
             last.toggleClass('hrcms-workspace-nav-back');
@@ -171,6 +168,14 @@ $(function() {
             var last = nav.find('span').last();
             last.toggleClass('hrcms-workspace-nav-back');
             last.toggleClass('hrcms-workspace-nav-current');
+        }
+        tThis.configButtons = function(buttons) {
+            for (var i = 0; i < buttons.length; ++i) {
+                var btn = $('<button class="hrcms-button"></button>').appendTo($('<div style="margin-left:15px;"/>').appendTo(workspaceToolbar));
+                btn.button();
+                btn.text(buttons[i].title);
+                btn.on("click", buttons[i].click);
+            }
         }
         // end
         return tThis;
@@ -204,7 +209,7 @@ $(function() {
                 dataFieldNames.push(columns[i].field);
             }
             tableBody = $('<tbody/>').appendTo(table);
-            table.append('<tfoot><tr><td class="hrcms-datagrid-tfoot" colspan="' + columns.length + '"></td></tr></tfoot>');
+            table.append('<tfoot><tr><td colspan="' + columns.length + '"><div style="height:25px;"></div></td></tr></tfoot>');
         }
         tThis.data = function(records) {
             for (var i = 0; i < records.length; ++i) {
@@ -384,6 +389,20 @@ $(function() {
             container: workspaceContainer,
             title: I18N.ContentNavMenu.Info.Person
         });
+        workspaceHeader.configButtons([
+            {
+                title: "Add",
+                click: function(event) {
+                    console.log(this);
+                }
+            },
+            {
+                title: "Remove",
+                click: function(event) {
+                    console.log(this);
+                }
+            }
+        ]);
         workspaceHeader.goTo('NO10001');
         var dataGrid = Hrcms.DataGrid.create({
             container: workspaceContainer,

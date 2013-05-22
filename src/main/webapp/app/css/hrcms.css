@@ -291,18 +291,16 @@ body {
 }
 .hrcms .hrcms-datagrid tfoot {
     display: table-footer-group;
+    border-spacing: 3px !important;
+}
+.hrcms .hrcms-datagrid tfoot td {
     text-align: left;
     vertical-align: middle;
     line-height: 25px;
     height: 25px;
-    border-spacing: 3px !important;
     border-top: 2px solid #cacaca;
     border-bottom: 1px solid #cacaca;
     background: #eeeeee;
     font-weight: bold;
-}
-.hrcms .hrcms-datagrid tfoot td {
-    line-height: 25px;
-    height: 25px;
 }
 /*** HRCMS workspace styles end */

@@ -46,6 +46,8 @@ $(function() {
     I18N.ContentNavMenu.Contract = {};
     I18N.ContentNavMenu.Contract.Title = "合同类信息";
     I18N.ContentNavMenu.Contract.EmploymentContract = "聘用合同"
+    
+    // Widget controls
 
 });
 
