@@ -238,6 +238,7 @@ body {
 
 .hrcms .hrcms-datagrid-container {
     background-color:rgb(240, 240, 240);
+    overflow: auto;
 }
 .hrcms .hrcms-datagrid {
     border-top: 1px solid rgba(255, 255, 255, .8);
@@ -246,16 +247,14 @@ body {
     display: table;
     border-spacing: 2px;
 }
-.hrcms .hrcms-datagrid div {
-    display: block;
-}
+
 .hrcms .hrcms-datagrid thead {
     display: table-header-group;
     border-spacing: 3px !important;
     background: #eeeeee;
     vertical-align: top;
-    line-height: 20px;
-    height: 20px;
+    line-height: 25px;
+    height: 25px;
 }
 .hrcms .hrmcs-datagrid tbody {
     display: table-row-group;
@@ -265,16 +264,23 @@ body {
 }
 .hrcms .hrcms-datagrid-row {
 }
-.hrcms .hrcms-datagrid-sort {
+.hrcms .hrcms-datagrid-header {
     cursor: pointer;
     color: #4c4c4c;
+}
+.hrcms .hrcms-datagrid-header-text {
+}
+.hrcms .hrcms-datagrid .hrcms-column-sort {
+    display: block;
+    float: right;
+    margin-left: 4px;
 }
 .hrcms .hrcms-datagrid th {
     display: table-cell;
     text-align: left;
     line-height: 20px;
     height: 20px;
-    padding: 3px 5px;
+    padding: 3px 8px;
     white-space: nowrap;
     border-bottom: 2px solid #cacaca;
     border-left: 1px solid #dfdfdf;

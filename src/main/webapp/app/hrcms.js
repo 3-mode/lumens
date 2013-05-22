@@ -200,12 +200,19 @@ $(function() {
             dataFieldNames = [];
             for (var i = 0; i < columns.length; ++i) {
                 var th = $('<th/>').appendTo(thead);
-                th.addClass("hrcms-datagrid-sort");
-                var div = $('<div/>').appendTo(th);
-                th.css("padding-left", "20px");
-                th.css("padding-right", "20px");
-                div.attr("field-name", columns[i].field);
-                div.html(columns[i].name);
+                th.addClass("hrcms-datagrid-header");
+                th.css("padding-left", "8px");
+                th.css("padding-right", "15px");
+                th.attr("field-name", columns[i].field);
+                var div = $('<div class="hrcms-datagrid-header-text"/>').appendTo(th);
+                /*
+                $('<span class="hrcms-column-sort ui-icon ui-icon-triangle-1-n"/>').appendTo(th);
+                th.on('click', function(event) {
+                    var sortIcon = $(this).find('.hrcms-column-sort');
+                    sortIcon.toggleClass('ui-icon ui-icon-triangle-1-s');
+                    sortIcon.toggleClass('ui-icon ui-icon-triangle-1-n');
+                });//*/
+                div.html(columns[i].field);
                 dataFieldNames.push(columns[i].field);
             }
             tableBody = $('<tbody/>').appendTo(table);
