@@ -5,21 +5,21 @@ $(function() {
     Hrcms.create = function(containerObj) {
         var tThis = {};
         var rootContainer = containerObj;
-        var heaerContainer = null;
+        var headerContainer = null;
         rootContainer.addClass("hrcms");
         function layoutHeader(parentContainer) {
             return $('<div class="hrcms-header-constainer"/>').appendTo(parentContainer);
         }
         tThis.load = function() {
             console.log("Loading HRCMS !");
-            heaerContainer = layoutHeader(rootContainer);
+            headerContainer = layoutHeader(rootContainer);
             /** Header begin */
-            Hrcms.Header.create(heaerContainer).setSysTitle(I18N.SystemTitle);
+            Hrcms.Header.create(headerContainer).setSysTitle(I18N.SystemTitle);
             function clickToolbarButton(event) {
                 console.log($(this).find('span').html());
             }
             // TODO use ajax to load the toolbar button strings
-            var toolbar = Hrcms.Toolbar.create(heaerContainer);
+            var toolbar = Hrcms.Toolbar.create(headerContainer);
             toolbar.configure([
                 {
                     title: I18N.Toolbar.Home,
@@ -153,7 +153,7 @@ $(function() {
             var last = nav.find('span').last();
             last.toggleClass('hrcms-workspace-nav-back');
             last.toggleClass('hrcms-workspace-nav-current');
-            last.on('click', function(event, ui) {
+            last.on('click', function(event) {
                 tThis.goBack();
             });
             nav.append('<span style="padding-left: 4px; padding-right:4px;">/</span><span class="hrcms-workspace-nav-current">'
@@ -171,7 +171,9 @@ $(function() {
         }
         tThis.configButtons = function(buttons) {
             for (var i = 0; i < buttons.length; ++i) {
-                var btn = $('<button class="hrcms-button"></button>').appendTo($('<div style="margin-left:15px;"/>').appendTo(workspaceToolbar));
+                var btn = $('<button class="hrcms-button"></button>')
+                .appendTo($('<div style="margin-left:15px;"/>')
+                .appendTo(workspaceToolbar));
                 btn.button();
                 btn.text(buttons[i].title);
                 btn.on("click", buttons[i].click);
@@ -182,35 +184,76 @@ $(function() {
     }
 
     Hrcms.DataGrid = {}
-    Hrcms.DataGrid.create = function(args) {
+    Hrcms.DataGrid.create = function(containerObj) {
         var tThis = {};
-        var container = args.container;
+        var container = containerObj;
+        var resizeHook = container.parent('#RightPane');
         var gridContainer = $('<div class="hrcms-datagrid-container" />').appendTo(container);
         var table = $('<table class="hrcms-datagrid"/>').appendTo(gridContainer);
-        gridContainer.css("width", args.width);
-        gridContainer.css("height", args.height);
-        table.css("width", args.width);
-        table.css("height", args.height);
         var tableBody = null;
         var dataFieldNames = null;
+        var currentSortTh = null;
+        gridContainer.css("width", container.width());
+        gridContainer.css("height", container.height() - 82);
+        resizeHook.resize(function(evt) {
+            gridContainer.css("width", container.width());
+            gridContainer.css("height", container.height() - 82);
+        });
         tThis.configure = function(args) {
+            var sortup = args.sortup;
+            var sortdown = args.sortdown;
             var thead = $('<thead><tr></tr></thead>').appendTo(table);
             thead = thead.find('tr');
             var columns = args.columns;
             dataFieldNames = [];
+            function sort() {
+                var clickedTh = $(this);
+                if (currentSortTh !== null) {
+                    if (clickedTh.get(0) === currentSortTh.get(0)) {
+                        if (currentSortTh.hasClass("sortdown")) {
+                            currentSortTh.removeClass("sortdown");
+                            currentSortTh.addClass("sortup");
+                            if (sortup !== undefined)
+                                sortup(currentSortTh);
+                        }
+                        else if (currentSortTh.hasClass("sortup")) {
+                            currentSortTh.removeClass("sortup");
+                            currentSortTh.addClass("sortdown");
+                            if (sortdown !== undefined)
+                                sortdown(currentSortTh);
+                        }
+                    }
+                    else {
+                        if (currentSortTh.hasClass("sortdown")) {
+                            currentSortTh.removeClass("sortdown");
+                            clickedTh.addClass("sortdown");
+                            if (sortdown !== undefined)
+                                sortdown(clickedTh);
+                        }
+                        else if (currentSortTh.hasClass("sortup")) {
+                            currentSortTh.removeClass("sortup");
+                            clickedTh.addClass("sortup");
+                            if (sortup !== undefined)
+                                sortup(currentSortTh);
+                        }
+                        currentSortTh = clickedTh;
+                    }
+                }
+                else {
+                    currentSortTh = clickedTh;
+                    currentSortTh.addClass("sortdown");
+                }
+            }
             for (var i = 0; i < columns.length; ++i) {
                 var th = $('<th/>').appendTo(thead);
-                th.addClass("hrcms-datagrid-header sortable sortup");
+                th.addClass("hrcms-datagrid-header sortable");
                 th.css("padding-left", "8px");
                 th.css("padding-right", "20px");
                 th.attr("field-name", columns[i].field);
+                th.on('click', sort);
                 var div = $('<div class="hrcms-datagrid-header-text"></div>').appendTo(th);
-                th.on('click', function(event) {
-                    $(this).toggleClass('sortup');
-                    $(this).toggleClass('sortdown');
-                });
-                div.html(columns[i].field);
-                dataFieldNames.push(columns[i].field);//*/
+                div.html(columns[i].name);
+                dataFieldNames.push(columns[i].field);
             }
             tableBody = $('<tbody/>').appendTo(table);
             table.append('<tfoot><tr><td colspan="' + columns.length + '"><div style="height:25px;"></div></td></tr></tfoot>');
@@ -230,7 +273,6 @@ $(function() {
         }
         // end
         return tThis;
-
     }
 
     Hrcms.ContentView = {};
@@ -395,211 +437,316 @@ $(function() {
         });
         workspaceHeader.configButtons([
             {
-                title: "Add",
+                title: "添加",
                 click: function(event) {
                     console.log(this);
                 }
             },
             {
-                title: "Remove",
+                title: "删除",
                 click: function(event) {
                     console.log(this);
                 }
             }
         ]);
         workspaceHeader.goTo('NO10001');
-        var dataGrid = Hrcms.DataGrid.create({
-            container: workspaceContainer,
-            width: "100%",
-            height: "auto"
-        });
+        var dataGrid = Hrcms.DataGrid.create(workspaceContainer);
+        // TODO
+        function sortup(column) {
+            console.log(column);
+        }
+        function sortdown(column) {
+            console.log(column);
+        }
         dataGrid.configure({
             columns: [
                 {
                     name: "员工名字",
                     field: "field-1",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工号",
                     field: "field-2",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "身份证号",
                     field: "field-3",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工名字",
                     field: "field-1",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工号",
                     field: "field-2",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "身份证号",
                     field: "field-3",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工名字",
                     field: "field-1",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工号",
                     field: "field-2",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "身份证号",
                     field: "field-3",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工名字",
                     field: "field-1",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工号",
                     field: "field-2",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "身份证号",
                     field: "field-3",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工名字",
                     field: "field-1",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工号",
                     field: "field-2",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "身份证号",
                     field: "field-3",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 }, {
                     name: "员工名字",
                     field: "field-1",
-                    click: function(event) {
-                    }
-                },
-                {
-                    name: "员工号",
-                    field: "field-2",
-                    click: function(event) {
-                    }
-                },
-                {
-                    name: "身份证号",
-                    field: "field-3",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工名字",
                     field: "field-1",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工号",
                     field: "field-2",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "身份证号",
                     field: "field-3",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
+                }, {
+                    name: "员工名字",
+                    field: "field-1",
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工名字",
                     field: "field-1",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工号",
                     field: "field-2",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "身份证号",
                     field: "field-3",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
+                }, {
+                    name: "员工名字",
+                    field: "field-1",
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工名字",
                     field: "field-1",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工号",
                     field: "field-2",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "身份证号",
                     field: "field-3",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
+                }, {
+                    name: "员工名字",
+                    field: "field-1",
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工名字",
                     field: "field-1",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "员工号",
                     field: "field-2",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
                 },
                 {
                     name: "身份证号",
                     field: "field-3",
-                    click: function(event) {
-                    }
+                    sortup: sortup,
+                    sortdown: sortdown
+                }, {
+                    name: "员工名字",
+                    field: "field-1",
+                    sortup: sortup,
+                    sortdown: sortdown
                 }
             ]
         });
         dataGrid.data([
             {record: ["张三", "NO1001", "12121212121212"]},
             {record: ["李四", "NO1002", "22121212121212"]},
-            {record: ["刘五", "NO1003", "32121212121212"]}
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]},
+            {record: ["李四", "NO1002", "22121212121212"]},
+            {record: ["刘五", "NO1003", "32121212121212"]}//*/
         ]);
         //*/
         // TODO ContentTitle
