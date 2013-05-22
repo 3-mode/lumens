@@ -25,30 +25,31 @@ body {
     white-space:nowrap;
 }
 .hrcms .hrcms-button {
+    float:left;
     font-size: 12px !important;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 .hrcms .hrcms-h-active {
     border-top: 1px solid rgb(61, 61, 61);
     border-bottom: 1px solid rgb(180, 180, 180);
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
     -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
     background-color: rgb(2, 83, 138); /*Use an background-image to work on IE7,8 */
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 .hrcms .hrcms-v-active {
     border-left: 1px solid rgb(61, 61, 61);
     border-right: 1px solid rgb(162, 162, 162);
     background-color: rgb(2, 83, 138);
-    color:white !important;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: inset 1px 0 3px rgba(0, 0, 0, 0.2), inset -1px 0 3px rgba(40, 40, 40, 0.2);
     -webkit-box-shadow: inset 1px 0 3px rgba(0, 0, 0, 0.2), inset -1px 0 3px rgba(40, 40, 40, 0.2);
-    box-shadow: inset 1px 0 3px rgba(0, 0, 0, 0.2), inset -1px 0 3px rgba(40, 40, 40, 0.2);
+    box-shadow: inset 1px 0 3px rgba(0, 0, 0, 0.2), inset -1px 0 3px rgba(40, 40, 40, 0.2); 
+    color:white !important;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 /* HRCMS Header styles */
 .hrcms .hrcms-header-constainer {
@@ -234,8 +235,8 @@ body {
     height: 100%;
     background-color: rgb(240, 240, 240);
 }
+
 .hrcms .hrcms-datagrid-container {
-    display:table;
     background-color:rgb(240, 240, 240);
 }
 .hrcms .hrcms-datagrid {
@@ -245,8 +246,12 @@ body {
     display: table;
     border-spacing: 2px;
 }
+.hrcms .hrcms-datagrid div {
+    display: block;
+}
 .hrcms .hrcms-datagrid thead {
     display: table-header-group;
+    border-spacing: 3px !important;
     background: #eeeeee;
     vertical-align: top;
     line-height: 20px;
@@ -257,8 +262,6 @@ body {
 }
 .hrcms .hrcms-datagrid tr {
     display: table-row;
-    line-height: 20px;
-    height: 20px;
 }
 .hrcms .hrcms-datagrid-row {
 }
@@ -280,8 +283,8 @@ body {
     display: table-cell;
     white-space: nowrap;
     text-align: left;
-    line-height: 20px;
-    height: 20px;
+    line-height: 18px;
+    height: 18px;
     padding: 3px 6px;
     border-top: 1px solid #dddddd;
     border-left: 1px solid #dfdfdf;
@@ -290,18 +293,16 @@ body {
     display: table-footer-group;
     text-align: left;
     vertical-align: middle;
-    line-height: 30px;
-    height: 30px;
+    line-height: 25px;
+    height: 25px;
+    border-spacing: 3px !important;
     border-top: 2px solid #cacaca;
     border-bottom: 1px solid #cacaca;
     background: #eeeeee;
     font-weight: bold;
 }
-.hrcms .hrcms-datagrid-tfoot {
-    line-height: 30px !important;
-    height: 30px !important;
-}
-.hrcms .hrcms-datagrid div {
-    display: block;
+.hrcms .hrcms-datagrid tfoot td {
+    line-height: 25px;
+    height: 25px;
 }
 /*** HRCMS workspace styles end */
