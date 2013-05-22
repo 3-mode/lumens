@@ -270,11 +270,6 @@ body {
 }
 .hrcms .hrcms-datagrid-header-text {
 }
-.hrcms .hrcms-datagrid .hrcms-column-sort {
-    display: block;
-    float: right;
-    margin-left: 4px;
-}
 .hrcms .hrcms-datagrid th {
     display: table-cell;
     text-align: left;
@@ -284,6 +279,14 @@ body {
     white-space: nowrap;
     border-bottom: 2px solid #cacaca;
     border-left: 1px solid #dfdfdf;
+    background-repeat: no-repeat;
+    background-position: right center;
+}
+.hrcms .hrcms-datagrid .sortable.sortup {
+    background-image: url(images/sortup_16x16.png);
+}
+.hrcms .hrcms-datagrid .sortable.sortdown {
+    background-image: url(images/sortdown_16x16.png);
 }
 .hrcms .hrcms-datagrid td {
     display: table-cell;
