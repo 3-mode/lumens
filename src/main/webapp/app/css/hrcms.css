@@ -228,6 +228,7 @@ html, body {
 }
 .hrcms .hrcms-datagrid {
     border-top: 1px solid rgba(255, 255, 255, .8);
+    border-right: 1px solid #cacaca;
     display: table;
     border-spacing: 2px;
 }
