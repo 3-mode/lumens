@@ -101,5 +101,5 @@ $(function() {
         // end
         return tThis;
     }
-})
+});
 
