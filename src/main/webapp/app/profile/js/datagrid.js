@@ -20,6 +20,9 @@ $(function() {
             gridContainer.css("width", container.width() - offsetWidth);
             gridContainer.css("height", container.height() - offsetHeight);
         });
+        gridContainer.scroll(function(event) {
+            console.log(event);
+        })
         tThis.configure = function(config) {
             var sortup = config.sortup;
             var sortdown = config.sortdown;
@@ -89,7 +92,8 @@ $(function() {
                 for (var j = 0; j < dataFieldNames.length; ++j) {
                     td = $('<td/>').appendTo(tr);
                     td.attr('field-name', dataFieldNames[j]);
-                    td.html(field[j]);
+                    if (j < field.length)
+                        td.html(field[j]);
                 }
             }
         }
