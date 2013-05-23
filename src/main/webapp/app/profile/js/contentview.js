@@ -46,12 +46,12 @@ $(function() {
                 return;
             workspaceContainer.trigger("resize");
         });
-        var workspaceHeader = Hrcms.DataNavBar.create({
+        var workspaceHeader = Hrcms.NavIndicator.create({
             container: workspaceContainer,
             title: I18N.ContentNavMenu.Info_Person
         });
         // TODO
-        workspaceHeader.configButtons([
+        workspaceHeader.configure([
             {
                 title: "添加",
                 click: function(event) {
@@ -71,32 +71,58 @@ $(function() {
             offsetHeight: 82
         });
 
-        function sortup(tbody, column) {
-            console.log(column);
+        function sortup(event) {
+            var tbody = event ? event.tbody : null;
+            var column = event ? event.column : null;
+            if (column)
+                console.log(column);
             // Remove all data rows first
             if (tbody)
-                tbody.remove('tr');
-            $.getJSON("data/test/person_info.json",
+                tbody.empty();
+            $.getJSON("data/test/person_info_small.json",
             function(result) {
                 dataGrid.data(result);
             });
         }
-        function sortdown(tbody, column) {
-            console.log(column);
+        function sortdown(event) {
+            var tbody = event ? event.tbody : null;
+            var column = event ? event.column : null;
+            if (column)
+                console.log(column);
             // Remove all data rows first
             if (tbody)
-                tbody.remove('tr');
-            $.getJSON("data/test/person_info.json",
+                tbody.empty();
+            $.getJSON("data/test/person_info_small.json",
             function(result) {
                 dataGrid.data(result);
             });
+        }
+        function rowclick(event) {
+            console.log('"' + $(this).attr("row-number") + '" is clicked !');
+        }
+        function prevpage(event) {
+        }
+        function nextpage(event) {
+        }
+        function firstpage(event) {
+        }
+        function lastpage(event) {
         }
         $.ajaxSetup({cache: false});
         $.getJSON("data/test/person_table.json",
-        function(result) {
-            result.sortup = sortup;
-            result.sortdown = sortdown;
-            dataGrid.configure(result);
+        function(data) {
+            dataGrid.configure({
+                columns: data.columns,
+                event: {
+                    sortup: sortup,
+                    sortdown: sortdown,
+                    prevpage: prevpage,
+                    nextpage: nextpage,
+                    firstpage: firstpage,
+                    lastpage: lastpage,
+                    rowclick: rowclick
+                }
+            });
             sortdown();
         }).fail(function(result) {
             console.log(result.error());

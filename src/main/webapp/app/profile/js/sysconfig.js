@@ -1,6 +1,9 @@
 $(function() {
+    if (!window.Hrcms)
+        window.Hrcms = {};
     var Demo = function() {
     };
+    Hrcms.debugEnabled = false;
     Hrcms.SyncGet = function(settings) {
         var result = null;
         $.ajax({
