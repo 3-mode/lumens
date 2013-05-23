@@ -1,0 +1,28 @@
+{
+    "columns": [
+        {
+            "name": "员工名字",
+            "field": "field-1"
+        },
+        {
+            "name": "员工号",
+            "field": "field-2"
+        },
+        {
+            "name": "身份证号",
+            "field": "field-3"
+        },
+        {
+            "name": "经理",
+            "field": "field-4"
+        },
+        {
+            "name": "部门",
+            "field": "field-5"
+        },
+        {
+            "name": "办公地点",
+            "field": "field-6"
+        }
+    ]
+}
