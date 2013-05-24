@@ -19,7 +19,7 @@ $(function() {
     Hrcms.NavToolbar.create = function(containerObj) {
         var tThis = {};
         var container = containerObj;
-        var toolbar = $('<div class="hrcms-toolbar"/>').appendTo(container);
+        var toolbar = $('<div class="hrcms-nav-toolbar"/>').appendTo(container);
         var toolbarContent = $('<ul/>').appendTo(toolbar);
         var buttonList = [];
         var activeItem = null;

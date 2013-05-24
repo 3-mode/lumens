@@ -3,7 +3,6 @@ $(function() {
         window.Hrcms = {};
     // TODO why I18N here ?
     var I18N = Hrcms.I18N;
-    var SyncGet = Hrcms.SyncGet;
     Hrcms.ContentView = {};
     Hrcms.ContentView.create = function(container) {
         var tThis = {};
@@ -21,11 +20,11 @@ $(function() {
         }
 
         var contentContainer = layoutContent(container);
-        var htmlTpl = SyncGet({
-            url: "html/splitter-tpl.html",
-            dataType: "html"
-        });
-
+        var htmlTpl =
+        '<div class="SplitterPane layout-content splitter-pane-container" style="overflow:hidden;">' +
+        '  <div id="LeftPane" style="position: absolute; z-index: 1; overflow-x: hidden; overflow-y: auto; left: 0px; width: 200px; height: 100%;"/>' +
+        '  <div id="RightPane" style="position: absolute; z-index: 1; width: 100%; height: 100%; overflow: hidden"/>' +
+        '</div>'
         var splitterContainer = $(htmlTpl).appendTo(contentContainer);
         splitterContainer.splitter({
             splitVertical: true,
@@ -48,28 +47,18 @@ $(function() {
         });
         var workspaceHeader = Hrcms.NavIndicator.create({
             container: workspaceContainer,
-            title: I18N.ContentNavMenu.Info_Person
+            title: I18N.ContentNavMenu.InfoManage_Info_Person
         });
         // TODO
-        workspaceHeader.configure([
-            {
-                title: "添加",
-                click: function(event) {
-                    console.log(this);
-                }
-            },
-            {
-                title: "删除",
-                click: function(event) {
-                    console.log(this);
-                }
-            }
-        ]);
-        workspaceHeader.goTo('NO10001');
         var dataGrid = Hrcms.DataGrid.create({
             container: workspaceContainer,
             offsetHeight: 82
         });
+
+        workspaceHeader.configure({
+            tableNavTarget: dataGrid
+        });
+        workspaceHeader.goTo('NO10001');
 
         function sortup(event) {
             var tbody = event ? event.tbody : null;
