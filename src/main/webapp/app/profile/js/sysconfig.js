@@ -18,8 +18,39 @@ $(function() {
         });
         return result;
     };
+
     var I18N = Hrcms.I18N;
-    Hrcms.NavMenu_Config = {
+    Hrcms.SysToolbar_Config = {
+        event_callback: null,
+        settings:
+        [
+            {
+                title: I18N.Toolbar.Home,
+                module_id: "Toolbar.Home"
+            },
+            {
+                title: I18N.Toolbar.Information,
+                module_id: "Toolbar.Information"
+            },
+            {
+                title: I18N.Toolbar.Statistic_Analysis,
+                module_id: "Toolbar.Statistic_Analysis"
+            },
+            {
+                title: I18N.Toolbar.ApproveProgress,
+                module_id: "Toolbar.ApproveProgress"
+            },
+            {
+                title: I18N.Toolbar.MessageCenter,
+                module_id: "Toolbar.MessageCenter"
+            },
+            {
+                title: I18N.Toolbar.SystemManage,
+                module_id: "Toolbar.SystemManage"
+            }
+        ]
+    };
+    Hrcms.NavMenu_InfoManage_Config = {
         event_callback: null,
         settings:
         [
@@ -146,34 +177,34 @@ $(function() {
             }
         ]
     };
-    Hrcms.SysToolbar_Config = {
+
+    Hrcms.NavMenu_StatisticAnalysisManage_Config = {
         event_callback: null,
         settings:
         [
             {
-                title: I18N.Toolbar.Home,
-                module_id: "Toolbar.Home"
+                title: I18N.ContentNavMenu.StatisticAnalysisManage_PersonInfoStatistic_Title,
+                items: [
+                    {
+                        title: I18N.ContentNavMenu.StatisticAnalysisManage_PersonInfoStatistic_Report,
+                        module_id: "ContentNavMenu.StatisticAnalysisManage_PersonInfoStatistic_Report"
+                    }
+                ]
             },
             {
-                title: I18N.Toolbar.Information,
-                module_id: "Toolbar.Information"
-            },
-            {
-                title: I18N.Toolbar.Statistic_Analysis,
-                module_id: "Toolbar.Statistic_Analysis"
-            },
-            {
-                title: I18N.Toolbar.WorkflowCheck,
-                module_id: "Toolbar.WorkflowCheck"
-            },
-            {
-                title: I18N.Toolbar.MessageCenter,
-                module_id: "Toolbar.MessageCenter"
-            },
-            {
-                title: I18N.Toolbar.SystemManage,
-                module_id: "Toolbar.SystemManage"
+                title: I18N.ContentNavMenu.StatisticAnalysisManage_PersonInfoReport_Title,
+                items: [
+                    {
+                        title: I18N.ContentNavMenu.StatisticAnalysisManage_PersonInfoReport_RelationshipWithStudent,
+                        module_id: "ContentNavMenu.StatisticAnalysisManage_PersonInfoReport_RelationshipWithStudent"
+                    },
+                    {
+                        title: I18N.ContentNavMenu.StatisticAnalysisManage_PersonInfoReport_JobTitleInfo,
+                        module_id: "ContentNavMenu.StatisticAnalysisManage_PersonInfoReport_JobTitleInfo"
+                    }
+                ]
             }
         ]
     };
+
 });

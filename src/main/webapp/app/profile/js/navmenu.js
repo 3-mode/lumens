@@ -5,7 +5,9 @@ $(function() {
     Hrcms.NavMenu = {};
     Hrcms.NavMenu.create = function(config) {
         var tThis = {};
-        var nav = $('<div class="hrcms-secondary-menu"/>').appendTo(config.container);
+        var menuContainer = $('<div class="hrcms-secondary-menu-container"/>').appendTo(config.container);
+        menuContainer.append('<div id="place-holder" style="width:220px;height:10px;float:top;"/>');
+        var nav = $('<div class="hrcms-secondary-menu"/>').appendTo(menuContainer);
         nav.css("width", config.width);
         nav.css("height", config.height);
         var activeItem = null;

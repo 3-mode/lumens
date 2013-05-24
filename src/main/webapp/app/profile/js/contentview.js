@@ -10,10 +10,8 @@ $(function() {
             return $('<div class="hrcms-content-constainer"/>').appendTo(parentContainer);
         }
         var layoutNavMenu = tThis.layoutNavMenu = function(parentContainer) {
-            var menuContainer = $('<div class="hrcms-secondary-menu-container"/>').appendTo(parentContainer);
-            menuContainer.append('<div id="place-holder" style="width:220px;height:10px;float:top;"/>');
             return Hrcms.NavMenu.create({
-                container: menuContainer,
+                container: parentContainer,
                 width: "100%",
                 height: "auto"
             });
@@ -31,13 +29,6 @@ $(function() {
             sizeLeft: true
         });
         var leftContainer = tThis.leftContainer = splitterContainer.find('#LeftPane');
-        var menu = tThis.navMenu = layoutNavMenu(leftContainer);
-        // TODO Need a real event function
-        function itemDemoClick(event, ui) {
-            console.log($(this).find('span').html());
-        }
-        Hrcms.NavMenu_Config.event_callback = itemDemoClick;
-        menu.configure(Hrcms.NavMenu_Config);
         var rightContainer = tThis.rightContainer = splitterContainer.find('#RightPane');
         var workspaceContainer = $('<div class="hrcms-workspace-container"/>').appendTo(rightContainer);
         rightContainer.resize(function(event) {
@@ -45,6 +36,16 @@ $(function() {
                 return;
             workspaceContainer.trigger("resize");
         });
+        var menu = tThis.navMenu = layoutNavMenu(leftContainer);
+        // TODO Need a real event function
+        //==========================================================================================
+        function itemDemoClick(event, ui) {
+            console.log($(this).find('span').html());
+        }
+        Hrcms.NavMenu_InfoManage_Config.event_callback = itemDemoClick;
+        menu.configure(Hrcms.NavMenu_InfoManage_Config);
+        //==========================================================================================
+        //==========================================================================================
         var workspaceHeader = Hrcms.NavIndicator.create({
             container: workspaceContainer,
             title: I18N.ContentNavMenu.InfoManage_Info_Person

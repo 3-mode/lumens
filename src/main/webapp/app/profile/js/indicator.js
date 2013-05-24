@@ -10,8 +10,8 @@ $(function() {
         var workspaceToolbar = $('<div class="hrcms-workspace-toolbar"/>').appendTo(workspaceHeader);
         var nav = $('<div class="hrcms-workspace-nav"><span class="hrcms-workspace-nav-current">'
         + args.title + '</span></div>').appendTo(headerNav);
-        var toolbar = Hrcms.Toolbar.create({container: workspaceToolbar});
-        
+        var tablebar = Hrcms.Tablebar.create({container: workspaceToolbar});
+
         // Methods
         tThis.goTo = function(text) {
             var last = nav.find('span').last();
@@ -34,7 +34,7 @@ $(function() {
             last.toggleClass('hrcms-workspace-nav-current');
         }
         tThis.configure = function(config) {
-            toolbar.configure(config);
+            tablebar.configure(config);
         }
         // end
         return tThis;
