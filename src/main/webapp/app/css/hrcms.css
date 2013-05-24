@@ -84,6 +84,48 @@ html, body {
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 .hrcms .hrcms-toolbar {
+    height: 25px;
+    width: auto;
+}
+.hrcms .hrcms-toolbar td {
+    height: 25px;
+    width: auto;
+}
+.hrcms .hrcms-toolbar .hrcms-toolbar-button {
+    border: 1px solid #cacaca;
+    background-repeat: no-repeat;
+    height: 23px;
+    width: 24px;
+    cursor: pointer;
+}
+.hrcms .hrcms-toolbar div.hrcms-toolbar-button:hover {
+    background-color: #dddddd;
+}
+.hrcms .hrcms-toolbar-button-begin {
+    background-image: url(images/begin.png);
+}
+.hrcms .hrcms-toolbar-button-prev {
+    background-image: url(images/prev.png);
+}
+.hrcms .hrcms-toolbar-button-next {
+    background-image: url(images/next.png);
+}
+.hrcms .hrcms-toolbar-button-end {
+    background-image: url(images/end.png);
+}
+.hrcms .hrcms-toolbar-button-add {
+    background-image: url(images/add.png);
+}
+.hrcms .hrcms-toolbar-button-delete {
+    background-image: url(images/delete.png);
+}
+.hrcms .hrcms-toolbar-button-reload {
+    background-image: url(images/reload.png);
+}
+.hrcms .hrcms-toolbar-button-find {
+    background-image: url(images/find.png);
+}
+.hrcms .hrcms-nav-toolbar {
     position: relative;
     height: 32px;
     width: 100%;
@@ -91,15 +133,15 @@ html, body {
     border-bottom: 1px solid rgb(150, 150, 150);
     background-image: url(images/bg_40x40_light.png);
 }
-.hrcms .hrcms-toolbar ul{
+.hrcms .hrcms-nav-toolbar ul{
     padding: 0;
     margin: 0 0 10px 25px;
 }
-.hrcms .hrcms-toolbar ul {
+.hrcms .hrcms-nav-toolbar ul {
     display: block;
     list-style: none;
 }
-.hrcms .hrcms-toolbar li {
+.hrcms .hrcms-nav-toolbar li {
     font-size: 12px;
     font-weight: bold;
     color: rgb(53, 53, 53);
@@ -109,10 +151,10 @@ html, body {
     line-height: 32px; 
     float: left;
 }
-.hrcms .hrcms-toolbar li a {
+.hrcms .hrcms-nav-toolbar li a {
     cursor: pointer;
 }
-.hrcms .hrcms-toolbar span {
+.hrcms .hrcms-nav-toolbar span {
     margin-right: 15px;
     margin-left: 15px;
 }
@@ -249,6 +291,9 @@ html, body {
     cursor: pointer;
 }
 .hrcms .hrcms-datagrid-row {
+}
+.hrcms tr.hrcms-datagrid-row:hover {
+    background-color: #dddddd;
 }
 .hrcms .hrcms-datagrid-header {
     cursor: pointer;
