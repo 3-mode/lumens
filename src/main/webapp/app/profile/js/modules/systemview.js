@@ -1,9 +1,10 @@
 $(function() {
     if (!window.Hrcms)
         window.Hrcms = {};
+    var I18N = Hrcms.I18N;
     Hrcms.SystemView = {};
-    Hrcms.SystemView.create = function(config) {
-        var tThis = ContentView.create(config);
+    Hrcms.SystemView.create = function(container) {
+        var tThis = Hrcms.ContentView.create(container);
 
         // end
         return tThis;

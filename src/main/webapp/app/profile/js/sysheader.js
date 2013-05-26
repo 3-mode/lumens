@@ -15,33 +15,40 @@ $(function() {
 
     }
 
-    Hrcms.NavToolbar = {};
-    Hrcms.NavToolbar.create = function(containerObj) {
+    Hrcms.SysToolbar = {};
+    Hrcms.SysToolbar.create = function(containerObj) {
         var tThis = {};
         var container = containerObj;
         var toolbar = $('<div class="hrcms-nav-toolbar"/>').appendTo(container);
         var toolbarContent = $('<ul/>').appendTo(toolbar);
-        var buttonList = [];
+        var configuration = null;
+        var buttonList = {};
         var activeItem = null;
         function activeButton(event) {
-            if (activeButton !== null)
+            if (activeItem)
                 activeItem.toggleClass("hrcms-v-active");
             activeItem = $(this);
             activeItem.toggleClass("hrcms-v-active");
+            toolbarContent.trigger(jQuery.Event(configuration.eventType, {
+                moduleID: activeItem.attr("module-id")
+            }));
+        }
+        tThis.activeButton = function(moduleID) {
+            buttonList[moduleID].trigger("click");
+        }
+        tThis.onButtonClick = function(buttonClick) {
+            toolbarContent.on(configuration.eventType, buttonClick);
         }
         tThis.configure = function(config) {
-            var callback = config.event_callback;
-            var buttons = config.settings;
+            configuration = config;
+            var buttons = config.buttons;
             for (var i = 0; i < buttons.length; ++i) {
                 var button = $('<li><a><span class="hrcms-toolbar-button-text"></span></a></li>').appendTo(toolbarContent);
+                button.attr("module-id", buttons[i].moduleID);
                 button.find('span').html(buttons[i].title);
                 button.on('click', activeButton);
-                if (callback)
-                    button.on('click', callback);
-                buttonList.push(button);
+                buttonList[buttons[i].moduleID] = button;
             }
-            activeItem = buttonList[0];
-            activeItem.toggleClass("hrcms-v-active");
         }
         // end
         return tThis;

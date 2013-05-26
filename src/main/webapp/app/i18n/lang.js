@@ -16,13 +16,13 @@ $(function() {
     // System business moudles
     I18N.SystemTitle = "高校人力资源管理系统";
     // Toolbar module
-    I18N.Toolbar = {};
-    I18N.Toolbar.Home = "首页管理";
-    I18N.Toolbar.Information = "信息管理";
-    I18N.Toolbar.Statistic_Analysis = "统计分析管理";
-    I18N.Toolbar.ApproveProgress = "流程审批";
-    I18N.Toolbar.MessageCenter = "消息管理";
-    I18N.Toolbar.SystemManage = "系统管理";
+    I18N.SysToolbar = {};
+    I18N.SysToolbar.Home = "首页管理";
+    I18N.SysToolbar.Information = "信息管理";
+    I18N.SysToolbar.Statistic_Analysis = "统计分析管理";
+    I18N.SysToolbar.ApproveProgress = "审批管理";
+    I18N.SysToolbar.MessageCenter = "消息管理";
+    I18N.SysToolbar.SystemManage = "系统管理";
     // Left nav module
     I18N.ContentNavMenu = {};
     I18N.ContentNavMenu.InfoManage_Info_Title = "基本信息类";

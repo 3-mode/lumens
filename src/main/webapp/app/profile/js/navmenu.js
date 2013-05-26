@@ -11,6 +11,7 @@ $(function() {
         nav.css("width", config.width);
         nav.css("height", config.height);
         var activeItem = null;
+        var configuration = null;
         var Section = {};
         Section.create = function(sectionName) {
             var tThis = {};
@@ -34,16 +35,25 @@ $(function() {
             //end
             return tThis;
         }
+        function clickCallBack(event) {
+            menuContainer.trigger(jQuery.Event(configuration.eventType, {
+                moduleID: $(this).attr("module-id"),
+                moduleName: $(this).find('span').html()
+            }));
+        }
+        tThis.onItemClick = function(callback) {
+            menuContainer.on(configuration.eventType, callback);
+        }
         tThis.configure = function(config) {
-            var callback = config.event_callback;
-            var sections = config.settings;
+            configuration = config;
+            var sections = config.sections;
             for (var i = 0; i < sections.length; ++i) {
                 var section = Section.create(sections[i].title);
                 var items = sections[i].items;
                 for (var j = 0; j < items.length; ++j) {
                     var item = section.addItem(items[j].title);
-                    if (callback)
-                        item.on('click', callback);
+                    item.attr("module-id", items[j].moduleID);
+                    item.on('click', clickCallBack);
                 }
             }
         }

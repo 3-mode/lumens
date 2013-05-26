@@ -98,6 +98,9 @@ $(function() {
                 }
             }
         }
+        tThis.remove = function() {
+            gridContainer.remove();
+        }
         // end
         return tThis;
     }
