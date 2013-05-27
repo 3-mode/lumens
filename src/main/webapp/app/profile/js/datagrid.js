@@ -5,31 +5,36 @@ $(function() {
     Hrcms.DataGrid.create = function(config) {
         var tThis = {};
         var container = config.container;
-        var gridContainer = $('<div class="hrcms-datagrid-container" />').appendTo(container);
-        var table = $('<table class="hrcms-datagrid"/>').appendTo(gridContainer);
-        var tableBody = null;
-        var currentSortTh = null;
-        var columns = null;
-        var event = null;
-        var offsetHeight = (config.offsetHeight ? config.offsetHeight : 0);
+        var gridContainer = $('<div class="hrcms-datagrid hrcms-datagrid-container"/>').appendTo(container);
+        var fixedHeaderContainer = $('<div style="position:relative;"/>').appendTo(gridContainer);
+        var fxiedHeaderTable = $('<table class="hrcms-datagrid-header"/>').appendTo(fixedHeaderContainer);
+        var dataContainer = $('<div class="hrcms-data-container"/>').appendTo(gridContainer);
+        var table = $('<table class="hrcms-datagrid-table"/>').appendTo(dataContainer);
+        var tableBody;
+        var fixedTableHeader;
+        var currentSortTh;
+        var configuration;
+        var offsetHeight = (config.offsetHeight ? config.offsetHeight + 30 : 30);
         var offsetWidth = (config.offsetWidth ? config.offsetWidth : 0);
-        gridContainer.css("width", container.width() - offsetWidth);
-        gridContainer.css("height", container.height() - offsetHeight);
+        dataContainer.css("width", container.width() - offsetWidth);
+        dataContainer.css("height", container.height() - offsetHeight);
         container.resize(function(event) {
             if (event.target !== this)
                 return;
-            gridContainer.css("width", container.width() - offsetWidth);
-            gridContainer.css("height", container.height() - offsetHeight);
+            dataContainer.css("width", container.width() - offsetWidth);
+            dataContainer.css("height", container.height() - offsetHeight);
         });
-        tThis.configure = function(config) {
-            columns = config.columns;
-            event = config.event ? config.event : {};
-            var thead = $('<thead><tr></tr></thead>').appendTo(table);
-            thead = thead.find('tr');
-            dataFieldNames = [];
+        dataContainer.scroll(function(event) {
+            if (Hrcms.debugEnabled)
+                console.log(event);
+            fixedHeaderContainer.css("left", -event.target.scrollLeft);
+        })
+        function buildColumns(config) {
+            var columns = config.columns;
+            var event = config.event ? config.event : {};
             function sort() {
                 var clickedTh = $(this);
-                if (currentSortTh !== null) {
+                if (currentSortTh) {
                     if (clickedTh.get(0) === currentSortTh.get(0)) {
                         if (currentSortTh.hasClass("sortdown")) {
                             currentSortTh.removeClass("sortdown");
@@ -67,38 +72,67 @@ $(function() {
                         event.sortdown({tbody: tableBody, column: currentSortTh});
                 }
             }
-            var th = $('<th style="padding-left:6px;" width="1"> <input type="checkbox"></th>').appendTo(thead);
+            var thead = fixedTableHeader = $('<thead><tr></tr></thead>').appendTo(fxiedHeaderTable);
+            thead = thead.find('tr');
+            var th = $('<th width="1" style="padding-left:6px;"> <input type="checkbox"></th>').appendTo(thead);
             for (var i = 0; i < columns.length; ++i) {
-                th = $('<th/>').appendTo(thead);
+                th = $('<th style="padding-left: 8px; padding-right: 20px;"/>').appendTo(thead);
                 th.addClass("hrcms-datagrid-header sortable");
-                th.css("padding-left", "8px");
-                th.css("padding-right", "20px");
                 th.attr("field-name", columns[i].field);
                 th.on('click', sort);
-                var div = $('<div class="hrcms-datagrid-header-text"></div>').appendTo(th);
-                div.html(columns[i].name);
+                var htxt = $('<div class="hrcms-datagrid-header-text"></div>').appendTo(th);
+                htxt.html(columns[i].name);
             }
+        }
+        // Member methods
+        tThis.configure = function(config) {
+            configuration = config
+            buildColumns(config);
+            var columns = config.columns;
             tableBody = $('<tbody/>').appendTo(table);
             table.append('<tfoot><tr><td colspan="' + (columns.length + 1) + '"><div style="height:20px;"></div></td></tr></tfoot>');
         }
         tThis.data = function(records) {
+            var columns = configuration.columns;
             for (var i = 0; i < records.length; ++i) {
                 var tr = $('<tr/>').appendTo(tableBody);
                 tr.addClass("hrcms-datagrid-row");
                 tr.attr('row-number', i);
                 if (event.rowclick)
                     tr.click(event.rowclick);
-                var th = $('<th width="1"><input type="checkbox"></th>').appendTo(tr);
+                // TODO need to add event handler for this th
+                var th = $('<th width="1" style="padding-left:6px; padding-right:8px;"><input type="checkbox"></th>').appendTo(tr);
                 var field = records[i].field_value;
                 for (var j = 0; j < columns.length; ++j) {
-                    td = $('<td/>').appendTo(tr);
+                    td = $('<td style="padding-left: 8px; padding-right: 20px;"><div></div></td>').appendTo(tr);
                     td.attr('field-name', columns[j].field);
                     if (j < field.length)
-                        td.html(field[j]);
+                        td.find("div").html(field[j]);
                 }
+            }
+            // Update header width
+            var fixedHeaders = fixedTableHeader.find("div");
+            var firstTr = tableBody.find("tr:first");
+            var firstTdList = firstTr.find("div");
+            for (var i = 0; i < fixedHeaders.length; ++i) {
+                var jElem = $(firstTdList[i]);
+                var jFixed = $(fixedHeaders[i]);
+                var oldWidth = jFixed.attr("init-width");
+                if (!oldWidth) {
+                    oldWidth = jFixed.width();
+                    jFixed.attr("init-width", oldWidth);
+                }
+                else {
+                    oldWidth = parseInt(oldWidth);
+                }
+                if (jElem.width() < oldWidth)
+                    jElem.css("width", oldWidth);
+                else
+                    jFixed.css("width", jElem.width());
             }
         }
         tThis.remove = function() {
+            fixedHeaderContainer.remove();
             gridContainer.remove();
         }
         // end

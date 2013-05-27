@@ -21,7 +21,7 @@ $(function() {
         var leftContainer = tThis.leftContainer = splitterContainer.find('#LeftPane');
         var rightContainer = tThis.rightContainer = splitterContainer.find('#RightPane');
         var rightContentContainer = tThis.rightContentContainer = $('<div class="hrcms-workspace-container"/>').appendTo(rightContainer);
-        rightContainer.resize(function(event) {
+        rightContainer.bind("resize", function(event) {
             if (event.target !== this)
                 return;
             rightContentContainer.trigger("resize");
@@ -34,6 +34,7 @@ $(function() {
             });
         }
         tThis.remove = function() {
+            rightContainer.unbind();
             contentContainer.remove();
         }
         tThis.initialize = function() {
