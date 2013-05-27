@@ -2,18 +2,22 @@
     "columns": [
         {
             "name": "所在单位",
-            "field": "field-1"
+            "field": "field-0"
         },
         {
             "name": "职工号",
-            "field": "field-2"
+            "field": "field-1"
         },
         {
             "name": "姓名",
-            "field": "field-3"
+            "field": "field-2"
         },
         {
             "name": "性别",
+            "field": "field-3"
+        },
+        {
+            "name": "出生年月日",
             "field": "field-4"
         },
         {
