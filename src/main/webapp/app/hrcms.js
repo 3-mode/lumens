@@ -26,13 +26,11 @@ $(function() {
                 if (Hrcms.debugEnabled) {
                     console.log(curSysModuleID);
                 }
-                // TODO switch to another view here
                 // Remove the old view
                 if (moduleViewMap.activeView)
                     moduleViewMap.activeView.remove();
                 // Switch to a new view
                 if (SysModuleID.SysToolbar_Home === curSysModuleID) {
-                    // TODO
                     moduleViewMap.activeView = Hrcms.HomeView.create(rootContainer);
                 }
                 else if (SysModuleID.SysToolbar_Information === curSysModuleID) {
