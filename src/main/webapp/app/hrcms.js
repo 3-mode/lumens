@@ -6,14 +6,15 @@ $(function() {
     Hrcms.create = function(containerObj) {
         var tThis = {};
         var rootContainer = containerObj;
-        var headerContainer = null;
+        var headerContainer;
+        var moduleViewMap = {};
         rootContainer.addClass("hrcms");
         function layoutHeader(parentContainer) {
             return $('<div class="hrcms-header-constainer"/>').appendTo(parentContainer);
         }
-        var moduleViewMap = {};
         tThis.load = function() {
-            console.log("Loading HRCMS !");
+            if (Hrcms.debugEnabled)
+                console.log("Loading HRCMS !");
             headerContainer = layoutHeader(rootContainer);
             /** Header begin */
             Hrcms.Header.create(headerContainer).setSysTitle(I18N.SystemTitle);

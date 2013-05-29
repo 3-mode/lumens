@@ -49,6 +49,10 @@ $(function() {
                 button.on('click', activeButton);
                 buttonList[buttons[i].moduleID] = button;
             }
+            return this;
+        }
+        tThis.remove = function() {
+            toolbar.remove();
         }
         // end
         return tThis;

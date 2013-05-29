@@ -27,7 +27,7 @@
     background: #ffffff;
     overflow: auto;
     width: 200px;	/* optional, initial splitbar position */
-    min-width: 200px;	/* optional */
+    min-width: 150px;	/* optional */
     /* No margin or border allowed */
 }
 /*

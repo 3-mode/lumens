@@ -8,6 +8,8 @@ $(function() {
         var rightContentContainer = tThis.rightContentContainer;
         var indicator;
         var dataGrid;
+        var recordForm;
+        var currentModuleName;
         var SysModuleID = Hrcms.SysModuleID;
         tThis.loadLeftNavMenu = function(menu) {
             menu.configure(Hrcms.NavMenu_InfoManage_Config);
@@ -18,14 +20,17 @@ $(function() {
                     indicator.remove();
                 if (dataGrid)
                     dataGrid.remove();
+                if (recordForm)
+                    recordForm.remove();
+                currentModuleName = event.moduleName;
                 indicator = Hrcms.NavIndicator.create(rightContentContainer);
-                indicator.goTo(event.moduleName);
+                indicator.goTo(currentModuleName);
                 dataGrid = Hrcms.DataGrid.create({
                     container: rightContentContainer,
                     offsetHeight: 82
                 });
                 indicator.configure({
-                    barType: Hrcms.Tablebar,
+                    toolbar: {barType: Hrcms.Tablebar},
                     tableNavTarget: dataGrid
                 });
                 var talbeUrl, dataUrl;
@@ -42,7 +47,7 @@ $(function() {
                 function sortup(event) {
                     var tbody = event ? event.tbody : null;
                     var column = event ? event.column : null;
-                    if (column)
+                    if (Hrcms.debugEnabled)
                         console.log(column);
                     // Remove all data rows first
                     if (tbody)
@@ -55,7 +60,7 @@ $(function() {
                 function sortdown(event) {
                     var tbody = event ? event.tbody : null;
                     var column = event ? event.column : null;
-                    if (column)
+                    if (Hrcms.debugEnabled)
                         console.log(column);
                     // Remove all data rows first
                     if (tbody)
@@ -66,7 +71,34 @@ $(function() {
                     });
                 }
                 function rowclick(event) {
-                    console.log('"' + $(this).attr("row-number") + '" is clicked !');
+                    if (Hrcms.debugEnabled)
+                        console.log(event);
+                    indicator.toggle();
+                    dataGrid.toggle();
+                    recordForm = Hrcms.RecordForm.create({
+                        container: rightContentContainer,
+                        navigator: [currentModuleName, $($(this).find('td')[1]).find('div').html()],
+                        goBack: function(currentTag) {
+                            if (currentTag.html() === currentModuleName && recordForm) {
+                                indicator.toggle();
+                                dataGrid.toggle();
+                                recordForm.remove();
+                                delete recordForm;
+                            }
+                        }
+                    });
+
+                    $.ajaxSetup({cache: false});
+                    $.ajax({
+                        type: "GET",
+                        url: "app/profile/html/personForm.html",
+                        dataType: "html",
+                        success: function(data) {
+                            recordForm.configure({
+                                html: data
+                            });
+                        }
+                    });
                 }
                 $.ajaxSetup({cache: false});
                 $.getJSON(talbeUrl,
@@ -81,9 +113,17 @@ $(function() {
                     });
                     sortdown();
                 }).fail(function(result) {
-                    console.log(result.error());
+                    if (Hrcms.debugEnabled)
+                        console.log(result);
                 });
             });
+        }
+
+        var superRemove = tThis.remove;
+        tThis.remove = function() {
+            if (recordForm)
+                recordForm.remove();
+            superRemove();
         }
 
         tThis.initialize();

@@ -7,8 +7,11 @@ $(function() {
         var container = containerObj;
         var workspaceHeader = $('<div class="hrcms-workspace-header"/>').appendTo(container);
         var headerNav = $('<div class="hrcms-workspace-nav-padding"/>').appendTo(workspaceHeader);
-        var workspaceToolbar = $('<div class="hrcms-workspace-toolbar"/>').appendTo(workspaceHeader);
         var nav = $('<div class="hrcms-workspace-nav"></div>').appendTo(headerNav);
+        var configuration;
+        tThis.toggle = function() {
+            workspaceHeader.toggle();
+        }
         tThis.remove = function() {
             workspaceHeader.remove();
         }
@@ -28,6 +31,7 @@ $(function() {
                 nav.append('<span style="padding-left: 4px; padding-right:4px;">/</span><span class="hrcms-workspace-nav-current">'
                 + text + '</span>');
             }
+            return this;
         }
         tThis.goBack = function() {
             var canGoBack = nav.find('.hrcms-workspace-nav-back');
@@ -38,10 +42,18 @@ $(function() {
             var last = nav.find('span').last();
             last.toggleClass('hrcms-workspace-nav-back');
             last.toggleClass('hrcms-workspace-nav-current');
+            if (configuration && configuration.goBack)
+                configuration.goBack(last);
+            return this;
         }
         tThis.configure = function(config) {
-            var bar = config.barType.create({container: workspaceToolbar});
-            bar.configure(config);
+            configuration = config;
+            if (config.toolbar && config.toolbar.barType) {
+                var workspaceToolbar = $('<div class="hrcms-workspace-toolbar"/>').appendTo(workspaceHeader);
+                var bar = config.toolbar.barType.create({container: workspaceToolbar});
+                bar.configure(config.toolbar);
+            }
+            return this;
         }
         // end
         return tThis;

@@ -11,7 +11,6 @@ $(function() {
                 if (Hrcms.debugEnabled)
                     console.log(event);
             });
-
         }
 
         tThis.initialize();

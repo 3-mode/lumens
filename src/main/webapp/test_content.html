@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>1</title>
+        <link rel="stylesheet" href="tool/jquery/css/jquery-ui.css">
+        <script type="text/javascript" src="tool/jquery/js/jquery.js"></script>
+        <script type="text/javascript" src="tool/jquery/js/jquery-ui.js"></script>
+        <!-- Splitter plug-in -->
+        <link rel="stylesheet" type="text/css" href="tool/splitter/splitter.css"/>
+        <script type="text/javascript" src="tool/splitter/splitter.js"></script>
+        <!--tree-->
+        <link rel="stylesheet" href="tool/tree/skin-vista/ui.dynatree.css" type="text/css"/>
+        <script type="text/javascript" src="tool/tree/jquery.cookie.js"></script>
+        <script type="text/javascript" src="tool/tree/jquery.dynatree.js"></script>
+        <!-- HRCMS configuration -->
+        <link rel="stylesheet" href="app/css/hrcms.css">
+        <script type="text/javascript" src="app/i18n/lang.js"></script>
+        <script type="text/javascript" src="app/profile/js/sysconfig.js"></script>
+        <script type="text/javascript" src="app/profile/js/sysheader.js"></script>
+        <script type="text/javascript" src="app/profile/js/navmenu.js"></script>
+        <script type="text/javascript" src="app/profile/js/datagrid.js"></script>
+        <script type="text/javascript" src="app/profile/js/indicator.js"></script>
+        <script type="text/javascript" src="app/profile/js/tablebar.js"></script>
+        <script type="text/javascript" src="app/profile/js/contentview.js"></script>
+        <script type="text/javascript" src="app/hrcms.js"></script>
+        <style>
+            #grid {
+                margin-left: 100px;
+                overflow: hidden;
+                position: absolute;
+            }
+        </style>
+        <script type="text/javascript">
+            $(function() {
+                var I18N = Hrcms.I18N;
+                var workspaceHeader = Hrcms.NavIndicator.create($('#grid'));
+                workspaceHeader.goTo('Test');
+                workspaceHeader.goTo('NO10001');
+                workspaceHeader.goTo('Job Title');
+                var dataGrid = Hrcms.DataGrid.create({
+                    container: $('#grid'),
+                    offsetHeight: 82
+                });
+                workspaceHeader.configure({
+                    tableNavTarget: dataGrid,
+                    toolbar: {barType: Hrcms.Tablebar}
+                });
+                // TODO
+                function sortup(column) {
+                    console.log(column);
+                }
+                function sortdown(column) {
+                    console.log(column);
+                }
+                dataGrid.configure({
+                    event: {
+                        sortup: sortup,
+                        sortdown: sortdown
+                    },
+                    columns: [
+                        {
+                            field: "test1",
+                            name: "test 1"
+
+                        },
+                        {
+                            field: "test2",
+                            name: "test 2"
+                        },
+                        {
+                            field: "test3",
+                            name: "test 3"
+                        },
+                        {
+                            field: "test1",
+                            name: "test 1"
+
+                        },
+                        {
+                            field: "test2",
+                            name: "test 2"
+                        },
+                        {
+                            field: "test3",
+                            name: "test 3"
+                        }
+                    ]
+                });
+
+                dataGrid.data([
+                    {field_value: ["张三", "NO1001", "121212121212121212222222222222222222222"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]},
+                    {field_value: ["李四", "NO1002", "22121212121212"]},
+                    {field_value: ["刘五", "NO1003", "32121212121212"]}
+                ]);//*/
+            });
+        </script>
+    </head>
+    <body class="hrcms">
+        <div style="width:500px; height:400px;" id="grid">
+        </div>
+    </body>
+</html>

@@ -3,7 +3,7 @@ $(function() {
         window.Hrcms = {};
     var Demo = function() {
     };
-    Hrcms.debugEnabled = true;
+    Hrcms.debugEnabled = false;
     Hrcms.SyncGet = function(settings) {
         var result = null;
         $.ajax({

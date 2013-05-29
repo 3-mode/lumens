@@ -1,8 +1,8 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <title>Human Resource Cloud Management Service</title>
+        <title>1</title>
         <link rel="stylesheet" href="tool/jquery/css/jquery-ui.css">
         <script type="text/javascript" src="tool/jquery/js/jquery.js"></script>
         <script type="text/javascript" src="tool/jquery/js/jquery-ui.js"></script>
@@ -21,21 +21,52 @@
         <script type="text/javascript" src="app/profile/js/navmenu.js"></script>
         <script type="text/javascript" src="app/profile/js/datagrid.js"></script>
         <script type="text/javascript" src="app/profile/js/indicator.js"></script>
-        <script type="text/javascript" src="app/profile/js/curdbar.js"></script>
         <script type="text/javascript" src="app/profile/js/tablebar.js"></script>
-        <script type="text/javascript" src="app/profile/js/portlet.js"></script>
-        <script type="text/javascript" src="app/profile/js/contentview.js"></script>
-        <script type="text/javascript" src="app/profile/js/modules/homeview.js"></script>
         <script type="text/javascript" src="app/profile/js/recordform.js"></script>
-        <script type="text/javascript" src="app/profile/js/modules/infomgntview.js"></script>
-        <script type="text/javascript" src="app/profile/js/modules/statisticsview.js"></script>
+        <script type="text/javascript" src="app/profile/js/contentview.js"></script>
         <script type="text/javascript" src="app/hrcms.js"></script>
+        <style>
+            #grid {
+                margin-left: 100px;
+                overflow: hidden;
+                position: absolute;
+            }
+        </style>
         <script type="text/javascript">
             $(function() {
-                var app = Hrcms.create($('#hrcmsApp'));
-                app.load();
+                var I18N = Hrcms.I18N;
+                var reordForm = Hrcms.RecordForm.create({
+                    container: $('#grid'),
+                    navigator: ["Employee", "N10001"]
+                });
+                $(window).bind("resize", function(e) {
+                    if (e.target !== this)
+                        return
+                    $('#grid').trigger("resize");
+                });
+                $.ajaxSetup({cache: false});
+                $.ajax({
+                    type: "GET",
+                    url: "app/profile/html/personForm.html",
+                    dataType: "html",
+                    success: function(data) {
+                        reordForm.configure({
+                            html: data
+                        });
+                    }
+                });
             });
         </script>
     </head>
-    <body id="hrcmsApp"></body>
+    <body class="hrcms">
+        <div style="width:80%; height:100%;" id="grid">
+        </div>
+        <!--
+        <table border="1" style="width:500px; height:500px;">
+            <tr><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td colspan="2" rowspan="2"></td><td></td></tr>
+            <tr><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td></tr>
+        </table>-->
+    </body>
 </html>

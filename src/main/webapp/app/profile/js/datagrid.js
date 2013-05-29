@@ -10,11 +10,12 @@ $(function() {
         var fxiedHeaderTable = $('<table class="hrcms-datagrid-header"/>').appendTo(fixedHeaderContainer);
         var dataContainer = $('<div class="hrcms-data-container"/>').appendTo(gridContainer);
         var table = $('<table class="hrcms-datagrid-table"/>').appendTo(dataContainer);
+        var tableHeaderFixedHeight = 30;
         var tableBody;
         var fixedTableHeader;
         var currentSortTh;
         var configuration;
-        var offsetHeight = (config.offsetHeight ? config.offsetHeight + 30 : 30);
+        var offsetHeight = (config.offsetHeight ? config.offsetHeight + tableHeaderFixedHeight : tableHeaderFixedHeight);
         var offsetWidth = (config.offsetWidth ? config.offsetWidth : 0);
         dataContainer.css("width", container.width() - offsetWidth);
         dataContainer.css("height", container.height() - offsetHeight);
@@ -85,12 +86,16 @@ $(function() {
             }
         }
         // Member methods
+        tThis.toggle = function() {
+            gridContainer.toggle();
+        }
         tThis.configure = function(config) {
             configuration = config
             buildColumns(config);
             var columns = config.columns;
             tableBody = $('<tbody/>').appendTo(table);
             table.append('<tfoot><tr><td colspan="' + (columns.length + 1) + '"><div style="height:20px;"></div></td></tr></tfoot>');
+            return this;
         }
         tThis.data = function(records) {
             var columns = configuration.columns;
@@ -98,8 +103,8 @@ $(function() {
                 var tr = $('<tr/>').appendTo(tableBody);
                 tr.addClass("hrcms-datagrid-row");
                 tr.attr('row-number', i);
-                if (event.rowclick)
-                    tr.click(event.rowclick);
+                if (configuration.event.rowclick)
+                    tr.click(configuration.event.rowclick);
                 // TODO need to add event handler for this th
                 var th = $('<th width="1" style="padding-left:6px; padding-right:8px;"><input type="checkbox"></th>').appendTo(tr);
                 var field = records[i].field_value;
@@ -130,6 +135,7 @@ $(function() {
                 else
                     jFixed.css("width", jElem.width());
             }
+            return this;
         }
         tThis.remove = function() {
             fixedHeaderContainer.remove();

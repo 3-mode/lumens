@@ -14,7 +14,7 @@ $(function() {
     I18N.Widget.TableNavbar_Refresh = "刷新";
     I18N.Widget.TableNavbar_Search = "搜索";
     // System business moudles
-    I18N.SystemTitle = "高校人力资源管理系统";
+    I18N.SystemTitle = "高校人力资源管理信息系统";
     // Toolbar module
     I18N.SysToolbar = {};
     I18N.SysToolbar.Home = "首页管理";

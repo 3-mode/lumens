@@ -13,7 +13,8 @@ $(function() {
         function(data) {
             portlet.configure(data);
         }).fail(function(result) {
-            console.log(result.error());
+            if (Hrcms.debugEnabled)
+                console.log(result.error());
         });
 
         tThis.remove = function() {

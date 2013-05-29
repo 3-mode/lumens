@@ -63,7 +63,7 @@ body {
 .hrcms .hrcms-header { 
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
     background-color: #4c4a70;
-    background-image: url(images/bg_40x40.png);
+    background-image: url(images/syshead.png);
     float: top;
     height:52px;
     width:100%;
@@ -95,7 +95,7 @@ body {
     width: auto;
 }
 .hrcms .hrcms-toolbar .hrcms-toolbar-button {
-    border: 1px solid #999999;
+    border: 1px solid rgb(196, 196, 196);
     background-repeat: no-repeat;
     height: 23px;
     width: 24px;
@@ -105,28 +105,36 @@ body {
     background-color: #d3d3d3;
 }
 .hrcms .hrcms-toolbar-button-begin {
-    background-image: url(images/begin.png);
+    background-position: center;
+    background-image: url(images/table/begin.png);
 }
 .hrcms .hrcms-toolbar-button-prev {
-    background-image: url(images/prev.png);
+    background-position: center;
+    background-image: url(images/table/prev.png);
 }
 .hrcms .hrcms-toolbar-button-next {
-    background-image: url(images/next.png);
+    background-position: center;
+    background-image: url(images/table/next.png);
 }
 .hrcms .hrcms-toolbar-button-end {
-    background-image: url(images/end.png);
+    background-position: center;
+    background-image: url(images/table/end.png);
 }
 .hrcms .hrcms-toolbar-button-add {
-    background-image: url(images/add.png);
+    background-position: center;
+    background-image: url(images/operate/add.png);
 }
 .hrcms .hrcms-toolbar-button-delete {
-    background-image: url(images/delete.png);
+    background-position: center;
+    background-image: url(images/operate/delete.png);
 }
 .hrcms .hrcms-toolbar-button-reload {
-    background-image: url(images/reload.png);
+    background-position: center;
+    background-image: url(images/operate/refresh.png);
 }
 .hrcms .hrcms-toolbar-button-find {
-    background-image: url(images/find.png);
+    background-position: center;
+    background-image: url(images/operate/find.png);
 }
 .hrcms .hrcms-nav-toolbar {
     position: relative;
@@ -240,6 +248,7 @@ body {
     background-image: url(images/wheader.png);
     background-repeat: repeat-x;
     background-color: rgb(240, 240, 240);
+    border-bottom: 1px solid #cacaca;
 }
 .hrcms .hrcms-workspace-nav {
     width: auto;
@@ -249,7 +258,6 @@ body {
 .hrcms .hrcms-workspace-toolbar {
     width: 100%;
     height: 36px;
-    border-bottom: 1px solid #cacaca;
 }
 .hrcms .hrcms-workspace-nav span {
     color: gray;
@@ -386,10 +394,14 @@ body {
     min-height: 200px;
 }
 .hrcms .hrcms-portlet-header {
+    font-size: 12px;
+    font-weight: bold;
+    color: rgb(53, 53, 53);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+    text-align: -webkit-match-parent;
     margin: 0.3em;
     padding-bottom: 4px;
     padding-left: 0.2em;
-    background-image: url(images/ui-bg_dots-small_75_cccccc_2x2.png);
     background-color: rgb(231, 231, 231);
     border: 1px solid rgb(180, 180, 180); 
 }
@@ -416,4 +428,74 @@ body {
 }
 .ui-sortable-placeholder * {
     visibility: hidden;
+}
+.hrcms .hrcms-form-container,
+.hrcms .hrcms-teditor-container {
+    width: 100%;
+    height:100%;
+    display: block;
+    background-image: url(images/ui-bg_small_gray_40x40_0.30.png);
+}
+.hrcms .hrcms-record-main-form {
+    width: 100%;
+    height: auto;
+    min-width: 650px;
+    max-width: 95%;
+    overflow: hidden;
+    margin: 0 auto;
+    border-left: 1px solid #cacaca;
+    border-right: 1px solid #cacaca;
+    border-bottom: 1px solid #cacaca;
+    -moz-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+.hrcms .hrcms-person-form {
+    /*Anchor*/
+}
+.hrcms .hrcms-tab {
+    padding:0;
+    width: 100%;
+    height: auto;
+    overflow: auto;
+}
+.hrcms .hrcms-tab-content {
+    display:table;
+    padding: 10px;
+}
+.hrcms .hrcms-person-form table,
+.hrcms .hrcms-person-form td {
+    border: 1px solid #cacaca;
+}
+.hrcms .hrcms-tableditor-insert-row {
+    background-position: center;
+    background-image: url(images/table/insert-row.png);
+}
+.hrcms .hrcms-tableditor-delete-row {
+    background-position: center;
+    background-image: url(images/table/delete-row.png);
+}
+.hrcms .hrcms-tableditor-insert-column {
+    background-position: center;
+    background-image: url(images/table/insert-column.png);
+}
+.hrcms .hrcms-tableditor-delete-column {
+    background-position: center;
+    background-image: url(images/table/delete-column.png);
+}
+.hrcms .hrcms-tableditor-add-table {
+    background-position: center;
+    background-image: url(images/table/table-add.png);
+}
+.hrcms .hrcms-tableditor-delete-table {
+    background-position: center;
+    background-image: url(images/table/table-delete.png);
+}
+.hrcms .hrcms-tableditor-join-cell {
+    background-position: center;
+    background-image: url(images/table/table-join.png);
+}
+.hrcms .hrcms-tableditor-save {
+    background-position: center;
+    background-image: url(images/table/save.png);
 }
