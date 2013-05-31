@@ -15,6 +15,12 @@ $(function() {
         tThis.remove = function() {
             workspaceHeader.remove();
         }
+        tThis.size = function() {
+            return {
+                height: workspaceHeader.height(),
+                width: workspaceHeader.width()
+            };
+        }
         // Methods
         tThis.goTo = function(text) {
             var span = nav.find('span');

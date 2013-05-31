@@ -14,6 +14,9 @@ html, body {
 body {
     background-color: rgb(240, 240, 240);
 }
+a {
+    outline: none;
+}
 .hrcms {
 
 }
@@ -483,6 +486,10 @@ body {
     background-position: center;
     background-image: url(images/table/delete-column.png);
 }
+.hrcms .hrcms-tableditor-join-cell {
+    background-position: center;
+    background-image: url(images/table/table-join.png);
+}
 .hrcms .hrcms-tableditor-add-table {
     background-position: center;
     background-image: url(images/table/table-add.png);
@@ -491,11 +498,21 @@ body {
     background-position: center;
     background-image: url(images/table/table-delete.png);
 }
-.hrcms .hrcms-tableditor-join-cell {
+.hrcms .hrcms-tableditor-edit-table {
     background-position: center;
-    background-image: url(images/table/table-join.png);
+    background-image: url(images/table/table-edit.png);
 }
-.hrcms .hrcms-tableditor-save {
+.hrcms .hrcms-tableditor-save-table {
     background-position: center;
-    background-image: url(images/table/save.png);
+    background-image: url(images/table/table-save.png);
+}
+.hrcms .hrcms-teditor-table-container{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+.hrcms .hrcms-report-table,
+.hrcms .hrcms-report-table td {
+    position: relative;
+    border: 1px solid rgb(163, 163, 163);
 }
