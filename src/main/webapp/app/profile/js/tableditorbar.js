@@ -26,6 +26,10 @@ $(function() {
                     config.addTable(event);
                 else if (id === "delete_table" && config.deleteTable)
                     config.deleteTable(event);
+                else if (id === "edit_table" && config.editTable)
+                    config.editTable(event);
+                else if (id === "save_table" && config.saveTable)
+                    config.saveTable(event);
             });
             return this;
         }

@@ -513,6 +513,8 @@ a {
 }
 .hrcms .hrcms-report-table,
 .hrcms .hrcms-report-table td {
-    position: relative;
     border: 1px solid rgb(163, 163, 163);
+}
+.hrcms .hrcms-report-table .hrcms-selected {
+    background-color: #dff0d8;
 }

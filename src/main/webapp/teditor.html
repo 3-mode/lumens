@@ -36,6 +36,15 @@
         </style>
         <script type="text/javascript">
             $(function() {
+                var holder = {};
+                holder.length = 10;
+                for (var i = 0; i < 10; ++i) {
+                    holder[i] = {
+                        index: i
+                    };
+                }
+                console.log(holder);
+
                 var I18N = Hrcms.I18N;
                 var tEditor = Hrcms.TableEditor.create({
                     container: $('#grid'),

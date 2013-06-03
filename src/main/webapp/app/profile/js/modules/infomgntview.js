@@ -119,11 +119,11 @@ $(function() {
             });
         }
 
-        var superRemove = tThis.remove;
+        var __superRemove = tThis.remove;
         tThis.remove = function() {
             if (recordForm)
                 recordForm.remove();
-            superRemove();
+            __superRemove();
         }
 
         tThis.initialize();
