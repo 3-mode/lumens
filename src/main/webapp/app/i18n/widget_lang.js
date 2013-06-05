@@ -4,7 +4,7 @@ $(function() {
     if (!Hrcms.I18N)
         Hrcms.I18N = {};
     if (!Hrcms.I18N.lang)
-        I18N.lang = "zh_CN";
+        Hrcms.I18N.lang = "zh_CN";
     var I18N = Hrcms.I18N;
     // System control widget modules
     I18N.Widget = {};

@@ -4,7 +4,7 @@ $(function() {
     if (!Hrcms.I18N)
         Hrcms.I18N = {};
     if (!Hrcms.I18N.lang)
-        I18N.lang = "zh_CN";
+        Hrcms.I18N.lang = "zh_CN";
     var I18N = Hrcms.I18N;
     // System business moudles
     I18N.SystemTitle = "高校人力资源管理信息系统";
