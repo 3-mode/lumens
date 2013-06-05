@@ -136,7 +136,7 @@ public class TransformProcessor extends AbstractProcessor
     {
         List<Element> itemList = new ArrayList<Element>();
         itemList.add(arrayElementEntry);
-        String pathToken = null;
+        String pathToken;
         Iterator<PathToken> it = arrayIterationPath.iterator();
         while (!itemList.isEmpty() && it.hasNext())
         {
