@@ -1,6 +1,4 @@
 $(function() {
-    if (!window.Hrcms)
-        window.Hrcms = {};
     Hrcms.Portlet = {};
     Hrcms.Portlet.create = function(config) {
         var tThis = {};

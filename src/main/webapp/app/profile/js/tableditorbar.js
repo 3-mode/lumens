@@ -1,6 +1,4 @@
 $(function() {
-    if (!window.Hrcms)
-        window.Hrcms = {};
     Hrcms.TableEditorbar = {};
     Hrcms.TableEditorbar.create = function(config) {
         var tThis = {};

@@ -1,6 +1,4 @@
 $(function() {
-    if (!window.Hrcms)
-        window.Hrcms = {};
     Hrcms.ContentView = {};
     Hrcms.ContentView.create = function(container) {
         var tThis = {};

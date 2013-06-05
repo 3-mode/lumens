@@ -1,6 +1,4 @@
 $(function() {
-    if (!window.Hrcms)
-        window.Hrcms = {};
     Hrcms.Curdbar = {};
     Hrcms.Curdbar.create = function(config) {
         var tThis = {};

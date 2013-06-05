@@ -1,6 +1,4 @@
 $(function() {
-    if (!window.Hrcms)
-        window.Hrcms = {};
     Hrcms.RecordForm = {};
     Hrcms.RecordForm.create = function(config) {
         var tThis = {};

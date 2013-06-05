@@ -1,6 +1,4 @@
 $(function() {
-    if (!window.Hrcms)
-        window.Hrcms = {};
     Hrcms.HomeView = {};
     Hrcms.HomeView.create = function(container) {
         var tThis = {};

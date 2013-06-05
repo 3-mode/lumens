@@ -1,7 +1,4 @@
 $(function() {
-    if (!window.Hrcms)
-        window.Hrcms = {};
-
     Hrcms.NavMenu = {};
     Hrcms.NavMenu.create = function(config) {
         var tThis = {};

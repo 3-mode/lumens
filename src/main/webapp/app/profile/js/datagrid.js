@@ -1,6 +1,4 @@
 $(function() {
-    if (!window.Hrcms)
-        window.Hrcms = {};
     Hrcms.DataGrid = {}
     Hrcms.DataGrid.create = function(config) {
         var tThis = {};

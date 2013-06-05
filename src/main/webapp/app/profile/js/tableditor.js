@@ -1,6 +1,5 @@
 $(function() {
-    if (!window.Hrcms)
-        window.Hrcms = {};
+    var I18N = Hrcms.I18N;
     Hrcms.TableEditor = {};
     Hrcms.TableEditor.create = function(config) {
         var tThis = {};
@@ -9,10 +8,12 @@ $(function() {
         var tableEditorContainer = $('<div class="hrcms-teditor-container"/>').appendTo(container);
         var workspaceHeader = Hrcms.NavIndicator.create(tableEditorContainer);
         var tableContainer = $('<div class="hrcms-teditor-table-container"/>').appendTo(tableEditorContainer);
-        var selecctedRow;
+        var selectedRow;
+        var selectedColumn = -1;
         for (var i = 0; i < config.navigator.length; ++i)
             workspaceHeader.goTo(config.navigator[i]);
 
+        // TODO this is a MOCK
         function click(event) {
         }
         function removeDialog(dialog) {
@@ -30,44 +31,112 @@ $(function() {
                 resizable: false,
                 buttons: [
                     {
-                        text: "Ok", click: function() {
+                        text: I18N.Widget.Button_Ok,
+                        click: function() {
                             var row = message.find("#rowCount").val();
                             var col = message.find("#colCount").val();
-                            var table = $('<table class="hrcms-report-table">').appendTo(tableContainer);
+                            var tableHolder = $(
+                            '<table>' +
+                            '  <tr><td id="hrcms-move-bar"></td><td class="hrcms-column-select-area"></td></tr>' +
+                            '  <tr><td class="hrcms-row-select-area"></td><td id="tableBox"></td></tr>' +
+                            '</table>').appendTo(tableContainer);
+                            var tableMoveBar = tableHolder.find("#hrcms-move-bar");
+                            var mouseUp = true, isDraggable = false;
+                            tableMoveBar.mousedown(function(event) {
+                                mouseUp = false;
+                            }).mouseup(function(event) {
+                                mouseUp = true;
+                            }).mouseenter(function(event) {
+                                if (!isDraggable) {
+                                    isDraggable = true;
+                                    tableMoveBar.toggleClass("hrcms-move-bar-active");
+                                    tableHolder.draggable({
+                                        stop: function(event) {
+                                            var p = tableHolder.position();
+                                            var tp = tableContainer.position();
+                                            if (p.left < tp.left)
+                                                tableHolder.css("left", 0);
+                                            if (p.top < tp.top)
+                                                tableHolder.css("top", 0);
+                                        }
+                                    });
+                                }
+                            }).mouseleave(function(event) {
+                                if (mouseUp) {
+                                    isDraggable = false;
+                                    tableHolder.draggable("destroy");
+                                    tableMoveBar.toggleClass("hrcms-move-bar-active");
+                                }
+                            });
+                            function updateRowStatus(currentRow) {
+                                if (currentRow && currentRow.hasClass("hrcms-selected")) {
+                                    currentRow.toggleClass("hrcms-selected");
+                                    selectedRow = undefined;
+                                } else if (currentRow) {
+                                    if (selectedRow)
+                                        selectedRow.toggleClass("hrcms-selected");
+                                    currentRow.toggleClass("hrcms-selected");
+                                    if (currentRow.hasClass("hrcms-selected"))
+                                        selectedRow = currentRow;
+                                }
+                            }
+                            function updateColumnStatus(currentColumn) {
+                                if (currentColumn >= 0) {
+                                    var tr = table.find('tr');
+                                    var filter = 'td:nth-child(' + (currentColumn + 1) + ')';
+                                    for (var i = 0; i < tr.length; ++i) {
+                                        $(tr[i]).find(filter).toggleClass("hrcms-selected");
+                                    }
+                                }
+                                selectedColumn = (currentColumn === selectedColumn) ? -1 : currentColumn;
+                            }
+                            tableHolder.find(".hrcms-row-select-area").click(function(event) {
+                                updateColumnStatus(selectedColumn);
+                                var tr = table.find('tr');
+                                for (var i = 0; i < tr.length; ++i) {
+                                    var cur = tr[i];
+                                    if (event.offsetY < (cur.offsetTop + cur.offsetHeight)) {
+                                        cur = $(cur);
+                                        updateRowStatus(cur);
+                                        break;
+                                    }
+                                }
+                            });
+                            tableHolder.find(".hrcms-column-select-area").click(function(event) {
+                                updateRowStatus(selectedRow);
+                                var oldSelectedClolumn = selectedColumn;
+                                updateColumnStatus(selectedColumn);
+                                var tr = table.find('tr');
+                                var firstTR = $(tr[0]);
+                                var td = firstTR.find('td');
+                                // Find the selected column number
+                                var localSelectedColumn = -1;
+                                for (var i = 0; i < td.length; ++i) {
+                                    var cur = td[i];
+                                    if (event.offsetX < (cur.offsetLeft + cur.offsetWidth)) {
+                                        localSelectedColumn = i;
+                                        break;
+                                    }
+                                }
+                                if (oldSelectedClolumn !== localSelectedColumn)
+                                    updateColumnStatus(localSelectedColumn);
+                            });
+
+                            var tableBox = tableHolder.find("#tableBox");
+                            var table = $('<table class="hrcms-report-table">').appendTo(tableBox);
                             for (var i = 0; i < row; ++i) {
                                 var tr = $('<tr></tr>').appendTo(table);
-                                tr.dblclick(function(event) {
-                                    var cur = $(this);
-                                    if (cur.hasClass("hrcms-selected")) {
-                                        cur.toggleClass("hrcms-selected");
-                                        selecctedRow = undefined;
-                                    } else {
-                                        if (selecctedRow)
-                                            selecctedRow.toggleClass("hrcms-selected");
-                                        cur.toggleClass("hrcms-selected");
-                                        if (cur.hasClass("hrcms-selected"))
-                                            selecctedRow = cur;
-                                    }
-                                });
                                 for (var j = 0; j < col; ++j) {
                                     $('<td style="width:50px;height:20px;"></td>').appendTo(tr);
                                 }
                                 // tr.find('td:nth-child(2)').css("background-color", "red");
                             }
-                            table.draggable({stop: function() {
-                                    var p = table.position();
-                                    var tp = tableContainer.position();
-                                    if (p.left < tp.left)
-                                        table.css("left", 0);
-                                    if (p.top < tp.top)
-                                        table.css("top", 0);
-                                }}
-                            );
                             removeDialog($(this));
                         }
                     },
                     {
-                        text: "Cancel", click: function() {
+                        text: I18N.Widget.Button_Cancel,
+                        click: function() {
                             removeDialog($(this));
                         }
                     }
@@ -91,24 +160,16 @@ $(function() {
                             if (Hrcms.debugEnabled)
                                 console.log(row + ", " + rowPosition);
                             // TODO need to refine
-                            if (selecctedRow && row > 0) {
+                            if (selectedRow && row > 0) {
                                 for (var i = 0; i < row; ++i) {
                                     var tr = $('<tr/>');
 
                                     if (rowPosition === "Above")
-                                        selecctedRow.before(tr);
+                                        selectedRow.before(tr);
                                     else
-                                        selecctedRow.after(tr);
+                                        selectedRow.after(tr);
 
-                                    tr.dblclick(function(event) {
-                                        var cur = $(this);
-                                        if (selecctedRow)
-                                            selecctedRow.toggleClass("hrcms-selected");
-                                        cur.toggleClass("hrcms-selected");
-                                        if (cur.hasClass("hrcms-selected"))
-                                            selecctedRow = cur;
-                                    });
-                                    var col = selecctedRow.find('td').length;
+                                    var col = selectedRow.find('td').length;
                                     for (var j = 0; j < col; ++j) {
                                         $('<td style="width:50px;height:20px;"></td>').appendTo(tr);
                                     }

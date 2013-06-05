@@ -1,6 +1,4 @@
 $(function() {
-    if (!window.Hrcms)
-        window.Hrcms = {};
     Hrcms.Header = {};
     Hrcms.Header.create = function(containerObj) {
         var tThis = {};
