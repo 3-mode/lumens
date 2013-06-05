@@ -1,18 +1,11 @@
 $(function() {
     if (!window.Hrcms)
         window.Hrcms = {};
-    var I18N = Hrcms.I18N = {};
-    I18N.lang = "zh_CN";
-    // System control widget modules
-    I18N.Widget = {};
-    I18N.Widget.TableNavbar_Prev = "前一页";
-    I18N.Widget.TableNavbar_Next = "下一页";
-    I18N.Widget.TableNavbar_First = "最前页";
-    I18N.Widget.TableNavbar_Last = "最后页";
-    I18N.Widget.TableNavbar_New = "新建";
-    I18N.Widget.TableNavbar_Remove = "删除";
-    I18N.Widget.TableNavbar_Refresh = "刷新";
-    I18N.Widget.TableNavbar_Search = "搜索";
+    if (!Hrcms.I18N)
+        Hrcms.I18N = {};
+    if (!Hrcms.I18N.lang)
+        I18N.lang = "zh_CN";
+    var I18N = Hrcms.I18N;
     // System business moudles
     I18N.SystemTitle = "高校人力资源管理信息系统";
     // Toolbar module
