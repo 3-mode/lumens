@@ -80,29 +80,21 @@ $(function() {
                             '</table>').appendTo(tableContainer);
                             var tableBox = tableHolder.find("#tableBox");
                             var table = $('<table class="hrcms-report-table">').appendTo(tableBox);
+                            table.selectable({
+                                stop: function(evt, ui) {
+                                    table.find('tbody[class~="ui-selected"]').removeClass("ui-selected");
+                                    table.find('tr[class~="ui-selected"]').removeClass("ui-selected");
+                                    table.find('th[class~="ui-selected"]').removeClass("ui-selected");
+                                }
+                            });//*/
                             table.attr(TABLE_UUID, SyncUUID("table"));
                             for (var i = 0; i < row; ++i) {
                                 var tr = $('<tr></tr>').appendTo(table);
                                 for (var j = 0; j < col; ++j) {
                                     $('<td style="width:50px;height:20px;"></td>').appendTo(tr).dblclick(tdDbClick);
                                 }
-                            }/*
-                             tableHolder.draggable({
-                             stack: ".hrcms-teditor-table-container",
-                             start: function(event) {
-                             tableBox.toggleClass("hrcms-report-table-active");
-                             },
-                             stop: function(event) {
-                             var p = tableHolder.position();
-                             var tp = tableContainer.position();
-                             if (p.left < tp.left)
-                             tableHolder.css("left", tp.left);
-                             if (p.top < tp.top)
-                             tableHolder.css("top", tp.top);
-                             tableBox.toggleClass("hrcms-report-table-active");
-                             }
-                             });//*/
-                            tableHolder.find(".hrcms-row-select-area").click(function(event) {
+                            }
+                            function rowSelect(event) {
                                 updateColumnStatus(editingTable.selectedColumn);
                                 var tr = table.find('tr');
                                 for (var i = 0; i < tr.length; ++i) {
@@ -113,8 +105,8 @@ $(function() {
                                         break;
                                     }
                                 }
-                            });
-                            tableHolder.find(".hrcms-column-select-area").click(function(event) {
+                            }
+                            function columnSelect(event) {
                                 updateRowStatus(editingTable.selectedRow);
                                 var oldSelectedClolumn = editingTable.selectedColumn;
                                 updateColumnStatus(editingTable.selectedColumn);
@@ -138,7 +130,9 @@ $(function() {
                                         selectedColumnIndex: localSelectedColumnIndex,
                                         tableUUID: table.attr(TABLE_UUID)
                                     });
-                            });
+                            }
+                            tableHolder.find(".hrcms-row-select-area").click(rowSelect);
+                            tableHolder.find(".hrcms-column-select-area").click(columnSelect);
                             removeDialog($(this));
                         }
                     },
@@ -181,13 +175,10 @@ $(function() {
                                     colspan = colspan ? parseInt(colspan) : 1;
                                     col += colspan;
                                 });
+                                var insert = rowPosition === "Above" ? selectedRow.before : selectedRow.after;
                                 for (var i = 0; i < row; ++i) {
                                     var tr = $('<tr/>');
-
-                                    if (rowPosition === "Above")
-                                        selectedRow.before(tr);
-                                    else
-                                        selectedRow.after(tr);
+                                    insert(tr);
                                     // TODO need to check the colspan when adding td cell
                                     for (var j = 0; j < col; ++j) {
                                         var td = $('<td style="width:50px;height:20px;"></td>').appendTo(tr);
@@ -263,8 +254,8 @@ $(function() {
         function joinTableCells(event) {
             //TODO must to make sure selected a rectangle cells
 
-            var selectedCells = tableContainer.find(".hrcms-selected");
-            selectedCells.toggleClass("hrcms-selected");
+            var selectedCells = tableContainer.find(".ui-selected");
+            selectedCells.toggleClass("ui-selected");
             // Normalized cell array ------------------------------>
             var normalizedCells = [];
             selectedCells.each(function(index, cell) {
@@ -306,21 +297,50 @@ $(function() {
                 return 0;
             });
             // Normalized cell array <------------------------------
+            var cellMatrix = [];
             var rowCounter = 0, colCounter = 0;
             var firstCell = normalizedCells[0];
             for (var index = 0; index < normalizedCells.length; ++index) {
                 var cell = normalizedCells[index];
-                if (index === 0) {
-                    rowCounter = cell.rowspan;
-                    colCounter = cell.colspan;
-                } else if (cell.rowIndex === firstCell.rowIndex) {
-                    colCounter += cell.colspan;
-                } else if (cell.rowIndex !== normalizedCells[index - 1].rowIndex
-                && cell.rowIndex - firstCell.rowIndex >= firstCell.rowspan) {
-                    rowCounter += cell.rowspan;
+                var row = cell.rowIndex - firstCell.rowIndex;
+                var rowCount = cell.rowspan;
+                for (var i = 0; i < rowCount; ++i) {
+                    var rowIndex = row + i;
+                    if (rowIndex >= cellMatrix.length) {
+                        // New row
+                        cellMatrix.push([]);
+                    }
+                    for (var j = 0; j < cell.colspan; ++j)
+                        cellMatrix[rowIndex].push(cell);
                 }
             }
-            $(firstCell.cell).attr("colspan", colCounter).attr("rowspan", rowCounter);
+
+            if (Hrcms.debugEnabled)
+                console.log(cellMatrix);
+
+            for (var i = 1; i < cellMatrix.length; ++i) {
+                if (cellMatrix[i].length !== cellMatrix[i - 1].length) {
+                    var message = $('<div title="错误">不能合并非法单元格</div>');
+                    message.dialog({
+                        modal: true,
+                        resizable: false,
+                        buttons: [{
+                                text: I18N.Widget.Button_Ok,
+                                click: function() {
+                                    removeDialog($(this));
+                                }
+                            }]
+                    });
+                    return;
+                }
+            }
+
+            colCounter = cellMatrix[0].length;
+            rowCounter = cellMatrix.length;
+            if (firstCell && firstCell.cell)
+                $(firstCell.cell).attr("colspan", colCounter).attr("rowspan", rowCounter)
+                .css("width", colCounter * 50)
+                .css("height", rowCounter * 20);
             for (var index = 0; index < normalizedCells.length; ++index) {
                 if (index !== 0)
                     $(normalizedCells[index].cell).remove();
