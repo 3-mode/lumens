@@ -10,47 +10,21 @@ $(function() {
         var tableEditorContainer = $('<div class="hrcms-teditor-container"/>').appendTo(container);
         var workspaceHeader = Hrcms.NavIndicator.create(tableEditorContainer);
         var tableContainer = $('<div class="hrcms-teditor-table-container"/>').appendTo(tableEditorContainer);
-        var editingTable = {};
+        // TODO need a row column selector
+        var tableHolder = $(
+        '<table class="hrcms-move-active">' +
+        '  <tr><td style="height:20px;"></td></tr>' +
+        '  <tr><td><div id="hrcms-table-holder"/></td></tr>' +
+        '</table>').appendTo(tableContainer);
+        var tableBox = tableHolder.find("#hrcms-table-holder");
+        var tdHtmlTpl = '<td style="width:50px;height:20px;border-left:1px solid rgb(163, 163, 163);border-bottom:1px solid rgb(163, 163, 163);border-right:1px solid rgb(163, 163, 163);border-top:1px solid rgb(163, 163, 163);"></td>';
+        tableBox.sortable();
+
         for (var i = 0; i < config.navigator.length; ++i)
             workspaceHeader.goTo(config.navigator[i]);
 
         // TODO this is a MOCK
         function click(event) {
-        }
-        function tdDbClick(event) {
-            $(this).toggleClass("hrcms-selected");
-        }
-        function updateRowStatus(currentRow) {
-            if (currentRow && currentRow.hasClass("hrcms-selected")) {
-                currentRow.toggleClass("hrcms-selected");
-                editingTable.selectedRow = undefined;
-            } else if (currentRow) {
-                if (editingTable.selectedRow)
-                    editingTable.selectedRow.toggleClass("hrcms-selected");
-                currentRow.toggleClass("hrcms-selected");
-                if (currentRow.hasClass("hrcms-selected"))
-                    editingTable.selectedRow = currentRow;
-            }
-        }
-        function updateColumnStatus(currentColumn) {
-            if (currentColumn) {
-                if (currentColumn.selectedColumnIndex >= 0) {
-                    var localTable = tableContainer.find('table[table-uuid="' + currentColumn.tableUUID + '"]');
-                    var tr = localTable.find('tr');
-                    var filter = 'td:nth-child(' + (currentColumn.selectedColumnIndex + 1) + ')';
-                    for (var i = 0; i < tr.length; ++i) {
-                        $(tr[i]).find(filter).toggleClass("hrcms-selected");
-                    }
-                }
-                if (editingTable.selectedColumn &&
-                currentColumn.tableUUID === editingTable.selectedColumn.tableUUID &&
-                currentColumn.selectedColumnIndex === editingTable.selectedColumn.selectedColumnIndex) {
-                    editingTable.selectedColumn = undefined;
-                }
-                else {
-                    editingTable.selectedColumn = currentColumn;
-                }
-            }
         }
         function removeDialog(dialog) {
             dialog.dialog("close");
@@ -71,68 +45,25 @@ $(function() {
                     {
                         text: I18N.Widget.Button_Ok,
                         click: function() {
+                            // Editing one table once
                             var row = message.find("#rowCount").val();
                             var col = message.find("#colCount").val();
-                            var tableHolder = $(
-                            '<table class="hrcms-move-active">' +
-                            '  <tr><td id="hrcms-move-bar"></td><td class="hrcms-column-select-area"></td></tr>' +
-                            '  <tr><td class="hrcms-row-select-area"></td><td><div id="tableBox"></div></td></tr>' +
-                            '</table>').appendTo(tableContainer);
-                            var tableBox = tableHolder.find("#tableBox");
-                            var table = $('<table class="hrcms-report-table">').appendTo(tableBox);
+                            var box = $('<div id="hrcms-table-holder-box" style="padding-left:20px;"><table class="hrcms-report-table"></div>').appendTo(tableBox);
+                            var table = box.find('table');
                             table.selectable({
                                 stop: function(evt, ui) {
                                     table.find('tbody[class~="ui-selected"]').removeClass("ui-selected");
                                     table.find('tr[class~="ui-selected"]').removeClass("ui-selected");
                                     table.find('th[class~="ui-selected"]').removeClass("ui-selected");
                                 }
-                            });//*/
+                            });
                             table.attr(TABLE_UUID, SyncUUID("table"));
                             for (var i = 0; i < row; ++i) {
                                 var tr = $('<tr></tr>').appendTo(table);
                                 for (var j = 0; j < col; ++j) {
-                                    $('<td style="width:50px;height:20px;"></td>').appendTo(tr).dblclick(tdDbClick);
+                                    $(tdHtmlTpl).appendTo(tr);
                                 }
                             }
-                            function rowSelect(event) {
-                                updateColumnStatus(editingTable.selectedColumn);
-                                var tr = table.find('tr');
-                                for (var i = 0; i < tr.length; ++i) {
-                                    var cur = tr[i];
-                                    if (event.offsetY < (cur.offsetTop + cur.offsetHeight)) {
-                                        cur = $(cur);
-                                        updateRowStatus(cur);
-                                        break;
-                                    }
-                                }
-                            }
-                            function columnSelect(event) {
-                                updateRowStatus(editingTable.selectedRow);
-                                var oldSelectedClolumn = editingTable.selectedColumn;
-                                updateColumnStatus(editingTable.selectedColumn);
-                                var tr = table.find('tr');
-                                var firstTR = $(tr[0]);
-                                var td = firstTR.find('td');
-                                // Find the selected column number
-                                var localSelectedColumnIndex = -1;
-                                for (var i = 0; i < td.length; ++i) {
-                                    var cur = td[i];
-                                    if (event.offsetX < (cur.offsetLeft + cur.offsetWidth)) {
-                                        localSelectedColumnIndex = i;
-                                        break;
-                                    }
-                                }
-                                if (!oldSelectedClolumn ||
-                                oldSelectedClolumn.tableUUID !== table.attr(TABLE_UUID) ||
-                                (oldSelectedClolumn.tableUUID === table.attr(TABLE_UUID) &&
-                                oldSelectedClolumn.selectedColumnIndex !== localSelectedColumnIndex))
-                                    updateColumnStatus({
-                                        selectedColumnIndex: localSelectedColumnIndex,
-                                        tableUUID: table.attr(TABLE_UUID)
-                                    });
-                            }
-                            tableHolder.find(".hrcms-row-select-area").click(rowSelect);
-                            tableHolder.find(".hrcms-column-select-area").click(columnSelect);
                             removeDialog($(this));
                         }
                     },
@@ -175,15 +106,12 @@ $(function() {
                                     colspan = colspan ? parseInt(colspan) : 1;
                                     col += colspan;
                                 });
-                                var insert = rowPosition === "Above" ? selectedRow.before : selectedRow.after;
                                 for (var i = 0; i < row; ++i) {
                                     var tr = $('<tr/>');
-                                    insert(tr);
+                                    rowPosition === "Above" ? selectedRow.before(tr) : selectedRow.after(tr);
                                     // TODO need to check the colspan when adding td cell
                                     for (var j = 0; j < col; ++j) {
-                                        var td = $('<td style="width:50px;height:20px;"></td>').appendTo(tr);
-                                        if (td && td.dblclick)
-                                            td.dblclick(tdDbClick);
+                                        $(tdHtmlTpl).appendTo(tr);
                                     }
                                 }
                                 updateRowStatus(selectedRow);
@@ -230,9 +158,9 @@ $(function() {
                                     for (var i = 0; i < tr.length; ++i) {
                                         var td = $(tr[i]).find(filter);
                                         if (colPosition === "Left")
-                                            $('<td style="width:50px;height:20px;"></td>').insertBefore(td);
+                                            $(tdHtmlTpl).insertBefore(td);
                                         else
-                                            $('<td style="width:50px;height:20px;"></td>').insertAfter(td);
+                                            $(tdHtmlTpl).insertAfter(td);
                                     }
                                     if (colPosition === "Left")
                                         selectedColumn.selectedColumnIndex++;
@@ -252,10 +180,7 @@ $(function() {
             });
         }
         function joinTableCells(event) {
-            //TODO must to make sure selected a rectangle cells
-
             var selectedCells = tableContainer.find(".ui-selected");
-            selectedCells.toggleClass("ui-selected");
             // Normalized cell array ------------------------------>
             var normalizedCells = [];
             selectedCells.each(function(index, cell) {
@@ -335,8 +260,8 @@ $(function() {
                 }
             }
 
-            colCounter = cellMatrix[0].length;
-            rowCounter = cellMatrix.length;
+            rowCounter = cellMatrix ? cellMatrix.length : 1;
+            colCounter = cellMatrix.length ? cellMatrix[0].length : 1;
             if (firstCell && firstCell.cell)
                 $(firstCell.cell).attr("colspan", colCounter).attr("rowspan", rowCounter)
                 .css("width", colCounter * 50)
@@ -346,14 +271,103 @@ $(function() {
                     $(normalizedCells[index].cell).remove();
             }
         }
+        function editTable(event) {
+            var form = SyncGet({
+                url: "html/table/table-edit.html",
+                dataType: "html"
+            });
+            var message = $('<div>' + form + '<div>');
+            var checkboxSet = Hrcms.CellStyleChechboxSet.create(message.find("#CellBorderStyle"));
+            checkboxSet.configure();
+            message.find("#CellTextLabel").html(I18N.Widget.TableCellText);
+            message.find("#CellTextColorLabel").html(I18N.Widget.TextColor);
+            message.find("#FontSizeLabel").html(I18N.Widget.FontSize);
+            message.find("#FontStyleLabel").html(I18N.Widget.FontStyle);
+            message.find("#BackgroundColorLabel").html(I18N.Widget.BackgroundColor);
+            message.find("#CellBoderStyleLabel").html(I18N.Widget.Border);
+            message.dialog({
+                title: I18N.Widget.TableCellSettings,
+                modal: true,
+                height: "auto",
+                width: "auto",
+                resizable: false,
+                create: function(event) {
+                    var selectedCells = tableContainer.find(".ui-selected");
+                    if (selectedCells.length === 1)
+                        message.find('#CellText').val(selectedCells.html());
+                    selectedCells.removeClass("ui-selected").addClass("hrcms-ui-selected");
+                    var bgcolor = selectedCells.css("background-color");
+                    if (bgcolor !== "" && bgcolor)
+                        message.find('#BackgroundColor').val(Hrcms.Rgb2Hex(bgcolor).substring(1));
+                    jscolor.init();
+                },
+                buttons: [{
+                        text: I18N.Widget.Button_Ok,
+                        click: function() {
+                            // TODO Setting the table cell styles
+                            var cellText = message.find('#CellText').val();
+                            var fontSize = parseInt(message.find('#FontSize').val());
+                            var fontStyle = message.find('#FontStyle').val();
+                            var backgroundColor = '#' + message.find('#BackgroundColor').val();
+                            var border = checkboxSet.values();
+                            if (Hrcms.debugEnabled) {
+                                console.log(fontSize);
+                                console.log(fontStyle);
+                                console.log(backgroundColor);
+                                console.log(border);
+                            }
+                            var selectedCells = tableContainer.find(".hrcms-ui-selected");
+                            selectedCells.toggleClass("hrcms-ui-selected");
+                            if (selectedCells.length === 1)
+                                selectedCells.html(cellText).css("font-weight", "bold");
+                            if (fontSize > 0)
+                                selectedCells.css("font-size", fontSize)
+                            if (backgroundColor !== "#000000")
+                                selectedCells.css("background-color", backgroundColor);
+                            else if (backgroundColor === "#000000")
+                                selectedCells.css("background-color", "");
+                            if (border) {
+                                if (border.Left)
+                                    selectedCells.css("border-left", "1px solid rgb(163, 163, 163)");
+                                else
+                                    selectedCells.css("border-left", "0px solid rgb(163, 163, 163)");
+                                if (border.Bottom)
+                                    selectedCells.css("border-bottom", "1px solid rgb(163, 163, 163)");
+                                else
+                                    selectedCells.css("border-bottom", "0px solid rgb(163, 163, 163)");
+                                if (border.Right)
+                                    selectedCells.css("border-right", "1px solid rgb(163, 163, 163)");
+                                else
+                                    selectedCells.css("border-right", "0px solid rgb(163, 163, 163)");
+                                if (border.Top)
+                                    selectedCells.css("border-top", "1px solid rgb(163, 163, 163)");
+                                else
+                                    selectedCells.css("border-top", "0px solid rgb(163, 163, 163)");
+                            }
+                            removeDialog($(this));
+                        }
+                    },
+                    {
+                        text: I18N.Widget.Button_Cancel,
+                        click: function() {
+                            removeDialog($(this));
+                        }
+                    }]
+            });
+        }
+
+        function saveTable(event) {
+            if (Hrcms.debugEnabled)
+                console.log(tableBox.html())
+        }
         workspaceHeader.configure({
             goBack: config.goBack,
             toolbar: {
                 barType: Hrcms.TableEditorbar,
                 addTable: addTable,
                 deleteTable: click,
-                editTable: click,
-                saveTable: click,
+                editTable: editTable,
+                saveTable: saveTable,
                 insertTableRow: insertTableRow,
                 deleteTableRow: click,
                 insertTableColumn: insertTableCol,
@@ -372,7 +386,6 @@ $(function() {
         }
         container.bind("resize", resize);
         resize();
-
         // Member methods
         tThis.configure = function(config) {
             return this;

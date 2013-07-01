@@ -1,9 +1,15 @@
 $(function() {
+    var I18N = Hrcms.I18N;
     Hrcms.TableEditorbar = {};
     Hrcms.TableEditorbar.create = function(config) {
         var tThis = {};
         var container = config.container;
         var toolbar = $(htmlTpl).appendTo(container);
+        toolbar.find('#add_table').attr("title", I18N.Widget.TableAdding);
+        toolbar.find('#edit_table').attr("title", I18N.Widget.TableCellSettings);
+        toolbar.find('#join_table_cell').attr("title", I18N.Widget.TableCellJoin);
+        toolbar.find('#insert_table_row').attr("title", I18N.Widget.TableRowAdding);
+        toolbar.find('#join_table_cell').attr("title", I18N.Widget.TableCellJoin);
         tThis.configure = function(config) {
             var navTarget = config.tableNavTarget;
             // TODO need to use navTarget to call target object function
@@ -41,10 +47,6 @@ $(function() {
     '  <td style="width:5px;"></td>' +
     '  <td><div id="delete_table" class="hrcms-toolbar-button hrcms-tableditor-delete-table ui-corner-all"/></td>' +
     '  <td style="width:5px;"></td>' +
-    '  <td><div id="edit_table" class="hrcms-toolbar-button hrcms-tableditor-edit-table ui-corner-all"/></td>' +
-    '  <td style="width:5px;"></td>' +
-    '  <td><div id="save_table" class="hrcms-toolbar-button hrcms-tableditor-save-table ui-corner-all"/></td>' +
-    '  <td style="width:5px;"></td>' +
     '  <td><div id="insert_table_row" class="hrcms-toolbar-button hrcms-tableditor-insert-row ui-corner-all"/></td>' +
     '  <td style="width:5px;"></td>' +
     '  <td><div id="delete_table_row" class="hrcms-toolbar-button hrcms-tableditor-delete-row ui-corner-all"/></td>' +
@@ -54,5 +56,11 @@ $(function() {
     '  <td><div id="delete_table_column" class="hrcms-toolbar-button hrcms-tableditor-delete-column ui-corner-all"/></td>' +
     '  <td style="width:5px;"></td>' +
     '  <td><div id="join_table_cell" class="hrcms-toolbar-button hrcms-tableditor-join-cell ui-corner-all"/></td>' +
+    '  <td style="width:5px;"></td>' +
+    '  <td><div id="edit_table" class="hrcms-toolbar-button hrcms-tableditor-edit-table ui-corner-all"/></td>' +
+    '  <td style="width:5px;"></td>' +
+    '  <td><div id="data_table_bind" class="hrcms-toolbar-button hrcms-tableditor-data-bind ui-corner-all"/></td>' +
+    '  <td style="width:5px;"></td>' +
+    '  <td><div id="save_table" class="hrcms-toolbar-button hrcms-tableditor-save-table ui-corner-all"/></td>' +
     '</tr></tbody></table></div>';
 });
