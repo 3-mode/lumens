@@ -1,0 +1,3 @@
+$(function() {
+    Hrcms.KanbanView = {};
+});
