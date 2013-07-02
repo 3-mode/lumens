@@ -48,7 +48,7 @@ $(function() {
                             // Editing one table once
                             var row = message.find("#rowCount").val();
                             var col = message.find("#colCount").val();
-                            var box = $('<div id="hrcms-table-holder-box" style="padding-left:20px;"><table class="hrcms-report-table"></div>').appendTo(tableBox);
+                            var box = $('<div class="hrcms-table-holder-box" style="padding-left:20px;"><table class="hrcms-report-table"></div>').appendTo(tableBox);
                             var table = box.find('table');
                             table.selectable({
                                 stop: function(evt, ui) {
@@ -93,30 +93,85 @@ $(function() {
                         text: I18N.Widget.Button_Ok,
                         click: function() {
                             var row = message.find("#rowCount").val();
+                            row = row ? parseInt(row) : 1;
                             var rowPosition = message.find('input[name="rowPosition"]:checked').val();
                             if (Hrcms.debugEnabled)
                                 console.log(row + ", " + rowPosition);
                             // TODO need to refine
-                            var selectedRow = editingTable.selectedRow;
-                            if (selectedRow && row > 0) {
-                                var col = 0;
-                                selectedRow.find('td').each(function(i, cell) {
+                            var selectedCells = getSelectedCells();
+                            if (selectedCells.length > 0 && row > 0) {
+                                var selectedRow = $(selectedCells[0].cell.parentElement);
+                                var tdList = selectedRow.find('td');
+                                var col = tdList.length;
+                                var prevRow = selectedRow[0];
+                                var offset = 1;
+                                var effectedRowspanCells = [];
+                                var topEffectedRowspanCells = [];
+                                var bottomEffectedRowspanCells = [];
+                                tdList.each(function(i, cell) {
                                     var jcell = $(cell);
+                                    var rowspan = jcell.attr("rowspan");
+                                    rowspan = rowspan ? parseInt(rowspan) : 1;
                                     var colspan = jcell.attr("colspan");
                                     colspan = colspan ? parseInt(colspan) : 1;
-                                    col += colspan;
+                                    if (colspan > 1 || rowspan > 1)
+                                        topEffectedRowspanCells.push({
+                                            colspan: colspan,
+                                            cell: cell
+                                        });
                                 });
+                                while (prevRow) {
+                                    if (Hrcms.debugEnabled)
+                                        console.log(prevRow);
+                                    $(prevRow).find('td').each(function(i, cell) {
+                                        var jcell = $(cell);
+                                        var rowspan = jcell.attr("rowspan");
+                                        rowspan = rowspan ? parseInt(rowspan) : 1;
+                                        var colspan = jcell.attr("colspan");
+                                        colspan = colspan ? parseInt(colspan) : 1;
+                                        if (colspan > 1 && rowspan === offset) {
+                                            bottomEffectedRowspanCells.push({
+                                                colspan: colspan,
+                                                cell: cell
+                                            });
+                                        }
+                                        if (rowspan > 1 && 1 === offset && rowPosition === "Below")
+                                            // the cell is at top edge
+                                            effectedRowspanCells.push(jcell);
+                                        else if (rowspan > 1 && rowspan === offset && rowPosition === "Above")
+                                            // the cell is at bottom edge
+                                            effectedRowspanCells.push(jcell);
+                                        else if (rowspan > 1 && rowspan > offset && offset !== 1)
+                                            effectedRowspanCells.push(jcell);
+                                    });
+                                    prevRow = prevRow.previousElementSibling;
+                                    ++offset;
+                                }
+
+                                if (rowPosition === "Above") {
+                                    col -= topEffectedRowspanCells.length;
+                                    for (var i = 0; i < topEffectedRowspanCells.length; ++i) {
+                                        col += topEffectedRowspanCells[i].colspan;
+                                    }
+                                } else if (rowPosition === "Below") {
+                                    col -= topEffectedRowspanCells.length;
+                                    for (var i = 0; i < bottomEffectedRowspanCells.length; ++i) {
+                                        col += bottomEffectedRowspanCells[i].colspan;
+                                    }
+                                }
                                 for (var i = 0; i < row; ++i) {
                                     var tr = $('<tr/>');
                                     rowPosition === "Above" ? selectedRow.before(tr) : selectedRow.after(tr);
-                                    // TODO need to check the colspan when adding td cell
                                     for (var j = 0; j < col; ++j) {
                                         $(tdHtmlTpl).appendTo(tr);
                                     }
                                 }
-                                updateRowStatus(selectedRow);
+                                for (var i = 0; i < effectedRowspanCells.length; ++i) {
+                                    var rowspan = effectedRowspanCells[i].attr("rowspan");
+                                    rowspan = rowspan ? parseInt(rowspan) : 1;
+                                    effectedRowspanCells[i].attr("rowspan", rowspan + row);
+                                }
                             }
-                            //table.find('td[row="0"][column="1"]').html("test");
                             removeDialog($(this));
                         }
                     },
@@ -149,12 +204,14 @@ $(function() {
                             var colPosition = message.find('input[name="colPosition"]:checked').val();
                             if (Hrcms.debugEnabled)
                                 console.log(col + ", " + colPosition);
-                            var selectedColumn = editingTable.selectedColumn;
-                            var localTable = tableContainer.find('table[table-uuid="' + selectedColumn.tableUUID + '"]');
-                            if (selectedColumn && col > 0) {
-                                var tr = localTable.find('tr');
+                            var selectedCells = getSelectedCells();
+                            if (selectedCells.length > 0 && col > 0) {
+                                var cell = $(selectedCells[0].cell);
+                                var currentTable = cell.closest("table");
+                                var tr = currentTable.find('tr');
+                                var colNum = selectedCells[0].cell.cellIndex;
                                 for (var j = 0; j < col; ++j) {
-                                    var filter = 'td:nth-child(' + (selectedColumn.selectedColumnIndex + 1) + ')';
+                                    var filter = 'td:nth-child(' + (colNum + 1) + ')';
                                     for (var i = 0; i < tr.length; ++i) {
                                         var td = $(tr[i]).find(filter);
                                         if (colPosition === "Left")
@@ -163,10 +220,9 @@ $(function() {
                                             $(tdHtmlTpl).insertAfter(td);
                                     }
                                     if (colPosition === "Left")
-                                        selectedColumn.selectedColumnIndex++;
+                                        colNum++;
                                 }
                             }
-                            updateColumnStatus(selectedColumn);
                             removeDialog($(this));
                         }
                     },
@@ -179,7 +235,7 @@ $(function() {
                 ]
             });
         }
-        function joinTableCells(event) {
+        function getSelectedCells() {
             var selectedCells = tableContainer.find(".ui-selected");
             // Normalized cell array ------------------------------>
             var normalizedCells = [];
@@ -221,7 +277,11 @@ $(function() {
                 }
                 return 0;
             });
-            // Normalized cell array <------------------------------
+
+            return normalizedCells;
+        }
+        function joinTableCells(event) {
+            var normalizedCells = getSelectedCells();
             var cellMatrix = [];
             var rowCounter = 0, colCounter = 0;
             var firstCell = normalizedCells[0];
@@ -327,22 +387,24 @@ $(function() {
                             else if (backgroundColor === "#000000")
                                 selectedCells.css("background-color", "");
                             if (border) {
+                                var cssBorder = "1px solid rgb(163, 163, 163)";
+                                var cssNoBorder = "0px solid rgb(163, 163, 163)";
                                 if (border.Left)
-                                    selectedCells.css("border-left", "1px solid rgb(163, 163, 163)");
+                                    selectedCells.css("border-left", cssBorder);
                                 else
-                                    selectedCells.css("border-left", "0px solid rgb(163, 163, 163)");
+                                    selectedCells.css("border-left", cssNoBorder);
                                 if (border.Bottom)
-                                    selectedCells.css("border-bottom", "1px solid rgb(163, 163, 163)");
+                                    selectedCells.css("border-bottom", cssBorder);
                                 else
-                                    selectedCells.css("border-bottom", "0px solid rgb(163, 163, 163)");
+                                    selectedCells.css("border-bottom", cssNoBorder);
                                 if (border.Right)
-                                    selectedCells.css("border-right", "1px solid rgb(163, 163, 163)");
+                                    selectedCells.css("border-right", cssBorder);
                                 else
-                                    selectedCells.css("border-right", "0px solid rgb(163, 163, 163)");
+                                    selectedCells.css("border-right", cssNoBorder);
                                 if (border.Top)
-                                    selectedCells.css("border-top", "1px solid rgb(163, 163, 163)");
+                                    selectedCells.css("border-top", cssBorder);
                                 else
-                                    selectedCells.css("border-top", "0px solid rgb(163, 163, 163)");
+                                    selectedCells.css("border-top", cssNoBorder);
                             }
                             removeDialog($(this));
                         }

@@ -427,7 +427,6 @@ a {
     opacity: .3;
     border: 1px dotted black;
     visibility: visible !important;
-    height: 200px !important;
 }
 .ui-sortable-placeholder * {
     visibility: hidden;
@@ -521,24 +520,9 @@ a {
 .hrcms .hrcms-report-table .hrcms-selected {
     background-color: rgb(245, 213, 167) !important;
 }
-.hrcms #hrcms-move-bar {
-    width: 20px;
-    height: 20px;
+.hrcms .hrcms-table-holder-box:hover {
+    background-color: rgb(221, 221, 221);
 }
-.hrcms-move-active {
-    /*cursor: move;*/
-    display: table;
-}
-.hrcms #hrcms-table-holder-box:hover {
-    background-color: #d3d3d3;
-}
-/*
-.hrcms .hrcms-row-select-area {
-    cursor: url(images/table/row-selector.png),url(app/css/images/table/row-selector.cur),auto;
-}
-.hrcms .hrcms-column-select-area {
-    cursor: url(images/table/column-selector.png),url(app/css/images/table/column-selector.cur),auto;
-}*/
 .hrcms .hrcms-report-table td.ui-selecting { background-color: rgb(245, 213, 167) !important; }
 .hrcms .hrcms-report-table td.ui-selected { background-color: rgb(245, 213, 167) !important; color: white !important; }
 .hrcms .hrcms-ui-selected {}
