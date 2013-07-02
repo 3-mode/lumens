@@ -1,0 +1,30 @@
+{
+    "tr-list": [
+        {
+            "td-list": [
+                {
+                    "label": "Name"
+                },
+                {
+                    "label": "Age"
+                },
+                {
+                    "label": "Job"
+                }
+            ]
+        },
+        {
+            "td-list": [
+                {
+                    "field": "pName"
+                },
+                {
+                    "field": "pAge"
+                },
+                {
+                    "field": "pJob"
+                }
+            ]
+        }
+    ]
+}

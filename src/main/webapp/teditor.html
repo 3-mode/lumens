@@ -13,13 +13,17 @@
         <link rel="stylesheet" href="tool/tree/skin-vista/ui.dynatree.css" type="text/css"/>
         <script type="text/javascript" src="tool/tree/jquery.cookie.js"></script>
         <script type="text/javascript" src="tool/tree/jquery.dynatree.js"></script>
+        <!-- Color -->
+        <script type="text/javascript" src="tool/jcolor/jscolor.js"></script>
         <!-- HRCMS configuration -->
         <link rel="stylesheet" href="app/css/hrcms.css">
+        <script type="text/javascript" src="app/i18n/wlang.js"></script>
         <script type="text/javascript" src="app/i18n/lang.js"></script>
         <script type="text/javascript" src="app/profile/js/sysconfig.js"></script>
         <script type="text/javascript" src="app/profile/js/sysheader.js"></script>
         <script type="text/javascript" src="app/profile/js/navmenu.js"></script>
         <script type="text/javascript" src="app/profile/js/datagrid.js"></script>
+        <script type="text/javascript" src="app/profile/js/checkbox.js"></script>
         <script type="text/javascript" src="app/profile/js/indicator.js"></script>
         <script type="text/javascript" src="app/profile/js/tablebar.js"></script>
         <script type="text/javascript" src="app/profile/js/tableditorbar.js"></script>
@@ -36,37 +40,42 @@
         </style>
         <script type="text/javascript">
             $(function() {
-                var holder = {};
-                holder.length = 10;
-                for (var i = 0; i < 10; ++i) {
-                    holder[i] = {
-                        index: i
-                    };
+                var editor = true;
+                if (editor) {
+                    $('#test').hide();
+                    var I18N = Hrcms.I18N;
+                    var tEditor = Hrcms.TableEditor.create({
+                        container: $('#grid'),
+                        navigator: ["Table Editor"]
+                    });
+                    $(window).bind("resize", function(e) {
+                        if (e.target !== this)
+                            return
+                        $('#grid').trigger("resize");
+                    });
                 }
-                console.log(holder);
-
-                var I18N = Hrcms.I18N;
-                var tEditor = Hrcms.TableEditor.create({
-                    container: $('#grid'),
-                    navigator: ["Table Editor"]
-                });
-                $(window).bind("resize", function(e) {
-                    if (e.target !== this)
-                        return
-                    $('#grid').trigger("resize");
-                });
+                else {
+                    var tr = $('#test').find('tr');
+                    console.log(tr);
+                    var firstTR = $(tr[0]);
+                    var td = firstTR.find('td');
+                    console.log(td);
+                    var secondTR = $(tr[1]);
+                    td = secondTR.find('td');
+                    console.log(td);
+                    console.log($('#test').html());//*/
+                }
             });
         </script>
     </head>
     <body class="hrcms">
         <div style="width:80%; height:100%;" id="grid">
         </div>
-        <!--
-        <table border="1" style="width:500px; height:500px;">
-            <tr><td></td><td></td><td></td><td></td></tr>
+        <table id="test" border="1" style="width:500px; height:500px;">
             <tr><td></td><td colspan="2" rowspan="2"></td><td></td></tr>
-            <tr><td></td><td></td></tr>
             <tr><td></td><td></td><td></td><td></td></tr>
-        </table>-->
+            <tr><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td></tr>
+        </table>
     </body>
 </html>
