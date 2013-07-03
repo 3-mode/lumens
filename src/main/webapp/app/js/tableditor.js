@@ -7,7 +7,7 @@ $(function() {
         var SyncUUID = Hrcms.SyncUUID;
         var TABLE_UUID = "table-uuid";
         var container = config.container;
-        var tableEditorContainer = $('<div class="hrcms-teditor-container"/>').appendTo(container);
+        var tableEditorContainer = $('<div class="hrcms-teditor-container" />').appendTo(container);
         var workspaceHeader = Hrcms.NavIndicator.create(tableEditorContainer);
         var tableContainer = $('<div class="hrcms-teditor-table-container"/>').appendTo(tableEditorContainer);
         // TODO need a row column selector
@@ -51,6 +51,9 @@ $(function() {
                             var box = $('<div class="hrcms-table-holder-box" style="padding-left:20px;"><table class="hrcms-report-table"></div>').appendTo(tableBox);
                             var table = box.find('table');
                             table.selectable({
+                                start: function(evt, ui) {
+                                    tableBox.find('.ui-selected').removeClass('ui-selected');
+                                },
                                 stop: function(evt, ui) {
                                     table.find('tbody[class~="ui-selected"]').removeClass("ui-selected");
                                     table.find('tr[class~="ui-selected"]').removeClass("ui-selected");
@@ -88,6 +91,14 @@ $(function() {
             message.dialog({
                 modal: true,
                 resizable: false,
+                create: function() {
+                    // Only keep first cell is selected
+                    var selectedCells = getSelectedCells();
+                    if (selectedCells.length > 0) {
+                        for (var i = 1; i < selectedCells.length; ++i)
+                            $(selectedCells[i].cell).removeClass("ui-selected");
+                    }
+                },
                 buttons: [
                     {
                         text: I18N.Widget.Button_Ok,
@@ -97,7 +108,6 @@ $(function() {
                             var rowPosition = message.find('input[name="rowPosition"]:checked').val();
                             if (Hrcms.debugEnabled)
                                 console.log(row + ", " + rowPosition);
-                            // TODO need to refine
                             var selectedCells = getSelectedCells();
                             if (selectedCells.length > 0 && row > 0) {
                                 var selectedRow = $(selectedCells[0].cell.parentElement);
@@ -196,11 +206,20 @@ $(function() {
             message.dialog({
                 modal: true,
                 resizable: false,
+                create: function() {
+                    // Only keep first cell is selected
+                    var selectedCells = getSelectedCells();
+                    if (selectedCells.length > 0) {
+                        for (var i = 1; i < selectedCells.length; ++i)
+                            $(selectedCells[i].cell).removeClass("ui-selected");
+                    }
+                },
                 buttons: [
                     {
                         text: I18N.Widget.Button_Ok,
                         click: function() {
                             var col = message.find("#colCount").val();
+                            col = col ? parseInt(col) : 1;
                             var colPosition = message.find('input[name="colPosition"]:checked').val();
                             if (Hrcms.debugEnabled)
                                 console.log(col + ", " + colPosition);
@@ -208,12 +227,12 @@ $(function() {
                             if (selectedCells.length > 0 && col > 0) {
                                 var cell = $(selectedCells[0].cell);
                                 var currentTable = cell.closest("table");
-                                var tr = currentTable.find('tr');
+                                var trList = currentTable.find('tr');
                                 var colNum = selectedCells[0].cell.cellIndex;
                                 for (var j = 0; j < col; ++j) {
                                     var filter = 'td:nth-child(' + (colNum + 1) + ')';
-                                    for (var i = 0; i < tr.length; ++i) {
-                                        var td = $(tr[i]).find(filter);
+                                    for (var i = 0; i < trList.length; ++i) {
+                                        var td = $(trList[i]).find(filter);
                                         if (colPosition === "Left")
                                             $(tdHtmlTpl).insertBefore(td);
                                         else
@@ -351,7 +370,7 @@ $(function() {
                 height: "auto",
                 width: "auto",
                 resizable: false,
-                create: function(event) {
+                create: function() {
                     var selectedCells = tableContainer.find(".ui-selected");
                     if (selectedCells.length === 1)
                         message.find('#CellText').val(selectedCells.html());
