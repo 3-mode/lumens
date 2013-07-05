@@ -34,7 +34,7 @@ $(function() {
             function sort() {
                 var clickedTh = $(this);
                 if (currentSortTh) {
-                    if (clickedTh.get(0) === currentSortTh.get(0)) {
+                    if (clickedTh[0] === currentSortTh[0]) {
                         if (currentSortTh.hasClass("sortdown")) {
                             currentSortTh.removeClass("sortdown");
                             currentSortTh.addClass("sortup");
