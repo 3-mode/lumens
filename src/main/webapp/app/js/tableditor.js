@@ -30,6 +30,14 @@ $(function() {
             dialog.dialog("close");
             dialog.remove();
         }
+        function getColspan(td) {
+            var colspan = td.attr("colspan");
+            return colspan ? parseInt(colspan) : 1;
+        }
+        function getRowspan(td) {
+            var rowspan = td.attr("rowspan");
+            return rowspan ? parseInt(rowspan) : 1;
+        }
         function addTable(event) {
             var form = SyncGet({
                 url: "html/table/create.html",
@@ -119,10 +127,9 @@ $(function() {
                                 var topEffectedRowspanCells = [];
                                 var bottomEffectedRowspanCells = [];
                                 tdList.each(function(i, cell) {
-                                    var jcell = $(cell);
-                                    var rowspan = jcell.attr("rowspan");
-                                    rowspan = rowspan ? parseInt(rowspan) : 1;
-                                    var colspan = jcell.attr("colspan");
+                                    var td = $(cell);
+                                    var rowspan = getRowspan(td);
+                                    var colspan = getColspan(td);
                                     colspan = colspan ? parseInt(colspan) : 1;
                                     if (colspan > 1 || rowspan > 1)
                                         topEffectedRowspanCells.push({
@@ -134,11 +141,9 @@ $(function() {
                                     if (Hrcms.debugEnabled)
                                         console.log(prevRow);
                                     $(prevRow).find('td').each(function(i, cell) {
-                                        var jcell = $(cell);
-                                        var rowspan = jcell.attr("rowspan");
-                                        rowspan = rowspan ? parseInt(rowspan) : 1;
-                                        var colspan = jcell.attr("colspan");
-                                        colspan = colspan ? parseInt(colspan) : 1;
+                                        var td = $(cell);
+                                        var rowspan = getRowspan(td);
+                                        var colspan = getColspan(td);
                                         if (colspan > 1 && rowspan === offset) {
                                             bottomEffectedRowspanCells.push({
                                                 colspan: colspan,
@@ -147,12 +152,12 @@ $(function() {
                                         }
                                         if (rowspan > 1 && 1 === offset && rowPosition === "Below")
                                             // the cell is at top edge
-                                            effectedRowspanCells.push(jcell);
+                                            effectedRowspanCells.push(td);
                                         else if (rowspan > 1 && rowspan === offset && rowPosition === "Above")
                                             // the cell is at bottom edge
-                                            effectedRowspanCells.push(jcell);
+                                            effectedRowspanCells.push(td);
                                         else if (rowspan > 1 && rowspan > offset && offset !== 1)
-                                            effectedRowspanCells.push(jcell);
+                                            effectedRowspanCells.push(td);
                                     });
                                     prevRow = prevRow.previousElementSibling;
                                     ++offset;
@@ -194,6 +199,18 @@ $(function() {
                 ]
             });
         }
+
+        function getTDbyColspan(tr, cellIndex) {
+            var tdList = tr.find("td");
+            var td;
+            var index = 0;
+            for (var i = 0; i < tdList.length && index < cellIndex; ++i) {
+                td = $(tdList[i]);
+                var colspan = getColspan(td);
+                index += colspan;
+            }
+            return td;
+        }
         function insertTableCol(event) {
             var form = SyncGet({
                 url: "html/table/insert-column.html",
@@ -230,13 +247,31 @@ $(function() {
                                 var trList = currentTable.find('tr');
                                 var colNum = selectedCells[0].cell.cellIndex;
                                 for (var j = 0; j < col; ++j) {
-                                    var filter = 'td:nth-child(' + (colNum + 1) + ')';
                                     for (var i = 0; i < trList.length; ++i) {
-                                        var td = $(trList[i]).find(filter);
-                                        if (colPosition === "Left")
-                                            $(tdHtmlTpl).insertBefore(td);
-                                        else
-                                            $(tdHtmlTpl).insertAfter(td);
+                                        var td = getTDbyColspan($(trList[i]), colNum + 1);
+                                        var colspan = getColspan(td);
+                                        var colRange = (td[0].cellIndex + colspan - 1);
+                                        if (colspan === 1) {
+                                            if (colPosition === "Left")
+                                                $(tdHtmlTpl).insertBefore(td);
+                                            else
+                                                $(tdHtmlTpl).insertAfter(td);
+                                        }
+                                        else if (colspan > 1) {
+                                            if (colNum < colRange && colNum > td[0].cellIndex) {
+                                                td.attr("colspan", (colspan + 1));
+                                            } else if (colNum === td[0].cellIndex) {
+                                                if (colPosition === "Left")
+                                                    $(tdHtmlTpl).insertBefore(td);
+                                                else
+                                                    td.attr("colspan", (colspan + 1));
+                                            } else if (colNum === colRange) {
+                                                if (colPosition === "Left")
+                                                    td.attr("colspan", (colspan + 1));
+                                                else
+                                                    $(tdHtmlTpl).insertAfter(td);
+                                            }
+                                        }
                                     }
                                     if (colPosition === "Left")
                                         colNum++;
@@ -259,14 +294,12 @@ $(function() {
             // Normalized cell array ------------------------------>
             var normalizedCells = [];
             selectedCells.each(function(index, cell) {
-                var jcell = $(cell);
-                var colspan = jcell.attr("colspan");
-                var rowspan = jcell.attr("rowspan");
+                var td = $(cell);
+                var colspan = getColspan(td);
+                var rowspan = getRowspan(td);
                 if (Hrcms.debugEnabled) {
                     console.log("colspan: " + colspan + "; rowspan: " + rowspan);
                 }
-                colspan = colspan ? parseInt(colspan) : 1;
-                rowspan = rowspan ? parseInt(rowspan) : 1;
                 normalizedCells.push({
                     cell: cell,
                     rowspan: rowspan,
