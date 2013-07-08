@@ -1,0 +1,174 @@
+[
+    {
+        "entity_name": "personSummaryInfo",
+        "is_list": false,
+        "field_list": [{
+                "field_name": "MingZi",
+                "field_value": "邓婷婷"
+            }, {
+                "field_name": "MingZiPinYin",
+                "field_value": "Deng, Ting-ting"
+            }, {
+                "field_name": "XingBie",
+                "field_value": "女"
+            }, {
+                "field_name": "GuoJi",
+                "field_value": "中国"
+            }, {
+                "field_name": "JiGuan",
+                "field_value": "山西"
+            }, {
+                "field_name": "MinZu",
+                "field_value": "汉族"
+            }, {
+                "field_name": "ChuShengRiQi",
+                "field_value": "1989-10-24"
+            }, {
+                "field_name": "LaiXiaoShiJian",
+                "field_value": "2011-01-20"
+            }, {
+                "field_name": "HunYinZhuangKuang",
+                "field_value": "已婚"
+            }, {
+                "field_name": "lastModifytime",
+                "field_value": "2011-02-12 12:11:123"
+            }, {
+                "field_name": "ShenFenZhengHao",
+                "field_value": "420104820718202"
+            }, {
+                "field_name": "CanJiaGongZuoShiJiang",
+                "field_value": "2012-01-20"
+            }]
+    },
+    {
+        "entity_name": "personProperties",
+        "is_list": false,
+        "field_list": [{
+                "field_name": "XianJiLu",
+                "field_value": "是"
+            }, {
+                "field_name": "BianZhiLeiBie",
+                "field_value": "行政"
+            }, {
+                "field_name": "RenYuanLeiBie",
+                "field_value": "专职思政管理干部职"
+            }, {
+                "field_name": "RenYuanZhuangTai",
+                "field_value": "全职在岗(占编)"
+            }, {
+                "field_name": "lastModifytime",
+                "field_value": "2011-03-1117:07:07.731"
+            }]
+    },
+    {
+        "entity_name": "personEducation",
+        "is_list": true,
+        "record_list": [
+            {
+                "field_list": [{
+                        "field_name": "ZuiHouXueLi",
+                        "field_value": "否"
+                    }, {
+                        "field_name": "XueLi",
+                        "field_value": "全日制普通高校本科毕业"
+                    }, {
+                        "field_name": "XueZhi",
+                        "field_value": "4.0"
+                    }, {
+                        "field_name": "ZuiGaoXueWei",
+                        "field_value": "否"
+                    }, {
+                        "field_name": "XueWei",
+                        "field_value": "学士"
+                    }, {
+                        "field_name": "lastModifytime",
+                        "field_value": "2010-07-18 10:39:06.484"
+                    }]
+            }, {
+                "field_list": [{
+                        "field_name": "ZuiHouXueLi",
+                        "field_value": "是"
+                    }, {
+                        "field_name": "XueLi",
+                        "field_value": "本科"
+                    }, {
+                        "field_name": "ZhuanYe",
+                        "field_value": "热带作物栽培"
+                    }, {
+                        "field_name": "XueZhi",
+                        "field_value": "4.0"
+                    }, {
+                        "field_name": "XueWeiShouYuDanWei",
+                        "field_value": "华南热带农业大学"
+                    }, {
+                        "field_name": "ZuiGaoXueWei",
+                        "field_value": "是"
+                    }, {
+                        "field_name": "XueWei",
+                        "field_value": "农学学士"
+                    }, {
+                        "field_name": "lastModifytime",
+                        "field_value": "2010-07-18 10:39:06.484"
+                    }]
+            }
+        ]
+    },
+    {
+        "entity_name": "partyPolicyJob",
+        "is_list": true,
+        "record_list": [{
+                "field_list": [{
+                        "field_name": "RenZhiBuMen",
+                        "field_value": "纪律检查委员会办公室纪检监察处"
+                    }, {
+                        "field_name": "BeiZhu",
+                        "field_value": "科员"
+                    }, {
+                        "field_name": "lastModifytime",
+                        "field_value": "2011-03-1117:07:07.731"
+                    }]
+            }]
+    },
+    {
+        "entity_name": "jobInfo",
+        "is_list": true,
+        "record_list": [
+            {
+                "field_list": [{
+                        "field_name": "XianZhiCheng",
+                        "field_value": "否"
+                    }, {
+                        "field_name": "RenZhiZiGe",
+                        "field_value": "副教授"
+                    }, {
+                        "field_name": "RenZhiZiGeJiBie",
+                        "field_value": "副高级"
+                    }, {
+                        "field_name": "ZhiChengDengJi",
+                        "field_value": "副教授"
+                    }, {
+                        "field_name": "lastModifytime",
+                        "field_value": "2011-03-1117:07:07.731"
+                    }]
+            },
+            {
+                "field_list": [{
+                        "field_name": "XianZhiCheng",
+                        "field_value": "是"
+                    }, {
+                        "field_name": "RenZhiZiGe",
+                        "field_value": "副教授"
+                    }, {
+                        "field_name": "RenZhiZiGeJiBie",
+                        "field_value": "副高级"
+                    }, {
+                        "field_name": "ZhiChengDengJi",
+                        "field_value": "副教授"
+                    }, {
+                        "field_name": "lastModifytime",
+                        "field_value": "2011-03-1117:07:07.731"
+                    }]
+            }
+        ]
+    }
+]
