@@ -17,7 +17,7 @@ $(function() {
         '  <tr><td><div id="hrcms-table-holder"/></td></tr>' +
         '</table>').appendTo(tableContainer);
         var tableBox = tableHolder.find("#hrcms-table-holder");
-        var tdHtmlTpl = '<td style="width:50px;height:20px;border-left:1px solid rgb(163, 163, 163);border-bottom:1px solid rgb(163, 163, 163);border-right:1px solid rgb(163, 163, 163);border-top:1px solid rgb(163, 163, 163);"></td>';
+        var tdHtmlTpl = '<td style="width:50px;height:20px;border-width:1px;border-style:solid;border-color:rgb(163, 163, 163);"></td>';
         tableBox.sortable();
 
         for (var i = 0; i < config.navigator.length; ++i)
@@ -439,24 +439,24 @@ $(function() {
                             else if (backgroundColor === "#000000")
                                 selectedCells.css("background-color", "");
                             if (border) {
-                                var cssBorder = "1px solid rgb(163, 163, 163)";
-                                var cssNoBorder = "0px solid rgb(163, 163, 163)";
-                                if (border.Left)
-                                    selectedCells.css("border-left", cssBorder);
-                                else
-                                    selectedCells.css("border-left", cssNoBorder);
-                                if (border.Bottom)
-                                    selectedCells.css("border-bottom", cssBorder);
-                                else
-                                    selectedCells.css("border-bottom", cssNoBorder);
-                                if (border.Right)
-                                    selectedCells.css("border-right", cssBorder);
-                                else
-                                    selectedCells.css("border-right", cssNoBorder);
+                                var borderWidthCSS;
                                 if (border.Top)
-                                    selectedCells.css("border-top", cssBorder);
+                                    borderWidthCSS = "1px";
                                 else
-                                    selectedCells.css("border-top", cssNoBorder);
+                                    borderWidthCSS = "0px";
+                                if (border.Right)
+                                    borderWidthCSS += " 1px";
+                                else
+                                    borderWidthCSS += " 0px";
+                                if (border.Bottom)
+                                    borderWidthCSS += " 1px";
+                                else
+                                    borderWidthCSS += " 0px";
+                                if (border.Left)
+                                    borderWidthCSS += " 1px";
+                                else
+                                    borderWidthCSS += " 0px";
+                                selectedCells.css("border-width", borderWidthCSS);
                             }
                             removeDialog($(this));
                         }

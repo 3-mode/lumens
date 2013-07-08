@@ -89,11 +89,13 @@ $(function() {
                     $.ajaxSetup({cache: false});
                     $.ajax({
                         type: "GET",
-                        url: "app/profile/html/personForm.html",
+                        url: "app/profile/html/tabsTempl.html",
                         dataType: "html",
-                        success: function(data) {
+                        success: function(tabsTempl) {
                             recordForm.configure({
-                                html: data
+                                tabsTempl: tabsTempl,
+                                reportTemplURL: "app/profile/html/personSummary.html",
+                                reportDataURL: "data/test/person_summary.json"
                             });
                         }
                     });

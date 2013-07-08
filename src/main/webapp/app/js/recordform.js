@@ -27,8 +27,14 @@ $(function() {
         // Member methods
         tThis.configure = function(config) {
             // TODO HTML template configuration here
-            formEntry = $(config.html).appendTo(mainForm);
+            formEntry = $(config.tabsTempl).appendTo(mainForm);
             formEntry.find("#tabs").tabs();
+            var reportFactory = Hrcms.ReportFactory.create();
+            reportFactory.load({
+                contentHolder: formEntry.find("#personSummaryReport").find(".hrcms-tab-content"),
+                reportTemplURL: config.reportTemplURL,
+                reportDataURL: config.reportDataURL
+            });
         }
         tThis.remove = function() {
             formContainer.remove();
