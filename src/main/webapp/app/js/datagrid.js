@@ -102,15 +102,27 @@ $(function() {
                 tr.addClass("hrcms-datagrid-row");
                 tr.attr('row-number', i);
                 if (configuration.event.rowclick)
-                    tr.click(configuration.event.rowclick);
+                    tr.dblclick(configuration.event.rowclick);
                 // TODO need to add event handler for this th
                 var th = $('<th width="1" style="padding-left:6px; padding-right:8px;"><input type="checkbox"></th>').appendTo(tr);
-                var field = records[i].field_value;
-                for (var j = 0; j < columns.length; ++j) {
-                    td = $('<td style="padding-left: 8px; padding-right: 20px;"><div></div></td>').appendTo(tr);
-                    td.attr('field-name', columns[j].field);
-                    if (j < field.length)
-                        td.find("div").html(field[j]);
+                if (records[i].field_value) {
+                    // TODO test data is here, it should be removed when the code completed
+                    var record = records[i].field_value;
+                    for (var j = 0; j < columns.length; ++j) {
+                        var td = $('<td style="padding-left: 8px; padding-right: 20px;"><div></div></td>').appendTo(tr);
+                        td.attr('field-name', columns[j].field);
+                        if (j < record.length)
+                            td.find("div").html(record[j]);
+                    }
+                } else {
+                    var record = records[i].field_value ? records[i].field_value : records[i];
+                    for (var j = 0; j < columns.length; ++j) {
+                        var td = $('<td style="padding-left: 8px; padding-right: 20px;"><div></div></td>').appendTo(tr);
+                        td.attr('field-name', columns[j].field);
+                        var field = record[columns[j].field];
+                        if (field)
+                            td.find("div").html(field);
+                    }
                 }
             }
             // Update header width
