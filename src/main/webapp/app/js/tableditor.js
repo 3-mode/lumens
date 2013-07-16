@@ -25,6 +25,8 @@ $(function() {
 
         // TODO this is a MOCK
         function click(event) {
+            if (Hrcms.debugEnabled)
+                console.log("Not support now !");
         }
         function removeDialog(dialog) {
             dialog.dialog("close");
@@ -469,24 +471,35 @@ $(function() {
                     }]
             });
         }
-
+        function deleteTable(event) {
+            var selectedCells = getSelectedCells();
+            if (selectedCells.length > 0) {
+                var cell = $(selectedCells[0].cell);
+                var currentTable = cell.closest("table");
+                currentTable.remove();
+            }
+        }
         function saveTable(event) {
             if (Hrcms.debugEnabled)
                 console.log(tableBox.html())
+        }
+        function addChart(event) {
+
         }
         workspaceHeader.configure({
             goBack: config.goBack,
             toolbar: {
                 barType: Hrcms.TableEditorbar,
                 addTable: addTable,
-                deleteTable: click,
+                deleteTable: deleteTable,
                 editTable: editTable,
                 saveTable: saveTable,
                 insertTableRow: insertTableRow,
                 deleteTableRow: click,
                 insertTableColumn: insertTableCol,
                 deleteTableColumn: click,
-                joinTableCell: joinTableCells
+                joinTableCell: joinTableCells,
+                addChart: addChart
             }
         });
         var offsetHeight = config.offsetHeight ? config.offsetHeight : 0;

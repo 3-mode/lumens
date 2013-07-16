@@ -1,6 +1,6 @@
 $(function() {
-    Hrcms.RecordForm = {};
-    Hrcms.RecordForm.create = function(config) {
+    Hrcms.PersonForm = {};
+    Hrcms.PersonForm.create = function(config) {
         var tThis = {};
         var container = config.container;
         var formContainer = $('<div class="hrcms-form-container"/>').appendTo(container);
@@ -27,13 +27,21 @@ $(function() {
         // Member methods
         tThis.configure = function(config) {
             // TODO HTML template configuration here
-            formEntry = $(config.tabsTempl).appendTo(mainForm);
+            formEntry = $(config.personFormTempl).appendTo(mainForm);
             formEntry.find("#tabs").tabs();
             var reportFactory = Hrcms.ReportFactory.create();
             reportFactory.load({
                 contentHolder: formEntry.find("#personSummaryReport").find(".hrcms-tab-content"),
                 reportTemplURL: config.reportTemplURL,
                 reportDataURL: config.reportDataURL
+            });
+            var list = Hrcms.List.create(formEntry.find("#basicInfo"));
+            list.configure({
+                formTitleList: ["联系方式", "综合信息"],
+                formURLList: [
+                    "app/profile/html/contractInfo.html",
+                    "app/profile/html/personSummary.html"
+                ]
             });
         }
         tThis.remove = function() {

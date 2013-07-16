@@ -15,6 +15,15 @@
         <script type="text/javascript" src="tool/tree/jquery.dynatree.js"></script>
         <!-- Color -->
         <script type="text/javascript" src="tool/jcolor/jscolor.js"></script>
+        <!-- Chart -->
+        <link rel="stylesheet" href="tool/jqplot/jquery.jqplot.css" type="text/css"/>
+        <script type="text/javascript" src="tool/jqplot/jquery.jqplot.js"></script>
+        <script type="text/javascript" src="tool/jqplot/excanvas.js"></script>
+        <script type="text/javascript" src="tool/jqplot/plugins/jqplot.pieRenderer.js"></script>
+        <script type="text/javascript" src="tool/jqplot/plugins/jqplot.donutRenderer.js"></script>
+        <script type="text/javascript" src="tool/jqplot/plugins/jqplot.barRenderer.js"></script>
+        <script type="text/javascript" src="tool/jqplot/plugins/jqplot.categoryAxisRenderer.js"></script>
+        <script type="text/javascript" src="tool/jqplot/plugins/jqplot.pointLabels.js"></script>
         <!-- HRCMS configuration -->
         <link rel="stylesheet" href="app/css/hrcms.css">
         <script type="text/javascript" src="app/i18n/wlang.js"></script>
@@ -28,9 +37,10 @@
         <script type="text/javascript" src="app/js/tablebar.js"></script>
         <script type="text/javascript" src="app/js/portlet.js"></script>
         <script type="text/javascript" src="app/js/checkbox.js"></script>
+        <script type="text/javascript" src="app/js/list.js"></script>
         <script type="text/javascript" src="app/js/contentview.js"></script>
-        <script type="text/javascript" src="app/js/recordform.js"></script>
         <script type="text/javascript" src="app/js/tableditorbar.js"></script>
+        <script type="text/javascript" src="app/js/tableditor.js"></script>  
         <script type="text/javascript" src="app/js/tableditor.js"></script>
         <script type="text/javascript" src="app/js/modules/homeview.js"></script>
         <script type="text/javascript" src="app/js/modules/infomgntview.js"></script>
@@ -42,45 +52,51 @@
                 overflow: hidden;
                 position: absolute;
             }
+
+            .form-title-icon-expand {
+                background-position: -48px -128px;
+            }
+            .form-title-icon-collapse {
+                background-position: -16px -128px;
+            }
         </style>
         <script type="text/javascript">
             $(function() {
-                var editor = true;
-                if (editor) {
-                    $('#test').hide();
-                    var I18N = Hrcms.I18N;
-                    var tEditor = Hrcms.TableEditor.create({
-                        container: $('#grid'),
-                        navigator: ["Table Editor"]
-                    });
-                    $(window).bind("resize", function(e) {
-                        if (e.target !== this)
-                            return
-                        $('#grid').trigger("resize");
-                    });
-                }
-                else {
-                    var tr = $('#test').find('tr');
-                    console.log(tr);
-                    var firstTR = $(tr[0]);
-                    var td = firstTR.find('td');
-                    console.log(td);
-                    var secondTR = $(tr[1]);
-                    td = secondTR.find('td');
-                    console.log(td);
-                    console.log($('#test').html());//*/
-                }
+                /*$.ajaxSetup({cache: false});
+                 $.ajax({
+                 type: "GET",
+                 url: "app/profile/html/contractInfo.html",
+                 dataType: "html",
+                 success: function(contractTempl) {
+                 var form1 = $(contractTempl).appendTo($("#ContractInfoPanel1").find('li'));
+                 $("#ContractInfo1").click(function(event) {
+                 form1.toggle(300);
+                 var icon = $(this).find("#statusIcon");
+                 icon.toggleClass("form-title-icon-expand");
+                 icon.toggleClass("form-title-icon-collapse");
+                 });
+                 var form2 = $(contractTempl).appendTo($("#ContractInfoPanel2").find('li'));
+                 $("#ContractInfo2").click(function(event) {
+                 form2.toggle(300);
+                 var icon = $(this).find("#statusIcon");
+                 icon.toggleClass("form-title-icon-expand");
+                 icon.toggleClass("form-title-icon-collapse");
+                 })
+                 }
+                 });//*/
+                var list = Hrcms.List.create($("#personForm0"));
+                list.configure({
+                    formTitleList: ["联系方式", "综合信息"],
+                    formURLList: [
+                        "app/profile/html/contractInfo.html",
+                        "app/profile/html/personSummary.html"
+                    ]
+                });
+
             });
         </script>
     </head>
     <body class="hrcms">
-        <div style="width:80%; height:100%;" id="grid">
-        </div>
-        <table id="test" border="1" style="width:500px; height:500px;">
-            <tr><td></td><td colspan="2" rowspan="2"></td><td></td></tr>
-            <tr><td></td><td></td><td></td><td></td></tr>
-            <tr><td></td><td></td><td></td><td></td></tr>
-            <tr><td></td><td></td><td></td><td></td></tr>
-        </table>
+        <div id="personForm0" style="display: table; padding-top: 20px; width: 400px; color: rgb(53, 53, 53);"></div>
     </body>
 </html>

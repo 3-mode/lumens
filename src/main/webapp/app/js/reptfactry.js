@@ -4,11 +4,12 @@ $(function() {
         var tThis = {};
         function setEntityTableData(fieldList, entityHolder) {
             if (entityHolder.length !== 0) {
-                for (var i = 0; i < fieldList.length; ++i) {
-                    var field = fieldList[i];
-                    var td = entityHolder.find('td[field-name="' + field.field_name + '"]');
-                    if (td.length)
-                        td.html(field.field_value);
+                var tdList = entityHolder.find('td[field-name!=""]');
+                for (var i = 0; i < tdList.length; ++i) {
+                    var td = $(tdList[i]);
+                    var fieldValue = fieldList[td.attr("field-name")];
+                    if (fieldValue)
+                        td.html(fieldValue);
                 }
             }
         }
@@ -37,14 +38,13 @@ $(function() {
                 url: config.reportTemplURL,
                 dataType: "html",
                 success: function(reportTempl) {
-                    var report = $(reportTempl).appendTo(config.contentHolder).removeClass("hrcms-table-holder-box");
+                    var report = $(reportTempl).appendTo(config.contentHolder);
                     $.getJSON(config.reportDataURL,
                     function(entities) {
                         if (Hrcms.debugEnabled) {
                             console.log(report);
                             console.log(entities);
                         }
-                        // TODO fill data into report
                         var length = entities.length;
                         for (var i = 0; i < length; ++i) {
                             var entity = entities[i];

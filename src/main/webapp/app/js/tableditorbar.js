@@ -32,6 +32,8 @@ $(function() {
                     config.deleteTable(event);
                 else if (id === "edit_table" && config.editTable)
                     config.editTable(event);
+                else if (id === "add_chart" && config.addChart)
+                    config.addChart(event);
                 else if (id === "save_table" && config.saveTable)
                     config.saveTable(event);
             });
@@ -49,15 +51,17 @@ $(function() {
     '  <td style="width:5px;"></td>' +
     '  <td><div id="insert_table_row" class="hrcms-toolbar-button hrcms-tableditor-insert-row ui-corner-all"/></td>' +
     /*'  <td style="width:5px;"></td>' +
-    '  <td><div id="delete_table_row" class="hrcms-toolbar-button hrcms-tableditor-delete-row ui-corner-all"/></td>' + */
+     '  <td><div id="delete_table_row" class="hrcms-toolbar-button hrcms-tableditor-delete-row ui-corner-all"/></td>' + */
     '  <td style="width:5px;"></td>' +
     '  <td><div id="insert_table_column" class="hrcms-toolbar-button hrcms-tableditor-insert-column ui-corner-all"/></td>' +
     /*'  <td style="width:5px;"></td>' +
-    '  <td><div id="delete_table_column" class="hrcms-toolbar-button hrcms-tableditor-delete-column ui-corner-all"/></td>' + */
+     '  <td><div id="delete_table_column" class="hrcms-toolbar-button hrcms-tableditor-delete-column ui-corner-all"/></td>' + */
     '  <td style="width:5px;"></td>' +
     '  <td><div id="join_table_cell" class="hrcms-toolbar-button hrcms-tableditor-join-cell ui-corner-all"/></td>' +
     '  <td style="width:5px;"></td>' +
     '  <td><div id="edit_table" class="hrcms-toolbar-button hrcms-tableditor-edit-table ui-corner-all"/></td>' +
+    '  <td style="width:5px;"></td>' +
+    '  <td><div id="add_chart" class="hrcms-toolbar-button hrcms-tableditor-chart ui-corner-all"/></td>' +
     '  <td style="width:5px;"></td>' +
     '  <td><div id="data_table_bind" class="hrcms-toolbar-button hrcms-tableditor-data-bind ui-corner-all"/></td>' +
     '  <td style="width:5px;"></td>' +
