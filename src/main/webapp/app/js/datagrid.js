@@ -5,10 +5,11 @@ $(function() {
         var container = config.container;
         var gridContainer = $('<div class="hrcms-datagrid hrcms-datagrid-container"/>').appendTo(container);
         var fixedHeaderContainer = $('<div style="position:relative;"/>').appendTo(gridContainer);
-        var fxiedHeaderTable = $('<table class="hrcms-datagrid-header"/>').appendTo(fixedHeaderContainer);
+        var fixedHeaderTable = $('<table class="hrcms-datagrid-header"/>').appendTo(fixedHeaderContainer);
         var dataContainer = $('<div class="hrcms-data-container"/>').appendTo(gridContainer);
         var table = $('<table class="hrcms-datagrid-table"/>').appendTo(dataContainer);
         var tableHeaderFixedHeight = 30;
+        var removeOldRecord = true;
         var tableBody;
         var fixedTableHeader;
         var currentSortTh;
@@ -27,8 +28,17 @@ $(function() {
             if (Hrcms.debugEnabled)
                 console.log(event);
             fixedHeaderContainer.css("left", -event.target.scrollLeft);
-        })
-        function buildColumns(config) {
+        });
+
+        function newRow() {
+            return $('<tr/>').appendTo(tableBody).addClass("hrcms-datagrid-row");
+        }
+
+        function newField(tr) {
+            return $('<td style="padding-left: 8px; padding-right: 20px;"><div></div></td>').appendTo(tr);
+        }
+
+        function buildTableHeader(config, theTable, noCallBack) {
             var columns = config.columns;
             var event = config.event ? config.event : {};
             function sort() {
@@ -71,17 +81,28 @@ $(function() {
                         event.sortdown({tbody: tableBody, column: currentSortTh});
                 }
             }
-            var thead = fixedTableHeader = $('<thead><tr></tr></thead>').appendTo(fxiedHeaderTable);
+            var thead = $('<thead><tr></tr></thead>').appendTo(theTable);
             thead = thead.find('tr');
             var th = $('<th width="1" style="padding-left:6px;"> <input type="checkbox"></th>').appendTo(thead);
             for (var i = 0; i < columns.length; ++i) {
                 th = $('<th style="padding-left: 8px; padding-right: 20px;"/>').appendTo(thead);
                 th.addClass("hrcms-datagrid-header sortable");
                 th.attr("field-name", columns[i].field);
-                th.on('click', sort);
+                if (!noCallBack)
+                    th.on('click', sort);
                 var htxt = $('<div class="hrcms-datagrid-header-text"></div>').appendTo(th);
                 htxt.html(columns[i].name);
             }
+            return thead;
+        }
+        function insertPlaceHolderRow() {
+            var columns = configuration.columns;
+            if (!columns || columns.length === 0)
+                return;
+            var tr = $('<tr/>').appendTo(tableBody).attr("place-holder", "1");
+            var fixedHeaders = fixedHeaderTable.find("thead");
+            var td = $('<td><div></div></td>').appendTo(tr).attr("colspan", columns.length);
+            td.find('div').css("width", (fixedHeaders[0].clientWidth - 13) + "px");
         }
         // Member methods
         tThis.toggle = function() {
@@ -89,18 +110,18 @@ $(function() {
         }
         tThis.configure = function(config) {
             configuration = config
-            buildColumns(config);
-            var columns = config.columns;
+            fixedTableHeader = buildTableHeader(config, fixedHeaderTable);
             tableBody = $('<tbody/>').appendTo(table);
-            //table.append('<tfoot><tr><td colspan="' + (columns.length + 1) + '"><div style="height:20px;"></div></td></tr></tfoot>');
+            // var columns = config.columns;
+            // table.append('<tfoot><tr><td colspan="' + (columns.length + 1) + '"><div style="height:20px;"></div></td></tr></tfoot>');
             return this;
         }
         tThis.data = function(records) {
+            if (removeOldRecord)
+                tableBody.empty();
             var columns = configuration.columns;
             for (var i = 0; i < records.length; ++i) {
-                var tr = $('<tr/>').appendTo(tableBody);
-                tr.addClass("hrcms-datagrid-row");
-                tr.attr('row-number', i);
+                var tr = newRow().attr('row-number', i);
                 if (configuration.event && configuration.event.rowdblclick)
                     tr.dblclick(configuration.event.rowdblclick);
                 if (configuration.event && configuration.event.rowclick)
@@ -119,8 +140,7 @@ $(function() {
                 } else {
                     var record = records[i].field_value ? records[i].field_value : records[i];
                     for (var j = 0; j < columns.length; ++j) {
-                        var td = $('<td style="padding-left: 8px; padding-right: 20px;"><div></div></td>').appendTo(tr);
-                        td.attr('field-name', columns[j].field);
+                        var td = newField(tr).attr('field-name', columns[j].field);
                         var field = record[columns[j].field];
                         if (field)
                             td.find("div").html(field);
@@ -147,6 +167,8 @@ $(function() {
                 else
                     jFixed.css("width", jElem.width());
             }
+            if (records.length === 0)
+                insertPlaceHolderRow();
             return this;
         }
         tThis.remove = function() {
