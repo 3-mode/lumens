@@ -95,14 +95,17 @@ $(function() {
             }
             return thead;
         }
-        function insertPlaceHolderRow() {
+        function insertPlaceHolderRowIfRecordIsEmpty(records) {
             var columns = configuration.columns;
-            if (!columns || columns.length === 0)
-                return;
-            var tr = $('<tr/>').appendTo(tableBody).attr("place-holder", "1");
-            var fixedHeaders = fixedHeaderTable.find("thead");
-            var td = $('<td><div></div></td>').appendTo(tr).attr("colspan", columns.length);
-            td.find('div').css("width", (fixedHeaders[0].clientWidth - 13) + "px");
+            if (!records || records.length === 0) {
+                var record = {};
+                for (var c in columns) {
+                    record[c.field] = "";
+                }
+                records = [record];
+                return records;
+            }
+            return records;
         }
         // Member methods
         tThis.toggle = function() {
@@ -120,6 +123,7 @@ $(function() {
             if (removeOldRecord)
                 tableBody.empty();
             var columns = configuration.columns;
+            records = insertPlaceHolderRowIfRecordIsEmpty(records);
             for (var i = 0; i < records.length; ++i) {
                 var tr = newRow().attr('row-number', i);
                 if (configuration.event && configuration.event.rowdblclick)
@@ -167,8 +171,6 @@ $(function() {
                 else
                     jFixed.css("width", jElem.width());
             }
-            if (records.length === 0)
-                insertPlaceHolderRow();
             return this;
         }
         tThis.remove = function() {
