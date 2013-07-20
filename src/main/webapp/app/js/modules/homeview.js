@@ -3,8 +3,7 @@ $(function() {
     Hrcms.HomeView.create = function(container) {
         var tThis = {};
         var portlet = Hrcms.Portlet.create({
-            container: container,
-            offsetTop: 86
+            container: container
         });
         $.ajaxSetup({cache: false});
         $.getJSON("data/test/home_info_data.json",

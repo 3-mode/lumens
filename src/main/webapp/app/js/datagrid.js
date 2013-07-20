@@ -92,7 +92,7 @@ $(function() {
             buildColumns(config);
             var columns = config.columns;
             tableBody = $('<tbody/>').appendTo(table);
-            table.append('<tfoot><tr><td colspan="' + (columns.length + 1) + '"><div style="height:20px;"></div></td></tr></tfoot>');
+            //table.append('<tfoot><tr><td colspan="' + (columns.length + 1) + '"><div style="height:20px;"></div></td></tr></tfoot>');
             return this;
         }
         tThis.data = function(records) {
@@ -101,8 +101,10 @@ $(function() {
                 var tr = $('<tr/>').appendTo(tableBody);
                 tr.addClass("hrcms-datagrid-row");
                 tr.attr('row-number', i);
-                if (configuration.event.rowclick)
-                    tr.dblclick(configuration.event.rowclick);
+                if (configuration.event && configuration.event.rowdblclick)
+                    tr.dblclick(configuration.event.rowdblclick);
+                if (configuration.event && configuration.event.rowclick)
+                    tr.click(configuration.event.rowclick);
                 // TODO need to add event handler for this th
                 var th = $('<th width="1" style="padding-left:6px; padding-right:8px;"><input type="checkbox"></th>').appendTo(tr);
                 if (records[i].field_value) {

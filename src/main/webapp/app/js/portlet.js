@@ -3,22 +3,12 @@ $(function() {
     Hrcms.Portlet.create = function(config) {
         var tThis = {};
         var container = config.container;
-        var offsetTop = config.offsetTop ? config.offsetTop : 0;
         var portletRootContainer = $('<div class="hrcms-portlet-root-container"><table class="hrcms-portlet-frame-container">' +
         '<tr style="height: 10px;"><td style="height:10px;width:10px;"></td><td style="height:10px;"></td></tr>' +
         '<tr><td style="width:10px;"></td><td><div class="hrcms-portlet-container"/></td>' +
         '</table></div>').appendTo(container);
-        function updateSize(event) {
-            if (event && event.target !== this)
-                return;
-            if (Hrcms.debugEnabled)
-                console.log("Portlet updating size");
-            portletRootContainer.css("width", container.width());
-            portletRootContainer.css("height", container.height() - offsetTop);
-        }
-        $(window).bind("resize", updateSize);
-        updateSize();
         var portletContainer = portletRootContainer.find(".hrcms-portlet-container");
+
         var htmlColumnTpl =
         '<div class="hrcms-portlet-column">' +
         '</div>';
@@ -63,7 +53,6 @@ $(function() {
             portletContainer.find(".hrcms-portlet-column").disableSelection();
         }
         tThis.remove = function() {
-            $(window).unbind("resize", updateSize);
             portletRootContainer.remove();
         }
         // end

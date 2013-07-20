@@ -1,7 +1,20 @@
 $(function() {
-    var Demo = function() {
-    };
     Hrcms.debugEnabled = true;
+    function generateId() {
+        var chars = "0123456789abcdefghiklmnopqrstuvwxyz",
+        string_length = 16,
+        id = '';
+        for (var i = 0; i < string_length; i++) {
+            var rnum = Math.floor(Math.random() * chars.length);
+            id += chars.substring(rnum, rnum + 1);
+        }
+
+        return id;
+    }
+    Hrcms.Id = function(element) {
+        element.attr("element-id", 'id$' + generateId());
+        return element;
+    }
     Hrcms.SyncGet = function(settings) {
         var result = null;
         $.ajax({
