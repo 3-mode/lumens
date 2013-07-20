@@ -12,7 +12,7 @@ html, body {
     overflow: hidden;
 }
 body {
-    background-color: rgb(240, 240, 240);
+    /*background-color: rgb(240, 240, 240);*/
 }
 a {
     outline: none;
@@ -184,12 +184,17 @@ a {
     overflow: hidden;
 }
 /*** HRCMS secondary menu styles */
+.hrcms .hrcms-menu-container {
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 .hrcms .hrcms-secondary-menu-container {
     width:100%;
-    height:100%;
+    height:auto;
     display:table;
     float:left;
-    position:relative; 
+    position:relative;
     background-color:rgb(240, 240, 240);
 }
 .hrcms .hrcms-secondary-menu {
@@ -282,13 +287,13 @@ a {
     /*Anchor*/
 }
 .hrcms .hrcms-datagrid-container {
-    background-color:rgb(240, 240, 240);
+    /*background-color:rgb(240, 240, 240);*/
     position: relative;
     display: block;
     overflow: hidden;
 }
 .hrcms .hrcms-datagrid .hrcms-data-container {
-    background-color:rgb(240, 240, 240);
+    /*background-color:rgb(240, 240, 240);*/
     position: relative;
     display: block;
     overflow: auto;
@@ -348,7 +353,7 @@ a {
     line-height: 18px;
     height: 18px;
     padding: 3px 6px;
-    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
     border-left: 1px solid #dfdfdf;
 }
 .hrcms .hrcms-datagrid tfoot {
@@ -440,17 +445,9 @@ a {
 }
 .hrcms .hrcms-record-main-form {
     width: 100%;
-    height: auto;
-    min-width: 650px;
-    max-width: 95%;
-    overflow: hidden;
+    height: 100%;
+    overflow: scroll;
     margin: 0 auto;
-    border-left: 1px solid #cacaca;
-    border-right: 1px solid #cacaca;
-    border-bottom: 1px solid #cacaca;
-    -moz-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    -webkit-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 .hrcms .hrcms-person-form {
     /*Anchor*/
@@ -564,10 +561,22 @@ a {
     height: 100%;
 }
 .hrcms .hrcms-accordion-title {
-    height: 25px;
+    height: 25px; 
+    width: 100%;
     cursor: pointer;
     background-color: rgb(200, 200, 200);
-    width: 100%;
+    border-bottom: 1px solid rgb(170, 170, 170);
+    color: #4C4C4C;
+}
+
+.hrcms .hrcms-accordion-content {
+    display: block;
+    list-style-type: none;
+    padding-top: 5px;
+    padding-bottom: 8px;
+    padding-left: 0px;
+    margin: 0;
+
 }
 .hrcms .hrcms-accordion-icon {
     float: left;
@@ -577,4 +586,21 @@ a {
 }
 .hrcms .hrcms-accordion-icon-collapse {
     background-position: -16px -128px;
+}
+.hrcms .hrcms-root-layout {
+    display: block;
+    width:100%;
+    height:100%;
+}
+.hrcms .hrcms-layout {
+    display: block;
+    background-color: #eeeeee;
+}
+.hrcms .hrcms-layout-horizontal,
+.hrcms .hrcms-layout-vertical,
+.hrcms .hrcms-panel
+{
+    display: block;
+    margin: 0;
+    padding: 0;
 }
