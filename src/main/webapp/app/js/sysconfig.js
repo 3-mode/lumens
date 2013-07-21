@@ -77,7 +77,7 @@ $(function() {
         ContentNavMenu_InfoManage_Records_Punishment: "ContentNavMenu_InfoManage_Records_Punishment",
         ContentNavMenu_InfoManage_Records_AnomalyInCollege: "ContentNavMenu_InfoManage_Records_AnomalyInCollege",
         ContentNavMenu_InfoManage_Records_InfoToJoinCollege: "ContentNavMenu_InfoManage_Records_InfoToJoinCollege",
-        ContentNavMenu_InfoManage_Records_LeaveOffice: "ContentNavMenu_InfoManage_Records_LeaveOffice",
+        ContentNavMenu_InfoManage_Records_QuitCollege: "ContentNavMenu_InfoManage_Records_QuitCollege",
         ContentNavMenu_InfoManage_JobInfo_Unit: "ContentNavMenu_InfoManage_JobInfo_Unit",
         ContentNavMenu_InfoManage_JobInfo_Politics: "ContentNavMenu_InfoManage_JobInfo_Politics",
         ContentNavMenu_InfoManage_JobInfo_JobOfPolitics: "ContentNavMenu_InfoManage_JobInfo_JobOfPolitics",
@@ -187,8 +187,8 @@ $(function() {
                         moduleID: SysModuleID.ContentNavMenu_InfoManage_Records_InfoToJoinCollege
                     },
                     {
-                        title: I18N.ContentNavMenu.InfoManage_Records_LeaveOffice,
-                        moduleID: SysModuleID.ContentNavMenu_InfoManage_Records_LeaveOffice
+                        title: I18N.ContentNavMenu.InfoManage_Records_QuitCollege,
+                        moduleID: SysModuleID.ContentNavMenu_InfoManage_Records_QuitCollege
                     }
                 ]
             },

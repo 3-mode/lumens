@@ -91,7 +91,7 @@ $(function() {
                 if (!noCallBack)
                     th.on('click', sort);
                 var htxt = $('<div class="hrcms-datagrid-header-text"></div>').appendTo(th);
-                htxt.html(columns[i].name);
+                htxt.html(columns[i].label);
             }
             return thead;
         }

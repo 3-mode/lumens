@@ -9,6 +9,12 @@ $(function() {
         var personForm;
         var currentModuleName;
         var SysModuleID = Hrcms.SysModuleID;
+        function generateTableDataUrl(name) {
+            return {
+                table: "data/test/" + name + "_table.json",
+                data: "data/test/" + name + "_data.json"
+            };
+        }
         tThis.loadLeftNavMenu = function(menu) {
             menu.configure(Hrcms.NavMenu_InfoManage_Config);
             menu.onItemClick(function(event) {
@@ -31,51 +37,59 @@ $(function() {
                     toolbar: {barType: Hrcms.Tablebar},
                     tableNavTarget: dataGrid
                 });
-                var tableUrl, dataUrl;
+                var Url;
                 // Different module load different table info and data from different URL
                 if (SysModuleID.ContentNavMenu_InfoManage_Info_Person === event.moduleID) {
-                    tableUrl = "data/test/person_table.json";
-                    dataUrl = "data/test/person_data_small.json";
-                }
-                else if (SysModuleID.ContentNavMenu_InfoManage_Info_ContactInfo === event.moduleID) {
-                    tableUrl = "data/test/contact_table.json";
-                    dataUrl = "data/test/contact_data.json";
+                    Url = generateTableDataUrl("person");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Info_ContactInfo === event.moduleID) {
+                    Url = generateTableDataUrl("contact");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Info_PersonNature === event.moduleID) {
-                    tableUrl = "data/test/person_properties_table.json";
-                    dataUrl = "data/test/person_properties_data.json";
+                    Url = generateTableDataUrl("person_properties");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Info_Evaluation === event.moduleID) {
-                    tableUrl = "data/test/evaluation_table.json";
-                    dataUrl = "data/test/evaluation_data.json";
+                    Url = generateTableDataUrl("evaluation");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Info_Family === event.moduleID) {
-                    tableUrl = "data/test/family_members_table.json";
-                    dataUrl = "data/test/family_members_data.json";
+                    Url = generateTableDataUrl("family_members");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_JobExperience === event.moduleID) {
-                    tableUrl = "data/test/info_before_college_table.json";
-                    dataUrl = "data/test/info_before_college_data_small.json";
+                    Url = generateTableDataUrl("info_before_college");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Degree === event.moduleID) {
+                    Url = generateTableDataUrl("education");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Records_TrainingInLand === event.moduleID) {
+                    Url = generateTableDataUrl("training_inland");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Records_TrainingOutLand === event.moduleID) {
+                    Url = generateTableDataUrl("training_outland");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Award === event.moduleID) {
+                    Url = generateTableDataUrl("award");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Punishment === event.moduleID) {
+                    Url = generateTableDataUrl("punishment");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Records_AnomalyInCollege === event.moduleID) {
+                    Url = generateTableDataUrl("anomaly");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Records_InfoToJoinCollege === event.moduleID) {
+                    Url = generateTableDataUrl("info2joincollege");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Records_QuitCollege === event.moduleID) {
+                    Url = generateTableDataUrl("quitcollege");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_JobInfo_Unit === event.moduleID) {
+                    Url = generateTableDataUrl("unit");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_JobInfo_Politics === event.moduleID) {
+                    Url = generateTableDataUrl("politics");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_JobInfo_JobOfPolitics === event.moduleID) {
+                    Url = generateTableDataUrl("jobofpolitics");
                 }
                 // Event function
                 function sortup(event) {
-                    var tbody = event ? event.tbody : null;
                     var column = event ? event.column : null;
                     if (Hrcms.debugEnabled)
                         console.log(column);
                     // Remove all data rows first
-                    if (tbody)
-                        tbody.empty();
-                    $.getJSON(dataUrl,
+                    $.getJSON(Url.data,
                     function(record) {
                         dataGrid.data(record);
                     });
                 }
                 function sortdown(event) {
-                    var tbody = event ? event.tbody : null;
                     var column = event ? event.column : null;
                     if (Hrcms.debugEnabled)
                         console.log(column);
-                    // Remove all data rows first
-                    if (tbody)
-                        tbody.empty();
-                    $.getJSON(dataUrl,
+                    $.getJSON(Url.data,
                     function(record) {
                         dataGrid.data(record);
                     });
@@ -83,11 +97,14 @@ $(function() {
                 function rowdblclick(event) {
                     if (Hrcms.debugEnabled)
                         console.log(event);
+                    var employeeID = $($(this).find('td[field-name="ZhiGongHao"]')[0]).find('div').html();
+                    if (!employeeID || employeeID === "")
+                        return;
                     indicator.toggle();
                     dataGrid.toggle();
                     personForm = Hrcms.PersonForm.create({
                         container: rightContentContainer,
-                        navigator: [currentModuleName, $($(this).find('td')[1]).find('div').html()],
+                        navigator: [currentModuleName, employeeID],
                         goBack: function(currentTag) {
                             if (currentTag.html() === currentModuleName && personForm) {
                                 indicator.toggle();
@@ -113,7 +130,7 @@ $(function() {
                     });
                 }
                 $.ajaxSetup({cache: false});
-                $.getJSON(tableUrl,
+                $.getJSON(Url.table,
                 function(table) {
                     dataGrid.configure({
                         columns: table.columns,
