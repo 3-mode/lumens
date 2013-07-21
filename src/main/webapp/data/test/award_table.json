@@ -1,0 +1,22 @@
+{
+    "columns": [
+        {"name": "职工号", "field": "ZhiGongHao"},
+        {"name": "姓名", "field": "XingMing"},
+        {"name": "所在单位", "field": "SuoZaiDanWei"},
+        {"name": "性别", "field": "XingBie"},
+        {"name": "获奖项目", "field": "HuoJiangXiangMu"},
+        {"name": "奖励级别", "field": "JiangLiJiBie"},
+        {"name": "获奖类别", "field": "HuoJiangLeiBie"},
+        {"name": "奖励方式", "field": "JiangLiFangShi"},
+        {"name": "奖励名称", "field": "JiangLiMingCheng"},
+        {"name": "奖励名称分类", "field": "JiangLiMingChengFenLei"},
+        {"name": "颁奖单位", "field": "BanJiangDanWei"},
+        {"name": "颁奖日期", "field": "BanJiangRiQi"},
+        {"name": "荣誉称号", "field": "RongYuChengHao"},
+        {"name": "获荣誉日期", "field": "HuoRongYuRiQi"},
+        {"name": "获奖角色", "field": "HuoJiangJueSe"},
+        {"name": "备注", "field": "BeiZhu"},
+        {"name": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
+        {"name": "身份类别", "field": "ShenFenLeiBie"}
+    ]
+}

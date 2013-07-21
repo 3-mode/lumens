@@ -1,0 +1,23 @@
+{
+    "columns": [
+        {"name": "职工号", "field": "ZhiGongHao"},
+        {"name": "姓名", "field": "XingMing"},
+        {"name": "院处名称", "field": "YuanChuMingCheng"},
+        {"name": "最后学历", "field": "ZuiHouXueLi"},
+        {"name": "学历", "field": "XueLi"},
+        {"name": "所学专业", "field": "SuoXueZhuanYe"},
+        {"name": "入学年月", "field": "RuXueNianYue"},
+        {"name": "学习形式", "field": "XueXiXingShi"},
+        {"name": "学习方式", "field": "XueXiFangShi"},
+        {"name": "学制", "field": "XueZhi"},
+        {"name": "毕业年月", "field": "BiYeNianYue"},
+        {"name": "毕肄业学校或单位", "field": "BiSiYeXueXiaoDanWei"},
+        {"name": "最高学位", "field": "ZuiGaoXueWei"},
+        {"name": "学位", "field": "XueWei"},
+        {"name": "学位授予日期", "field": "XueWeiShouYuRiQi"},
+        {"name": "学位授予国家", "field": "XueWeiShouYuGuoJia"},
+        {"name": "学位授予单位", "field": "XueWeiShouYuDanWei"},
+        {"name": "备注", "field": "BeiZhu"},
+        {"name": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"}
+    ]
+}

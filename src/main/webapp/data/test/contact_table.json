@@ -1,7 +1,7 @@
 {
     "columns": [
         {"name": "全局编号", "field": "field-1"},
-        {"name": "职工号", "field": "field-2"},
+        {"name": "职工号", "field": "ZhiGongHao"},
         {"name": "姓名", "field": "field-3"},
         {"name": "院处名称", "field": "field-4"},
         {"name": "单位电话", "field": "field-5"},

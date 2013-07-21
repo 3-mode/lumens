@@ -1,0 +1,15 @@
+{
+    "columns": [
+        {"name": "职工号", "field": "ZhiGongHao"},
+        {"name": "姓名", "field": "XingMing"},
+        {"name": "院处名称", "field": "YuanChuMingCheng"},
+        {"name": "起始年月", "field": "QiShiNianYue"},
+        {"name": "截止年月", "field": "JieZhiNianYue"},
+        {"name": "所在单位名称", "field": "SuoZaiDanWeiMingCheng"},
+        {"name": "从事工作内容", "field": "CongShiGongZuoNeiRong"},
+        {"name": "曾任党政职务", "field": "CengRenDangZhengZhiWu"},
+        {"name": "曾任技术职务", "field": "CengRenJiShuZhiWu"},
+        {"name": "证明人", "field": "ZhengMingRen"},
+        {"name": "备注", "field": "BeiZhu"}
+    ]
+}

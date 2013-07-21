@@ -1,0 +1,32 @@
+{
+    "columns": [
+        {
+            "name": "考核时间",
+            "field": "KaoHeShiJian"
+        },
+        {
+            "name": "考核类别",
+            "field": "KaoHeLeiBie"
+        },
+        {
+            "name": "考核岗位",
+            "field": "KaoHeGangWei"
+        },
+        {
+            "name": "考核内容",
+            "field": "KaoHeNeiRong"
+        },
+        {
+            "name": "考核等级",
+            "field": "KaoHeDengJi"
+        },
+        {
+            "name": "考核结果",
+            "field": "KaoHeJieGuo"
+        },
+        {
+            "name": "备注",
+            "field": "BeiZhu"
+        }
+    ]
+}

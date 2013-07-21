@@ -1,0 +1,24 @@
+{
+    "columns": [
+        {"name": "职工号", "field": "ZhiGongHao"},
+        {"name": "姓名", "field": "XingMing"},
+        {"name": "院处名称", "field": "YuanChuMingCheng"},
+        {"name": "校内调出单位", "field": "XiaoNeiDiaoChuDanWei"},
+        {"name": "校内调入单位", "field": "XiaoNeiDiaoRuDanWei"},
+        {"name": "编制异动类别", "field": "BianZhiYiDongLeiBie"},
+        {"name": "编制异动年月", "field": "BianZhiYiDongNianYue"},
+        {"name": "编制异动原因", "field": "BianZhiYiDongYuanYin"},
+        {"name": "离岗年月", "field": "LiGangNianYue"},
+        {"name": "离岗原因", "field": "LiGangYuanYin"},
+        {"name": "返岗年月", "field": "TuiGangNianYue"},
+        {"name": "病休起始年月", "field": "BingXiuQiShiNianYue"},
+        {"name": "病休诊断医院", "field": "BingXiuZhenDuanYiYuan"},
+        {"name": "病休诊断证明", "field": "BingXiuZhenDuanZhengMing"},
+        {"name": "恢复工作年月", "field": "HuiFuGongZuoNianYue"},
+        {"name": "康复诊断医院", "field": "KangFuZhenDuanYiYuan"},
+        {"name": "康复诊断证明", "field": "KangFuZhenDuanZhengMing"},
+        {"name": "备注", "field": "BeiZhu"},
+        {"name": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
+        {"name": "身份类别", "field": "ShenFenLeiBie"}
+    ]
+}

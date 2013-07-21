@@ -1,0 +1,28 @@
+{
+    "columns": [
+        {
+            "name": "成员姓名",
+            "field": "XingMing"
+        },
+        {
+            "name": "称谓",
+            "field": "ChengWei"
+        },
+        {
+            "name": "出生时间",
+            "field": "ChuShengShiJian"
+        },
+        {
+            "name": "工作单位",
+            "field": "GongZuoDanWei"
+        },
+        {
+            "name": "政治面貌",
+            "field": "ZhengZhiMianMao"
+        },
+        {
+            "name": "备注",
+            "field": "BeiZhu"
+        }
+    ]
+}
