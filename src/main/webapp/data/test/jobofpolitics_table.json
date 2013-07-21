@@ -1,0 +1,22 @@
+{
+    "columns": [
+        {"label": "职工号", "field": "ZhiGongHao"},
+        {"label": "姓名", "field": "XingMing"},
+        {"label": "院处名称", "field": "YuanChuMingCheng"},
+        {"label": "职务类别", "field": "ZhiWuLeiBie"},
+        {"label": "职务名称", "field": "ZhiWuMingCheng"},
+        {"label": "任职日期", "field": "RenZhiRiQi"},
+        {"label": "任职部门", "field": "ZhiWuBuMen"},
+        {"label": "任职文号", "field": "RenZhiWenHao"},
+        {"label": "职务级别", "field": "ZhiWuJiBie"},
+        {"label": "职务变动类别", "field": "ZhiWuBianDongLeiBie"},
+        {"label": "当前任职状况", "field": "DangQianRenZhiZhuangKuang"},
+        {"label": "免职日期", "field": "MianZhiRiQi"},
+        {"label": "免职方式", "field": "MianZhiFangShi"},
+        {"label": "免职原因", "field": "MianZhiYuanYin"},
+        {"label": "免职文号", "field": "MianZhiWenHao"},
+        {"label": "备注", "field": "BeiZhu"},
+        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
+        {"label": "身份类别", "field": "ShenFenLeiBie"}
+    ]
+}

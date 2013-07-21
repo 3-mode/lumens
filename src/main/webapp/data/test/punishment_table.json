@@ -1,19 +1,19 @@
 {
     "columns": [
-        {"name": "职工号", "field": "ZhiGongHao"},
-        {"name": "姓名", "field": "XingMing"},
-        {"name": "院处名称", "field": "YuanChuMingCheng"},
-        {"name": "惩处名称", "field": "ChengChuMingCheng"},
-        {"name": "惩处原因", "field": "ChengChuYuanYin"},
-        {"name": "惩处内容", "field": "ChengChuNeiRong"},
-        {"name": "惩处单位", "field": "ChengChuDanWei"},
-        {"name": "惩处文号", "field": "ChengChuWenHao"},
-        {"name": "惩处日期", "field": "ChengChuRiQi"},
-        {"name": "惩处撤销日期", "field": "ChengChuCheXiaoRiQi"},
-        {"name": "惩处撤销文号", "field": "ChengChuCheXiaoWenHao"},
-        {"name": "惩处撤销原因", "field": "ChengChuCheXiaoYuanYin"},
-        {"name": "备注", "field": "BeiZhu"},
-        {"name": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
-        {"name": "身份类别", "field": "ShenFenLeiBie"}
+        {"label": "职工号", "field": "ZhiGongHao"},
+        {"label": "姓名", "field": "XingMing"},
+        {"label": "院处名称", "field": "YuanChuMingCheng"},
+        {"label": "惩处名称", "field": "ChengChuMingCheng"},
+        {"label": "惩处原因", "field": "ChengChuYuanYin"},
+        {"label": "惩处内容", "field": "ChengChuNeiRong"},
+        {"label": "惩处单位", "field": "ChengChuDanWei"},
+        {"label": "惩处文号", "field": "ChengChuWenHao"},
+        {"label": "惩处日期", "field": "ChengChuRiQi"},
+        {"label": "惩处撤销日期", "field": "ChengChuCheXiaoRiQi"},
+        {"label": "惩处撤销文号", "field": "ChengChuCheXiaoWenHao"},
+        {"label": "惩处撤销原因", "field": "ChengChuCheXiaoYuanYin"},
+        {"label": "备注", "field": "BeiZhu"},
+        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
+        {"label": "身份类别", "field": "ShenFenLeiBie"}
     ]
 }

@@ -1,43 +1,43 @@
 {
     "columns": [
         {
-            "name": "现记录",
+            "label": "现记录",
             "field": "XianJiLu"
         },
         {
-            "name": "调整时间",
+            "label": "调整时间",
             "field": "TiaoZhengShiJian"
         },
         {
-            "name": "编制类别",
+            "label": "编制类别",
             "field": "BianZhiLeiBie"
         },
         {
-            "name": "岗位",
+            "label": "岗位",
             "field": "GangWei"
         },
         {
-            "name": "人员类别",
+            "label": "人员类别",
             "field": "RenYuanLeiBie"
         },
         {
-            "name": "人员状态",
+            "label": "人员状态",
             "field": "RenYuanZhuangTai"
         },
         {
-            "name": "统计分类",
+            "label": "统计分类",
             "field": "TongJiFenLei"
         },
         {
-            "name": "备注",
+            "label": "备注",
             "field": "BeiZhu"
         },
         {
-            "name": "身份类别",
+            "label": "身份类别",
             "field": "ShenFenLeiBie"
         },
         {
-            "name": "最后修改时间",
+            "label": "最后修改时间",
             "field": "LastModifyTime"
         }
     ]

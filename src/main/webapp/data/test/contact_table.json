@@ -1,17 +1,17 @@
 {
     "columns": [
-        {"name": "全局编号", "field": "field-1"},
-        {"name": "职工号", "field": "ZhiGongHao"},
-        {"name": "姓名", "field": "field-3"},
-        {"name": "院处名称", "field": "field-4"},
-        {"name": "单位电话", "field": "field-5"},
-        {"name": "家庭电话", "field": "field-6"},
-        {"name": "手机", "field": "field-7"},
-        {"name": "电子信箱", "field": "field-8"},
-        {"name": "家庭住址", "field": "field-9"},
-        {"name": "邮政编码", "field": "field-10"},
-        {"name": "备注", "field": "field-11"},
-        {"name": "最后修改时间", "field": "field-12"},
-        {"name": "身份类别", "field": "field-13"}
+        {"label": "全局编号", "field": "field-1"},
+        {"label": "职工号", "field": "ZhiGongHao"},
+        {"label": "姓名", "field": "field-3"},
+        {"label": "院处名称", "field": "field-4"},
+        {"label": "单位电话", "field": "field-5"},
+        {"label": "家庭电话", "field": "field-6"},
+        {"label": "手机", "field": "field-7"},
+        {"label": "电子信箱", "field": "field-8"},
+        {"label": "家庭住址", "field": "field-9"},
+        {"label": "邮政编码", "field": "field-10"},
+        {"label": "备注", "field": "field-11"},
+        {"label": "最后修改时间", "field": "field-12"},
+        {"label": "身份类别", "field": "field-13"}
     ]
 }

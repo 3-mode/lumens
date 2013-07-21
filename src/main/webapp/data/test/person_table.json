@@ -1,139 +1,139 @@
 {
     "columns": [
         {
-            "name": "所在单位",
+            "label": "所在单位",
             "field": "field-0"
         },
         {
-            "name": "职工号",
+            "label": "职工号",
             "field": "ZhiGongHao"
         },
         {
-            "name": "姓名",
+            "label": "姓名",
             "field": "field-2"
         },
         {
-            "name": "性别",
+            "label": "性别",
             "field": "field-3"
         },
         {
-            "name": "出生年月日",
+            "label": "出生年月日",
             "field": "field-4"
         },
         {
-            "name": "身份证号",
+            "label": "身份证号",
             "field": "field-5"
         },
         {
-            "name": "民族",
+            "label": "民族",
             "field": "field-6"
         },
         {
-            "name": "籍贯",
+            "label": "籍贯",
             "field": "field-7"
         },
         {
-            "name": "来校年月",
+            "label": "来校年月",
             "field": "field-8"
         },
         {
-            "name": "参加工作年月",
+            "label": "参加工作年月",
             "field": "field-9"
         },
         {
-            "name": "健康状况",
+            "label": "健康状况",
             "field": "field-10"
         },
         {
-            "name": "外侨情况",
+            "label": "外侨情况",
             "field": "field-11"
         },
         {
-            "name": "婚姻状况",
+            "label": "婚姻状况",
             "field": "field-12"
         },
         {
-            "name": "科室名称",
+            "label": "科室名称",
             "field": "field-13"
         },
         {
-            "name": "政治面貌",
+            "label": "政治面貌",
             "field": "field-14"
         },
         {
-            "name": "最后学历",
+            "label": "最后学历",
             "field": "field-15"
         },
         {
-            "name": "最高学历",
+            "label": "最高学历",
             "field": "field-15-1"
         },
         {
-            "name": "最后学历毕业学校",
+            "label": "最后学历毕业学校",
             "field": "field-16"
         },
         {
-            "name": "最后学历毕业年月",
+            "label": "最后学历毕业年月",
             "field": "field-17"
         },
         {
-            "name": "现职称",
+            "label": "现职称",
             "field": "field-18"
         },
         {
-            "name": "现专业技术职务级别",
+            "label": "现专业技术职务级别",
             "field": "field-19"
         },
         {
-            "name": "专业技术职务资格评定日期",
+            "label": "专业技术职务资格评定日期",
             "field": "field-20"
         },
         {
-            "name": "聘任职称",
+            "label": "聘任职称",
             "field": "field-21"
         },
         {
-            "name": "聘任职称等级",
+            "label": "聘任职称等级",
             "field": "field-22"
         },
         {
-            "name": "现职级日期",
+            "label": "现职级日期",
             "field": "field-23"
         },
         {
-            "name": "从事专业",
+            "label": "从事专业",
             "field": "field-24"
         },
         {
-            "name": "主要岗位",
+            "label": "主要岗位",
             "field": "field-24"
         },
         {
-            "name": "来源类别",
+            "label": "来源类别",
             "field": "field-25"
         },
         {
-            "name": "编制类别",
+            "label": "编制类别",
             "field": "field-26"
         },
         {
-            "name": "人员类别",
+            "label": "人员类别",
             "field": "field-27"
         },
         {
-            "name": "人员状态",
+            "label": "人员状态",
             "field": "field-28"
         },
         {
-            "name": "党政职务",
+            "label": "党政职务",
             "field": "field-29"
         },
         {
-            "name": "党政职务级别",
+            "label": "党政职务级别",
             "field": "field-30"
         },
         {
-            "name": "身份类别",
+            "label": "身份类别",
             "field": "field-31"
         }
     ]

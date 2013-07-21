@@ -1,11 +1,11 @@
 {
     "columns": [
-        {"name": "单位电话", "field": "DanWeiDianHua"},
-        {"name": "家庭电话", "field": "JiaTingDianHua"},
-        {"name": "手机", "field": "ShouJi"},
-        {"name": "电子信箱", "field": "DianZiXinXiang"},
-        {"name": "家庭住址", "field": "JiaTingZhuZhi"},
-        {"name": "邮政编码", "field": "YouZhengBianMa"},
-        {"name": "备注", "field": "BeiZhu"}
+        {"label": "单位电话", "field": "DanWeiDianHua"},
+        {"label": "家庭电话", "field": "JiaTingDianHua"},
+        {"label": "手机", "field": "ShouJi"},
+        {"label": "电子信箱", "field": "DianZiXinXiang"},
+        {"label": "家庭住址", "field": "JiaTingZhuZhi"},
+        {"label": "邮政编码", "field": "YouZhengBianMa"},
+        {"label": "备注", "field": "BeiZhu"}
     ]
 }

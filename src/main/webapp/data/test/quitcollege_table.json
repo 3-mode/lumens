@@ -1,13 +1,13 @@
 {
     "columns": [
-        {"name": "职工号", "field": "ZhiGongHao"},
-        {"name": "姓名", "field": "XingMing"},
-        {"name": "院处名称", "field": "YuanChuMingCheng"},
-        {"name": "离校年月", "field": "LiXiaoNianYue"},
-        {"name": "离校原因", "field": "LiXiaoYuanYin"},
-        {"name": "离校去向", "field": "LiXiaoQuXiang"},
-        {"name": "备注", "field": "BeiZhu"},
-        {"name": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
-        {"name": "身份类别", "field": "ShenFenLeiBie"}
+        {"label": "职工号", "field": "ZhiGongHao"},
+        {"label": "姓名", "field": "XingMing"},
+        {"label": "院处名称", "field": "YuanChuMingCheng"},
+        {"label": "离校年月", "field": "LiXiaoNianYue"},
+        {"label": "离校原因", "field": "LiXiaoYuanYin"},
+        {"label": "离校去向", "field": "LiXiaoQuXiang"},
+        {"label": "备注", "field": "BeiZhu"},
+        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
+        {"label": "身份类别", "field": "ShenFenLeiBie"}
     ]
 }

@@ -1,43 +1,43 @@
 {
     "columns": [
         {
-            "name": "职工号",
+            "label": "职工号",
             "field": "ZhiGongHao"
         },
         {
-            "name": "姓名",
+            "label": "姓名",
             "field": "XingMing"
         },
         {
-            "name": "院处名称",
+            "label": "院处名称",
             "field": "YuanChuMingCheng"
         },
         {
-            "name": "主要成员姓名",
+            "label": "主要成员姓名",
             "field": "ZhuYaoChengYuanXingMing"
         },
         {
-            "name": "称谓",
+            "label": "称谓",
             "field": "ChengWei"
         },
         {
-            "name": "出生时间",
+            "label": "出生时间",
             "field": "ChuShengNianYue"
         },
         {
-            "name": "工作单位",
+            "label": "工作单位",
             "field": "GongZuoDanWei"
         },
         {
-            "name": "政治面貌",
+            "label": "政治面貌",
             "field": "ZhengZhiMianMao"
         },
         {
-            "name": "备注",
+            "label": "备注",
             "field": "BeiZhu"
         },
         {
-            "name": "最后修改时间",
+            "label": "最后修改时间",
             "field": "LastModifyTime"
         }
     ]
