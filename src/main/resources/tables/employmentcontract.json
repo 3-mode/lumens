@@ -1,0 +1,15 @@
+{
+    "columns": [
+        {"label": "职工号", "field": "ZhiGongHao"},
+        {"label": "姓名", "field": "XingMing"},
+        {"label": "院处名称", "field": "YuanChuMingCheng"},
+        {"label": "合同类别", "field": "HeTongLeiBie"},
+        {"label": "起聘日期", "field": "QiPinRiQi"},
+        {"label": "终聘日期", "field": "ZhongPinRiQi"},
+        {"label": "合同编号", "field": "HeTongBianHao"},
+        {"label": "合同文件", "field": "HeTongWenJian"},
+        {"label": "聘用岗位", "field": "PinYongGangWei"},
+        {"label": "备注", "field": "BeiZhu"},
+        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"}
+    ]
+}

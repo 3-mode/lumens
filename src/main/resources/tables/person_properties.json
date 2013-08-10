@@ -1,0 +1,56 @@
+{
+    "columns": [
+        {
+            "label": "职工号",
+            "field": "ZhiGongHao"
+        },
+        {
+            "label": "姓名",
+            "field": "XingMing"
+        },
+        {
+            "label": "院处名称",
+            "field": "YuanChuMingCheng"
+        },
+        {
+            "label": "现记录",
+            "field": "XianJiLu"
+        },
+        {
+            "label": "调整时间",
+            "field": "TiaoZhengShiJian"
+        },
+        {
+            "label": "编制类别",
+            "field": "BianZhiLeiBie"
+        },
+        {
+            "label": "岗位",
+            "field": "GangWei"
+        },
+        {
+            "label": "人员类别",
+            "field": "RenYuanLeiBie"
+        },
+        {
+            "label": "人员状态",
+            "field": "RenYuanZhuangTai"
+        },
+        {
+            "label": "统计分类",
+            "field": "TongJiFenLei"
+        },
+        {
+            "label": "备注",
+            "field": "BeiZhu"
+        },
+        {
+            "label": "身份类别",
+            "field": "ShenFenLeiBie"
+        },
+        {
+            "label": "最后修改时间",
+            "field": "LastModifyTime"
+        }
+    ]
+}

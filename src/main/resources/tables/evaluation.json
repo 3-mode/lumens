@@ -1,0 +1,48 @@
+{
+    "columns": [
+        {
+            "label": "职工号",
+            "field": "ZhiGongHao"
+        },
+        {
+            "label": "姓名",
+            "field": "XingMing"
+        },
+        {
+            "label": "院处名称",
+            "field": "YuanChuMingCheng"
+        },
+        {
+            "label": "考核时间",
+            "field": "KaoHeShiJian"
+        },
+        {
+            "label": "考核类别",
+            "field": "KaoHeLeiBie"
+        },
+        {
+            "label": "考核岗位",
+            "field": "KaoHeGangWei"
+        },
+        {
+            "label": "考核内容",
+            "field": "KaoHeNeiRong"
+        },
+        {
+            "label": "考核等级",
+            "field": "KaoHeDengJi"
+        },
+        {
+            "label": "考核结果",
+            "field": "KaoHeJieGuo"
+        },
+        {
+            "label": "备注",
+            "field": "BeiZhu"
+        },
+        {
+            "label": "最后修改时间",
+            "field": "LastModifyTime"
+        }
+    ]
+}
