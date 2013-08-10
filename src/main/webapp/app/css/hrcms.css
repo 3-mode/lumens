@@ -242,12 +242,7 @@ a {
 /*** HRCMS secondary menu styles end */
 /*** HRCMS workspace styles */
 .hrcms .hrcms-workspace-container {
-    display: inline-block;
-    background-color:rgb(240, 240, 240);
-    overflow: hidden;
-    position:relative;
-    width:100%;
-    height:100%;
+    border-left: 1px solid #cacaca;
 }
 .hrcms .hrcms-workspace-header {
     width: 100%;
@@ -452,16 +447,6 @@ a {
 .hrcms .hrcms-person-form {
     /*Anchor*/
 }
-.hrcms .hrcms-tab {
-    padding:0;
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-}
-.hrcms .hrcms-tab-content {
-    display:table;
-    padding: 10px;
-}
 .hrcms .hrcms-tableditor-insert-row {
     background-position: center;
     background-image: url(images/table/insert-row.png);
@@ -560,20 +545,23 @@ a {
     width: 100%;
     height: 100%;
 }
+.hrcms .hrcms-accordion-item {
+}
 .hrcms .hrcms-accordion-title {
     height: 25px; 
     width: 100%;
     cursor: pointer;
     background-color: rgb(200, 200, 200);
+    border-top: 1px solid rgb(230, 230, 230);
     border-bottom: 1px solid rgb(170, 170, 170);
     color: #4C4C4C;
 }
-
 .hrcms .hrcms-accordion-content {
     display: block;
     list-style-type: none;
     padding-top: 5px;
     padding-bottom: 8px;
+    padding-right: 10px;
     padding-left: 0px;
     margin: 0;
 
@@ -603,4 +591,57 @@ a {
     display: block;
     margin: 0;
     padding: 0;
+}
+.hrcms .hrcms-tab-panel {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: #eeeeee;
+    min-height: 300px;
+}
+.hrcms .hrcms-tab-header {
+    width: 100%;
+    line-height: 32px;
+    padding: 0;
+    margin: 0;
+    float: top;
+    list-style: none;
+    border-bottom: 1px solid #C2C2C2;
+    display: table;
+}
+.hrcms .hrcms-tab {
+    margin-bottom: -1px;
+    width: auto;
+    line-height: 32px;
+    float: left;
+    display: list-item;
+    text-align: -webkit-match-parent;
+    cursor: pointer;
+}
+.hrcms .hrcms-tab > div {
+    display: block;
+    text-decoration: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border: 1px solid transparent;
+}
+.hrcms .hrcms-tab > div:hover {
+    background-color: #dddddd;
+}
+.hrcms .hrcms-tab > div.active {
+    border: 1px solid #C2C2C2;
+    border-bottom-color: #eeeeee;
+}
+.hrcms .hrcms-tab-content {
+    min-height: 100px;
+    display: block;
+    overflow: hidden;
+}
+.hrcms .hrcms-tab-content-page {
+    padding: 10px;
+    min-height: 100px;
+    border: 1px solid #C2C2C2;
+    border-top-color: transparent;
 }

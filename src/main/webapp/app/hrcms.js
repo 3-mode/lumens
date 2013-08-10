@@ -9,13 +9,19 @@ $(function() {
         var headerContainer;
         var moduleViewMap = {};
         rootContainer.addClass("hrcms");
+        var rootLayout = Hrcms.RootLayout.create(rootContainer);
+        var theLayout = Hrcms.SplitLayout.create(rootLayout);
+        theLayout.configure({
+            mode: "vertical",
+            part1Size: 86
+        });
         function layoutHeader(parentContainer) {
             return $('<div class="hrcms-header-constainer"/>').appendTo(parentContainer);
         }
         tThis.load = function() {
             if (Hrcms.debugEnabled)
                 console.log("Loading HRCMS !");
-            headerContainer = layoutHeader(rootContainer);
+            headerContainer = layoutHeader(theLayout.getPart1());
             /** Header begin */
             Hrcms.Header.create(headerContainer).setSysTitle(I18N.SystemTitle);
             // TODO use ajax to load the toolbar button strings
@@ -32,13 +38,13 @@ $(function() {
                     moduleViewMap.activeView.remove();
                 // Switch to a new view
                 if (SysModuleID.SysToolbar_Home === curSysModuleID) {
-                    moduleViewMap.activeView = Hrcms.HomeView.create(rootContainer);
+                    moduleViewMap.activeView = Hrcms.HomeView.create(theLayout.getPart2());
                 }
                 else if (SysModuleID.SysToolbar_Information === curSysModuleID) {
-                    moduleViewMap.activeView = Hrcms.InfoManageView.create(rootContainer);
+                    moduleViewMap.activeView = Hrcms.InfoManageView.create(theLayout.getPart2());
                 }
                 else if (SysModuleID.SysToolbar_Statistic_Analysis === curSysModuleID) {
-                    moduleViewMap.activeView = Hrcms.StatisticsView.create(rootContainer);
+                    moduleViewMap.activeView = Hrcms.StatisticsView.create(theLayout.getPart2());
                 }
                 else if (SysModuleID.SysToolbar_ApproveProgress === curSysModuleID) {
                     // TODO

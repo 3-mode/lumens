@@ -37,7 +37,7 @@ $(function() {
         return tThis;
     }
 
-    var htmlTpl = '<div style="padding-left:10px;position:relative;">' +
+    var htmlTpl = '<div style="padding-left:10px;padding-top:5px;position:relative;">' +
     '<table cellspacing="0" cellpadding="0" border="0" style="table-layout:auto;" class="hrcms-toolbar"><tbody><tr>' +
     '  <td><div id="first_pagernav" class="hrcms-toolbar-button hrcms-toolbar-button-begin ui-corner-all"/></td>' +
     '  <td style="width:5px;"></td>' +

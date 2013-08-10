@@ -11,7 +11,7 @@ $(function() {
         var SysModuleID = Hrcms.SysModuleID;
         function generateTableDataUrl(name) {
             return {
-                table: "data/test/" + name + "_table.json",
+                table: "rest/tables/" + name,
                 data: "data/test/" + name + "_data.json"
             };
         }
@@ -73,6 +73,20 @@ $(function() {
                     Url = generateTableDataUrl("politics");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_JobInfo_JobOfPolitics === event.moduleID) {
                     Url = generateTableDataUrl("jobofpolitics");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_JobInfo_TechnicalTitles === event.moduleID) {
+                    Url = generateTableDataUrl("technicaltitles");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_JobInfo_TechnicalLevel === event.moduleID) {
+                    Url = generateTableDataUrl("technicallevel");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Qualification_PostdoctoralTeacher === event.moduleID) {
+                    Url = generateTableDataUrl("postdoctoralteacher");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Qualification_VisitingScholarTeacher === event.moduleID) {
+                    Url = generateTableDataUrl("visitingscholarteacher");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Qualification_ExpertJob === event.moduleID) {
+                    Url = generateTableDataUrl("expertjob");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Qualification_TalentsFunding === event.moduleID) {
+                    Url = generateTableDataUrl("talentsfunding");
+                } else if (SysModuleID.ContentNavMenu_InfoManage_Contract_EmploymentContract === event.moduleID) {
+                    Url = generateTableDataUrl("employmentcontract");
                 }
                 // Event function
                 function sortup(event) {

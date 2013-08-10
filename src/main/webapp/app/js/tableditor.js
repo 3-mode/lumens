@@ -4,8 +4,6 @@ $(function() {
     Hrcms.TableEditor.create = function(config) {
         var tThis = {};
         var SyncGet = Hrcms.SyncGet;
-        var SyncUUID = Hrcms.SyncUUID;
-        var TABLE_UUID = "table-uuid";
         var container = config.container;
         var tableEditorContainer = $('<div class="hrcms-teditor-container" />').appendTo(container);
         var workspaceHeader = Hrcms.NavIndicator.create(tableEditorContainer);
@@ -59,7 +57,7 @@ $(function() {
                             var row = message.find("#rowCount").val();
                             var col = message.find("#colCount").val();
                             var box = $('<div class="hrcms-table-holder-box" style="padding-left:20px;"><table class="hrcms-report-table"></div>').appendTo(tableBox);
-                            var table = box.find('table');
+                            var table = Hrcms.Id(box.find('table'));
                             table.selectable({
                                 start: function(evt, ui) {
                                     tableBox.find('.ui-selected').removeClass('ui-selected');
@@ -70,7 +68,6 @@ $(function() {
                                     table.find('th[class~="ui-selected"]').removeClass("ui-selected");
                                 }
                             });
-                            table.attr(TABLE_UUID, SyncUUID("table"));
                             for (var i = 0; i < row; ++i) {
                                 var tr = $('<tr></tr>').appendTo(table);
                                 for (var j = 0; j < col; ++j) {

@@ -20,6 +20,7 @@ $(function() {
 
     // Left nav module
     I18N.ContentNavMenu = {
+        InfoManage_Summary_Info: "综合信息",
         InfoManage_Info_Title: "基本信息类",
         InfoManage_Info_Person: "个人概况",
         InfoManage_Info_ContactInfo: "联系方式",
@@ -35,7 +36,7 @@ $(function() {
         InfoManage_Records_Punishment: "惩处",
         InfoManage_Records_AnomalyInCollege: "校内异动",
         InfoManage_Records_InfoToJoinCollege: "来校信息",
-        InfoManage_Records_LeaveOffice: "离校",
+        InfoManage_Records_QuitCollege: "离校",
         InfoManage_JobInfo_Title: "任职类信息",
         InfoManage_JobInfo_Unit: "任职单位",
         InfoManage_JobInfo_Politics: "政治面貌",

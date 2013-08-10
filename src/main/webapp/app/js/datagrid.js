@@ -120,7 +120,7 @@ $(function() {
             return this;
         }
         tThis.data = function(records) {
-            if (removeOldRecord)
+            if (removeOldRecord && tableBody)
                 tableBody.empty();
             var columns = configuration.columns;
             records = insertPlaceHolderRowIfRecordIsEmpty(records);

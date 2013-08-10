@@ -84,6 +84,7 @@ $(function() {
         ContentNavMenu_InfoManage_JobInfo_TechnicalTitles: "ContentNavMenu_InfoManage_JobInfo_TechnicalTitles",
         ContentNavMenu_InfoManage_JobInfo_TechnicalLevel: "ContentNavMenu_InfoManage_JobInfo_TechnicalLevel",
         ContentNavMenu_InfoManage_Qualification_PostdoctoralTeacher: "ContentNavMenu_InfoManage_Qualification_PostdoctoralTeacher",
+        ContentNavMenu_InfoManage_Qualification_VisitingScholarTeacher: "ContentNavMenu_InfoManage_Qualification_VisitingScholarTeacher",
         ContentNavMenu_InfoManage_Qualification_ExpertJob: "ContentNavMenu_InfoManage_Qualification_ExpertJob",
         ContentNavMenu_InfoManage_Qualification_TalentsFunding: "ContentNavMenu_InfoManage_Qualification_TalentsFunding",
         ContentNavMenu_InfoManage_Contract_EmploymentContract: "ContentNavMenu_InfoManage_Contract_EmploymentContract",
