@@ -29,13 +29,13 @@ $(function() {
         container.bind("resize", resize);
         resize();
         // Utility function
-        function loadGrid(formsHolder, formHolderId, gridHolderId, gridTemplUrl, gridDataUrl) {
+        function loadGrid(formsHolder, formHolderId, gridHolderId, tableDefineUrl, gridDataUrl) {
             var formHolder = formsHolder.find(formHolderId);
             var dataGrid = Hrcms.DataGrid.create({
                 container: formsHolder.find(gridHolderId)
             });
             $.ajaxSetup({cache: false});
-            $.getJSON(gridTemplUrl,
+            $.getJSON(tableDefineUrl,
             function(table) {
                 dataGrid.configure({
                     columns: table.columns,
@@ -64,15 +64,17 @@ $(function() {
         // Member methods
         tThis.configure = function(config) {
             // TODO HTML template configuration here
+            // TODO Form should be load when the accordion item is actived
+            // TODO Form label should be load by activate call back
             formEntry = $(config.personFormTempl).appendTo(mainForm);
             Hrcms.TabPanel.create($("#basicInfoTab")).configure({
                 tab: [
                     {id: "personSummaryReport", label: I18N.ContentNavMenu.InfoManage_Summary_Info},
                     {id: "basicInfo", label: I18N.ContentNavMenu.InfoManage_Info_Title},
                     {id: "resumeInfo", label: I18N.ContentNavMenu.InfoManage_Records_Title},
-                    {id: "t4", label: I18N.ContentNavMenu.InfoManage_JobInfo_Title},
-                    {id: "t5", label: I18N.ContentNavMenu.InfoManage_Qualification_Title},
-                    {id: "t6", label: I18N.ContentNavMenu.InfoManage_Contract_Title}
+                    {id: "takeJobInfo", label: I18N.ContentNavMenu.InfoManage_JobInfo_Title},
+                    {id: "qualificationInfo", label: I18N.ContentNavMenu.InfoManage_Qualification_Title},
+                    {id: "contractInfo", label: I18N.ContentNavMenu.InfoManage_Contract_Title}
                 ],
                 activate: function(header, content) {
                     if (Hrcms.debugEnabled) {
@@ -104,34 +106,35 @@ $(function() {
                                 "app/profile/html/basic/family.html"
                             ],
                             activate: function(accordion, accordionTitle, isExpand) {
-                                if (isExpand && accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Info_PersonNature) {
+                                if (!isExpand)
+                                    return;
+                                if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Info_PersonNature) {
                                     loadGrid(
                                     accordion,
                                     "#natureInfo", "#natureInfoGrid",
-                                    "rest/tables/person_nature",
+                                    "rest/tables/basic/person_nature",
                                     "data/test/person_nature_data.json");
                                 }
-                                else if (isExpand && accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Info_ContactInfo) {
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Info_ContactInfo) {
                                     loadGrid(
                                     accordion,
                                     "#contactInfo", "#contactInfoGrid",
-                                    "rest/tables/person_contact",
+                                    "rest/tables/basic/person_contact",
                                     "data/test/person_contact_data.json");
                                 }
-                                else if (isExpand && accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Info_Evaluation) {
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Info_Evaluation) {
                                     loadGrid(
                                     accordion,
                                     "#evaluateInfo", "#evaluateGrid",
-                                    "rest/tables/person_evaluation",
+                                    "rest/tables/basic/person_evaluation",
                                     "data/test/person_evaluation_data.json");
                                 }
-                                else if (isExpand && accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Info_Family) {
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Info_Family) {
                                     loadGrid(
                                     accordion,
                                     "#familyInfo", "#familyGrid",
-                                    "rest/tables/person_family",
+                                    "rest/tables/basic/person_family",
                                     "data/test/person_family_data.json");
-                                    var familyInfo = accordion.find("#familyInfo");
                                 }
                             }
                         });
@@ -159,7 +162,7 @@ $(function() {
                                 I18N.ContentNavMenu.InfoManage_Records_Punishment,
                                 I18N.ContentNavMenu.InfoManage_Records_AnomalyInCollege,
                                 I18N.ContentNavMenu.InfoManage_Records_InfoToJoinCollege,
-                                I18N.ContentNavMenu.InfoManage_Records_QuitCollege,
+                                I18N.ContentNavMenu.InfoManage_Records_QuitCollege
                             ],
                             formURLList: [
                                 "app/profile/html/resume/info_before_join.html",
@@ -173,62 +176,179 @@ $(function() {
                                 "app/profile/html/resume/quit_college.html"
                             ],
                             activate: function(accordion, accordionTitle, isExpand) {
-                                if (isExpand && accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_JobExperience) {
+                                if (!isExpand)
+                                    return;
+                                if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_JobExperience) {
                                     loadGrid(
                                     accordion,
                                     "#resumeInfo", "#resumeInfoGrid",
-                                    "rest/tables/person_nature",
-                                    "data/test/person_nature_data.json");
+                                    "rest/tables/resume/info_before_college",
+                                    "data/test/info_before_college_data.json");
                                 }
-                                else if (isExpand && accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_Degree) {
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_Degree) {
                                     loadGrid(
                                     accordion,
                                     "#degreeInfo", "#degreeInfoGrid",
-                                    "rest/tables/person_contact",
-                                    "data/test/person_contact_data.json");
+                                    "rest/tables/resume/education",
+                                    "data/test/education_data.json");
                                 }
-                                else if (isExpand && accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_TrainingInLand) {
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_TrainingInLand) {
                                     loadGrid(
                                     accordion,
                                     "#trainInInfo", "#trainInInfoGrid",
-                                    "rest/tables/person_evaluation",
-                                    "data/test/person_evaluation_data.json");
+                                    "rest/tables/resume/training_inland",
+                                    "data/test/training_inland_data.json");
                                 }
-                                else if (isExpand && accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_TrainingOutLand) {
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_TrainingOutLand) {
                                     loadGrid(
                                     accordion,
                                     "#trainOutInfo", "#trainOutInfoGrid",
-                                    "rest/tables/person_family",
-                                    "data/test/person_family_data.json");
+                                    "rest/tables/resume/training_outland",
+                                    "data/test/training_outland_data.json");
                                 }
-                                else if (isExpand && accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_Award) {
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_Award) {
                                     loadGrid(
                                     accordion,
                                     "#awardInfo", "#awardInfoGrid",
-                                    "rest/tables/person_evaluation",
-                                    "data/test/person_evaluation_data.json");
+                                    "rest/tables/resume/award",
+                                    "data/test/award_data.json");
                                 }
-                                else if (isExpand && accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_Punishment) {
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_Punishment) {
                                     loadGrid(
                                     accordion,
                                     "#punishmentInfo", "#punishmentInfoGrid",
-                                    "rest/tables/person_family",
-                                    "data/test/person_family_data.json");
+                                    "rest/tables/resume/punishment",
+                                    "data/test/punishment_data.json");
                                 }
-                                else if (isExpand && accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_InfoToJoinCollege) {
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_AnomalyInCollege) {
+                                    loadGrid(
+                                    accordion,
+                                    "#anomalyInfo", "#anomalyInfoGrid",
+                                    "rest/tables/resume/anomaly",
+                                    "data/test/anomaly_data.json");
+                                }
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_InfoToJoinCollege) {
                                     loadGrid(
                                     accordion,
                                     "#joinInfo", "#joinInfoGrid",
-                                    "rest/tables/person_evaluation",
-                                    "data/test/person_evaluation_data.json");
+                                    "rest/tables/resume/info2joincollege",
+                                    "data/test/info2joincollege_data.json");
                                 }
-                                else if (isExpand && accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_QuitCollege) {
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_QuitCollege) {
                                     loadGrid(
                                     accordion,
                                     "#quitInfo", "#quitInfoGrid",
-                                    "rest/tables/person_family",
-                                    "data/test/person_family_data.json");
+                                    "rest/tables/resume/quitcollege",
+                                    "data/test/quitcollege_data.json");
                                 }
+                            }
+                        });
+                    }
+                    else if (id === "takeJobInfo") {
+                        var list = Hrcms.List.create(formEntry.find("#takeJobInfo"));
+                        list.configure({
+                            IdList: [
+                                SysModuleID.ContentNavMenu_InfoManage_JobInfo_Unit,
+                                SysModuleID.ContentNavMenu_InfoManage_JobInfo_Politics,
+                                SysModuleID.ContentNavMenu_InfoManage_JobInfo_JobOfPolitics,
+                                SysModuleID.ContentNavMenu_InfoManage_JobInfo_TechnicalTitles,
+                                SysModuleID.ContentNavMenu_InfoManage_JobInfo_TechnicalLevel
+                            ],
+                            formTitleList: [
+                                I18N.ContentNavMenu.InfoManage_JobInfo_Unit,
+                                I18N.ContentNavMenu.InfoManage_JobInfo_Politics,
+                                I18N.ContentNavMenu.InfoManage_JobInfo_JobOfPolitics,
+                                I18N.ContentNavMenu.InfoManage_JobInfo_TechnicalTitles,
+                                I18N.ContentNavMenu.InfoManage_JobInfo_TechnicalLevel
+                            ],
+                            formURLList: [
+                                "app/profile/html/job/unit.html",
+                                "app/profile/html/job/politics.html",
+                                "app/profile/html/job/job_of_politics.html",
+                                "app/profile/html/job/technical_titles.html",
+                                "app/profile/html/job/technical_level.html"
+                            ],
+                            activate: function(accordion, accordionTitle, isExpand) {
+                                if (!isExpand)
+                                    return;
+                                if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_JobInfo_Unit) {
+                                    loadGrid(
+                                    accordion,
+                                    "#unitInfo", "#unitInfoGrid",
+                                    "rest/tables/job/unit",
+                                    "data/test/unit_data.json");
+                                }
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_JobInfo_Politics) {
+                                    loadGrid(
+                                    accordion,
+                                    "#politicsInfo", "#politicsInfoGrid",
+                                    "rest/tables/job/politics",
+                                    "data/test/dummy.json");
+                                }
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_JobInfo_JobOfPolitics) {
+                                    loadGrid(
+                                    accordion,
+                                    "#jobOfPoliticsInfo", "#jobOfPoliticsInfoGrid",
+                                    "rest/tables/job/jobofpolitics",
+                                    "data/test/dummy.json");
+                                }
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_JobInfo_TechnicalTitles) {
+                                    loadGrid(
+                                    accordion,
+                                    "#technicalTitleInfo", "#technicalTitleInfoGrid",
+                                    "rest/tables/job/technicaltitles",
+                                    "data/test/dummy.json");
+                                }
+                                else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_JobInfo_TechnicalLevel) {
+                                    loadGrid(
+                                    accordion,
+                                    "#technicalLevelInfo", "#technicalLevelInfoGrid",
+                                    "rest/tables/job/technicallevel",
+                                    "data/test/dummy.json");
+                                }
+                            }
+                        });
+                    }
+                    else if (id === "qualificationInfo") {
+                        var list = Hrcms.List.create(formEntry.find("#qualificationInfo"));
+                        list.configure({
+                            IdList: [
+                                SysModuleID.ContentNavMenu_InfoManage_Qualification_PostdoctoralTeacher,
+                                SysModuleID.ContentNavMenu_InfoManage_Qualification_VisitingScholarTeacher,
+                                SysModuleID.ContentNavMenu_InfoManage_Qualification_ExpertJob,
+                                SysModuleID.ContentNavMenu_InfoManage_Qualification_TalentsFunding
+                            ],
+                            formTitleList: [
+                                I18N.ContentNavMenu.InfoManage_Qualification_PostdoctoralTeacher,
+                                I18N.ContentNavMenu.InfoManage_Qualification_VisitingScholarTeacher,
+                                I18N.ContentNavMenu.InfoManage_Qualification_ExpertJob,
+                                I18N.ContentNavMenu.InfoManage_Qualification_TalentsFunding
+                            ],
+                            formURLList: [
+                                "app/profile/html/qualification/postdocteacher.html",
+                                "app/profile/html/qualification/visitteacher.html",
+                                "app/profile/html/qualification/expertjob.html",
+                                "app/profile/html/qualification/talentsfunding.html"
+                            ],
+                            activate: function(accordion, accordionTitle, isExpand) {
+
+                            }
+                        });
+                    }
+                    else if (id === "contractInfo") {
+                        var list = Hrcms.List.create(formEntry.find("#contractInfo"));
+                        list.configure({
+                            IdList: [
+                                SysModuleID.ContentNavMenu_InfoManage_Contract_EmploymentContract
+                            ],
+                            formTitleList: [
+                                I18N.ContentNavMenu.InfoManage_Contract_EmploymentContract
+                            ],
+                            formURLList: [
+                                "app/profile/html/job/technical_level.html"
+                            ],
+                            activate: function(accordion, accordionTitle, isExpand) {
+
                             }
                         });
                     }

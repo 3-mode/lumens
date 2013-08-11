@@ -11,7 +11,7 @@ $(function() {
         var SysModuleID = Hrcms.SysModuleID;
         function generateTableDataUrl(name) {
             return {
-                table: "rest/tables/" + name,
+                table: "rest/tables/base/" + name,
                 data: "data/test/" + name + "_data.json"
             };
         }
