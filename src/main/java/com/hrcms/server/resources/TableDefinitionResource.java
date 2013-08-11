@@ -16,7 +16,8 @@ public class TableDefinitionResource {
     private String getTableJson(String subPath, String tableName) throws IOException {
         InputStream in = null;
         try {
-            in = TableDefinitionResource.class.getResourceAsStream("/tables/" + tableName + ".json");
+            in = TableDefinitionResource.class.getResourceAsStream(
+            subPath != null ? ("/tables/" + subPath + '/' + tableName + ".json") : ("/tables/" + tableName + ".json"));
             ByteArrayOutputStream baos = Utils.read(in);
             String json = baos.toString("UTF-8");
             return json;
@@ -29,7 +30,7 @@ public class TableDefinitionResource {
     @Path("/base/{tableName}")
     @Produces("application/json")
     public String getBaseTable(@PathParam("tableName") String tableName) throws IOException {
-        return getTableJson("base", tableName);
+        return getTableJson(null, tableName);
     }
 
     @GET
@@ -51,5 +52,19 @@ public class TableDefinitionResource {
     @Produces("application/json")
     public String getJobTable(@PathParam("tableName") String tableName) throws IOException {
         return getTableJson("job", tableName);
+    }
+
+    @GET
+    @Path("/qualification/{tableName}")
+    @Produces("application/json")
+    public String getQualificationTable(@PathParam("tableName") String tableName) throws IOException {
+        return getTableJson("qualification", tableName);
+    }
+    
+    @GET
+    @Path("/contact/{tableName}")
+    @Produces("application/json")
+    public String getContactTable(@PathParam("tableName") String tableName) throws IOException {
+        return getTableJson("contact", tableName);
     }
 }
