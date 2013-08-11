@@ -12,19 +12,44 @@ import org.apache.commons.io.IOUtils;
 
 @Path("tables")
 public class TableDefinitionResource {
-    @GET
-    @Path("/{tableName}")
-    @Produces("application/json")
-    public String getTable(@PathParam("tableName") String tableName) throws IOException {
+    // Utility method
+    private String getTableJson(String subPath, String tableName) throws IOException {
         InputStream in = null;
         try {
             in = TableDefinitionResource.class.getResourceAsStream("/tables/" + tableName + ".json");
             ByteArrayOutputStream baos = Utils.read(in);
             String json = baos.toString("UTF-8");
-            System.out.println(json);
             return json;
         } finally {
             IOUtils.closeQuietly(in);
         }
+    }
+
+    @GET
+    @Path("/base/{tableName}")
+    @Produces("application/json")
+    public String getBaseTable(@PathParam("tableName") String tableName) throws IOException {
+        return getTableJson("base", tableName);
+    }
+
+    @GET
+    @Path("/basic/{tableName}")
+    @Produces("application/json")
+    public String getBasicTable(@PathParam("tableName") String tableName) throws IOException {
+        return getTableJson("basic", tableName);
+    }
+
+    @GET
+    @Path("/resume/{tableName}")
+    @Produces("application/json")
+    public String getResumeTable(@PathParam("tableName") String tableName) throws IOException {
+        return getTableJson("resume", tableName);
+    }
+
+    @GET
+    @Path("/job/{tableName}")
+    @Produces("application/json")
+    public String getJobTable(@PathParam("tableName") String tableName) throws IOException {
+        return getTableJson("job", tableName);
     }
 }
