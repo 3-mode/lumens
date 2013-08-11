@@ -28,6 +28,7 @@
         <link rel="stylesheet" href="app/css/hrcms.css">
         <script type="text/javascript" src="app/i18n/wlang.js"></script>
         <script type="text/javascript" src="app/i18n/lang.js"></script>
+        <script type="text/javascript" src="app/js/layout.js"></script>
         <script type="text/javascript" src="app/js/sysconfig.js"></script>
         <script type="text/javascript" src="app/js/sysheader.js"></script>
         <script type="text/javascript" src="app/js/navmenu.js"></script>
@@ -59,44 +60,44 @@
             .form-title-icon-collapse {
                 background-position: -16px -128px;
             }
+            .myClass {
+                background-color: #1f6377;
+            }
         </style>
         <script type="text/javascript">
             $(function() {
-                /*$.ajaxSetup({cache: false});
-                 $.ajax({
-                 type: "GET",
-                 url: "app/profile/html/contractInfo.html",
-                 dataType: "html",
-                 success: function(contractTempl) {
-                 var form1 = $(contractTempl).appendTo($("#ContractInfoPanel1").find('li'));
-                 $("#ContractInfo1").click(function(event) {
-                 form1.toggle(300);
-                 var icon = $(this).find("#statusIcon");
-                 icon.toggleClass("form-title-icon-expand");
-                 icon.toggleClass("form-title-icon-collapse");
-                 });
-                 var form2 = $(contractTempl).appendTo($("#ContractInfoPanel2").find('li'));
-                 $("#ContractInfo2").click(function(event) {
-                 form2.toggle(300);
-                 var icon = $(this).find("#statusIcon");
-                 icon.toggleClass("form-title-icon-expand");
-                 icon.toggleClass("form-title-icon-collapse");
-                 })
-                 }
-                 });//*/
-                var list = Hrcms.List.create($("#personForm0"));
-                list.configure({
-                    formTitleList: ["联系方式", "人员性质"],
-                    formURLList: [
-                        "app/profile/html/contactInfo.html",
-                        "app/profile/html/nature.html"
-                    ]
+                var rootLayout = Hrcms.RootLayout.create();
+                var theLayout = Hrcms.SplitLayout.create(rootLayout);
+                theLayout.configure({
+                    mode: "vertical",
+                    part1Size: 50
                 });
 
+                var part1Panel = Hrcms.Panel.create(theLayout.getPart1());
+                part1Panel.configure({
+                    panelClass: ["myClass"],
+                    panelStyle: {width: "100%", height: "100%"}
+                });
+
+                var theLayout2 = Hrcms.SplitLayout.create(theLayout.getPart2());
+                theLayout2.configure({
+                    mode: "horizontal",
+                    part1Size: 200
+                });
+
+                var theLayout3 = Hrcms.SplitLayout.create(theLayout2.getPart2());
+                theLayout3.configure({
+                    mode: "vertical",
+                    part2Size: 200
+                });
+                var part1Panel = Hrcms.Panel.create(theLayout3.getPart1());
+                part1Panel.configure({
+                    panelClass: ["myClass"],
+                    panelStyle: {width: "100%", height: "100%"}
+                });
             });
         </script>
     </head>
     <body class="hrcms">
-        <div id="personForm0" style="overflow-y: auto; padding-top: 20px; width: 1200px; height: 200px; color: rgb(53, 53, 53);"></div>
     </body>
 </html>

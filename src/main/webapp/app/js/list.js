@@ -15,13 +15,16 @@ $(function() {
         '</div>';
 
         function doExpandCollapse(accordion) {
-            accordion.find("ul").toggle(500);
+            accordion.find("ul").toggle(300);
             accordion.find(".hrcms-accordion-icon")
             .toggleClass("hrcms-accordion-icon-expand")
             .toggleClass("hrcms-accordion-icon-collapse");
         }
-        function loadForm(config, accordion, i) {
-            $.ajaxSetup({cache: false});
+        function loadForm(config, accordion) {
+            if (config.activate)
+                config.activate(accordion, accordion.find(".hrcms-accordion-title"), accordion.find(".hrcms-accordion-icon").hasClass("hrcms-accordion-icon-expand"));
+            
+            /*$.ajaxSetup({cache: false});
             $.ajax({
                 type: "GET",
                 url: config.formURLList[i],
@@ -29,14 +32,13 @@ $(function() {
                 success: function(formTempl) {
                     $(formTempl).appendTo(accordion.find("li"));
                     // Load data
-                    if (config.activate)
-                        config.activate(accordion, accordion.find(".hrcms-accordion-title"), accordion.find(".hrcms-accordion-icon").hasClass("hrcms-accordion-icon-expand"));
+
                 }
-            });
+            });*/
         }
         function addAccordion(config, i) {
             var accordion = $(sectionTempl).appendTo(accordionHolder);
-            accordion.find("b").html(config.formTitleList[i]);
+            accordion.find("b").html(config.titleList[i]);
             var accordionTitle = accordion.find(".hrcms-accordion-title");
             var form = accordion.find("ul");
             form.toggle(100);
@@ -45,19 +47,25 @@ $(function() {
                 doExpandCollapse(accordion);
                 // Load data
                 if (accordion.find("li").children().length === 0 && config.activate) {
-                    loadForm(config, accordion, i);
+                    if (config.activate)
+                        config.activate(accordion, accordion.find(".hrcms-accordion-title"),
+                                        accordion.find(".hrcms-accordion-icon").hasClass("hrcms-accordion-icon-expand"));
                 }
 
             });
         }
         tThis.configure = function(config) {
-            for (var i = 0; i < config.formTitleList.length; ++i) {
+            for (var i = 0; i < config.titleList.length; ++i) {
                 addAccordion(config, i);
             }
             var accordions = accordionHolder.find(".hrcms-accordion-item");
             if (accordions.length) {
+                var accordion = $(accordions[0]);
                 doExpandCollapse($(accordions[0]));
-                loadForm(config, $(accordions[0]), 0);
+                if (config.activate)
+                    config.activate(accordion, accordion.find(".hrcms-accordion-title"),
+                                    accordion.find(".hrcms-accordion-icon").hasClass("hrcms-accordion-icon-expand"));
+
             }
         }
         // end

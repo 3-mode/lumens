@@ -29,6 +29,7 @@
         <script type="text/javascript" src="app/i18n/wlang.js"></script>
         <script type="text/javascript" src="app/i18n/lang.js"></script>
         <script type="text/javascript" src="app/js/sysconfig.js"></script>
+        <script type="text/javascript" src="app/js/layout.js"></script>
         <script type="text/javascript" src="app/js/sysheader.js"></script>
         <script type="text/javascript" src="app/js/navmenu.js"></script>
         <script type="text/javascript" src="app/js/datagrid.js"></script>
@@ -38,6 +39,7 @@
         <script type="text/javascript" src="app/js/portlet.js"></script>
         <script type="text/javascript" src="app/js/checkbox.js"></script>
         <script type="text/javascript" src="app/js/list.js"></script>
+        <script type="text/javascript" src="app/js/tab.js"></script>
         <script type="text/javascript" src="app/js/contentview.js"></script>
         <script type="text/javascript" src="app/js/tableditorbar.js"></script>
         <script type="text/javascript" src="app/js/tableditor.js"></script>  
@@ -59,44 +61,26 @@
             .form-title-icon-collapse {
                 background-position: -16px -128px;
             }
+            .myClass {
+                background-color: #1f6377;
+            }
         </style>
         <script type="text/javascript">
             $(function() {
-                /*$.ajaxSetup({cache: false});
-                 $.ajax({
-                 type: "GET",
-                 url: "app/profile/html/contractInfo.html",
-                 dataType: "html",
-                 success: function(contractTempl) {
-                 var form1 = $(contractTempl).appendTo($("#ContractInfoPanel1").find('li'));
-                 $("#ContractInfo1").click(function(event) {
-                 form1.toggle(300);
-                 var icon = $(this).find("#statusIcon");
-                 icon.toggleClass("form-title-icon-expand");
-                 icon.toggleClass("form-title-icon-collapse");
-                 });
-                 var form2 = $(contractTempl).appendTo($("#ContractInfoPanel2").find('li'));
-                 $("#ContractInfo2").click(function(event) {
-                 form2.toggle(300);
-                 var icon = $(this).find("#statusIcon");
-                 icon.toggleClass("form-title-icon-expand");
-                 icon.toggleClass("form-title-icon-collapse");
-                 })
-                 }
-                 });//*/
-                var list = Hrcms.List.create($("#personForm0"));
-                list.configure({
-                    formTitleList: ["联系方式", "人员性质"],
-                    formURLList: [
-                        "app/profile/html/contactInfo.html",
-                        "app/profile/html/nature.html"
+                Hrcms.TabPanel.create($("#tabHolder")).configure({
+                    tab: [
+                        {id: "t1", label: "基本信息"},
+                        {id: "t2", label: "履历信息"},
+                        {id: "t3", label: "任职信息"},
+                        {id: "t4", label: "基本信息"},
+                        {id: "t5", label: "履历信息"},
+                        {id: "t6", label: "任职信息"}
                     ]
-                });
-
+                })
             });
         </script>
     </head>
     <body class="hrcms">
-        <div id="personForm0" style="overflow-y: auto; padding-top: 20px; width: 1200px; height: 200px; color: rgb(53, 53, 53);"></div>
+        <div id="tabHolder" style="display: block; width: 900px; height: 600px; padding: 10px; min-width: 100px;"></div>
     </body>
 </html>
