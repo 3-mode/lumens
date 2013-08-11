@@ -1,0 +1,21 @@
+{
+    "columns": [
+        {"label": "现职称", "field": "XianZiGeMingCheng"},
+        {"label": "任职资格名称", "field": "RenZhiZiGeMingCheng"},
+        {"label": "任职资格级别", "field": "RenZhiZiGeJiBie"},
+        {"label": "取得资格途径", "field": "QuDeZiGeTuJing"},
+        {"label": "评审单位", "field": "PingShenDanWei"},
+        {"label": "取得资格日期", "field": "QueDeZiGeRiQi"},
+        {"label": "聘任职务", "field": "PinRenZhiWu"},
+        {"label": "聘任职务级别", "field": "PinRenZhiWuJiBie"},
+        {"label": "聘任单位", "field": "PinRenDanWei"},
+        {"label": "职称等级", "field": "ZhiChengDengJi"},
+        {"label": "聘任日期", "field": "PinRenReQi"},
+        {"label": "聘任情况", "field": "PinRenQingKuang"},
+        {"label": "解聘日期", "field": "JiePinRiQi"},
+        {"label": "解聘原因", "field": "JiePieYuanYin"},
+        {"label": "备注", "field": "BeiZhu"},
+        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
+        {"label": "身份类别", "field": "ShenFenLeiBie"}
+    ]
+}

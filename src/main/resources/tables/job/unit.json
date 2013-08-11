@@ -1,0 +1,15 @@
+{
+    "columns": [
+        {"label": "人事关系所在单位", "field": "RenShiGuanXiSuoZaiDanWei"},
+        {"label": "调动时间", "field": "DiaoDongShiJian"},
+        {"label": "所在单位", "field": "SuoZaiDanWei"},
+        {"label": "科室名称", "field": "KeShiMingCheng"},
+        {"label": "现从事学科", "field": "XianCongShiXueKe"},
+        {"label": "现从事专业", "field": "XianCongShiZhuanYe"},
+        {"label": "主要岗位", "field": "ZhuYaoGangWei"},
+        {"label": "兼职岗位", "field": "JianZhiGangWei"},
+        {"label": "备注", "field": "BeiZhu"},
+        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
+        {"label": "身份类别", "field": "ShenFenLeiBie"}
+    ]
+}

@@ -1,0 +1,11 @@
+{
+    "columns": [
+        {"label": "奖励", "field": "JiangLi"},
+        {"label": "资助日期", "field": "ZiZhuRiQi"},
+        {"label": "资助金额", "field": "ZiZhuJinE"},
+        {"label": "校配套金额", "field": "XiaoPeiTaoJiJin"},
+        {"label": "备注", "field": "BeiZhu"},
+        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
+        {"label": "身份类别", "field": "ShenFenLeiBie"}
+    ]
+}

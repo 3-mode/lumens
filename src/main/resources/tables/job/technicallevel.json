@@ -1,0 +1,19 @@
+{
+    "columns": [
+        {"label": "现技术等级", "field": "XianJiShuDengJi"},
+        {"label": "工人技术等级资格", "field": "GongRenJiShuDengJiZiGe"},
+        {"label": "资格取得日期", "field": "ZiGeQuDeRiQi"},
+        {"label": "取得资格途径", "field": "QuDeZiGeTuJing"},
+        {"label": "资格评审单位", "field": "ZiGePingShenDanWei"},
+        {"label": "聘用工人技术等级", "field": "PinYongGongRenJiShuDengJi"},
+        {"label": "起聘日期", "field": "QiPinRiQi"},
+        {"label": "聘用单位", "field": "PinYongDanWei"},
+        {"label": "聘用情况", "field": "PinYongQingKuang"},
+        {"label": "解聘日期", "field": "JiePinRiQi"},
+        {"label": "解聘原因", "field": "JiePinYuanYin"},
+        {"label": "工人工种名称", "field": "GongRenGongZhongMingCheng"},
+        {"label": "备注", "field": "BeiZhu"},
+        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
+        {"label": "身份类别", "field": "ShenFenLeiBie"}
+    ]
+}

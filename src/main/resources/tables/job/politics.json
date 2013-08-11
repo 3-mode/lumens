@@ -1,0 +1,13 @@
+{
+    "columns": [
+        {"label": "政治面貌", "field": "ZhengZhiMianMao"},
+        {"label": "参加日期", "field": "CanJiaRiQi"},
+        {"label": "参加党派时所在单位", "field": "CanJiaDangPaiSuoZaiDanWei"},
+        {"label": "介绍人", "field": "JieShaoRen"},
+        {"label": "转正日期", "field": "ZhuanZhengRiQi"},
+        {"label": "异常类别", "field": "YiChangLeiBie"},
+        {"label": "备注", "field": "BeiZhu"},
+        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
+        {"label": "身份类别", "field": "ShenFenLeiBie"}
+    ]
+}

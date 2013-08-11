@@ -1,0 +1,19 @@
+{
+    "columns": [
+        {"label": "性别", "field": "XingBie"},
+        {"label": "获奖项目", "field": "HuoJiangXiangMu"},
+        {"label": "奖励级别", "field": "JiangLiJiBie"},
+        {"label": "获奖类别", "field": "HuoJiangLeiBie"},
+        {"label": "奖励方式", "field": "JiangLiFangShi"},
+        {"label": "奖励名称", "field": "JiangLiMingCheng"},
+        {"label": "奖励名称分类", "field": "JiangLiMingChengFenLei"},
+        {"label": "颁奖单位", "field": "BanJiangDanWei"},
+        {"label": "颁奖日期", "field": "BanJiangRiQi"},
+        {"label": "荣誉称号", "field": "RongYuChengHao"},
+        {"label": "获荣誉日期", "field": "HuoRongYuRiQi"},
+        {"label": "获奖角色", "field": "HuoJiangJueSe"},
+        {"label": "备注", "field": "BeiZhu"},
+        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
+        {"label": "身份类别", "field": "ShenFenLeiBie"}
+    ]
+}

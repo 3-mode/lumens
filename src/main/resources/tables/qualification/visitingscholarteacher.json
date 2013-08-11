@@ -1,0 +1,13 @@
+{
+    "columns": [
+        {"label": "推荐单位", "field": "TuiJianDanWei"},
+        {"label": "接受单位", "field": "JieShouDanWei"},
+        {"label": "访问学者", "field": "FangWenXueZhe"},
+        {"label": "课题", "field": "KeTi"},
+        {"label": "访学时间", "field": "FangXueShiJian"},
+        {"label": "访学证书号", "field": "FangXueZhengShuHao"},
+        {"label": "备注", "field": "BeiZhu"},
+        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
+        {"label": "身份类别", "field": "ShenFenLeiBie"}
+    ]
+}

@@ -1,6 +1,5 @@
 {
     "columns": [
-        {"label": "全局编号", "field": "field-1"},
         {"label": "职工号", "field": "ZhiGongHao"},
         {"label": "姓名", "field": "field-3"},
         {"label": "院处名称", "field": "field-4"},
