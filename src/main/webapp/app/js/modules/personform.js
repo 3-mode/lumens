@@ -36,7 +36,7 @@ $(function() {
                 url: formTemplUrl,
                 dataType: "html",
                 success: function(formTempl) {
-                    $(formTempl).appendTo(formsHolder.find("li"));
+                    $(formTempl).appendTo(formsHolder.find("li")).find("input").attr("disabled", true);
                     // Load data
                     var formHolder = formsHolder.find(formHolderId);
                     var dataGrid = Hrcms.DataGrid.create({
@@ -61,6 +61,12 @@ $(function() {
                                         formHolder.find('input[field-name="' + fieldName + '"]').val($(td).find("div").html());
                                     });
                                 }
+                            },
+                            header_filter: function(column) {
+                                // filter the ex field out, the "ex" fields like "pk", "fk" and etc.
+                                if (column.field_type === "ex")
+                                    return false;
+                                return true;
                             }
                             // TODO add sort function
                         });

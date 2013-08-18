@@ -85,13 +85,14 @@ $(function() {
             thead = thead.find('tr');
             var th = $('<th width="1" style="padding-left:6px;"> <input type="checkbox"></th>').appendTo(thead);
             for (var i = 0; i < columns.length; ++i) {
+                if (config.header_filter && !config.header_filter(columns[i]))
+                    continue;
                 th = $('<th style="padding-left: 8px; padding-right: 20px;"/>').appendTo(thead);
                 th.addClass("hrcms-datagrid-header sortable");
                 th.attr("field-name", columns[i].field);
                 if (!noCallBack)
                     th.on('click', sort);
-                var htxt = $('<div class="hrcms-datagrid-header-text"></div>').appendTo(th);
-                htxt.html(columns[i].label);
+                $('<div class="hrcms-datagrid-header-text"></div>').appendTo(th).html(columns[i].label);
             }
             return thead;
         }
@@ -136,7 +137,7 @@ $(function() {
                     // TODO test data is here, it should be removed when the code completed
                     var record = records[i].field_value;
                     for (var j = 0; j < columns.length; ++j) {
-                        var td = $('<td style="padding-left: 8px; padding-right: 20px;"><div></div></td>').appendTo(tr);
+                        var td = $('<td style="padding-left:8px; padding-right:20px;"><div></div></td>').appendTo(tr);
                         td.attr('field-name', columns[j].field);
                         if (j < record.length)
                             td.find("div").html(record[j]);
@@ -144,6 +145,8 @@ $(function() {
                 } else {
                     var record = records[i].field_value ? records[i].field_value : records[i];
                     for (var j = 0; j < columns.length; ++j) {
+                        if (configuration.header_filter && !configuration.header_filter(columns[j]))
+                            continue;
                         var td = newField(tr).attr('field-name', columns[j].field);
                         var field = record[columns[j].field];
                         if (field)

@@ -9,10 +9,10 @@ $(function() {
         var personForm;
         var currentModuleName;
         var SysModuleID = Hrcms.SysModuleID;
-        function generateTableDataUrl(name) {
+        function generateTableDataUrl(tablePath, dataPath) {
             return {
-                table: "rest/tables/base/" + name,
-                data: "data/test/" + name + "_data.json"
+                table: "rest/tables/" + tablePath,
+                data: "data/test/" + dataPath + ".json"
             };
         }
         tThis.loadLeftNavMenu = function(menu) {
@@ -40,53 +40,53 @@ $(function() {
                 var Url;
                 // Different module load different table info and data from different URL
                 if (SysModuleID.ContentNavMenu_InfoManage_Info_Person === event.moduleID) {
-                    Url = generateTableDataUrl("person");
+                    Url = generateTableDataUrl("base/person", "person_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Info_ContactInfo === event.moduleID) {
-                    Url = generateTableDataUrl("contact");
+                    Url = generateTableDataUrl("basic/person_contact", "contact_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Info_PersonNature === event.moduleID) {
-                    Url = generateTableDataUrl("person_properties");
+                    Url = generateTableDataUrl("basic/person_nature", "person_properties_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Info_Evaluation === event.moduleID) {
-                    Url = generateTableDataUrl("evaluation");
+                    Url = generateTableDataUrl("basic/person_evaluation", "person_evaluation_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Info_Family === event.moduleID) {
-                    Url = generateTableDataUrl("family_members");
+                    Url = generateTableDataUrl("basic/person_family", "person_family_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_JobExperience === event.moduleID) {
-                    Url = generateTableDataUrl("info_before_college");
+                    Url = generateTableDataUrl("resume/info_before_college", "info_before_college_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Degree === event.moduleID) {
-                    Url = generateTableDataUrl("education");
+                    Url = generateTableDataUrl("resume/education", "education_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_TrainingInLand === event.moduleID) {
-                    Url = generateTableDataUrl("training_inland");
+                    Url = generateTableDataUrl("resume/training_inland", "training_inland_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_TrainingOutLand === event.moduleID) {
-                    Url = generateTableDataUrl("training_outland");
+                    Url = generateTableDataUrl("resume/training_outland", "training_outland_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Award === event.moduleID) {
-                    Url = generateTableDataUrl("award");
+                    Url = generateTableDataUrl("resume/award", "asward_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Punishment === event.moduleID) {
-                    Url = generateTableDataUrl("punishment");
+                    Url = generateTableDataUrl("resume/punishment", "punishment_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_AnomalyInCollege === event.moduleID) {
-                    Url = generateTableDataUrl("anomaly");
+                    Url = generateTableDataUrl("resume/anomaly", "anomaly_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_InfoToJoinCollege === event.moduleID) {
-                    Url = generateTableDataUrl("info2joincollege");
+                    Url = generateTableDataUrl("resume/info2joincollege", "info2joincollege_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_QuitCollege === event.moduleID) {
-                    Url = generateTableDataUrl("quitcollege");
+                    Url = generateTableDataUrl("resume/quitcollege", "quitcollege_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_JobInfo_Unit === event.moduleID) {
-                    Url = generateTableDataUrl("unit");
+                    Url = generateTableDataUrl("job/unit", "unit_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_JobInfo_Politics === event.moduleID) {
-                    Url = generateTableDataUrl("politics");
+                    Url = generateTableDataUrl("job/politics", "politics_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_JobInfo_JobOfPolitics === event.moduleID) {
-                    Url = generateTableDataUrl("jobofpolitics");
+                    Url = generateTableDataUrl("job/jobofpolitics", "jobofpolitics_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_JobInfo_TechnicalTitles === event.moduleID) {
-                    Url = generateTableDataUrl("technicaltitles");
+                    Url = generateTableDataUrl("job/technicaltitles", "technicaltitles_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_JobInfo_TechnicalLevel === event.moduleID) {
-                    Url = generateTableDataUrl("technicallevel");
+                    Url = generateTableDataUrl("job/technicallevel", "technicallevel_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Qualification_PostdoctoralTeacher === event.moduleID) {
-                    Url = generateTableDataUrl("postdoctoralteacher");
+                    Url = generateTableDataUrl("qualification/postdoctoralteacher", "postdoctoralteacher_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Qualification_VisitingScholarTeacher === event.moduleID) {
-                    Url = generateTableDataUrl("visitingscholarteacher");
+                    Url = generateTableDataUrl("qualification/visitingscholarteacher", "visitingscholarteacher_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Qualification_ExpertJob === event.moduleID) {
-                    Url = generateTableDataUrl("expertjob");
+                    Url = generateTableDataUrl("qualification/expertjob", "expertjob_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Qualification_TalentsFunding === event.moduleID) {
-                    Url = generateTableDataUrl("talentsfunding");
+                    Url = generateTableDataUrl("qualification/talentsfunding", "talentsfunding_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Contract_EmploymentContract === event.moduleID) {
-                    Url = generateTableDataUrl("employmentcontract");
+                    Url = generateTableDataUrl("contact/employmentcontract", "employmentcontract_data");
                 }
                 // Event function
                 function sortup(event) {
