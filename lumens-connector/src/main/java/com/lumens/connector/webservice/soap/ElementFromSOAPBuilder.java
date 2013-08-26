@@ -19,31 +19,28 @@ import org.apache.axiom.soap.SOAPEnvelope;
  *
  * @author shaofeng wang
  */
-public class ElementFromSOAPBuilder implements SOAPConstants
-{
-    public Element buildElement(Format format, SOAPEnvelope envelope)
-    {
+public class ElementFromSOAPBuilder implements SOAPConstants {
+    public Element buildElement(Format format, SOAPEnvelope envelope) {
         // TODO need to handle binary attachment
-        if (format == null || format.getChildren() == null)
+        if (format == null || format.getChildren() == null) {
             return null;
+        }
         Element element = new DataElement(format);
         List<Format> children = format.getChildren();
-        for (Format message : children)
-        {
+        for (Format message : children) {
             Value isMessage = message.getProperty(SOAPMESSAGE);
-            if (isMessage != null && isMessage.getInt() == SOAPMESSAGE_OUT)
-            {
+            if (isMessage != null && isMessage.getInt() == SOAPMESSAGE_OUT) {
                 Element messageElement = element.addChild(message.getName());
                 String namespace = message.getProperty(TARGETNAMESPACE).
-                        getString();
+                getString();
                 SOAPBody body = envelope.getBody();
                 OMElement omElem = body.getFirstElement();
-                if (omElem != null)
-                {
+                if (omElem != null) {
                     QName qName = omElem.getQName();
                     if (qName.getLocalPart().equals(message.getName())
-                        && qName.getNamespaceURI().equals(namespace))
+                    && qName.getNamespaceURI().equals(namespace)) {
                         buildElementFromOMElement(messageElement, omElem);
+                    }
                 }
                 break;
             }
@@ -51,39 +48,36 @@ public class ElementFromSOAPBuilder implements SOAPConstants
         return element;
     }
 
-    private void buildElementFromOMElement(Element element, OMElement omElem)
-    {
+    private void buildElementFromOMElement(Element element, OMElement omElem) {
         List<Format> children = element.getFormat().getChildren();
-        if (children != null)
-        {
-            for (Format child : children)
-            {
+        if (children != null) {
+            for (Format child : children) {
                 String namespace = child.getProperty(TARGETNAMESPACE).getString();
                 Iterator<OMElement> it = omElem.getChildrenWithName(new QName(namespace, child.
-                        getName()));
-                if (it != null && it.hasNext())
-                {
+                getName()));
+                if (it != null && it.hasNext()) {
                     Element childElement = element.newChild(child);
-                    while (it.hasNext())
-                    {
+                    while (it.hasNext()) {
                         OMElement omChild = it.next();
-                        if (child.isArray())
-                        {
+                        if (child.isArray()) {
                             Element arrayItem = childElement.newArrayItem();
-                            if (child.getType() != Type.NONE && arrayItem.isArrayItem())
+                            if (child.getType() != Type.NONE && arrayItem.isArrayItem()) {
                                 arrayItem.setValue(omChild.getText());
+                            }
                             buildElementFromOMElement(arrayItem, omChild);
-                            if (arrayItem.getChildren() != null || arrayItem.isField())
+                            if (arrayItem.getChildren() != null || arrayItem.isField()) {
                                 childElement.addArrayItem(arrayItem);
-                        } else
-                        {
-                            if (child.getType() != Type.NONE)
+                            }
+                        } else {
+                            if (child.getType() != Type.NONE) {
                                 childElement.setValue(omChild.getText());
+                            }
                             buildElementFromOMElement(childElement, omChild);
                         }
                     }
-                    if (childElement.getChildren() != null || childElement.isField())
+                    if (childElement.getChildren() != null || childElement.isField()) {
                         element.addChild(childElement);
+                    }
                 }
             }
         }

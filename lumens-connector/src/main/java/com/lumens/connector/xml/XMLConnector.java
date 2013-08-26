@@ -14,41 +14,34 @@ import java.util.Map;
  *
  * @author shaofeng wang
  */
-public class XMLConnector implements Connector
-{
+public class XMLConnector implements Connector {
     @Override
-    public void open()
-    {
+    public void open() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void close()
-    {
+    public void close() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Map<String, Format> getFormatList(Direction direction)
-    {
+    public Map<String, Format> getFormatList(Direction direction) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Format getFormat(Format format, String path, Direction direction)
-    {
+    public Format getFormat(Format format, String path, Direction direction) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Operation getOperation()
-    {
+    public Operation getOperation() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void setPropertyList(Map<String, Value> propertyList)
-    {
+    public void setPropertyList(Map<String, Value> propertyList) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

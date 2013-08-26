@@ -16,81 +16,56 @@ import java.util.Properties;
  *
  * @author shaofeng wang
  */
-public class DbUtils
-{
-    public static void releaseConnection(Connection conn)
-    {
-        if (conn != null)
-        {
-            try
-            {
+public class DbUtils {
+    public static void releaseConnection(Connection conn) {
+        if (conn != null) {
+            try {
                 conn.close();
-            }
-            catch (SQLException ex)
-            {
+            } catch (SQLException ex) {
             }
         }
     }
 
     public static Connection getConnection(Driver driver, String connURL, String user,
-                                           String password)
-    {
-        try
-        {
+    String password) {
+        try {
             Properties props = new Properties();
             props.put("user", user);
             props.put("password", password);
             return driver.connect(connURL, props);
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    public static void releaseResultSet(ResultSet ret)
-    {
-        if (ret != null)
-        {
-            try
-            {
+    public static void releaseResultSet(ResultSet ret) {
+        if (ret != null) {
+            try {
                 ret.close();
-            }
-            catch (SQLException ex)
-            {
+            } catch (SQLException ex) {
             }
         }
     }
 
-    public static void releaseStatement(Statement stat)
-    {
-        if (stat != null)
-        {
-            try
-            {
+    public static void releaseStatement(Statement stat) {
+        if (stat != null) {
+            try {
                 stat.close();
-            }
-            catch (SQLException ex)
-            {
+            } catch (SQLException ex) {
             }
         }
     }
 
-    public static Object getInstance(String jarURL, String className) throws Exception
-    {
+    public static Object getInstance(String jarURL, String className) throws Exception {
         ClassLoader savedClassLoader = Thread.currentThread().getContextClassLoader();
-        try
-        {
-            ClassLoader urlClassLoader = new URLClassLoader(new URL[]
-                    {
-                        new URL(jarURL)
-                    });
+        try {
+            ClassLoader urlClassLoader = new URLClassLoader(new URL[]{
+                new URL(jarURL)
+            });
             Thread.currentThread().setContextClassLoader(urlClassLoader);
             Class clazz = Class.forName(className, true, urlClassLoader);
             return clazz.newInstance();
-        }
-        finally
-        {
+        } finally {
             Thread.currentThread().setContextClassLoader(savedClassLoader);
         }
     }

@@ -7,7 +7,5 @@ package com.lumens.connector.database.client.mysql;
  *
  * @author shaofeng wang
  */
-public class MySQLClient
-{
-
+public class MySQLClient {
 }

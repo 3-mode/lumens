@@ -20,42 +20,34 @@ import java.util.Map;
  *
  * @author shaofeng wang
  */
-public class OracleClient extends AbstractClient implements OracleConstants
-{
+public class OracleClient extends AbstractClient implements OracleConstants {
     public OracleClient(String ojdbcURL, String connURL, String user,
-                        String password)
-    {
+    String password) {
         super(ojdbcURL, ORACLE_CLASS, connURL, user, password);
     }
 
     @Override
-    public void open()
-    {
+    public void open() {
         conn = DbUtils.getConnection(driver, connURL, user, password);
     }
 
     @Override
-    public void close()
-    {
+    public void close() {
         DbUtils.releaseConnection(conn);
     }
 
     @Override
-    public Map<String, Format> getFormatList(boolean fullLoad)
-    {
+    public Map<String, Format> getFormatList(boolean fullLoad) {
         Map<String, Format> tables = new HashMap<String, Format>();
         Statement stat = null;
         PreparedStatement preparedStat = null;
         ResultSet ret = null;
         ResultSet preparedRet = null;
-        try
-        {
+        try {
             stat = conn.createStatement();
             ret = stat.executeQuery(TABLENAMES);
-            if (!ret.isClosed())
-            {
-                while (ret.next())
-                {
+            if (!ret.isClosed()) {
+                while (ret.next()) {
                     String tableName = ret.getString(1);
                     String description = ret.getString(2);
                     String type = ret.getString(3);
@@ -64,39 +56,33 @@ public class OracleClient extends AbstractClient implements OracleConstants
                     table.setProperty(DESCRIPTION, new Value(description));
                     table.setProperty(TYPE, new Value(type));
                 }
-                if (fullLoad)
-                {
+                if (fullLoad) {
                     preparedStat = conn.prepareStatement(TABLECOLUMNS + '?');
-                    for (Format format : tables.values())
-                    {
+                    for (Format format : tables.values()) {
                         preparedStat.setString(1, format.getName());
                         preparedRet = preparedStat.executeQuery();
-                        if (!preparedRet.isClosed())
-                        {
-                            while (preparedRet.next())
-                            {
+                        if (!preparedRet.isClosed()) {
+                            while (preparedRet.next()) {
                                 String columnName = preparedRet.getString(1);
                                 String dataType = preparedRet.getString(2);
                                 String dataLength = preparedRet.getString(3);
                                 Format table = format.addChild(columnName,
-                                                               Form.FIELD,
-                                                               toType(
-                                        dataType));
+                                Form.FIELD,
+                                toType(
+                                dataType));
                                 table.
-                                        setProperty(DATA_TYPE,
-                                                    new Value(dataType));
+                                setProperty(DATA_TYPE,
+                                new Value(dataType));
                                 table.setProperty(DATA_LENGTH,
-                                                  new Value(dataLength));
+                                new Value(dataLength));
                             }
                         }
                     }
                 }
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException(e);
-        } finally
-        {
+        } finally {
             DbUtils.releaseResultSet(ret);
             DbUtils.releaseStatement(stat);
             DbUtils.releaseResultSet(preparedRet);
@@ -106,33 +92,27 @@ public class OracleClient extends AbstractClient implements OracleConstants
     }
 
     @Override
-    public Format getFormat(Format format)
-    {
+    public Format getFormat(Format format) {
         Statement stat = null;
         ResultSet ret = null;
-        try
-        {
+        try {
             stat = conn.createStatement();
             ret = stat.executeQuery(
-                    TABLECOLUMNS + '\'' + format.getName() + '\'');
-            if (!ret.isClosed())
-            {
-                while (ret.next())
-                {
+            TABLECOLUMNS + '\'' + format.getName() + '\'');
+            if (!ret.isClosed()) {
+                while (ret.next()) {
                     String columnName = ret.getString(1);
                     String dataType = ret.getString(2);
                     String dataLength = ret.getString(3);
                     Format table = format.addChild(columnName, Form.FIELD,
-                                                   toType(dataType));
+                    toType(dataType));
                     table.setProperty(DATA_TYPE, new Value(dataType));
                     table.setProperty(DATA_LENGTH, new Value(dataLength));
                 }
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException(e);
-        } finally
-        {
+        } finally {
             DbUtils.releaseResultSet(ret);
             DbUtils.releaseStatement(stat);
         }
@@ -140,20 +120,20 @@ public class OracleClient extends AbstractClient implements OracleConstants
         return format;
     }
 
-    private Type toType(String dataType)
-    {
+    private Type toType(String dataType) {
         if (dataType.equalsIgnoreCase(CHAR)
-            || dataType.startsWith(VARCHAR2) || dataType.startsWith(NVARCHAR2) || dataType.
-                equalsIgnoreCase(CLOB))
+        || dataType.startsWith(VARCHAR2) || dataType.startsWith(NVARCHAR2) || dataType.
+        equalsIgnoreCase(CLOB)) {
             return Type.STRING;
-        else if (dataType.startsWith(NUMBER))
+        } else if (dataType.startsWith(NUMBER)) {
             return Type.INTEGER;
-        else if (dataType.equalsIgnoreCase(DATE))
+        } else if (dataType.equalsIgnoreCase(DATE)) {
             return Type.DATE;
-        else if (dataType.startsWith(NUMBERIC))
+        } else if (dataType.startsWith(NUMBERIC)) {
             return Type.DOUBLE;
-        else if (dataType.equalsIgnoreCase(BLOB))
+        } else if (dataType.equalsIgnoreCase(BLOB)) {
             return Type.BINARY;
+        }
         return Type.NONE;
     }
 }

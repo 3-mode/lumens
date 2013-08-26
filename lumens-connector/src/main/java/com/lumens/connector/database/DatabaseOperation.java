@@ -7,22 +7,17 @@ package com.lumens.connector.database;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.model.Element;
-import com.lumens.model.Format;
-import java.util.List;
 
 /**
  *
  * @author shaofeng wang
  */
-public class DatabaseOperation implements Operation
-{
-    DatabaseOperation(Client dbClient)
-    {
+public class DatabaseOperation implements Operation {
+    DatabaseOperation(Client dbClient) {
     }
 
     @Override
-    public OperationResult execute(Element input) throws Exception
-    {
+    public OperationResult execute(Element input) throws Exception {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

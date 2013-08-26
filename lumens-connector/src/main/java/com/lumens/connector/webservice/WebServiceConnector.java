@@ -17,8 +17,7 @@ import java.util.Map;
  *
  * @author shaofeng wang
  */
-public class WebServiceConnector implements Connector
-{
+public class WebServiceConnector implements Connector {
     public static final String WSDL = "WSDL";
     public static final String USER = "User";
     public static final String PASSWORD = "Password";
@@ -37,104 +36,98 @@ public class WebServiceConnector implements Connector
     private String proxyPassword;
 
     @Override
-    public void open()
-    {
+    public void open() {
         soapClient = new SOAPClient(this);
         soapClient.open();
         formatBuilder = soapClient.getFormatBuilder();
     }
 
     @Override
-    public void close()
-    {
-        if (soapClient != null)
+    public void close() {
+        if (soapClient != null) {
             soapClient.close();
+        }
         soapClient = null;
     }
 
     @Override
-    public Map<String, Format> getFormatList(Direction direction)
-    {
+    public Map<String, Format> getFormatList(Direction direction) {
         return formatBuilder.getFormatList(direction);
     }
 
     @Override
-    public Format getFormat(Format format, String path, Direction direction)
-    {
+    public Format getFormat(Format format, String path, Direction direction) {
         return formatBuilder.getFormat(format, path, direction);
     }
 
     @Override
-    public void setPropertyList(Map<String, Value> propertyList)
-    {
-        if (propertyList.containsKey(WSDL))
+    public void setPropertyList(Map<String, Value> propertyList) {
+        if (propertyList.containsKey(WSDL)) {
             wsdlURL = propertyList.get(WSDL).getString();
-        if (propertyList.containsKey(USER))
+        }
+        if (propertyList.containsKey(USER)) {
             user = propertyList.get(USER).getString();
-        if (propertyList.containsKey(PASSWORD))
+        }
+        if (propertyList.containsKey(PASSWORD)) {
             password = propertyList.get(PASSWORD).getString();
-        if (propertyList.containsKey(PROXY_ADDR))
+        }
+        if (propertyList.containsKey(PROXY_ADDR)) {
             proxyAddr = propertyList.get(PROXY_ADDR).getString();
-        if (propertyList.containsKey(PROXY_PORT))
+        }
+        if (propertyList.containsKey(PROXY_PORT)) {
             proxyPort = propertyList.get(PROXY_PORT).getInt();
-        if (propertyList.containsKey(PROXY_USER))
+        }
+        if (propertyList.containsKey(PROXY_USER)) {
             proxyUser = propertyList.get(PROXY_USER).getString();
-        if (propertyList.containsKey(PROXY_PASSWORD))
+        }
+        if (propertyList.containsKey(PROXY_PASSWORD)) {
             proxyPassword = propertyList.get(PROXY_PASSWORD).getString();
+        }
     }
 
     @Override
-    public Operation getOperation()
-    {
+    public Operation getOperation() {
         return new WebServiceOperation(getClient());
     }
 
-    protected SOAPClient getClient()
-    {
+    protected SOAPClient getClient() {
         return soapClient;
     }
 
-    public String getProxyAddr()
-    {
+    public String getProxyAddr() {
         return proxyAddr;
     }
 
-    public int getProxyPort()
-    {
+    public int getProxyPort() {
         return proxyPort;
     }
 
-    public String getProxyUser()
-    {
+    public String getProxyUser() {
         return proxyUser;
     }
 
-    public String getProxyPassword()
-    {
+    public String getProxyPassword() {
         return proxyPassword;
     }
 
     /**
      * @return the wsdlURL
      */
-    public String getWsdlURL()
-    {
+    public String getWsdlURL() {
         return wsdlURL;
     }
 
     /**
      * @return the user
      */
-    public String getUser()
-    {
+    public String getUser() {
         return user;
     }
 
     /**
      * @return the password
      */
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 }

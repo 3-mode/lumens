@@ -14,18 +14,15 @@ import org.apache.axiom.soap.SOAPEnvelope;
  *
  * @author shaofeng wang
  */
-public class WebServiceOperation implements Operation
-{
+public class WebServiceOperation implements Operation {
     private SOAPClient client;
 
-    WebServiceOperation(SOAPClient client)
-    {
+    WebServiceOperation(SOAPClient client) {
         this.client = client;
     }
 
     @Override
-    public OperationResult execute(Element input) throws Exception
-    {
+    public OperationResult execute(Element input) throws Exception {
         SOAPEnvelope envelope = client.execute(input);
         return new WebServiceResult(envelope);
     }

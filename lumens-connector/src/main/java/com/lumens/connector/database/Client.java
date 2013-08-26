@@ -10,8 +10,7 @@ import java.util.Map;
  *
  * @author shaofeng wang
  */
-public interface Client
-{
+public interface Client {
     public void open();
 
     public void close();

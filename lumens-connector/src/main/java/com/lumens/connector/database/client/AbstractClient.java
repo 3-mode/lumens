@@ -13,8 +13,7 @@ import java.sql.Driver;
  *
  * @author shaofeng wang
  */
-public abstract class AbstractClient implements Client
-{
+public abstract class AbstractClient implements Client {
     protected URLClassLoader driverLoader;
     protected Driver driver;
     protected Connection conn;
@@ -23,17 +22,13 @@ public abstract class AbstractClient implements Client
     protected String password;
 
     public AbstractClient(String driverURL, String driverClass, String connURL, String user,
-                          String password)
-    {
-        try
-        {
+    String password) {
+        try {
             driver = (Driver) DbUtils.getInstance(driverURL, driverClass);
             this.connURL = connURL;
             this.user = user;
             this.password = password;
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }

@@ -8,8 +8,7 @@ package com.lumens.connector;
  *
  * @author shaofeng wang
  */
-public enum Direction
-{
+public enum Direction {
     IN,
     OUT
 }

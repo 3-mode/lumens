@@ -10,7 +10,6 @@ import java.util.Map;
  *
  * @author shaofeng wang
  */
-public interface Configurable
-{
+public interface Configurable {
     public void setPropertyList(Map<String, Value> parameters);
 }

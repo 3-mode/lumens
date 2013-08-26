@@ -15,8 +15,7 @@ import java.util.Map;
  *
  * @author shaofeng wang
  */
-public class DatabaseConnector implements Connector
-{
+public class DatabaseConnector implements Connector {
     public static final String OJDBC = "OJDBC";
     public static final String CONNECTION_URL = "ConnectionURL";
     public static final String USER = "User";
@@ -31,8 +30,7 @@ public class DatabaseConnector implements Connector
     private boolean fullLoad;
 
     @Override
-    public void open()
-    {
+    public void open() {
         // TODO only create oracle client now, select different db client later
         dbClient = new OracleClient(ojdbcURL, connURL, user, password);
         dbClient.open();
@@ -40,43 +38,44 @@ public class DatabaseConnector implements Connector
     }
 
     @Override
-    public void close()
-    {
-        if (dbClient != null)
+    public void close() {
+        if (dbClient != null) {
             dbClient.close();
+        }
         tables = null;
     }
 
     @Override
-    public Map<String, Format> getFormatList(Direction direction)
-    {
+    public Map<String, Format> getFormatList(Direction direction) {
         return tables;
     }
 
     @Override
-    public Format getFormat(Format format, String path, Direction direction)
-    {
+    public Format getFormat(Format format, String path, Direction direction) {
         return dbClient.getFormat(format);
     }
 
     @Override
-    public Operation getOperation()
-    {
+    public Operation getOperation() {
         return new DatabaseOperation(dbClient);
     }
 
     @Override
-    public void setPropertyList(Map<String, Value> propertyList)
-    {
-        if (propertyList.containsKey(OJDBC))
+    public void setPropertyList(Map<String, Value> propertyList) {
+        if (propertyList.containsKey(OJDBC)) {
             ojdbcURL = propertyList.get(OJDBC).getString();
-        if (propertyList.containsKey(CONNECTION_URL))
+        }
+        if (propertyList.containsKey(CONNECTION_URL)) {
             connURL = propertyList.get(CONNECTION_URL).getString();
-        if (propertyList.containsKey(USER))
+        }
+        if (propertyList.containsKey(USER)) {
             user = propertyList.get(USER).getString();
-        if (propertyList.containsKey(PASSWORD))
+        }
+        if (propertyList.containsKey(PASSWORD)) {
             password = propertyList.get(PASSWORD).getString();
-        if (propertyList.containsKey(FULL_LOAD))
+        }
+        if (propertyList.containsKey(FULL_LOAD)) {
             fullLoad = propertyList.get(FULL_LOAD).getBoolean();
+        }
     }
 }

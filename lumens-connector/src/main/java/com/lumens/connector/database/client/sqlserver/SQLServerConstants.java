@@ -7,7 +7,6 @@ package com.lumens.connector.database.client.sqlserver;
  *
  * @author shaofeng wang
  */
-public interface SQLServerConstants
-{
+public interface SQLServerConstants {
     public String SQLSERVER_CLASS = "";
 }

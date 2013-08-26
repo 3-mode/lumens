@@ -7,8 +7,7 @@ package com.lumens.connector.webservice.soap;
  *
  * @author shaofeng wang
  */
-public interface SOAPConstants
-{
+public interface SOAPConstants {
     public int SOAP11 = 11;
     public int SOAP12 = 12;
     public int SOAPMESSAGE_IN = 0;

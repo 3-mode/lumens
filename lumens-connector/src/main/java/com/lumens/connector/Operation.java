@@ -10,7 +10,6 @@ import com.lumens.model.Element;
  *
  * @author washaofe
  */
-public interface Operation
-{
+public interface Operation {
     public OperationResult execute(Element input) throws Exception;
 }
