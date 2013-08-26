@@ -1,4 +1,4 @@
-conn system/q;
+﻿conn system/q;
 create user hrcms identified by q;
 grant connect to hrcms;
 
