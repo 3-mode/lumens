@@ -1,4 +1,4 @@
-﻿create table 个人概况 
+create table 个人概况 
 (
    婚姻状况             VARCHAR2(255)        not null,
    国家代码                 VARCHAR2(50),
