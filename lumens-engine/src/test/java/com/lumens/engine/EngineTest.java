@@ -59,16 +59,12 @@ public class EngineTest extends TestCase
         // The code is used to create a format copy for registered request
         getOpenFundStringRequest = getOpenFundStringRequest.recursiveClone();
         getOpenFundStringResponse = getOpenFundStringResponse.recursiveClone();
-        datasource.registerFormat(targetName,
-        getOpenFundStringRequest, Direction.IN);
-        datasource.registerFormat(targetName,
-        getOpenFundStringResponse, Direction.OUT);
+        datasource.registerFormat(targetName, getOpenFundStringRequest, Direction.IN);
+        datasource.registerFormat(targetName, getOpenFundStringResponse, Direction.OUT);
 
         String targetName2 = getOpenFundStringRequest.getName() + (nameCounter++);
-        datasource.registerFormat(targetName2,
-        getOpenFundStringRequest, Direction.IN);
-        datasource.registerFormat(targetName2,
-        getOpenFundStringResponse, Direction.OUT);
+        datasource.registerFormat(targetName2, getOpenFundStringRequest, Direction.IN);
+        datasource.registerFormat(targetName2, getOpenFundStringResponse, Direction.OUT);
 
         //******************************************************************************************
         // Create transformation to a data source
@@ -116,7 +112,6 @@ public class EngineTest extends TestCase
             List<Executor> tExList = executor.execute();
             executorStack.push(tExList);
         }
-
     }
 
     private void doTestProjectSerialize(TransformProject project) throws Exception

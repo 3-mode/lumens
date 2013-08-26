@@ -3,7 +3,7 @@
  */
 package com.lumens.processor.transform.serializer;
 
-import com.lumens.io.StringWriter;
+import com.lumens.io.StringUTF8Writer;
 import com.lumens.io.XmlSerializer;
 import com.lumens.model.Format;
 import com.lumens.processor.transform.TransformRule;
@@ -13,6 +13,7 @@ import com.lumens.processor.transform.serializer.parser.TransformRuleParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
 import org.xml.sax.InputSource;
@@ -55,11 +56,11 @@ public class TransformRuleXmlSerializer implements XmlSerializer
     @Override
     public void write(OutputStream out) throws Exception
     {
-        StringWriter xml = new StringWriter(out);
+        StringUTF8Writer xml = new StringUTF8Writer(out);
         writeTransformRuleToXml(xml, outputRule, INDENT);
     }
 
-    private void writeTransformRuleToXml(StringWriter xml, TransformRule rule, String indent)
+    private void writeTransformRuleToXml(StringUTF8Writer xml, TransformRule rule, String indent)
             throws IOException
     {
         xml.print(indent).print("<transform-rule");
@@ -71,7 +72,7 @@ public class TransformRuleXmlSerializer implements XmlSerializer
         xml.print(indent).println("</transform-rule>");
     }
 
-    private void writeTransformRuleItemToXml(StringWriter xml, TransformRuleItem ruleItem,
+    private void writeTransformRuleItemToXml(StringUTF8Writer xml, TransformRuleItem ruleItem,
                                              String indent) throws IOException
     {
         if (ruleItem == null)

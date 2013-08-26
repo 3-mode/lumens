@@ -12,7 +12,7 @@ import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.serializer.parser.ProjectHandlerImpl;
 import com.lumens.engine.serializer.parser.ProjectParser;
-import com.lumens.io.StringWriter;
+import com.lumens.io.StringUTF8Writer;
 import com.lumens.io.XmlSerializer;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
@@ -51,7 +51,7 @@ public class ProjectXmlSerializer implements XmlSerializer
     @Override
     public void write(OutputStream out) throws Exception
     {
-        StringWriter xml = new StringWriter(out);
+        StringUTF8Writer xml = new StringUTF8Writer(out);
         xml.print("<project").print(" name=\"").print(project.getName()).println("\">");
         xml.print(INDENT).println("<description>").print("<![CDATA[").print(
                 project.getDescription()).println("]]>").print(INDENT).println("</description>");
@@ -61,7 +61,7 @@ public class ProjectXmlSerializer implements XmlSerializer
         xml.println("</project>");
     }
 
-    private void writeDatasourceListToXml(StringWriter xml,
+    private void writeDatasourceListToXml(StringUTF8Writer xml,
                                           List<DataSource> datasourceList,
                                           String indent) throws Exception
     {
@@ -74,7 +74,7 @@ public class ProjectXmlSerializer implements XmlSerializer
         }
     }
 
-    private void writeDatasourceToXml(StringWriter xml, DataSource ds, String indent) throws Exception
+    private void writeDatasourceToXml(StringUTF8Writer xml, DataSource ds, String indent) throws Exception
     {
         String nextIndent = indent + INDENT;
         xml.print(indent).print("<datasource name=\"").print(ds.getName()).print("\" class-name=\"").
@@ -93,7 +93,7 @@ public class ProjectXmlSerializer implements XmlSerializer
         xml.print(indent).println("</datasource>");
     }
 
-    private void writeTargetListToXml(StringWriter xml,
+    private void writeTargetListToXml(StringUTF8Writer xml,
                                       Map<String, TransformComponent> targetList,
                                       String indent) throws IOException
     {
@@ -112,7 +112,7 @@ public class ProjectXmlSerializer implements XmlSerializer
         }
     }
 
-    private void writeDatasourceParameterListToXml(StringWriter xml,
+    private void writeDatasourceParameterListToXml(StringUTF8Writer xml,
                                                    Map<String, Value> propertyList,
                                                    String indent) throws IOException
     {
@@ -133,7 +133,7 @@ public class ProjectXmlSerializer implements XmlSerializer
         }
     }
 
-    private void writeRegisterFormatListToXml(StringWriter xml, Direction direction,
+    private void writeRegisterFormatListToXml(StringUTF8Writer xml, Direction direction,
                                               Map<String, FormatEntry> registeredFormatList,
                                               String indent) throws Exception
     {
@@ -156,14 +156,14 @@ public class ProjectXmlSerializer implements XmlSerializer
         }
     }
 
-    private void writeFormatToXml(StringWriter xml, Format format, String indent) throws Exception
+    private void writeFormatToXml(StringUTF8Writer xml, Format format, String indent) throws Exception
     {
         FormatXmlSerializer formatXml = new FormatXmlSerializer(format);
         formatXml.initIndent(indent);
         formatXml.write(xml.getOutStream());
     }
 
-    private void writeDataTransformationListToXml(StringWriter xml,
+    private void writeDataTransformationListToXml(StringUTF8Writer xml,
                                                   List<DataTransformation> dataTransformationList,
                                                   String indent) throws Exception
     {
@@ -179,7 +179,7 @@ public class ProjectXmlSerializer implements XmlSerializer
         }
     }
 
-    private void writeDataTransformationToXml(StringWriter xml, DataTransformation dt,
+    private void writeDataTransformationToXml(StringUTF8Writer xml, DataTransformation dt,
                                               String indent) throws Exception
     {
         String nextIndent = indent + INDENT;
@@ -193,7 +193,7 @@ public class ProjectXmlSerializer implements XmlSerializer
         xml.print(indent).println("</processor>");
     }
 
-    private void writeTransformRuleList(StringWriter xml,
+    private void writeTransformRuleList(StringUTF8Writer xml,
                                         List<TransformRuleEntry> transformRuleList,
                                         String indent) throws Exception
     {
@@ -207,7 +207,7 @@ public class ProjectXmlSerializer implements XmlSerializer
         }
     }
 
-    private void writeTransformRuleEntry(StringWriter xml, TransformRuleEntry ruleEntry,
+    private void writeTransformRuleEntry(StringUTF8Writer xml, TransformRuleEntry ruleEntry,
                                          String indent) throws Exception
     {
         xml.print(indent).print("<transform-rule-entry name=\"").print(ruleEntry.getName()).print(
@@ -218,7 +218,7 @@ public class ProjectXmlSerializer implements XmlSerializer
         xml.print(indent).println("</transform-rule-entry>");
     }
 
-    private void writeRuleToXml(StringWriter xml, TransformRule rule, String indent) throws Exception
+    private void writeRuleToXml(StringUTF8Writer xml, TransformRule rule, String indent) throws Exception
     {
         TransformRuleXmlSerializer ruleXml = new TransformRuleXmlSerializer(rule);
         ruleXml.initIndent(indent);

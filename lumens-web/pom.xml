@@ -7,7 +7,7 @@
   <packaging>war</packaging>
   <version>1.0</version>
 
-  <name>lumens-web</name>
+  <name>Lumens Web Client</name>
   <url>http://maven.apache.org</url>
 
   <dependencies>

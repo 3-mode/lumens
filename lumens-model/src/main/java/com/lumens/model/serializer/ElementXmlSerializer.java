@@ -3,7 +3,7 @@
  */
 package com.lumens.model.serializer;
 
-import com.lumens.io.StringWriter;
+import com.lumens.io.StringUTF8Writer;
 import com.lumens.io.XmlSerializer;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
@@ -41,12 +41,12 @@ public class ElementXmlSerializer implements XmlSerializer
     @Override
     public void write(OutputStream out) throws Exception
     {
-        StringWriter dataOut = new StringWriter(out);
+        StringUTF8Writer dataOut = new StringUTF8Writer(out);
         writeElementToXml(element, "", dataOut);
     }
 
     private void writeElementToXml(Element element, String indent,
-                                   StringWriter out) throws Exception
+                                   StringUTF8Writer out) throws Exception
     {
         boolean closeTag = false;
         Format format = element.getFormat();

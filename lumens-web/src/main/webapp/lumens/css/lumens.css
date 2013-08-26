@@ -336,7 +336,7 @@ path.relation {
     overflow: hidden;
     border-spacing: 0;
     background: rgb(245, 245, 245);
-    border-collapse: separate;
+    border-collapse: collapse;
 }
 .table-td-border-side {
     float: left;

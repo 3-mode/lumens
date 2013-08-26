@@ -14,7 +14,6 @@ import com.lumens.processor.transform.TransformProcessor;
 import com.lumens.processor.transform.TransformRule;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,15 +54,18 @@ public class ConnectorTest extends TestCase implements SOAPConstants {
             props.put(DatabaseConnector.FULL_LOAD, new Value(true));
             cntr.setPropertyList(props);
             cntr.open();
-            OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream("C:/db.table.xml"), "UTF-8");
+            FileOutputStream fos = new FileOutputStream("C:/db.tables.xml");
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             for (Format format : cntr.getFormatList(null).values()) {
                 FormatXmlSerializer xml = new FormatXmlSerializer(format);
                 xml.write(baos);
             }
-            out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-            out.write(baos.toString("UTF-8"));
-            out.close();
+            String xmlContent = baos.toString("UTF-8");
+            System.out.println(xmlContent);
+            fos.write(baos.toByteArray());
+            fos.close();
+            //osw.write(xmlContent);
+            //osw.close();
         } finally {
             cntr.close();
         }

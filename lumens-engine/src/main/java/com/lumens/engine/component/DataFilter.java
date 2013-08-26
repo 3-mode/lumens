@@ -7,6 +7,6 @@ package com.lumens.engine.component;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class DataFilter {
-
+public class DataFilter
+{
 }

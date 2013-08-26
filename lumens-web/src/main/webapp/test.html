@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <script type="text/javascript" src="tool/jquery/js/jquery.js"></script>
         <script type="text/javascript" src="tool/jquery/js/jquery-ui.js"></script>
         <!-- Splitter plug-in -->
@@ -14,7 +14,7 @@
         <!-- D3 -->
         <script type="text/javascript" src="tool/d3/d3.js"></script>
         <!--lumens-->
-        <link rel="stylesheet" type="text/css" href="lumens/styles/lumens.css"/>
+        <link rel="stylesheet" type="text/css" href="lumens/css/lumens.css"/>
         <script type="text/javascript" src="lumens/controls.js"></script>
         <script type="text/javascript" src="lumens/lumens.js"></script>
         <style>
@@ -33,9 +33,7 @@
                 var map = {};
                 map['james'] = {"name": "james", "job": "SE"};
                 map['tom'] = {"name": "tom", "job": "SE"};
-
                 delete map['james'];
-
                 console.log(map['tom']);
                 console.log(map['james']);
             });
@@ -124,6 +122,10 @@
                 width: 100px;
                 height: 100px;
             }
+            .component {
+            }
+            svg { border: 1px solid black; }
+            svg div { border: 1px dotted blue; }
         </style>
         <script type="text/javascript">
             $(function() {
@@ -145,95 +147,64 @@
                 assign("#text2", "text2");
                 assign("#text3", "text3");
                 assign("#text4", "test4");
+
+                $('.component').draggable();
             });
         </script>
     </head>
     <body>
-        <input id="text"/>
-        <textarea id="text2"></textarea>
-        <select id="text3">
-            <option value="text1">1</option>
-            <option value="text2">2</option>
-            <option value="text3">3</option>
-        </select>
-        <div id="text4" ></div>
-        <div style="position: relative; width: 900px; height:300px; left: 100px; top: 100px;">
-            <div id="test" class="scb"/>
+    <input id="text"/>
+    <textarea id="text2"></textarea>
+    <select id="text3">
+        <option value="text1">1</option>
+        <option value="text2">2</option>
+        <option value="text3">3</option>
+    </select>
+    <div class="component" style="position:relative;left:200px;top:400px;width:140px;height:57px;">
+        <div style="border:1px solid rgba(177, 177, 177, .5);background-color:rgb(214, 214, 214);float:top; width:140px; height:25px">
+            <img style="padding-top:3px;padding-left:3px;" src="lumens/images/status/16/disconnect.png"/>
         </div>
-        <div id="jevent_test"></div>
-        <script type="text/javascript">
+        <div style="border:1px solid rgba(177, 177, 177, .3);background-color:rgb(236, 236, 236);width:140px; height:32px"></div>
+    </div>
+    <div id="text4" ></div>
+    <div style="position: relative; width: 900px; height:300px; left: 100px; top: 100px;">
+        <div id="test" class="scb"> </div>
+    </div>
+    <div id="jevent_test"></div>
+    <script type="text/javascript">
+        function item_clone() {
+            return $('<div id="draggable-item" style="width:50px;height:20px"/>');
+        }
+        var svg = d3.select("#jevent_test").append("svg");
+        var rr = svg.append("svg:rect")
+        .attr({
+            "width": "100px",
+            "height": "50px"
+        });
+        $(rr.node()).draggable({
+            appendTo: $("#jevent_test"),
+            helper: item_clone
+        });
+        var tt = svg.append("svg:text")
+        .attr({
+            "width": "200px",
+            "height": "100px",
+            "x": 120,
+            "y": 120
+        }).text("Hello World");
 
-            function item_clone() {
-                return $('<div id="draggable-item" style="width:50px;height:20px"/>');
+        $(tt.node()).droppable({
+            drop: function(e, u) {
+                console.log(this);
             }
-            var svg = d3.select("#jevent_test").append("svg");
-            var rr = svg.append("svg:rect")
-            .attr({
-                "width": "100px",
-                "height": "50px"
-            });
-            $(rr.node()).draggable({
-                appendTo: $("#jevent_test"),
-                helper: item_clone
-            });
-            var tt = svg.append("svg:text")
-            .attr({
-                "width": "200px",
-                "height": "100px",
-                "x": 120,
-                "y": 120
-            }).text("Hello World");
-
-            $(tt.node()).droppable({
-                drop: function(e, u) {
-                    console.log(this);
-                }
-            });
-            $(tt.node()).mousedown(function() {
-                console.log("mousedown");
-            });
-
-            tt.on("mousedown", function() {
-                console.log("mousedown");
-            });//*/
-        </script>
-        <div id="viz"></div>
-        <script type="text/javascript">
-
-            var vizSVG = d3.select("#viz")
-            .append("svg:svg")
-            .attr("width", 400)
-            .attr("height", 300);
-
-            vizSVG.append("svg:circle")
-            .attr("id", "blueCircle")
-            .attr("cx", 50)
-            .attr("cy", 140)
-            .attr("r", 40)
-            .attr("fill", "blue")
-            .call(d3.behavior.drag().on("drag", move));
-
-            vizSVG.append("svg:circle")
-            .attr("id", "redCircle")
-            .attr("cx", 100)
-            .attr("cy", 140)
-            .attr("r", 40)
-            .attr("fill", "red")
-            .call(d3.behavior.drag().on("drag", move));
-
-            function move() {
-                this.parentNode.appendChild(this);
-                var dragTarget = d3.select(this);
-                dragTarget
-                .attr("cx", function() {
-                    return d3.event.dx + parseInt(dragTarget.attr("cx"))
-                })
-                .attr("cy", function() {
-                    var y = parseInt(dragTarget.attr("cy"));
-                    return d3.event.dy + y
-                });
-            }
-            ;
-        </script>
-    </body>
+        });
+        $(tt.node()).mousedown(function() {
+            console.log("mousedown");
+        });
+        tt.on("mousedown", function() {
+            console.log("mousedown");
+        });//*/
+    </script>
+    <div id="viz"></div>
+</body>
 </html>

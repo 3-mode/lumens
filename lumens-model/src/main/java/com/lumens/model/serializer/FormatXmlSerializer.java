@@ -3,7 +3,7 @@
  */
 package com.lumens.model.serializer;
 
-import com.lumens.io.StringWriter;
+import com.lumens.io.StringUTF8Writer;
 import com.lumens.io.XmlSerializer;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
@@ -67,13 +67,13 @@ public class FormatXmlSerializer implements XmlSerializer
     @Override
     public void write(OutputStream out) throws Exception
     {
-        StringWriter dataOut = new StringWriter(out);
+        StringUTF8Writer dataOut = new StringUTF8Writer(out);
         writeFormatToXml(format, INDENT, dataOut);
     }
 
     private void writePropertyListToXml(Map<String, Value> properties,
                                         String indent,
-                                        StringWriter out) throws IOException
+                                        StringUTF8Writer out) throws IOException
     {
         Set<Map.Entry<String, Value>> props = properties.entrySet();
         for (Map.Entry<String, Value> en : props)
@@ -87,7 +87,7 @@ public class FormatXmlSerializer implements XmlSerializer
     }
 
     private void writeFormatToXml(Format format, String indent,
-                                  StringWriter out) throws Exception
+                                  StringUTF8Writer out) throws Exception
     {
         boolean closeTag = false;
         out.print(indent).print("<format name=\"").print(format.
