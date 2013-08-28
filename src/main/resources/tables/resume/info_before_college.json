@@ -1,12 +1,15 @@
 {
     "columns": [
-        {"label": "起始年月", "field": "QiShiNianYue"},
-        {"label": "截止年月", "field": "JieZhiNianYue"},
-        {"label": "所在单位名称", "field": "SuoZaiDanWeiMingCheng"},
-        {"label": "从事工作内容", "field": "CongShiGongZuoNeiRong"},
-        {"label": "曾任党政职务", "field": "CengRenDangZhengZhiWu"},
-        {"label": "曾任技术职务", "field": "CengRenJiShuZhiWu"},
-        {"label": "证明人", "field": "ZhengMingRen"},
-        {"label": "备注", "field": "BeiZhu"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "起始年月", "field": "起始年月"},
+        {"label": "截止年月", "field": "截止年月"},
+        {"label": "所在单位名称", "field": "所在单位名称"},
+        {"label": "从事工作内容", "field": "从事工作内容"},
+        {"label": "曾任党政职务", "field": "曾任党政职务"},
+        {"label": "曾任技术职务", "field": "曾任技术职务"},
+        {"label": "证明人", "field": "证明人"},
+        {"label": "备注", "field": "备注"}
     ]
 }

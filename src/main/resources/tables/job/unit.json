@@ -1,15 +1,18 @@
 {
     "columns": [
-        {"label": "人事关系所在单位", "field": "RenShiGuanXiSuoZaiDanWei"},
-        {"label": "调动时间", "field": "DiaoDongShiJian"},
-        {"label": "所在单位", "field": "SuoZaiDanWei"},
-        {"label": "科室名称", "field": "KeShiMingCheng"},
-        {"label": "现从事学科", "field": "XianCongShiXueKe"},
-        {"label": "现从事专业", "field": "XianCongShiZhuanYe"},
-        {"label": "主要岗位", "field": "ZhuYaoGangWei"},
-        {"label": "兼职岗位", "field": "JianZhiGangWei"},
-        {"label": "备注", "field": "BeiZhu"},
-        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
-        {"label": "身份类别", "field": "ShenFenLeiBie"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "人事关系所在单位", "field": "人事关系所在单位"},
+        {"label": "调动时间", "field": "调动时间"},
+        {"label": "所在单位", "field": "所在单位"},
+        {"label": "科室名称", "field": "科室名称"},
+        {"label": "现从事学科", "field": "现从事学科"},
+        {"label": "现从事专业", "field": "现从事专业"},
+        {"label": "主要岗位", "field": "主要岗位"},
+        {"label": "兼职岗位", "field": "兼职岗位"},
+        {"label": "备注", "field": "备注"},
+        {"label": "最后修改时间", "field": "最后修改时间"},
+        {"label": "身份类别", "field": "身份类别"}
     ]
 }

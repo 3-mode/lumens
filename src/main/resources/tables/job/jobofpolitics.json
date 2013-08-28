@@ -1,19 +1,22 @@
 {
     "columns": [
-        {"label": "职务类别", "field": "ZhiWuLeiBie"},
-        {"label": "职务名称", "field": "ZhiWuMingCheng"},
-        {"label": "任职日期", "field": "RenZhiRiQi"},
-        {"label": "任职部门", "field": "ZhiWuBuMen"},
-        {"label": "任职文号", "field": "RenZhiWenHao"},
-        {"label": "职务级别", "field": "ZhiWuJiBie"},
-        {"label": "职务变动类别", "field": "ZhiWuBianDongLeiBie"},
-        {"label": "当前任职状况", "field": "DangQianRenZhiZhuangKuang"},
-        {"label": "免职日期", "field": "MianZhiRiQi"},
-        {"label": "免职方式", "field": "MianZhiFangShi"},
-        {"label": "免职原因", "field": "MianZhiYuanYin"},
-        {"label": "免职文号", "field": "MianZhiWenHao"},
-        {"label": "备注", "field": "BeiZhu"},
-        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
-        {"label": "身份类别", "field": "ShenFenLeiBie"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "职务类别", "field": "职务类别"},
+        {"label": "职务名称", "field": "职务名称"},
+        {"label": "任职日期", "field": "任职日期"},
+        {"label": "任职部门", "field": "任职部门"},
+        {"label": "任职文号", "field": "任职文号"},
+        {"label": "职务级别", "field": "职务级别"},
+        {"label": "职务变动类别", "field": "职务变动类别"},
+        {"label": "当前任职状况", "field": "当前任职状况"},
+        {"label": "免职日期", "field": "免职日期"},
+        {"label": "免职方式", "field": "免职方式"},
+        {"label": "免职原因", "field": "免职原因"},
+        {"label": "免职文号", "field": "免职文号"},
+        {"label": "备注", "field": "备注"},
+        {"label": "最后修改时间", "field": "最后修改时间"},
+        {"label": "身份类别", "field": "身份类别"}
     ]
 }

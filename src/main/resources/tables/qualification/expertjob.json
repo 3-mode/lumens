@@ -1,13 +1,16 @@
 {
     "columns": [
-        {"label": "专家类别", "field": "ZhuanJianLeiBie"},
-        {"label": "获得时间", "field": "HuoDeShiJian"},
-        {"label": "获得荣誉时所在单位", "field": "HuoDeRongYuSuoZaiDanWei"},
-        {"label": "专家证书号", "field": "ZhuanJiaZhengShuHao"},
-        {"label": "起始时间", "field": "QiShiShiJian"},
-        {"label": "结束时间", "field": "JiShuShiJian"},
-        {"label": "金额", "field": "JinE"},
-        {"label": "备注", "field": "BeiZhu"},
-        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "专家类别", "field": "专家类别"},
+        {"label": "获得时间", "field": "获得时间"},
+        {"label": "获得荣誉时所在单位", "field": "获得荣誉时所在单位"},
+        {"label": "专家证书号", "field": "专家证书号"},
+        {"label": "起始时间", "field": "起始时间"},
+        {"label": "结束时间", "field": "结束时间"},
+        {"label": "金额", "field": "金额"},
+        {"label": "备注", "field": "备注"},
+        {"label": "最后修改时间", "field": "最后修改时间"}
     ]
 }

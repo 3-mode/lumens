@@ -1,11 +1,14 @@
 {
     "columns": [
-        {"label": "奖励", "field": "JiangLi"},
-        {"label": "资助日期", "field": "ZiZhuRiQi"},
-        {"label": "资助金额", "field": "ZiZhuJinE"},
-        {"label": "校配套金额", "field": "XiaoPeiTaoJiJin"},
-        {"label": "备注", "field": "BeiZhu"},
-        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
-        {"label": "身份类别", "field": "ShenFenLeiBie"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "奖励", "field": "奖励"},
+        {"label": "资助日期", "field": "资助日期"},
+        {"label": "资助金额", "field": "资助金额"},
+        {"label": "校配套金额", "field": "校配套金额"},
+        {"label": "备注", "field": "备注"},
+        {"label": "最后修改时间", "field": "最后修改时间"},
+        {"label": "身份类别", "field": "身份类别"}
     ]
 }

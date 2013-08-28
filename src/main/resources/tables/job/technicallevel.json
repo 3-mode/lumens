@@ -1,19 +1,22 @@
 {
     "columns": [
-        {"label": "现技术等级", "field": "XianJiShuDengJi"},
-        {"label": "工人技术等级资格", "field": "GongRenJiShuDengJiZiGe"},
-        {"label": "资格取得日期", "field": "ZiGeQuDeRiQi"},
-        {"label": "取得资格途径", "field": "QuDeZiGeTuJing"},
-        {"label": "资格评审单位", "field": "ZiGePingShenDanWei"},
-        {"label": "聘用工人技术等级", "field": "PinYongGongRenJiShuDengJi"},
-        {"label": "起聘日期", "field": "QiPinRiQi"},
-        {"label": "聘用单位", "field": "PinYongDanWei"},
-        {"label": "聘用情况", "field": "PinYongQingKuang"},
-        {"label": "解聘日期", "field": "JiePinRiQi"},
-        {"label": "解聘原因", "field": "JiePinYuanYin"},
-        {"label": "工人工种名称", "field": "GongRenGongZhongMingCheng"},
-        {"label": "备注", "field": "BeiZhu"},
-        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
-        {"label": "身份类别", "field": "ShenFenLeiBie"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "现技术等级", "field": "现技术等级"},
+        {"label": "工人技术等级资格", "field": "工人技术等级资格"},
+        {"label": "资格取得日期", "field": "资格取得日期"},
+        {"label": "取得资格途径", "field": "取得资格途径"},
+        {"label": "资格评审单位", "field": "资格评审单位"},
+        {"label": "聘用工人技术等级", "field": "聘用工人技术等级"},
+        {"label": "起聘日期", "field": "起聘日期"},
+        {"label": "聘用单位", "field": "聘用单位"},
+        {"label": "聘用情况", "field": "聘用情况"},
+        {"label": "解聘日期", "field": "解聘日期"},
+        {"label": "解聘原因", "field": "解聘原因"},
+        {"label": "工人工种名称", "field": "工人工种名称"},
+        {"label": "备注", "field": "备注"},
+        {"label": "最后修改时间", "field": "最后修改时间"},
+        {"label": "身份类别", "field": "身份类别"}
     ]
 }

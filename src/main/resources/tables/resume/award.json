@@ -1,19 +1,21 @@
 {
     "columns": [
-        {"label": "性别", "field": "XingBie"},
-        {"label": "获奖项目", "field": "HuoJiangXiangMu"},
-        {"label": "奖励级别", "field": "JiangLiJiBie"},
-        {"label": "获奖类别", "field": "HuoJiangLeiBie"},
-        {"label": "奖励方式", "field": "JiangLiFangShi"},
-        {"label": "奖励名称", "field": "JiangLiMingCheng"},
-        {"label": "奖励名称分类", "field": "JiangLiMingChengFenLei"},
-        {"label": "颁奖单位", "field": "BanJiangDanWei"},
-        {"label": "颁奖日期", "field": "BanJiangRiQi"},
-        {"label": "荣誉称号", "field": "RongYuChengHao"},
-        {"label": "获荣誉日期", "field": "HuoRongYuRiQi"},
-        {"label": "获奖角色", "field": "HuoJiangJueSe"},
-        {"label": "备注", "field": "BeiZhu"},
-        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
-        {"label": "身份类别", "field": "ShenFenLeiBie"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "获奖项目", "field": "获奖项目"},
+        {"label": "奖励级别", "field": "奖励级别"},
+        {"label": "获奖类别", "field": "获奖类别"},
+        {"label": "奖励方式", "field": "奖励方式"},
+        {"label": "奖励名称", "field": "奖励名称"},
+        {"label": "奖励名称分类", "field": "奖励名称分类"},
+        {"label": "颁奖单位", "field": "颁奖单位"},
+        {"label": "颁奖日期", "field": "颁奖日期"},
+        {"label": "荣誉称号", "field": "荣誉称号"},
+        {"label": "获荣誉日期", "field": "获荣誉日期"},
+        {"label": "获奖角色", "field": "获奖角色"},
+        {"label": "备注", "field": "备注"},
+        {"label": "最后修改时间", "field": "最后修改时间"},
+        {"label": "身份类别", "field": "身份类别"}
     ]
 }

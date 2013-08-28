@@ -1,44 +1,17 @@
 {
     "columns": [
-        {
-            "label": "现记录",
-            "field": "XianJiLu"
-        },
-        {
-            "label": "调整时间",
-            "field": "TiaoZhengShiJian"
-        },
-        {
-            "label": "编制类别",
-            "field": "BianZhiLeiBie"
-        },
-        {
-            "label": "岗位",
-            "field": "GangWei"
-        },
-        {
-            "label": "人员类别",
-            "field": "RenYuanLeiBie"
-        },
-        {
-            "label": "人员状态",
-            "field": "RenYuanZhuangTai"
-        },
-        {
-            "label": "统计分类",
-            "field": "TongJiFenLei"
-        },
-        {
-            "label": "备注",
-            "field": "BeiZhu"
-        },
-        {
-            "label": "身份类别",
-            "field": "ShenFenLeiBie"
-        },
-        {
-            "label": "最后修改时间",
-            "field": "LastModifyTime"
-        }
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "现记录", "field": "现记录"},
+        {"label": "调整时间", "field": "调整时间"},
+        {"label": "编制类别", "field": "编制类别"},
+        {"label": "岗位", "field": "岗位"},
+        {"label": "人员类别", "field": "人员类别"},
+        {"label": "人员状态", "field": "人员状态"},
+        {"label": "统计分类", "field": "统计分类"},
+        {"label": "备注", "field": "备注"},
+        {"label": "身份类别", "field": "身份类别"},
+        {"label": "最后修改时间", "field": "最后修改时间"}
     ]
 }

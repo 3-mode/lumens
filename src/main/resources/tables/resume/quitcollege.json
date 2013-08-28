@@ -1,10 +1,13 @@
 {
     "columns": [
-        {"label": "离校年月", "field": "LiXiaoNianYue"},
-        {"label": "离校原因", "field": "LiXiaoYuanYin"},
-        {"label": "离校去向", "field": "LiXiaoQuXiang"},
-        {"label": "备注", "field": "BeiZhu"},
-        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
-        {"label": "身份类别", "field": "ShenFenLeiBie"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "离校年月", "field": "离校年月"},
+        {"label": "离校原因", "field": "离校原因"},
+        {"label": "离校去向", "field": "离校去向"},
+        {"label": "备注", "field": "备注"},
+        {"label": "最后修改时间", "field": "最后修改时间"},
+        {"label": "身份类别", "field": "身份类别"}
     ]
 }

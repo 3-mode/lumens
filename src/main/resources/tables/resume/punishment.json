@@ -1,16 +1,19 @@
 {
     "columns": [
-        {"label": "惩处名称", "field": "ChengChuMingCheng"},
-        {"label": "惩处原因", "field": "ChengChuYuanYin"},
-        {"label": "惩处内容", "field": "ChengChuNeiRong"},
-        {"label": "惩处单位", "field": "ChengChuDanWei"},
-        {"label": "惩处文号", "field": "ChengChuWenHao"},
-        {"label": "惩处日期", "field": "ChengChuRiQi"},
-        {"label": "惩处撤销日期", "field": "ChengChuCheXiaoRiQi"},
-        {"label": "惩处撤销文号", "field": "ChengChuCheXiaoWenHao"},
-        {"label": "惩处撤销原因", "field": "ChengChuCheXiaoYuanYin"},
-        {"label": "备注", "field": "BeiZhu"},
-        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
-        {"label": "身份类别", "field": "ShenFenLeiBie"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "惩处名称", "field": "惩处名称"},
+        {"label": "惩处原因", "field": "惩处原因"},
+        {"label": "惩处内容", "field": "惩处内容"},
+        {"label": "惩处单位", "field": "惩处单位"},
+        {"label": "惩处文号", "field": "惩处文号"},
+        {"label": "惩处日期", "field": "惩处日期"},
+        {"label": "惩处撤销日期", "field": "惩处撤销日期"},
+        {"label": "惩处撤销文号", "field": "惩处撤销文号"},
+        {"label": "惩处撤销原因", "field": "惩处撤销原因"},
+        {"label": "备注", "field": "备注"},
+        {"label": "最后修改时间", "field": "最后修改时间"},
+        {"label": "身份类别", "field": "身份类别"}
     ]
 }

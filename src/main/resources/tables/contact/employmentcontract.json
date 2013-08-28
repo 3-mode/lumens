@@ -1,12 +1,15 @@
 {
     "columns": [
-        {"label": "合同类别", "field": "HeTongLeiBie"},
-        {"label": "起聘日期", "field": "QiPinRiQi"},
-        {"label": "终聘日期", "field": "ZhongPinRiQi"},
-        {"label": "合同编号", "field": "HeTongBianHao"},
-        {"label": "合同文件", "field": "HeTongWenJian"},
-        {"label": "聘用岗位", "field": "PinYongGangWei"},
-        {"label": "备注", "field": "BeiZhu"},
-        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "合同类别", "field": "合同类别"},
+        {"label": "起聘日期", "field": "起聘日期"},
+        {"label": "终聘日期", "field": "终聘日期"},
+        {"label": "合同编号", "field": "合同编号"},
+        {"label": "合同文件", "field": "合同文件"},
+        {"label": "聘用岗位", "field": "聘用岗位"},
+        {"label": "备注", "field": "备注"},
+        {"label": "最后修改时间", "field": "最后修改时间"}
     ]
 }

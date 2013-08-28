@@ -1,32 +1,14 @@
 {
     "columns": [
-        {
-            "label": "考核时间",
-            "field": "KaoHeShiJian"
-        },
-        {
-            "label": "考核类别",
-            "field": "KaoHeLeiBie"
-        },
-        {
-            "label": "考核岗位",
-            "field": "KaoHeGangWei"
-        },
-        {
-            "label": "考核内容",
-            "field": "KaoHeNeiRong"
-        },
-        {
-            "label": "考核等级",
-            "field": "KaoHeDengJi"
-        },
-        {
-            "label": "考核结果",
-            "field": "KaoHeJieGuo"
-        },
-        {
-            "label": "备注",
-            "field": "BeiZhu"
-        }
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "考核时间", "field": "考核时间"},
+        {"label": "考核类别", "field": "考核类别"},
+        {"label": "考核岗位", "field": "考核岗位"},
+        {"label": "考核内容", "field": "考核内容"},
+        {"label": "考核等级", "field": "考核等级"},
+        {"label": "考核结果", "field": "考核结果"},
+        {"label": "备注", "field": "备注"}
     ]
 }

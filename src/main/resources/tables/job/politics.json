@@ -1,13 +1,16 @@
 {
     "columns": [
-        {"label": "政治面貌", "field": "ZhengZhiMianMao"},
-        {"label": "参加日期", "field": "CanJiaRiQi"},
-        {"label": "参加党派时所在单位", "field": "CanJiaDangPaiSuoZaiDanWei"},
-        {"label": "介绍人", "field": "JieShaoRen"},
-        {"label": "转正日期", "field": "ZhuanZhengRiQi"},
-        {"label": "异常类别", "field": "YiChangLeiBie"},
-        {"label": "备注", "field": "BeiZhu"},
-        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
-        {"label": "身份类别", "field": "ShenFenLeiBie"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "政治面貌", "field": "政治面貌"},
+        {"label": "参加日期", "field": "参加日期"},
+        {"label": "参加党派时所在单位", "field": "参加党派时所在单位"},
+        {"label": "介绍人", "field": "介绍人"},
+        {"label": "转正日期", "field": "转正日期"},
+        {"label": "异常类别", "field": "异常类别"},
+        {"label": "备注", "field": "备注"},
+        {"label": "最后修改时间", "field": "最后修改时间"},
+        {"label": "身份类别", "field": "身份类别"}
     ]
 }

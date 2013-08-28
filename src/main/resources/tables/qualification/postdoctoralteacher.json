@@ -1,15 +1,18 @@
 {
     "columns": [
-        {"label": "博士后职工号", "field": "BoShiHouZhiGouHao"},
-        {"label": "博士后姓名", "field": "BoShiHouXingMing"},
-        {"label": "流动站名称", "field": "LiuDongZhanMingCheng"},
-        {"label": "所在学院", "field": "SuoZaiXueYuan"},
-        {"label": "研究项目", "field": "YanJiuXiangMu"},
-        {"label": "进站时间", "field": "JinZhanShiJian"},
-        {"label": "进站学科", "field": "JinZhanXueKe"},
-        {"label": "博士后类型", "field": "BoShiHouLeiXing"},
-        {"label": "备注", "field": "BeiZhu"},
-        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
-        {"label": "身份类别", "field": "ShenFenLeiBie"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "博士后职工号", "field": "博士后职工号"},
+        {"label": "博士后姓名", "field": "博士后姓名"},
+        {"label": "流动站名称", "field": "流动站名称"},
+        {"label": "所在学院", "field": "所在学院"},
+        {"label": "研究项目", "field": "研究项目"},
+        {"label": "进站时间", "field": "进站时间"},
+        {"label": "进站学科", "field": "进站学科"},
+        {"label": "博士后类型", "field": "博士后类型"},
+        {"label": "备注", "field": "备注"},
+        {"label": "最后修改时间", "field": "最后修改时间"},
+        {"label": "身份类别", "field": "身份类别"}
     ]
 }

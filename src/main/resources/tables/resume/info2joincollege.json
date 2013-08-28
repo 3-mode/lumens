@@ -1,16 +1,19 @@
 {
     "columns": [
-        {"label": "最近来校", "field": "ZuiJinLaiXiao"},
-        {"label": "来校年月", "field": "LaiXiaoNianYue"},
-        {"label": "来源类别", "field": "LaiYuanLeiBie"},
-        {"label": "来源地区", "field": "LaiYuanDiQue"},
-        {"label": "来校原因", "field": "LaiXiaoYuanYin"},
-        {"label": "原单位名称", "field": "YuanDanWeiMingCheng"},
-        {"label": "原党政职务", "field": "YuanDangZhengZhiWu"},
-        {"label": "原技术职务", "field": "YuanJiShuZhiWu"},
-        {"label": "原从事学科", "field": "YuanCongShiXueKe"},
-        {"label": "备注", "field": "BeiZhu"},
-        {"label": "最后修改时间", "field": "ZuiHouXiuGaiShiJian"},
-        {"label": "身份类别", "field": "ShenFenLeiBie"}
+        {"label": "职工号", "field": "职工号", "field_type": "ex"},
+        {"label": "姓名", "field": "姓名", "field_type": "ex"},
+        {"label": "院处名称", "field": "院处名称", "field_type": "ex"},
+        {"label": "最近来校", "field": "最近来校"},
+        {"label": "来校年月", "field": "来校年月"},
+        {"label": "来源类别", "field": "来源类别"},
+        {"label": "来源地区", "field": "来源地区"},
+        {"label": "来校原因", "field": "来校原因"},
+        {"label": "原单位名称", "field": "原单位名称"},
+        {"label": "原党政职务", "field": "原党政职务"},
+        {"label": "原技术职务", "field": "原技术职务"},
+        {"label": "原从事学科", "field": "原从事学科"},
+        {"label": "备注", "field": "备注"},
+        {"label": "最后修改时间", "field": "最后修改时间"},
+        {"label": "身份类别", "field": "身份类别"}
     ]
 }
