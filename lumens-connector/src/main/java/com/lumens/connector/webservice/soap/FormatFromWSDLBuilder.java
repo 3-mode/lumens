@@ -5,6 +5,7 @@ package com.lumens.connector.webservice.soap;
 
 import com.lumens.connector.Direction;
 import com.lumens.connector.FormatBuilder;
+import static com.lumens.connector.webservice.soap.SOAPConstants.TARGETNAMESPACE;
 import com.lumens.model.AccessPath;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
@@ -16,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,7 @@ import javax.wsdl.BindingInput;
 import javax.wsdl.BindingOperation;
 import javax.wsdl.BindingOutput;
 import javax.wsdl.Definition;
+import javax.wsdl.Import;
 import javax.wsdl.Input;
 import javax.wsdl.Message;
 import javax.wsdl.Operation;
@@ -77,10 +80,10 @@ import org.xml.sax.InputSource;
  * @author shaofeng wang
  */
 public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
-XMLEntityResolver {
+                                              XMLEntityResolver {
     private String wsdlURL;
     private Definition definition;
-    private XSModel xsModel;
+    private XSModelHolder xsModel;
     private Map<String, Element> schemaCache;
     private static final Map<String, Type> buildinTypes = new HashMap<String, Type>();
     private Map<String, Format> consumeServices;
@@ -112,6 +115,24 @@ XMLEntityResolver {
         buildinTypes.put("hexBinary", Type.BINARY);
     }
 
+    private class XSModelHolder {
+        private List<XSModel> models = new ArrayList<XSModel>();
+
+        public void addModel(XSModel model) {
+            models.add(model);
+        }
+
+        public XSElementDeclaration getElementDeclaration(String name, String namespace) {
+            for (XSModel model : models) {
+                XSElementDeclaration xsElement = model.getElementDeclaration(name, namespace);
+                if (xsElement != null) {
+                    return xsElement;
+                }
+            }
+            return null;
+        }
+    }
+
     public FormatFromWSDLBuilder(String wsdlURL) {
         this.wsdlURL = wsdlURL;
     }
@@ -122,7 +143,9 @@ XMLEntityResolver {
             produceServices = null;
             WSDLReader wsdlReader11 = WSDLFactory.newInstance().newWSDLReader();
             definition = wsdlReader11.readWSDL(wsdlURL);
-            buildSchemaModel();
+            xsModel = new XSModelHolder();
+            buildSchemaModel(definition);
+            buildSchemafromSubWSDL(definition);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -144,76 +167,84 @@ XMLEntityResolver {
         Format child = format.getChildByPath(accessPath);
         if (child == null || path.endsWith(child.getName())) {
             while (count >= 0) {
-                getFormatForMessage(format, accessPath.removeRight(--count),
-                soapMessageType);
+                getFormatForMessage(format, accessPath.removeRight(--count), soapMessageType);
             }
         }
         return format;
     }
 
-    private void buildSchemaModel() {
-        if (xsModel == null) {
-            // Caching the schema information
-            List schemas = definition.getTypes().getExtensibilityElements();
-            Set<Map.Entry<String, String>> namespaceSet = definition.
-            getNamespaces().entrySet();
-            if (schemas.size() > 1) {
-                throw new RuntimeException(
-                "Not support multiple schema in one WSDL");
+    private void buildSchemafromSubWSDL(Definition rootDefinition) {
+        // TODO if the wsdl import the sub wsdl, need to handle it here
+        Map wsdlImport = rootDefinition.getImports();
+        if (wsdlImport == null || wsdlImport.isEmpty()) {
+            return;
+        }
+        for (Object vec : wsdlImport.values()) {
+            for (Object o : (Collection) vec) {
+                Definition wsdlDefinition = ((Import) o).getDefinition();
+                buildSchemaModel(wsdlDefinition);
             }
-            for (Object o : schemas) {
-                if (o instanceof Schema) {
-                    try {
-                        Schema s = (Schema) o;
-                        Element schema = s.getElement();
-                        for (Map.Entry<String, String> entry : namespaceSet) {
-                            StringBuilder b = new StringBuilder();
-                            if (entry.getKey().isEmpty()) {
-                                b.append("xmlns");
-                            } else {
-                                b.append("xmlns:").append(entry.getKey());
-                            }
-                            String attrNS = b.toString();
-                            if (!schema.hasAttribute(attrNS)) {
-                                schema.setAttribute(attrNS, entry.getValue());
-                            }
-                        }
-                        schemaCache = new HashMap<String, Element>();
-                        Map imports = s.getImports();
-                        for (Object importO : imports.values()) {
-                            Collection schemaVec = (Collection) importO;
-                            for (Object vecO : schemaVec) {
-                                SchemaImport sImport = (SchemaImport) vecO;
-                                buildSchemaCache(sImport.getReferencedSchema());
-                            }
-                        }
-                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        toString(schema, out);
-                        XMLSchemaLoader loader = new XMLSchemaLoader();
-                        DocumentBuilderFactory domFactory = DocumentBuilderFactory.
-                        newInstance();
-                        domFactory.setNamespaceAware(true);
-                        domFactory.setValidating(false);
-                        DocumentBuilder builder = domFactory.
-                        newDocumentBuilder();
-                        DOMImplementationLS domLS = (DOMImplementationLS) builder.
-                        getDOMImplementation();
-                        LSInput input = domLS.createLSInput();
-                        ByteArrayInputStream bais = new ByteArrayInputStream(out.
-                        toByteArray());
-                        InputSource is = new InputSource(bais);
-                        input.setEncoding(is.getEncoding());
-                        input.setPublicId(is.getPublicId());
-                        input.setSystemId(is.getSystemId());
-                        input.setCharacterStream(is.getCharacterStream());
-                        input.setByteStream(is.getByteStream());
-                        loader.setEntityResolver(this);
-                        xsModel = loader.load(input);
-                        schemaCache = null;
-                    } catch (Exception ex) {
-                        throw new RuntimeException(ex);
+        }
+    }
+
+    private void buildSchemaModel(Definition wsdlDefinition) {
+        // Caching the schema information
+        List schemas = wsdlDefinition.getTypes().getExtensibilityElements();
+        Set<Map.Entry<String, String>> namespaceSet = definition.
+        getNamespaces().entrySet();
+        if (schemas.size() > 1) {
+            throw new RuntimeException("Not support multiple schema in one WSDL");
+        } else if (schemas.isEmpty()) {
+            return;
+        }
+        // a WSDL only contain a schema definition
+        Object o = schemas.get(0);
+        if (o instanceof Schema) {
+            try {
+                Schema s = (Schema) o;
+                Element schema = s.getElement();
+                for (Map.Entry<String, String> entry : namespaceSet) {
+                    StringBuilder b = new StringBuilder();
+                    if (entry.getKey().isEmpty()) {
+                        b.append("xmlns");
+                    } else {
+                        b.append("xmlns:").append(entry.getKey());
+                    }
+                    String attrNS = b.toString();
+                    if (!schema.hasAttribute(attrNS)) {
+                        schema.setAttribute(attrNS, entry.getValue());
                     }
                 }
+                schemaCache = new HashMap<String, Element>();
+                Map imports = s.getImports();
+                for (Object importO : imports.values()) {
+                    Collection schemaVec = (Collection) importO;
+                    for (Object vecO : schemaVec) {
+                        SchemaImport sImport = (SchemaImport) vecO;
+                        buildSchemaCache(sImport.getReferencedSchema());
+                    }
+                }
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                toString(schema, out);
+                XMLSchemaLoader loader = new XMLSchemaLoader();
+                DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+                domFactory.setNamespaceAware(true);
+                domFactory.setValidating(false);
+                DocumentBuilder builder = domFactory.newDocumentBuilder();
+                DOMImplementationLS domLS = (DOMImplementationLS) builder.getDOMImplementation();
+                LSInput input = domLS.createLSInput();
+                ByteArrayInputStream bais = new ByteArrayInputStream(out.toByteArray());
+                InputSource is = new InputSource(bais);
+                input.setEncoding(is.getEncoding());
+                input.setPublicId(is.getPublicId());
+                input.setSystemId(is.getSystemId());
+                input.setCharacterStream(is.getCharacterStream());
+                input.setByteStream(is.getByteStream());
+                loader.setEntityResolver(this);
+                xsModel.addModel(loader.load(input));
+                schemaCache = null;
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         }
     }
@@ -222,38 +253,28 @@ XMLEntityResolver {
         List<Format> children = format.getChildren();
         for (Format child : children) {
             Value prop = child.getProperty(SOAPMESSAGE);
-            if (prop != null && param == prop.getInt()
-            && (accessPath.isEmpty() || child.getName().equals(accessPath.
-            left(1).toString()))) {
+            if (prop != null && param == prop.getInt() && (accessPath.isEmpty() || child.getName().equals(accessPath.left(1).toString()))) {
                 format = child;
                 break;
             }
         }
         String name = format.getName();
         String namespace = format.getProperty(TARGETNAMESPACE).getString();
-        XSElementDeclaration xsElement = xsModel.
-        getElementDeclaration(name,
-        namespace);
+        XSElementDeclaration xsElement = xsModel.getElementDeclaration(name, namespace);
         if (xsElement != null) {
             XSTypeDefinition xsTypeDef = xsElement.getTypeDefinition();
             if (xsTypeDef.getTypeCategory() == XSTypeDefinition.COMPLEX_TYPE) {
                 XSComplexTypeDefinition xsComplex = (XSComplexTypeDefinition) xsTypeDef;
                 buildFieldFromXSAttributeList(format, xsComplex);
-                buildFormatFromXSComplexType(format, null, null, accessPath.
-                removeLeft(1), xsComplex,
-                false, 2);
+                buildFormatFromXSComplexType(format, null, null, accessPath.removeLeft(1), xsComplex, false, 2);
             } else if (xsTypeDef.getTypeCategory() == XSTypeDefinition.SIMPLE_TYPE) {
                 XSSimpleTypeDefinition xsSimple = (XSSimpleTypeDefinition) xsTypeDef;
-                buildFormatFromXSSimpleType(format, name, namespace, null,
-                xsSimple, false);
+                buildFormatFromXSSimpleType(format, name, namespace, null, xsSimple, false);
             }
         }
     }
 
-    private static void buildFromatFromElement(Format parent,
-    XSElementDeclaration xsElement,
-    Path accessPath, boolean isArray,
-    int level) {
+    private static void buildFromatFromElement(Format parent, XSElementDeclaration xsElement, Path accessPath, boolean isArray, int level) {
         String name = xsElement.getName();
         String namespace = xsElement.getNamespace();
 
@@ -261,34 +282,32 @@ XMLEntityResolver {
         if (xsTypeDef.getTypeCategory() == XSTypeDefinition.COMPLEX_TYPE) {
 
             XSComplexTypeDefinition xsComplex = (XSComplexTypeDefinition) xsTypeDef;
-            buildFormatFromXSComplexType(parent, name, namespace, accessPath,
-            xsComplex, isArray,
-            level);
+            buildFormatFromXSComplexType(parent, name, namespace, accessPath, xsComplex, isArray, level);
         } else if (xsTypeDef.getTypeCategory() == XSTypeDefinition.SIMPLE_TYPE) {
 
             XSSimpleTypeDefinition xsSimple = (XSSimpleTypeDefinition) xsTypeDef;
-            buildFormatFromXSSimpleType(parent, name, namespace, null, xsSimple,
-            isArray);
+            buildFormatFromXSSimpleType(parent, name, namespace, null, xsSimple, isArray);
         }
     }
 
     private static void buildFormatFromXSComplexType(Format parent, String name,
-    String namespace,
-    Path accessPath,
-    XSComplexTypeDefinition xsComplex,
-    boolean isArray, int level) {
+                                                     String namespace,
+                                                     Path accessPath,
+                                                     XSComplexTypeDefinition xsComplex,
+                                                     boolean isArray, int level) {
         short contentType = xsComplex.getContentType();
         if (contentType == XSComplexTypeDefinition.CONTENTTYPE_SIMPLE) {
             XSTypeDefinition baseType = xsComplex.getBaseType();
             int max = 20;
             while (baseType != null
-            && baseType.getType() == XSComplexTypeDefinition.CONTENTTYPE_SIMPLE && --max > 0) {
+                   && baseType.getType() == XSComplexTypeDefinition.CONTENTTYPE_SIMPLE && --max > 0) {
                 baseType = baseType.getBaseType();
             }
 
             if (!acceptFormat(name, accessPath)) {
                 return;
             }
+
             if (!accessPath.isEmpty()) {
                 accessPath = accessPath.removeLeft(1);
             }
@@ -296,14 +315,14 @@ XMLEntityResolver {
             Format format = parent.getChild(name);
             if (format == null) {
                 format = buildFormatFromXSSimpleType(parent, name, namespace,
-                xsComplex,
-                (XSSimpleTypeDefinition) baseType,
-                isArray);
+                                                     xsComplex,
+                                                     (XSSimpleTypeDefinition) baseType,
+                                                     isArray);
             }
             buildFieldFromXSAttributeList(format, xsComplex);
         } else if (contentType == XSComplexTypeDefinition.SIMPLE_TYPE) {
             buildFormatFromXSSimpleType(parent, name, namespace, xsComplex,
-            xsComplex.getSimpleType(), isArray);
+                                        xsComplex.getSimpleType(), isArray);
         } else if (contentType == XSComplexTypeDefinition.CONTENTTYPE_ELEMENT) {
             if (name != null) {
                 if (!acceptFormat(name, accessPath)) {
@@ -342,10 +361,10 @@ XMLEntityResolver {
     }
 
     private static Format buildFormatFromXSSimpleType(Format parent, String name,
-    String namespace,
-    XSComplexTypeDefinition xsComplex,
-    XSSimpleTypeDefinition xsSimple,
-    boolean isArray) {
+                                                      String namespace,
+                                                      XSComplexTypeDefinition xsComplex,
+                                                      XSSimpleTypeDefinition xsSimple,
+                                                      boolean isArray) {
         Format format = parent.getChild(name);
         if (format == null) {
             Form form = null;
@@ -356,14 +375,20 @@ XMLEntityResolver {
             }
             format = parent.addChild(name, form);
             format.setProperty(TARGETNAMESPACE, new Value(namespace));
-            String simpleName = xsSimple.getName();
-            if (XMLSCHEMAXSD.equalsIgnoreCase(xsSimple.getNamespace())) {
-                Type type = buildinTypes.get(simpleName);
-                if (type != null) {
-                    format.setType(type);
-                    return format;
+            boolean bNotFound = true;
+            String simpleName;
+            do {
+                simpleName = xsSimple.getName();
+                if (XMLSCHEMAXSD.equalsIgnoreCase(xsSimple.getNamespace())) {
+                    Type type = buildinTypes.get(simpleName);
+                    if (type != null) {
+                        format.setType(type);
+                        return format;
+                    }
+                } else {
+                    xsSimple = (XSSimpleTypeDefinition) xsSimple.getBaseType();
                 }
-            }
+            } while (bNotFound);
 
             // TODO it should log an error not throw an exception
             throw new RuntimeException(
@@ -374,8 +399,8 @@ XMLEntityResolver {
     }
 
     private static void buildFromFromXSParticle(Format parent,
-    XSParticle xsParticle,
-    Path accessPath, int level) {
+                                                XSParticle xsParticle,
+                                                Path accessPath, int level) {
         boolean isUnbounded = xsParticle.getMaxOccursUnbounded();
         int maxOccurs = xsParticle.getMaxOccurs();
         boolean isArray = isUnbounded || (maxOccurs > 1);
@@ -420,8 +445,8 @@ XMLEntityResolver {
             InputSource is = new InputSource(bais);
             is.setPublicId(ns);
             XMLInputSource xmlInputSource = new XMLInputSource(is.getPublicId(),
-            is.getSystemId(),
-            xmlri.
+                                                               is.getSystemId(),
+                                                               xmlri.
             getBaseSystemId());
             if (is.getCharacterStream() != null) {
                 xmlInputSource.setCharacterStream(is.getCharacterStream());
@@ -438,6 +463,9 @@ XMLEntityResolver {
 
     private void buildSchemaCache(Schema schema) {
         Element e = schema.getElement();
+        if (schemaCache.containsKey(e.getAttribute(TARGETNAMESPACE))) {
+            return;
+        }
         schemaCache.put(e.getAttribute(TARGETNAMESPACE), e);
         Map imports = schema.getImports();
         if (imports != null && imports.values() != null) {
@@ -452,7 +480,7 @@ XMLEntityResolver {
     }
 
     private static void buildFieldFromXSAttributeList(Format format,
-    XSComplexTypeDefinition xsComplex) {
+                                                      XSComplexTypeDefinition xsComplex) {
         XSObjectList attrUses = xsComplex.getAttributeUses();
         for (Object o : attrUses) {
             XSAttributeUse attrUse = (XSAttributeUse) o;
@@ -473,7 +501,7 @@ XMLEntityResolver {
     }
 
     private static Map<String, Format> buildServices(Definition definition,
-    Direction direction) {
+                                                     Direction direction) {
         Map<String, Format> services = new HashMap<String, Format>();
         Collection<Service> wsServices = definition.getServices().values();
         for (Service service : wsServices) {
@@ -485,8 +513,7 @@ XMLEntityResolver {
                     continue;
                 }
                 Binding binding = port.getBinding();
-                List<BindingOperation> bindingOperations = binding.
-                getBindingOperations();
+                List<BindingOperation> bindingOperations = binding.getBindingOperations();
                 for (BindingOperation bindingOperation : bindingOperations) {
                     String name = bindingOperation.getName();
                     if (services.get(name) != null) {
@@ -511,7 +538,7 @@ XMLEntityResolver {
                         portFmt.setProperty(BINDINGOUTPUT, outputName);
                     }
                     portFmt.setProperty(TARGETNAMESPACE,
-                    new Value(binding.getQName().
+                                        new Value(binding.getQName().
                     getNamespaceURI()));
                     buildMessages(portFmt, binding.getPortType(), direction);
                 }
@@ -521,7 +548,7 @@ XMLEntityResolver {
     }
 
     private static void buildMessages(Format port, PortType portType,
-    Direction direction) {
+                                      Direction direction) {
         if (portType != null) {
             String strInputName = null;
             Value vName = port.getProperty(BINDINGINPUT);
@@ -534,8 +561,8 @@ XMLEntityResolver {
                 strOutputName = vName.getString();
             }
             Operation operation = portType.getOperation(port.getName(),
-            strInputName,
-            strOutputName);
+                                                        strInputName,
+                                                        strOutputName);
             if (operation != null) {
                 Message message = null;
                 if (direction == Direction.IN) {
@@ -553,7 +580,7 @@ XMLEntityResolver {
     }
 
     private static void buildFormatFormMessage(Message message, Format port,
-    int soapMessageMode) {
+                                               int soapMessageMode) {
         Collection<Part> parts = message.getParts().values();
         for (Part part : parts) {
             // TODO does not handle http call here, the qname is null for http call
