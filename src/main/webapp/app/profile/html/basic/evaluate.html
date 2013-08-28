@@ -2,31 +2,45 @@
 <table class="hrcms-report-table" id="evaluateInfo" style="margin-top: 10px;">
     <tbody>
         <tr>
-            <td field-label="KaoHeShiJian" style="width: 60px; height: 20px; text-align: right;"></td>
+            <td field-label="考核时间" style="width: 60px; height: 20px; text-align: right;"></td>
             <td style="width: 150px; height: 20px; border-left:1px solid rgb(163, 163, 163);">
-                <input field-name="KaoHeShiJian" style="margin-left:2px; width:100%;" type="text" /></td>
-            <td field-label="KaoHeLeiBie" style="width: 60px; height: 20px; text-align: right;"></td>
+                <input field-name="考核时间" style="margin-left:2px; width:100%;" type="text" /></td>
+            <td field-label="考核类别" style="width: 60px; height: 20px; text-align: right;"></td>
             <td style="width: 150px; height: 20px; border-left:1px solid rgb(163, 163, 163);">
-                <input field-name="KaoHeLeiBie" style="margin-left:2px; width:100%;" type="text" /></td>
-            <td field-label="KaoHeDengJi" style="width: 60px; height: 20px; text-align: right;"></td>
+                <input field-name="考核类别" style="margin-left:2px; width:100%;" type="text" /></td>
+            <td field-label="考核等级" style="width: 60px; height: 20px; text-align: right;"></td>
             <td style="width: 150px; height: 20px; border-left:1px solid rgb(163, 163, 163);">
-                <input field-name="KaoHeDengJi" style="margin-left:2px; width:100%;" type="text" /></td>
-            <td field-label="KaoHeGangWei" style="width: 60px; height: 20px; text-align: right;"></td>
+                <input field-name="考核等级" style="margin-left:2px; width:100%;" type="text" /></td>
+            <td field-label="考核岗位" style="width: 60px; height: 20px; text-align: right;"></td>
             <td style="width: 150px; height: 20px; border-left:1px solid rgb(163, 163, 163);">
-                <input field-name="KaoHeGangWei" style="margin-left:2px; width:100%;" type="text"/></td>
+                <input field-name="考核岗位" style="margin-left:2px; width:100%;" type="text"/></td>
         </tr>
         <tr>
-            <td field-label="KaoHeJieGuo" style="width: 60px; height: 20px; text-align: right;"></td>
+            <td field-label="考核结果" style="width: 60px; height: 20px; text-align: right;"></td>
             <td style="width: 150px; height: 20px; border-left:1px solid rgb(163, 163, 163);">
-                <input field-name="KaoHeJieGuo" style="margin-left:2px; width:100%;" type="text" /></td>
-            <td field-label="KaoHeNeiRong" style="width: 60px; height: 20px; text-align: right;"></td>
+                <input field-name="考核结果" style="margin-left:2px; width:100%;" type="text" /></td>
+            <td field-label="考核内容" style="width: 60px; height: 20px; text-align: right;"></td>
             <td style="height: 20px; border-left:1px solid rgb(163, 163, 163);" colspan="5">
-                <input field-name="KaoHeNeiRong" style="margin-left:2px; width:100%;" type="text" /></td>
+                <input field-name="考核内容" style="margin-left:2px; width:100%;" type="text" /></td>
         </tr>
         <tr>
-            <td field-label="BeiZhu" style="width: 60px; height: 20px; text-align: right;"></td>
+            <td field-label="备注" style="width: 60px; height: 20px; text-align: right;"></td>
             <td style="height: 20px; border-left:1px solid rgb(163, 163, 163);" colspan="7">
-                <input field-name="BeiZhu" style="margin-left:2px; width:100%;" type="text" /></td>
+                <input field-name="备注" style="margin-left:2px; width:100%;" type="text" /></td>
+        </tr>
+        <tr>
+            <td style="width: 30px; height: 20px;"></td>
+            <td style="height: 20px; text-align:left;">
+                <button id="Create" type="button" style="padding:3px 15px;">创建</button>
+                <button id="Edit" type="button" style="padding:3px 15px;">修改</button>
+                <button id="Save" type="button" style="display:none; padding:3px 15px;">保存</button>
+                <button id="Discard" type="button" style="display:none; padding:3px 15px;">放弃</button>
+            </td>
+            <td style="height: 20px; text-align:right;" colspan="6">
+                <div style="display:block; float:right; width:50px; height:20px; text-align:left;">
+                    <a href="#" style="color:#4c4c4c;">删除</a>
+                </div>
+            </td>
         </tr>
     </tbody>
 </table>
