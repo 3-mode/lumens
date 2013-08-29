@@ -10,8 +10,13 @@ import com.lumens.engine.run.Executor;
 import com.lumens.engine.run.SingleThreadExecuteStack;
 import com.lumens.engine.run.TransformExecutor;
 import com.lumens.engine.serializer.ProjectXmlSerializer;
+import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
+import com.lumens.model.serializer.ElementXmlSerializer;
+import com.lumens.model.serializer.FormatXmlSerializer;
+import com.lumens.processor.Processor;
+import com.lumens.processor.transform.TransformProcessor;
 import com.lumens.processor.transform.TransformRule;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -24,15 +29,12 @@ import org.apache.commons.io.IOUtils;
  *
  * @author washaofe
  */
-public class EngineTest extends TestCase
-{
-    public EngineTest(String testName)
-    {
+public class EngineTest extends TestCase {
+    public EngineTest(String testName) {
         super(testName);
     }
 
-    public void testEngine1() throws Exception
-    {
+    public void TtestEngine1() throws Exception {
         int nameCounter = 1;
         // Create ws connector to read data
         HashMap<String, Value> props = new HashMap<String, Value>();
@@ -49,11 +51,9 @@ public class EngineTest extends TestCase
         //*******************************************************************************************
         Map<String, Format> consumes = datasource.getFormatList(Direction.IN);
         Connector connector = datasource.getConnector();
-        Format getOpenFundStringRequest = connector.getFormat(consumes.get("getOpenFundString"),
-        "getOpenFundString.userID", Direction.IN);
+        Format getOpenFundStringRequest = connector.getFormat(consumes.get("getOpenFundString"), "getOpenFundString.userID", Direction.IN);
         Map<String, Format> produces = datasource.getFormatList(Direction.OUT);
-        Format getOpenFundStringResponse = connector.getFormat(
-        produces.get("getOpenFundString"), "getOpenFundStringResponse.getOpenFundStringResult.string", Direction.OUT);
+        Format getOpenFundStringResponse = connector.getFormat(produces.get("getOpenFundString"), "getOpenFundStringResponse.getOpenFundStringResult.string", Direction.OUT);
         // Register format
         String targetName = getOpenFundStringRequest.getName() + (nameCounter++);
         // The code is used to create a format copy for registered request
@@ -106,29 +106,64 @@ public class EngineTest extends TestCase
         // Execute all start rules to drive the ws connector
         SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
         executorStack.push(new TransformExecutor(callGetOpenFundString, new TransformExecuteContext(null, startPoint)));
-        while (!executorStack.isEmpty())
-        {
+        while (!executorStack.isEmpty()) {
             Executor executor = executorStack.pop();
             List<Executor> tExList = executor.execute();
             executorStack.push(tExList);
         }
     }
 
-    private void doTestProjectSerialize(TransformProject project) throws Exception
-    {
+    public void testSymatecWS() throws Exception {
+        HashMap<String, Value> props = new HashMap<String, Value>();
+        props.put(WebServiceConnector.WSDL, new Value("file:///C:/Symantec_CC/UsernameSecurity_1.wsdl"));
+        //props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/wsdl/ChinaOpenFundWS.asmx").toString()));
+        //props.put(WebServiceConnector.PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
+        //props.put(WebServiceConnector.PROXY_PORT, new Value(8080));
+        DataSource datasource = new DataSource(WebServiceConnector.class.getName());
+        datasource.setName("UsernameSecurity_1-WebService-SOAP");
+        datasource.setPropertyList(props);
+        datasource.open();
+        datasource.setDescription("this is testing demo datasource for web service");
+
+        Map<String, Format> consumes = datasource.getFormatList(Direction.IN);
+        Connector connector = datasource.getConnector();
+        Format searchService = connector.getFormat(consumes.get("Search"), "Search.assetSearchCriteria.Filter.Expression.ExpressionField", Direction.IN);
+        new FormatXmlSerializer(searchService).write(System.out);
+        Map<String, Format> produces = datasource.getFormatList(Direction.OUT);
+        Format SearchResultDisplayName = connector.getFormat(produces.get("Search"), "SearchResponse.SearchResult.Asset.DisplayName", Direction.OUT);
+        new FormatXmlSerializer(SearchResultDisplayName).write(System.out);
+        searchService = searchService.recursiveClone();
+        SearchResultDisplayName = SearchResultDisplayName.recursiveClone();
+        datasource.registerFormat("Test", searchService, Direction.IN);
+        datasource.registerFormat("Test", SearchResultDisplayName, Direction.OUT);
+        DataTransformation dataDriver = new DataTransformation();
+        dataDriver.setName("CCS02-WS");
+        dataDriver.targetTo(datasource);
+        TransformRule rule = new TransformRule(searchService);
+        rule.getRuleItem("Search.assetSearchCriteria.Filter.Expression.ExpressionField").setScript("\"displayName\"");
+        dataDriver.registerRule(new TransformRuleEntry("Start", "Test", rule));
+
+        SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
+        executorStack.push(new TransformExecutor(dataDriver, new TransformExecuteContext(null, "Start")));
+        while (!executorStack.isEmpty()) {
+            Executor executor = executorStack.pop();
+            List<Executor> tExList = executor.execute();
+            executorStack.push(tExList);
+        }
+    }
+
+    private void doTestProjectSerialize(TransformProject project) throws Exception {
         new ProjectXmlSerializer(project).write(System.out);
 
         InputStream in = null;
-        try
-        {
+        try {
             in = EngineTest.class.getResourceAsStream("/xml/project.xml");
             // Read project and write it again
             TransformProject newProject = new TransformProject();
             ProjectXmlSerializer projXml = new ProjectXmlSerializer(newProject);
             projXml.read(in);
             projXml.write(System.out);
-        } finally
-        {
+        } finally {
             IOUtils.closeQuietly(in);
         }
     }
