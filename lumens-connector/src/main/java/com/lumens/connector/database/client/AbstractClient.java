@@ -21,8 +21,7 @@ public abstract class AbstractClient implements Client {
     protected String user;
     protected String password;
 
-    public AbstractClient(String driverURL, String driverClass, String connURL, String user,
-    String password) {
+    public AbstractClient(String driverURL, String driverClass, String connURL, String user, String password) {
         try {
             driver = (Driver) DbUtils.getInstance(driverURL, driverClass);
             this.connURL = connURL;

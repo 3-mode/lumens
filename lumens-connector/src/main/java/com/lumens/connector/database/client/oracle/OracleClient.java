@@ -21,8 +21,7 @@ import java.util.Map;
  * @author shaofeng wang
  */
 public class OracleClient extends AbstractClient implements OracleConstants {
-    public OracleClient(String ojdbcURL, String connURL, String user,
-    String password) {
+    public OracleClient(String ojdbcURL, String connURL, String user, String password) {
         super(ojdbcURL, ORACLE_CLASS, connURL, user, password);
     }
 
@@ -66,15 +65,9 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                                 String columnName = preparedRet.getString(1);
                                 String dataType = preparedRet.getString(2);
                                 String dataLength = preparedRet.getString(3);
-                                Format table = format.addChild(columnName,
-                                Form.FIELD,
-                                toType(
-                                dataType));
-                                table.
-                                setProperty(DATA_TYPE,
-                                new Value(dataType));
-                                table.setProperty(DATA_LENGTH,
-                                new Value(dataLength));
+                                Format table = format.addChild(columnName, Form.FIELD, toType(dataType));
+                                table.setProperty(DATA_TYPE, new Value(dataType));
+                                table.setProperty(DATA_LENGTH, new Value(dataLength));
                             }
                         }
                     }
@@ -104,8 +97,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                     String columnName = ret.getString(1);
                     String dataType = ret.getString(2);
                     String dataLength = ret.getString(3);
-                    Format table = format.addChild(columnName, Form.FIELD,
-                    toType(dataType));
+                    Format table = format.addChild(columnName, Form.FIELD, toType(dataType));
                     table.setProperty(DATA_TYPE, new Value(dataType));
                     table.setProperty(DATA_LENGTH, new Value(dataLength));
                 }
@@ -122,7 +114,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
 
     private Type toType(String dataType) {
         if (dataType.equalsIgnoreCase(CHAR)
-        || dataType.startsWith(VARCHAR2) || dataType.startsWith(NVARCHAR2) || dataType.
+            || dataType.startsWith(VARCHAR2) || dataType.startsWith(NVARCHAR2) || dataType.
         equalsIgnoreCase(CLOB)) {
             return Type.STRING;
         } else if (dataType.startsWith(NUMBER)) {
