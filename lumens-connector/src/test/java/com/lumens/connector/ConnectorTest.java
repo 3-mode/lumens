@@ -20,6 +20,7 @@ import java.util.Map;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.apache.axiom.om.OMElement;
 import org.apache.axiom.soap.SOAPEnvelope;
 
 /**
@@ -47,7 +48,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants {
         try {
 
             HashMap<String, Value> props = new HashMap<String, Value>();
-            props.put(DatabaseConnector.OJDBC, new Value("file:///C:/app/washaofe/product/11.2.0/dbhome_1/jdbc/lib/ojdbc6.jar"));
+            props.put(DatabaseConnector.OJDBC, new Value("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar"));
             props.put(DatabaseConnector.CONNECTION_URL, new Value("jdbc:oracle:thin:@localhost:1521:orcl"));
             props.put(DatabaseConnector.USER, new Value("hrcms"));
             props.put(DatabaseConnector.PASSWORD, new Value("hrcms"));
@@ -71,11 +72,40 @@ public class ConnectorTest extends TestCase implements SOAPConstants {
         }
     }
 
+    public void testCCS02WebService() throws Exception {
+        HashMap<String, Value> props = new HashMap<String, Value>();
+        props.put(WebServiceConnector.WSDL, new Value("file:///C:/Symantec_CC/UsernameSecurity_1.wsdl"));
+        WebServiceConnector connector = new WebServiceConnector();
+        connector.setPropertyList(props);
+        connector.open();
+        Map<String, Format> consumes = connector.getFormatList(Direction.IN);
+        Format searchService = connector.getFormat(consumes.get("Search"), "Search.assetSearchCriteria.Filter.Expression.ExpressionField", Direction.IN);
+        Map<String, Format> produces = connector.getFormatList(Direction.OUT);
+        Format SearchResultDisplayName = connector.getFormat(produces.get("Search"), "SearchResponse.SearchResult.Asset.DisplayName", Direction.OUT);
+        TransformRule rule = new TransformRule(searchService);
+        rule.getRuleItem("Search.assetSearchCriteria.Filter.Expression.ExpressionField").setScript("\"displayName\"");
+        rule.getRuleItem("Search.assetSearchCriteria.Filter.Expression.ExpressionOperator").setScript("\"EqualTo\"");
+        rule.getRuleItem("Search.assetSearchCriteria.Filter.Expression.ExpressionValue").setScript("\"sparta\\\\am01\"");
+        Processor transformProcessor = new TransformProcessor();
+        List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
+        new ElementXmlSerializer(result.get(0), true).write(System.out);
+        connector.close();
+        SOAPMessageBuilder soapBuilder = new SOAPMessageBuilder();
+        SOAPEnvelope envelope = soapBuilder.buildSOAPMessage(result.get(0));
+        System.out.println(envelope);
+        OMElement o = envelope.getBody();
+        o = (OMElement) o.getChildrenWithLocalName("Search").next();
+        o = (OMElement) o.getChildrenWithLocalName("assetSearchCriteria").next();
+        o = (OMElement) o.getChildrenWithLocalName("Filter").next();
+        o = (OMElement) o.getChildrenWithLocalName("Expression").next();
+        o = (OMElement) o.getChildrenWithLocalName("ExpressionField").next();
+        assertNotNull(o);
+    }
+
     public void TtestWebServiceConnector() throws Exception {
         WebServiceConnector connector = new WebServiceConnector();
         HashMap<String, Value> props = new HashMap<String, Value>();
-        props.put(WebServiceConnector.WSDL, new Value(getClass().getResource(
-        "/wsdl/IncidentManagement.wsdl").toString()));
+        props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/wsdl/IncidentManagement.wsdl").toString()));
         connector.setPropertyList(props);
         connector.open();
         Map<String, Format> services = connector.getFormatList(Direction.IN);
@@ -83,7 +113,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants {
 
         connector.getFormat(retrieveIncident, "RetrieveIncidentRequest.model.instance", Direction.IN);
         connector.getFormat(retrieveIncident, "RetrieveIncidentRequest.model.instance.attachments",
-        Direction.IN);
+                            Direction.IN);
         new FormatXmlSerializer(retrieveIncident).write(System.out);
         assertNotNull(retrieveIncident.getChildByPath("RetrieveIncidentRequest.model.instance.attachments.attachment"));
 
@@ -99,32 +129,27 @@ public class ConnectorTest extends TestCase implements SOAPConstants {
         SOAPEnvelope envelope = soapBuilder.buildSOAPMessage(result.get(0));
         System.out.println(envelope);
 
-        props.put(WebServiceConnector.WSDL, new Value(getClass().getResource(
-        "/wsdl/ChinaOpenFundWS.asmx").toString()));
-        //props.put(WebServiceConnector.PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
-        //props.put(WebServiceConnector.PROXY_PORT, new Value(8080));
+        props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/wsdl/ChinaOpenFundWS.asmx").toString()));
+        props.put(WebServiceConnector.PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
+        props.put(WebServiceConnector.PROXY_PORT, new Value(8080));
         connector.setPropertyList(props);
         connector.open();
         services = connector.getFormatList(Direction.IN);
         Format getOpenFundString = services.get("getOpenFundString");
         connector.getFormat(getOpenFundString, "getOpenFundString", Direction.IN);
         rule = new TransformRule(getOpenFundString);
-        rule.getRuleItem("getOpenFundString.userID").setScript(
-        "\"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\"");
+        rule.getRuleItem("getOpenFundString.userID").setScript("\"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\"");
         transformProcessor = new TransformProcessor();
         result = (List<Element>) transformProcessor.execute(rule, null);
         new ElementXmlSerializer(result.get(0), true).write(System.out);
 
         services = connector.getFormatList(Direction.OUT);
         getOpenFundString = services.get("getOpenFundString");
-        connector.getFormat(getOpenFundString,
-        "getOpenFundStringResponse.getOpenFundStringResult.string.string",
-        Direction.OUT);
+        connector.getFormat(getOpenFundString, "getOpenFundStringResponse.getOpenFundStringResult.string.string", Direction.OUT);
         Operation op = connector.getOperation();
         OperationResult opResult = op.execute(result.get(0));
         List<Element> response = opResult.getResult(getOpenFundString);
         new ElementXmlSerializer(response.get(0), true).write(System.out);
-
         new FormatXmlSerializer(getOpenFundString).write(System.out);
 
     }
@@ -140,30 +165,21 @@ public class ConnectorTest extends TestCase implements SOAPConstants {
         connector.open();
         Map<String, Format> services = connector.getFormatList(Direction.IN);
         Format getRequests = services.get("getRequests");
-        connector.getFormat(getRequests, "getRequests.requestIds.id",
-        Direction.IN);
+        connector.getFormat(getRequests, "getRequests.requestIds.id", Direction.IN);
         assertNotNull(getRequests.getChildByPath("getRequests.requestIds.id"));
         new FormatXmlSerializer(getRequests).write(System.out);
         TransformRule rule = new TransformRule(getRequests);
         rule.getRuleItem("getRequests.requestIds.id").setScript("\"30392\"");
         TransformProcessor transformProcessor = new TransformProcessor();
-        List<Element> result = (List<Element>) transformProcessor.execute(rule,
-        null);
+        List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
         new ElementXmlSerializer(result.get(0), true).write(System.out);
         Operation op = connector.getOperation();
         services = connector.getFormatList(Direction.OUT);
         getRequests = services.get("getRequests");
-        connector.getFormat(getRequests, "getRequestsResponse.return",
-        Direction.OUT);
-        connector.getFormat(getRequests,
-        "getRequestsResponse.return.fieldChangeNodes",
-        Direction.OUT);
-        connector.getFormat(getRequests,
-        "getRequestsResponse.return.simpleFields",
-        Direction.OUT);
-        connector.getFormat(getRequests,
-        "getRequestsResponse.return.simpleFields.stringValue",
-        Direction.OUT);
+        connector.getFormat(getRequests, "getRequestsResponse.return", Direction.OUT);
+        connector.getFormat(getRequests, "getRequestsResponse.return.fieldChangeNodes", Direction.OUT);
+        connector.getFormat(getRequests, "getRequestsResponse.return.simpleFields", Direction.OUT);
+        connector.getFormat(getRequests, "getRequestsResponse.return.simpleFields.stringValue", Direction.OUT);
         new FormatXmlSerializer(getRequests).write(System.out);
         assertNotNull(getRequests.getChildByPath(
         "getRequestsResponse.return.simpleFields.stringValue"));
