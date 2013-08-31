@@ -200,7 +200,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#degreeInfo", "#degreeInfoGrid",
-                                    "app/profile/html/resume/degree.html",
+                                    "app/profile/html/resume/education.html",
                                     "rest/tables/resume/education",
                                     "data/test/education_data.json");
                                 }

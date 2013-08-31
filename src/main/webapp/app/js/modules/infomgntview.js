@@ -58,7 +58,7 @@ $(function() {
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_TrainingOutLand === event.moduleID) {
                     Url = generateTableDataUrl("resume/training_outland", "training_outland_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Award === event.moduleID) {
-                    Url = generateTableDataUrl("resume/award", "asward_data");
+                    Url = generateTableDataUrl("resume/award", "award_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Punishment === event.moduleID) {
                     Url = generateTableDataUrl("resume/punishment", "punishment_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_AnomalyInCollege === event.moduleID) {
@@ -111,7 +111,7 @@ $(function() {
                 function rowdblclick(event) {
                     if (Hrcms.debugEnabled)
                         console.log(event);
-                    var employeeID = $($(this).find('td[field-name="ZhiGongHao"]')[0]).find('div').html();
+                    var employeeID = $($(this).find('td[field-name="职工号"]')[0]).find('div').html();
                     if (!employeeID || employeeID === "")
                         return;
                     indicator.toggle();
