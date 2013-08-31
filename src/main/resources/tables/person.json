@@ -6,7 +6,7 @@
         },
         {
             "label": "职工号",
-            "field": "ZhiGongHao"
+            "field": "职工号"
         },
         {
             "label": "姓名",
