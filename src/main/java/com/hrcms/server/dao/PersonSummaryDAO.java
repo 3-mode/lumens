@@ -16,10 +16,6 @@ import org.apache.tomcat.jdbc.pool.DataSource;
 public class PersonSummaryDAO {
     private DataSource dataSource;
 
-    public PersonSummaryDAO() {
-        System.out.println(PersonSummaryDAO.class);
-    }
-
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }

@@ -1,8 +1,8 @@
 package com.hrcms.server.resources;
 
-import com.hrcms.server.model.PersonSummary;
-import com.hrcms.server.dao.PersonSummaryDAO;
+import com.hrcms.server.dao.PersonSummaryListDAO;
 import com.hrcms.server.dao.factory.HrcmsDAOFactory;
+import com.hrcms.server.model.PersonSummaryListRecord;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,13 +20,16 @@ public class HrcmsEntityResources {
     @Path("/person")
     @Produces("application/json")
     public Response getPersons(@QueryParam("filter") String filter) throws Exception {
-        PersonSummaryDAO pDAO = HrcmsDAOFactory.getPersonSummaryDAO();
+        PersonSummaryListDAO pDAO = HrcmsDAOFactory.getPersonSummaryListDAO();
         StringBuilder sb = new StringBuilder();
-        for (PersonSummary ps : pDAO.getPersonSummaryList()) {
-            sb.append("\"id\" : \"").append(ps.getEmployeeID()).append("\",").append("\"name\" : \"").append(ps.getEmployeeName()).append("\"");
+        for (PersonSummaryListRecord ps : pDAO.getPersonSummaryRecordList()) {
+            if(sb.length() > 0)
+                sb.append(",\n");
+            sb.append("{ \"id\" : \"").append(ps.getEmployeeID()).append("\",").append("\"name\" : \"").append(ps.getEmployeeName()).append("\" }");
         }
+        sb.append("\n");
 
-        return Response.ok().entity(String.format("{ \"person\": { %s } }", sb.toString())).build();
+        return Response.ok().entity(String.format("{ \"person\":\n[ \n%s]\n}", sb.toString())).build();
     }
 
     @GET

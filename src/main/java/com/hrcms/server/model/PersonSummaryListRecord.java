@@ -1,17 +1,30 @@
-package com.hrcms.server.dao;
+package com.hrcms.server.model;
+
+import com.hrcms.server.dao.factory.Table;
+import com.hrcms.server.dao.factory.Column;
+import java.sql.Date;
 
 /**
  *
  * @author shaofeng.wang@outlook.com
  */
-public class PersonSummary {
+@Table(name = "个人概况")
+public class PersonSummaryListRecord {
+    public static final String SQL_ALL = "SELECT 职工号, 姓名 FROM 个人概况";
+    // Fields
+    @Column(name = "职工号")
     private String employeeID;
+    @Column(name = "姓名")
     private String employeeName;
-
-    PersonSummary(int employeeID, String employeeName) {
-        this.employeeID = Integer.toHexString(employeeID);
-        this.employeeName = employeeName;
-    }
+    private String sex;
+    private Date birthday;
+    private String idCard;
+    private String nation;
+    private String nativePlace;
+    private Date dateToJoinColleage;
+    private Date dateToHaveJob;
+    private String health;
+    private String alienInfo;
 
     /**
      * @return the employeeID
