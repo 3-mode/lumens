@@ -1,6 +1,6 @@
 package com.hrcms.server.resources;
 
-import com.hrcms.server.dao.PersonSummary;
+import com.hrcms.server.model.PersonSummary;
 import com.hrcms.server.dao.PersonSummaryDAO;
 import com.hrcms.server.dao.factory.HrcmsDAOFactory;
 import javax.ws.rs.GET;
