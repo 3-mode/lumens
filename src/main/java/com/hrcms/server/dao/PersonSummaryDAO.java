@@ -1,5 +1,6 @@
 package com.hrcms.server.dao;
 
+import com.hrcms.server.model.PersonSummary;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
