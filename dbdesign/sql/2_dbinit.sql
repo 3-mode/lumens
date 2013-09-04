@@ -162,7 +162,8 @@ create table 任职单位
 /*==============================================================*/
 create table DICT_人员类别代码 
 (
-   人员类别代码               VARCHAR2(50)
+  "人员类别代码" VARCHAR2(50), 
+  "人员类别名称" VARCHAR2(50)
 );
 
 
@@ -315,8 +316,9 @@ create table DICT_岗位代码
 /*==============================================================*/
 create table DICT_身份类别 
 (
-   身份类别                 VARCHAR2(50)         not null,
-   constraint DICT_身份类别 primary key (身份类别)
+  "身份类别代码" VARCHAR2(20) not null,
+  "身份类别名称" VARCHAR2(50) not null,
+   constraint DICT_身份类别 primary key (身份类别代码)
 );
 
 
@@ -341,7 +343,7 @@ create table 人员性质
    全局编号                 VARCHAR2(64),
    职工号                  VARCHAR2(10),
    最后修改时间               VARCHAR2(25),
-   现记录                  RAW(1),
+   现记录                  NUMBER(1,0),
    调整时间                 DATE,
    编制类别                 VARCHAR2(100),
    岗位                   VARCHAR2(100),
