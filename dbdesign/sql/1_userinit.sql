@@ -1,4 +1,10 @@
-﻿conn system/q;
+﻿/*==============================================================*/
+/* 说明                                                         */
+/* sqlplus: @c:\1_userinit.sql                                  */
+/* sqlplus: start c:\1_userinit.sql                             */
+/*==============================================================*/
+
+conn system/q;
 create user hrcms identified by q;
 grant connect to hrcms;
 
