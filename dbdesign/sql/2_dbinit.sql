@@ -1,3 +1,26 @@
+﻿drop table 个人概况;
+drop table DICT_职称;
+drop table 政治面貌;
+drop table DICT_党政职务;
+drop table 来校信息;
+drop table 任职单位;
+drop table DICT_人员类别代码;
+drop table DICT_编制类别代码;
+drop table DICT_来源类别代码;
+drop table 学历学位;
+drop table DICT_家庭出身代码;
+drop table DICT_婚姻状况代码;
+drop table DICT_港澳台侨外代码;
+drop table DICT_在岗状态;
+drop table DICT_所有制性质代码
+drop table DICT_教职工类别代码;
+drop table DICT_编制类别;
+drop table DICT_人员统计分类代码;
+drop table DICT_薪酬来源代码;
+drop table DICT_岗位代码;
+drop table DICT_身份类别;
+drop table 人员性质;
+
 create table 个人概况 
 (
    婚姻状况             VARCHAR2(255)        not null,
@@ -43,7 +66,7 @@ create table 个人概况
    人员类别                 INTEGER
 );
 
-
+drop table 专业技术职称;
 create table 专业技术职称 
 (
    职称               VARCHAR2(255),
