@@ -5,7 +5,7 @@
 /*==============================================================*/
 
 conn system/q;
-create user hrcms identified by q;
+create user hrcms identified by hrcms;
 grant connect to hrcms;
 
 conn / as sysdba;
