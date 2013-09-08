@@ -1509,7 +1509,7 @@ CREATE TABLE DICT_所在单位
 CREATE TABLE DICT_籍贯
   (
     代码 INTEGER NOT NULL,
-    名称 VARCHAR2(255) NOT NULL,
+    名称 VARCHAR2(255) NOT NULL, 
     CONSTRAINT PK_DICT_籍贯 PRIMARY KEY (代码, 名称)
   ); 
 /*==============================================================*/
