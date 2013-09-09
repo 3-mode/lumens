@@ -679,7 +679,7 @@ CREATE TABLE DICT_学位代码
 CREATE TABLE DICT_荣誉称号和奖章
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_政治面貌代码                                       */
@@ -808,7 +808,7 @@ CREATE TABLE DICT_申请表类型代码
 CREATE TABLE DICT_授奖等级代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_成果获奖类别代码                                    */
@@ -816,7 +816,7 @@ CREATE TABLE DICT_授奖等级代码
 CREATE TABLE DICT_成果获奖类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_奖励类型代码                                       */
@@ -824,7 +824,7 @@ CREATE TABLE DICT_成果获奖类别代码
 CREATE TABLE DICT_奖励类型代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_指导研究生类型代码                                      */
@@ -832,7 +832,7 @@ CREATE TABLE DICT_奖励类型代码
 CREATE TABLE DICT_指导研究生类型
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_教学类型代码                                       */
@@ -840,7 +840,7 @@ CREATE TABLE DICT_指导研究生类型
 CREATE TABLE DICT_教学类型代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_鉴定结论代码                                       */
@@ -848,7 +848,7 @@ CREATE TABLE DICT_教学类型代码
 CREATE TABLE DICT_鉴定结论代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_成果类型代码                                       */
@@ -856,7 +856,7 @@ CREATE TABLE DICT_鉴定结论代码
 CREATE TABLE DICT_成果类型代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_完成形式代码                                       */
@@ -864,7 +864,7 @@ CREATE TABLE DICT_成果类型代码
 CREATE TABLE DICT_完成形式代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_学生类别代码                                       */
@@ -872,7 +872,7 @@ CREATE TABLE DICT_完成形式代码
 CREATE TABLE DICT_学生类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_学科门类代码                                        */
@@ -880,7 +880,7 @@ CREATE TABLE DICT_学生类别代码
 CREATE TABLE DICT_学科门类代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_密级代码                                          */
@@ -888,7 +888,7 @@ CREATE TABLE DICT_学科门类代码
 CREATE TABLE DICT_密级代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_项目类型代码                                        */
@@ -896,7 +896,7 @@ CREATE TABLE DICT_密级代码
 CREATE TABLE DICT_项目类型代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_项目经费来源代码                                    */
@@ -904,7 +904,7 @@ CREATE TABLE DICT_项目类型代码
 CREATE TABLE DICT_项目经费来源代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_计划完成情况代码                                    */
@@ -912,7 +912,7 @@ CREATE TABLE DICT_项目经费来源代码
 CREATE TABLE DICT_计划完成情况代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_论文报告形式代码                                    */
@@ -920,7 +920,7 @@ CREATE TABLE DICT_计划完成情况代码
 CREATE TABLE DICT_论文报告形式代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_法律状态代码                                        */
@@ -928,7 +928,7 @@ CREATE TABLE DICT_论文报告形式代码
 CREATE TABLE DICT_法律状态代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_考核情况代码                                        */
@@ -936,7 +936,7 @@ CREATE TABLE DICT_法律状态代码
 CREATE TABLE DICT_考核情况代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_社会经济效益代码                                    */
@@ -944,7 +944,7 @@ CREATE TABLE DICT_考核情况代码
 CREATE TABLE DICT_社会经济效益代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_任课课程类别代码                                     */
@@ -952,7 +952,7 @@ CREATE TABLE DICT_社会经济效益代码
 CREATE TABLE DICT_任课课程类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_任课课程分类代码                                    */
@@ -960,7 +960,7 @@ CREATE TABLE DICT_任课课程类别代码
 CREATE TABLE DICT_任课课程分类代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_任课课程性质代码                                    */
@@ -968,7 +968,7 @@ CREATE TABLE DICT_任课课程分类代码
 CREATE TABLE DICT_任课课程性质代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_任课课程形式代码                                    */
@@ -976,7 +976,7 @@ CREATE TABLE DICT_任课课程性质代码
 CREATE TABLE DICT_任课课程形式代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_任课课程精品代码                                    */
@@ -984,7 +984,7 @@ CREATE TABLE DICT_任课课程形式代码
 CREATE TABLE DICT_任课课程精品代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_任课角色代码                                       */
@@ -992,7 +992,7 @@ CREATE TABLE DICT_任课课程精品代码
 CREATE TABLE DICT_任课角色代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_协作单位类型代码                                    */
@@ -1000,7 +1000,7 @@ CREATE TABLE DICT_任课角色代码
 CREATE TABLE DICT_协作单位类型代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_专利类型代码                                       */
@@ -1008,7 +1008,7 @@ CREATE TABLE DICT_协作单位类型代码
 CREATE TABLE DICT_专利类型代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_论文级别代码                                        */
@@ -1016,7 +1016,7 @@ CREATE TABLE DICT_专利类型代码
 CREATE TABLE DICT_论文级别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_著作类型代码                                       */
@@ -1024,7 +1024,7 @@ CREATE TABLE DICT_论文级别代码
 CREATE TABLE DICT_著作类型代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 
 /*==============================================================*/
@@ -1033,7 +1033,7 @@ CREATE TABLE DICT_著作类型代码
 CREATE TABLE DICT_出版社级别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_批准形式代码                                       */
@@ -1041,7 +1041,7 @@ CREATE TABLE DICT_出版社级别代码
 CREATE TABLE DICT_批准形式代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_项目来源代码                                       */
@@ -1049,7 +1049,7 @@ CREATE TABLE DICT_批准形式代码
 CREATE TABLE DICT_项目来源代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_署名单位代码                                       */
@@ -1057,7 +1057,7 @@ CREATE TABLE DICT_项目来源代码
 CREATE TABLE DICT_署名单位代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_操作名称代码                                           */
@@ -1065,7 +1065,7 @@ CREATE TABLE DICT_署名单位代码
 CREATE TABLE DICT_操作名称代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_登记表类型代码                                      */
@@ -1073,7 +1073,7 @@ CREATE TABLE DICT_操作名称代码
 CREATE TABLE DICT_登记表类型代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_职称级别代码                                           */
@@ -1081,7 +1081,7 @@ CREATE TABLE DICT_登记表类型代码
 CREATE TABLE DICT_职称级别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_人员代码                                           */
@@ -1091,7 +1091,7 @@ CREATE TABLE DICT_职称级别代码
 CREATE TABLE DICT_人员代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_专业技术职务级别代码                                 */
@@ -1099,7 +1099,7 @@ CREATE TABLE DICT_人员代码
 CREATE TABLE DICT_专业技术职务级别
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 
 /*==============================================================*/
@@ -1108,7 +1108,7 @@ CREATE TABLE DICT_专业技术职务级别
 CREATE TABLE DICT_行业工种类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_聘任情况代码                                       */
@@ -1116,7 +1116,7 @@ CREATE TABLE DICT_行业工种类别代码
 CREATE TABLE DICT_聘任情况代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_取得资格途径代码                                    */
@@ -1124,7 +1124,7 @@ CREATE TABLE DICT_聘任情况代码
 CREATE TABLE DICT_取得资格途径代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_教师资格类别代码                                    */
@@ -1132,7 +1132,7 @@ CREATE TABLE DICT_取得资格途径代码
 CREATE TABLE DICT_教师资格类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_离退类别代码                                       */
@@ -1140,7 +1140,7 @@ CREATE TABLE DICT_教师资格类别代码
 CREATE TABLE DICT_离退类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_离岗原因代码                                        */
@@ -1148,7 +1148,7 @@ CREATE TABLE DICT_离退类别代码
 CREATE TABLE DICT_离岗原因代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_编制异动代码                                        */
@@ -1156,7 +1156,7 @@ CREATE TABLE DICT_离岗原因代码
 CREATE TABLE DICT_编制异动代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_博士后类型代码                                     */
@@ -1164,7 +1164,7 @@ CREATE TABLE DICT_编制异动代码
 CREATE TABLE DICT_博士后类型代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_政治面貌异常类别代码                                */
@@ -1172,7 +1172,7 @@ CREATE TABLE DICT_博士后类型代码
 CREATE TABLE DICT_政治面貌异常代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_工人技术等级、职务代码                               */
@@ -1180,7 +1180,7 @@ CREATE TABLE DICT_政治面貌异常代码
 CREATE TABLE DICT_工人技术等级代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_人员统计分类代码                                    */
@@ -1188,7 +1188,7 @@ CREATE TABLE DICT_工人技术等级代码
 CREATE TABLE DICT_人员统计分类代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_所有制性质代码                                      */
@@ -1196,7 +1196,7 @@ CREATE TABLE DICT_人员统计分类代码
 CREATE TABLE DICT_所有制性质代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_在岗状态代码                                       */
@@ -1204,7 +1204,7 @@ CREATE TABLE DICT_所有制性质代码
 CREATE TABLE DICT_在岗状态代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_教职工类别代码                                     */
@@ -1212,7 +1212,7 @@ CREATE TABLE DICT_在岗状态代码
 CREATE TABLE DICT_教职工类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_血型代码                                           */
@@ -1220,7 +1220,7 @@ CREATE TABLE DICT_教职工类别代码
 CREATE TABLE DICT_血型代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_教职工来源代码                                      */
@@ -1228,7 +1228,7 @@ CREATE TABLE DICT_血型代码
 CREATE TABLE DICT_教职工来源代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_学科专业代码                                       */
@@ -1236,7 +1236,7 @@ CREATE TABLE DICT_教职工来源代码
 CREATE TABLE DICT_学科专业代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_离校离职原因代码                                    */
@@ -1244,7 +1244,7 @@ CREATE TABLE DICT_学科专业代码
 CREATE TABLE DICT_离校离职原因代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_房屋产权代码                                       */
@@ -1252,7 +1252,7 @@ CREATE TABLE DICT_离校离职原因代码
 CREATE TABLE DICT_房屋产权代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_房屋位置状况                                       */
@@ -1260,7 +1260,7 @@ CREATE TABLE DICT_房屋产权代码
 CREATE TABLE DICT_房屋位置状况代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_房屋类型代码                                       */
@@ -1268,7 +1268,7 @@ CREATE TABLE DICT_房屋位置状况代码
 CREATE TABLE DICT_房屋类型代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_建筑物结构代码                                      */
@@ -1276,7 +1276,7 @@ CREATE TABLE DICT_房屋类型代码
 CREATE TABLE DICT_建筑物结构代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_外语程度代码                                       */
@@ -1284,7 +1284,7 @@ CREATE TABLE DICT_建筑物结构代码
 CREATE TABLE DICT_外语程度代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_称谓代码                                           */
@@ -1292,7 +1292,7 @@ CREATE TABLE DICT_外语程度代码
 CREATE TABLE DICT_称谓代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_角色代码                                           */
@@ -1300,7 +1300,7 @@ CREATE TABLE DICT_称谓代码
 CREATE TABLE DICT_角色代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_奖励代码                                           */
@@ -1308,7 +1308,7 @@ CREATE TABLE DICT_角色代码
 CREATE TABLE DICT_奖励代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_教师获奖类别代码                                    */
@@ -1316,7 +1316,7 @@ CREATE TABLE DICT_奖励代码
 CREATE TABLE DICT_教师获奖类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_奖励级别代码                                       */
@@ -1332,7 +1332,7 @@ CREATE TABLE DICT_奖励级别代码
 CREATE TABLE DICT_高层次人才奖励
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_学习方式代码                                       */
@@ -1340,7 +1340,7 @@ CREATE TABLE DICT_高层次人才奖励
 CREATE TABLE DICT_学习方式代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_学习形式代码                                       */
@@ -1348,7 +1348,7 @@ CREATE TABLE DICT_学习方式代码
 CREATE TABLE DICT_学习形式代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_职级代码                                           */
@@ -1356,7 +1356,7 @@ CREATE TABLE DICT_学习形式代码
 CREATE TABLE DICT_职级代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_免职原因代码                                       */
@@ -1372,7 +1372,7 @@ CREATE TABLE DICT_免职原因代码
 CREATE TABLE DICT_免职方式代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_任职状况代码                                           */
@@ -1380,7 +1380,7 @@ CREATE TABLE DICT_免职方式代码
 CREATE TABLE DICT_任职状况代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_职务变动类别代码                                    */
@@ -1388,7 +1388,7 @@ CREATE TABLE DICT_任职状况代码
 CREATE TABLE DICT_职务变动类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_任职方式代码                                       */
@@ -1396,7 +1396,7 @@ CREATE TABLE DICT_职务变动类别代码
 CREATE TABLE DICT_任职方式代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_职位分类代码                                       */
@@ -1412,7 +1412,7 @@ CREATE TABLE DICT_职位分类代码
 CREATE TABLE DICT_出国经费来源代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_出国状态代码                                       */
@@ -1420,7 +1420,7 @@ CREATE TABLE DICT_出国经费来源代码
 CREATE TABLE DICT_出国状态代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_机构代码                                           */
@@ -1428,7 +1428,7 @@ CREATE TABLE DICT_出国状态代码
 CREATE TABLE DICT_机构代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_进修性质代码                                       */
@@ -1436,7 +1436,7 @@ CREATE TABLE DICT_机构代码
 CREATE TABLE DICT_进修性质代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_单位性质代码                                       */
@@ -1444,7 +1444,7 @@ CREATE TABLE DICT_进修性质代码
 CREATE TABLE DICT_单位性质代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_在学单位类别代码                                    */
@@ -1452,7 +1452,7 @@ CREATE TABLE DICT_单位性质代码
 CREATE TABLE DICT_在学单位类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_教育结果代码                                       */
@@ -1460,7 +1460,7 @@ CREATE TABLE DICT_在学单位类别代码
 CREATE TABLE DICT_教育结果代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_考核类别代码                                       */
@@ -1468,7 +1468,7 @@ CREATE TABLE DICT_教育结果代码
 CREATE TABLE DICT_考核类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_考核等级代码                                       */
@@ -1476,7 +1476,7 @@ CREATE TABLE DICT_考核类别代码
 CREATE TABLE DICT_考核等级代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_考核结果代码                                       */
@@ -1484,7 +1484,7 @@ CREATE TABLE DICT_考核等级代码
 CREATE TABLE DICT_考核结果代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_合同类别代码                                       */
@@ -1492,7 +1492,7 @@ CREATE TABLE DICT_考核结果代码
 CREATE TABLE DICT_合同类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_合同类别代码                                       */
@@ -1500,7 +1500,7 @@ CREATE TABLE DICT_合同类别代码
 CREATE TABLE DICT_职务类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_人员类别代码                                       */
@@ -1508,7 +1508,7 @@ CREATE TABLE DICT_职务类别代码
 CREATE TABLE DICT_人员类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 
 /*==============================================================*/
@@ -1517,7 +1517,7 @@ CREATE TABLE DICT_人员类别代码
 CREATE TABLE DICT_来源类别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_港澳台侨外代码                                      */
