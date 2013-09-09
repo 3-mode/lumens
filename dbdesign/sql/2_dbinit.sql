@@ -122,7 +122,7 @@ DROP TABLE DICT_任职状况代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_职务变动类别代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_任职方式代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_职位分类代码 CASCADE CONSTRAINTS;
-DROP TABLE DICT_经费来源代码 CASCADE CONSTRAINTS;
+DROP TABLE DICT_出国经费来源代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_出国状态代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_机构代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_进修性质代码 CASCADE CONSTRAINTS;
@@ -616,9 +616,9 @@ CREATE TABLE 荣誉性奖励
 /*==============================================================*/
 CREATE TABLE DICT_国家代码
   (
-    国家代码 VARCHAR2(20) NOT NULL,
-    国家   VARCHAR2(255) NOT NULL,
-    CONSTRAINT PK_DICT_国家 PRIMARY KEY (国家代码, 国家)
+    代码 VARCHAR2(20) NOT NULL,
+    名称   VARCHAR2(300) NOT NULL,
+    CONSTRAINT PK_DICT_国家 PRIMARY KEY (代码)
   );
 /*==============================================================*/
 /* Table: DICT_出国目的代码                                       */
@@ -627,7 +627,7 @@ CREATE TABLE DICT_国家代码
 CREATE TABLE DICT_出国目的代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_健康状况代码                                       */
@@ -736,7 +736,7 @@ CREATE TABLE DICT_中华人民共和国行政区划代码
 CREATE TABLE DICT_社会兼职代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_婚姻状况代码                                       */
@@ -802,8 +802,8 @@ CREATE TABLE DICT_职工身份类别
 /*==============================================================*/
 CREATE TABLE DICT_申请表类型代码
   (
-    代码 VARCHAR2(20),
-    名称 VARCHAR2(100)
+    代码 VARCHAR2(50),
+    名称 VARCHAR2(255)
   );
 /*==============================================================*/
 /* Table: DICT_授奖等级代码                                       */
@@ -1334,7 +1334,7 @@ CREATE TABLE DICT_教师获奖类别代码
 CREATE TABLE DICT_奖励级别代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_高层次人才奖励类别代码                               */
@@ -1374,7 +1374,7 @@ CREATE TABLE DICT_职级代码
 CREATE TABLE DICT_免职原因代码
   (
     代码 VARCHAR2(20),
-    名称 VARCHAR2(50)
+    名称 VARCHAR2(100)
   );
 /*==============================================================*/
 /* Table: DICT_免职方式代码                                       */
@@ -1417,9 +1417,9 @@ CREATE TABLE DICT_职位分类代码
     名称 VARCHAR2(100)
   );
 /*==============================================================*/
-/* Table: DICT_经费来源代码                                       */
+/* Table: DICT_出国经费来源代码                                       */
 /*==============================================================*/
-CREATE TABLE DICT_经费来源代码
+CREATE TABLE DICT_出国经费来源代码
   (
     代码 VARCHAR2(20),
     名称 VARCHAR2(50)
