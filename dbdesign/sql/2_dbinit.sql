@@ -754,6 +754,13 @@ CREATE TABLE DICT_籍贯
     名称 VARCHAR2(255) NOT NULL,
     CONSTRAINT PK_DICT_籍贯 PRIMARY KEY (代码, 名称)
   );
+  
+CREATE TABLE DICT_民族
+  (
+    代码 INTEGER NOT NULL,
+    名称 VARCHAR2(255) NOT NULL,
+    CONSTRAINT PK_DICT_民族 PRIMARY KEY (代码, 名称)
+  );
 /*==============================================================*/
 /* Table: DICT_职称                                             */
 /*==============================================================*/
