@@ -26,7 +26,7 @@ DROP TABLE 荣誉性奖励 CASCADE CONSTRAINTS;
 /* =======================================================================*/
 /*                                清空字典表                                */
 /* =======================================================================*/
-DROP TABLE DICT_国家 CASCADE CONSTRAINTS;
+DROP TABLE DICT_国家代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_出国目的代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_干部职务名称代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_干部职务级别代码 CASCADE CONSTRAINTS;
@@ -37,8 +37,6 @@ DROP TABLE DICT_政治面貌代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_语种名称代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_中国各民族名称罗马字母拼写法和代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_人的性别代码 CASCADE CONSTRAINTS;
-DROP TABLE
-DROP TABLE
 DROP TABLE DICT_中华人民共和国行政区划代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_社会兼职代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_婚姻状况代码 CASCADE CONSTRAINTS;
@@ -51,7 +49,7 @@ DROP TABLE DICT_申请表类型代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_授奖等级代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_成果获奖类别代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_奖励类型代码 CASCADE CONSTRAINTS;
-DROP TABLE DICT_指导研究生类型 CASCADE CONSTRAINTS;
+DROP TABLE DICT_指导研究生类型代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_教学类型代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_鉴定结论代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_成果类型代码 CASCADE CONSTRAINTS;
@@ -81,12 +79,11 @@ DROP TABLE DICT_出版社级别代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_批准形式代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_项目来源代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_署名单位代码 CASCADE CONSTRAINTS;
-DROP TABLE DICT_操作名称 CASCADE CONSTRAINTS;
+DROP TABLE DICT_操作名称代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_登记表类型代码 CASCADE CONSTRAINTS;
-DROP TABLE DICT_职称级别 CASCADE CONSTRAINTS;
+DROP TABLE DICT_职称级别代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_人员代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_专业技术职务级别代码 CASCADE CONSTRAINTS;
-DROP TABLE DICT_专业 CASCADE CONSTRAINTS;
 DROP TABLE DICT_行业工种类别代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_聘任情况代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_取得资格途径代码 CASCADE CONSTRAINTS;
@@ -121,7 +118,7 @@ DROP TABLE DICT_学习形式代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_职级代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_免职原因代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_免职方式代码 CASCADE CONSTRAINTS;
-DROP TABLE DICT_任职状况 CASCADE CONSTRAINTS;
+DROP TABLE DICT_任职状况代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_职务变动类别代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_任职方式代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_职位分类代码 CASCADE CONSTRAINTS;
@@ -138,27 +135,29 @@ DROP TABLE DICT_考核结果代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_合同类别代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_职务类别代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_职务类别代码 CASCADE CONSTRAINTS;
-DROP TABLE DICT_人员类别 CASCADE CONSTRAINTS;
-DROP TABLE DICT_党政职务 CASCADE CONSTRAINTS;
+DROP TABLE DICT_人员类别代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_本人成分代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_学习形式代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_来源类别代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_港澳台侨外代码 CASCADE CONSTRAINTS;
-DROP TABLE DICT_编制类别 CASCADE CONSTRAINTS;
+DROP TABLE DICT_编制类别代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_薪酬来源代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_岗位代码 CASCADE CONSTRAINTS;
-DROP TABLE DICT_健康状况 CASCADE CONSTRAINTS;
+DROP TABLE DICT_健康状况代码 CASCADE CONSTRAINTS;
 DROP TABLE DICT_所在单位 CASCADE CONSTRAINTS;
 DROP TABLE DICT_籍贯 CASCADE CONSTRAINTS;
-/* =======================================================================*/
-/*                                   实体表                                */
-/* =======================================================================*/
-/* ====================================================================== */
-/* 外链字段如下                                                              */
+DROP TABLE DICT_党政职务 CASCADE CONSTRAINTS;
+DROP TABLE DICT_在岗状态 CASCADE CONSTRAINTS;
+DROP TABLE DICT_身份类别 CASCADE CONSTRAINTS;
+/* ========================================================================== */
+/*                                   实体表                                    */
+/* ========================================================================== */
+/* ========================================================================== */
+/* 外链字段如下                                                                 */
 /* 所在单位, 籍贯，科室名称,政治面貌, 最后学历,最高学位,最后学历毕业学校,最后学历毕业年月*/
 /* 现职称,现专业技术职务级别,专业技术职务资格评定日期,聘任职称, 聘任职称等级,现职级日期  */
-/* 从事专业,主要岗位,人员状态,党政职务,党政职务级别,身份类别                        */
-/* ======================================================================= */
+/* 从事专业,主要岗位,人员状态,党政职务,党政职务级别,身份类别                         */
+/* ========================================================================== */
 CREATE TABLE 个人概况
   (
     职工号    VARCHAR2(10) NOT NULL,
@@ -612,10 +611,10 @@ CREATE TABLE 荣誉性奖励
 /*                        字典 国家标准                           */
 /*==============================================================*/
 /*==============================================================*/
-/* Table: DICT_国家                                              */
+/* Table: DICT_国家代码                                              */
 /* GB_T2659                                                     */
 /*==============================================================*/
-CREATE TABLE DICT_国家
+CREATE TABLE DICT_国家代码
   (
     国家代码 VARCHAR2(20) NOT NULL,
     国家   VARCHAR2(255) NOT NULL,
@@ -629,6 +628,16 @@ CREATE TABLE DICT_出国目的代码
   (
     代码 VARCHAR2(20),
     名称 VARCHAR2(50)
+  );
+/*==============================================================*/
+/* Table: DICT_健康状况代码                                       */
+/*  GB_T4767                                                    */
+/*==============================================================*/
+CREATE TABLE DICT_健康状况代码
+  (
+    代码 VARCHAR2(20) NOT NULL,
+    名称 VARCHAR2(50) NOT NULL,
+    CONSTRAINT PK_DICT_健康状况 PRIMARY KEY (健康状况)
   );
 /*==============================================================*/
 /* Table: DICT_干部职务名称代码                                    */
@@ -821,9 +830,9 @@ CREATE TABLE DICT_奖励类型代码
     名称 VARCHAR2(50)
   );
 /*==============================================================*/
-/* Table: DICT_指导研究生类型                                      */
+/* Table: DICT_指导研究生类型代码                                      */
 /*==============================================================*/
-CREATE TABLE DICT_指导研究生类型
+CREATE TABLE DICT_指导研究生类型代码
   (
     代码 VARCHAR2(20),
     名称 VARCHAR2(50)
@@ -1061,9 +1070,9 @@ CREATE TABLE DICT_署名单位代码
     名称 VARCHAR2(50)
   );
 /*==============================================================*/
-/* Table: DICT_操作名称                                           */
+/* Table: DICT_操作名称代码                                           */
 /*==============================================================*/
-CREATE TABLE DICT_操作名称
+CREATE TABLE DICT_操作名称代码
   (
     代码 VARCHAR2(20),
     名称 VARCHAR2(50)
@@ -1077,9 +1086,9 @@ CREATE TABLE DICT_登记表类型代码
     名称 VARCHAR2(50)
   );
 /*==============================================================*/
-/* Table: DICT_职称级别                                           */
+/* Table: DICT_职称级别代码                                           */
 /*==============================================================*/
-CREATE TABLE DICT_职称级别
+CREATE TABLE DICT_职称级别代码
   (
     代码 VARCHAR2(20),
     名称 VARCHAR2(50)
@@ -1102,15 +1111,7 @@ CREATE TABLE DICT_专业技术职务级别代码
     代码 VARCHAR2(20),
     名称 VARCHAR2(50)
   );
-/*==============================================================*/
-/* Table: DICT_专业                                              */
-/*==============================================================*/
-CREATE TABLE DICT_专业
-  (
-    学科 VARCHAR2(255) NOT NULL,
-    专业 VARCHAR2(255) NOT NULL,
-    CONSTRAINT PK_DICT_专业 PRIMARY KEY (学科, 专业)
-  );
+
 /*==============================================================*/
 /* Table: DICT_行业工种类别代码                                    */
 /*==============================================================*/
@@ -1384,9 +1385,9 @@ CREATE TABLE DICT_免职方式代码
     名称 VARCHAR2(50)
   );
 /*==============================================================*/
-/* Table: DICT_任职状况                                           */
+/* Table: DICT_任职状况代码                                           */
 /*==============================================================*/
-CREATE TABLE DICT_任职状况
+CREATE TABLE DICT_任职状况代码
   (
     代码 VARCHAR2(20),
     名称 VARCHAR2(50)
@@ -1514,20 +1515,10 @@ CREATE TABLE DICT_职务类别代码
 /*==============================================================*/
 /* Table: DICT_人员类别代码                                       */
 /*==============================================================*/
-CREATE TABLE DICT_人员类别
+CREATE TABLE DICT_人员类别代码
   (
     代码 VARCHAR2(20),
     名称 VARCHAR2(50)
-  );
-/*==============================================================*/
-/* Table: DICT_党政职务                                           */
-/*==============================================================*/
-CREATE TABLE DICT_党政职务
-  (
-    党政职务   VARCHAR2(100) NOT NULL,
-    党政职务级别 SMALLINT NOT NULL,
-    职工号    VARCHAR2(10),
-    CONSTRAINT DICT_党政职务 PRIMARY KEY (党政职务, 党政职务级别)
   );
 /*==============================================================*/
 /* Table: DICT_本人成分代码                                       */
@@ -1562,9 +1553,9 @@ CREATE TABLE DICT_港澳台侨外代码
     名称 VARCHAR2(100) NOT NULL,
   );
 /*==============================================================*/
-/* Table: DICT_编制类别                                           */
+/* Table: DICT_编制类别代码                                           */
 /*==============================================================*/
-CREATE TABLE DICT_编制类别
+CREATE TABLE DICT_编制类别代码
   (
     代码 VARCHAR2(50) NOT NULL,
     类别 VARCHAR2(100) NOT NULL,
@@ -1586,15 +1577,10 @@ CREATE TABLE DICT_岗位代码
     名称 VARCHAR2(100) NOT NULL,
     CONSTRAINT DICT_岗位代码 PRIMARY KEY (代码, 名称)
   );
+
 /*==============================================================*/
-/* Table: DICT_健康状况                                          */
+/*                        有待进一步评估                          */
 /*==============================================================*/
-CREATE TABLE DICT_健康状况
-  (
-    代码 VARCHAR2(20) NOT NULL,
-    名称 VARCHAR2(50) NOT NULL,
-    CONSTRAINT PK_DICT_健康状况 PRIMARY KEY (健康状况)
-  );
 /*==============================================================*/
 /* Table: DICT_所在单位                                          */
 /*==============================================================*/
@@ -1615,8 +1601,43 @@ CREATE TABLE DICT_籍贯
     代码 INTEGER NOT NULL,
     名称 VARCHAR2(255) NOT NULL,
     CONSTRAINT PK_DICT_籍贯 PRIMARY KEY (代码, 名称)
-  );
+  );  
+/*==============================================================*/
+/* Table: DICT_党政职务                                           */
+/*==============================================================*/
+CREATE TABLE DICT_党政职务
+  (
+    党政职务   VARCHAR2(100) NOT NULL,
+    党政职务级别 SMALLINT NOT NULL,
+    职工号    VARCHAR2(10),
+    CONSTRAINT DICT_党政职务 PRIMARY KEY (党政职务, 党政职务级别)
+  );  
+
+/*==============================================================*/
+/* Table: DICT_身份类别                                           */
+/*==============================================================*/
+CREATE TABLE DICT_在岗状态
+  (
+    代码 VARCHAR2(50) NOT NULL,
+    名称 VARCHAR2(500) NOT NULL,
+  ); 
+/*==============================================================*/
+/* Table: DICT_身份类别                                           */
+/*==============================================================*/
+CREATE TABLE DICT_身份类别
+  (
+    代码 VARCHAR2(20) NOT NULL,
+    名称 VARCHAR2(500) NOT NULL,
+  ); 
 /*==============================================================*/
 /*                         冗余的表，考虑删除                      */
 /*==============================================================*/
-
+/*==============================================================*/
+/* Table: DICT_专业, 跟学科专业代码重复                            */
+/*==============================================================*/
+CREATE TABLE DICT_专业
+  (
+    学科 VARCHAR2(255) NOT NULL,
+    专业 VARCHAR2(255) NOT NULL,
+    CONSTRAINT PK_DICT_专业 PRIMARY KEY (学科, 专业)
+  );
