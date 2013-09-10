@@ -40,20 +40,6 @@ $(function() {
             return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
         }
     };
-    Hrcms.SyncUUID = function(prefix) {
-        var result = prefix;
-        $.ajax({
-            async: false,
-            cache: false,
-            url: "uuid",
-            dataType: "json",
-            type: "GET",
-            success: function(data) {
-                result = result + "-" + data.uuid;
-            }
-        });
-        return result;
-    }
 
     var I18N = Hrcms.I18N;
     var SysModuleID = Hrcms.SysModuleID = {
