@@ -40,7 +40,7 @@ $(function() {
                 var Url;
                 // Different module load different table info and data from different URL
                 if (SysModuleID.ContentNavMenu_InfoManage_Info_Person === event.moduleID) {
-                    Url = generateTableDataUrl("base/person", "person_data");
+                    Url = generateTableDataUrl("basic/person", "person_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Info_ContactInfo === event.moduleID) {
                     Url = generateTableDataUrl("basic/person_contact", "contact_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Info_PersonNature === event.moduleID) {
