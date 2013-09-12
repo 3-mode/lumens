@@ -53,7 +53,7 @@ $(function() {
                     // TODO
                 }
                 else if (SysModuleID.SysToolbar_SystemManage === curSysModuleID) {
-                    // TODO
+                    moduleViewMap.activeView = Hrcms.SystemView.create(theLayout.getPart2());
                 }
             });
             //-------------- Sys toolbar configuration End------------------------------------------

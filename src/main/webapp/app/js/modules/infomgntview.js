@@ -132,12 +132,12 @@ $(function() {
                     $.ajaxSetup({cache: false});
                     $.ajax({
                         type: "GET",
-                        url: "app/profile/html/basic/personInfo.html",
+                        url: "app/html/basic/personInfo.html",
                         dataType: "html",
                         success: function(personInfoTempl) {
                             personForm.configure({
                                 personFormTempl: personInfoTempl,
-                                reportTemplURL: "app/profile/html/basic/personSummary.html",
+                                reportTemplURL: "app/html/basic/personSummary.html",
                                 reportDataURL: "data/test/person_summary.json"
                             });
                         }

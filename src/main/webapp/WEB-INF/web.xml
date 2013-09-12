@@ -24,7 +24,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>HrcmsServiceProvider</servlet-name>
-        <url-pattern>/uuid</url-pattern>
+        <url-pattern>/service/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

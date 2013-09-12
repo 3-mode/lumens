@@ -54,7 +54,9 @@ $(function() {
         StatisticAnalysisManage_PersonInfoStatistic_Report: "报表",
         StatisticAnalysisManage_PersonInfoReport_Title: "人员情况表",
         StatisticAnalysisManage_PersonInfoReport_RelationshipWithStudent: "学缘",
-        StatisticAnalysisManage_PersonInfoReport_JobTitleInfo: "职称情况"
+        StatisticAnalysisManage_PersonInfoReport_JobTitleInfo: "职称情况",
+        SystemManage_System_Title: "系统",
+        SystemManage_System_Dict: "数据字典"
     };
 
 });

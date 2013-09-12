@@ -20,7 +20,7 @@ $(function() {
         $.ajax({
             async: false,
             cache: settings.cache ? settings.cache : false,
-            url: "app/profile/" + settings.url,
+            url: "app/" + settings.url,
             dataType: settings.dataType,
             type: "GET",
             success: function(data) {
@@ -76,7 +76,8 @@ $(function() {
         ContentNavMenu_InfoManage_Contract_EmploymentContract: "ContentNavMenu_InfoManage_Contract_EmploymentContract",
         ContentNavMenu_StatisticAnalysisManage_PersonInfoStatistic_Report: "ContentNavMenu_StatisticAnalysisManage_PersonInfoStatistic_Report",
         ContentNavMenu_StatisticAnalysisManage_PersonInfoReport_RelationshipWithStudent: "ContentNavMenu_StatisticAnalysisManage_PersonInfoReport_RelationshipWithStudent",
-        ContentNavMenu_StatisticAnalysisManage_PersonInfoReport_JobTitleInfo: "ContentNavMenu_StatisticAnalysisManage_PersonInfoReport_JobTitleInfo"
+        ContentNavMenu_StatisticAnalysisManage_PersonInfoReport_JobTitleInfo: "ContentNavMenu_StatisticAnalysisManage_PersonInfoReport_JobTitleInfo",
+        ContentNavMenu_SystemManage_System_Dict: "ContentNavMenu_SystemManage_System_Dict"
     };
 
     Hrcms.SysToolbar_Config = {
@@ -260,6 +261,22 @@ $(function() {
                     {
                         title: I18N.ContentNavMenu.StatisticAnalysisManage_PersonInfoReport_JobTitleInfo,
                         moduleID: SysModuleID.ContentNavMenu_StatisticAnalysisManage_PersonInfoReport_JobTitleInfo
+                    }
+                ]
+            }
+        ]
+    };
+
+    Hrcms.NavMenu_SystemManage_Config = {
+        eventType: "NavMenu_SystemManage_Config",
+        sections:
+        [
+            {
+                title: I18N.ContentNavMenu.SystemManage_System_Title,
+                items: [
+                    {
+                        title: I18N.ContentNavMenu.SystemManage_System_Dict,
+                        moduleID: SysModuleID.ContentNavMenu_SystemManage_System_Dict
                     }
                 ]
             }

@@ -129,7 +129,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#natureInfo", "#natureInfoGrid",
-                                    "app/profile/html/basic/nature.html",
+                                    "app/html/basic/nature.html",
                                     "rest/tables/basic/person_nature",
                                     "data/test/person_nature_data.json");
                                 }
@@ -137,7 +137,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#contactInfo", "#contactInfoGrid",
-                                    "app/profile/html/basic/contactInfo.html",
+                                    "app/html/basic/contactInfo.html",
                                     "rest/tables/basic/person_contact",
                                     "data/test/person_contact_data.json");
                                 }
@@ -145,7 +145,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#evaluateInfo", "#evaluateGrid",
-                                    "app/profile/html/basic/evaluate.html",
+                                    "app/html/basic/evaluate.html",
                                     "rest/tables/basic/person_evaluation",
                                     "data/test/person_evaluation_data.json");
                                 }
@@ -153,7 +153,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#familyInfo", "#familyGrid",
-                                    "app/profile/html/basic/family.html",
+                                    "app/html/basic/family.html",
                                     "rest/tables/basic/person_family",
                                     "data/test/person_family_data.json");
                                 }
@@ -192,7 +192,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#resumeInfo", "#resumeInfoGrid",
-                                    "app/profile/html/resume/info_before_join.html",
+                                    "app/html/resume/info_before_join.html",
                                     "rest/tables/resume/info_before_college",
                                     "data/test/info_before_college_data.json");
                                 }
@@ -200,7 +200,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#degreeInfo", "#degreeInfoGrid",
-                                    "app/profile/html/resume/education.html",
+                                    "app/html/resume/education.html",
                                     "rest/tables/resume/education",
                                     "data/test/education_data.json");
                                 }
@@ -208,7 +208,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#trainInInfo", "#trainInInfoGrid",
-                                    "app/profile/html/resume/training_in_land.html",
+                                    "app/html/resume/training_in_land.html",
                                     "rest/tables/resume/training_inland",
                                     "data/test/training_inland_data.json");
                                 }
@@ -216,7 +216,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#trainOutInfo", "#trainOutInfoGrid",
-                                    "app/profile/html/resume/training_out_land.html",
+                                    "app/html/resume/training_out_land.html",
                                     "rest/tables/resume/training_outland",
                                     "data/test/training_outland_data.json");
                                 }
@@ -224,7 +224,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#awardInfo", "#awardInfoGrid",
-                                    "app/profile/html/resume/award.html",
+                                    "app/html/resume/award.html",
                                     "rest/tables/resume/award",
                                     "data/test/award_data.json");
                                 }
@@ -232,7 +232,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#punishmentInfo", "#punishmentInfoGrid",
-                                    "app/profile/html/resume/punishment.html",
+                                    "app/html/resume/punishment.html",
                                     "rest/tables/resume/punishment",
                                     "data/test/punishment_data.json");
                                 }
@@ -240,7 +240,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#anomalyInfo", "#anomalyInfoGrid",
-                                    "app/profile/html/resume/anomaly_in_college.html",
+                                    "app/html/resume/anomaly_in_college.html",
                                     "rest/tables/resume/anomaly",
                                     "data/test/anomaly_data.json");
                                 }
@@ -248,7 +248,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#joinInfo", "#joinInfoGrid",
-                                    "app/profile/html/resume/info_join_college.html",
+                                    "app/html/resume/info_join_college.html",
                                     "rest/tables/resume/info2joincollege",
                                     "data/test/info2joincollege_data.json");
                                 }
@@ -256,7 +256,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#quitInfo", "#quitInfoGrid",
-                                    "app/profile/html/resume/quit_college.html",
+                                    "app/html/resume/quit_college.html",
                                     "rest/tables/resume/quitcollege",
                                     "data/test/quitcollege_data.json");
                                 }
@@ -287,7 +287,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#unitInfo", "#unitInfoGrid",
-                                    "app/profile/html/job/unit.html",
+                                    "app/html/job/unit.html",
                                     "rest/tables/job/unit",
                                     "data/test/unit_data.json");
                                 }
@@ -295,7 +295,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#politicsInfo", "#politicsInfoGrid",
-                                    "app/profile/html/job/politics.html",
+                                    "app/html/job/politics.html",
                                     "rest/tables/job/politics",
                                     "data/test/dummy.json");
                                 }
@@ -303,7 +303,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#jobOfPoliticsInfo", "#jobOfPoliticsInfoGrid",
-                                    "app/profile/html/job/job_of_politics.html",
+                                    "app/html/job/job_of_politics.html",
                                     "rest/tables/job/jobofpolitics",
                                     "data/test/dummy.json");
                                 }
@@ -311,7 +311,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#technicalTitleInfo", "#technicalTitleInfoGrid",
-                                    "app/profile/html/job/technical_titles.html",
+                                    "app/html/job/technical_titles.html",
                                     "rest/tables/job/technicaltitles",
                                     "data/test/dummy.json");
                                 }
@@ -319,7 +319,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#technicalLevelInfo", "#technicalLevelInfoGrid",
-                                    "app/profile/html/job/technical_level.html",
+                                    "app/html/job/technical_level.html",
                                     "rest/tables/job/technicallevel",
                                     "data/test/dummy.json");
                                 }
@@ -348,7 +348,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#postDocInfo", "#postDocInfoGrid",
-                                    "app/profile/html/qualification/postdocteacher.html",
+                                    "app/html/qualification/postdocteacher.html",
                                     "rest/tables/qualification/postdoctoralteacher",
                                     "data/test/dummy.json");
                                 }
@@ -356,7 +356,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#visitTeacherInfo", "#visitTeacherInfoGrid",
-                                    "app/profile/html/qualification/visitteacher.html",
+                                    "app/html/qualification/visitteacher.html",
                                     "rest/tables/qualification/visitingscholarteacher",
                                     "data/test/dummy.json");
                                 }
@@ -364,7 +364,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#expertJobInfo", "#expertJobInfoGrid",
-                                    "app/profile/html/qualification/expertjob.html",
+                                    "app/html/qualification/expertjob.html",
                                     "rest/tables/qualification/expertjob",
                                     "data/test/dummy.json");
                                 }
@@ -372,7 +372,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#talentsFundingInfo", "#talentsFundingInfoGrid",
-                                    "app/profile/html/qualification/talentsfunding.html",
+                                    "app/html/qualification/talentsfunding.html",
                                     "rest/tables/qualification/talentsfunding",
                                     "data/test/dummy.json");
                                 }
@@ -395,7 +395,7 @@ $(function() {
                                     loadFormAndGrid(
                                     accordion,
                                     "#contactInfo", "#contactInfoGrid",
-                                    "app/profile/html/contact/employee_contact.html",
+                                    "app/html/contact/employee_contact.html",
                                     "rest/tables/contact/employmentcontract",
                                     "data/test/dummy.json");
                                 }

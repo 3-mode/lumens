@@ -189,6 +189,11 @@ a {
     overflow-y: auto;
     overflow-x: hidden;
 }
+.hrcms .hrcms-menu-placeholder {
+    width: 100%;
+    height: 10px;
+    float: top;
+}
 .hrcms .hrcms-secondary-menu-container {
     width:100%;
     height:auto;
