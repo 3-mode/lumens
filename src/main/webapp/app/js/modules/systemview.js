@@ -3,15 +3,17 @@ $(function() {
     Hrcms.SystemView = {};
     Hrcms.SystemView.create = function(container) {
         var tThis = Hrcms.ContentView.create(container);
-        tThis.loadLeftNavMenu = function(menu) {
+        var rightPanel = tThis.getRightPanel();
+
+        // Override function which is used by parent ContentView
+        tThis.initialize(function(menu) {
             menu.configure(Hrcms.NavMenu_SystemManage_Config);
             menu.onItemClick(function(event) {
                 if (Hrcms.debugEnabled)
                     console.log(event);
             });
-        }
+        });
 
-        tThis.initialize();
         // end
         return tThis;
     }

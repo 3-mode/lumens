@@ -3,15 +3,14 @@ $(function() {
     Hrcms.StatisticsView = {};
     Hrcms.StatisticsView.create = function(container) {
         var tThis = Hrcms.ContentView.create(container);
-        tThis.loadLeftNavMenu = function(menu) {
+
+        tThis.initialize(function(menu) {
             menu.configure(Hrcms.NavMenu_StatisticAnalysisManage_Config);
             menu.onItemClick(function(event) {
                 if (Hrcms.debugEnabled)
                     console.log(event);
             });
-        }
-
-        tThis.initialize();
+        });
         // end
         return tThis;
     }

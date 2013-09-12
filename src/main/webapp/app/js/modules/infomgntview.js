@@ -3,7 +3,7 @@ $(function() {
     Hrcms.InfoManageView = {};
     Hrcms.InfoManageView.create = function(container) {
         var tThis = Hrcms.ContentView.create(container);
-        var rightContentContainer = tThis.rightContentContainer;
+        var rightContentContainer = tThis.getRightPanel();
         var indicator;
         var dataGrid;
         var personForm;
@@ -15,7 +15,8 @@ $(function() {
                 data: "data/test/" + dataPath + ".json"
             };
         }
-        tThis.loadLeftNavMenu = function(menu) {
+
+        tThis.initialize(function(menu) {
             menu.configure(Hrcms.NavMenu_InfoManage_Config);
             menu.onItemClick(function(event) {
                 if (Hrcms.debugEnabled)
@@ -160,7 +161,7 @@ $(function() {
                         console.log(result);
                 });
             });
-        }
+        });
 
         var __superRemove = tThis.remove;
         tThis.remove = function() {
@@ -168,8 +169,6 @@ $(function() {
                 personForm.remove();
             __superRemove();
         }
-
-        tThis.initialize();
 
         // end
         return tThis;
