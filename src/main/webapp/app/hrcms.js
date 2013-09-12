@@ -60,6 +60,7 @@ $(function() {
             // Go to the default home view
             sysToolbar.activeButton(SysModuleID.SysToolbar_Home);
             // TODO Begin page workspace building here, default is home page
+            return this;
         }
         // end
         return tThis;

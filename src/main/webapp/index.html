@@ -41,10 +41,9 @@
         <script type="text/javascript" src="app/hrcms.js"></script>
         <script type="text/javascript">
             $(function() {
-                var app = Hrcms.create($('#hrcmsApp'));
-                app.load();
+            window.App = Hrcms.create($('#hrcms-app')).load();
             });
         </script>
     </head>
-    <body id="hrcmsApp"></body>
+    <body id="hrcms-app"></body>
 </html>
