@@ -39,8 +39,8 @@ $(function() {
                         container: formsHolder.find(gridHolderId)
                     });
                     $.ajaxSetup({cache: false});
-                    $.getJSON(tableDefineUrl,
-                    function(table) {
+                    $.getJSON(tableDefineUrl, function(table) {
+                        // Configure the form field label according the tabe json description
                         for (var i = 0; i < table.columns.length; ++i) {
                             var column = table.columns[i];
                             var fieldLabel = formHolder.find('td[field-label="' + column.field + '"]');
@@ -66,8 +66,7 @@ $(function() {
                             }
                             // TODO add sort function
                         });
-                        $.getJSON(gridDataUrl,
-                        function(record) {
+                        $.getJSON(gridDataUrl, function(record) {
                             dataGrid.data(record);
                         });
                     }).fail(function(result) {
