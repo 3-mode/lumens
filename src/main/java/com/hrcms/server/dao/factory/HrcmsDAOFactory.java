@@ -1,6 +1,7 @@
 package com.hrcms.server.dao.factory;
 
-import com.hrcms.server.dao.DictTableDAO;
+import com.hrcms.server.dao.DictItemDAO;
+import com.hrcms.server.dao.DictListDAO;
 import com.hrcms.server.dao.PersonSummaryDAO;
 import com.hrcms.server.dao.PersonSummaryListDAO;
 import org.springframework.context.ApplicationContext;
@@ -21,7 +22,11 @@ public class HrcmsDAOFactory {
         return (PersonSummaryListDAO) context.getBean("personSummaryListDAO");
     }
 
-    public static DictTableDAO getdictTableDAO() {
-        return (DictTableDAO) context.getBean("dictTableDAO");
+    public static DictListDAO getDictListDAO() {
+        return (DictListDAO) context.getBean("dictListDAO");
+    }
+
+    public static DictItemDAO getDictItemDAO() {
+        return (DictItemDAO) context.getBean("dictItemDAO");
     }
 }

@@ -452,7 +452,7 @@ a {
 .hrcms .hrcms-record-main-form {
     width: 100%;
     height: 100%;
-    overflow: scroll;
+    overflow: auto;
     margin: 0 auto;
 }
 .hrcms .hrcms-person-form {

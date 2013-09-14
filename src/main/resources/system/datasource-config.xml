@@ -28,13 +28,13 @@
     <bean id="personSummaryDAO" class="com.hrcms.server.dao.PersonSummaryDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-
     <bean id="personSummaryListDAO" class="com.hrcms.server.dao.PersonSummaryListDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-    
-    
-    <bean id="dictTableDAO" class="com.hrcms.server.dao.DictTableDAO">
+    <bean id="dictListDAO" class="com.hrcms.server.dao.DictListDAO">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="dictItemDAO" class="com.hrcms.server.dao.DictItemDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 

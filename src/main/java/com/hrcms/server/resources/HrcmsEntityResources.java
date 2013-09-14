@@ -1,11 +1,12 @@
 package com.hrcms.server.resources;
 
-import com.hrcms.server.dao.DictTableDAO;
+import com.hrcms.server.dao.DictItemDAO;
+import com.hrcms.server.dao.DictListDAO;
 import com.hrcms.server.dao.PersonSummaryListDAO;
-import com.hrcms.server.dao.factory.ColumnUtil;
 import com.hrcms.server.dao.factory.EntityFactory;
 import com.hrcms.server.dao.factory.HrcmsDAOFactory;
-import com.hrcms.server.model.DictTable;
+import com.hrcms.server.model.DictItem;
+import com.hrcms.server.model.DictListRecord;
 import com.hrcms.server.model.PersonSummaryListRecord;
 import java.util.List;
 import javax.ws.rs.GET;
@@ -47,17 +48,34 @@ public class HrcmsEntityResources {
     }
 
     @GET
-    @Path("/dict")
+    @Path("/dictlist")
     @Produces("application/json")
     public Response getDictList() throws Exception {
-        DictTableDAO dDAO = HrcmsDAOFactory.getdictTableDAO();
+        DictListDAO dDAO = HrcmsDAOFactory.getDictListDAO();
         StringBuilder sb = new StringBuilder();
-        List<DictTable> l = dDAO.getDictTableList();
-        for (DictTable t : l) {
+        List<DictListRecord> l = dDAO.getDictTableList();
+        for (DictListRecord t : l) {
             if (sb.length() > 0) {
                 sb.append(",\n");
             }
             sb.append(EntityFactory.createJsonFromEntity(t));
+        }
+
+        return Response.ok().entity(String.format("[%s]", sb.toString())).build();
+    }
+
+    @GET
+    @Path("/dict/{dictName}")
+    @Produces("application/json")
+    public Response getDictItemList(@PathParam("dictName") String dictName) throws Exception {
+        DictItemDAO dDAO = HrcmsDAOFactory.getDictItemDAO();
+        StringBuilder sb = new StringBuilder();
+        List<DictItem> l = dDAO.getDictItemList(dictName);
+        for (DictItem i : l) {
+            if (sb.length() > 0) {
+                sb.append(",\n");
+            }
+            sb.append(EntityFactory.createJsonFromEntity(i));
         }
 
         return Response.ok().entity(String.format("[%s]", sb.toString())).build();

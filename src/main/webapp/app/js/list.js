@@ -3,6 +3,14 @@ $(function() {
     Hrcms.List.create = function(container) {
         var tThis = {};
         var accordionHolder = $('<div class="hrcms-accordion"></div>').appendTo(container);
+
+        function resizeHandler(e) {
+            if (e && e.target !== this)
+                return;
+            accordionHolder.find(".hrcms-accordion-content").trigger("resize");
+        }
+        container.resize(resizeHandler);
+
         var sectionTempl =
         '<div class="hrcms-accordion-item">' +
         '  <div class="hrcms-accordion-title">' +
@@ -14,6 +22,7 @@ $(function() {
         '  <ul class="hrcms-accordion-content"><li></li></ul>' +
         '</div>';
 
+
         function doExpandCollapse(accordion) {
             accordion.find("ul").toggle(300);
             accordion.find(".hrcms-accordion-icon")
@@ -23,18 +32,18 @@ $(function() {
         function loadForm(config, accordion) {
             if (config.activate)
                 config.activate(accordion, accordion.find(".hrcms-accordion-title"), accordion.find(".hrcms-accordion-icon").hasClass("hrcms-accordion-icon-expand"));
-            
-            /*$.ajaxSetup({cache: false});
-            $.ajax({
-                type: "GET",
-                url: config.formURLList[i],
-                dataType: "html",
-                success: function(formTempl) {
-                    $(formTempl).appendTo(accordion.find("li"));
-                    // Load data
 
-                }
-            });*/
+            /*$.ajaxSetup({cache: false});
+             $.ajax({
+             type: "GET",
+             url: config.formURLList[i],
+             dataType: "html",
+             success: function(formTempl) {
+             $(formTempl).appendTo(accordion.find("li"));
+             // Load data
+             
+             }
+             });*/
         }
         function addAccordion(config, i) {
             var accordion = $(sectionTempl).appendTo(accordionHolder);
@@ -49,7 +58,7 @@ $(function() {
                 if (accordion.find("li").children().length === 0 && config.activate) {
                     if (config.activate)
                         config.activate(accordion, accordion.find(".hrcms-accordion-title"),
-                                        accordion.find(".hrcms-accordion-icon").hasClass("hrcms-accordion-icon-expand"));
+                        accordion.find(".hrcms-accordion-icon").hasClass("hrcms-accordion-icon-expand"));
                 }
 
             });
@@ -64,9 +73,17 @@ $(function() {
                 doExpandCollapse($(accordions[0]));
                 if (config.activate)
                     config.activate(accordion, accordion.find(".hrcms-accordion-title"),
-                                    accordion.find(".hrcms-accordion-icon").hasClass("hrcms-accordion-icon-expand"));
+                    accordion.find(".hrcms-accordion-icon").hasClass("hrcms-accordion-icon-expand"));
 
             }
+
+            return this;
+        }
+
+        tThis.remove = function() {
+            accordionHolder.unbind();
+            accordionHolder.remove();
+            container.unbind("resize", resizeHandler);
         }
         // end
         return tThis;

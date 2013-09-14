@@ -18,12 +18,13 @@ $(function() {
         var offsetWidth = (config.offsetWidth ? config.offsetWidth : 0);
         dataContainer.css("width", container.width() - offsetWidth);
         dataContainer.css("height", container.height() - offsetHeight);
-        container.resize(function(event) {
+        function resize(event) {
             if (event.target !== this)
                 return;
             dataContainer.css("width", container.width() - offsetWidth);
             dataContainer.css("height", container.height() - offsetHeight);
-        });
+        }
+        container.resize(resize);
         dataContainer.scroll(function(event) {
             if (Hrcms.debugEnabled)
                 console.log(event);
@@ -179,8 +180,11 @@ $(function() {
             return this;
         }
         tThis.remove = function() {
+            fixedHeaderContainer.unbind();
             fixedHeaderContainer.remove();
+            gridContainer.unbind();
             gridContainer.remove();
+            container.unbind("resize", resize);
         }
         // end
         return tThis;

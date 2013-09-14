@@ -12,13 +12,13 @@ $(function() {
             mode: "vertical",
             part1Size: 46
         });
-        var formContainer = formSplitPanel.getPart2Element();
         var workspaceHeader = Hrcms.NavIndicator.create(formSplitPanel.getPart1Element());
         for (var i = 0; i < config.navigator.length; ++i)
             workspaceHeader.goTo(config.navigator[i]);
         workspaceHeader.configure({
             goBack: config.goBack
         });
+        var formContainer = formSplitPanel.getPart2Element();
         var mainFormPanel = Hrcms.Panel.create(formContainer).configure({
             panelClass: ["hrcms-record-main-form"]
         });
@@ -28,18 +28,16 @@ $(function() {
             return mainForm;
         }
 
-        tThis.buildGrid = function(gridHolder, gridHolderId, tableDefineUrl, gridDataUrl) {
+        tThis.buildGrid = function(gridHolder, tableDefineUrl, gridDataUrl, eventHandler) {
             var dataGrid = Hrcms.DataGrid.create({
-                container: gridHolder.find(gridHolderId)
+                container: gridHolder
             });
             $.ajaxSetup({cache: false});
             $.getJSON(tableDefineUrl, function(table) {
                 dataGrid.configure({
                     columns: table.columns,
-                    event: {
-                        rowclick: function(event) {
-                        }
-                    },
+                    event: eventHandler
+                    ,
                     header_filter: function(column) {
                         // filter the ex field out, the "ex" fields like "pk", "fk" and etc.
                         if (column.field_type === "ex")
@@ -55,6 +53,7 @@ $(function() {
                 if (Hrcms.debugEnabled)
                     console.log(result);
             });
+            
         }
 
         // Utility function

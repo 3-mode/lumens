@@ -113,6 +113,7 @@ $(function() {
                 part2Layout.unbind();
             theLayout.unbind();
             theLayout.remove();
+            parentContainer.unbind("resize", resize);
         }
         // end
         return tThis;
@@ -124,7 +125,7 @@ $(function() {
         var parentContainer = container;
         var thePanel = Hrcms.Id($('<div class="hrcms-panel"></div>').appendTo(parentContainer));
         var size = {};
-        parentContainer.resize(function(e) {
+        function resize(e) {
             if (e && e.target !== this)
                 return;
             if (size.width)
@@ -132,7 +133,9 @@ $(function() {
             if (size.height)
                 thePanel.css("height", size.height);
             thePanel.trigger("resize");
-        });
+        }
+        parentContainer.resize(resize);
+        resize();
 
         tThis.configure = function(config) {
             if (config.panelStyle) {
@@ -159,6 +162,7 @@ $(function() {
         tThis.remove = function() {
             thePanel.unbind();
             thePanel.remove();
+            parentContainer.unbind("resize", resize);
         }
         // end
         return tThis;
