@@ -27,13 +27,6 @@ public class TableDefinitionResource {
     }
 
     @GET
-    @Path("/base/{tableName}")
-    @Produces("application/json")
-    public String getBaseTable(@PathParam("tableName") String tableName) throws IOException {
-        return getTableJson(null, tableName);
-    }
-
-    @GET
     @Path("/basic/{tableName}")
     @Produces("application/json")
     public String getBasicTable(@PathParam("tableName") String tableName) throws IOException {

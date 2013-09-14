@@ -20,12 +20,5 @@ public class HrcmsServiceProvider extends HttpServlet {
     }
 
     protected void doService(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String serviceURI = req.getRequestURI();
-        if (serviceURI.endsWith("uuid")) {
-            resp.setHeader("Content-Type", "application/json;charset=UTF-8");
-            PrintWriter writer = resp.getWriter();
-            writer.write("{\"uuid\":\"" + UUID.randomUUID().toString() + "\"}");
-            writer.flush();
-        }
     }
 }

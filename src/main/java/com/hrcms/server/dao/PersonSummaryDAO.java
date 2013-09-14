@@ -28,7 +28,7 @@ public class PersonSummaryDAO {
         try {
             con = dataSource.getConnection();
             st = con.createStatement();
-            rs = st.executeQuery("select * from \"个人概况\"");
+            rs = st.executeQuery("SELECT * FROM \"个人概况\"");
             ResultSetMetaData rsmd = rs.getMetaData();
             int count = rsmd.getColumnCount();
 

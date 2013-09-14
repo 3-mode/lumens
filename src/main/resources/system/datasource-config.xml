@@ -32,6 +32,11 @@
     <bean id="personSummaryListDAO" class="com.hrcms.server.dao.PersonSummaryListDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    
+    
+    <bean id="dictTableDAO" class="com.hrcms.server.dao.DictTableDAO">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
     <!-- the DataSource (parameterized for configuration via a PropertyPlaceHolderConfigurer) -->
     <bean id="dataSource" destroy-method="close" class="org.apache.tomcat.jdbc.pool.DataSource">

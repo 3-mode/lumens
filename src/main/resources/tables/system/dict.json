@@ -1,0 +1,6 @@
+{
+    "columns": [
+        {"label": "字典", "field": "TABLE_NAME"},
+        {"label": "备注", "field": "COMMENTS"}
+    ]
+}
