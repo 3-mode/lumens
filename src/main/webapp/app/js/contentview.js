@@ -8,24 +8,24 @@ $(function() {
             part1Size: 180
         });
 
-        var leftPanel = Hrcms.Panel.create(theLayout.getPart1())
+        var leftPanel = Hrcms.Panel.create(theLayout.getPart1Element())
         .configure({
             panelClass: ["hrcms-menu-container"],
             panelStyle: {width: "100%", height: "100%"}
         });
 
-        var rightPanel = Hrcms.Panel.create(theLayout.getPart2())
+        var rightPanel = Hrcms.Panel.create(theLayout.getPart2Element())
         .configure({
             panelClass: ["hrcms-workspace-container"],
             panelStyle: {width: "100%", height: "100%"}
         }).getElement();
 
         // Memeber functions
-        tThis.getLeftPanel = function() {
+        tThis.getLeftPanelElement = function() {
             return leftPanel;
         }
 
-        tThis.getRightPanel = function() {
+        tThis.getRightPanelElement = function() {
             return rightPanel;
         }
 

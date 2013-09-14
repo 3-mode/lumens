@@ -35,7 +35,7 @@ $(function() {
         }
 
         function newField(tr) {
-            return $('<td style="padding-left: 8px; padding-right: 20px;"><div></div></td>').appendTo(tr);
+            return $('<td class="hrcms-datagrid-cell"><div></div></td>').appendTo(tr);
         }
 
         function buildTableHeader(config, theTable, noCallBack) {
@@ -83,17 +83,18 @@ $(function() {
             }
             var thead = $('<thead><tr></tr></thead>').appendTo(theTable);
             thead = thead.find('tr');
-            var th = $('<th width="1" style="padding-left:6px;"> <input type="checkbox"></th>').appendTo(thead);
+            var th = $('<th width="1" class="hrcms-datagrid-checkbox"><input type="checkbox"></th>').appendTo(thead);
             for (var i = 0; i < columns.length; ++i) {
                 if (config.header_filter && !config.header_filter(columns[i]))
                     continue;
-                th = $('<th style="padding-left: 8px; padding-right: 20px;"/>').appendTo(thead);
+                th = $('<th class="hrcms-datagrid-cell"/>').appendTo(thead);
                 th.addClass("hrcms-datagrid-header sortable");
                 th.attr("field-name", columns[i].field);
                 if (!noCallBack)
                     th.on('click', sort);
                 $('<div class="hrcms-datagrid-header-text"></div>').appendTo(th).html(columns[i].label);
             }
+            $('<th class="hrcms-datagrid-cell" style="width:100%;"/>').appendTo(thead);
             return thead;
         }
         function insertPlaceHolderRowIfRecordIsEmpty(records) {
@@ -132,12 +133,12 @@ $(function() {
                 if (configuration.event && configuration.event.rowclick)
                     tr.click(configuration.event.rowclick);
                 // TODO need to add event handler for this th
-                var th = $('<th width="1" style="padding-left:6px; padding-right:8px;"><input type="checkbox"></th>').appendTo(tr);
+                var th = $('<th width="1" class="hrcms-datagrid-checkbox"><input type="checkbox"></th>').appendTo(tr);
                 if (records[i].field_value) {
                     // TODO test data is here, it should be removed when the code completed
                     var record = records[i].field_value;
                     for (var j = 0; j < columns.length; ++j) {
-                        var td = $('<td style="padding-left:8px; padding-right:20px;"><div></div></td>').appendTo(tr);
+                        var td = newField(tr);
                         td.attr('field-name', columns[j].field);
                         if (j < record.length)
                             td.find("div").html(record[j]);
@@ -153,6 +154,7 @@ $(function() {
                             td.find("div").html(field);
                     }
                 }
+                newField(tr).css("width", "100%");
             }
             // Update header width
             var fixedHeaders = fixedTableHeader.find("div");
@@ -184,4 +186,3 @@ $(function() {
         return tThis;
     }
 });
-

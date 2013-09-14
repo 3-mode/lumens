@@ -3,7 +3,7 @@ $(function() {
     Hrcms.InfoManageView = {};
     Hrcms.InfoManageView.create = function(container) {
         var tThis = Hrcms.ContentView.create(container);
-        var rightContentContainer = tThis.getRightPanel();
+        var rightContentPanel = tThis.getRightPanelElement();
         var indicator;
         var dataGrid;
         var personForm;
@@ -28,10 +28,10 @@ $(function() {
                 if (personForm)
                     personForm.remove();
                 currentModuleName = event.moduleName;
-                indicator = Hrcms.NavIndicator.create(rightContentContainer);
+                indicator = Hrcms.NavIndicator.create(rightContentPanel);
                 indicator.goTo(currentModuleName);
                 dataGrid = Hrcms.DataGrid.create({
-                    container: rightContentContainer,
+                    container: rightContentPanel,
                     offsetHeight: 82
                 });
                 indicator.configure({
@@ -118,7 +118,7 @@ $(function() {
                     indicator.toggle();
                     dataGrid.toggle();
                     personForm = Hrcms.PersonForm.create({
-                        container: rightContentContainer,
+                        container: rightContentPanel,
                         navigator: [currentModuleName, employeeID],
                         goBack: function(currentTag) {
                             if (currentTag.html() === currentModuleName && personForm) {

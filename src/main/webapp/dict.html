@@ -28,8 +28,8 @@
         <link rel="stylesheet" href="app/css/hrcms.css">
         <script type="text/javascript" src="app/i18n/wlang.js"></script>
         <script type="text/javascript" src="app/i18n/lang.js"></script>
-        <script type="text/javascript" src="app/js/layout.js"></script>
         <script type="text/javascript" src="app/js/sysconfig.js"></script>
+        <script type="text/javascript" src="app/js/layout.js"></script>
         <script type="text/javascript" src="app/js/sysheader.js"></script>
         <script type="text/javascript" src="app/js/navmenu.js"></script>
         <script type="text/javascript" src="app/js/datagrid.js"></script>
@@ -39,13 +39,18 @@
         <script type="text/javascript" src="app/js/portlet.js"></script>
         <script type="text/javascript" src="app/js/checkbox.js"></script>
         <script type="text/javascript" src="app/js/list.js"></script>
+        <script type="text/javascript" src="app/js/tab.js"></script>
         <script type="text/javascript" src="app/js/contentview.js"></script>
+        <script type="text/javascript" src="app/js/reptfactry.js"></script>
         <script type="text/javascript" src="app/js/tableditorbar.js"></script>
-        <script type="text/javascript" src="app/js/tableditor.js"></script>  
         <script type="text/javascript" src="app/js/tableditor.js"></script>
+        <script type="text/javascript" src="app/js/modules/form/personform.js"></script>
+        <script type="text/javascript" src="app/js/modules/form/dictform.js"></script>
+        <script type="text/javascript" src="app/js/modules/form/baseform.js"></script>
         <script type="text/javascript" src="app/js/modules/homeview.js"></script>
         <script type="text/javascript" src="app/js/modules/infomgntview.js"></script>
         <script type="text/javascript" src="app/js/modules/statisticsview.js"></script>
+        <script type="text/javascript" src="app/js/modules/systemview.js"></script>
         <script type="text/javascript" src="app/hrcms.js"></script>
         <style>
             #grid {
@@ -106,6 +111,23 @@
                 part1Panel.configure({
                     panelClass: ["myContent"],
                     panelStyle: {width: "100%", height: "100%"}
+                });
+
+                var dictForm = Hrcms.DictForm.create({
+                    container: part1Panel.getElement(),
+                    navigator: ["REST"]
+                });
+                $.ajaxSetup({cache: false});
+                $.ajax({
+                    type: "GET",
+                    url: "app/html/dict/dictform.html",
+                    dataType: "html",
+                    success: function(dictFormTempl) {
+                        dictForm.configure({
+                            personFormTempl: dictFormTempl
+                        });
+                    }
+
                 });
             });
         </script>

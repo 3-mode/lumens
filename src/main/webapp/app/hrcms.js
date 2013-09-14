@@ -21,7 +21,7 @@ $(function() {
         tThis.load = function() {
             if (Hrcms.debugEnabled)
                 console.log("Loading HRCMS !");
-            headerContainer = layoutHeader(theLayout.getPart1());
+            headerContainer = layoutHeader(theLayout.getPart1Element());
             /** Header begin */
             Hrcms.Header.create(headerContainer).setSysTitle(I18N.SystemTitle);
             // TODO use ajax to load the toolbar button strings
@@ -38,13 +38,13 @@ $(function() {
                     moduleViewMap.activeView.remove();
                 // Switch to a new view
                 if (SysModuleID.SysToolbar_Home === curSysModuleID) {
-                    moduleViewMap.activeView = Hrcms.HomeView.create(theLayout.getPart2());
+                    moduleViewMap.activeView = Hrcms.HomeView.create(theLayout.getPart2Element());
                 }
                 else if (SysModuleID.SysToolbar_Information === curSysModuleID) {
-                    moduleViewMap.activeView = Hrcms.InfoManageView.create(theLayout.getPart2());
+                    moduleViewMap.activeView = Hrcms.InfoManageView.create(theLayout.getPart2Element());
                 }
                 else if (SysModuleID.SysToolbar_Statistic_Analysis === curSysModuleID) {
-                    moduleViewMap.activeView = Hrcms.StatisticsView.create(theLayout.getPart2());
+                    moduleViewMap.activeView = Hrcms.StatisticsView.create(theLayout.getPart2Element());
                 }
                 else if (SysModuleID.SysToolbar_ApproveProgress === curSysModuleID) {
                     // TODO
@@ -53,7 +53,7 @@ $(function() {
                     // TODO
                 }
                 else if (SysModuleID.SysToolbar_SystemManage === curSysModuleID) {
-                    moduleViewMap.activeView = Hrcms.SystemView.create(theLayout.getPart2());
+                    moduleViewMap.activeView = Hrcms.SystemView.create(theLayout.getPart2Element());
                 }
             });
             //-------------- Sys toolbar configuration End------------------------------------------

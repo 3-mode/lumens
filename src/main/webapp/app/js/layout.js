@@ -100,10 +100,10 @@ $(function() {
             }
             return this;
         }
-        tThis.getPart1 = function() {
+        tThis.getPart1Element = function() {
             return part1Layout;
         }
-        tThis.getPart2 = function() {
+        tThis.getPart2Element = function() {
             return part2Layout;
         }
         tThis.remove = function() {

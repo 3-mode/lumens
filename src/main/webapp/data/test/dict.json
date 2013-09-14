@@ -1,0 +1,7 @@
+{
+    "columns": [
+        {"label": "代码", "field": "代码"},
+        {"label": "名称", "field": "名称"},
+        {"label": "备注", "field": "备注"}
+    ]
+}

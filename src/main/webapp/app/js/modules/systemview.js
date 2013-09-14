@@ -3,7 +3,7 @@ $(function() {
     Hrcms.SystemView = {};
     Hrcms.SystemView.create = function(container) {
         var tThis = Hrcms.ContentView.create(container);
-        var rightPanel = tThis.getRightPanel();
+        var rightPanel = tThis.getRightPanelElement();
 
         // Override function which is used by parent ContentView
         tThis.initialize(function(menu) {
