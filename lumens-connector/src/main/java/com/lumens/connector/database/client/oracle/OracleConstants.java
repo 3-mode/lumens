@@ -15,7 +15,7 @@ public interface OracleConstants {
     public String DATA_TYPE = "data_type";
     // Oracle SQL to query tables information
     public String TABLENAMES = "select t.table_name,t.comments, t.TABLE_TYPE from user_tab_comments t";
-    public String TABLECOLUMNS = "select t.COLUMN_NAME, t.DATA_TYPE, t.DATA_LENGTH from user_tab_columns t where t.TABLE_NAME = ";
+    public String TABLECOLUMNS = "select t.COLUMN_NAME, t.DATA_TYPE, t.DATA_LENGTH from user_tab_columns t where t.TABLE_NAME = '%s'";
     // Oracle data types
     public String CHAR = "CHAR";
     public String VARCHAR2 = "VARCHAR2";

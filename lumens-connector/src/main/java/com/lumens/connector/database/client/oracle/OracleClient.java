@@ -54,22 +54,8 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                     tables.put(tableName, table);
                     table.setProperty(DESCRIPTION, new Value(description));
                     table.setProperty(TYPE, new Value(type));
-                }
-                if (fullLoad) {
-                    preparedStat = conn.prepareStatement(TABLECOLUMNS + '?');
-                    for (Format format : tables.values()) {
-                        preparedStat.setString(1, format.getName());
-                        preparedRet = preparedStat.executeQuery();
-                        if (!preparedRet.isClosed()) {
-                            while (preparedRet.next()) {
-                                String columnName = preparedRet.getString(1);
-                                String dataType = preparedRet.getString(2);
-                                String dataLength = preparedRet.getString(3);
-                                Format table = format.addChild(columnName, Form.FIELD, toType(dataType));
-                                table.setProperty(DATA_TYPE, new Value(dataType));
-                                table.setProperty(DATA_LENGTH, new Value(dataLength));
-                            }
-                        }
+                    if (fullLoad) {
+                        getFormat(table);
                     }
                 }
             }
@@ -90,16 +76,15 @@ public class OracleClient extends AbstractClient implements OracleConstants {
         ResultSet ret = null;
         try {
             stat = conn.createStatement();
-            ret = stat.executeQuery(
-            TABLECOLUMNS + '\'' + format.getName() + '\'');
+            ret = stat.executeQuery(String.format(TABLECOLUMNS, format.getName()));
             if (!ret.isClosed()) {
                 while (ret.next()) {
                     String columnName = ret.getString(1);
                     String dataType = ret.getString(2);
                     String dataLength = ret.getString(3);
-                    Format table = format.addChild(columnName, Form.FIELD, toType(dataType));
-                    table.setProperty(DATA_TYPE, new Value(dataType));
-                    table.setProperty(DATA_LENGTH, new Value(dataLength));
+                    Format field = format.addChild(columnName, Form.FIELD, toType(dataType));
+                    field.setProperty(DATA_TYPE, new Value(dataType));
+                    field.setProperty(DATA_LENGTH, new Value(dataLength));
                 }
             }
         } catch (Exception e) {
@@ -114,8 +99,9 @@ public class OracleClient extends AbstractClient implements OracleConstants {
 
     private Type toType(String dataType) {
         if (dataType.equalsIgnoreCase(CHAR)
-            || dataType.startsWith(VARCHAR2) || dataType.startsWith(NVARCHAR2) || dataType.
-        equalsIgnoreCase(CLOB)) {
+            || dataType.startsWith(VARCHAR2)
+            || dataType.startsWith(NVARCHAR2)
+            || dataType.equalsIgnoreCase(CLOB)) {
             return Type.STRING;
         } else if (dataType.startsWith(NUMBER)) {
             return Type.INTEGER;
