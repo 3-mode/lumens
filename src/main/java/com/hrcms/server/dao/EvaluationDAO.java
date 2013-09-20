@@ -1,7 +1,7 @@
 package com.hrcms.server.dao;
 
 import com.hrcms.server.dao.factory.EntityFactory;
-import com.hrcms.server.model.PersonSummaryListRecord;
+import com.hrcms.server.model.Evaluation;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,11 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-/**
- *
- * @author shaofeng.wang@outlook.com
- */
-public class PersonSummaryListDAO {
+public class EvaluationDAO {
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -26,12 +22,13 @@ public class PersonSummaryListDAO {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    public List<PersonSummaryListRecord> getPersonSummaryRecordList() throws Exception {
-        final List<PersonSummaryListRecord> pList = new ArrayList<PersonSummaryListRecord>();
-        jdbcTemplate.query(PersonSummaryListRecord.SQL_ALL_SUMMARY, new RowCallbackHandler() {
+    public List<Evaluation> getEvaluationItemList() throws Exception {
+
+        final List<Evaluation> pList = new ArrayList<Evaluation>();
+        jdbcTemplate.query(Evaluation.SQL_ALL_EVALUATION, new RowCallbackHandler() {
             @Override
             public void processRow(ResultSet rs) throws SQLException {
-                pList.add(EntityFactory.createEntity(PersonSummaryListRecord.class, rs));
+                pList.add(EntityFactory.createEntity(Evaluation.class, rs));
             }
         });
         return pList;

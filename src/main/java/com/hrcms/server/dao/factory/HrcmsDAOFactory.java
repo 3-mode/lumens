@@ -2,8 +2,12 @@ package com.hrcms.server.dao.factory;
 
 import com.hrcms.server.dao.DictItemDAO;
 import com.hrcms.server.dao.DictListDAO;
+import com.hrcms.server.dao.EvaluationDAO;
+import com.hrcms.server.dao.FamilyMemberDAO;
 import com.hrcms.server.dao.PersonSummaryDAO;
 import com.hrcms.server.dao.PersonSummaryListDAO;
+import com.hrcms.server.dao.ResumeItemDAO;
+import com.hrcms.server.dao.TableColumnDAO;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -28,5 +32,21 @@ public class HrcmsDAOFactory {
 
     public static DictItemDAO getDictItemDAO() {
         return (DictItemDAO) context.getBean("dictItemDAO");
+    }
+
+    public static TableColumnDAO getTableColumnDAO() {
+        return (TableColumnDAO) context.getBean("tableColumnDAO");
+    }
+
+    public static EvaluationDAO getEvaluationDAO() {
+        return (EvaluationDAO) context.getBean("evaluationDAO");
+    }
+
+    public static FamilyMemberDAO getFamilyMemberDAO() {
+        return (FamilyMemberDAO) context.getBean("familyMemberDAO");
+    }
+
+    public static ResumeItemDAO getResumeItemDAO() {
+        return (ResumeItemDAO) context.getBean("resumeItemDAO");
     }
 }
