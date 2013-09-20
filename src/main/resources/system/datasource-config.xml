@@ -37,6 +37,18 @@
     <bean id="dictItemDAO" class="com.hrcms.server.dao.DictItemDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    <bean id="tableColumnDAO" class="com.hrcms.server.dao.TableColumnDAO">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="evaluationDAO" class="com.hrcms.server.dao.EvaluationDAO">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="familyMemberDAO" class="com.hrcms.server.dao.FamilyMemberDAO">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="resumeItemDAO" class="com.hrcms.server.dao.ResumeItemDAO">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
     <!-- the DataSource (parameterized for configuration via a PropertyPlaceHolderConfigurer) -->
     <bean id="dataSource" destroy-method="close" class="org.apache.tomcat.jdbc.pool.DataSource">
