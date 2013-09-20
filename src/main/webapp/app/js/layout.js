@@ -106,6 +106,9 @@ $(function() {
         tThis.getPart2Element = function() {
             return part2Layout;
         }
+        tThis.getElement = function() {
+            return theLayout;
+        }
         tThis.remove = function() {
             if (part1Layout)
                 part1Layout.unbind();

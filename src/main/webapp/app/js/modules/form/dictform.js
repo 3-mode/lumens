@@ -12,7 +12,7 @@ $(function() {
         tThis.configure = function(config) {
             part1Panel = Hrcms.Panel.create(mainForm)
             .configure({
-                panelStyle: {"float": "left", "width": "400px", "height": "100%", "min-height": "400px", "border-left": "1px solid #dddddd", "border-right": "1px solid #dddddd"}
+                panelStyle: {"float": "left", "width": "400px", "height": "100%", "min-height": "450px", "border-left": "1px solid #dddddd", "border-right": "1px solid #dddddd"}
             });
             buildGrid(part1Panel.getElement(), "data/test/dict_list.json", "rest/entities/dictlist", {
                 rowclick: function() {
@@ -33,7 +33,7 @@ $(function() {
                             if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_SystemManage_System_Dict) {
                                 buildFormGrid(accordion,
                                 "#dictInfo", "app/html/dict/dict.html",
-                                "#dictInfoGrid", "data/test/dict.json", "rest/entities/dict/" + dictName);
+                                "#dictInfoGrid", "rest/entities/dictcolumns/" + dictName, "rest/entities/dict/" + dictName);
                             }
                         }
                     });

@@ -18,6 +18,7 @@
         <script type="text/javascript" src="app/i18n/wlang.js"></script>
         <script type="text/javascript" src="app/i18n/lang.js"></script>
         <script type="text/javascript" src="app/js/sysconfig.js"></script>
+        <script type="text/javascript" src="app/js/layout.js"></script>
         <script type="text/javascript" src="app/js/sysheader.js"></script>
         <script type="text/javascript" src="app/js/navmenu.js"></script>
         <script type="text/javascript" src="app/js/datagrid.js"></script>
@@ -25,13 +26,20 @@
         <script type="text/javascript" src="app/js/curdbar.js"></script>
         <script type="text/javascript" src="app/js/tablebar.js"></script>
         <script type="text/javascript" src="app/js/portlet.js"></script>
+        <script type="text/javascript" src="app/js/checkbox.js"></script>
+        <script type="text/javascript" src="app/js/list.js"></script>
+        <script type="text/javascript" src="app/js/tab.js"></script>
         <script type="text/javascript" src="app/js/contentview.js"></script>
-        <script type="text/javascript" src="app/js/recordform.js"></script>
+        <script type="text/javascript" src="app/js/reptfactry.js"></script>
         <script type="text/javascript" src="app/js/tableditorbar.js"></script>
         <script type="text/javascript" src="app/js/tableditor.js"></script>
+        <script type="text/javascript" src="app/js/modules/form/baseform.js"></script>
+        <script type="text/javascript" src="app/js/modules/form/personform.js"></script>
+        <script type="text/javascript" src="app/js/modules/form/dictform.js"></script>
         <script type="text/javascript" src="app/js/modules/homeview.js"></script>
         <script type="text/javascript" src="app/js/modules/infomgntview.js"></script>
         <script type="text/javascript" src="app/js/modules/statisticsview.js"></script>
+        <script type="text/javascript" src="app/js/modules/systemview.js"></script>
         <script type="text/javascript" src="app/hrcms.js"></script>
         <style>
             #grid {
@@ -62,83 +70,19 @@
                 function sortdown(column) {
                     console.log(column);
                 }
-                dataGrid.configure({
-                    event: {
-                        sortup: sortup,
-                        sortdown: sortdown
-                    },
-                    columns: [
-                        {
-                            field: "test1",
-                            name: "test 1"
-
+                $.getJSON("rest/tables/resume/info_before_college", function(table) {
+                    dataGrid.configure({
+                        event: {
+                            sortup: sortup,
+                            sortdown: sortdown
                         },
-                        {
-                            field: "test2",
-                            name: "test 2"
-                        },
-                        {
-                            field: "test3",
-                            name: "test 3"
-                        },
-                        {
-                            field: "test1",
-                            name: "test 1"
-
-                        },
-                        {
-                            field: "test2",
-                            name: "test 2"
-                        },
-                        {
-                            field: "test3",
-                            name: "test 3"
-                        }
-                    ]
+                        columns: table.columns
+                    });
+                    $.get("rest/entities/resume", function(data) {
+                        console.log(data);
+                        dataGrid.data(data);
+                    });
                 });
-
-                dataGrid.data([
-                    {field_value: ["张三", "NO1001", "121212121212121212222222222222222222222"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]},
-                    {field_value: ["李四", "NO1002", "22121212121212"]},
-                    {field_value: ["刘五", "NO1003", "32121212121212"]}
-                ]);//*/
-
             });
         </script>
     </head>

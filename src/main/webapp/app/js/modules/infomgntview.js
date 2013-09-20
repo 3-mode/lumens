@@ -16,6 +16,13 @@ $(function() {
             };
         }
 
+        function getTableDataRESTUrl(tablePath, dataPath) {
+            return {
+                table: "rest/tables/" + tablePath,
+                data: "rest/entities/" + dataPath
+            };
+        }
+
         tThis.initialize(function(menu) {
             menu.configure(Hrcms.NavMenu_InfoManage_Config);
             menu.onItemClick(function(event) {
@@ -47,11 +54,11 @@ $(function() {
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Info_PersonNature === event.moduleID) {
                     Url = generateTableDataUrl("basic/person_nature", "person_properties_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Info_Evaluation === event.moduleID) {
-                    Url = generateTableDataUrl("basic/person_evaluation", "person_evaluation_data");
+                    Url = getTableDataRESTUrl("basic/person_evaluation", "evaluation");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Info_Family === event.moduleID) {
-                    Url = generateTableDataUrl("basic/person_family", "person_family_data");
+                    Url = getTableDataRESTUrl("basic/person_family", "family");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_JobExperience === event.moduleID) {
-                    Url = generateTableDataUrl("resume/info_before_college", "info_before_college_data");
+                    Url = getTableDataRESTUrl("resume/info_before_college", "resume");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Degree === event.moduleID) {
                     Url = generateTableDataUrl("resume/education", "education_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_TrainingInLand === event.moduleID) {
