@@ -1,5 +1,16 @@
 $(function() {
-    Hrcms.debugEnabled = true;
+    function isDebug() {
+        if (window.location.search) {
+            var searchItems = window.location.search.substring(1).split('&');
+            for (var i = 0; i < searchItems.length; ++i) {
+                if (searchItems[i] === "debug")
+                    return true;
+            }
+        }
+        return false;
+    }
+    Hrcms.debugEnabled = isDebug();
+
     function generateId() {
         var chars = "0123456789abcdefghiklmnopqrstuvwxyz",
         string_length = 16,
