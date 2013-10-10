@@ -113,7 +113,7 @@ $(function() {
                                 else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_TrainingInLand) {
                                     buildFormGrid(accordion,
                                     "#trainInInfo", "app/html/resume/training_in_land.html",
-                                    "#trainInInfoGrid", "rest/tables/resume/training_inland", "data/test/training_inland_data.json");
+                                    "#trainInInfoGrid", "rest/tables/resume/training_inland", "rest/entities/educationinland");
                                 }
                                 else if (accordionTitle.attr("id") === SysModuleID.ContentNavMenu_InfoManage_Records_TrainingOutLand) {
                                     buildFormGrid(accordion,

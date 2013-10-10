@@ -2,12 +2,15 @@ package com.hrcms.server.dao.factory;
 
 import com.hrcms.server.dao.DictItemDAO;
 import com.hrcms.server.dao.DictListDAO;
+import com.hrcms.server.dao.EducationDAO;
+import com.hrcms.server.dao.EducationInLandDAO;
 import com.hrcms.server.dao.EvaluationDAO;
 import com.hrcms.server.dao.FamilyMemberDAO;
 import com.hrcms.server.dao.PersonSummaryDAO;
 import com.hrcms.server.dao.PersonSummaryListDAO;
 import com.hrcms.server.dao.ResumeItemDAO;
 import com.hrcms.server.dao.TableColumnDAO;
+import com.hrcms.server.dao.sql.SQLManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -17,6 +20,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class HrcmsDAOFactory {
     private static ApplicationContext context = new ClassPathXmlApplicationContext("system/datasource-config.xml");
+    private static SQLManager sqlManager = new SQLManager("system/daoSQL.xml");
 
     public static PersonSummaryDAO getPersonSummaryDAO() {
         return (PersonSummaryDAO) context.getBean("personSummaryDAO");
@@ -48,5 +52,13 @@ public class HrcmsDAOFactory {
 
     public static ResumeItemDAO getResumeItemDAO() {
         return (ResumeItemDAO) context.getBean("resumeItemDAO");
+    }
+
+    public static EducationDAO getEducationDAO() {
+        return (EducationDAO) context.getBean("educationDAO");
+    }
+
+    public static EducationInLandDAO getEducationInLandDAO() {
+        return (EducationInLandDAO) context.getBean("educationInLandDAO");
     }
 }

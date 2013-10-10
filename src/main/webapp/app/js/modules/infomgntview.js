@@ -60,9 +60,9 @@ $(function() {
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_JobExperience === event.moduleID) {
                     Url = getTableDataRESTUrl("resume/info_before_college", "resume");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Degree === event.moduleID) {
-                    Url = generateTableDataUrl("resume/education", "education_data");
+                    Url = getTableDataRESTUrl("resume/education", "education");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_TrainingInLand === event.moduleID) {
-                    Url = generateTableDataUrl("resume/training_inland", "training_inland_data");
+                    Url = getTableDataRESTUrl("resume/training_inland", "educationinland");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_TrainingOutLand === event.moduleID) {
                     Url = generateTableDataUrl("resume/training_outland", "training_outland_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Award === event.moduleID) {

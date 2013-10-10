@@ -2,6 +2,8 @@ package com.hrcms.server.resources;
 
 import com.hrcms.server.dao.DictItemDAO;
 import com.hrcms.server.dao.DictListDAO;
+import com.hrcms.server.dao.EducationDAO;
+import com.hrcms.server.dao.EducationInLandDAO;
 import com.hrcms.server.dao.EvaluationDAO;
 import com.hrcms.server.dao.FamilyMemberDAO;
 import com.hrcms.server.dao.PersonSummaryListDAO;
@@ -11,6 +13,8 @@ import com.hrcms.server.dao.factory.EntityFactory;
 import com.hrcms.server.dao.factory.HrcmsDAOFactory;
 import com.hrcms.server.model.DictItem;
 import com.hrcms.server.model.DictListRecord;
+import com.hrcms.server.model.EducationInLandItem;
+import com.hrcms.server.model.EducationItem;
 import com.hrcms.server.model.Evaluation;
 import com.hrcms.server.model.FamilyMember;
 import com.hrcms.server.model.PersonSummaryListRecord;
@@ -107,6 +111,24 @@ public class HrcmsEntityResources {
     public Response getResumeItemList() throws Exception {
         ResumeItemDAO rDAO = HrcmsDAOFactory.getResumeItemDAO();
         List<ResumeItem> l = rDAO.getResumeItemList();
+        return Response.ok().entity(String.format("[%s]", convertToJson(l))).build();
+    }
+
+    @GET
+    @Path("/education")
+    @Produces("application/json")
+    public Response getEducationItemList() throws Exception {
+        EducationDAO eDAO = HrcmsDAOFactory.getEducationDAO();
+        List<EducationItem> l = eDAO.getEducationItemList();
+        return Response.ok().entity(String.format("[%s]", convertToJson(l))).build();
+    }
+
+    @GET
+    @Path("/educationinland")
+    @Produces("application/json")
+    public Response getEducationInLandItemList() throws Exception {
+        EducationInLandDAO eDAO = HrcmsDAOFactory.getEducationInLandDAO();
+        List<EducationInLandItem> l = eDAO.getEducationInLandItemList();
         return Response.ok().entity(String.format("[%s]", convertToJson(l))).build();
     }
 

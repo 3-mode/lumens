@@ -49,6 +49,12 @@
     <bean id="resumeItemDAO" class="com.hrcms.server.dao.ResumeItemDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    <bean id="educationDAO" class="com.hrcms.server.dao.EducationDAO">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="educationInLandDAO" class="com.hrcms.server.dao.EducationInLandDAO">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
     <!-- the DataSource (parameterized for configuration via a PropertyPlaceHolderConfigurer) -->
     <bean id="dataSource" destroy-method="close" class="org.apache.tomcat.jdbc.pool.DataSource">

@@ -2,7 +2,6 @@ package com.hrcms.server.model;
 
 import com.hrcms.server.dao.factory.Column;
 import com.hrcms.server.dao.factory.Table;
-import java.math.BigDecimal;
 
 @Table(name = "考核")
 public class Evaluation {
