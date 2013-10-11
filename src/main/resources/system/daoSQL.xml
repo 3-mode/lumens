@@ -1,12 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database-access-objects>
-    <database-access-object name="educationDAO">
+    <database-access-object name="EducationDAO">
         <sql name="selectAllEducationItems">
-<![CDATA[select t1.全局编号, t1.职工号, t6.姓名, t1.学历, t1.所学专业, t1.入学年月, t2.名称 as 学习形式, t3.名称 as 学习方式, t1.学制,
+<![CDATA[
+select t1.全局编号, t1.职工号, t6.姓名, t1.学历, t1.所学专业, t1.入学年月, t2.名称 as 学习形式, t3.名称 as 学习方式, t1.学制,
  t1.毕业年月, t1.毕肄业学校或单位, t4.名称 as 学位, t1.学位授予日期, t5.名称 as 学位授予国家, t1.学位授予单位, t1.备注, t1.最后修改时间
  from 学历学位 t1, DICT_学习形式代码 t2, DICT_学习方式代码 t3, DICT_学位代码 t4, DICT_国家代码 t5, 个人概况 t6
  where t1.学习形式 = t2.代码(+) and t1.学习方式 = t3.代码(+) and t1.学位 = t4.代码(+) and t1.学位授予国家 = t5.代码(+) and t1.职工号 = t6.职工号(+)
- order by t1.职工号]]>
+ order by t1.职工号
+]]>
         </sql>
     </database-access-object>
+    <database-access-object name="DictListDAO">
+        <sql name="tableNames">
+<![CDATA[
+select t.TABLE_NAME,t.COMMENTS from USER_TAB_COMMENTS t where t.TABLE_NAME like 'DICT_%'
+]]>
+        </sql>
+    </database-access-object>
+    <database-access-object name="DictItemDAO">
+        <sql name="sqlDictItems">
+<![CDATA[select %s from %s t]]>
+        </sql>
+    </database-access-object>
+    <database-access-object name="EducationInLandDAO">
+        <sql name="sql_all_educations">
+<![CDATA[
+select t1.全局编号, t1.职工号, t3.姓名, t1.最后修改时间, t4.名称 as 进修性质, t6.名称 as 学习方式, t1.学习起始年月, t1.学习终止年月, t1.总学时, t1.学习内容,
+       t1.进修班名称, t1.主办单位, t7.名称 as 主办单位性质, t1.在学单位, t2.名称 as 在学单位类别, t5.名称 as 进修结果, t1.备注
+ from 国内进修培训 t1, dict_在学单位类别代码 t2, 个人概况 t3, dict_进修性质代码 t4, dict_教育结果代码 t5, dict_学习方式代码 t6, dict_单位性质代码 t7
+ where t1.在学单位类别 = t2.代码(+) and t1.职工号 = t3.职工号(+) and t1.进修性质 = t4.代码(+) and t1.进修结果 = t5.代码(+)
+       and t1.学习方式 = t6.代码(+) and t1.主办单位性质 = t7.代码(+)
+ order by t1.职工号
+]]>
+        </sql>
+    </database-access-object>
+    <database-access-object name="EvaluationDAO">
+        <sql name="sql_all_evaluations">
+<![CDATA[
+select k.全局编号, k.职工号, g.姓名, lb.名称 AS 考核类别, k.考核岗位, k.考核内容, dj.名称 AS 考核等级, jg.名称 AS 考核结果, k.考核时间, k.备注, k.最后修改时间
+ from 考核 k, 个人概况 g, DICT_考核类别代码 lb, DICT_考核等级代码 dj, DICT_考核结果代码 jg
+ where k.职工号 = g.职工号(+) and  k.考核类别 = lb.代码(+) and k.考核等级 = dj.代码(+) and k.考核结果 = jg.代码(+)
+ order by k.职工号
+]]>
+        </sql>
+    </database-access-object>
+    <database-access-object name="FamilyMemberDAO">
+        <sql name="sql_all_members">
+<![CDATA[
+select f.全局编号, f.职工号, g.姓名, f.主要成员姓名 AS 成员姓名, c.名称 AS 称谓, f.出生时间, f.工作单位, f.备注, f.最后修改时间
+ from 家庭成员 f, 个人概况 g,  DICT_称谓代码 c
+ where f.职工号 = g.职工号(+) and f.称谓 = c.代码(+)
+ order by f.职工号
+]]>
+        </sql>
+    </database-access-object>
+   
 </database-access-objects>

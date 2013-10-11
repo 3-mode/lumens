@@ -6,25 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.tomcat.jdbc.pool.DataSource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-public class DictListDAO {
-    private DataSource dataSource;
-    private JdbcTemplate jdbcTemplate;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
-
+public class DictListDAO extends baseDAO {
     public List<DictListRecord> getDictTableList() throws Exception {
         final List<DictListRecord> pList = new ArrayList<DictListRecord>();
-        jdbcTemplate.query(DictListRecord.TABLENAMES, new RowCallbackHandler() {
+        jdbcTemplate.query(sqlManager.getSQL("DictListDAO/tableNames"), new RowCallbackHandler() {
             @Override
             public void processRow(ResultSet rs) throws SQLException {
                 pList.add(EntityFactory.createEntity(DictListRecord.class, rs));

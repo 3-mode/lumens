@@ -10,7 +10,6 @@ import com.hrcms.server.dao.PersonSummaryDAO;
 import com.hrcms.server.dao.PersonSummaryListDAO;
 import com.hrcms.server.dao.ResumeItemDAO;
 import com.hrcms.server.dao.TableColumnDAO;
-import com.hrcms.server.dao.sql.SQLManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -20,7 +19,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class HrcmsDAOFactory {
     private static ApplicationContext context = new ClassPathXmlApplicationContext("system/datasource-config.xml");
-    private static SQLManager sqlManager = new SQLManager("system/daoSQL.xml");
 
     public static PersonSummaryDAO getPersonSummaryDAO() {
         return (PersonSummaryDAO) context.getBean("personSummaryDAO");

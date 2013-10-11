@@ -1,15 +1,11 @@
 package com.hrcms.server.dao.sql;
 
+import com.hrcms.server.dao.sql.config.DatabaseAccessObject;
 import com.hrcms.server.dao.sql.config.DatabaseAccessObjects;
 import com.hrcms.server.dao.sql.config.Sql;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import org.apache.commons.io.IOUtils;
@@ -19,13 +15,7 @@ import org.apache.commons.io.IOUtils;
  * @author shaofeng.wang@outlook.com
  */
 public class SQLManager {
-    class DatabaseAccessObjectHolder {
-        Map<String, Sql> sqlHolder = new HashMap<String, Sql>();
-    }
-
-    class DatabaseAccessObjectsHolder {
-        Map<String, DatabaseAccessObjectHolder> daoHolder = new HashMap<String, DatabaseAccessObjectHolder>();
-    }
+    private Map<String, Sql> sqlHolder = new HashMap<String, Sql>();
 
     public SQLManager(String strSQLURL) {
         loadSQL(strSQLURL);
@@ -38,11 +28,20 @@ public class SQLManager {
             JAXBContext context = JAXBContext.newInstance(DatabaseAccessObjects.class);
             Unmarshaller um = context.createUnmarshaller();
             DatabaseAccessObjects objects = (DatabaseAccessObjects) um.unmarshal(in);
-            System.out.println("dao object list size: " + objects.getDatabaseAccessObject().size());
+            for (DatabaseAccessObject obj : objects.getDatabaseAccessObject()) {
+                for (Sql sql : obj.getSql()) {
+                    sql.setvalue(sql.getvalue().trim());
+                    sqlHolder.put(obj.getName() + '/' + sql.getName(), sql);
+                }
+            }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         } finally {
             IOUtils.closeQuietly(in);
         }
+    }
+
+    public String getSQL(String sqlPath) {
+        return sqlHolder.get(sqlPath).getvalue();
     }
 }

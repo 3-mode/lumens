@@ -26,36 +26,49 @@
     See here for more details on commons-dbcp versus tomcat-jdbc: 
     http://blog.ippon.fr/2013/03/13/improving-the-performance-of-the-spring-petclinic-sample-application-part-3-of-5/-->
     <bean id="personSummaryDAO" class="com.hrcms.server.dao.PersonSummaryDAO">
+        <property name="sqlManager" ref="sqlManager"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean id="personSummaryListDAO" class="com.hrcms.server.dao.PersonSummaryListDAO">
+        <property name="sqlManager" ref="sqlManager"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean id="dictListDAO" class="com.hrcms.server.dao.DictListDAO">
+        <property name="sqlManager" ref="sqlManager"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean id="dictItemDAO" class="com.hrcms.server.dao.DictItemDAO">
+        <property name="sqlManager" ref="sqlManager"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean id="tableColumnDAO" class="com.hrcms.server.dao.TableColumnDAO">
+        <property name="sqlManager" ref="sqlManager"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean id="evaluationDAO" class="com.hrcms.server.dao.EvaluationDAO">
+        <property name="sqlManager" ref="sqlManager"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean id="familyMemberDAO" class="com.hrcms.server.dao.FamilyMemberDAO">
+        <property name="sqlManager" ref="sqlManager"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean id="resumeItemDAO" class="com.hrcms.server.dao.ResumeItemDAO">
+        <property name="sqlManager" ref="sqlManager"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean id="educationDAO" class="com.hrcms.server.dao.EducationDAO">
+        <property name="sqlManager" ref="sqlManager"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean id="educationInLandDAO" class="com.hrcms.server.dao.EducationInLandDAO">
+        <property name="sqlManager" ref="sqlManager"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
-
+   
+    <bean id="sqlManager" class="com.hrcms.server.dao.sql.SQLManager">
+        <constructor-arg value="system/daoSQL.xml"/>
+    </bean>
     <!-- the DataSource (parameterized for configuration via a PropertyPlaceHolderConfigurer) -->
     <bean id="dataSource" destroy-method="close" class="org.apache.tomcat.jdbc.pool.DataSource">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>
