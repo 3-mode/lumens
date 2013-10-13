@@ -397,8 +397,9 @@ create table 家庭成员
     职工号    varchar2(10),
     最后修改时间 varchar2(25),
     主要成员姓名 varchar2(60),
+    政治面貌    varchar2(20),
     称谓     varchar2(100),
-    出生时间   date,
+    出生时间   varchar2(20),
     工作单位   varchar2(120),
     备注     varchar2(500)
   );

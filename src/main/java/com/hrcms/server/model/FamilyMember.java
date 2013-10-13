@@ -19,6 +19,8 @@ public class FamilyMember {
     public String unit;
     @Column(name = "备注")
     public String remark;
+    @Column(name = "政治面貌")
+    public String politicalStatus;
     @Column(name = "最后修改时间")
     public String lastModifyTime;
 }
