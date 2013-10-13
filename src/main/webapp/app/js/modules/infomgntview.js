@@ -68,7 +68,7 @@ $(function() {
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Award === event.moduleID) {
                     Url = generateTableDataUrl("resume/award", "award_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Punishment === event.moduleID) {
-                    Url = generateTableDataUrl("resume/punishment", "punishment_data");
+                    Url = getTableDataRESTUrl("resume/punishment", "punishment");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_AnomalyInCollege === event.moduleID) {
                     Url = generateTableDataUrl("resume/anomaly", "anomaly_data");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_InfoToJoinCollege === event.moduleID) {

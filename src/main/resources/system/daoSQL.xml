@@ -48,12 +48,21 @@ select k.全局编号, k.职工号, g.姓名, lb.名称 AS 考核类别, k.考�
     <database-access-object name="FamilyMemberDAO">
         <sql name="sql_all_members">
 <![CDATA[
-select f.全局编号, f.职工号, g.姓名, f.主要成员姓名 AS 成员姓名, c.名称 AS 称谓, f.出生时间, f.工作单位, f.备注, f.最后修改时间
- from 家庭成员 f, 个人概况 g,  DICT_称谓代码 c
- where f.职工号 = g.职工号(+) and f.称谓 = c.代码(+)
- order by f.职工号
+select F.全局编号, F.职工号, G.姓名, F.主要成员姓名 as 成员姓名, C.名称 as 称谓, F.出生时间, F.工作单位, Z.名称 as 政治面貌, F.备注, F.最后修改时间
+ from 家庭成员 F, 个人概况 G,  DICT_称谓代码 C, DICT_政治面貌代码 Z
+ where F.职工号 = G.职工号(+) and F.称谓 = C.代码(+) and F.政治面貌 = Z.代码(+)
+ order by F.职工号
 ]]>
         </sql>
     </database-access-object>
-   
+    <database-access-object name="PunishmentDAO">
+        <sql name="sql_all_punishments">
+<![CDATA[
+select t1.全局编号, t1.职工号, t2.姓名, t1.惩处名称, t1.惩处原因, t1.惩处内容, t1.惩处单位, t1.惩处文号, t1.惩处日期,
+       t1.惩处撤销日期, t1.惩处撤销文号, t1.惩处撤销原因, t1.备注, t1.最后修改时间
+ from 惩处 t1, 个人概况 t2
+ where t1.职工号 = t2.职工号(+)
+]]>
+        </sql>
+    </database-access-object>
 </database-access-objects>

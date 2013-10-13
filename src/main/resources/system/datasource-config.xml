@@ -65,6 +65,10 @@
         <property name="sqlManager" ref="sqlManager"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    <bean id="punishmentDAO" class="com.hrcms.server.dao.PunishmentDAO">
+        <property name="sqlManager" ref="sqlManager"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
    
     <bean id="sqlManager" class="com.hrcms.server.dao.sql.SQLManager">
         <constructor-arg value="system/daoSQL.xml"/>

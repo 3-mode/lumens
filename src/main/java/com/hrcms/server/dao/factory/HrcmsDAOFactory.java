@@ -8,6 +8,7 @@ import com.hrcms.server.dao.EvaluationDAO;
 import com.hrcms.server.dao.FamilyMemberDAO;
 import com.hrcms.server.dao.PersonSummaryDAO;
 import com.hrcms.server.dao.PersonSummaryListDAO;
+import com.hrcms.server.dao.PunishmentDAO;
 import com.hrcms.server.dao.ResumeItemDAO;
 import com.hrcms.server.dao.TableColumnDAO;
 import org.springframework.context.ApplicationContext;
@@ -58,5 +59,9 @@ public class HrcmsDAOFactory {
 
     public static EducationInLandDAO getEducationInLandDAO() {
         return (EducationInLandDAO) context.getBean("educationInLandDAO");
+    }
+
+    public static PunishmentDAO getPunishmentDAO() {
+        return (PunishmentDAO) context.getBean("punishmentDAO");
     }
 }

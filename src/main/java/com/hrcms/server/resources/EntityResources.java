@@ -7,6 +7,7 @@ import com.hrcms.server.dao.EducationInLandDAO;
 import com.hrcms.server.dao.EvaluationDAO;
 import com.hrcms.server.dao.FamilyMemberDAO;
 import com.hrcms.server.dao.PersonSummaryListDAO;
+import com.hrcms.server.dao.PunishmentDAO;
 import com.hrcms.server.dao.ResumeItemDAO;
 import com.hrcms.server.dao.TableColumnDAO;
 import com.hrcms.server.dao.factory.EntityFactory;
@@ -18,6 +19,7 @@ import com.hrcms.server.model.EducationItem;
 import com.hrcms.server.model.Evaluation;
 import com.hrcms.server.model.FamilyMember;
 import com.hrcms.server.model.PersonSummaryListRecord;
+import com.hrcms.server.model.Punishment;
 import com.hrcms.server.model.ResumeItem;
 import com.hrcms.server.model.TableColumn;
 import java.util.List;
@@ -33,7 +35,7 @@ import javax.ws.rs.core.Response;
  * @author shaofeng.wang@outlook.com
  */
 @Path("entities")
-public class HrcmsEntityResources {
+public class EntityResources {
     public static final String columnTemplate = "{ \"columns\": [\n%s\n]}";
 
     @GET
@@ -129,6 +131,15 @@ public class HrcmsEntityResources {
     public Response getEducationInLandItemList() throws Exception {
         EducationInLandDAO eDAO = HrcmsDAOFactory.getEducationInLandDAO();
         List<EducationInLandItem> l = eDAO.getEducationInLandItemList();
+        return Response.ok().entity(String.format("[%s]", convertToJson(l))).build();
+    }
+
+    @GET
+    @Path("/punishment")
+    @Produces("application/json")
+    public Response getPunishmentList() throws Exception {
+        PunishmentDAO pDAO = HrcmsDAOFactory.getPunishmentDAO();
+        List<Punishment> l = pDAO.getPunishmentList();
         return Response.ok().entity(String.format("[%s]", convertToJson(l))).build();
     }
 

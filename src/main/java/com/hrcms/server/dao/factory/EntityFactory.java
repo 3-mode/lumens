@@ -53,7 +53,7 @@ public class EntityFactory<T> {
                     b.append(", ");
                 }
                 Object v = entry.getValue();
-                b.append(String.format("\"%s\": \"%s\"", entry.getKey(), v == null ? "" : v.toString()));
+                b.append(String.format("\"%s\": \"%s\"", entry.getKey(), v == null ? "" : v.toString().replace("\"", "\\\"")));
             }
         } else {
             Class<T> clazz = (Class<T>) entity.getClass();
@@ -67,7 +67,7 @@ public class EntityFactory<T> {
                     b.append(", ");
                 }
                 Object v = fieldList[i].get(entity);
-                b.append(String.format("\"%s\": \"%s\"", column.name(), v == null ? "" : v.toString()));
+                b.append(String.format("\"%s\": \"%s\"", column.name(), v == null ? "" : v.toString().replace("\"", "\\\"")));
             }
         }
         return String.format("{ %s }", b.toString());
