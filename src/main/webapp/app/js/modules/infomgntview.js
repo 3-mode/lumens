@@ -64,9 +64,9 @@ $(function() {
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_TrainingInLand === event.moduleID) {
                     Url = getTableDataRESTUrl("resume/training_inland", "educationinland");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_TrainingOutLand === event.moduleID) {
-                    Url = generateTableDataUrl("resume/training_outland", "training_outland_data");
+                    Url = getTableDataRESTUrl("resume/training_outland", "educationoutland");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Award === event.moduleID) {
-                    Url = generateTableDataUrl("resume/award", "award_data");
+                    Url = getTableDataRESTUrl("resume/award", "award");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_Punishment === event.moduleID) {
                     Url = getTableDataRESTUrl("resume/punishment", "punishment");
                 } else if (SysModuleID.ContentNavMenu_InfoManage_Records_AnomalyInCollege === event.moduleID) {

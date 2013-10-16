@@ -1,9 +1,11 @@
 package com.hrcms.server.resources;
 
+import com.hrcms.server.dao.AwardDAO;
 import com.hrcms.server.dao.DictItemDAO;
 import com.hrcms.server.dao.DictListDAO;
 import com.hrcms.server.dao.EducationDAO;
 import com.hrcms.server.dao.EducationInLandDAO;
+import com.hrcms.server.dao.EducationOutLandDAO;
 import com.hrcms.server.dao.EvaluationDAO;
 import com.hrcms.server.dao.FamilyMemberDAO;
 import com.hrcms.server.dao.PersonSummaryListDAO;
@@ -12,10 +14,12 @@ import com.hrcms.server.dao.ResumeItemDAO;
 import com.hrcms.server.dao.TableColumnDAO;
 import com.hrcms.server.dao.factory.EntityFactory;
 import com.hrcms.server.dao.factory.HrcmsDAOFactory;
+import com.hrcms.server.model.AwardItem;
 import com.hrcms.server.model.DictItem;
 import com.hrcms.server.model.DictListRecord;
 import com.hrcms.server.model.EducationInLandItem;
 import com.hrcms.server.model.EducationItem;
+import com.hrcms.server.model.EducationOutLandItem;
 import com.hrcms.server.model.Evaluation;
 import com.hrcms.server.model.FamilyMember;
 import com.hrcms.server.model.PersonSummaryListRecord;
@@ -131,6 +135,24 @@ public class EntityResources {
     public Response getEducationInLandItemList() throws Exception {
         EducationInLandDAO eDAO = HrcmsDAOFactory.getEducationInLandDAO();
         List<EducationInLandItem> l = eDAO.getEducationInLandItemList();
+        return Response.ok().entity(String.format("[%s]", convertToJson(l))).build();
+    }
+
+    @GET
+    @Path("/educationoutland")
+    @Produces("application/json")
+    public Response getEducationOutLandItemList() throws Exception {
+        EducationOutLandDAO eDAO = HrcmsDAOFactory.getEducationOutLandDAO();
+        List<EducationOutLandItem> l = eDAO.getEducationOutLandItemList();
+        return Response.ok().entity(String.format("[%s]", convertToJson(l))).build();
+    }
+
+    @GET
+    @Path("/award")
+    @Produces("application/json")
+    public Response getAwardList() throws Exception {
+        AwardDAO aDAO = HrcmsDAOFactory.getAwardDAO();
+        List<AwardItem> l = aDAO.getAwardItemList();
         return Response.ok().entity(String.format("[%s]", convertToJson(l))).build();
     }
 

@@ -1,9 +1,11 @@
 package com.hrcms.server.dao.factory;
 
+import com.hrcms.server.dao.AwardDAO;
 import com.hrcms.server.dao.DictItemDAO;
 import com.hrcms.server.dao.DictListDAO;
 import com.hrcms.server.dao.EducationDAO;
 import com.hrcms.server.dao.EducationInLandDAO;
+import com.hrcms.server.dao.EducationOutLandDAO;
 import com.hrcms.server.dao.EvaluationDAO;
 import com.hrcms.server.dao.FamilyMemberDAO;
 import com.hrcms.server.dao.PersonSummaryDAO;
@@ -61,7 +63,15 @@ public class HrcmsDAOFactory {
         return (EducationInLandDAO) context.getBean("educationInLandDAO");
     }
 
+    public static EducationOutLandDAO getEducationOutLandDAO() {
+        return (EducationOutLandDAO) context.getBean("educationOutLandDAO");
+    }
+
     public static PunishmentDAO getPunishmentDAO() {
         return (PunishmentDAO) context.getBean("punishmentDAO");
+    }
+    
+    public static AwardDAO getAwardDAO() {
+        return (AwardDAO) context.getBean("awardDAO");
     }
 }
