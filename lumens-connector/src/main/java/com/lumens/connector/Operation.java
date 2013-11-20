@@ -5,11 +5,12 @@
 package com.lumens.connector;
 
 import com.lumens.model.Element;
+import com.lumens.model.Format;
 
 /**
  *
  * @author washaofe
  */
 public interface Operation {
-    public OperationResult execute(Element input) throws Exception;
+    public OperationResult execute(Element input, Format output) throws Exception;
 }

@@ -18,14 +18,16 @@ import org.apache.axiom.soap.SOAPEnvelope;
 public class WebServiceResult implements OperationResult {
     private ElementFromSOAPBuilder elementBuilder = new ElementFromSOAPBuilder();
     private SOAPEnvelope envelope;
+    private Format resultFormat;
 
-    WebServiceResult(SOAPEnvelope envelope) {
+    WebServiceResult(Format resultFormat, SOAPEnvelope envelope) {
+        this.resultFormat = resultFormat;
         this.envelope = envelope;
     }
 
     @Override
-    public List<Element> getResult(Format format) {
-        Element result = elementBuilder.buildElement(format, envelope);
+    public List<Element> getResult() {
+        Element result = elementBuilder.buildElement(resultFormat, envelope);
         if (result != null) {
             List<Element> results = new ArrayList<Element>(1);
             results.add(result);

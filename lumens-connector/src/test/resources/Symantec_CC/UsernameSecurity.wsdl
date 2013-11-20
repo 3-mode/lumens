@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+  <wsp:Policy wsu:Id="BasicHttpBinding_IAssetService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsoma:OptimizedMimeSerialization xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization"/>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false"/>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256/>
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Lax/>
+              </wsp:Policy>
+            </sp:Layout>
+            <sp:IncludeTimestamp/>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <sp:SignedSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:UsernameToken sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+              <wsp:Policy>
+                <sp:WssUsernameToken10/>
+              </wsp:Policy>
+            </sp:UsernameToken>
+          </wsp:Policy>
+        </sp:SignedSupportingTokens>
+        <sp:Wss10 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy/>
+        </sp:Wss10>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/Imports">
+      <xsd:import schemaLocation="UsernameSecurity.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/AccessDeniedFaultContract"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/InvalidArgumentFaultContract"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetsNotFoundError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1.xsd" namespace="http://schemas.microsoft.com/2003/10/Serialization/"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/Asset"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/Attribute"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4.xsd" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5.xsd" namespace="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.AssetBizLayerInterfaces"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetType"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/NotSupportedFaultContract"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/LicenseExpiredFaultContract"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/NotLicensedFaultContract"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/EmailNotificationFaultContract"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/DatasetInvalidFaultContract"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/JobTypeNotValid"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/SiteNotFoundError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34.xsd" namespace="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.Integration"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/SiteRetrievingError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35_36.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetOperationFailed"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35_36_37.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/ManualReviewFault"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35_36_37_38.xsd" namespace="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.AssetBizLayerInterfaces.Integration"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35_36_37_38_39.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/InValidAttributeError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35_36_37_38_39_40.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetTypeNotFoundError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35_36_37_38_39_40_41.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetDeleteError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSearchCriteria"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9.xsd" namespace="http://schemas.datacontract.org/2004/07/Symantec.CSM.Business.Shared"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10.xsd" namespace="http://schemas.datacontract.org/2004/07/Symantec.CSM.Business.Common.ExpressionTree"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11.xsd" namespace="http://www.symantec.com/CSM/ExpressionService/Expression"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12.xsd" namespace="http://schemas.datacontract.org/2004/07/System"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13.xsd" namespace="http://schemas.datacontract.org/2004/07/System.Reflection"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetTypeAssetAttributePair"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35_36_37_38_39_40_41_42.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/GetScoreError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetScores"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35_36_37_38_39_40_41_42_43.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/ProviderNotRegisteredError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetRiskScore"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetScorePair"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35_36_37_38_39_40_41_42_43_44.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/InvalidJobNameError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35_36_37_38_39_40_41_42_43_44_45.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/EMailAddressFormatError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35_36_37_38_39_40_41_42_43_44_45_46.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/ScheduleDataError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26_27_28_29_30_31_32_33_34_35_36_37_38_39_40_41_42_43_44_45_46_47.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/ReconciliationRuleError"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetImportInputData"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/NotificationData"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/ReconciliationRule"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20.xsd" namespace="http://www.symantec.com/CSM/Shared/V1/ScheduleData"/>
+      <xsd:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21.xsd" namespace="http://www.symantec.com/CCS/"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IAssetService_GetDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDetails"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_GetDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDetailsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_GetDetails_AccessDeniedErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q1:AccessDeniedError" xmlns:q1="http://www.symantec.com/CSM/Shared/V1/AccessDeniedFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_GetDetails_InvalidArgumentErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q2:InvalidArgumentError" xmlns:q2="http://www.symantec.com/CSM/Shared/V1/InvalidArgumentFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_GetDetails_AssetsNotFoundErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q3:AssetsNotFoundError" xmlns:q3="http://www.symantec.com/CSM/Applications/AssetSystem/AssetsNotFoundError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_GetDetails_AssetSystemErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q4:AssetSystemError" xmlns:q4="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Update_InputMessage">
+    <wsdl:part name="parameters" element="tns:Update"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Update_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Update_AssetsNotFoundErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q5:AssetsNotFoundError" xmlns:q5="http://www.symantec.com/CSM/Applications/AssetSystem/AssetsNotFoundError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Update_InvalidAttributeErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q6:InvalidAttributeError" xmlns:q6="http://www.symantec.com/CSM/Applications/AssetSystem/InValidAttributeError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Update_AccessDeniedErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q7:AccessDeniedError" xmlns:q7="http://www.symantec.com/CSM/Shared/V1/AccessDeniedFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Update_InvalidArgumentErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q8:InvalidArgumentError" xmlns:q8="http://www.symantec.com/CSM/Shared/V1/InvalidArgumentFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Update_AssetUpdateErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q9:AssetUpdateError" xmlns:q9="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.AssetBizLayerInterfaces.Integration"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Update_AssetTypeNotFoundErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q10:AssetTypeNotFoundError" xmlns:q10="http://www.symantec.com/CSM/Applications/AssetSystem/AssetTypeNotFoundError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Delete_InputMessage">
+    <wsdl:part name="parameters" element="tns:Delete"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Delete_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Delete_AssetDeleteErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q11:AssetDeleteError" xmlns:q11="http://www.symantec.com/CSM/Applications/AssetSystem/AssetDeleteError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Delete_AssetSystemErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q12:AssetSystemError" xmlns:q12="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Delete_AccessDeniedErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q13:AccessDeniedError" xmlns:q13="http://www.symantec.com/CSM/Shared/V1/AccessDeniedFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Delete_AssetsNotFoundErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q14:AssetsNotFoundError" xmlns:q14="http://www.symantec.com/CSM/Applications/AssetSystem/AssetsNotFoundError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Delete_InvalidArgumentErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q15:InvalidArgumentError" xmlns:q15="http://www.symantec.com/CSM/Shared/V1/InvalidArgumentFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_MoveAssets_InputMessage">
+    <wsdl:part name="parameters" element="tns:MoveAssets"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_MoveAssets_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MoveAssetsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_MoveAssets_InvalidArgumentErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q16:InvalidArgumentError" xmlns:q16="http://www.symantec.com/CSM/Shared/V1/InvalidArgumentFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_MoveAssets_AssetSystemErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q17:AssetSystemError" xmlns:q17="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_MoveAssets_AssetsNotFoundErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q18:AssetsNotFoundError" xmlns:q18="http://www.symantec.com/CSM/Applications/AssetSystem/AssetsNotFoundError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_MoveAssets_InvalidAttributeErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q19:InvalidAttributeError" xmlns:q19="http://www.symantec.com/CSM/Applications/AssetSystem/InValidAttributeError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_MoveAssets_AssetTypeNotFoundErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q20:AssetTypeNotFoundError" xmlns:q20="http://www.symantec.com/CSM/Applications/AssetSystem/AssetTypeNotFoundError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_MoveAssets_AccessDeniedErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q21:AccessDeniedError" xmlns:q21="http://www.symantec.com/CSM/Shared/V1/AccessDeniedFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_ExportESMCCSAssetMapping_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExportESMCCSAssetMapping"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_ExportESMCCSAssetMapping_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExportESMCCSAssetMappingResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_ExportESMCCSAssetMapping_AccessDeniedErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q22:AccessDeniedError" xmlns:q22="http://www.symantec.com/CSM/Shared/V1/AccessDeniedFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_ExportESMCCSAssetMapping_InvalidArgumentErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q23:InvalidArgumentError" xmlns:q23="http://www.symantec.com/CSM/Shared/V1/InvalidArgumentFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_ExportESMCCSAssetMapping_AssetSystemErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q24:AssetSystemError" xmlns:q24="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Search_InputMessage">
+    <wsdl:part name="parameters" element="tns:Search"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Search_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SearchResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Search_AssetTypeNotFoundErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q25:AssetTypeNotFoundError" xmlns:q25="http://www.symantec.com/CSM/Applications/AssetSystem/AssetTypeNotFoundError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Search_InvalidAttributeErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q26:InvalidAttributeError" xmlns:q26="http://www.symantec.com/CSM/Applications/AssetSystem/InValidAttributeError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Search_InvalidArgumentErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q27:InvalidArgumentError" xmlns:q27="http://www.symantec.com/CSM/Shared/V1/InvalidArgumentFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Search_AssetSystemErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q28:AssetSystemError" xmlns:q28="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_Search_AccessDeniedErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q29:AccessDeniedError" xmlns:q29="http://www.symantec.com/CSM/Shared/V1/AccessDeniedFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_GetScores_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetScores"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_GetScores_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetScoresResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_GetScores_InvalidArgumentErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q30:InvalidArgumentError" xmlns:q30="http://www.symantec.com/CSM/Shared/V1/InvalidArgumentFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_GetScores_AssetSystemErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q31:AssetSystemError" xmlns:q31="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_GetScores_AccessDeniedErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q32:AccessDeniedError" xmlns:q32="http://www.symantec.com/CSM/Shared/V1/AccessDeniedFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_GetScores_GetScoreErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q33:GetScoreError" xmlns:q33="http://www.symantec.com/CSM/Applications/AssetSystem/GetScoreError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateRiskScores_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateRiskScores"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateRiskScores_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateRiskScoresResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateRiskScores_ProviderNotRegisteredErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q34:ProviderNotRegisteredError" xmlns:q34="http://www.symantec.com/CSM/Applications/AssetSystem/ProviderNotRegisteredError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateRiskScores_AccessDeniedErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q35:AccessDeniedError" xmlns:q35="http://www.symantec.com/CSM/Shared/V1/AccessDeniedFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateRiskScores_AssetUpdateErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q36:AssetUpdateError" xmlns:q36="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.AssetBizLayerInterfaces.Integration"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateRiskScores_ProviderConfigurationErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q37:ProviderConfigurationError" xmlns:q37="http://www.symantec.com/CSM/Applications/AssetSystem/InValidAttributeError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateRiskScores_InvalidArgumentErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q38:InvalidArgumentError" xmlns:q38="http://www.symantec.com/CSM/Shared/V1/InvalidArgumentFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateRiskScores_AssetSystemErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q39:AssetSystemError" xmlns:q39="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateComplianceScores_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateComplianceScores"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateComplianceScores_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateComplianceScoresResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateComplianceScores_AccessDeniedErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q40:AccessDeniedError" xmlns:q40="http://www.symantec.com/CSM/Shared/V1/AccessDeniedFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateComplianceScores_AssetUpdateErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q41:AssetUpdateError" xmlns:q41="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.AssetBizLayerInterfaces.Integration"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateComplianceScores_ProviderConfigurationErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q42:ProviderConfigurationError" xmlns:q42="http://www.symantec.com/CSM/Applications/AssetSystem/InValidAttributeError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateComplianceScores_ProviderNotRegisteredErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q43:ProviderNotRegisteredError" xmlns:q43="http://www.symantec.com/CSM/Applications/AssetSystem/ProviderNotRegisteredError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateComplianceScores_InvalidArgumentErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q44:InvalidArgumentError" xmlns:q44="http://www.symantec.com/CSM/Shared/V1/InvalidArgumentFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_UpdateComplianceScores_AssetSystemErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q45:AssetSystemError" xmlns:q45="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_CreateAssetImportJob_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateAssetImportJob"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_CreateAssetImportJob_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateAssetImportJobResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_CreateAssetImportJob_InvalidArgumentErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q46:InvalidArgumentError" xmlns:q46="http://www.symantec.com/CSM/Shared/V1/InvalidArgumentFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_CreateAssetImportJob_AssetTypeNotFoundErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q47:AssetTypeNotFoundError" xmlns:q47="http://www.symantec.com/CSM/Applications/AssetSystem/AssetTypeNotFoundError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_CreateAssetImportJob_InvalidJobNameErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q48:InvalidJobNameError" xmlns:q48="http://www.symantec.com/CSM/Shared/V1/InvalidJobNameError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_CreateAssetImportJob_AssetImportJobErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q49:AssetImportJobError" xmlns:q49="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.Integration"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_CreateAssetImportJob_EmailNotificationErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q50:EmailNotificationError" xmlns:q50="http://www.symantec.com/CSM/Shared/V1/EmailNotificationFaultContract"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_CreateAssetImportJob_EMailAddressFormatErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q51:EMailAddressFormatError" xmlns:q51="http://www.symantec.com/CSM/Shared/V1/EMailAddressFormatError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_CreateAssetImportJob_ScheduleDataErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q52:ScheduleDataError" xmlns:q52="http://www.symantec.com/CSM/Shared/V1/ScheduleDataError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_CreateAssetImportJob_ReconciliationRuleErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q53:ReconciliationRuleError" xmlns:q53="http://www.symantec.com/CSM/Applications/AssetSystem/ReconciliationRuleError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_CreateAssetImportJob_AssetSystemErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q54:AssetSystemError" xmlns:q54="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError"/>
+  </wsdl:message>
+  <wsdl:message name="IAssetService_CreateAssetImportJob_AccessDeniedErrorFault_FaultMessage">
+    <wsdl:part name="detail" element="q55:AccessDeniedError" xmlns:q55="http://www.symantec.com/CSM/Shared/V1/AccessDeniedFaultContract"/>
+  </wsdl:message>
+  <wsdl:portType name="IAssetService">
+    <wsdl:operation name="GetDetails">
+      <wsdl:input wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetDetails" message="tns:IAssetService_GetDetails_InputMessage"/>
+      <wsdl:output wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetDetailsResponse" message="tns:IAssetService_GetDetails_OutputMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetDetailsAccessDeniedErrorFault" name="AccessDeniedErrorFault" message="tns:IAssetService_GetDetails_AccessDeniedErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetDetailsInvalidArgumentErrorFault" name="InvalidArgumentErrorFault" message="tns:IAssetService_GetDetails_InvalidArgumentErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetDetailsAssetsNotFoundErrorFault" name="AssetsNotFoundErrorFault" message="tns:IAssetService_GetDetails_AssetsNotFoundErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetDetailsAssetSystemErrorFault" name="AssetSystemErrorFault" message="tns:IAssetService_GetDetails_AssetSystemErrorFault_FaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="Update">
+      <wsdl:input wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/Update" message="tns:IAssetService_Update_InputMessage"/>
+      <wsdl:output wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateResponse" message="tns:IAssetService_Update_OutputMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateAssetsNotFoundErrorFault" name="AssetsNotFoundErrorFault" message="tns:IAssetService_Update_AssetsNotFoundErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateInvalidAttributeErrorFault" name="InvalidAttributeErrorFault" message="tns:IAssetService_Update_InvalidAttributeErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateAccessDeniedErrorFault" name="AccessDeniedErrorFault" message="tns:IAssetService_Update_AccessDeniedErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateInvalidArgumentErrorFault" name="InvalidArgumentErrorFault" message="tns:IAssetService_Update_InvalidArgumentErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateAssetUpdateErrorFault" name="AssetUpdateErrorFault" message="tns:IAssetService_Update_AssetUpdateErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateAssetTypeNotFoundErrorFault" name="AssetTypeNotFoundErrorFault" message="tns:IAssetService_Update_AssetTypeNotFoundErrorFault_FaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="Delete">
+      <wsdl:input wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/Delete" message="tns:IAssetService_Delete_InputMessage"/>
+      <wsdl:output wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/DeleteResponse" message="tns:IAssetService_Delete_OutputMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/DeleteAssetDeleteErrorFault" name="AssetDeleteErrorFault" message="tns:IAssetService_Delete_AssetDeleteErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/DeleteAssetSystemErrorFault" name="AssetSystemErrorFault" message="tns:IAssetService_Delete_AssetSystemErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/DeleteAccessDeniedErrorFault" name="AccessDeniedErrorFault" message="tns:IAssetService_Delete_AccessDeniedErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/DeleteAssetsNotFoundErrorFault" name="AssetsNotFoundErrorFault" message="tns:IAssetService_Delete_AssetsNotFoundErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/DeleteInvalidArgumentErrorFault" name="InvalidArgumentErrorFault" message="tns:IAssetService_Delete_InvalidArgumentErrorFault_FaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="MoveAssets">
+      <wsdl:input wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/MoveAssets" message="tns:IAssetService_MoveAssets_InputMessage"/>
+      <wsdl:output wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/MoveAssetsResponse" message="tns:IAssetService_MoveAssets_OutputMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/MoveAssetsInvalidArgumentErrorFault" name="InvalidArgumentErrorFault" message="tns:IAssetService_MoveAssets_InvalidArgumentErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/MoveAssetsAssetSystemErrorFault" name="AssetSystemErrorFault" message="tns:IAssetService_MoveAssets_AssetSystemErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/MoveAssetsAssetsNotFoundErrorFault" name="AssetsNotFoundErrorFault" message="tns:IAssetService_MoveAssets_AssetsNotFoundErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/MoveAssetsInvalidAttributeErrorFault" name="InvalidAttributeErrorFault" message="tns:IAssetService_MoveAssets_InvalidAttributeErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/MoveAssetsAssetTypeNotFoundErrorFault" name="AssetTypeNotFoundErrorFault" message="tns:IAssetService_MoveAssets_AssetTypeNotFoundErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/MoveAssetsAccessDeniedErrorFault" name="AccessDeniedErrorFault" message="tns:IAssetService_MoveAssets_AccessDeniedErrorFault_FaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="ExportESMCCSAssetMapping">
+      <wsdl:input wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/ExportESMCCSAssetMapping" message="tns:IAssetService_ExportESMCCSAssetMapping_InputMessage"/>
+      <wsdl:output wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/ExportESMCCSAssetMappingResponse" message="tns:IAssetService_ExportESMCCSAssetMapping_OutputMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/ExportESMCCSAssetMappingAccessDeniedErrorFault" name="AccessDeniedErrorFault" message="tns:IAssetService_ExportESMCCSAssetMapping_AccessDeniedErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/ExportESMCCSAssetMappingInvalidArgumentErrorFault" name="InvalidArgumentErrorFault" message="tns:IAssetService_ExportESMCCSAssetMapping_InvalidArgumentErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/ExportESMCCSAssetMappingAssetSystemErrorFault" name="AssetSystemErrorFault" message="tns:IAssetService_ExportESMCCSAssetMapping_AssetSystemErrorFault_FaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="Search">
+      <wsdl:input wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/Search" message="tns:IAssetService_Search_InputMessage"/>
+      <wsdl:output wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/SearchResponse" message="tns:IAssetService_Search_OutputMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/SearchAssetTypeNotFoundErrorFault" name="AssetTypeNotFoundErrorFault" message="tns:IAssetService_Search_AssetTypeNotFoundErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/SearchInvalidAttributeErrorFault" name="InvalidAttributeErrorFault" message="tns:IAssetService_Search_InvalidAttributeErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/SearchInvalidArgumentErrorFault" name="InvalidArgumentErrorFault" message="tns:IAssetService_Search_InvalidArgumentErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/SearchAssetSystemErrorFault" name="AssetSystemErrorFault" message="tns:IAssetService_Search_AssetSystemErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/SearchAccessDeniedErrorFault" name="AccessDeniedErrorFault" message="tns:IAssetService_Search_AccessDeniedErrorFault_FaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="GetScores">
+      <wsdl:input wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetScores" message="tns:IAssetService_GetScores_InputMessage"/>
+      <wsdl:output wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetScoresResponse" message="tns:IAssetService_GetScores_OutputMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetScoresInvalidArgumentErrorFault" name="InvalidArgumentErrorFault" message="tns:IAssetService_GetScores_InvalidArgumentErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetScoresAssetSystemErrorFault" name="AssetSystemErrorFault" message="tns:IAssetService_GetScores_AssetSystemErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetScoresAccessDeniedErrorFault" name="AccessDeniedErrorFault" message="tns:IAssetService_GetScores_AccessDeniedErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetScoresGetScoreErrorFault" name="GetScoreErrorFault" message="tns:IAssetService_GetScores_GetScoreErrorFault_FaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateRiskScores">
+      <wsdl:input wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateRiskScores" message="tns:IAssetService_UpdateRiskScores_InputMessage"/>
+      <wsdl:output wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateRiskScoresResponse" message="tns:IAssetService_UpdateRiskScores_OutputMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateRiskScoresProviderNotRegisteredErrorFault" name="ProviderNotRegisteredErrorFault" message="tns:IAssetService_UpdateRiskScores_ProviderNotRegisteredErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateRiskScoresAccessDeniedErrorFault" name="AccessDeniedErrorFault" message="tns:IAssetService_UpdateRiskScores_AccessDeniedErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateRiskScoresAssetUpdateErrorFault" name="AssetUpdateErrorFault" message="tns:IAssetService_UpdateRiskScores_AssetUpdateErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateRiskScoresProviderConfigurationErrorFault" name="ProviderConfigurationErrorFault" message="tns:IAssetService_UpdateRiskScores_ProviderConfigurationErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateRiskScoresInvalidArgumentErrorFault" name="InvalidArgumentErrorFault" message="tns:IAssetService_UpdateRiskScores_InvalidArgumentErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateRiskScoresAssetSystemErrorFault" name="AssetSystemErrorFault" message="tns:IAssetService_UpdateRiskScores_AssetSystemErrorFault_FaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateComplianceScores">
+      <wsdl:input wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateComplianceScores" message="tns:IAssetService_UpdateComplianceScores_InputMessage"/>
+      <wsdl:output wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateComplianceScoresResponse" message="tns:IAssetService_UpdateComplianceScores_OutputMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateComplianceScoresAccessDeniedErrorFault" name="AccessDeniedErrorFault" message="tns:IAssetService_UpdateComplianceScores_AccessDeniedErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateComplianceScoresAssetUpdateErrorFault" name="AssetUpdateErrorFault" message="tns:IAssetService_UpdateComplianceScores_AssetUpdateErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateComplianceScoresProviderConfigurationErrorFault" name="ProviderConfigurationErrorFault" message="tns:IAssetService_UpdateComplianceScores_ProviderConfigurationErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateComplianceScoresProviderNotRegisteredErrorFault" name="ProviderNotRegisteredErrorFault" message="tns:IAssetService_UpdateComplianceScores_ProviderNotRegisteredErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateComplianceScoresInvalidArgumentErrorFault" name="InvalidArgumentErrorFault" message="tns:IAssetService_UpdateComplianceScores_InvalidArgumentErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateComplianceScoresAssetSystemErrorFault" name="AssetSystemErrorFault" message="tns:IAssetService_UpdateComplianceScores_AssetSystemErrorFault_FaultMessage"/>
+    </wsdl:operation>
+    <wsdl:operation name="CreateAssetImportJob">
+      <wsdl:input wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJob" message="tns:IAssetService_CreateAssetImportJob_InputMessage"/>
+      <wsdl:output wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJobResponse" message="tns:IAssetService_CreateAssetImportJob_OutputMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJobInvalidArgumentErrorFault" name="InvalidArgumentErrorFault" message="tns:IAssetService_CreateAssetImportJob_InvalidArgumentErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJobAssetTypeNotFoundErrorFault" name="AssetTypeNotFoundErrorFault" message="tns:IAssetService_CreateAssetImportJob_AssetTypeNotFoundErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJobInvalidJobNameErrorFault" name="InvalidJobNameErrorFault" message="tns:IAssetService_CreateAssetImportJob_InvalidJobNameErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJobAssetImportJobErrorFault" name="AssetImportJobErrorFault" message="tns:IAssetService_CreateAssetImportJob_AssetImportJobErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJobEmailNotificationErrorFault" name="EmailNotificationErrorFault" message="tns:IAssetService_CreateAssetImportJob_EmailNotificationErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJobEMailAddressFormatErrorFault" name="EMailAddressFormatErrorFault" message="tns:IAssetService_CreateAssetImportJob_EMailAddressFormatErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJobScheduleDataErrorFault" name="ScheduleDataErrorFault" message="tns:IAssetService_CreateAssetImportJob_ScheduleDataErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJobReconciliationRuleErrorFault" name="ReconciliationRuleErrorFault" message="tns:IAssetService_CreateAssetImportJob_ReconciliationRuleErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJobAssetSystemErrorFault" name="AssetSystemErrorFault" message="tns:IAssetService_CreateAssetImportJob_AssetSystemErrorFault_FaultMessage"/>
+      <wsdl:fault wsaw:Action="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJobAccessDeniedErrorFault" name="AccessDeniedErrorFault" message="tns:IAssetService_CreateAssetImportJob_AccessDeniedErrorFault_FaultMessage"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IAssetService" type="tns:IAssetService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IAssetService_policy"/>
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetDetails">
+      <soap:operation soapAction="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetDetails" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AccessDeniedErrorFault">
+        <soap:fault name="AccessDeniedErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidArgumentErrorFault">
+        <soap:fault name="InvalidArgumentErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetsNotFoundErrorFault">
+        <soap:fault name="AssetsNotFoundErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetSystemErrorFault">
+        <soap:fault name="AssetSystemErrorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Update">
+      <soap:operation soapAction="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/Update" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AssetsNotFoundErrorFault">
+        <soap:fault name="AssetsNotFoundErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidAttributeErrorFault">
+        <soap:fault name="InvalidAttributeErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AccessDeniedErrorFault">
+        <soap:fault name="AccessDeniedErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidArgumentErrorFault">
+        <soap:fault name="InvalidArgumentErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetUpdateErrorFault">
+        <soap:fault name="AssetUpdateErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetTypeNotFoundErrorFault">
+        <soap:fault name="AssetTypeNotFoundErrorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Delete">
+      <soap:operation soapAction="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/Delete" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AssetDeleteErrorFault">
+        <soap:fault name="AssetDeleteErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetSystemErrorFault">
+        <soap:fault name="AssetSystemErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AccessDeniedErrorFault">
+        <soap:fault name="AccessDeniedErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetsNotFoundErrorFault">
+        <soap:fault name="AssetsNotFoundErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidArgumentErrorFault">
+        <soap:fault name="InvalidArgumentErrorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="MoveAssets">
+      <soap:operation soapAction="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/MoveAssets" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentErrorFault">
+        <soap:fault name="InvalidArgumentErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetSystemErrorFault">
+        <soap:fault name="AssetSystemErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetsNotFoundErrorFault">
+        <soap:fault name="AssetsNotFoundErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidAttributeErrorFault">
+        <soap:fault name="InvalidAttributeErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetTypeNotFoundErrorFault">
+        <soap:fault name="AssetTypeNotFoundErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AccessDeniedErrorFault">
+        <soap:fault name="AccessDeniedErrorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ExportESMCCSAssetMapping">
+      <soap:operation soapAction="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/ExportESMCCSAssetMapping" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AccessDeniedErrorFault">
+        <soap:fault name="AccessDeniedErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidArgumentErrorFault">
+        <soap:fault name="InvalidArgumentErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetSystemErrorFault">
+        <soap:fault name="AssetSystemErrorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Search">
+      <soap:operation soapAction="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/Search" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AssetTypeNotFoundErrorFault">
+        <soap:fault name="AssetTypeNotFoundErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidAttributeErrorFault">
+        <soap:fault name="InvalidAttributeErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidArgumentErrorFault">
+        <soap:fault name="InvalidArgumentErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetSystemErrorFault">
+        <soap:fault name="AssetSystemErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AccessDeniedErrorFault">
+        <soap:fault name="AccessDeniedErrorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetScores">
+      <soap:operation soapAction="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/GetScores" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentErrorFault">
+        <soap:fault name="InvalidArgumentErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetSystemErrorFault">
+        <soap:fault name="AssetSystemErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AccessDeniedErrorFault">
+        <soap:fault name="AccessDeniedErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GetScoreErrorFault">
+        <soap:fault name="GetScoreErrorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateRiskScores">
+      <soap:operation soapAction="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateRiskScores" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ProviderNotRegisteredErrorFault">
+        <soap:fault name="ProviderNotRegisteredErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AccessDeniedErrorFault">
+        <soap:fault name="AccessDeniedErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetUpdateErrorFault">
+        <soap:fault name="AssetUpdateErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ProviderConfigurationErrorFault">
+        <soap:fault name="ProviderConfigurationErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidArgumentErrorFault">
+        <soap:fault name="InvalidArgumentErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetSystemErrorFault">
+        <soap:fault name="AssetSystemErrorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateComplianceScores">
+      <soap:operation soapAction="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/UpdateComplianceScores" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AccessDeniedErrorFault">
+        <soap:fault name="AccessDeniedErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetUpdateErrorFault">
+        <soap:fault name="AssetUpdateErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ProviderConfigurationErrorFault">
+        <soap:fault name="ProviderConfigurationErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ProviderNotRegisteredErrorFault">
+        <soap:fault name="ProviderNotRegisteredErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidArgumentErrorFault">
+        <soap:fault name="InvalidArgumentErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetSystemErrorFault">
+        <soap:fault name="AssetSystemErrorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateAssetImportJob">
+      <soap:operation soapAction="http://www.symantec.com/CSM/Applications/AssetSystem/AssetService/IAssetService/CreateAssetImportJob" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentErrorFault">
+        <soap:fault name="InvalidArgumentErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetTypeNotFoundErrorFault">
+        <soap:fault name="AssetTypeNotFoundErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidJobNameErrorFault">
+        <soap:fault name="InvalidJobNameErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetImportJobErrorFault">
+        <soap:fault name="AssetImportJobErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="EmailNotificationErrorFault">
+        <soap:fault name="EmailNotificationErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="EMailAddressFormatErrorFault">
+        <soap:fault name="EMailAddressFormatErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ScheduleDataErrorFault">
+        <soap:fault name="ScheduleDataErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ReconciliationRuleErrorFault">
+        <soap:fault name="ReconciliationRuleErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AssetSystemErrorFault">
+        <soap:fault name="AssetSystemErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AccessDeniedErrorFault">
+        <soap:fault name="AccessDeniedErrorFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+</wsdl:definitions>

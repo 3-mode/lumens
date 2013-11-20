@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetScorePair" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.symantec.com/CSM/Applications/AssetSystem/AssetScorePair" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/">
+  <xs:import schemaLocation="UsernameSecurity_1.xsd" namespace="http://schemas.microsoft.com/2003/10/Serialization/"/>
+  <xs:complexType name="ArrayOfAssetScorePair">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AssetScorePair" nillable="true" type="tns:AssetScorePair"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAssetScorePair" nillable="true" type="tns:ArrayOfAssetScorePair"/>
+  <xs:complexType name="AssetScorePair">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AssetID" type="ser:guid"/>
+      <xs:element minOccurs="0" name="Score" type="xs:float"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AssetScorePair" nillable="true" type="tns:AssetScorePair"/>
+</xs:schema>

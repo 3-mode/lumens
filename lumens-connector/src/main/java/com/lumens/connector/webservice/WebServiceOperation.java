@@ -1,13 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.lumens.connector.webservice;
 
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.connector.webservice.soap.SOAPClient;
 import com.lumens.model.Element;
+import com.lumens.model.Format;
 import org.apache.axiom.soap.SOAPEnvelope;
 
 /**
@@ -22,8 +19,8 @@ public class WebServiceOperation implements Operation {
     }
 
     @Override
-    public OperationResult execute(Element input) throws Exception {
+    public OperationResult execute(Element input, Format output) throws Exception {
         SOAPEnvelope envelope = client.execute(input);
-        return new WebServiceResult(envelope);
+        return new WebServiceResult(output, envelope);
     }
 }

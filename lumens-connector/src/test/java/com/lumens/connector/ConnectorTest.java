@@ -1,11 +1,17 @@
 package com.lumens.connector;
 
 import com.lumens.connector.database.DatabaseConnector;
+import com.lumens.connector.database.client.oracle.OracleQuerySQLBuilder;
+import com.lumens.connector.database.client.oracle.OracleWriteSQLBuilder;
 import com.lumens.connector.webservice.WebServiceConnector;
 import com.lumens.connector.webservice.soap.SOAPConstants;
 import com.lumens.connector.webservice.soap.SOAPMessageBuilder;
+import com.lumens.model.DataElement;
+import com.lumens.model.DataFormat;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
+import com.lumens.model.Format.Form;
+import com.lumens.model.Type;
 import com.lumens.model.Value;
 import com.lumens.model.serializer.ElementXmlSerializer;
 import com.lumens.model.serializer.FormatXmlSerializer;
@@ -62,8 +68,8 @@ public class ConnectorTest extends TestCase implements SOAPConstants {
                 xml.write(baos);
             }
             String xmlContent = baos.toString("UTF-8");
-            System.out.println(xmlContent);
-            fos.write(baos.toByteArray());
+            //System.out.println(xmlContent);
+            //fos.write(baos.toByteArray());
             fos.close();
             //osw.write(xmlContent);
             //osw.close();
@@ -74,7 +80,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants {
 
     public void testCCS02WebService() throws Exception {
         HashMap<String, Value> props = new HashMap<String, Value>();
-        props.put(WebServiceConnector.WSDL, new Value("file:///C:/Symantec_CC/UsernameSecurity_1.wsdl"));
+        props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/Symantec_CC/UsernameSecurity_1.wsdl").toString()));
         WebServiceConnector connector = new WebServiceConnector();
         connector.setPropertyList(props);
         connector.open();
@@ -147,8 +153,8 @@ public class ConnectorTest extends TestCase implements SOAPConstants {
         getOpenFundString = services.get("getOpenFundString");
         connector.getFormat(getOpenFundString, "getOpenFundStringResponse.getOpenFundStringResult.string.string", Direction.OUT);
         Operation op = connector.getOperation();
-        OperationResult opResult = op.execute(result.get(0));
-        List<Element> response = opResult.getResult(getOpenFundString);
+        OperationResult opResult = op.execute(result.get(0), getOpenFundString);
+        List<Element> response = opResult.getResult();
         new ElementXmlSerializer(response.get(0), true).write(System.out);
         new FormatXmlSerializer(getOpenFundString).write(System.out);
 
@@ -181,9 +187,34 @@ public class ConnectorTest extends TestCase implements SOAPConstants {
         connector.getFormat(getRequests, "getRequestsResponse.return.simpleFields", Direction.OUT);
         connector.getFormat(getRequests, "getRequestsResponse.return.simpleFields.stringValue", Direction.OUT);
         new FormatXmlSerializer(getRequests).write(System.out);
-        assertNotNull(getRequests.getChildByPath(
-        "getRequestsResponse.return.simpleFields.stringValue"));
+        assertNotNull(getRequests.getChildByPath("getRequestsResponse.return.simpleFields.stringValue"));
         //List<Element> response = op.execute(result.get(0), getRequests);
         //new DataElementXmlSerializer(response.get(0), "UTF-8", true).write(System.out);
+    }
+
+    public void testOracleQuerySQLBuilder() {
+        // Test select SQL generating
+        Format employeeFmt = new DataFormat("Testtable", Form.STRUCT);
+        employeeFmt.addChild(new DataFormat("Id", Form.FIELD, Type.STRING));
+        employeeFmt.addChild(new DataFormat("name", Form.FIELD, Type.STRING));
+        employeeFmt.addChild(new DataFormat("job_title", Form.FIELD, Type.STRING));
+        employeeFmt.addChild(new DataFormat("department", Form.FIELD, Type.STRING));
+        OracleQuerySQLBuilder sql = new OracleQuerySQLBuilder(employeeFmt);
+        String sqlSelect = sql.generateSelectSQL(null);
+        assertTrue("SELECT t1.Id, t1.name, t1.job_title, t1.department FROM Testtable t1".equalsIgnoreCase(sqlSelect));
+        System.out.println("Gerenated select SQL: " + sqlSelect);
+
+        // Test insert SQL generating
+        Element employee = new DataElement(employeeFmt);
+        employee.addChild("Id").setValue("E10001");
+        employee.addChild("name").setValue("James");
+        employee.addChild("job_title").setValue("Software engineer");
+        employee.addChild("department").setValue("Software R&D");
+        OracleWriteSQLBuilder sqlWrite = new OracleWriteSQLBuilder();
+        String sqlInsert = sqlWrite.generateInsertSQL(employee);
+        System.out.println("Generated insert SQL: " + sqlInsert);
+
+        // Test update SQL generating
+        //sqlWrite.generateUpdateSQL(employee);
     }
 }

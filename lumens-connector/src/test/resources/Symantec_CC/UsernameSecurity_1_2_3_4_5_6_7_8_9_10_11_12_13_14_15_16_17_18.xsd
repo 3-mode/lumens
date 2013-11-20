@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://www.symantec.com/CSM/Shared/V1/NotificationData" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.symantec.com/CSM/Shared/V1/NotificationData">
+  <xs:complexType name="NotificationData">
+    <xs:sequence>
+      <xs:element name="Body" nillable="true" type="xs:string"/>
+      <xs:element name="FromEmailAddress" nillable="true" type="xs:string"/>
+      <xs:element name="Subject" nillable="true" type="xs:string"/>
+      <xs:element name="ToEmailAddress" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="NotificationData" nillable="true" type="tns:NotificationData"/>
+</xs:schema>

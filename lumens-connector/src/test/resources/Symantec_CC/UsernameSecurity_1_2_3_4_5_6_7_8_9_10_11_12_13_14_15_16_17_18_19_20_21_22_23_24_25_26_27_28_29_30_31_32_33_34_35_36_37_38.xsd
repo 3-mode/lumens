@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.AssetBizLayerInterfaces.Integration" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.AssetBizLayerInterfaces.Integration">
+  <xs:import schemaLocation="UsernameSecurity_1_2_3_4.xsd" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+  <xs:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError"/>
+  <xs:complexType name="AssetUpdateError">
+    <xs:complexContent mixed="false">
+      <xs:extension base="q1:AssetSystemError" xmlns:q1="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AssetsFailedToUpdate" nillable="true" type="q2:ArrayOfguid" xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AssetUpdateError" nillable="true" type="tns:AssetUpdateError"/>
+  <xs:complexType name="ArrayOfAttributeErrorDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AttributeErrorDetail" nillable="true" type="tns:AttributeErrorDetail"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAttributeErrorDetail" nillable="true" type="tns:ArrayOfAttributeErrorDetail"/>
+  <xs:complexType name="AttributeErrorDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AttributeName" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Reason" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AttributeErrorDetail" nillable="true" type="tns:AttributeErrorDetail"/>
+  <xs:complexType name="ArrayOfReconciliationRuleErrorDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ReconciliationRuleErrorDetail" nillable="true" type="tns:ReconciliationRuleErrorDetail"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfReconciliationRuleErrorDetail" nillable="true" type="tns:ArrayOfReconciliationRuleErrorDetail"/>
+  <xs:complexType name="ReconciliationRuleErrorDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Reason" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="RuleName" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ReconciliationRuleErrorDetail" nillable="true" type="tns:ReconciliationRuleErrorDetail"/>
+</xs:schema>
