@@ -83,13 +83,13 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 if (!list.isEmpty() && list.get(0) instanceof Element) {
                     List<Element> inputDataList = (List<Element>) list;
                     for (Element data : inputDataList) {
-                        OperationResult opRet = operation.execute(data);
-                        result.addAll(opRet.getResult(targetFormat));
+                        OperationResult opRet = operation.execute(data, targetFormat);
+                        result.addAll(opRet.getResult());
                     }
                 }
             } else if (input instanceof Element) {
-                OperationResult opRet = operation.execute((Element) input);
-                result.addAll(opRet.getResult(targetFormat));
+                OperationResult opRet = operation.execute((Element) input, targetFormat);
+                result.addAll(opRet.getResult());
             }
             List<ExecuteContext> exList = new ArrayList<ExecuteContext>();
             exList.add(new TransformExecuteContext(result, entry.getName()));

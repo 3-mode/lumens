@@ -549,7 +549,7 @@
     </wsdl:port>  -->
     <wsdl:port name="ChinaOpenFundWSSoap12" binding="tns:ChinaOpenFundWSSoap12">
       <soap12:address location="http://www.webxml.com.cn/WebServices/ChinaOpenFundWS.asmx" />
-    </wsdl:port>
+    </wsdl:port>-->
     <!--<wsdl:port name="ChinaOpenFundWSHttpGet" binding="tns:ChinaOpenFundWSHttpGet">
       <http:address location="http://www.webxml.com.cn/WebServices/ChinaOpenFundWS.asmx" />
     </wsdl:port>

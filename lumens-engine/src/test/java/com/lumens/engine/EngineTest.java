@@ -10,13 +10,8 @@ import com.lumens.engine.run.Executor;
 import com.lumens.engine.run.SingleThreadExecuteStack;
 import com.lumens.engine.run.TransformExecutor;
 import com.lumens.engine.serializer.ProjectXmlSerializer;
-import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
-import com.lumens.model.serializer.ElementXmlSerializer;
-import com.lumens.model.serializer.FormatXmlSerializer;
-import com.lumens.processor.Processor;
-import com.lumens.processor.transform.TransformProcessor;
 import com.lumens.processor.transform.TransformRule;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -113,45 +108,6 @@ public class EngineTest extends TestCase {
         }
     }
 
-    public void testSymatecWS() throws Exception {
-        HashMap<String, Value> props = new HashMap<String, Value>();
-        props.put(WebServiceConnector.WSDL, new Value("file:///C:/Symantec_CC/UsernameSecurity_1.wsdl"));
-        //props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/wsdl/ChinaOpenFundWS.asmx").toString()));
-        //props.put(WebServiceConnector.PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
-        //props.put(WebServiceConnector.PROXY_PORT, new Value(8080));
-        DataSource datasource = new DataSource(WebServiceConnector.class.getName());
-        datasource.setName("UsernameSecurity_1-WebService-SOAP");
-        datasource.setPropertyList(props);
-        datasource.open();
-        datasource.setDescription("this is testing demo datasource for web service");
-
-        Map<String, Format> consumes = datasource.getFormatList(Direction.IN);
-        Connector connector = datasource.getConnector();
-        Format searchService = connector.getFormat(consumes.get("Search"), "Search.assetSearchCriteria.Filter.Expression.ExpressionField", Direction.IN);
-        new FormatXmlSerializer(searchService).write(System.out);
-        Map<String, Format> produces = datasource.getFormatList(Direction.OUT);
-        Format SearchResultDisplayName = connector.getFormat(produces.get("Search"), "SearchResponse.SearchResult.Asset.DisplayName", Direction.OUT);
-        new FormatXmlSerializer(SearchResultDisplayName).write(System.out);
-        searchService = searchService.recursiveClone();
-        SearchResultDisplayName = SearchResultDisplayName.recursiveClone();
-        datasource.registerFormat("Test", searchService, Direction.IN);
-        datasource.registerFormat("Test", SearchResultDisplayName, Direction.OUT);
-        DataTransformation dataDriver = new DataTransformation();
-        dataDriver.setName("CCS02-WS");
-        dataDriver.targetTo(datasource);
-        TransformRule rule = new TransformRule(searchService);
-        rule.getRuleItem("Search.assetSearchCriteria.Filter.Expression.ExpressionField").setScript("\"displayName\"");
-        dataDriver.registerRule(new TransformRuleEntry("Start", "Test", rule));
-
-        SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
-        executorStack.push(new TransformExecutor(dataDriver, new TransformExecuteContext(null, "Start")));
-        while (!executorStack.isEmpty()) {
-            Executor executor = executorStack.pop();
-            List<Executor> tExList = executor.execute();
-            executorStack.push(tExList);
-        }
-    }
-
     private void doTestProjectSerialize(TransformProject project) throws Exception {
         new ProjectXmlSerializer(project).write(System.out);
 
@@ -166,5 +122,9 @@ public class EngineTest extends TestCase {
         } finally {
             IOUtils.closeQuietly(in);
         }
+    }
+
+    public void testEmpty() {
+        assertTrue(true);
     }
 }
