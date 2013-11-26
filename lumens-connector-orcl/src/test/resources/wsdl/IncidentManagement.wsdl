@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://schemas.hp.com/SM/7" xsi:schemaLocation="http://schemas.xmlsoap.org/wsdl/  http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:cmn="http://schemas.hp.com/SM/7/Common" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ns="http://schemas.hp.com/SM/7" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://schemas.hp.com/SM/7" version="2012-03-19 Rev 2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.hp.com/SM/7" xmlns:xmime="http://www.w3.org/2005/05/xmlmime">
+      <xs:import namespace="http://www.w3.org/2005/05/xmlmime" schemaLocation="./xmlmime.xsd"/>
+      <xs:import namespace="http://schemas.hp.com/SM/7/Common" schemaLocation="./Common.xsd"/>
+      <xs:complexType name="IncidentKeysType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="IncidentID" nillable="true" type="cmn:StringType"/>
+        </xs:sequence>
+        <xs:attribute name="query" type="xs:string" use="optional"/>
+      </xs:complexType>
+      <xs:complexType name="IncidentInstanceType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="IncidentID" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="Category" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="OpenTime" nillable="true" type="cmn:DateTimeType"/>
+          <xs:element minOccurs="0" name="OpenedBy" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="PriorityCode" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="Severity" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="UpdatedTime" nillable="true" type="cmn:DateTimeType"/>
+          <xs:element minOccurs="0" name="PrimaryAssignmentGroup" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="ClosedTime" nillable="true" type="cmn:DateTimeType"/>
+          <xs:element minOccurs="0" name="ClosedBy" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="ClosureCode" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="ConfigurationItem" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="Location" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="IncidentDescription">
+            <xs:complexType>
+              <xs:complexContent>
+                <xs:extension base="cmn:ArrayType">
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="IncidentDescription" type="cmn:StringType"/>
+                  </xs:sequence>
+                </xs:extension>
+              </xs:complexContent>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" name="Solution">
+            <xs:complexType>
+              <xs:complexContent>
+                <xs:extension base="cmn:ArrayType">
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="Solution" type="cmn:StringType"/>
+                  </xs:sequence>
+                </xs:extension>
+              </xs:complexContent>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" name="AssigneeName" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="Contact" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="JournalUpdates">
+            <xs:complexType>
+              <xs:complexContent>
+                <xs:extension base="cmn:ArrayType">
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="JournalUpdates" type="cmn:StringType"/>
+                  </xs:sequence>
+                </xs:extension>
+              </xs:complexContent>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" name="AlertStatus" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="ContactLastName" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="ContactFirstName" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="Company" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="BriefDescription" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="Department" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="TicketOwner" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="UpdatedBy" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="IMTicketStatus" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="Subcategory" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="Application_name" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="SLAAgreementID" nillable="true" type="cmn:IntType"/>
+          <xs:element minOccurs="0" name="SiteCategory" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="ProductType" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="ProblemType" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="ResolutionFixType" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="UserPriority" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="Resolution">
+            <xs:complexType>
+              <xs:complexContent>
+                <xs:extension base="cmn:ArrayType">
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="Resolution" type="cmn:StringType"/>
+                  </xs:sequence>
+                </xs:extension>
+              </xs:complexContent>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" name="CustomerVisible" nillable="true" type="cmn:BooleanType"/>
+          <xs:element minOccurs="0" name="InitialImpact" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="NodeType" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="MessageText">
+            <xs:complexType>
+              <xs:complexContent>
+                <xs:extension base="cmn:ArrayType">
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="MessageText" type="cmn:StringType"/>
+                  </xs:sequence>
+                </xs:extension>
+              </xs:complexContent>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" name="MessageGroup" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="Object" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="CMAs">
+            <xs:complexType>
+              <xs:complexContent>
+                <xs:extension base="cmn:ArrayType">
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="CMAs" type="cmn:StringType"/>
+                  </xs:sequence>
+                </xs:extension>
+              </xs:complexContent>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" name="MessageID" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="Instructions">
+            <xs:complexType>
+              <xs:complexContent>
+                <xs:extension base="cmn:ArrayType">
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="Instructions" type="cmn:StringType"/>
+                  </xs:sequence>
+                </xs:extension>
+              </xs:complexContent>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" name="CIName" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="OVOServer" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="OVOServerTime" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="AssigneeEmail" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="OVOSeverity" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="MS.first.touch" nillable="true" type="cmn:DateTimeType"/>
+          <xs:element minOccurs="0" name="MS.source.of.call" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="OVOMode" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="LegacyIMid" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="MS.mass.resolved" nillable="true" type="cmn:BooleanType"/>
+          <xs:element minOccurs="0" name="folder" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="Service" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="ServiceLine" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="ServiceType" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="ServiceArea" nillable="true" type="cmn:StringType"/>
+          <xs:element minOccurs="0" name="attachments" nillable="true" type="cmn:AttachmentsType"/>
+        </xs:sequence>
+        <xs:attribute name="query" type="xs:string" use="optional"/>
+        <xs:attribute name="uniquequery" type="xs:string" use="optional"/>
+        <xs:attribute name="recordid" type="xs:string" use="optional"/>
+      </xs:complexType>
+      <xs:complexType name="IncidentModelType">
+        <xs:sequence>
+          <xs:element name="keys" type="IncidentKeysType"/>
+          <xs:element name="instance" type="IncidentInstanceType"/>
+          <xs:element minOccurs="0" name="messages" type="cmn:MessagesType"/>
+        </xs:sequence>
+        <xs:attribute name="query" type="xs:string" use="optional"/>
+      </xs:complexType>
+      <xs:element name="RetrieveIncidentRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+          </xs:sequence>
+          <xs:attribute name="attachmentInfo" type="xs:boolean" use="optional"/>
+          <xs:attribute name="attachmentData" type="xs:boolean" use="optional"/>
+          <xs:attribute default="true" name="ignoreEmptyElements" type="xs:boolean" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="RetrieveIncidentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+            <xs:element minOccurs="0" name="messages" type="cmn:MessagesType"/>
+          </xs:sequence>
+          <xs:attribute name="status" type="cmn:StatusType" use="required"/>
+          <xs:attribute name="message" type="xs:string" use="required"/>
+          <xs:attribute name="schemaRevisionDate" type="xs:date" use="required"/>
+          <xs:attribute name="schemaRevisionLevel" type="xs:int" use="required"/>
+          <xs:attribute name="returnCode" type="xs:decimal" use="optional"/>
+          <xs:attribute name="query" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="RetrieveIncidentKeysListRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+          </xs:sequence>
+          <xs:attribute name="attachmentInfo" type="xs:boolean" use="optional"/>
+          <xs:attribute name="attachmentData" type="xs:boolean" use="optional"/>
+          <xs:attribute default="true" name="ignoreEmptyElements" type="xs:boolean" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="RetrieveIncidentKeysListResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="keys" type="IncidentKeysType"/>
+            <xs:element minOccurs="0" name="messages" type="cmn:MessagesType"/>
+          </xs:sequence>
+          <xs:attribute name="status" type="cmn:StatusType" use="required"/>
+          <xs:attribute name="message" type="xs:string" use="required"/>
+          <xs:attribute name="schemaRevisionDate" type="xs:date" use="required"/>
+          <xs:attribute name="schemaRevisionLevel" type="xs:int" use="required"/>
+          <xs:attribute name="returnCode" type="xs:decimal" use="optional"/>
+          <xs:attribute name="query" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="RetrieveIncidentListRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="keys" type="IncidentKeysType"/>
+          </xs:sequence>
+          <xs:attribute name="attachmentInfo" type="xs:boolean" use="optional"/>
+          <xs:attribute name="attachmentData" type="xs:boolean" use="optional"/>
+          <xs:attribute default="true" name="ignoreEmptyElements" type="xs:boolean" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="RetrieveIncidentListResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="instance" type="IncidentInstanceType"/>
+            <xs:element minOccurs="0" name="messages" type="cmn:MessagesType"/>
+          </xs:sequence>
+          <xs:attribute name="status" type="cmn:StatusType" use="required"/>
+          <xs:attribute name="message" type="xs:string" use="required"/>
+          <xs:attribute name="schemaRevisionDate" type="xs:date" use="required"/>
+          <xs:attribute name="schemaRevisionLevel" type="xs:int" use="required"/>
+          <xs:attribute name="returnCode" type="xs:decimal" use="optional"/>
+          <xs:attribute name="query" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CreateIncidentRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+          </xs:sequence>
+          <xs:attribute name="attachmentInfo" type="xs:boolean" use="optional"/>
+          <xs:attribute name="attachmentData" type="xs:boolean" use="optional"/>
+          <xs:attribute default="true" name="ignoreEmptyElements" type="xs:boolean" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CreateIncidentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+            <xs:element minOccurs="0" name="messages" type="cmn:MessagesType"/>
+          </xs:sequence>
+          <xs:attribute name="status" type="cmn:StatusType" use="required"/>
+          <xs:attribute name="message" type="xs:string" use="required"/>
+          <xs:attribute name="schemaRevisionDate" type="xs:date" use="required"/>
+          <xs:attribute name="schemaRevisionLevel" type="xs:int" use="required"/>
+          <xs:attribute name="returnCode" type="xs:decimal" use="optional"/>
+          <xs:attribute name="query" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CloseIncidentRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+          </xs:sequence>
+          <xs:attribute name="attachmentInfo" type="xs:boolean" use="optional"/>
+          <xs:attribute name="attachmentData" type="xs:boolean" use="optional"/>
+          <xs:attribute default="true" name="ignoreEmptyElements" type="xs:boolean" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="CloseIncidentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+            <xs:element minOccurs="0" name="messages" type="cmn:MessagesType"/>
+          </xs:sequence>
+          <xs:attribute name="status" type="cmn:StatusType" use="required"/>
+          <xs:attribute name="message" type="xs:string" use="required"/>
+          <xs:attribute name="schemaRevisionDate" type="xs:date" use="required"/>
+          <xs:attribute name="schemaRevisionLevel" type="xs:int" use="required"/>
+          <xs:attribute name="returnCode" type="xs:decimal" use="optional"/>
+          <xs:attribute name="query" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ReopenIncidentRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+          </xs:sequence>
+          <xs:attribute name="attachmentInfo" type="xs:boolean" use="optional"/>
+          <xs:attribute name="attachmentData" type="xs:boolean" use="optional"/>
+          <xs:attribute default="true" name="ignoreEmptyElements" type="xs:boolean" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ReopenIncidentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+            <xs:element minOccurs="0" name="messages" type="cmn:MessagesType"/>
+          </xs:sequence>
+          <xs:attribute name="status" type="cmn:StatusType" use="required"/>
+          <xs:attribute name="message" type="xs:string" use="required"/>
+          <xs:attribute name="schemaRevisionDate" type="xs:date" use="required"/>
+          <xs:attribute name="schemaRevisionLevel" type="xs:int" use="required"/>
+          <xs:attribute name="returnCode" type="xs:decimal" use="optional"/>
+          <xs:attribute name="query" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ResolveIncidentRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+          </xs:sequence>
+          <xs:attribute name="attachmentInfo" type="xs:boolean" use="optional"/>
+          <xs:attribute name="attachmentData" type="xs:boolean" use="optional"/>
+          <xs:attribute default="true" name="ignoreEmptyElements" type="xs:boolean" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ResolveIncidentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+            <xs:element minOccurs="0" name="messages" type="cmn:MessagesType"/>
+          </xs:sequence>
+          <xs:attribute name="status" type="cmn:StatusType" use="required"/>
+          <xs:attribute name="message" type="xs:string" use="required"/>
+          <xs:attribute name="schemaRevisionDate" type="xs:date" use="required"/>
+          <xs:attribute name="schemaRevisionLevel" type="xs:int" use="required"/>
+          <xs:attribute name="returnCode" type="xs:decimal" use="optional"/>
+          <xs:attribute name="query" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="UpdateIncidentRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+          </xs:sequence>
+          <xs:attribute name="attachmentInfo" type="xs:boolean" use="optional"/>
+          <xs:attribute name="attachmentData" type="xs:boolean" use="optional"/>
+          <xs:attribute default="true" name="ignoreEmptyElements" type="xs:boolean" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="UpdateIncidentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="model" type="IncidentModelType"/>
+            <xs:element minOccurs="0" name="messages" type="cmn:MessagesType"/>
+          </xs:sequence>
+          <xs:attribute name="status" type="cmn:StatusType" use="required"/>
+          <xs:attribute name="message" type="xs:string" use="required"/>
+          <xs:attribute name="schemaRevisionDate" type="xs:date" use="required"/>
+          <xs:attribute name="schemaRevisionLevel" type="xs:int" use="required"/>
+          <xs:attribute name="returnCode" type="xs:decimal" use="optional"/>
+          <xs:attribute name="query" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </types>
+  <message name="RetrieveIncidentRequest">
+    <part element="ns:RetrieveIncidentRequest" name="RetrieveIncidentRequest"/>
+  </message>
+  <message name="RetrieveIncidentResponse">
+    <part element="ns:RetrieveIncidentResponse" name="RetrieveIncidentResponse"/>
+  </message>
+  <message name="RetrieveIncidentKeysListRequest">
+    <part element="ns:RetrieveIncidentKeysListRequest" name="RetrieveIncidentKeysListRequest"/>
+  </message>
+  <message name="RetrieveIncidentKeysListResponse">
+    <part element="ns:RetrieveIncidentKeysListResponse" name="RetrieveIncidentKeysListResponse"/>
+  </message>
+  <message name="RetrieveIncidentListRequest">
+    <part element="ns:RetrieveIncidentListRequest" name="RetrieveIncidentListRequest"/>
+  </message>
+  <message name="RetrieveIncidentListResponse">
+    <part element="ns:RetrieveIncidentListResponse" name="RetrieveIncidentListResponse"/>
+  </message>
+  <message name="CreateIncidentRequest">
+    <part element="ns:CreateIncidentRequest" name="CreateIncidentRequest"/>
+  </message>
+  <message name="CreateIncidentResponse">
+    <part element="ns:CreateIncidentResponse" name="CreateIncidentResponse"/>
+  </message>
+  <message name="CloseIncidentRequest">
+    <part element="ns:CloseIncidentRequest" name="CloseIncidentRequest"/>
+  </message>
+  <message name="CloseIncidentResponse">
+    <part element="ns:CloseIncidentResponse" name="CloseIncidentResponse"/>
+  </message>
+  <message name="ReopenIncidentRequest">
+    <part element="ns:ReopenIncidentRequest" name="ReopenIncidentRequest"/>
+  </message>
+  <message name="ReopenIncidentResponse">
+    <part element="ns:ReopenIncidentResponse" name="ReopenIncidentResponse"/>
+  </message>
+  <message name="ResolveIncidentRequest">
+    <part element="ns:ResolveIncidentRequest" name="ResolveIncidentRequest"/>
+  </message>
+  <message name="ResolveIncidentResponse">
+    <part element="ns:ResolveIncidentResponse" name="ResolveIncidentResponse"/>
+  </message>
+  <message name="UpdateIncidentRequest">
+    <part element="ns:UpdateIncidentRequest" name="UpdateIncidentRequest"/>
+  </message>
+  <message name="UpdateIncidentResponse">
+    <part element="ns:UpdateIncidentResponse" name="UpdateIncidentResponse"/>
+  </message>
+  <portType name="IncidentManagement">
+    <operation name="RetrieveIncident">
+      <documentation/>
+      <input message="ns:RetrieveIncidentRequest"/>
+      <output message="ns:RetrieveIncidentResponse"/>
+    </operation>
+    <operation name="RetrieveIncidentKeysList">
+      <documentation/>
+      <input message="ns:RetrieveIncidentKeysListRequest"/>
+      <output message="ns:RetrieveIncidentKeysListResponse"/>
+    </operation>
+    <operation name="RetrieveIncidentList">
+      <documentation/>
+      <input message="ns:RetrieveIncidentListRequest"/>
+      <output message="ns:RetrieveIncidentListResponse"/>
+    </operation>
+    <operation name="CreateIncident">
+      <documentation/>
+      <input message="ns:CreateIncidentRequest"/>
+      <output message="ns:CreateIncidentResponse"/>
+    </operation>
+    <operation name="CloseIncident">
+      <documentation/>
+      <input message="ns:CloseIncidentRequest"/>
+      <output message="ns:CloseIncidentResponse"/>
+    </operation>
+    <operation name="ReopenIncident">
+      <documentation/>
+      <input message="ns:ReopenIncidentRequest"/>
+      <output message="ns:ReopenIncidentResponse"/>
+    </operation>
+    <operation name="ResolveIncident">
+      <documentation/>
+      <input message="ns:ResolveIncidentRequest"/>
+      <output message="ns:ResolveIncidentResponse"/>
+    </operation>
+    <operation name="UpdateIncident">
+      <documentation/>
+      <input message="ns:UpdateIncidentRequest"/>
+      <output message="ns:UpdateIncidentResponse"/>
+    </operation>
+  </portType>
+  <binding name="IncidentManagement" type="ns:IncidentManagement">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="RetrieveIncident">
+      <soap:operation soapAction="Retrieve" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="RetrieveIncidentKeysList">
+      <soap:operation soapAction="RetrieveKeysList" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="RetrieveIncidentList">
+      <soap:operation soapAction="RetrieveList" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="CreateIncident">
+      <soap:operation soapAction="Create" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="CloseIncident">
+      <soap:operation soapAction="Close" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="ReopenIncident">
+      <soap:operation soapAction="Reopen" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="ResolveIncident">
+      <soap:operation soapAction="Resolve" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="UpdateIncident">
+      <soap:operation soapAction="Update" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="IncidentManagement">
+    <port binding="ns:IncidentManagement" name="IncidentManagement">
+      <soap:address location="http://usplsvulm842.eit.elabs.eds.com:47002/SM/7/ws"/>
+    </port>
+  </service>
+</definitions>

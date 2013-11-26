@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.Integration" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.Integration">
+  <xs:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13_14_15_16_17_18_19_20_21_22_23_24_25_26.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError"/>
+  <xs:complexType name="CustomSchemaOperationError">
+    <xs:complexContent mixed="false">
+      <xs:extension base="q1:AssetSystemError" xmlns:q1="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CustomSchemaOperationError" nillable="true" type="tns:CustomSchemaOperationError"/>
+  <xs:complexType name="AssetImportJobError">
+    <xs:complexContent mixed="false">
+      <xs:extension base="q2:AssetSystemError" xmlns:q2="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSystemError">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AssetImportJobError" nillable="true" type="tns:AssetImportJobError"/>
+</xs:schema>

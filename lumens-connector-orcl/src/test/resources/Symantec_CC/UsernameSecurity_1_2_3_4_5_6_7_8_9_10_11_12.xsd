@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://schemas.datacontract.org/2004/07/System">
+  <xs:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9_10_11_12_13.xsd" namespace="http://schemas.datacontract.org/2004/07/System.Reflection"/>
+  <xs:complexType name="Type">
+    <xs:complexContent mixed="false">
+      <xs:extension base="q1:MemberInfo" xmlns:q1="http://schemas.datacontract.org/2004/07/System.Reflection">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Type" nillable="true" type="tns:Type"/>
+</xs:schema>

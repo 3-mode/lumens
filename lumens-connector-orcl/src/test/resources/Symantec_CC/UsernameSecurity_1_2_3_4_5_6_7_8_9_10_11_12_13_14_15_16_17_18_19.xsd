@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://www.symantec.com/CSM/Applications/AssetSystem/ReconciliationRule" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.symantec.com/CSM/Applications/AssetSystem/ReconciliationRule">
+  <xs:complexType name="ArrayOfReconciliationRule">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ReconciliationRule" nillable="true" type="tns:ReconciliationRule"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfReconciliationRule" nillable="true" type="tns:ArrayOfReconciliationRule"/>
+  <xs:complexType name="ReconciliationRule">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="Path" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ReconciliationRule" nillable="true" type="tns:ReconciliationRule"/>
+</xs:schema>
