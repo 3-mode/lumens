@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema elementFormDefault="qualified" targetNamespace="http://www.symantec.com/CSM/Shared/V1/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.symantec.com/CSM/Shared/V1/">
-  <xs:complexType name="ApplicationFaultContractBase">
-    <xs:sequence/>
-  </xs:complexType>
-  <xs:element name="ApplicationFaultContractBase" nillable="true" type="tns:ApplicationFaultContractBase"/>
-</xs:schema>

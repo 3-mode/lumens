@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System.Reflection" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://schemas.datacontract.org/2004/07/System.Reflection">
-  <xs:complexType name="MemberInfo">
-    <xs:sequence/>
-  </xs:complexType>
-  <xs:element name="MemberInfo" nillable="true" type="tns:MemberInfo"/>
-</xs:schema>
