@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.AssetBizLayerInterfaces" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.AssetBizLayerInterfaces">
+  <xs:simpleType name="AssetSchemaType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NetwortAsset"/>
+      <xs:enumeration value="BusinessAsset"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="AssetSchemaType" nillable="true" type="tns:AssetSchemaType"/>
+</xs:schema>

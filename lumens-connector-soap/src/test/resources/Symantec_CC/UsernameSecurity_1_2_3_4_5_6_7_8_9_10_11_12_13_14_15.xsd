@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetRiskScore" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.symantec.com/CSM/Applications/AssetSystem/AssetRiskScore" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/">
+  <xs:import schemaLocation="UsernameSecurity_1.xsd" namespace="http://schemas.microsoft.com/2003/10/Serialization/"/>
+  <xs:complexType name="ArrayOfAssetRiskScore">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AssetRiskScore" nillable="true" type="tns:AssetRiskScore"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAssetRiskScore" nillable="true" type="tns:ArrayOfAssetRiskScore"/>
+  <xs:complexType name="AssetRiskScore">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AssetID" type="ser:guid"/>
+      <xs:element minOccurs="0" name="MaxRiskScore" type="xs:float"/>
+      <xs:element minOccurs="0" name="RiskScore" type="xs:float"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AssetRiskScore" nillable="true" type="tns:AssetRiskScore"/>
+</xs:schema>
