@@ -1,20 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <artifactId>lumens</artifactId>
-    <groupId>com.lumens</groupId>
-    <version>1.0</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>lumens</artifactId>
+        <groupId>com.lumens</groupId>
+        <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.lumens.model</groupId>
-  <artifactId>lumens-model</artifactId>
-  <version>1.0</version>
-  <packaging>jar</packaging>
+    <groupId>com.lumens.model</groupId>
+    <artifactId>lumens-model</artifactId>
+    <packaging>jar</packaging>
 
-  <name>lumens-model</name>
+    <name>lumens-model</name>
     <dependencies>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -24,7 +23,7 @@
         <dependency>
             <groupId>com.lumens.io</groupId>
             <artifactId>lumens-io</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

@@ -11,7 +11,6 @@
 
     <groupId>com.lumens.connector.soap</groupId>
     <artifactId>lumens-connector-soap</artifactId>
-    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>lumens-connector-soap</name>
@@ -19,18 +18,18 @@
         <dependency>
             <groupId>com.lumens.model</groupId>
             <artifactId>lumens-model</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.lumens.processor</groupId>
             <artifactId>lumens-processor</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.lumens.connector</groupId>
             <artifactId>lumens-connector</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

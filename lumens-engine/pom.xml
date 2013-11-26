@@ -11,7 +11,6 @@
 
   <groupId>com.lumens.engine</groupId>
   <artifactId>lumens-engine</artifactId>
-  <version>1.0</version>
   <packaging>jar</packaging>
 
   <name>lumens-engine</name>
@@ -19,18 +18,28 @@
         <dependency>
             <groupId>com.lumens.connector</groupId>
             <artifactId>lumens-connector</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.lumens.io</groupId>
             <artifactId>lumens-io</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.lumens.processor</groupId>
             <artifactId>lumens-processor</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.lumens.connector-orcl</groupId>
+            <artifactId>lumens-connector-orcl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lumens.connector.soap</groupId>
+            <artifactId>lumens-connector-soap</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>

@@ -14,6 +14,8 @@
         <module>lumens-server</module>
         <module>lumens-log</module>
         <module>lumens-io</module>
+        <module>lumens-connector-orcl</module>
+        <module>lumens-connector-soap</module>
         <module>lumens-web</module>
     </modules>
     <url>http://maven.apache.org</url>
