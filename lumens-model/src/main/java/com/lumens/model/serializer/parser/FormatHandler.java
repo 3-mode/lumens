@@ -18,12 +18,11 @@ import org.xml.sax.SAXException;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public interface FormatHandler
-{
-
+public interface FormatHandler {
     /**
      *
      * A container element start event handling method.
+     *
      * @param meta attributes
      */
     public void start_format_list(final Attributes meta) throws SAXException;
@@ -37,6 +36,7 @@ public interface FormatHandler
     /**
      *
      * A data element event handling method.
+     *
      * @param data value or null
      * @param meta attributes
      */
@@ -45,6 +45,7 @@ public interface FormatHandler
     /**
      *
      * A container element start event handling method.
+     *
      * @param meta attributes
      */
     public void start_format(final Attributes meta) throws SAXException;
@@ -54,5 +55,4 @@ public interface FormatHandler
      * A container element end event handling method.
      */
     public void end_format() throws SAXException;
-    
 }

@@ -16,75 +16,72 @@ import java.util.List;
  *
  * @author shaofeng wang
  */
-public class ElementXmlSerializer implements XmlSerializer
-{
+public class ElementXmlSerializer implements XmlSerializer {
     private Element element;
     private boolean useIndent;
     private String INDENT = "  ";
 
-    public ElementXmlSerializer(Element element, boolean indent)
-    {
+    public ElementXmlSerializer(Element element, boolean indent) {
         this.element = element;
         this.useIndent = indent;
     }
 
-    public void initIndent(String indent)
-    {
+    public void initIndent(String indent) {
         this.INDENT = indent;
     }
 
     @Override
-    public void read(InputStream in) throws Exception
-    {
+    public void read(InputStream in) throws Exception {
     }
 
     @Override
-    public void write(OutputStream out) throws Exception
-    {
+    public void write(OutputStream out) throws Exception {
         StringUTF8Writer dataOut = new StringUTF8Writer(out);
         writeElementToXml(element, "", dataOut);
     }
 
     private void writeElementToXml(Element element, String indent,
-                                   StringUTF8Writer out) throws Exception
-    {
+                                   StringUTF8Writer out) throws Exception {
         boolean closeTag = false;
         Format format = element.getFormat();
         out.print(indent).print("<element name=\"").print(format.
-                getName()).print("\" ").
-                print("form=\"");
+        getName()).print("\" ").
+        print("form=\"");
         out.print(format.getForm().toString());
         out.print("\" ").print("type=\"").print(format.getType().toString()).
-                print("\"");
+        print("\"");
 
         if (!element.isArray() && format.getType() != Type.NONE && !element.
-                isNull())
-        {
-            if (!closeTag)
+        isNull()) {
+            if (!closeTag) {
                 out.print(">");
+            }
             closeTag = true;
-            if (element.isField() || element.getChildren() == null)
+            if (element.isField() || element.getChildren() == null) {
                 out.print(element.getValue().getString());
-            else
+            } else {
                 out.println(element.getValue().getString());
+            }
         }
 
         List<Element> children = element.getChildren();
-        if (children != null && children.size() > 0)
-        {
-            if (!closeTag)
+        if (children != null && children.size() > 0) {
+            if (!closeTag) {
                 out.println(">");
+            }
             closeTag = true;
-            for (Element child : children)
+            for (Element child : children) {
                 writeElementToXml(child, indent + INDENT, out);
+            }
         }
-        if (closeTag)
-        {
-            if (element.isField() || element.getChildren() == null)
+        if (closeTag) {
+            if (element.isField() || element.getChildren() == null) {
                 out.println("</element>");
-            else
+            } else {
                 out.print(indent.toString()).println("</element>");
-        } else
+            }
+        } else {
             out.println("/>");
+        }
     }
 }

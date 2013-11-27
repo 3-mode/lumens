@@ -13,8 +13,7 @@ import java.util.Map;
  *
  * @author shaofeng wang
  */
-public class DataFormat implements Format
-{
+public class DataFormat implements Format {
     protected Map<String, Value> propertyList;
     protected Map<String, Format> childMap;
     protected List<Format> childList;
@@ -23,116 +22,101 @@ public class DataFormat implements Format
     private Form form = Form.NONE;
     private Format parent;
 
-    public DataFormat()
-    {
+    public DataFormat() {
     }
 
-    public DataFormat(String name)
-    {
+    public DataFormat(String name) {
         this.name = name;
     }
 
-    public DataFormat(String name, Form form)
-    {
+    public DataFormat(String name, Form form) {
         this.name = name;
         this.form = form;
     }
 
-    public DataFormat(String name, Form form, Type type)
-    {
+    public DataFormat(String name, Form form, Type type) {
         this.name = name;
         this.form = form;
         this.type = type;
     }
 
     @Override
-    public Format clone()
-    {
+    public Format clone() {
         DataFormat cloned = new DataFormat(getName(), getForm(), getType());
-        if (propertyList != null)
+        if (propertyList != null) {
             cloned.propertyList = new HashMap<String, Value>(propertyList);
+        }
         return cloned;
     }
 
     @Override
-    public Format recursiveClone()
-    {
+    public Format recursiveClone() {
         Format cloned = clone();
-        if (childList != null)
-        {
-            for (Format child : childList)
+        if (childList != null) {
+            for (Format child : childList) {
                 cloned.addChild(child.recursiveClone());
+            }
         }
 
         return cloned;
     }
 
     @Override
-    public Type getType()
-    {
+    public Type getType() {
         return type;
     }
 
     @Override
-    public Form getForm()
-    {
+    public Form getForm() {
         return form;
     }
 
     @Override
-    public void setType(Type type)
-    {
+    public void setType(Type type) {
         this.type = type;
     }
 
     @Override
-    public void setForm(Form form)
-    {
+    public void setForm(Form form) {
         this.form = form;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
     @Override
-    public void setProperty(String name, Value value)
-    {
-        if (propertyList == null)
+    public void setProperty(String name, Value value) {
+        if (propertyList == null) {
             propertyList = new HashMap<String, Value>();
+        }
         propertyList.put(name, value);
     }
 
     @Override
-    public Value getProperty(String name)
-    {
+    public Value getProperty(String name) {
         return propertyList == null ? null : propertyList.get(name);
     }
 
     @Override
-    public Map<String, Value> getPropertyList()
-    {
+    public Map<String, Value> getPropertyList() {
         return propertyList;
     }
 
     @Override
-    public Format addChild(Format format)
-    {
-        if (childMap == null && childList == null)
-        {
+    public Format addChild(Format format) {
+        if (childMap == null && childList == null) {
             childMap = new HashMap<String, Format>();
             childList = new ArrayList<Format>();
-        }
-        else if (childMap.containsKey(format.getName()))
+        } else if (childMap.containsKey(format.getName())) {
             throw new IllegalArgumentException("Duplicate child \"" + format.getName() + "\"");
+        }
         format.setParent(this);
 
         childMap.put(format.getName(), format);
@@ -141,57 +125,50 @@ public class DataFormat implements Format
     }
 
     @Override
-    public Format addChild(String name, Form form, Type type)
-    {
+    public Format addChild(String name, Form form, Type type) {
         return addChild(new DataFormat(name, form, type));
     }
 
     @Override
-    public Format addChild(String name, Form form)
-    {
+    public Format addChild(String name, Form form) {
         return addChild(new DataFormat(name, form, Type.NONE));
     }
 
     @Override
-    public Format getChild(String name)
-    {
+    public Format getChild(String name) {
         return childMap == null ? null : childMap.get(name);
     }
 
     @Override
-    public Format getChildByPath(String path)
-    {
+    public Format getChildByPath(String path) {
         return getChildByPath(new AccessPath(path));
     }
 
     @Override
-    public Format getChildByPath(Path path)
-    {
-        if (path == null || path.isEmpty())
+    public Format getChildByPath(Path path) {
+        if (path == null || path.isEmpty()) {
             return null;
+        }
 
         Iterator<PathToken> it = path.iterator();
         Format format = this;
-        while (format != null && it.hasNext())
+        while (format != null && it.hasNext()) {
             format = format.getChild(it.next().toString());
+        }
         return format;
     }
 
     @Override
-    public List<Format> getChildren()
-    {
+    public List<Format> getChildren() {
         return childList;
     }
 
     @Override
-    public Path getFullPath()
-    {
+    public Path getFullPath() {
         Path fullPath = new AccessPath((String) null);
-        if (parent != null)
-        {
+        if (parent != null) {
             Format format = this;
-            while (format.getParent() != null)
-            {
+            while (format.getParent() != null) {
                 fullPath.addLeft(format.getName());
                 format = format.getParent();
             }
@@ -200,44 +177,37 @@ public class DataFormat implements Format
     }
 
     @Override
-    public Format getParent()
-    {
+    public Format getParent() {
         return parent;
     }
 
     @Override
-    public void setParent(Format parent)
-    {
+    public void setParent(Format parent) {
         this.parent = parent;
     }
 
     @Override
-    public boolean isField()
-    {
+    public boolean isField() {
         return form == Form.FIELD;
     }
 
     @Override
-    public boolean isStruct()
-    {
+    public boolean isStruct() {
         return form == Form.STRUCT;
     }
 
     @Override
-    public boolean isArray()
-    {
+    public boolean isArray() {
         return form == Form.ARRAYOFFIELD || form == Form.ARRAYOFSTRUCT;
     }
 
     @Override
-    public boolean isArrayOfField()
-    {
+    public boolean isArrayOfField() {
         return form == Form.ARRAYOFFIELD;
     }
 
     @Override
-    public boolean isArrayOfStruct()
-    {
+    public boolean isArrayOfStruct() {
         return form == Form.ARRAYOFSTRUCT;
     }
 }

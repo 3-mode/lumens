@@ -9,8 +9,7 @@ import java.util.List;
  *
  * @author shaofeng wang
  */
-public interface Element
-{
+public interface Element {
     /*Methods to get and set properties of data node*/
     public int getLevel();
 

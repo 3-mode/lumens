@@ -7,8 +7,7 @@ package com.lumens.model;
  *
  * @author shaofeng wang
  */
-public enum Type
-{
+public enum Type {
     NONE("None"),
     BYTE("Byte"),
     BOOLEAN("Boolean"),
@@ -22,19 +21,16 @@ public enum Type
     DATE("Date");
     private String name;
 
-    private Type(String name)
-    {
+    private Type(String name) {
         this.name = name;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return name;
     }
 
-    public static Type parseString(String type)
-    {
+    public static Type parseString(String type) {
         return Type.valueOf(type.toUpperCase());
     }
 }

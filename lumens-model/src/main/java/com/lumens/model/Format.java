@@ -10,10 +10,8 @@ import java.util.Map;
  *
  * @author shaofeng wang
  */
-public interface Format
-{
-    public enum Form
-    {
+public interface Format {
+    public enum Form {
         NONE("None"),
         FIELD("Field"),
         STRUCT("Struct"),
@@ -21,19 +19,16 @@ public interface Format
         ARRAYOFSTRUCT("ArrayOfStruct");
         private String name;
 
-        private Form(String name)
-        {
+        private Form(String name) {
             this.name = name;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return name;
         }
 
-        public static Form parseString(String form)
-        {
+        public static Form parseString(String form) {
             return Form.valueOf(form.toUpperCase());
         }
     }

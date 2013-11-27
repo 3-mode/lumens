@@ -14,51 +14,46 @@ import org.xml.sax.SAXException;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class FormatHandlerImpl implements FormatHandler
-{
+public class FormatHandlerImpl implements FormatHandler {
     private List<Format> formatList;
     private LinkedList<Format> formatStack = new LinkedList<Format>();
     private Format currentFormat;
 
-    public FormatHandlerImpl(List<Format> formatList)
-    {
+    public FormatHandlerImpl(List<Format> formatList) {
         this.formatList = formatList;
     }
 
     @Override
-    public void start_format_list(final Attributes meta) throws SAXException
-    {
+    public void start_format_list(final Attributes meta) throws SAXException {
     }
 
     @Override
-    public void end_format_list() throws SAXException
-    {
+    public void end_format_list() throws SAXException {
     }
 
     @Override
-    public void handle_property(final String data, final Attributes meta) throws SAXException
-    {
+    public void handle_property(final String data, final Attributes meta) throws SAXException {
         Type type = Type.parseString(meta.getValue("type"));
         currentFormat.setProperty(meta.getValue("name"), new Value(type, data));
     }
 
     @Override
-    public void start_format(final Attributes meta) throws SAXException
-    {
+    public void start_format(final Attributes meta) throws SAXException {
         Form form = Form.parseString(meta.getValue("form"));
         Type type = Type.parseString(meta.getValue("type"));
         currentFormat = new DataFormat(meta.getValue("name"), form, type);
-        if (!formatStack.isEmpty())
+        if (!formatStack.isEmpty()) {
             formatStack.getLast().addChild(currentFormat);
+        }
         formatStack.add(currentFormat);
     }
 
     @Override
-    public void end_format() throws SAXException
-    {
+    public void end_format() throws SAXException {
         currentFormat = formatStack.removeLast();
-        if (formatStack.isEmpty())
+        if (formatStack.isEmpty()) {
             formatList.add(currentFormat);
+        }
         currentFormat = null;
     }
 }

@@ -13,8 +13,7 @@ import java.util.Map;
  *
  * @author shaofeng wang
  */
-public class DataElement implements Element
-{
+public class DataElement implements Element {
     protected Map<String, Element> children;
     protected List<Element> childrenList;
     protected List<Element> arrayItems;
@@ -24,63 +23,60 @@ public class DataElement implements Element
     private boolean isArrayItem;
     private Value value;
 
-    public DataElement(Format format)
-    {
+    public DataElement(Format format) {
         super();
         this.format = format;
     }
 
     @Override
-    public int getLevel()
-    {
+    public int getLevel() {
         return level;
     }
 
     @Override
-    public void removeChild(Element child)
-    {
-        if (isField())
+    public void removeChild(Element child) {
+        if (isField()) {
             throw new RuntimeException("Error, the data node is field");
+        }
 
-        if (isStruct())
-        {
+        if (isStruct()) {
             Element removed = children.remove(child.getFormat().getName());
-            if (removed != null)
+            if (removed != null) {
                 childrenList.remove(removed);
-        } else
+            }
+        } else {
             arrayItems.remove(child);
+        }
     }
 
     @Override
-    public Element newChild(Format child)
-    {
+    public Element newChild(Format child) {
         Element elem = new DataElement(child);
         elem.setParent(this);
         return elem;
     }
 
     @Override
-    public Element addChild(String name)
-    {
+    public Element addChild(String name) {
         Format child = format.getChild(name);
         return addChild(new DataElement(child));
     }
 
     @Override
-    public Element addChild(Element child)
-    {
-        if (isArray())
+    public Element addChild(Element child) {
+        if (isArray()) {
             throw new RuntimeException(
-                    "Error, the data node is an array, it is not an array item");
-        if (children == null)
-        {
+            "Error, the data node is an array, it is not an array item");
+        }
+        if (children == null) {
             children = new HashMap<String, Element>();
             childrenList = new ArrayList<Element>();
         }
         String name = child.getFormat().getName();
-        if (children.containsKey(name))
+        if (children.containsKey(name)) {
             throw new IllegalArgumentException("Duplicate child \"" + format.
-                    getName() + "\"");
+            getName() + "\"");
+        }
         child.setParent(this);
         children.put(name, child);
         childrenList.add(child);
@@ -88,82 +84,74 @@ public class DataElement implements Element
     }
 
     @Override
-    public Element addArrayItem()
-    {
+    public Element addArrayItem() {
         return addArrayItem(newArrayItem());
     }
 
     @Override
-    public Element addArrayItem(Element item)
-    {
-        if (!isArray())
+    public Element addArrayItem(Element item) {
+        if (!isArray()) {
             throw new RuntimeException("Error, the data node is not an array");
+        }
 
-        if (arrayItems == null)
+        if (arrayItems == null) {
             arrayItems = new ArrayList<Element>();
+        }
         item.setParent(this);
         arrayItems.add(item);
         return item;
     }
 
     @Override
-    public Element newArrayItem()
-    {
-        if (!isArray())
+    public Element newArrayItem() {
+        if (!isArray()) {
             throw new RuntimeException("Error, the node type is not an array");
+        }
         DataElement data = new DataElement(format);
         data.isArrayItem = true;
         return data;
     }
 
-    private List<Element> getArrayItems()
-    {
+    private List<Element> getArrayItems() {
         return arrayItems;
     }
 
     @Override
-    public void setParent(Element parent)
-    {
+    public void setParent(Element parent) {
         this.level = parent.isArray() ? parent.getLevel() : parent.getLevel() + 1;
         this.parent = parent;
     }
 
     @Override
-    public Element getParent()
-    {
+    public Element getParent() {
         return parent;
     }
 
     @Override
-    public Element getChild(String name)
-    {
-        return children.get(name);
+    public Element getChild(String name) {
+        return children == null ? null : children.get(name);
     }
 
     @Override
-    public Element getChildByPath(String path)
-    {
+    public Element getChildByPath(String path) {
         return getChildByPath(new AccessPath(path));
     }
 
     @Override
-    public Element getChildByPath(Path path)
-    {
+    public Element getChildByPath(Path path) {
         Element child = this;
         PathToken token = null;
         List<Element> items = null;
         Iterator<PathToken> it = path.iterator();
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             token = it.next();
             child = child.getChild(token.toString());
-            if (child != null && (token.isIndexed() || child.isArray() && (it.
-                    hasNext() || child.getChildren() != null)))
-            {
+            if (child != null && (token.isIndexed() || child.isArray() && (it.hasNext() || child.getChildren() != null))) {
                 items = child.getChildren();
-                if (items == null)
+                if (items == null) {
                     throw new IllegalArgumentException("Error path \"" + path.
-                            toString() + "\"");
+                    toString() + "\"");
+                }
                 child = items.get(token.isIndexed() ? token.index() : 0);
             }
         }
@@ -172,78 +160,68 @@ public class DataElement implements Element
     }
 
     @Override
-    public List<Element> getChildren()
-    {
-        if (isArray())
+    public List<Element> getChildren() {
+        if (isArray()) {
             return getArrayItems();
+        }
         return childrenList;
     }
 
     @Override
-    public Format getFormat()
-    {
+    public Format getFormat() {
         return format;
     }
 
     @Override
-    public boolean isField()
-    {
+    public boolean isField() {
         return format.isField() || (isArrayItem() && format.isArrayOfField());
     }
 
     @Override
-    public boolean isStruct()
-    {
+    public boolean isStruct() {
         return format.isStruct() || (isArrayItem() && format.isArrayOfStruct());
     }
 
     @Override
-    public boolean isArray()
-    {
+    public boolean isArray() {
         return format.isArray() && !isArrayItem();
     }
 
     @Override
-    public boolean isArrayOfField()
-    {
+    public boolean isArrayOfField() {
         return format.isArrayOfField();
     }
 
     @Override
-    public boolean isArrayOfStruct()
-    {
+    public boolean isArrayOfStruct() {
         return format.isArrayOfStruct();
     }
 
     @Override
-    public boolean isArrayItem()
-    {
+    public boolean isArrayItem() {
         return isArrayItem;
     }
 
     @Override
-    public Value getValue()
-    {
+    public Value getValue() {
         return value;
     }
 
     @Override
-    public void setValue(Value value)
-    {
+    public void setValue(Value value) {
         this.value = value;
     }
 
     @Override
-    public void setValue(Object value)
-    {
-        if (value instanceof Value)
+    public void setValue(Object value) {
+        if (value instanceof Value) {
             this.value = (Value) value;
+        }
         this.value = new Value(format.getType(), value);
     }
 
     @Override
-    public boolean isNull()
-    {
+    public boolean isNull() {
         return value == null || value.isNull();
     }
 }
