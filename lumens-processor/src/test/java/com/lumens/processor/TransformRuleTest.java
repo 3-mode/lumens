@@ -9,13 +9,10 @@ import com.lumens.model.Format;
 import com.lumens.model.Type;
 import com.lumens.processor.transform.TransformRule;
 import com.lumens.processor.transform.serializer.TransformRuleXmlSerializer;
-import com.lumens.processor.transform.serializer.parser.TransformRuleHandlerImpl;
-import com.lumens.processor.transform.serializer.parser.TransformRuleParser;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.TestCase;
-import org.xml.sax.InputSource;
 
 /**
  *

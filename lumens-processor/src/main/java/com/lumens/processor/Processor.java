@@ -11,5 +11,5 @@ public interface Processor
 
     public String getName();
 
-    public Object execute(Rule rule, Element element);
+    public Object execute(Rule rule, Element input);
 }

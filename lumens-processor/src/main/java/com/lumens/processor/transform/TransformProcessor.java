@@ -25,12 +25,12 @@ public class TransformProcessor extends AbstractProcessor
 {
     // private boolean ignoreNull = Boolean.getBoolean("transform.ignore.null");
     @Override
-    public Object execute(Rule rule, Element element)
+    public Object execute(Rule rule, Element input)
     {
         if (rule instanceof TransformRule)
         {
             TransformRule transformRule = (TransformRule) rule;
-            Element inputElement = element;
+            Element inputElement = input;
             List<Element> results = new ArrayList<Element>();
             TransformRuleItem ruleItem = transformRule.getRootRuleItem();
             String arrayIterationPath = ruleItem.getArrayIterationPath();
