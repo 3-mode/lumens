@@ -15,38 +15,31 @@ import org.xml.sax.SAXException;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class TransformRuleHandlerImpl implements TransformRuleHandler
-{
+public class TransformRuleHandlerImpl implements TransformRuleHandler {
     private Format format;
     private LinkedList<TransformRuleItem> ruleItemStack = new LinkedList<TransformRuleItem>();
     private TransformRule rule;
     private TransformRuleItem currentRuleItem;
     private List<TransformRule> ruleList;
 
-    public TransformRuleHandlerImpl(Format format, List<TransformRule> ruleList)
-    {
+    public TransformRuleHandlerImpl(Format format, List<TransformRule> ruleList) {
         this.format = format;
         this.ruleList = ruleList;
     }
 
     @Override
-    public void start_transform_rule_list(final Attributes meta) throws SAXException
-    {
+    public void start_transform_rule_list(final Attributes meta) throws SAXException {
     }
 
     @Override
-    public void end_transform_rule_list() throws SAXException
-    {
+    public void end_transform_rule_list() throws SAXException {
     }
 
     @Override
-    public void start_transform_rule(final Attributes meta) throws SAXException
-    {
-        if (format != null)
-        {
+    public void start_transform_rule(final Attributes meta) throws SAXException {
+        if (format != null) {
             String name = meta.getValue("name");
-            if (name != null && format.getName().equals(name))
-            {
+            if (name != null && format.getName().equals(name)) {
                 rule = new TransformRule(format);
                 ruleList.add(rule);
             }
@@ -54,24 +47,18 @@ public class TransformRuleHandlerImpl implements TransformRuleHandler
     }
 
     @Override
-    public void end_transform_rule() throws SAXException
-    {
+    public void end_transform_rule() throws SAXException {
     }
 
     @Override
-    public void start_transform_rule_item(final Attributes meta) throws SAXException
-    {
-        if (currentRuleItem == null)
-        {
+    public void start_transform_rule_item(final Attributes meta) throws SAXException {
+        if (currentRuleItem == null) {
             currentRuleItem = rule.getRootRuleItem();
-        } else
-        {
+        } else {
             String name = meta.getValue("format-name");
-            if (name != null)
-            {
+            if (name != null) {
                 TransformRuleItem child = currentRuleItem.addChild(name);
-                if (child != null)
-                {
+                if (child != null) {
                     String arrayItrPath = meta.getValue("array-iteration-path");
                     if (arrayItrPath != null)
                         child.setArrayIterationPath(arrayItrPath);
@@ -83,22 +70,17 @@ public class TransformRuleHandlerImpl implements TransformRuleHandler
     }
 
     @Override
-    public void end_transform_rule_item() throws SAXException
-    {
+    public void end_transform_rule_item() throws SAXException {
         if (!ruleItemStack.isEmpty())
             currentRuleItem = ruleItemStack.removeLast();
     }
 
     @Override
-    public void handle_script(final String data, final Attributes meta) throws SAXException
-    {
-        if (currentRuleItem != null && data != null)
-        {
-            try
-            {
+    public void handle_script(final String data, final Attributes meta) throws SAXException {
+        if (currentRuleItem != null && data != null) {
+            try {
                 currentRuleItem.setScript(data.trim());
-            } catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 throw new SAXException(ex);
             }
         }
