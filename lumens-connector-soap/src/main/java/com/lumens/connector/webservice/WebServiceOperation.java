@@ -14,7 +14,7 @@ import org.apache.axiom.soap.SOAPEnvelope;
 public class WebServiceOperation implements Operation {
     private SOAPClient client;
 
-    WebServiceOperation(SOAPClient client) {
+    public WebServiceOperation(SOAPClient client) {
         this.client = client;
     }
 
