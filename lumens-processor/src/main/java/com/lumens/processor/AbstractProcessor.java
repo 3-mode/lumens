@@ -7,24 +7,20 @@ package com.lumens.processor;
  *
  * @author shaofeng wang
  */
-public abstract class AbstractProcessor implements Processor
-{
+public abstract class AbstractProcessor implements Processor {
     private String name;
 
-    public AbstractProcessor()
-    {
+    public AbstractProcessor() {
         name = "Processor-" + this.hashCode();
     }
 
     @Override
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 }

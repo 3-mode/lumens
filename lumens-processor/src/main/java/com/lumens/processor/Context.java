@@ -9,7 +9,6 @@ import com.lumens.model.Element;
  *
  * @author shaofeng wang
  */
-public interface Context
-{
+public interface Context {
     public Element getAccessPathEntry();
 }

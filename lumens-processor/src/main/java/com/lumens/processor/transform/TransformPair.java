@@ -10,10 +10,8 @@ import com.lumens.processor.Pair;
  *
  * @author shaofeng wang
  */
-public class TransformPair extends Pair<Element, TransformRuleItem>
-{
-    public TransformPair(Element element, TransformRuleItem ruleItem)
-    {
+public class TransformPair extends Pair<Element, TransformRuleItem> {
+    public TransformPair(Element element, TransformRuleItem ruleItem) {
         super(element, ruleItem);
     }
 }

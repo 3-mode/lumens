@@ -7,8 +7,7 @@ package com.lumens.processor.route;
  *
  * @author shaofeng wang
  */
-public enum RouteStatus
-{
+public enum RouteStatus {
     CONTINUE,
     RETURN
 }

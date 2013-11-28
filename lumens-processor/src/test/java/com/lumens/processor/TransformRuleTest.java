@@ -32,18 +32,11 @@ public class TransformRuleTest extends TestCase {
             // a.@b.c.@d.e.f --> a1.@a2.a3.@a4.a5 (@b-@a4) (wrong logic, what will happen ?)
             // a.@b.c.@d.e.f --> a1.@a2.a3.@a4.a5 (none)
             Format a = new DataFormat("a", Format.Form.STRUCT);
-            a.addChild("b", Format.Form.ARRAYOFSTRUCT).addChild("c", Format.Form.STRUCT).addChild(
-            "d",
-            Format.Form.ARRAYOFSTRUCT).
-            addChild(
-            "e", Format.Form.STRUCT).addChild("f", Format.Form.FIELD, Type.STRING);
+            a.addChild("b", Format.Form.ARRAYOFSTRUCT).addChild("c", Format.Form.STRUCT).addChild("d", Format.Form.ARRAYOFSTRUCT).addChild("e", Format.Form.STRUCT).addChild("f", Format.Form.FIELD, Type.STRING);
             Format a1 = new DataFormat("a1", Format.Form.STRUCT);
-            Format a3 = a1.addChild("a2", Format.Form.ARRAYOFSTRUCT).addChild("a3",
-                                                                              Format.Form.STRUCT);
-            a3.addChild("a4", Format.Form.ARRAYOFSTRUCT).addChild("a5", Format.Form.FIELD,
-                                                                  Type.STRING);
-            a3.addChild("aa4", Format.Form.ARRAYOFSTRUCT).addChild("aa5", Format.Form.FIELD,
-                                                                   Type.STRING);
+            Format a3 = a1.addChild("a2", Format.Form.ARRAYOFSTRUCT).addChild("a3", Format.Form.STRUCT);
+            a3.addChild("a4", Format.Form.ARRAYOFSTRUCT).addChild("a5", Format.Form.FIELD, Type.STRING);
+            a3.addChild("aa4", Format.Form.ARRAYOFSTRUCT).addChild("aa5", Format.Form.FIELD, Type.STRING);
 
             List<TransformRule> ruleList = new ArrayList<TransformRule>();
             in = TransformRuleTest.class.getResourceAsStream("/xml/transform-rule.xml");

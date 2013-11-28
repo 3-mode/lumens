@@ -14,33 +14,27 @@ import java.util.Iterator;
  *
  * @author shaofeng wang
  */
-public class TransformRule implements Rule
-{
+public class TransformRule implements Rule {
     private Format dstFmt;
     private TransformRuleItem root;
 
-    public TransformRule(Format dest)
-    {
+    public TransformRule(Format dest) {
         this.dstFmt = dest;
         this.root = new TransformRuleItem(dstFmt);
     }
 
-    public TransformRuleItem getRootRuleItem()
-    {
+    public TransformRuleItem getRootRuleItem() {
         return root;
     }
 
-    public TransformRuleItem getRuleItem(String path)
-    {
+    public TransformRuleItem getRuleItem(String path) {
         Path fmtPath = new AccessPath(path);
-        if (!fmtPath.isEmpty())
-        {
+        if (!fmtPath.isEmpty()) {
             PathToken token = null;
             TransformRuleItem parent = root;
             TransformRuleItem child = null;
             Iterator<PathToken> it = fmtPath.iterator();
-            while (it.hasNext())
-            {
+            while (it.hasNext()) {
                 token = it.next();
                 child = parent.getChild(token.toString());
                 if (child == null)
@@ -54,8 +48,7 @@ public class TransformRule implements Rule
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return dstFmt.getName();
     }
 }

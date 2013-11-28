@@ -11,26 +11,19 @@ import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
-public class JavaScript implements Script
-{
+public class JavaScript implements Script {
     private static ScriptableObject globalScope;
 
-    static
-    {
-        try
-        {
+    static {
+        try {
             org.mozilla.javascript.Context ctx = org.mozilla.javascript.Context.enter();
             globalScope = ctx.initStandardObjects();
             ctx.evaluateString(globalScope,
                                ScriptUtils.loadJS("com/lumens/processor/script/build-in.js"),
                                "build-in", 1, null);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             // TODO Process the log4j
-        }
-        finally
-        {
+        } finally {
             org.mozilla.javascript.Context.exit();
         }
     }
@@ -40,48 +33,37 @@ public class JavaScript implements Script
     private org.mozilla.javascript.Context jsCTX;
     private Function jsFunction;
 
-    public JavaScript(String script) throws Exception
-    {
+    public JavaScript(String script) throws Exception {
         this("script" + System.currentTimeMillis(), script);
     }
 
-    public JavaScript(String sourceName, String script) throws Exception
-    {
+    public JavaScript(String sourceName, String script) throws Exception {
         // TODO refine here, put the context initialization to gloabl place, in
         // order to load build in function only once
         this.orignalScript = script;
         jsCTX = org.mozilla.javascript.Context.enter();
         scope = jsCTX.initStandardObjects(globalScope);
-        jsFunction = jsCTX.compileFunction(scope, builder.build(orignalScript), sourceName, 1,
-                                           null);
+        jsFunction = jsCTX.compileFunction(scope, builder.build(orignalScript), sourceName, 1, null);
     }
 
     @Override
-    protected void finalize() throws Throwable
-    {
-        try
-        {
+    protected void finalize() throws Throwable {
+        try {
             super.finalize();
-        }
-        finally
-        {
+        } finally {
             org.mozilla.javascript.Context.exit();
         }
     }
 
     @Override
-    public Object execute(Context ctx)
-    {
-        if (ctx instanceof TransformContext)
-        {
-            Object[] args =
-            {
+    public Object execute(Context ctx) {
+        if (ctx instanceof TransformContext) {
+            Object[] args = {
                 ctx
             };
             Object result = jsFunction.call(jsCTX, scope, scope, args);
-            if(result instanceof NativeJavaObject)
-            {
-                NativeJavaObject nativeObj = (NativeJavaObject)result;
+            if (result instanceof NativeJavaObject) {
+                NativeJavaObject nativeObj = (NativeJavaObject) result;
                 return nativeObj.unwrap();
             }
             return result;

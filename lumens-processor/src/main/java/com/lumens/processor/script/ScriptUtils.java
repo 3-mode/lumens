@@ -11,29 +11,22 @@ import org.apache.commons.io.IOUtils;
  *
  * @author shaofeng wang
  */
-public class ScriptUtils
-{
-    public static String loadJS(String name) throws Exception
-    {
+public class ScriptUtils {
+    public static String loadJS(String name) throws Exception {
         InputStream in = getInputStream(name);
-        try
-        {
+        try {
             return IOUtils.toString(in);
-        }
-        finally
-        {
+        } finally {
             IOUtils.closeQuietly(in);
         }
     }
 
-    public static Object getElement(Context ctx, String path)
-    {
+    public static Object getElement(Context ctx, String path) {
         AccessPathScript script = new AccessPathScript(path);
         return script.execute(ctx);
     }
 
-    private static InputStream getInputStream(String name) throws Exception
-    {
+    private static InputStream getInputStream(String name) throws Exception {
         return ScriptUtils.class.getClassLoader().getResourceAsStream(name);
     }
 }

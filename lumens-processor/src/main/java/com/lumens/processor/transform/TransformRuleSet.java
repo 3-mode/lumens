@@ -7,6 +7,5 @@ package com.lumens.processor.transform;
  *
  * @author shaofeng wang
  */
-public class TransformRuleSet
-{
+public class TransformRuleSet {
 }

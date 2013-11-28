@@ -16,8 +16,7 @@ import java.util.List;
  *
  * @author shaofeng wang
  */
-public class TransformRuleItem
-{
+public class TransformRuleItem {
     private TransformRuleItem parent;
     private List<TransformRuleItem> children;
     private Script script;
@@ -25,13 +24,11 @@ public class TransformRuleItem
     private String arrayIterationPath;
     private Format format;
 
-    TransformRuleItem(Format format)
-    {
+    TransformRuleItem(Format format) {
         this.format = format;
     }
 
-    public void setScript(String script) throws Exception
-    {
+    public void setScript(String script) throws Exception {
         orignalScript = script;
         if (TransformUtils.isPathFormat(script))
             this.script = new AccessPathScript(TransformUtils.getAccessPath(script));
@@ -39,31 +36,26 @@ public class TransformRuleItem
             this.script = new JavaScript(format.getFullPath().toString(), script);
     }
 
-    public Script getScript()
-    {
+    public Script getScript() {
         return script;
     }
 
-    public String getScriptString()
-    {
+    public String getScriptString() {
         return orignalScript;
     }
 
-    public void setArrayIterationPath(String arrayIterationPath)
-    {
-        if (!format.isArray() && format.getParent() != null)
-        {
+    public void setArrayIterationPath(String arrayIterationPath) {
+        if (!format.isArray() && format.getParent() != null) {
             throw new IllegalArgumentException(
-                    "iteration path \"" + arrayIterationPath + "\" can not be configured for a no array or no root element");
+            "iteration path \"" + arrayIterationPath + "\" can not be configured for a no array or no root element");
         }
 
         TransformRuleItem item = parent;
-        while (item != null)
-        {
+        while (item != null) {
             if (item.arrayIterationPath != null && item.arrayIterationPath.equalsIgnoreCase(
-                    arrayIterationPath))
+            arrayIterationPath))
                 throw new IllegalArgumentException(
-                        "iteration path \"" + arrayIterationPath + "\" already is configured in its parent element");
+                "iteration path \"" + arrayIterationPath + "\" already is configured in its parent element");
             item = item.parent;
         }
         ArrayDeque<TransformRuleItem> items = new ArrayDeque<TransformRuleItem>();
@@ -71,13 +63,12 @@ public class TransformRuleItem
         if (currentChildren != null && !currentChildren.isEmpty())
             items.addAll(currentChildren);
 
-        while (!items.isEmpty())
-        {
+        while (!items.isEmpty()) {
             item = items.removeFirst();
             if (item.arrayIterationPath != null && item.arrayIterationPath.equalsIgnoreCase(
-                    arrayIterationPath))
+            arrayIterationPath))
                 throw new IllegalArgumentException(
-                        "iteration path \"" + arrayIterationPath + "\" already is configured in its child element");
+                "iteration path \"" + arrayIterationPath + "\" already is configured in its child element");
             currentChildren = item.getChildren();
             if (currentChildren != null && !currentChildren.isEmpty())
                 items.addAll(currentChildren);
@@ -86,25 +77,20 @@ public class TransformRuleItem
         this.arrayIterationPath = arrayIterationPath;
     }
 
-    public String getArrayIterationPath()
-    {
+    public String getArrayIterationPath() {
         return arrayIterationPath;
     }
 
-    public TransformRuleItem getParent()
-    {
+    public TransformRuleItem getParent() {
         return parent;
     }
 
-    public Iterator<TransformRuleItem> iterator()
-    {
+    public Iterator<TransformRuleItem> iterator() {
         return children != null ? children.iterator() : null;
     }
 
-    public TransformRuleItem getChild(String name)
-    {
-        if (children != null)
-        {
+    public TransformRuleItem getChild(String name) {
+        if (children != null) {
             for (TransformRuleItem item : children)
                 if (item.format.getName().equalsIgnoreCase(name))
                     return item;
@@ -112,8 +98,7 @@ public class TransformRuleItem
         return null;
     }
 
-    public TransformRuleItem addChild(String name)
-    {
+    public TransformRuleItem addChild(String name) {
         if (children == null)
             children = new ArrayList<TransformRuleItem>();
         Format child = format.getChild(name);
@@ -125,13 +110,11 @@ public class TransformRuleItem
         return item;
     }
 
-    public Format getFormat()
-    {
+    public Format getFormat() {
         return format;
     }
 
-    List<TransformRuleItem> getChildren()
-    {
+    List<TransformRuleItem> getChildren() {
         return children;
     }
 }
