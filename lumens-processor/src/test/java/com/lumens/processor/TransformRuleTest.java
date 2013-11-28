@@ -18,18 +18,14 @@ import junit.framework.TestCase;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class TransformRuleTest extends TestCase
-{
-    public TransformRuleTest(String testName)
-    {
+public class TransformRuleTest extends TestCase {
+    public TransformRuleTest(String testName) {
         super(testName);
     }
-    
-    public void testReadTransformRuleFromXml() throws Exception
-    {
+
+    public void testReadTransformRuleFromXml() throws Exception {
         InputStream in = null;
-        try
-        {
+        try {
             // a.@b.c.@d.e.f --> a1.@a2.a3.@a4.a5 (@b-@a2, @d-@a4)
             // a.@b.c.@d.e.f --> a1.@a2.a3.@a4.a5 (@b-@a2)
             // a.@b.c.@d.e.f --> a1.@a2.a3.@a4.a5 (@d-@a4)
@@ -37,10 +33,10 @@ public class TransformRuleTest extends TestCase
             // a.@b.c.@d.e.f --> a1.@a2.a3.@a4.a5 (none)
             Format a = new DataFormat("a", Format.Form.STRUCT);
             a.addChild("b", Format.Form.ARRAYOFSTRUCT).addChild("c", Format.Form.STRUCT).addChild(
-                    "d",
-                    Format.Form.ARRAYOFSTRUCT).
-                    addChild(
-                    "e", Format.Form.STRUCT).addChild("f", Format.Form.FIELD, Type.STRING);
+            "d",
+            Format.Form.ARRAYOFSTRUCT).
+            addChild(
+            "e", Format.Form.STRUCT).addChild("f", Format.Form.FIELD, Type.STRING);
             Format a1 = new DataFormat("a1", Format.Form.STRUCT);
             Format a3 = a1.addChild("a2", Format.Form.ARRAYOFSTRUCT).addChild("a3",
                                                                               Format.Form.STRUCT);
@@ -48,15 +44,14 @@ public class TransformRuleTest extends TestCase
                                                                   Type.STRING);
             a3.addChild("aa4", Format.Form.ARRAYOFSTRUCT).addChild("aa5", Format.Form.FIELD,
                                                                    Type.STRING);
-            
+
             List<TransformRule> ruleList = new ArrayList<TransformRule>();
             in = TransformRuleTest.class.getResourceAsStream("/xml/transform-rule.xml");
             TransformRuleXmlSerializer unSerialXml = new TransformRuleXmlSerializer(a1, ruleList);
             unSerialXml.read(in);
             TransformRuleXmlSerializer xml = new TransformRuleXmlSerializer(ruleList.get(0));
             xml.write(System.out);
-        } finally
-        {
+        } finally {
             in.close();
         }
     }
