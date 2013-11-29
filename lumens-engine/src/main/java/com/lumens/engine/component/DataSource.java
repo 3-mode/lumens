@@ -116,8 +116,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     @Override
     public void registerFormat(String formatEntryName, Format format, Direction direction) {
         if (direction == Direction.IN) {
-            registerINFormatList.put(formatEntryName, new FormatEntry(formatEntryName, format,
-                                                                      Direction.IN));
+            registerINFormatList.put(formatEntryName, new FormatEntry(formatEntryName, format, Direction.IN));
         } else {
             registerOUTFormatList.
             put(formatEntryName, new FormatEntry(formatEntryName, format, Direction.OUT));

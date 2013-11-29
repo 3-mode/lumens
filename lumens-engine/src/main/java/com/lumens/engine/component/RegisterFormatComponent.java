@@ -11,8 +11,7 @@ import java.util.Map;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public interface RegisterFormatComponent
-{
+public interface RegisterFormatComponent {
     public void registerFormat(String formatEntryName, Format format, Direction direction);
 
     public FormatEntry removeFormat(String formatEntryName, Direction direction);

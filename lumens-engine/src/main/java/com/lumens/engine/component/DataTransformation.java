@@ -18,28 +18,24 @@ import java.util.Map;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class DataTransformation extends AbstractTransformComponent implements RuleComponent
-{
+public class DataTransformation extends AbstractTransformComponent implements RuleComponent {
     private String name;
     private Processor processor;
     private List<TransformRuleEntry> ruleList = new ArrayList<TransformRuleEntry>();
     private Map<String, List<TransformRuleEntry>> ruleFindList = new HashMap<String, List<TransformRuleEntry>>();
 
-    public DataTransformation()
-    {
+    public DataTransformation() {
         processor = new TransformProcessor();
     }
 
     @Override
-    public void registerRule(TransformRuleEntry rule)
-    {
+    public void registerRule(TransformRuleEntry rule) {
         for (TransformRuleEntry r : ruleList)
             if (r.getName().equals(rule.getName()))
                 return;
         ruleList.add(rule);
         List<TransformRuleEntry> rules = ruleFindList.get(rule.getSourceName());
-        if (rules == null)
-        {
+        if (rules == null) {
             rules = new ArrayList<TransformRuleEntry>();
             ruleFindList.put(rule.getSourceName(), rules);
         }
@@ -47,14 +43,11 @@ public class DataTransformation extends AbstractTransformComponent implements Ru
     }
 
     @Override
-    public TransformRuleEntry removeRule(String ruleName)
-    {
+    public TransformRuleEntry removeRule(String ruleName) {
         Iterator<TransformRuleEntry> it = ruleList.iterator();
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             TransformRuleEntry rule = it.next();
-            if (rule.getName().equals(ruleName))
-            {
+            if (rule.getName().equals(ruleName)) {
                 it.remove();
                 List<TransformRuleEntry> rules = ruleFindList.get(rule.getSourceName());
                 if (rules == null)
@@ -67,31 +60,24 @@ public class DataTransformation extends AbstractTransformComponent implements Ru
     }
 
     @Override
-    public List<ExecuteContext> execute(ExecuteContext context)
-    {
+    public List<ExecuteContext> execute(ExecuteContext context) {
         List<Element> results = new ArrayList<Element>();
         String targetId = context.getTargetName();
         List<TransformRuleEntry> rules = ruleFindList.get(targetId);
         List<ExecuteContext> exList = new ArrayList<ExecuteContext>();
         Object input = context.getInput();
-        for (TransformRuleEntry rule : rules)
-        {
-            if (input != null && input instanceof List)
-            {
+        for (TransformRuleEntry rule : rules) {
+            if (input != null && input instanceof List) {
                 List list = (List) input;
-                if (!list.isEmpty() && list.get(0) instanceof Element)
-                {
+                if (!list.isEmpty() && list.get(0) instanceof Element) {
                     List<Element> inputs = (List<Element>) input;
-                    for (Element data : inputs)
-                    {
-                        List<Element> result = (List<Element>) processor.execute(rule.getRule(),
-                                                                                 data);
+                    for (Element data : inputs) {
+                        List<Element> result = (List<Element>) processor.execute(rule.getRule(), data);
                         if (!result.isEmpty())
                             results.addAll(result);
                     }
                 }
-            } else if (input == null || input instanceof Element)
-            {
+            } else if (input == null || input instanceof Element) {
                 Element data = input == null ? null : (Element) input;
                 List<Element> result = (List<Element>) processor.execute(rule.getRule(), data);
                 if (!result.isEmpty())
@@ -103,47 +89,39 @@ public class DataTransformation extends AbstractTransformComponent implements Ru
     }
 
     @Override
-    public void open()
-    {
+    public void open() {
     }
 
     @Override
-    public void close()
-    {
+    public void close() {
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     @Override
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
     @Override
-    public boolean accept(ExecuteContext ctx)
-    {
+    public boolean accept(ExecuteContext ctx) {
         return ruleFindList.containsKey(ctx.getTargetName());
     }
 
     @Override
-    public boolean isSingleTarget()
-    {
+    public boolean isSingleTarget() {
         return true;
     }
 
-    public List<TransformRuleEntry> getTransformRuleList()
-    {
+    public List<TransformRuleEntry> getTransformRuleList() {
         return ruleList;
     }
 
     @Override
-    public String getClassName()
-    {
+    public String getClassName() {
         return DataTransformation.class.getName();
     }
 }

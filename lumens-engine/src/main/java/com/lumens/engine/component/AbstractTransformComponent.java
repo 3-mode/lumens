@@ -11,66 +11,56 @@ import java.util.Map;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public abstract class AbstractTransformComponent implements TransformComponent
-{
+public abstract class AbstractTransformComponent implements TransformComponent {
     private int x;
     private int y;
     private String description;
     private Map<String, TransformComponent> targetList;
 
     @Override
-    public void setX(int x)
-    {
+    public void setX(int x) {
         this.x = x;
     }
 
     @Override
-    public void setY(int y)
-    {
+    public void setY(int y) {
         this.y = y;
     }
 
     @Override
-    public int getX()
-    {
+    public int getX() {
         return x;
     }
 
     @Override
-    public int getY()
-    {
+    public int getY() {
         return y;
     }
 
     @Override
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
     @Override
-    public void setDescription(String description)
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 
     @Override
-    public void targetTo(TransformComponent target)
-    {
+    public void targetTo(TransformComponent target) {
         if (targetList == null)
             targetList = new HashMap<String, TransformComponent>();
         targetList.put(target.getName(), target);
     }
 
     @Override
-    public Map<String, TransformComponent> getTargetList()
-    {
+    public Map<String, TransformComponent> getTargetList() {
         return targetList;
     }
 
     @Override
-    public boolean hasTarget()
-    {
+    public boolean hasTarget() {
         return targetList != null && !targetList.isEmpty();
     }
 }

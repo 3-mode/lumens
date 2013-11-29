@@ -15,28 +15,23 @@ import java.util.Map;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class TransformEngine
-{
+public class TransformEngine {
     private Map<String, TransformExecuteJob> jobList = new HashMap<String, TransformExecuteJob>();
 
-    public void initialize()
-    {
+    public void initialize() {
     }
 
-    public void execute(TransformProject project)
-    {
+    public void execute(TransformProject project) {
         // Execute all start rules to drive the ws connector
         project.getStartEntryList();
 
     }
 
-    public void executeImpl(TransformComponent transformEntry, String entryName)
-    {
+    public void executeImpl(TransformComponent transformEntry, String entryName) {
         SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
         executorStack.push(
-                new TransformExecutor(transformEntry, new TransformExecuteContext(entryName)));
-        while (!executorStack.isEmpty())
-        {
+        new TransformExecutor(transformEntry, new TransformExecuteContext(entryName)));
+        while (!executorStack.isEmpty()) {
             Executor executor = executorStack.pop();
             List<Executor> tExList = executor.execute();
             executorStack.push(tExList);

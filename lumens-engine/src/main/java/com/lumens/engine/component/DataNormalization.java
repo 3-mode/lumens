@@ -7,6 +7,5 @@ package com.lumens.engine.component;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class DataNormalization
-{
+public class DataNormalization {
 }

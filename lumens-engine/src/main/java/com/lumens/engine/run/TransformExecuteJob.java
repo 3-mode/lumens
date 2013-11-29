@@ -9,9 +9,7 @@ import com.lumens.engine.TransformProject;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class TransformExecuteJob
-{
-    public TransformExecuteJob(TransformProject project)
-    {
+public class TransformExecuteJob {
+    public TransformExecuteJob(TransformProject project) {
     }
 }
