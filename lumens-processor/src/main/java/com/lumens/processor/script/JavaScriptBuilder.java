@@ -8,7 +8,7 @@ import java.io.StringReader;
 
 public class JavaScriptBuilder {
     private final String functionPrefix = "function fLumensScript_";
-    private final String pathEnding = "+-*/ &|!<>\n\r\t^%=;:?";
+    private final String pathEnding = "+-*/ &|!<>\n\r\t^%=;:?,";
 
     public String build(String script) {
         // TODO prepare the script and convert it to python function
@@ -33,9 +33,10 @@ public class JavaScriptBuilder {
                 scriptWithoutComments.append(line).append('\n');
                 ++lineCount;
             }
-            if (1 == lineCount)
-                scriptWithoutComments.insert(0, "return ");
-            return scriptWithoutComments.toString();
+            String scriptString = scriptWithoutComments.toString().trim();
+            if (1 == lineCount && !scriptString.startsWith("return"))
+                scriptString = scriptWithoutComments.insert(0, "return ").toString();
+            return scriptString;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

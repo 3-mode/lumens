@@ -28,8 +28,8 @@ public class AccessPathScript implements Script {
         else
             currentPath = path;
         Element find = searchEntry.getChildByPath(currentPath);
-        if (find.getFormat().getType() != Type.NONE)
-            return find.getValue();
+        if (find.getFormat().getType() != Type.NONE && find.getValue() != null)
+            return find.getValue().get();
 
         return null;
     }

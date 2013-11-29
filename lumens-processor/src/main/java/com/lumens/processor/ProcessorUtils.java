@@ -6,6 +6,7 @@ package com.lumens.processor;
  */
 public class ProcessorUtils {
     public static boolean isPathFormat(String input) {
+        // TODO need to enhance the algorithm for path format pattern
         if (input != null && !input.isEmpty() && input.charAt(0) == '@')
             return true;
         return false;

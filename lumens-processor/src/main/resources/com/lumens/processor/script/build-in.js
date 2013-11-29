@@ -4,17 +4,23 @@ var Calendar = java.util.Calendar;
 
 /*Get the value by the current path*/
 function getElementValue(ctx, path) {
-  return ScriptUtils.getElement(ctx, path);
+    return ScriptUtils.getElement(ctx, path);
 }
 
 /*Get the current date*/
 function now() {
-  var cal = Calendar.getInstance();
-  return cal.getTime();
+    var cal = Calendar.getInstance();
+    return cal.getTime();
 }
 
 /*Format a date to string*/
-function dateFormat(date, format) {
-  var dateFormat = new SimpleDateFormat(format);
-  return dateFormat.format(date);
+function dateToString(date, format) {
+    var dateFormat = new SimpleDateFormat(format);
+    return dateFormat.format(date);
+}
+
+/*Format a string to data*/
+function stringToDate(string, format) {
+    var dateFormat = new SimpleDateFormat(format);
+    return dateFormat.parse(string);
 }

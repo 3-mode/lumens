@@ -263,8 +263,7 @@ extends TestCase {
 
     public void testJavaScriptBuilder() throws Exception {
         JavaScriptBuilder builder = new JavaScriptBuilder();
-        String script = builder.build(IOUtils.toString(getInputStream(
-        "test-script/transform-script-test.txt")));
+        String script = builder.build(IOUtils.toString(getInputStream("test-script/transform-script-test.txt")));
         System.out.println("testJavaScriptBuilder###: " + script);
         String s = "@'a.b.c./a/*'";
         script = builder.build(s);
