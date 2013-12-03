@@ -15,6 +15,7 @@ import java.util.List;
 public class TransformProject {
     private List<DataSource> datasourceList = new ArrayList<DataSource>();
     private List<DataTransformation> transformationList = new ArrayList<DataTransformation>();
+    private List<StartEntry> startList = new ArrayList<StartEntry>();
     private String name;
     private String description;
 
@@ -52,6 +53,20 @@ public class TransformProject {
     }
 
     public List<StartEntry> getStartEntryList() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return startList;
+    }
+
+    public void open() throws Exception {
+        for (DataSource ds : datasourceList)
+            ds.open();
+        for (DataTransformation dt : transformationList)
+            dt.open();
+    }
+
+    public void close() throws Exception {
+        for (DataSource ds : datasourceList)
+            ds.close();
+        for (DataTransformation dt : transformationList)
+            dt.close();
     }
 }

@@ -4,6 +4,7 @@
 package com.lumens.engine.serializer;
 
 import com.lumens.connector.Direction;
+import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.DataSource;
@@ -49,17 +50,18 @@ public class ProjectXmlSerializer implements XmlSerializer {
     public void write(OutputStream out) throws Exception {
         StringUTF8Writer xml = new StringUTF8Writer(out);
         xml.print("<project").print(" name=\"").print(project.getName()).println("\">");
-        xml.print(INDENT).println("<description>").print("<![CDATA[").print(
-        project.getDescription()).println("]]>").print(INDENT).println("</description>");
+        xml.print(INDENT)
+        .println("<description>")
+        .print("<![CDATA[").print(project.getDescription()).println("]]>").print(INDENT)
+        .println("</description>");
         writeDatasourceListToXml(xml, project.getDatasourceList(), INDENT);
-        writeDataTransformationListToXml(xml,
-                                         project.getDataTransformationList(), INDENT);
+        writeDataTransformationListToXml(xml, project.getDataTransformationList(), INDENT);
+        writeDataTransformationListToXml(xml, project.getDataTransformationList(), INDENT);
+        writeStartEntryListToXml(xml, project.getStartEntryList(), INDENT);
         xml.println("</project>");
     }
 
-    private void writeDatasourceListToXml(StringUTF8Writer xml,
-                                          List<DataSource> datasourceList,
-                                          String indent) throws Exception {
+    private void writeDatasourceListToXml(StringUTF8Writer xml, List<DataSource> datasourceList, String indent) throws Exception {
         if (datasourceList != null && !datasourceList.isEmpty()) {
             xml.print(indent).println("<datasource-list>");
             for (DataSource ds : datasourceList)
@@ -70,73 +72,73 @@ public class ProjectXmlSerializer implements XmlSerializer {
 
     private void writeDatasourceToXml(StringUTF8Writer xml, DataSource ds, String indent) throws Exception {
         String nextIndent = indent + INDENT;
-        xml.print(indent).print("<datasource name=\"").print(ds.getName()).print("\" class-name=\"").
-        print(ds.getClassName()).println("\">");
-        xml.print(nextIndent).println("<description>").print("<![CDATA[").print(
-        ds.getDescription()).println("]]>").print(nextIndent).println("</description>");
-        xml.print(nextIndent).print("<position x=\"")
-        .print(Integer.toString(ds.getX())).print("\" y=\"")
-        .print(Integer.toString(ds.getY())).println("\"/>");
+        xml.print(indent)
+        .print("<datasource name=\"").print(ds.getName()).print("\" class-name=\"").print(ds.getClassName()).println("\">");
+        xml.print(nextIndent)
+        .println("<description>")
+        .print("<![CDATA[").print(ds.getDescription()).println("]]>").print(nextIndent)
+        .println("</description>");
+        xml.print(nextIndent)
+        .print("<position x=\"").print(Integer.toString(ds.getX())).print("\" y=\"").print(Integer.toString(ds.getY())).println("\"/>");
         writeDatasourceParameterListToXml(xml, ds.getPropertyList(), nextIndent);
-        writeRegisterFormatListToXml(xml, Direction.IN, ds.getRegisteredFormatList(Direction.IN),
-                                     nextIndent);
-        writeRegisterFormatListToXml(xml, Direction.OUT, ds.getRegisteredFormatList(Direction.OUT),
-                                     nextIndent);
+        writeRegisterFormatListToXml(xml, Direction.IN, ds.getRegisteredFormatList(Direction.IN), nextIndent);
+        writeRegisterFormatListToXml(xml, Direction.OUT, ds.getRegisteredFormatList(Direction.OUT), nextIndent);
         writeTargetListToXml(xml, ds.getTargetList(), nextIndent);
-        xml.print(indent).println("</datasource>");
+        xml.print(indent)
+        .println("</datasource>");
     }
 
-    private void writeTargetListToXml(StringUTF8Writer xml,
-                                      Map<String, TransformComponent> targetList,
-                                      String indent) throws IOException {
+    private void writeTargetListToXml(StringUTF8Writer xml, Map<String, TransformComponent> targetList, String indent) throws IOException {
         if (targetList != null) {
             String nextIndent = indent + INDENT;
-            xml.print(indent).println("<target-list>");
+            xml.print(indent)
+            .println("<target-list>");
             Iterator<Entry<String, TransformComponent>> it = targetList.entrySet().iterator();
             while (it.hasNext()) {
                 Entry<String, TransformComponent> entry = it.next();
-                xml.print(nextIndent).print("<target ").print("name=\"").print(entry.getKey()).
-                println("\"/>");
+                xml.print(nextIndent).print("<target ").print("name=\"").print(entry.getKey()).println("\"/>");
             }
-            xml.print(indent).println("</target-list>");
+            xml.print(indent)
+            .println("</target-list>");
         }
     }
 
-    private void writeDatasourceParameterListToXml(StringUTF8Writer xml,
-                                                   Map<String, Value> propertyList,
-                                                   String indent) throws IOException {
+    private void writeDatasourceParameterListToXml(StringUTF8Writer xml, Map<String, Value> propertyList, String indent) throws IOException {
         if (propertyList != null && !propertyList.isEmpty()) {
             String nextIndent = indent + INDENT;
-            xml.print(indent).println("<property-list>");
+            xml.print(indent)
+            .println("<property-list>");
             Iterator<Entry<String, Value>> it = propertyList.entrySet().iterator();
             while (it.hasNext()) {
                 Entry<String, Value> entry = it.next();
-                xml.print(nextIndent).print("<property name=\"").print(entry.getKey()).print("\"");
+                xml.print(nextIndent)
+                .print("<property name=\"").print(entry.getKey()).print("\"");
                 xml.print(" type=\"").print(entry.getValue().type().toString()).print("\">");
                 xml.print(entry.getValue().toString());
                 xml.println("</property>");
             }
-            xml.print(indent).println("</property-list>");
+            xml.print(indent)
+            .println("</property-list>");
         }
     }
 
-    private void writeRegisterFormatListToXml(StringUTF8Writer xml, Direction direction,
-                                              Map<String, FormatEntry> registeredFormatList,
-                                              String indent) throws Exception {
+    private void writeRegisterFormatListToXml(StringUTF8Writer xml, Direction direction, Map<String, FormatEntry> registeredFormatList, String indent) throws Exception {
         if (registeredFormatList != null && !registeredFormatList.isEmpty()) {
             String nextIndent = indent + INDENT;
-            xml.print(indent).print("<format-list direction=\"").print(direction.name()).println(
-            "\">");
+            xml.print(indent)
+            .print("<format-list direction=\"").print(direction.name()).println("\">");
             Iterator<Entry<String, FormatEntry>> it = registeredFormatList.entrySet().iterator();
             while (it.hasNext()) {
                 Entry<String, FormatEntry> entry = it.next();
                 FormatEntry fe = entry.getValue();
-                xml.print(nextIndent).print("<format-entry name=\"").print(fe.getName()).print(
-                "\" direction=\"").print(fe.getDirection().name()).println("\">");
+                xml.print(nextIndent)
+                .print("<format-entry name=\"").print(fe.getName()).print("\" direction=\"").print(fe.getDirection().name()).println("\">");
                 writeFormatToXml(xml, fe.getFormat(), nextIndent + INDENT);
-                xml.print(nextIndent).println("</format-entry>");
+                xml.print(nextIndent)
+                .println("</format-entry>");
             }
-            xml.print(indent).println("</format-list>");
+            xml.print(indent)
+            .println("</format-list>");
         }
     }
 
@@ -146,52 +148,69 @@ public class ProjectXmlSerializer implements XmlSerializer {
         formatXml.write(xml.getOutStream());
     }
 
-    private void writeDataTransformationListToXml(StringUTF8Writer xml,
-                                                  List<DataTransformation> dataTransformationList,
-                                                  String indent) throws Exception {
+    private void writeDataTransformationListToXml(StringUTF8Writer xml, List<DataTransformation> dataTransformationList, String indent) throws Exception {
         if (dataTransformationList != null && !dataTransformationList.isEmpty()) {
             String nextIndent = indent + INDENT;
-            xml.print(indent).println("<processor-list>");
+            xml.print(indent)
+            .println("<processor-list>");
             for (DataTransformation dt : dataTransformationList) {
                 writeDataTransformationToXml(xml, dt, nextIndent);
             }
-            xml.print(indent).println("</processor-list>");
+            xml.print(indent)
+            .println("</processor-list>");
         }
     }
 
-    private void writeDataTransformationToXml(StringUTF8Writer xml, DataTransformation dt,
-                                              String indent) throws Exception {
+    private void writeDataTransformationToXml(StringUTF8Writer xml, DataTransformation dt, String indent) throws Exception {
         String nextIndent = indent + INDENT;
-        xml.print(indent).print("<processor name=\"").print(dt.getName()).print("\" class-name=\"").
+        xml.print(indent)
+        .print("<processor name=\"").print(dt.getName()).print("\" class-name=\"").
         print(dt.getClassName()).println("\">");
-        xml.print(nextIndent).print("<position x=\"")
-        .print(Integer.toString(dt.getX())).print("\" y=\"")
-        .print(Integer.toString(dt.getY())).println("\"/>");
+        xml.print(nextIndent).print("<position x=\"").print(Integer.toString(dt.getX())).print("\" y=\"").print(Integer.toString(dt.getY())).println("\"/>");
         writeTargetListToXml(xml, dt.getTargetList(), nextIndent);
         writeTransformRuleList(xml, dt.getTransformRuleList(), nextIndent);
-        xml.print(indent).println("</processor>");
+        xml.print(indent)
+        .println("</processor>");
     }
 
-    private void writeTransformRuleList(StringUTF8Writer xml,
-                                        List<TransformRuleEntry> transformRuleList,
-                                        String indent) throws Exception {
-        if (transformRuleList != null && !transformRuleList.isEmpty()) {
+    private void writeStartEntryListToXml(StringUTF8Writer xml, List<StartEntry> startEntryList, String indent) throws Exception {
+        if (startEntryList != null && !startEntryList.isEmpty()) {
             String nextIndent = indent + INDENT;
-            xml.print(indent).println("<transform-rule-list>");
-            for (TransformRuleEntry ruleEntry : transformRuleList)
-                writeTransformRuleEntry(xml, ruleEntry, nextIndent);
-            xml.print(indent).println("</transform-rule-list>");
+            xml.print(indent)
+            .println("<start-entry-list>");
+            for (StartEntry se : startEntryList) {
+                writeStartEntryToXml(xml, se, nextIndent);
+            }
+            xml.print(indent)
+            .println("</start-entry-list>");
         }
     }
 
-    private void writeTransformRuleEntry(StringUTF8Writer xml, TransformRuleEntry ruleEntry,
-                                         String indent) throws Exception {
-        xml.print(indent).print("<transform-rule-entry name=\"").print(ruleEntry.getName()).print(
-        "\"");
+    private void writeStartEntryToXml(StringUTF8Writer xml, StartEntry se, String indent) throws Exception {
+        String nextIndent = indent + INDENT;
+        xml.print(indent).print("<start-entry name=\"").print(se.getStartName()).print("\" entry-name=\"").print(se.getStartComponent().getName()).println("\"/>");
+    }
+
+    private void writeTransformRuleList(StringUTF8Writer xml, List<TransformRuleEntry> transformRuleList, String indent) throws Exception {
+        if (transformRuleList != null && !transformRuleList.isEmpty()) {
+            String nextIndent = indent + INDENT;
+            xml.print(indent)
+            .println("<transform-rule-list>");
+            for (TransformRuleEntry ruleEntry : transformRuleList)
+                writeTransformRuleEntry(xml, ruleEntry, nextIndent);
+            xml.print(indent)
+            .println("</transform-rule-list>");
+        }
+    }
+
+    private void writeTransformRuleEntry(StringUTF8Writer xml, TransformRuleEntry ruleEntry, String indent) throws Exception {
+        xml.print(indent)
+        .print("<transform-rule-entry name=\"").print(ruleEntry.getName()).print("\"");
         xml.print(" source-name=\"").print(ruleEntry.getSourceName()).print("\"");
         xml.print(" target-name=\"").print(ruleEntry.getTargetName()).println("\">");
         writeRuleToXml(xml, ruleEntry.getRule(), indent + INDENT);
-        xml.print(indent).println("</transform-rule-entry>");
+        xml.print(indent)
+        .println("</transform-rule-entry>");
     }
 
     private void writeRuleToXml(StringUTF8Writer xml, TransformRule rule, String indent) throws Exception {

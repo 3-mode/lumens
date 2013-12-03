@@ -6,9 +6,7 @@ import com.lumens.connector.webservice.WebServiceConnector;
 import com.lumens.engine.component.DataSource;
 import com.lumens.engine.component.DataTransformation;
 import com.lumens.engine.component.TransformRuleEntry;
-import com.lumens.engine.run.Executor;
-import com.lumens.engine.run.SingleThreadExecuteStack;
-import com.lumens.engine.run.TransformExecutor;
+import com.lumens.engine.run.TransformSingleThreadEngine;
 import com.lumens.engine.serializer.ProjectXmlSerializer;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
@@ -29,13 +27,13 @@ public class EngineTest extends TestCase {
         super(testName);
     }
 
-    public void TtestEngine1() throws Exception {
+    public void testEngine1() throws Exception {
         int nameCounter = 1;
         // Create ws connector to read data
         HashMap<String, Value> props = new HashMap<String, Value>();
         props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/wsdl/ChinaOpenFundWS.asmx").toString()));
-        //props.put(WebServiceConnector.PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
-        //props.put(WebServiceConnector.PROXY_PORT, new Value(8080));
+        props.put(WebServiceConnector.PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
+        props.put(WebServiceConnector.PROXY_PORT, new Value(8080));
         DataSource datasource = new DataSource(WebServiceConnector.class.getName());
         datasource.setName("ChinaMobile-WebService-SOAP");
         datasource.setPropertyList(props);
@@ -77,7 +75,7 @@ public class EngineTest extends TestCase {
         callGetOpenFundString2.targetTo(datasource);
 
         // Create start point transformation
-        String startPoint = "DataDriven";
+        String startPoint = "startWS";
         TransformRule rule1 = new TransformRule(getOpenFundStringRequest);
         rule1.getRuleItem("getOpenFundString.userID").setScript("\"123\"");
         callGetOpenFundString.registerRule(new TransformRuleEntry(startPoint, targetName, rule1));
@@ -91,24 +89,22 @@ public class EngineTest extends TestCase {
         TransformProject project = new TransformProject();
         project.setName("The demo project");
         project.setDescription("test project description demo");
+        project.getStartEntryList().add(new StartEntry("startWS", callGetOpenFundString));
         List<DataSource> dsList = project.getDatasourceList();
         List<DataTransformation> dtList = project.getDataTransformationList();
         dsList.add(datasource);
         dtList.add(callGetOpenFundString);
         dtList.add(callGetOpenFundString2);
-        doTestProjectSerialize(project);
+        TransformProject newProject = doTestProjectSerialize(project);
         //**********************************************************************
         // Execute all start rules to drive the ws connector
-        SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
-        executorStack.push(new TransformExecutor(callGetOpenFundString, new TransformExecuteContext(null, startPoint)));
-        while (!executorStack.isEmpty()) {
-            Executor executor = executorStack.pop();
-            List<Executor> tExList = executor.execute();
-            executorStack.push(tExList);
-        }
+        newProject.open();
+        TransformSingleThreadEngine stEngine = new TransformSingleThreadEngine();
+        stEngine.execute(newProject);
+        newProject.close();
     }
 
-    private void doTestProjectSerialize(TransformProject project) throws Exception {
+    private TransformProject doTestProjectSerialize(TransformProject project) throws Exception {
         new ProjectXmlSerializer(project).write(System.out);
 
         InputStream in = null;
@@ -119,6 +115,7 @@ public class EngineTest extends TestCase {
             ProjectXmlSerializer projXml = new ProjectXmlSerializer(newProject);
             projXml.read(in);
             projXml.write(System.out);
+            return newProject;
         } finally {
             IOUtils.closeQuietly(in);
         }

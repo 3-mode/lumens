@@ -32,13 +32,13 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>com.lumens.connector-orcl</groupId>
-            <artifactId>lumens-connector-orcl</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.lumens.connector.soap</groupId>
             <artifactId>lumens-connector-soap</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lumens.connector.orcl</groupId>
+            <artifactId>lumens-connector-orcl</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

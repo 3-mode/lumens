@@ -17,4 +17,16 @@ public class MockOperation implements Operation {
     public OperationResult execute(Element input, Format output) throws Exception {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public void begin() {
+    }
+
+    @Override
+    public void end() {
+    }
+
+    @Override
+    public void commit() {
+    }
 }

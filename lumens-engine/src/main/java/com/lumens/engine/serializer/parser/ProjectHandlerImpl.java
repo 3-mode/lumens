@@ -4,6 +4,7 @@
 package com.lumens.engine.serializer.parser;
 
 import com.lumens.connector.Direction;
+import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.DataSource;
@@ -58,6 +59,8 @@ public class ProjectHandlerImpl implements ProjectHandler {
     private TransformRuleEntry curRuleEntry;
     private String curComponentTargetName;
     private List<TransformRule> ruleList;
+    // Start
+    private List<StartEntry> startList;
 
     public ProjectHandlerImpl(TransformProject project) {
         this.project = project;
@@ -349,5 +352,20 @@ public class ProjectHandlerImpl implements ProjectHandler {
             if (transformRuleHandler != null)
                 transformRuleHandler.handle_script(data, meta);
         }
+    }
+
+    @Override
+    public void start_start_entry_list(Attributes meta) throws SAXException {
+        startList = new ArrayList<StartEntry>();
+    }
+
+    @Override
+    public void end_start_entry_list() throws SAXException {
+        project.getStartEntryList().addAll(startList);
+    }
+
+    @Override
+    public void handle_start_entry(Attributes meta) throws SAXException {
+        startList.add(new StartEntry(meta.getValue("name"), tComponentCache.get(meta.getValue("entry-name"))));
     }
 }

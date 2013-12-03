@@ -1,11 +1,11 @@
 <project name="The demo project">
     <description>
-<![CDATA[test project description demo]]>
+      <![CDATA[test project description demo]]>
     </description>
     <datasource-list>
         <datasource name="ChinaMobile-WebService-SOAP" class-name="com.lumens.connector.webservice.WebServiceConnector">
             <description>
-<![CDATA[this is testing demo datasource for web service]]>
+              <![CDATA[this is testing demo datasource for web service]]>
             </description>
             <position x="0" y="0"/>
             <property-list>
@@ -97,13 +97,13 @@
                 <target name="ChinaMobile-WebService-SOAP"/>
             </target-list>
             <transform-rule-list>
-                <transform-rule-entry name="DataDriven-getOpenFundString1" source-name="DataDriven" target-name="getOpenFundString1">
+                <transform-rule-entry name="startWS-getOpenFundString1" source-name="startWS" target-name="getOpenFundString1">
                     <transform-rule name="getOpenFundString">
                         <transform-rule-item format-name="getOpenFundString">
                             <transform-rule-item format-name="getOpenFundString">
                                 <transform-rule-item format-name="userID">
                                     <script>
-<![CDATA["123"]]>
+                                      <![CDATA["123"]]>
                                     </script>
                                 </transform-rule-item>
                             </transform-rule-item>
@@ -124,7 +124,7 @@
                             <transform-rule-item format-name="getOpenFundString">
                                 <transform-rule-item format-name="userID">
                                     <script>
-<![CDATA[@getOpenFundStringResponse.getOpenFundStringResult.string]]>
+                                       <![CDATA[@getOpenFundStringResponse.getOpenFundStringResult.string]]>
                                     </script>
                                 </transform-rule-item>
                             </transform-rule-item>
@@ -134,4 +134,7 @@
             </transform-rule-list>
         </processor>
     </processor-list>
+    <start-entry-list>
+        <start-entry name="startWS" entry-name="GetOpenFundString-WS-Transform" />
+    </start-entry-list>
 </project>

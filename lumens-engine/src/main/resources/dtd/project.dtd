@@ -20,7 +20,7 @@
 -->
 
 <!--- Put your DTDDoc comment here. -->
-<!ELEMENT project (processor-list|datasource-list|description)*>
+<!ELEMENT project (start-entry-list|processor-list|datasource-list|description)*>
 <!ATTLIST project
     name CDATA #IMPLIED
   >
@@ -108,6 +108,9 @@
 
 <!--- Put your DTDDoc comment here. -->
 <!ELEMENT transform-rule (transform-rule-item)*>
+<!ATTLIST transform-rule
+    name CDATA #IMPLIED
+  >
 
 <!--- Put your DTDDoc comment here. -->
 <!ELEMENT transform-rule-item (script|transform-rule-item)*>
@@ -117,3 +120,13 @@
 
 <!--- Put your DTDDoc comment here. -->
 <!ELEMENT script (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT start-entry-list (start-entry)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT start-entry EMPTY>
+<!ATTLIST start-entry
+    entry-name CDATA #IMPLIED
+    name CDATA #IMPLIED
+  >
