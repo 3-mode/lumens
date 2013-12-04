@@ -85,7 +85,7 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
     private Definition definition;
     private XSModelHolder xsModel;
     private Map<String, Element> schemaCache;
-    private static final Map<String, Type> buildinTypes = new HashMap<String, Type>();
+    private static final Map<String, Type> buildinTypes = new HashMap<>();
     private Map<String, Format> consumeServices;
     private Map<String, Format> produceServices;
 
@@ -116,7 +116,7 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
     }
 
     private class XSModelHolder {
-        private List<XSModel> models = new ArrayList<XSModel>();
+        private List<XSModel> models = new ArrayList<>();
 
         public void addModel(XSModel model) {
             models.add(model);
@@ -215,7 +215,7 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
                         schema.setAttribute(attrNS, entry.getValue());
                     }
                 }
-                schemaCache = new HashMap<String, Element>();
+                schemaCache = new HashMap<>();
                 Map imports = s.getImports();
                 for (Object importO : imports.values()) {
                     Collection schemaVec = (Collection) importO;

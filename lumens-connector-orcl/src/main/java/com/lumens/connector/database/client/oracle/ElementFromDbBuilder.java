@@ -7,7 +7,6 @@ import com.lumens.model.Format;
 import com.lumens.model.Value;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import java.util.List;
  */
 public class ElementFromDbBuilder {
     public List<Element> buildElement(Format output, ResultSet ret) throws Exception {
-        List<Element> result = new ArrayList<Element>();
+        List<Element> result = new ArrayList<>();
         if (!ret.isClosed()) {
             while (ret.next()) {
                 DataElement data = new DataElement(output);

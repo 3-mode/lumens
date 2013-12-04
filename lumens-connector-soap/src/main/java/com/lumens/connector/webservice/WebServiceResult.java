@@ -29,7 +29,7 @@ public class WebServiceResult implements OperationResult {
     public List<Element> getResult() {
         Element result = elementBuilder.buildElement(resultFormat, envelope);
         if (result != null) {
-            List<Element> results = new ArrayList<Element>(1);
+            List<Element> results = new ArrayList<>(1);
             results.add(result);
             return results;
         }

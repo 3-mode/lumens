@@ -56,7 +56,7 @@ public class ModelSerializeTest extends TestCase
         ElementXmlSerializer serializer = new ElementXmlSerializer(
                 personData, true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        serializer.write(baos);
+        serializer.writeToXml(baos);
         System.out.println(baos.toString());
 
     }
@@ -69,8 +69,8 @@ public class ModelSerializeTest extends TestCase
         try
         {
             in = ModelSerializeTest.class.getResourceAsStream("/xml/format.xml");
-            xmlSerializer.read(in);
-            xmlSerializer.write(System.out);
+            xmlSerializer.readFromXml(in);
+            xmlSerializer.writeToXml(System.out);
         } finally
         {
             in.close();

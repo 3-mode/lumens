@@ -41,9 +41,9 @@ public class TransformRuleTest extends TestCase {
             List<TransformRule> ruleList = new ArrayList<TransformRule>();
             in = TransformRuleTest.class.getResourceAsStream("/xml/transform-rule.xml");
             TransformRuleXmlSerializer unSerialXml = new TransformRuleXmlSerializer(a1, ruleList);
-            unSerialXml.read(in);
+            unSerialXml.readFromXml(in);
             TransformRuleXmlSerializer xml = new TransformRuleXmlSerializer(ruleList.get(0));
-            xml.write(System.out);
+            xml.writeToXml(System.out);
         } finally {
             in.close();
         }

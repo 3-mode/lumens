@@ -42,13 +42,13 @@ public class TransformRuleXmlSerializer implements XmlSerializer {
     }
 
     @Override
-    public void read(InputStream in) throws Exception {
+    public void readFromXml(InputStream in) throws Exception {
         TransformRuleParser.parse(new InputSource(in),
                                   new TransformRuleHandlerImpl(ruleFormat, unSerializeRuleList));
     }
 
     @Override
-    public void write(OutputStream out) throws Exception {
+    public void writeToXml(OutputStream out) throws Exception {
         StringUTF8Writer xml = new StringUTF8Writer(out);
         writeTransformRuleToXml(xml, outputRule, INDENT);
     }

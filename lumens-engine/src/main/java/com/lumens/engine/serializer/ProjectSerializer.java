@@ -36,28 +36,31 @@ import org.xml.sax.InputSource;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class ProjectXmlSerializer implements XmlSerializer {
+public class ProjectSerializer implements XmlSerializer {
     private final static String INDENT = "  ";
     private TransformProject project;
 
-    public ProjectXmlSerializer(TransformProject project) {
+    public ProjectSerializer(TransformProject project) {
         this.project = project;
     }
 
     @Override
-    public void read(InputStream in) throws Exception {
+    public void readFromXml(InputStream in) throws Exception {
         ProjectParser.parse(new InputSource(in), new ProjectHandlerImpl(project));
+    }
+
+    public void readFromJson(InputStream in) throws Exception {
     }
 
     public void writeToJson(OutputStream out) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        write(baos);
+        writeToXml(baos);
         JSONObject json = XML.toJSONObject(baos.toString());
         out.write(json.toString().getBytes("UTF-8"));
     }
 
     @Override
-    public void write(OutputStream out) throws Exception {
+    public void writeToXml(OutputStream out) throws Exception {
         StringUTF8Writer xml = new StringUTF8Writer(out);
         xml.print("<project").print(" name=\"").print(project.getName()).println("\">");
         xml.print(INDENT)
@@ -65,7 +68,6 @@ public class ProjectXmlSerializer implements XmlSerializer {
         .print("<![CDATA[").print(project.getDescription()).println("]]>").print(INDENT)
         .println("</description>");
         writeDatasourceListToXml(xml, project.getDatasourceList(), INDENT);
-        writeDataTransformationListToXml(xml, project.getDataTransformationList(), INDENT);
         writeDataTransformationListToXml(xml, project.getDataTransformationList(), INDENT);
         writeStartEntryListToXml(xml, project.getStartEntryList(), INDENT);
         xml.println("</project>");
@@ -155,7 +157,7 @@ public class ProjectXmlSerializer implements XmlSerializer {
     private void writeFormatToXml(StringUTF8Writer xml, Format format, String indent) throws Exception {
         FormatXmlSerializer formatXml = new FormatXmlSerializer(format);
         formatXml.initIndent(indent);
-        formatXml.write(xml.getOutStream());
+        formatXml.writeToXml(xml.getOutStream());
     }
 
     private void writeDataTransformationListToXml(StringUTF8Writer xml, List<DataTransformation> dataTransformationList, String indent) throws Exception {
@@ -226,6 +228,6 @@ public class ProjectXmlSerializer implements XmlSerializer {
     private void writeRuleToXml(StringUTF8Writer xml, TransformRule rule, String indent) throws Exception {
         TransformRuleXmlSerializer ruleXml = new TransformRuleXmlSerializer(rule);
         ruleXml.initIndent(indent);
-        ruleXml.write(xml.getOutStream());
+        ruleXml.writeToXml(xml.getOutStream());
     }
 }

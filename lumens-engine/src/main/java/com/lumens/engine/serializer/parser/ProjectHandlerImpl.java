@@ -45,8 +45,8 @@ public class ProjectHandlerImpl implements ProjectHandler {
     // Project
     private ReadStatus status = ReadStatus.NONE;
     private TransformProject project;
-    private Map<String, TransformComponent> tComponentCache = new HashMap<String, TransformComponent>();
-    private Map<String, List<String>> linkInfoList = new HashMap<String, List<String>>();
+    private Map<String, TransformComponent> tComponentCache = new HashMap<>();
+    private Map<String, List<String>> linkInfoList = new HashMap<>();
     private TransformComponent tc;
     // Format
     private FormatHandler formatHandler;
@@ -162,7 +162,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
                                           Direction.valueOf(meta.getValue("direction")));
             registeredFormatList.put(formatEntry.getName(), formatEntry);
             if (formatList == null) {
-                formatList = new ArrayList<Format>();
+                formatList = new ArrayList<>();
                 formatHandler = new FormatHandlerImpl(formatList);
             }
             status = ReadStatus.FORMAT;
@@ -196,7 +196,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
     @Override
     public void start_property_list(final Attributes meta) throws SAXException {
         if (status == ReadStatus.DATASRC) {
-            propList = new HashMap<String, Value>();
+            propList = new HashMap<>();
         }
     }
 
@@ -234,7 +234,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
             String srcName = tc.getName();
             List<String> targetList = linkInfoList.get(srcName);
             if (targetList == null) {
-                targetList = new ArrayList<String>();
+                targetList = new ArrayList<>();
                 linkInfoList.put(srcName, targetList);
             }
             curComponentTargetName = meta.getValue("name");
@@ -261,7 +261,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
                 tc = (TransformComponent) (Class.forName(className).newInstance());
                 tc.setName(meta.getValue("name"));
                 tComponentCache.put(tc.getName(), tc);
-            } catch (Exception e) {
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 throw new SAXException(e);
             }
         } else
@@ -312,7 +312,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
                     FormatEntry fEntry = rfComp.getRegisteredFormatList(Direction.IN).
                     get(curRuleEntry.getTargetName());
                     Format format = fEntry.getFormat();
-                    ruleList = new ArrayList<TransformRule>();
+                    ruleList = new ArrayList<>();
                     transformRuleHandler = new TransformRuleHandlerImpl(format, ruleList);
                     transformRuleHandler.start_transform_rule(meta);
                 }
@@ -356,7 +356,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
 
     @Override
     public void start_start_entry_list(Attributes meta) throws SAXException {
-        startList = new ArrayList<StartEntry>();
+        startList = new ArrayList<>();
     }
 
     @Override

@@ -57,7 +57,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         rule.getRuleItem("Search.assetSearchCriteria.Filter.Expression.ExpressionValue").setScript("\"sparta\\\\am01\"");
         Processor transformProcessor = new TransformProcessor();
         List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
-        new ElementXmlSerializer(result.get(0), true).write(System.out);
+        new ElementXmlSerializer(result.get(0), true).writeToXml(System.out);
         connector.close();
         SOAPMessageBuilder soapBuilder = new SOAPMessageBuilder();
         SOAPEnvelope envelope = soapBuilder.buildSOAPMessage(result.get(0));
@@ -83,7 +83,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         connector.getFormat(retrieveIncident, "RetrieveIncidentRequest.model.instance", Direction.IN);
         connector.getFormat(retrieveIncident, "RetrieveIncidentRequest.model.instance.attachments",
                             Direction.IN);
-        new FormatXmlSerializer(retrieveIncident).write(System.out);
+        new FormatXmlSerializer(retrieveIncident).writeToXml(System.out);
         assertNotNull(retrieveIncident.getChildByPath("RetrieveIncidentRequest.model.instance.attachments.attachment"));
 
         TransformRule rule = new TransformRule(retrieveIncident);
@@ -92,7 +92,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         rule.getRuleItem("RetrieveIncidentRequest.model.instance.ClosedTime").setScript("dateFormat(now(), \"yyyy-MM-dd HH:mm:ss\")");
         Processor transformProcessor = new TransformProcessor();
         List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
-        new ElementXmlSerializer(result.get(0), true).write(System.out);
+        new ElementXmlSerializer(result.get(0), true).writeToXml(System.out);
         connector.close();
         SOAPMessageBuilder soapBuilder = new SOAPMessageBuilder();
         SOAPEnvelope envelope = soapBuilder.buildSOAPMessage(result.get(0));
@@ -110,7 +110,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         rule.getRuleItem("getOpenFundString.userID").setScript("\"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\"");
         transformProcessor = new TransformProcessor();
         result = (List<Element>) transformProcessor.execute(rule, null);
-        new ElementXmlSerializer(result.get(0), true).write(System.out);
+        new ElementXmlSerializer(result.get(0), true).writeToXml(System.out);
 
         services = connector.getFormatList(Direction.OUT);
         getOpenFundString = services.get("getOpenFundString");
@@ -118,8 +118,8 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         Operation op = connector.getOperation();
         OperationResult opResult = op.execute(result.get(0), getOpenFundString);
         List<Element> response = opResult.getResult();
-        new ElementXmlSerializer(response.get(0), true).write(System.out);
-        new FormatXmlSerializer(getOpenFundString).write(System.out);
+        new ElementXmlSerializer(response.get(0), true).writeToXml(System.out);
+        new FormatXmlSerializer(getOpenFundString).writeToXml(System.out);
 
     }
 
@@ -136,12 +136,12 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         Format getRequests = services.get("getRequests");
         connector.getFormat(getRequests, "getRequests.requestIds.id", Direction.IN);
         assertNotNull(getRequests.getChildByPath("getRequests.requestIds.id"));
-        new FormatXmlSerializer(getRequests).write(System.out);
+        new FormatXmlSerializer(getRequests).writeToXml(System.out);
         TransformRule rule = new TransformRule(getRequests);
         rule.getRuleItem("getRequests.requestIds.id").setScript("\"30392\"");
         TransformProcessor transformProcessor = new TransformProcessor();
         List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
-        new ElementXmlSerializer(result.get(0), true).write(System.out);
+        new ElementXmlSerializer(result.get(0), true).writeToXml(System.out);
         Operation op = connector.getOperation();
         services = connector.getFormatList(Direction.OUT);
         getRequests = services.get("getRequests");
@@ -149,7 +149,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         connector.getFormat(getRequests, "getRequestsResponse.return.fieldChangeNodes", Direction.OUT);
         connector.getFormat(getRequests, "getRequestsResponse.return.simpleFields", Direction.OUT);
         connector.getFormat(getRequests, "getRequestsResponse.return.simpleFields.stringValue", Direction.OUT);
-        new FormatXmlSerializer(getRequests).write(System.out);
+        new FormatXmlSerializer(getRequests).writeToXml(System.out);
         assertNotNull(getRequests.getChildByPath("getRequestsResponse.return.simpleFields.stringValue"));
         //List<Element> response = op.execute(result.get(0), getRequests);
         //new DataElementXmlSerializer(response.get(0), "UTF-8", true).write(System.out);

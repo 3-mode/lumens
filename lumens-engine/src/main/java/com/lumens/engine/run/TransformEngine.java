@@ -12,7 +12,7 @@ import java.util.List;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class TransformEngine {
-    private List<ExecuteJob> jobList = new ArrayList<ExecuteJob>();
+    private List<ExecuteJob> jobList = new ArrayList<>();
 
     public void execute(TransformProject project) throws Exception {
         ExecuteJob job = new SingleThreadTransformExecuteJob(project);

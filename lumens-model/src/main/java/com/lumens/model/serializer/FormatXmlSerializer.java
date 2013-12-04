@@ -51,7 +51,7 @@ public class FormatXmlSerializer implements XmlSerializer {
     }
 
     @Override
-    public void read(InputStream in) throws Exception {
+    public void readFromXml(InputStream in) throws Exception {
         List<Format> formatList = new ArrayList<Format>();
         FormatParser.parse(new InputSource(in), new FormatHandlerImpl(formatList));
         for (Format child : formatList) {
@@ -60,7 +60,7 @@ public class FormatXmlSerializer implements XmlSerializer {
     }
 
     @Override
-    public void write(OutputStream out) throws Exception {
+    public void writeToXml(OutputStream out) throws Exception {
         StringUTF8Writer dataOut = new StringUTF8Writer(out);
         writeFormatToXml(format, INDENT, dataOut);
     }

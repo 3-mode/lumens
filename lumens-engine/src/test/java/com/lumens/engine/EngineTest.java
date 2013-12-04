@@ -7,7 +7,7 @@ import com.lumens.engine.component.DataSource;
 import com.lumens.engine.component.DataTransformation;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.run.TransformEngine;
-import com.lumens.engine.serializer.ProjectXmlSerializer;
+import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
 import com.lumens.processor.transform.TransformRule;
@@ -18,13 +18,7 @@ import java.util.List;
 import java.util.Map;
 import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
-import org.json.JSONObject;
-import org.json.XML;
 
-/**
- *
- * @author washaofe
- */
 public class EngineTest extends TestCase {
     public EngineTest(String testName) {
         super(testName);
@@ -33,7 +27,7 @@ public class EngineTest extends TestCase {
     public void testEngine1() throws Exception {
         int nameCounter = 1;
         // Create ws connector to read data
-        HashMap<String, Value> props = new HashMap<String, Value>();
+        HashMap<String, Value> props = new HashMap<>();
         props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/wsdl/ChinaOpenFundWS.asmx").toString()));
         props.put(WebServiceConnector.PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
         props.put(WebServiceConnector.PROXY_PORT, new Value(8080));
@@ -107,20 +101,16 @@ public class EngineTest extends TestCase {
 
     private TransformProject doTestProjectSerialize(TransformProject project) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        new ProjectXmlSerializer(project).write(baos);
-        System.out.println(baos.toString());
-        JSONObject json = XML.toJSONObject(baos.toString());
-        baos.reset();
-        new ProjectXmlSerializer(project).writeToJson(baos);
-        System.out.println(baos.toString());
+        new ProjectSerializer(project).writeToXml(System.out);
+        new ProjectSerializer(project).writeToJson(System.out);
         InputStream in = null;
         try {
             in = EngineTest.class.getResourceAsStream("/xml/project.xml");
             // Read project and write it again
             TransformProject newProject = new TransformProject();
-            ProjectXmlSerializer projXml = new ProjectXmlSerializer(newProject);
-            projXml.read(in);
-            projXml.write(System.out);
+            ProjectSerializer projXml = new ProjectSerializer(newProject);
+            projXml.readFromXml(in);
+            //projXml.write(System.out);
             return newProject;
         } finally {
             IOUtils.closeQuietly(in);

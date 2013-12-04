@@ -184,7 +184,7 @@ public class ModelTest
         ElementXmlSerializer serializer = new ElementXmlSerializer(
                 personData, true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        serializer.write(baos);
+        serializer.writeToXml(baos);
         System.out.println(baos.toString());
     }
 

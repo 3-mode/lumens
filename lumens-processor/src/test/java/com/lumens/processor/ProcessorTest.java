@@ -98,7 +98,7 @@ extends TestCase {
 
         ElementXmlSerializer serializer = new ElementXmlSerializer(result.get(0), true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        serializer.write(baos);
+        serializer.writeToXml(baos);
         System.out.println(baos.toString());
     }
 
@@ -137,7 +137,7 @@ extends TestCase {
         ElementXmlSerializer serializer = new ElementXmlSerializer(
         a_data, true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        serializer.write(baos);
+        serializer.writeToXml(baos);
         System.out.println(baos.toString());
         //(@b-@a2, (@d-@a4, @d-@aa4))
         tryMultipleArrayToArrayTransform(a1, a_data);
@@ -172,7 +172,7 @@ extends TestCase {
 
         ElementXmlSerializer serializer = new ElementXmlSerializer(result.get(0), true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        serializer.write(baos);
+        serializer.writeToXml(baos);
         System.out.println("tryMultipleArrayToArrayTransform####\n" + baos.toString());
 
         assertEquals("test-b[3].d[2]", result.get(0).getChildByPath("a2[3].a3.a4[2].a5").getValue().getString());
@@ -190,7 +190,7 @@ extends TestCase {
         ElementXmlSerializer serializer = new ElementXmlSerializer(result.
         get(0), true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        serializer.write(baos);
+        serializer.writeToXml(baos);
         System.out.println("tryFirstArrayToFirstArray####\n" + baos.toString());
 
         assertEquals("test-b[3].d[0]", result.get(0).getChildByPath("a2[3].a3.a4[0].a5").getValue().getString());
@@ -207,7 +207,7 @@ extends TestCase {
         ElementXmlSerializer serializer = new ElementXmlSerializer(result.
         get(0), true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        serializer.write(baos);
+        serializer.writeToXml(baos);
         System.out.
         println("trySecondArrayToSecondArray####\n" + baos.toString());
 
@@ -226,7 +226,7 @@ extends TestCase {
             ElementXmlSerializer serializer = new ElementXmlSerializer(
             elem, true);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            serializer.write(baos);
+            serializer.writeToXml(baos);
             System.out.println("tryArrayIterationOnRootElement####\n" + baos.
             toString());
         }
@@ -282,7 +282,7 @@ extends TestCase {
 
         ElementXmlSerializer serializer = new ElementXmlSerializer(result.get(0), true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        serializer.write(baos);
+        serializer.writeToXml(baos);
         System.out.println("tryJavaScriptSupportingInTransformRule####:\n" + baos.toString());
 
         assertEquals("test-b[3].d[2]", result.get(0).getChildByPath("a2[3].a3.a4[2].a5").getValue().getString());

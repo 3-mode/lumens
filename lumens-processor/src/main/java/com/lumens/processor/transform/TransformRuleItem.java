@@ -58,7 +58,7 @@ public class TransformRuleItem {
                 "iteration path \"" + arrayIterationPath + "\" already is configured in its parent element");
             item = item.parent;
         }
-        ArrayDeque<TransformRuleItem> items = new ArrayDeque<TransformRuleItem>();
+        ArrayDeque<TransformRuleItem> items = new ArrayDeque<>();
         List<TransformRuleItem> currentChildren = getChildren();
         if (currentChildren != null && !currentChildren.isEmpty())
             items.addAll(currentChildren);
@@ -100,7 +100,7 @@ public class TransformRuleItem {
 
     public TransformRuleItem addChild(String name) {
         if (children == null)
-            children = new ArrayList<TransformRuleItem>();
+            children = new ArrayList<>();
         Format child = format.getChild(name);
         if (child == null)
             throw new IllegalArgumentException("The child format \"" + name + "\" does not exist");

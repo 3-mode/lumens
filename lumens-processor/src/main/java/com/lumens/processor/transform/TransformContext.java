@@ -13,7 +13,7 @@ import java.util.Map;
  * @author shaofeng wang
  */
 public class TransformContext implements Context {
-    private Map<String, Element> arrayIterationMap = new HashMap<String, Element>();
+    private Map<String, Element> arrayIterationMap = new HashMap<>();
     private Element elementSearchEntry;
     private Element input;
     private Element result;

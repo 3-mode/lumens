@@ -59,7 +59,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
 
     @Override
     public Map<String, Format> getFormatList(boolean fullLoad) {
-        Map<String, Format> tables = new HashMap<String, Format>();
+        Map<String, Format> tables = new HashMap<>();
         Statement stat = null;
         PreparedStatement preparedStat = null;
         ResultSet ret = null;

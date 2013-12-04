@@ -63,7 +63,7 @@ public class ConnectorTest extends TestCase implements DatabaseConstants, Oracle
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             for (Format format : cntr.getFormatList(null).values()) {
                 FormatXmlSerializer xml = new FormatXmlSerializer(format);
-                xml.write(baos);
+                xml.writeToXml(baos);
             }
             //String xmlContent = baos.toString("UTF-8");
             //System.out.println(xmlContent);

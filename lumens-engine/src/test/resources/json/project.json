@@ -1,0 +1,421 @@
+{
+    "project": {
+        "description": "test project description demo",
+        "name": "The demo project",
+        "start-entry-list": {
+            "start-entry": {
+                "entry-name": "GetOpenFundString-WS-Transform",
+                "name": "startWS"
+            }
+        },
+        "datasource-list": {
+            "datasource": {
+                "description": "this is testing demo datasource for web service",
+                "name": "ChinaMobile-WebService-SOAP",
+                "position": {
+                    "y": 0,
+                    "x": 0
+                },
+                "format-list": [
+                    {
+                        "format-entry": [
+                            {
+                                "direction": "IN",
+                                "name": "getOpenFundString1",
+                                "format": {
+                                    "form": "Struct",
+                                    "name": "getOpenFundString",
+                                    "property": [
+                                        {
+                                            "content": "http://WebXml.com.cn/",
+                                            "name": "targetNamespace",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "content": "http://www.webxml.com.cn/WebServices/ChinaOpenFundWS.asmx",
+                                            "name": "SOAPAddress",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "content": "http://WebXml.com.cn/getOpenFundString",
+                                            "name": "SOAPAction",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "BindingInput",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "BindingOutput",
+                                            "type": "String"
+                                        }
+                                    ],
+                                    "format": [
+                                        {
+                                            "form": "Struct",
+                                            "name": "getOpenFundString",
+                                            "property": [
+                                                {
+                                                    "content": "http://WebXml.com.cn/",
+                                                    "name": "targetNamespace",
+                                                    "type": "String"
+                                                },
+                                                {
+                                                    "content": 0,
+                                                    "name": "SOAPMessage",
+                                                    "type": "Integer"
+                                                }
+                                            ],
+                                            "format": {
+                                                "form": "Field",
+                                                "name": "userID",
+                                                "property": {
+                                                    "content": "http://WebXml.com.cn/",
+                                                    "name": "targetNamespace",
+                                                    "type": "String"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "type": "None"
+                                        },
+                                        {
+                                            "form": "Field",
+                                            "name": "userID",
+                                            "property": {
+                                                "content": "http://WebXml.com.cn/",
+                                                "name": "targetNamespace",
+                                                "type": "String"
+                                            },
+                                            "type": "String"
+                                        }
+                                    ],
+                                    "type": "None"
+                                }
+                            },
+                            {
+                                "direction": "IN",
+                                "name": "getOpenFundString2",
+                                "format": {
+                                    "form": "Struct",
+                                    "name": "getOpenFundString",
+                                    "property": [
+                                        {
+                                            "content": "http://WebXml.com.cn/",
+                                            "name": "targetNamespace",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "content": "http://www.webxml.com.cn/WebServices/ChinaOpenFundWS.asmx",
+                                            "name": "SOAPAddress",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "content": "http://WebXml.com.cn/getOpenFundString",
+                                            "name": "SOAPAction",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "BindingInput",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "BindingOutput",
+                                            "type": "String"
+                                        }
+                                    ],
+                                    "format": [
+                                        {
+                                            "form": "Struct",
+                                            "name": "getOpenFundString",
+                                            "property": [
+                                                {
+                                                    "content": "http://WebXml.com.cn/",
+                                                    "name": "targetNamespace",
+                                                    "type": "String"
+                                                },
+                                                {
+                                                    "content": 0,
+                                                    "name": "SOAPMessage",
+                                                    "type": "Integer"
+                                                }
+                                            ],
+                                            "format": {
+                                                "form": "Field",
+                                                "name": "userID",
+                                                "property": {
+                                                    "content": "http://WebXml.com.cn/",
+                                                    "name": "targetNamespace",
+                                                    "type": "String"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "type": "None"
+                                        },
+                                        {
+                                            "form": "Field",
+                                            "name": "userID",
+                                            "property": {
+                                                "content": "http://WebXml.com.cn/",
+                                                "name": "targetNamespace",
+                                                "type": "String"
+                                            },
+                                            "type": "String"
+                                        }
+                                    ],
+                                    "type": "None"
+                                }
+                            }
+                        ],
+                        "direction": "IN"
+                    },
+                    {
+                        "format-entry": [
+                            {
+                                "direction": "OUT",
+                                "name": "getOpenFundString1",
+                                "format": {
+                                    "form": "Struct",
+                                    "name": "getOpenFundString",
+                                    "property": [
+                                        {
+                                            "content": "http://WebXml.com.cn/",
+                                            "name": "targetNamespace",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "content": "http://www.webxml.com.cn/WebServices/ChinaOpenFundWS.asmx",
+                                            "name": "SOAPAddress",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "content": "http://WebXml.com.cn/getOpenFundString",
+                                            "name": "SOAPAction",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "BindingInput",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "BindingOutput",
+                                            "type": "String"
+                                        }
+                                    ],
+                                    "format": [
+                                        {
+                                            "form": "Struct",
+                                            "name": "getOpenFundString",
+                                            "property": [
+                                                {
+                                                    "content": "http://WebXml.com.cn/",
+                                                    "name": "targetNamespace",
+                                                    "type": "String"
+                                                },
+                                                {
+                                                    "content": 0,
+                                                    "name": "SOAPMessage",
+                                                    "type": "Integer"
+                                                }
+                                            ],
+                                            "format": {
+                                                "form": "Field",
+                                                "name": "userID",
+                                                "property": {
+                                                    "content": "http://WebXml.com.cn/",
+                                                    "name": "targetNamespace",
+                                                    "type": "String"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "type": "None"
+                                        },
+                                        {
+                                            "form": "Field",
+                                            "name": "userID",
+                                            "property": {
+                                                "content": "http://WebXml.com.cn/",
+                                                "name": "targetNamespace",
+                                                "type": "String"
+                                            },
+                                            "type": "String"
+                                        }
+                                    ],
+                                    "type": "None"
+                                }
+                            },
+                            {
+                                "direction": "OUT",
+                                "name": "getOpenFundString2",
+                                "format": {
+                                    "form": "Struct",
+                                    "name": "getOpenFundString",
+                                    "property": [
+                                        {
+                                            "content": "http://WebXml.com.cn/",
+                                            "name": "targetNamespace",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "content": "http://www.webxml.com.cn/WebServices/ChinaOpenFundWS.asmx",
+                                            "name": "SOAPAddress",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "content": "http://WebXml.com.cn/getOpenFundString",
+                                            "name": "SOAPAction",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "BindingInput",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "BindingOutput",
+                                            "type": "String"
+                                        }
+                                    ],
+                                    "format": [
+                                        {
+                                            "form": "Struct",
+                                            "name": "getOpenFundString",
+                                            "property": [
+                                                {
+                                                    "content": "http://WebXml.com.cn/",
+                                                    "name": "targetNamespace",
+                                                    "type": "String"
+                                                },
+                                                {
+                                                    "content": 0,
+                                                    "name": "SOAPMessage",
+                                                    "type": "Integer"
+                                                }
+                                            ],
+                                            "format": {
+                                                "form": "Field",
+                                                "name": "userID",
+                                                "property": {
+                                                    "content": "http://WebXml.com.cn/",
+                                                    "name": "targetNamespace",
+                                                    "type": "String"
+                                                },
+                                                "type": "String"
+                                            },
+                                            "type": "None"
+                                        },
+                                        {
+                                            "form": "Field",
+                                            "name": "userID",
+                                            "property": {
+                                                "content": "http://WebXml.com.cn/",
+                                                "name": "targetNamespace",
+                                                "type": "String"
+                                            },
+                                            "type": "String"
+                                        }
+                                    ],
+                                    "type": "None"
+                                }
+                            }
+                        ],
+                        "direction": "OUT"
+                    }
+                ],
+                "property-list": {
+                    "property": [
+                        {
+                            "content": "web-proxy.atl.hp.com",
+                            "name": "ProxyAddress",
+                            "type": "String"
+                        },
+                        {
+                            "content": "file:/X:/PRODUCT/lumens/lumens-engine/target/test-classes/wsdl/ChinaOpenFundWS.asmx",
+                            "name": "WSDL",
+                            "type": "String"
+                        },
+                        {
+                            "content": 8080,
+                            "name": "ProxyPort",
+                            "type": "Integer"
+                        }
+                    ]
+                },
+                "target-list": {
+                    "target": {
+                        "name": "GetOpenFundString2-WS-Transform"
+                    }
+                },
+                "class-name": "com.lumens.connector.webservice.WebServiceConnector"
+            }
+        },
+        "processor-list": {
+            "processor": [
+                {
+                    "name": "GetOpenFundString-WS-Transform",
+                    "position": {
+                        "y": 0,
+                        "x": 0
+                    },
+                    "transform-rule-list": {
+                        "transform-rule-entry": {
+                            "target-name": "getOpenFundString1",
+                            "name": "startWS-getOpenFundString1",
+                            "source-name": "startWS",
+                            "transform-rule": {
+                                "transform-rule-item": {
+                                    "transform-rule-item": {
+                                        "transform-rule-item": {
+                                            "format-name": "userID",
+                                            "script": "\"123\""
+                                        },
+                                        "format-name": "getOpenFundString"
+                                    },
+                                    "format-name": "getOpenFundString"
+                                },
+                                "name": "getOpenFundString"
+                            }
+                        }
+                    },
+                    "target-list": {
+                        "target": {
+                            "name": "ChinaMobile-WebService-SOAP"
+                        }
+                    },
+                    "class-name": "com.lumens.engine.component.DataTransformation"
+                },
+                {
+                    "name": "GetOpenFundString2-WS-Transform",
+                    "position": {
+                        "y": 0,
+                        "x": 0
+                    },
+                    "transform-rule-list": {
+                        "transform-rule-entry": {
+                            "target-name": "getOpenFundString2",
+                            "name": "getOpenFundString1-getOpenFundString2",
+                            "source-name": "getOpenFundString1",
+                            "transform-rule": {
+                                "transform-rule-item": {
+                                    "transform-rule-item": {
+                                        "transform-rule-item": {
+                                            "format-name": "userID",
+                                            "script": "@getOpenFundStringResponse.getOpenFundStringResult.string"
+                                        },
+                                        "format-name": "getOpenFundString"
+                                    },
+                                    "format-name": "getOpenFundString"
+                                },
+                                "name": "getOpenFundString"
+                            }
+                        }
+                    },
+                    "target-list": {
+                        "target": {
+                            "name": "ChinaMobile-WebService-SOAP"
+                        }
+                    },
+                    "class-name": "com.lumens.engine.component.DataTransformation"
+                }
+            ]
+        }
+    }
+}

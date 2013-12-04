@@ -38,7 +38,7 @@ public class SOAPMessageBuilder implements SOAPConstants {
     public SOAPEnvelope buildSOAPMessage(Element element) {
         // TODO not handle binary and attachment
         try {
-            namespaceCache = new HashMap<String, OMNamespace>();
+            namespaceCache = new HashMap<>();
             if (element == null || element.getChildren() == null) {
                 return null;
             }

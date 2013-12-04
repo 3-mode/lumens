@@ -24,6 +24,7 @@ public class OracleSQLBuilder implements SQLBuilder, OracleConstants {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
     public String generateDeleteSQL(Element input) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

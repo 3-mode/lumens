@@ -44,7 +44,7 @@ public class DataFormat implements Format {
     public Format clone() {
         DataFormat cloned = new DataFormat(getName(), getForm(), getType());
         if (propertyList != null) {
-            cloned.propertyList = new HashMap<String, Value>(propertyList);
+            cloned.propertyList = new HashMap<>(propertyList);
         }
         return cloned;
     }

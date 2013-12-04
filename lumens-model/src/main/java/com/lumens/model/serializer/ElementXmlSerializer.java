@@ -31,11 +31,11 @@ public class ElementXmlSerializer implements XmlSerializer {
     }
 
     @Override
-    public void read(InputStream in) throws Exception {
+    public void readFromXml(InputStream in) throws Exception {
     }
 
     @Override
-    public void write(OutputStream out) throws Exception {
+    public void writeToXml(OutputStream out) throws Exception {
         StringUTF8Writer dataOut = new StringUTF8Writer(out);
         writeElementToXml(element, "", dataOut);
     }

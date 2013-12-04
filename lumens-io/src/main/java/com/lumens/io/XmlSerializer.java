@@ -12,7 +12,7 @@ import java.io.OutputStream;
  */
 public interface XmlSerializer
 {
-    public void read(InputStream in) throws Exception;
+    public void readFromXml(InputStream in) throws Exception;
 
-    public void write(OutputStream out) throws Exception;
+    public void writeToXml(OutputStream out) throws Exception;
 }

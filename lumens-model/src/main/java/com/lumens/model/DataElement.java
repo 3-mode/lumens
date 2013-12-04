@@ -69,8 +69,8 @@ public class DataElement implements Element {
             "Error, the data node is an array, it is not an array item");
         }
         if (children == null) {
-            children = new HashMap<String, Element>();
-            childrenList = new ArrayList<Element>();
+            children = new HashMap<>();
+            childrenList = new ArrayList<>();
         }
         String name = child.getFormat().getName();
         if (children.containsKey(name)) {

@@ -12,7 +12,7 @@ import java.util.List;
  * @author shaofeng wang
  */
 public class AccessPath implements Path {
-    private List<PathToken> tokens = new LinkedList<PathToken>();
+    private List<PathToken> tokens = new LinkedList<>();
 
     public AccessPath(String path) {
         parse(path);

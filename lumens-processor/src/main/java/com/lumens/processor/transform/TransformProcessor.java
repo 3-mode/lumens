@@ -28,7 +28,7 @@ public class TransformProcessor extends AbstractProcessor {
         if (rule instanceof TransformRule) {
             TransformRule transformRule = (TransformRule) rule;
             Element inputElement = input;
-            List<Element> results = new ArrayList<Element>();
+            List<Element> results = new ArrayList<>();
             TransformRuleItem ruleItem = transformRule.getRootRuleItem();
             String arrayIterationPath = ruleItem.getArrayIterationPath();
             List<Element> items;
@@ -36,7 +36,7 @@ public class TransformProcessor extends AbstractProcessor {
                 items = getAllElementsFromEntry(inputElement, new AccessPath(
                 arrayIterationPath));
             } else {
-                items = new ArrayList<Element>();
+                items = new ArrayList<>();
                 items.add(inputElement);
             }
             for (Element elem : items) {
@@ -44,7 +44,7 @@ public class TransformProcessor extends AbstractProcessor {
                 TransformContext ctx = new TransformContext(inputElement, resultElement);
                 ctx.putParentArrayElement(resultElement, elem);
                 executeTransformRule(ctx, ruleItem, resultElement);
-                ArrayDeque<TransformPair> queue = new ArrayDeque<TransformPair>();
+                ArrayDeque<TransformPair> queue = new ArrayDeque<>();
                 queue.add(new TransformPair(resultElement, ruleItem));
                 TransformPair item;
                 while (!queue.isEmpty()) {
@@ -114,7 +114,7 @@ public class TransformProcessor extends AbstractProcessor {
     }
 
     private List<Element> getAllElementsFromEntry(Element arrayElementEntry, Path arrayIterationPath) {
-        List<Element> itemList = new ArrayList<Element>();
+        List<Element> itemList = new ArrayList<>();
         itemList.add(arrayElementEntry);
         String pathToken;
         Iterator<PathToken> it = arrayIterationPath.iterator();
@@ -128,7 +128,7 @@ public class TransformProcessor extends AbstractProcessor {
 
     private List<Element> getChildItemsOfCurrentLevel(String pathToken,
                                                       List<Element> itemList) {
-        ArrayList<Element> childItems = new ArrayList<Element>();
+        ArrayList<Element> childItems = new ArrayList<>();
         for (Element item : itemList) {
             if (item.isStruct()) {
                 item = item.getChild(pathToken);

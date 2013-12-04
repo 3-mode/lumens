@@ -13,9 +13,9 @@ import java.util.List;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class TransformProject {
-    private List<DataSource> datasourceList = new ArrayList<DataSource>();
-    private List<DataTransformation> transformationList = new ArrayList<DataTransformation>();
-    private List<StartEntry> startList = new ArrayList<StartEntry>();
+    private List<DataSource> datasourceList = new ArrayList<>();
+    private List<DataTransformation> transformationList = new ArrayList<>();
+    private List<StartEntry> startList = new ArrayList<>();
     private String name;
     private String description;
     private boolean isOpen;

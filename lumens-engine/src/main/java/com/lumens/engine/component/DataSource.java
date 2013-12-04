@@ -26,8 +26,8 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     private String className;
     private String description;
     private Connector connector;
-    private Map<String, FormatEntry> registerOUTFormatList = new HashMap<String, FormatEntry>();
-    private Map<String, FormatEntry> registerINFormatList = new HashMap<String, FormatEntry>();
+    private Map<String, FormatEntry> registerOUTFormatList = new HashMap<>();
+    private Map<String, FormatEntry> registerINFormatList = new HashMap<>();
     private Map<String, Format> inFormatList;
     private Map<String, Format> outFormatList;
     private Map<String, Value> propertyList;
@@ -75,7 +75,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             String targetName = context.getTargetName();
             FormatEntry entry = registerOUTFormatList.get(targetName);
             Format targetFormat = entry.getFormat();
-            List<Element> result = new ArrayList<Element>();
+            List<Element> result = new ArrayList<>();
             Object input = context.getInput();
             Operation operation = connector.getOperation();
             if (input instanceof List) {
@@ -91,7 +91,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 OperationResult opRet = operation.execute((Element) input, targetFormat);
                 result.addAll(opRet.getResult());
             }
-            List<ExecuteContext> exList = new ArrayList<ExecuteContext>();
+            List<ExecuteContext> exList = new ArrayList<>();
             exList.add(new TransformExecuteContext(result, entry.getName()));
             return exList;
         } catch (Exception ex) {

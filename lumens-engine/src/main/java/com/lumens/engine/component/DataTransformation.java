@@ -21,8 +21,8 @@ import java.util.Map;
 public class DataTransformation extends AbstractTransformComponent implements RuleComponent {
     private String name;
     private Processor processor;
-    private List<TransformRuleEntry> ruleList = new ArrayList<TransformRuleEntry>();
-    private Map<String, List<TransformRuleEntry>> ruleFindList = new HashMap<String, List<TransformRuleEntry>>();
+    private List<TransformRuleEntry> ruleList = new ArrayList<>();
+    private Map<String, List<TransformRuleEntry>> ruleFindList = new HashMap<>();
 
     public DataTransformation() {
         processor = new TransformProcessor();
@@ -36,7 +36,7 @@ public class DataTransformation extends AbstractTransformComponent implements Ru
         ruleList.add(rule);
         List<TransformRuleEntry> rules = ruleFindList.get(rule.getSourceName());
         if (rules == null) {
-            rules = new ArrayList<TransformRuleEntry>();
+            rules = new ArrayList<>();
             ruleFindList.put(rule.getSourceName(), rules);
         }
         rules.add(rule);
@@ -61,10 +61,10 @@ public class DataTransformation extends AbstractTransformComponent implements Ru
 
     @Override
     public List<ExecuteContext> execute(ExecuteContext context) {
-        List<Element> results = new ArrayList<Element>();
+        List<Element> results = new ArrayList<>();
         String targetId = context.getTargetName();
         List<TransformRuleEntry> rules = ruleFindList.get(targetId);
-        List<ExecuteContext> exList = new ArrayList<ExecuteContext>();
+        List<ExecuteContext> exList = new ArrayList<>();
         Object input = context.getInput();
         for (TransformRuleEntry rule : rules) {
             if (input != null && input instanceof List) {
