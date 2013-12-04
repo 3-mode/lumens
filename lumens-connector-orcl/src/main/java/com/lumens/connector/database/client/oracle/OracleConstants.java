@@ -25,4 +25,12 @@ public interface OracleConstants {
     public String DATE = "DATE";
     public String NUMBERIC = "NUMBERIC";
     public String BLOB = "BLOB";
+    // Key field words
+    public String SELECT = "SELECT";
+    public String INSERT = "INSERT";
+    public String UPDATE = "UPDATE";
+    // Constants node names
+    public String FIELDS = "fields";
+    public String CLAUSE = "clause";
+    public String OPERATION = "operation";
 }

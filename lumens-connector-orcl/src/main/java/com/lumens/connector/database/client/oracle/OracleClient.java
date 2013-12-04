@@ -5,8 +5,12 @@ package com.lumens.connector.database.client.oracle;
 
 import com.lumens.connector.database.DbUtils;
 import com.lumens.connector.database.client.AbstractClient;
-import static com.lumens.connector.database.client.oracle.OracleConstants.ORACLE_CLASS;
+import static com.lumens.connector.database.client.oracle.OracleConstants.DATA_LENGTH;
+import static com.lumens.connector.database.client.oracle.OracleConstants.DATA_TYPE;
+import static com.lumens.connector.database.client.oracle.OracleConstants.FIELDS;
+import static com.lumens.connector.database.client.oracle.OracleConstants.TABLECOLUMNS;
 import com.lumens.model.DataFormat;
+import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Format.Form;
 import com.lumens.model.Type;
@@ -15,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,13 +27,29 @@ import java.util.Map;
  * @author shaofeng wang
  */
 public class OracleClient extends AbstractClient implements OracleConstants {
-    public OracleClient(String ojdbcURL, String connURL, String user, String password, boolean letterUpper) {
-        super(ojdbcURL, ORACLE_CLASS, connURL, user, password, letterUpper);
+    public OracleClient(String ojdbcURL, String connURL, String user, String password, String sessionAlter) {
+        super(ojdbcURL, ORACLE_CLASS, connURL, user, password, sessionAlter);
     }
 
     @Override
     public void open() {
         conn = DbUtils.getConnection(driver, connURL, user, password);
+        if (sessionAlter != null && !sessionAlter.isEmpty()) {
+            Statement stat = null;
+            try {
+                stat = conn.createStatement();
+                String[] alterList = sessionAlter.split("\n");
+                for (String alter : alterList) {
+                    alter = alter.trim();
+                    if (!alter.isEmpty())
+                        stat.execute(alter.trim());
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            } finally {
+                DbUtils.releaseStatement(stat);
+            }
+        }
     }
 
     @Override
@@ -51,8 +72,11 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                     String tableName = ret.getString(1);
                     String description = ret.getString(2);
                     String type = ret.getString(3);
-                    Format table = new DataFormat(letterUpper ? tableName.toUpperCase() : tableName.toLowerCase(), Form.STRUCT, Type.STRING);
+                    Format table = new DataFormat(tableName, Form.STRUCT);
                     tables.put(tableName, table);
+                    table.addChild(FIELDS, Form.STRUCT);
+                    table.addChild(OPERATION, Form.FIELD, Type.STRING);
+                    table.addChild(CLAUSE, Form.FIELD, Type.STRING);
                     table.setProperty(DESCRIPTION, new Value(description));
                     table.setProperty(TYPE, new Value(type));
                     if (fullLoad) {
@@ -77,15 +101,18 @@ public class OracleClient extends AbstractClient implements OracleConstants {
         ResultSet ret = null;
         try {
             stat = conn.createStatement();
-            ret = stat.executeQuery(String.format(TABLECOLUMNS, letterUpper ? format.getName() : format.getName().toUpperCase()));
+            ret = stat.executeQuery(String.format(TABLECOLUMNS, format.getName()));
             if (!ret.isClosed()) {
-                while (ret.next()) {
-                    String columnName = ret.getString(1);
-                    String dataType = ret.getString(2);
-                    String dataLength = ret.getString(3);
-                    Format field = format.addChild(letterUpper ? columnName.toUpperCase() : columnName.toLowerCase(), Form.FIELD, toType(dataType));
-                    field.setProperty(DATA_TYPE, new Value(dataType));
-                    field.setProperty(DATA_LENGTH, new Value(dataLength));
+                Format fields = format.getChild(FIELDS);
+                if (fields != null) {
+                    while (ret.next()) {
+                        String columnName = ret.getString(1);
+                        String dataType = ret.getString(2);
+                        String dataLength = ret.getString(3);
+                        Format field = fields.addChild(columnName, Form.FIELD, toType(dataType));
+                        field.setProperty(DATA_TYPE, new Value(dataType));
+                        field.setProperty(DATA_LENGTH, new Value(dataLength));
+                    }
                 }
             }
         } catch (Exception e) {
@@ -112,5 +139,32 @@ public class OracleClient extends AbstractClient implements OracleConstants {
             return Type.BINARY;
         }
         return Type.NONE;
+    }
+
+    public void execute(String SQL) {
+        Statement stat = null;
+        try {
+            stat = conn.createStatement();
+            stat.execute(SQL);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            DbUtils.releaseStatement(stat);
+        }
+    }
+
+    public List<Element> executeQuery(String SQL, ElementFromDbBuilder elementBuilder, Format output) {
+        Statement stat = null;
+        ResultSet ret = null;
+        try {
+            stat = conn.createStatement();
+            ret = stat.executeQuery(SQL);
+            return elementBuilder.buildElement(output, ret);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            DbUtils.releaseResultSet(ret);
+            DbUtils.releaseStatement(stat);
+        }
     }
 }

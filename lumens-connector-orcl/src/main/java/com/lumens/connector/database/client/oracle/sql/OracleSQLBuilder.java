@@ -1,14 +1,14 @@
-package com.lumens.connector.database.client.oracle;
+package com.lumens.connector.database.client.oracle.sql;
 
 import com.lumens.connector.database.SQLBuilder;
+import com.lumens.connector.database.client.oracle.OracleConstants;
 import com.lumens.model.Element;
 
 /**
  *
  * @author shaofeng.wang@outlook.com
  */
-public class OracleSQLBuilder implements SQLBuilder {
-
+public class OracleSQLBuilder implements SQLBuilder, OracleConstants {
     @Override
     public String generateInsertSQL(Element input) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -23,9 +23,8 @@ public class OracleSQLBuilder implements SQLBuilder {
     public String generateSelectSQL(Element input) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
     public String generateDeleteSQL(Element input) {
-         throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
-    
 }
