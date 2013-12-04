@@ -9,22 +9,32 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.lumens.connector</groupId>
+    <groupId>com.lumens</groupId>
     <artifactId>lumens-connector</artifactId>
     <packaging>jar</packaging>
 
     <name>lumens-connector</name>
     <dependencies>
         <dependency>
-            <groupId>com.lumens.model</groupId>
+            <groupId>com.lumens</groupId>
             <artifactId>lumens-model</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.lumens.processor</groupId>
+            <groupId>com.lumens</groupId>
             <artifactId>lumens-processor</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.0-beta9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.0-beta9</version>
         </dependency>
     </dependencies>
     <properties>

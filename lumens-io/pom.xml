@@ -8,16 +8,10 @@
         <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <groupId>com.lumens.io</groupId>
+    <groupId>com.lumens</groupId>
     <artifactId>lumens-io</artifactId>
     <version>1.0</version>
     <name>lumens-io</name>
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 </project>

@@ -9,14 +9,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.lumens.processor</groupId>
+    <groupId>com.lumens</groupId>
     <artifactId>lumens-processor</artifactId>
     <packaging>jar</packaging>
 
     <name>lumens-processor</name>
     <dependencies>
         <dependency>
-            <groupId>com.lumens.model</groupId>
+            <groupId>com.lumens</groupId>
             <artifactId>lumens-model</artifactId>
             <version>${project.version}</version>
         </dependency>

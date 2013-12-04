@@ -1,45 +1,49 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <artifactId>lumens</artifactId>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>lumens</artifactId>
+        <groupId>com.lumens</groupId>
+        <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.lumens</groupId>
-    <version>1.0</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+    <artifactId>lumens-engine</artifactId>
+    <packaging>jar</packaging>
 
-  <modelVersion>4.0.0</modelVersion>
-
-  <groupId>com.lumens.engine</groupId>
-  <artifactId>lumens-engine</artifactId>
-  <packaging>jar</packaging>
-
-  <name>lumens-engine</name>
+    <name>lumens-engine</name>
     <dependencies>
         <dependency>
-            <groupId>com.lumens.connector</groupId>
+            <groupId>com.lumens</groupId>
             <artifactId>lumens-connector</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.lumens.io</groupId>
+            <groupId>com.lumens</groupId>
             <artifactId>lumens-io</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.lumens.processor</groupId>
+            <groupId>com.lumens</groupId>
             <artifactId>lumens-processor</artifactId>
             <version>${project.version}</version>
-            <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>com.lumens.connector.soap</groupId>
+            <groupId>com.lumens</groupId>
             <artifactId>lumens-connector-soap</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.lumens.connector.orcl</groupId>
+            <groupId>com.lumens</groupId>
             <artifactId>lumens-connector-orcl</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20090211</version>
         </dependency>
     </dependencies>
 </project>

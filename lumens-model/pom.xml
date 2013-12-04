@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.lumens.model</groupId>
+    <groupId>com.lumens</groupId>
     <artifactId>lumens-model</artifactId>
     <packaging>jar</packaging>
 
@@ -21,7 +21,7 @@
             <version>1.4</version>
         </dependency>
         <dependency>
-            <groupId>com.lumens.io</groupId>
+            <groupId>com.lumens</groupId>
             <artifactId>lumens-io</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -9,25 +9,25 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.lumens.connector.soap</groupId>
+    <groupId>com.lumens</groupId>
     <artifactId>lumens-connector-soap</artifactId>
     <packaging>jar</packaging>
 
     <name>lumens-connector-soap</name>
     <dependencies>
         <dependency>
-            <groupId>com.lumens.model</groupId>
+            <groupId>com.lumens</groupId>
             <artifactId>lumens-model</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.lumens.processor</groupId>
+            <groupId>com.lumens</groupId>
             <artifactId>lumens-processor</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.lumens.connector</groupId>
+            <groupId>com.lumens</groupId>
             <artifactId>lumens-connector</artifactId>
             <version>${project.version}</version>
         </dependency>
