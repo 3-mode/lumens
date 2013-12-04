@@ -18,6 +18,7 @@ public class TransformProject {
     private List<StartEntry> startList = new ArrayList<StartEntry>();
     private String name;
     private String description;
+    private boolean isOpen;
 
     public String getName() {
         return name;
@@ -56,14 +57,24 @@ public class TransformProject {
         return startList;
     }
 
+    public boolean isOpen() {
+        return isOpen;
+    }
+
     public void open() throws Exception {
-        for (DataSource ds : datasourceList)
-            ds.open();
-        for (DataTransformation dt : transformationList)
-            dt.open();
+        try {
+            for (DataSource ds : datasourceList)
+                ds.open();
+            for (DataTransformation dt : transformationList)
+                dt.open();
+            isOpen = true;
+        } catch (Exception ex) {
+            throw new Exception(ex);
+        }
     }
 
     public void close() throws Exception {
+        isOpen = false;
         for (DataSource ds : datasourceList)
             ds.close();
         for (DataTransformation dt : transformationList)

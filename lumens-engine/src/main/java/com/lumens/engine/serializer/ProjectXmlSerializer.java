@@ -20,6 +20,7 @@ import com.lumens.model.Value;
 import com.lumens.model.serializer.FormatXmlSerializer;
 import com.lumens.processor.transform.TransformRule;
 import com.lumens.processor.transform.serializer.TransformRuleXmlSerializer;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -27,6 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.json.JSONObject;
+import org.json.XML;
 import org.xml.sax.InputSource;
 
 /**
@@ -44,6 +47,13 @@ public class ProjectXmlSerializer implements XmlSerializer {
     @Override
     public void read(InputStream in) throws Exception {
         ProjectParser.parse(new InputSource(in), new ProjectHandlerImpl(project));
+    }
+
+    public void writeToJson(OutputStream out) throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        write(baos);
+        JSONObject json = XML.toJSONObject(baos.toString());
+        out.write(json.toString().getBytes("UTF-8"));
     }
 
     @Override

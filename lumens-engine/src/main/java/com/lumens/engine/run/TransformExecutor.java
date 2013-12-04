@@ -16,8 +16,7 @@ public class TransformExecutor implements Executor {
     private TransformComponent tComponent;
     private ExecuteContext executeContext;
 
-    public TransformExecutor(TransformComponent tComponent,
-                             ExecuteContext executeContext) {
+    public TransformExecutor(TransformComponent tComponent, ExecuteContext executeContext) {
         this.tComponent = tComponent;
         this.executeContext = executeContext;
     }
@@ -39,8 +38,7 @@ public class TransformExecutor implements Executor {
         if (!exList.isEmpty() && tExList.isEmpty()) {
             // TODO need log system
             for (ExecuteContext ctx : exList) {
-                System.out.println(String.format(
-                "No target component to process '%s'", ctx.getTargetName()));
+                System.out.println(String.format("No target component to process '%s'", ctx.getTargetName()));
             }
         }
         return tExList;

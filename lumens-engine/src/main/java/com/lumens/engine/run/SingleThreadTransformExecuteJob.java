@@ -12,17 +12,27 @@ import java.util.List;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class TransformSingleThreadEngine {
-    public void execute(TransformProject project) {
+public class SingleThreadTransformExecuteJob implements ExecuteJob {
+    private TransformProject project;
+
+    public SingleThreadTransformExecuteJob(TransformProject project) {
+        this.project = project;
+    }
+
+    @Override
+    public void run() throws Exception {
+        if (!project.isOpen())
+            project.open();
         List<StartEntry> startList = project.getStartEntryList();
         for (StartEntry entry : startList) {
             SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
-            executorStack.push(new TransformExecutor(entry.getStartComponent(), new TransformExecuteContext(null, entry.getStartName())));
+            executorStack.push(new TransformExecutor(entry.getStartComponent(), new TransformExecuteContext(entry.getStartName())));
             while (!executorStack.isEmpty()) {
                 Executor executor = executorStack.pop();
                 List<Executor> tExList = executor.execute();
                 executorStack.push(tExList);
             }
         }
+        project.close();
     }
 }
