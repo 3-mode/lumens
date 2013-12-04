@@ -23,4 +23,16 @@ public class WebServiceOperation implements Operation {
         SOAPEnvelope envelope = client.execute(input);
         return new WebServiceResult(output, envelope);
     }
+
+    @Override
+    public void begin() {
+    }
+
+    @Override
+    public void end() {
+    }
+
+    @Override
+    public void commit() {
+    }
 }

@@ -27,6 +27,7 @@ public class WebServiceConnector implements Connector, WebServiceConstants {
     private int proxyPort = 80;
     private String proxyUser;
     private String proxyPassword;
+    private Map<String, Format> formatList;
 
     @Override
     public void open() {
@@ -40,12 +41,15 @@ public class WebServiceConnector implements Connector, WebServiceConstants {
         if (soapClient != null) {
             soapClient.close();
         }
+        formatList = null;
         soapClient = null;
     }
 
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
-        return formatBuilder.getFormatList(direction);
+        if (formatList == null)
+            formatList = formatBuilder.getFormatList(direction);
+        return formatList;
     }
 
     @Override
