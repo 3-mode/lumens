@@ -19,6 +19,11 @@ public class Value {
         this.value = value;
     }
 
+    public Value(Type type, String value) {
+        this.type = type;
+        set(value);
+    }
+
     public Value(Type type) {
         this(type, null);
     }
