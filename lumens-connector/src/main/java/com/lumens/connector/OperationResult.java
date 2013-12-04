@@ -4,7 +4,6 @@
 package com.lumens.connector;
 
 import com.lumens.model.Element;
-import com.lumens.model.Format;
 import java.util.List;
 
 /**

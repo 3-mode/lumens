@@ -12,5 +12,11 @@ import com.lumens.model.Format;
  * @author washaofe
  */
 public interface Operation {
+    public void begin();
+
+    public void end();
+
     public OperationResult execute(Element input, Format output) throws Exception;
+
+    public void commit();
 }

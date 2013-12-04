@@ -3,6 +3,9 @@
  */
 package com.lumens.connector.database;
 
+import com.lumens.model.Type;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Connection;
@@ -11,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
@@ -26,13 +30,14 @@ public class DbUtils {
         }
     }
 
-    public static Connection getConnection(Driver driver, String connURL, String user,
-    String password) {
+    public static Connection getConnection(Driver driver, String connURL, String user, String password) {
         try {
             Properties props = new Properties();
             props.put("user", user);
             props.put("password", password);
-            return driver.connect(connURL, props);
+            Connection conn = driver.connect(connURL, props);
+            conn.setAutoCommit(false);
+            return conn;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -67,6 +72,14 @@ public class DbUtils {
             return clazz.newInstance();
         } finally {
             Thread.currentThread().setContextClassLoader(savedClassLoader);
+        }
+    }
+
+    public static byte[] toByteArray(InputStream binaryStream) throws IOException {
+        try {
+            return IOUtils.toByteArray(binaryStream);
+        } finally {
+            IOUtils.closeQuietly(binaryStream);
         }
     }
 }

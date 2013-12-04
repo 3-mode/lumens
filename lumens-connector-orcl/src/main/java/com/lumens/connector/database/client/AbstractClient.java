@@ -20,15 +20,15 @@ public abstract class AbstractClient implements Client {
     protected String connURL;
     protected String user;
     protected String password;
-    protected boolean letterUpper;
+    protected String sessionAlter;
 
-    public AbstractClient(String driverURL, String driverClass, String connURL, String user, String password, boolean letterUpper) {
+    public AbstractClient(String driverURL, String driverClass, String connURL, String user, String password, String sessionAlter) {
         try {
             driver = (Driver) DbUtils.getInstance(driverURL, driverClass);
             this.connURL = connURL;
             this.user = user;
             this.password = password;
-            this.letterUpper = letterUpper;
+            this.sessionAlter = sessionAlter;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

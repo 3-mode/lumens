@@ -6,17 +6,20 @@ import com.lumens.connector.webservice.WebServiceConnector;
 import com.lumens.engine.component.DataSource;
 import com.lumens.engine.component.DataTransformation;
 import com.lumens.engine.component.TransformRuleEntry;
-import com.lumens.engine.run.TransformSingleThreadEngine;
+import com.lumens.engine.run.TransformEngine;
 import com.lumens.engine.serializer.ProjectXmlSerializer;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
 import com.lumens.processor.transform.TransformRule;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
+import org.json.XML;
 
 /**
  *
@@ -98,15 +101,18 @@ public class EngineTest extends TestCase {
         TransformProject newProject = doTestProjectSerialize(project);
         //**********************************************************************
         // Execute all start rules to drive the ws connector
-        newProject.open();
-        TransformSingleThreadEngine stEngine = new TransformSingleThreadEngine();
+        TransformEngine stEngine = new TransformEngine();
         stEngine.execute(newProject);
-        newProject.close();
     }
 
     private TransformProject doTestProjectSerialize(TransformProject project) throws Exception {
-        new ProjectXmlSerializer(project).write(System.out);
-
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        new ProjectXmlSerializer(project).write(baos);
+        System.out.println(baos.toString());
+        JSONObject json = XML.toJSONObject(baos.toString());
+        baos.reset();
+        new ProjectXmlSerializer(project).writeToJson(baos);
+        System.out.println(baos.toString());
         InputStream in = null;
         try {
             in = EngineTest.class.getResourceAsStream("/xml/project.xml");
