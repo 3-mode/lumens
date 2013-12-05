@@ -11,5 +11,6 @@ import java.util.List;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public interface OperationResult {
+
     public List<Element> getResult();
 }

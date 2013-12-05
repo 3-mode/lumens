@@ -12,6 +12,7 @@ import java.util.Map;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public interface TransformComponent {
+
     public void setX(int x);
 
     public void setY(int y);

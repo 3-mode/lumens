@@ -19,6 +19,7 @@ import java.util.Map;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class DataTransformation extends AbstractTransformComponent implements RuleComponent {
+
     private String name;
     private Processor processor;
     private List<TransformRuleEntry> ruleList = new ArrayList<>();

@@ -13,6 +13,7 @@ import com.lumens.model.Format;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class MockOperation implements Operation {
+
     @Override
     public OperationResult execute(Element input, Format output) throws Exception {
         throw new UnsupportedOperationException("Not supported yet.");

@@ -21,18 +21,19 @@ import org.xml.sax.InputSource;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class TransformRuleXmlSerializer implements XmlSerializer {
+public class TransformRuleSerializer implements XmlSerializer {
+
     private TransformRule outputRule;
     private Format ruleFormat;
     private List<TransformRule> unSerializeRuleList;
     private String INDENT_OFFSET = "  ";
     private String INDENT = "";
 
-    public TransformRuleXmlSerializer(TransformRule outputRule) {
+    public TransformRuleSerializer(TransformRule outputRule) {
         this.outputRule = outputRule;
     }
 
-    public TransformRuleXmlSerializer(Format ruleFormat, List<TransformRule> unserializeRuleList) {
+    public TransformRuleSerializer(Format ruleFormat, List<TransformRule> unserializeRuleList) {
         this.ruleFormat = ruleFormat;
         this.unSerializeRuleList = unserializeRuleList;
     }

@@ -14,41 +14,35 @@ import java.util.Map;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class MockConnector implements Connector
-{
+public class MockConnector implements Connector {
+
     @Override
-    public void open()
-    {
+    public void open() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void close()
-    {
+    public void close() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Operation getOperation()
-    {
+    public Operation getOperation() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Map<String, Format> getFormatList(Direction direction)
-    {
+    public Map<String, Format> getFormatList(Direction direction) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Format getFormat(Format format, String path, Direction direction)
-    {
+    public Format getFormat(Format format, String path, Direction direction) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void setPropertyList(Map<String, Value> parameters)
-    {
+    public void setPropertyList(Map<String, Value> parameters) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

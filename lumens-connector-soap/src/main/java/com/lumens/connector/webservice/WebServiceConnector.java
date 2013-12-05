@@ -18,6 +18,7 @@ import java.util.Map;
  * @author shaofeng wang
  */
 public class WebServiceConnector implements Connector, WebServiceConstants {
+
     private SOAPClient soapClient;
     private FormatBuilder formatBuilder;
     private String wsdlURL;

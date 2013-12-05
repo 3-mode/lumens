@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 @Path("/")
 public class ApplicationService {
+
     @GET
     @Path("/project")
     @Produces("application/json")

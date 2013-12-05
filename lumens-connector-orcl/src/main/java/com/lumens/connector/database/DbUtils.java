@@ -3,7 +3,6 @@
  */
 package com.lumens.connector.database;
 
-import com.lumens.model.Type;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -21,6 +20,7 @@ import org.apache.commons.io.IOUtils;
  * @author shaofeng wang
  */
 public class DbUtils {
+
     public static void releaseConnection(Connection conn) {
         if (conn != null) {
             try {

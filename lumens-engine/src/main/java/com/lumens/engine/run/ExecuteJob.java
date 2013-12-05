@@ -8,5 +8,6 @@ package com.lumens.engine.run;
  * @author shaofeng.wang@outlook.com
  */
 public interface ExecuteJob {
+
     public void run() throws Exception;
 }

@@ -7,6 +7,5 @@ package com.lumens.connector.webservice;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class SoapWsConnector
-{
+public class SoapWsConnector {
 }

@@ -15,6 +15,7 @@ import org.xml.sax.SAXException;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class FormatHandlerImpl implements FormatHandler {
+
     private List<Format> formatList;
     private LinkedList<Format> formatStack = new LinkedList<Format>();
     private Format currentFormat;

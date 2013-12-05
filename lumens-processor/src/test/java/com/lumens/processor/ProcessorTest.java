@@ -9,7 +9,7 @@ import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Format.Form;
 import com.lumens.model.Type;
-import com.lumens.model.serializer.ElementXmlSerializer;
+import com.lumens.model.serializer.ElementSerializer;
 import com.lumens.processor.route.RouteProcessor;
 import com.lumens.processor.route.RouteRule;
 import com.lumens.processor.script.JavaScriptBuilder;
@@ -28,6 +28,7 @@ import org.apache.commons.io.IOUtils;
  */
 public class ProcessorTest
 extends TestCase {
+
     /**
      * Create the test case
      *
@@ -96,7 +97,7 @@ extends TestCase {
         assertEquals("Mac air book", result.get(0).getChildByPath("Computer.name").getValue().getString());
         assertEquals("HP computer", result.get(0).getChildByPath("Computer[1].name").getValue().getString());
 
-        ElementXmlSerializer serializer = new ElementXmlSerializer(result.get(0), true);
+        ElementSerializer serializer = new ElementSerializer(result.get(0), true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
         System.out.println(baos.toString());
@@ -134,7 +135,7 @@ extends TestCase {
                 d_data_item[j].addChild("e").addChild("f").setValue("test-b[" + i + "]." + "d[" + j + ']');
             }
         }
-        ElementXmlSerializer serializer = new ElementXmlSerializer(
+        ElementSerializer serializer = new ElementSerializer(
         a_data, true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
@@ -170,7 +171,7 @@ extends TestCase {
 
         List<Element> result = (List<Element>) transformProcessor.execute(rule, data);
 
-        ElementXmlSerializer serializer = new ElementXmlSerializer(result.get(0), true);
+        ElementSerializer serializer = new ElementSerializer(result.get(0), true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
         System.out.println("tryMultipleArrayToArrayTransform####\n" + baos.toString());
@@ -187,7 +188,7 @@ extends TestCase {
         rule.getRuleItem("a2").setArrayIterationPath("b");
         List<Element> result = (List<Element>) transformProcessor.execute(rule, data);
 
-        ElementXmlSerializer serializer = new ElementXmlSerializer(result.
+        ElementSerializer serializer = new ElementSerializer(result.
         get(0), true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
@@ -204,7 +205,7 @@ extends TestCase {
         rule.getRuleItem("a2.a3.a4").setArrayIterationPath("b.c.d");
         List<Element> result = (List<Element>) transformProcessor.execute(rule, data);
 
-        ElementXmlSerializer serializer = new ElementXmlSerializer(result.
+        ElementSerializer serializer = new ElementSerializer(result.
         get(0), true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
@@ -223,7 +224,7 @@ extends TestCase {
         List<Element> result = (List<Element>) transformProcessor.execute(rule, data);
 
         for (Element elem : result) {
-            ElementXmlSerializer serializer = new ElementXmlSerializer(
+            ElementSerializer serializer = new ElementSerializer(
             elem, true);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             serializer.writeToXml(baos);
@@ -280,7 +281,7 @@ extends TestCase {
         rule.getRuleItem("a2.a3.aa4").setArrayIterationPath("b.c.d");
         List<Element> result = (List<Element>) transformProcessor.execute(rule, data);
 
-        ElementXmlSerializer serializer = new ElementXmlSerializer(result.get(0), true);
+        ElementSerializer serializer = new ElementSerializer(result.get(0), true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
         System.out.println("tryJavaScriptSupportingInTransformRule####:\n" + baos.toString());

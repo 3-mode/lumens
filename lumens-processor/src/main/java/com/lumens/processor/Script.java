@@ -4,5 +4,6 @@
 package com.lumens.processor;
 
 public interface Script {
+
     public Object execute(Context ctx);
 }

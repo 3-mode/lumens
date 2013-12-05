@@ -8,6 +8,7 @@ package com.lumens.processor;
  * @author shaofeng wang
  */
 public class Pair<A, B> {
+
     private A first;
     private B second;
 

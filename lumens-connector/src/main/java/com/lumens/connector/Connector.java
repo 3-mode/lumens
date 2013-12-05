@@ -11,6 +11,7 @@ import java.util.Map;
  * @author shaofeng wang
  */
 public interface Connector extends Configurable {
+
     public void open();
 
     public void close();

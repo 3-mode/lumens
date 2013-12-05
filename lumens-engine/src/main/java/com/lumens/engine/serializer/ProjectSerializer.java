@@ -17,9 +17,9 @@ import com.lumens.io.StringUTF8Writer;
 import com.lumens.io.XmlSerializer;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
-import com.lumens.model.serializer.FormatXmlSerializer;
+import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.transform.TransformRule;
-import com.lumens.processor.transform.serializer.TransformRuleXmlSerializer;
+import com.lumens.processor.transform.serializer.TransformRuleSerializer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +37,7 @@ import org.xml.sax.InputSource;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class ProjectSerializer implements XmlSerializer {
+
     private final static String INDENT = "  ";
     private TransformProject project;
 
@@ -155,7 +156,7 @@ public class ProjectSerializer implements XmlSerializer {
     }
 
     private void writeFormatToXml(StringUTF8Writer xml, Format format, String indent) throws Exception {
-        FormatXmlSerializer formatXml = new FormatXmlSerializer(format);
+        FormatSerializer formatXml = new FormatSerializer(format);
         formatXml.initIndent(indent);
         formatXml.writeToXml(xml.getOutStream());
     }
@@ -226,7 +227,7 @@ public class ProjectSerializer implements XmlSerializer {
     }
 
     private void writeRuleToXml(StringUTF8Writer xml, TransformRule rule, String indent) throws Exception {
-        TransformRuleXmlSerializer ruleXml = new TransformRuleXmlSerializer(rule);
+        TransformRuleSerializer ruleXml = new TransformRuleSerializer(rule);
         ruleXml.initIndent(indent);
         ruleXml.writeToXml(xml.getOutStream());
     }

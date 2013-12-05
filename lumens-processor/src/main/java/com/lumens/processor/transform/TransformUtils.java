@@ -11,6 +11,7 @@ import com.lumens.processor.ProcessorUtils;
  * @author shaofeng wang
  */
 public class TransformUtils extends ProcessorUtils {
+
     public static boolean checkTransformParameters(Object... args) {
         if (args == null || args.length < 1)
             return false;

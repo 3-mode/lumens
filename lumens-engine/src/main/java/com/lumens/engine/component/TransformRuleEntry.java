@@ -10,6 +10,7 @@ import com.lumens.processor.transform.TransformRule;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class TransformRuleEntry {
+
     private String name;
     private String sourceName;
     private String targetSource;

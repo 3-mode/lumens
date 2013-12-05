@@ -10,10 +10,9 @@ import java.util.List;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public interface Executor
-{
+public interface Executor {
+
     public List<Executor> execute();
 
     public TransformComponent getTransformComponent();
-
 }

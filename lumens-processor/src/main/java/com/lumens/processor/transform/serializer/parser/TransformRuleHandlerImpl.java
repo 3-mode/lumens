@@ -16,8 +16,9 @@ import org.xml.sax.SAXException;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class TransformRuleHandlerImpl implements TransformRuleHandler {
+
     private Format format;
-    private LinkedList<TransformRuleItem> ruleItemStack = new LinkedList<TransformRuleItem>();
+    private LinkedList<TransformRuleItem> ruleItemStack = new LinkedList<>();
     private TransformRule rule;
     private TransformRuleItem currentRuleItem;
     private List<TransformRule> ruleList;

@@ -8,6 +8,7 @@ package com.lumens.connector;
  * @author shaofeng wang
  */
 public interface Cacheable {
+
     public void setCacheSize(int size);
 
     public int getCacheSize();

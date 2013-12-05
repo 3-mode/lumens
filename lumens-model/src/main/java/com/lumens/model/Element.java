@@ -11,6 +11,7 @@ import java.util.List;
  */
 public interface Element {
     /*Methods to get and set properties of data node*/
+
     public int getLevel();
 
     public void removeChild(Element child);

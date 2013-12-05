@@ -10,6 +10,7 @@ import com.lumens.processor.Rule;
  * @author shaofeng wang
  */
 public class RouteRule implements Rule {
+
     public RouteRule(String scipt_here) {
     }
 

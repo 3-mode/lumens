@@ -10,6 +10,7 @@ import java.util.Iterator;
  * @author washaofe
  */
 public interface Path {
+
     public boolean isEmpty();
 
     public int tokenCount();

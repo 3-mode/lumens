@@ -10,6 +10,7 @@ import com.lumens.engine.run.ExecuteContext;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class TransformExecuteContext implements ExecuteContext {
+
     private Object input;
     private String targetName;
 

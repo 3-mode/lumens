@@ -15,6 +15,7 @@ import java.util.Map;
  * @author shaofeng wang
  */
 public class XMLConnector implements Connector {
+
     @Override
     public void open() {
         throw new UnsupportedOperationException("Not supported yet.");

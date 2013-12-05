@@ -9,6 +9,7 @@ import java.util.List;
  * @author shaofeng.wang@outlook.com
  */
 public class OracleOperationResult implements OperationResult {
+
     private List<Element> result;
 
     public OracleOperationResult(List<Element> result) {

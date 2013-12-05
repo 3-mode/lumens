@@ -14,6 +14,7 @@ import java.util.Map;
  * @author shaofeng wang
  */
 public class DataFormat implements Format {
+
     protected Map<String, Value> propertyList;
     protected Map<String, Format> childMap;
     protected List<Format> childList;

@@ -16,6 +16,7 @@ import org.apache.axiom.soap.SOAPEnvelope;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class WebServiceResult implements OperationResult {
+
     private ElementFromSOAPBuilder elementBuilder = new ElementFromSOAPBuilder();
     private SOAPEnvelope envelope;
     private Format resultFormat;

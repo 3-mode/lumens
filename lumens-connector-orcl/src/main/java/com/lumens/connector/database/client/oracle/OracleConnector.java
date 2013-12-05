@@ -18,6 +18,7 @@ import java.util.Map;
  * @author shaofeng wang
  */
 public class OracleConnector implements Connector, DatabaseConstants {
+
     public static final String SESSION_ALTER = "SESSION_ALTER";
     private OracleClient dbClient;
     private Map<String, Format> tables;

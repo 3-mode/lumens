@@ -81,6 +81,7 @@ import org.xml.sax.InputSource;
  */
 public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
                                               XMLEntityResolver {
+
     private String wsdlURL;
     private Definition definition;
     private XSModelHolder xsModel;
@@ -116,6 +117,7 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
     }
 
     private class XSModelHolder {
+
         private List<XSModel> models = new ArrayList<>();
 
         public void addModel(XSModel model) {

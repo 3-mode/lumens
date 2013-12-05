@@ -22,6 +22,7 @@ import java.util.Map;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class DataSource extends AbstractTransformComponent implements RegisterFormatComponent {
+
     private String name;
     private String className;
     private String description;

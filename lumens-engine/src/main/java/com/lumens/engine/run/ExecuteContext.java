@@ -7,8 +7,8 @@ package com.lumens.engine.run;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public interface ExecuteContext
-{
+public interface ExecuteContext {
+
     public String getTargetName();
 
     public Object getInput();

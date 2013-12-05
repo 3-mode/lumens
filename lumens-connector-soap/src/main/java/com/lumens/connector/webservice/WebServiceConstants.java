@@ -5,6 +5,7 @@ package com.lumens.connector.webservice;
  * @author shaofng.wang
  */
 public interface WebServiceConstants {
+
     public static final String WSDL = "WSDL";
     public static final String USER = "User";
     public static final String PASSWORD = "Password";

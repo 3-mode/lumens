@@ -27,6 +27,7 @@ import java.util.Map;
  * @author shaofeng wang
  */
 public class OracleClient extends AbstractClient implements OracleConstants {
+
     public OracleClient(String ojdbcURL, String connURL, String user, String password, String sessionAlter) {
         super(ojdbcURL, ORACLE_CLASS, connURL, user, password, sessionAlter);
     }

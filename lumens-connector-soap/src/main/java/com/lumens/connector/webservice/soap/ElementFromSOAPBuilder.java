@@ -20,6 +20,7 @@ import org.apache.axiom.soap.SOAPEnvelope;
  * @author shaofeng wang
  */
 public class ElementFromSOAPBuilder implements SOAPConstants {
+
     public Element buildElement(Format format, SOAPEnvelope envelope) {
         // TODO need to handle binary attachment
         if (format == null || format.getChildren() == null) {
@@ -38,7 +39,7 @@ public class ElementFromSOAPBuilder implements SOAPConstants {
                 if (omElem != null) {
                     QName qName = omElem.getQName();
                     if (qName.getLocalPart().equals(message.getName())
-                    && qName.getNamespaceURI().equals(namespace)) {
+                        && qName.getNamespaceURI().equals(namespace)) {
                         buildElementFromOMElement(messageElement, omElem);
                     }
                 }

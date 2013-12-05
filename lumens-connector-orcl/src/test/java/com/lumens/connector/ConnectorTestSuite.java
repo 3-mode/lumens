@@ -9,6 +9,7 @@ import junit.framework.TestSuite;
  * @author shaofeng.wang@outlook.com
  */
 public class ConnectorTestSuite extends TestCase {
+
     public ConnectorTestSuite(String testName) {
         super(testName);
     }

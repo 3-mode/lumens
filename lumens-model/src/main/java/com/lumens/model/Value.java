@@ -11,6 +11,7 @@ import org.apache.commons.codec.binary.Base64;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class Value {
+
     protected Object value;
     protected Type type;
 

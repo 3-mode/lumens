@@ -23,6 +23,7 @@ import java.util.List;
  */
 public class TransformProcessor extends AbstractProcessor {
     // private boolean ignoreNull = Boolean.getBoolean("transform.ignore.null");
+
     @Override
     public Object execute(Rule rule, Element input) {
         if (rule instanceof TransformRule) {

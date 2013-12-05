@@ -11,6 +11,7 @@ import java.util.Map;
  * @author shaofeng wang
  */
 public interface FormatBuilder {
+
     public Map<String, Format> getFormatList(Direction direction);
 
     public Format getFormat(Format format, String path, Direction direction);

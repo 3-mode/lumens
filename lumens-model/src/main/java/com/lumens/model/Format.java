@@ -11,7 +11,9 @@ import java.util.Map;
  * @author shaofeng wang
  */
 public interface Format {
+
     public enum Form {
+
         NONE("None"),
         FIELD("Field"),
         STRUCT("Struct"),

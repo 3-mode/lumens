@@ -17,6 +17,7 @@ import java.util.List;
  * @author shaofeng wang
  */
 public class TransformRuleItem {
+
     private TransformRuleItem parent;
     private List<TransformRuleItem> children;
     private Script script;

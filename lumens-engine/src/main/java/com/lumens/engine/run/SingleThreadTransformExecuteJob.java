@@ -13,6 +13,7 @@ import java.util.List;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class SingleThreadTransformExecuteJob implements ExecuteJob {
+
     private TransformProject project;
 
     public SingleThreadTransformExecuteJob(TransformProject project) {

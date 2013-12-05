@@ -22,26 +22,27 @@ import org.xml.sax.InputSource;
  *
  * @author shaofeng wang
  */
-public class FormatXmlSerializer implements XmlSerializer {
+public class FormatSerializer implements XmlSerializer {
+
     private Format format;
     private boolean useIndent;
     private boolean careProperties;
     private String INDENT_OFFSET = "  ";
     private String INDENT = "";
 
-    public FormatXmlSerializer(Format format, boolean careProps,
-                               boolean indent) {
+    public FormatSerializer(Format format, boolean careProps,
+                            boolean indent) {
         this.format = format;
         this.careProperties = careProps;
         this.useIndent = indent;
     }
 
-    public FormatXmlSerializer(Format format, boolean careProps) {
+    public FormatSerializer(Format format, boolean careProps) {
         this.format = format;
         this.careProperties = careProps;
     }
 
-    public FormatXmlSerializer(Format format) {
+    public FormatSerializer(Format format) {
         this.format = format;
         this.careProperties = true;
     }
@@ -52,7 +53,7 @@ public class FormatXmlSerializer implements XmlSerializer {
 
     @Override
     public void readFromXml(InputStream in) throws Exception {
-        List<Format> formatList = new ArrayList<Format>();
+        List<Format> formatList = new ArrayList<>();
         FormatParser.parse(new InputSource(in), new FormatHandlerImpl(formatList));
         for (Format child : formatList) {
             format.addChild(child);
@@ -83,8 +84,7 @@ public class FormatXmlSerializer implements XmlSerializer {
         boolean closeTag = false;
         out.print(indent).print("<format name=\"").print(format.
         getName()).print("\" ").
-        print(
-        "form=\"").print(format.getForm().toString()).print("\" ").
+        print("form=\"").print(format.getForm().toString()).print("\" ").
         print("type=\"").
         print(format.getType().toString()).print("\" ");
         if (format.getPropertyList() != null && careProperties) {

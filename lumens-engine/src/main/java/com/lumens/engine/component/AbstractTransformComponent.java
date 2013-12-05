@@ -12,6 +12,7 @@ import java.util.Map;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public abstract class AbstractTransformComponent implements TransformComponent {
+
     private int x;
     private int y;
     private String description;

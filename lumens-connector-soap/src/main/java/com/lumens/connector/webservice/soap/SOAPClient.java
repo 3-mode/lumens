@@ -29,6 +29,7 @@ import org.apache.axis2.wsdl.WSDLConstants;
  * @author shaofeng wang
  */
 public class SOAPClient implements SOAPConstants {
+
     private FormatFromWSDLBuilder formatBuilder;
     private SOAPMessageBuilder soapBuilder;
     private Authenticator basicAuth;

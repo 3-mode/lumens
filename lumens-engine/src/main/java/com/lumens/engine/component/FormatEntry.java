@@ -11,6 +11,7 @@ import com.lumens.model.Format;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class FormatEntry {
+
     private Format format;
     private Direction direction;
     private String name;

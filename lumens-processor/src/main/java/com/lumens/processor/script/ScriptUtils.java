@@ -12,6 +12,7 @@ import org.apache.commons.io.IOUtils;
  * @author shaofeng wang
  */
 public class ScriptUtils {
+
     public static String loadJS(String name) throws Exception {
         InputStream in = getInputStream(name);
         try {

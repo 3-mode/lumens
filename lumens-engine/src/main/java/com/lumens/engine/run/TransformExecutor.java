@@ -13,6 +13,7 @@ import java.util.Map;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class TransformExecutor implements Executor {
+
     private TransformComponent tComponent;
     private ExecuteContext executeContext;
 

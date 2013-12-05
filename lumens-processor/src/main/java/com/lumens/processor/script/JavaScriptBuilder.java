@@ -7,6 +7,7 @@ import java.io.LineNumberReader;
 import java.io.StringReader;
 
 public class JavaScriptBuilder {
+
     private final String functionPrefix = "function fLumensScript_";
     private final String pathEnding = "+-*/ &|!<>\n\r\t^%=;:?,";
 

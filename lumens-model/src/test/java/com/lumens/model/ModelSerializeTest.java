@@ -4,8 +4,8 @@
  */
 package com.lumens.model;
 
-import com.lumens.model.serializer.ElementXmlSerializer;
-import com.lumens.model.serializer.FormatXmlSerializer;
+import com.lumens.model.serializer.ElementSerializer;
+import com.lumens.model.serializer.FormatSerializer;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import junit.framework.TestCase;
@@ -53,7 +53,7 @@ public class ModelSerializeTest extends TestCase
         assetDataItem.addChild("price").setValue(15000.05f);
         assetDataItem.addChild("vendor").addChild("name").setValue("HP");
 
-        ElementXmlSerializer serializer = new ElementXmlSerializer(
+        ElementSerializer serializer = new ElementSerializer(
                 personData, true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
@@ -64,7 +64,7 @@ public class ModelSerializeTest extends TestCase
     public void testUnSerializeFromXml() throws Exception
     {
         Format root = new DataFormat("Root");
-        FormatXmlSerializer xmlSerializer = new FormatXmlSerializer(root);
+        FormatSerializer xmlSerializer = new FormatSerializer(root);
         InputStream in = null;
         try
         {

@@ -10,6 +10,7 @@ import com.lumens.model.Format;
  * @author shaofeng.wang@outlook.com
  */
 public class OracleQuerySQLBuilder extends OracleSQLBuilder {
+
     private Format output;
 
     public OracleQuerySQLBuilder(Format output) {

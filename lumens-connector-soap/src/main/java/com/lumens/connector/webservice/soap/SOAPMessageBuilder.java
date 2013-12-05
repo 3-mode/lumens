@@ -21,6 +21,7 @@ import org.apache.axiom.soap.SOAPFactory;
  * @author shaofeng wang
  */
 public class SOAPMessageBuilder implements SOAPConstants {
+
     private SOAPFactory soapFactory;
     private Map<String, OMNamespace> namespaceCache;
     private int nsCount;

@@ -14,6 +14,7 @@ import java.sql.Driver;
  * @author shaofeng wang
  */
 public abstract class AbstractClient implements Client {
+
     protected URLClassLoader driverLoader;
     protected Driver driver;
     protected Connection conn;

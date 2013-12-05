@@ -16,12 +16,13 @@ import java.util.List;
  *
  * @author shaofeng wang
  */
-public class ElementXmlSerializer implements XmlSerializer {
+public class ElementSerializer implements XmlSerializer {
+
     private Element element;
     private boolean useIndent;
     private String INDENT = "  ";
 
-    public ElementXmlSerializer(Element element, boolean indent) {
+    public ElementSerializer(Element element, boolean indent) {
         this.element = element;
         this.useIndent = indent;
     }

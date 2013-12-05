@@ -8,6 +8,7 @@ package com.lumens.connector.database.client.oracle;
  * @author shaofeng wang
  */
 public interface OracleConstants {
+
     public String ORACLE_CLASS = "oracle.jdbc.OracleDriver";
     public String TYPE = "type";
     public String DESCRIPTION = "description";

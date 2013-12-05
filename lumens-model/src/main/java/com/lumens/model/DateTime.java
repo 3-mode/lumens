@@ -13,6 +13,7 @@ import java.util.Date;
  * @author shaofeng wang
  */
 public class DateTime {
+
     public final static DateFormat[] DATETIME_PATTERN = {
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),
         new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"),

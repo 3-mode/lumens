@@ -16,6 +16,7 @@ import java.util.Map;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class TransformEngine {
+
     private Map<String, SingleThreadTransformExecuteJob> jobList = new HashMap<>();
 
     public void initialize() {

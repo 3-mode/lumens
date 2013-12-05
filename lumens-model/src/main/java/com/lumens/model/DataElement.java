@@ -14,6 +14,7 @@ import java.util.Map;
  * @author shaofeng wang
  */
 public class DataElement implements Element {
+
     protected Map<String, Element> children;
     protected List<Element> childrenList;
     protected List<Element> arrayItems;

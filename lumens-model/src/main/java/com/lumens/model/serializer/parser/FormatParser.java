@@ -10,6 +10,7 @@ import org.xml.sax.*;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class FormatParser implements ContentHandler {
+
     private FormatHandler handler;
     private Stack context;
     private StringBuffer buffer;

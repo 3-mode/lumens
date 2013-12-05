@@ -8,6 +8,7 @@ package com.lumens.engine;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class StartEntry {
+
     private TransformComponent tComponent;
     private String startEntryName;
 

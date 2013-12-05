@@ -13,6 +13,7 @@ import java.io.UnsupportedEncodingException;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class StringUTF8Writer {
+
     private OutputStreamWriter osw;
     private OutputStream outputStream;
 

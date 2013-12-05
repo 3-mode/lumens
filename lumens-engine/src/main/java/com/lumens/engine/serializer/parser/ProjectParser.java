@@ -17,6 +17,7 @@ import org.xml.sax.*;
  * @author auto
  */
 public class ProjectParser implements ContentHandler {
+
     private ProjectHandler handler;
     private Stack context;
     private StringBuffer buffer;

@@ -9,6 +9,7 @@ import com.lumens.model.Element;
  * @author shaofeng.wang@outlook.com
  */
 public class OracleSQLBuilder implements SQLBuilder, OracleConstants {
+
     @Override
     public String generateInsertSQL(Element input) {
         throw new UnsupportedOperationException("Not supported yet.");

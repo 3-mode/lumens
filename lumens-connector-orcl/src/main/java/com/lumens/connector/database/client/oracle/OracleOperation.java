@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 
 public class OracleOperation implements Operation, OracleConstants {
+
     private static Logger log = LogManager.getLogger(OracleOperation.class);
     private OracleClient client;
     private ElementFromDbBuilder elementBuilder;

@@ -8,6 +8,7 @@ package com.lumens.model;
  * @author shaofeng wang
  */
 public enum Type {
+
     NONE("None"),
     BYTE("Byte"),
     BOOLEAN("Boolean"),

@@ -13,6 +13,7 @@ import org.xml.sax.*;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class TransformRuleParser implements ContentHandler {
+
     private TransformRuleHandler handler;
     private Stack context;
     private StringBuffer buffer;

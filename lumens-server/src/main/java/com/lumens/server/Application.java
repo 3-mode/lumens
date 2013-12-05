@@ -19,6 +19,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
  * Lumens server entry point
  */
 public class Application {
+
     public static void main(String[] args) throws Exception {
         Server server = new Server();
         ServerConnector connector = new ServerConnector(server);

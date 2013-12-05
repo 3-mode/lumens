@@ -7,6 +7,7 @@ import com.lumens.model.Element;
  * @author shaofeng.wang@outlook.com
  */
 public interface SQLBuilder {
+
     public String generateInsertSQL(Element input);
 
     public String generateUpdateSQL(Element input);

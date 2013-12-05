@@ -15,6 +15,7 @@ import java.util.List;
  * @author shaofeng.wang@outlook.com
  */
 public class ElementFromDbBuilder {
+
     public List<Element> buildElement(Format output, ResultSet ret) throws Exception {
         List<Element> result = new ArrayList<>();
         if (!ret.isClosed()) {

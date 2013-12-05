@@ -12,6 +12,7 @@ import com.lumens.model.Format;
  * @author washaofe
  */
 public interface Operation {
+
     public void begin();
 
     public void end();

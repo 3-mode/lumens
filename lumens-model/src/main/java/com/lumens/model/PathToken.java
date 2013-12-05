@@ -8,6 +8,7 @@ package com.lumens.model;
  * @author shaofeng wang
  */
 public class PathToken {
+
     private String token;
     private int index;
 

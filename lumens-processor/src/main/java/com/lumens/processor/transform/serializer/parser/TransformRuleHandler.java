@@ -11,6 +11,7 @@ import org.xml.sax.SAXException;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public interface TransformRuleHandler {
+
     /**
      *
      * A container element start event handling method.

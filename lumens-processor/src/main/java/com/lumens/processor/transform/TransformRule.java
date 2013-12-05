@@ -15,6 +15,7 @@ import java.util.Iterator;
  * @author shaofeng wang
  */
 public class TransformRule implements Rule {
+
     private Format dstFmt;
     private TransformRuleItem root;
 

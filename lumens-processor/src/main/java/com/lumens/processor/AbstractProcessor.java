@@ -8,6 +8,7 @@ package com.lumens.processor;
  * @author shaofeng wang
  */
 public abstract class AbstractProcessor implements Processor {
+
     private String name;
 
     public AbstractProcessor() {

@@ -13,6 +13,7 @@ import com.lumens.processor.Script;
 // TODO need to refine the package path, if it is correct to put the class into
 // transform package
 public class AccessPathScript implements Script {
+
     private Path path;
 
     public AccessPathScript(String script) {

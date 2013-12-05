@@ -8,18 +8,23 @@ import com.lumens.engine.component.DataTransformation;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.run.TransformEngine;
 import com.lumens.engine.serializer.ProjectSerializer;
+import com.lumens.engine.serializer.parser.ProjectJsonParser;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
 import com.lumens.processor.transform.TransformRule;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import junit.framework.TestCase;
+import static junit.framework.TestCase.assertTrue;
 import org.apache.commons.io.IOUtils;
 
 public class EngineTest extends TestCase {
+
     public EngineTest(String testName) {
         super(testName);
     }
@@ -112,6 +117,24 @@ public class EngineTest extends TestCase {
             projXml.readFromXml(in);
             //projXml.write(System.out);
             return newProject;
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+    }
+
+    public void testSerializeJson() throws Exception {
+        TransformProject project = new TransformProject();
+        new ProjectJsonParser(project).parse(getResourceAsByteArrayInputStream("/json/project.json"));
+        assertTrue(project.getDatasourceList().size() == 1);
+        assertTrue(project.getDataTransformationList().size() == 2);
+    }
+
+    public InputStream getResourceAsByteArrayInputStream(String url) throws IOException {
+        InputStream in = null;
+        try {
+            in = EngineTest.class.getResourceAsStream(url);
+            ByteArrayInputStream bais = new ByteArrayInputStream(IOUtils.toByteArray(in));
+            return in;
         } finally {
             IOUtils.closeQuietly(in);
         }

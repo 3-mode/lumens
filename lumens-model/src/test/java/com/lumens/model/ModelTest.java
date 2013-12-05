@@ -4,7 +4,7 @@
 package com.lumens.model;
 
 import com.lumens.model.Format.Form;
-import com.lumens.model.serializer.ElementXmlSerializer;
+import com.lumens.model.serializer.ElementSerializer;
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.util.Iterator;
@@ -181,7 +181,7 @@ public class ModelTest
                 getString());
 
         // test xml
-        ElementXmlSerializer serializer = new ElementXmlSerializer(
+        ElementSerializer serializer = new ElementSerializer(
                 personData, true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);

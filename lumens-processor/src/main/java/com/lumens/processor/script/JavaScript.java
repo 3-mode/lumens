@@ -12,6 +12,7 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 public class JavaScript implements Script {
+
     private static ScriptableObject globalScope;
 
     static {

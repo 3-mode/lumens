@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public interface FormatHandler {
+
     /**
      *
      * A container element start event handling method.

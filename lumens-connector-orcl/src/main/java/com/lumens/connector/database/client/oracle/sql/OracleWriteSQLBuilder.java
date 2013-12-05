@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
  * @author shaofeng.wang@outlook.com
  */
 public class OracleWriteSQLBuilder extends OracleSQLBuilder {
+
     private static Logger log = LogManager.getLogger("oracle");
 
     @Override
