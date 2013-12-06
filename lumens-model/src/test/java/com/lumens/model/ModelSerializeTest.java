@@ -14,15 +14,13 @@ import junit.framework.TestCase;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class ModelSerializeTest extends TestCase
-{
-    public ModelSerializeTest(String testName)
-    {
+public class ModelSerializeTest extends TestCase {
+
+    public ModelSerializeTest(String testName) {
         super(testName);
     }
 
-    public void testXmlSerializer() throws Exception
-    {
+    public void testXmlSerializer() throws Exception {
         Format root = new DataFormat("root");
         Format person = root.addChild("Person", Format.Form.STRUCT);
         person.setProperty("test1", new Value("prop1"));
@@ -35,7 +33,7 @@ public class ModelSerializeTest extends TestCase
         asset.addChild("name", Format.Form.FIELD, Type.STRING);
         asset.addChild("price", Format.Form.FIELD, Type.FLOAT);
         Format name = asset.addChild("vendor", Format.Form.STRUCT).
-                addChild("name", Format.Form.FIELD, Type.STRING);
+        addChild("name", Format.Form.FIELD, Type.STRING);
 
         Element personData = new DataElement(person);
         Element nameData = personData.addChild("name");
@@ -44,7 +42,7 @@ public class ModelSerializeTest extends TestCase
         Element assetData = personData.addChild("asset");
         Element assetDataItem = assetData.addArrayItem();
         assetDataItem.addChild("test").addArrayItem().setValue(
-                "test collection default index");
+        "test collection default index");
         assetDataItem.addChild("name").setValue("Mac air book");
         assetDataItem.addChild("price").setValue(12000.05f);
         assetDataItem.addChild("vendor").addChild("name").setValue("Apple");
@@ -54,25 +52,24 @@ public class ModelSerializeTest extends TestCase
         assetDataItem.addChild("vendor").addChild("name").setValue("HP");
 
         ElementSerializer serializer = new ElementSerializer(
-                personData, true);
+        personData, true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
         System.out.println(baos.toString());
 
     }
 
-    public void testUnSerializeFromXml() throws Exception
-    {
+    public void testUnSerializeFromXml() throws Exception {
         Format root = new DataFormat("Root");
         FormatSerializer xmlSerializer = new FormatSerializer(root);
         InputStream in = null;
-        try
-        {
+        try {
             in = ModelSerializeTest.class.getResourceAsStream("/xml/format.xml");
             xmlSerializer.readFromXml(in);
             xmlSerializer.writeToXml(System.out);
-        } finally
-        {
+            xmlSerializer.writeToJson(System.out);
+            System.out.println();
+        } finally {
             in.close();
         }
     }

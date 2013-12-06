@@ -79,8 +79,7 @@ import org.xml.sax.InputSource;
  *
  * @author shaofeng wang
  */
-public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
-                                              XMLEntityResolver {
+public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants, XMLEntityResolver {
 
     private String wsdlURL;
     private Definition definition;
@@ -276,7 +275,8 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
         }
     }
 
-    private static void buildFromatFromElement(Format parent, XSElementDeclaration xsElement, Path accessPath, boolean isArray, int level) {
+    private static void buildFromatFromElement(Format parent, XSElementDeclaration xsElement,
+                                               Path accessPath, boolean isArray, int level) {
         String name = xsElement.getName();
         String namespace = xsElement.getNamespace();
 
@@ -292,10 +292,8 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
         }
     }
 
-    private static void buildFormatFromXSComplexType(Format parent, String name,
-                                                     String namespace,
-                                                     Path accessPath,
-                                                     XSComplexTypeDefinition xsComplex,
+    private static void buildFormatFromXSComplexType(Format parent, String name, String namespace,
+                                                     Path accessPath, XSComplexTypeDefinition xsComplex,
                                                      boolean isArray, int level) {
         short contentType = xsComplex.getContentType();
         if (contentType == XSComplexTypeDefinition.CONTENTTYPE_SIMPLE) {
@@ -362,10 +360,8 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
         return true;
     }
 
-    private static Format buildFormatFromXSSimpleType(Format parent, String name,
-                                                      String namespace,
-                                                      XSComplexTypeDefinition xsComplex,
-                                                      XSSimpleTypeDefinition xsSimple,
+    private static Format buildFormatFromXSSimpleType(Format parent, String name, String namespace,
+                                                      XSComplexTypeDefinition xsComplex, XSSimpleTypeDefinition xsSimple,
                                                       boolean isArray) {
         Format format = parent.getChild(name);
         if (format == null) {
@@ -400,8 +396,7 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
         return format;
     }
 
-    private static void buildFromFromXSParticle(Format parent,
-                                                XSParticle xsParticle,
+    private static void buildFromFromXSParticle(Format parent, XSParticle xsParticle,
                                                 Path accessPath, int level) {
         boolean isUnbounded = xsParticle.getMaxOccursUnbounded();
         int maxOccurs = xsParticle.getMaxOccurs();
@@ -502,9 +497,8 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
         }
     }
 
-    private static Map<String, Format> buildServices(Definition definition,
-                                                     Direction direction) {
-        Map<String, Format> services = new HashMap<String, Format>();
+    private static Map<String, Format> buildServices(Definition definition, Direction direction) {
+        Map<String, Format> services = new HashMap<>();
         Collection<Service> wsServices = definition.getServices().values();
         for (Service service : wsServices) {
             Collection<Port> ports = service.getPorts().values();
@@ -535,13 +529,10 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
                     }
                     BindingOutput output = bindingOperation.getBindingOutput();
                     if (output != null) {
-                        Value outputName = new Value(Type.STRING, output.
-                        getName());
+                        Value outputName = new Value(Type.STRING, output.getName());
                         portFmt.setProperty(BINDINGOUTPUT, outputName);
                     }
-                    portFmt.setProperty(TARGETNAMESPACE,
-                                        new Value(binding.getQName().
-                    getNamespaceURI()));
+                    portFmt.setProperty(TARGETNAMESPACE, new Value(binding.getQName().getNamespaceURI()));
                     buildMessages(portFmt, binding.getPortType(), direction);
                 }
             }
@@ -549,8 +540,7 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
         return services;
     }
 
-    private static void buildMessages(Format port, PortType portType,
-                                      Direction direction) {
+    private static void buildMessages(Format port, PortType portType, Direction direction) {
         if (portType != null) {
             String strInputName = null;
             Value vName = port.getProperty(BINDINGINPUT);
@@ -562,9 +552,7 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
             if (vName != null) {
                 strOutputName = vName.getString();
             }
-            Operation operation = portType.getOperation(port.getName(),
-                                                        strInputName,
-                                                        strOutputName);
+            Operation operation = portType.getOperation(port.getName(), strInputName, strOutputName);
             if (operation != null) {
                 Message message = null;
                 if (direction == Direction.IN) {
@@ -581,15 +569,13 @@ public class FormatFromWSDLBuilder implements FormatBuilder, SOAPConstants,
         }
     }
 
-    private static void buildFormatFormMessage(Message message, Format port,
-                                               int soapMessageMode) {
+    private static void buildFormatFormMessage(Message message, Format port, int soapMessageMode) {
         Collection<Part> parts = message.getParts().values();
         for (Part part : parts) {
             // TODO does not handle http call here, the qname is null for http call
             QName qName = part.getElementName();
             Format msgFmt = port.addChild(qName.getLocalPart(), Form.STRUCT);
-            msgFmt.setProperty(TARGETNAMESPACE, new Value(qName.
-            getNamespaceURI()));
+            msgFmt.setProperty(TARGETNAMESPACE, new Value(qName.getNamespaceURI()));
             msgFmt.setProperty(SOAPMESSAGE, new Value(soapMessageMode));
         }
     }

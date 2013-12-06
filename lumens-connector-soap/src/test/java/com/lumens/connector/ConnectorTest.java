@@ -43,7 +43,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
     }
 
     public void testCCS02WebService() throws Exception {
-        HashMap<String, Value> props = new HashMap<String, Value>();
+        HashMap<String, Value> props = new HashMap<>();
         props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/Symantec_CC/UsernameSecurity_1.wsdl").toString()));
         WebServiceConnector connector = new WebServiceConnector();
         connector.setPropertyList(props);
@@ -72,9 +72,9 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         assertNotNull(o);
     }
 
-    public void TtestWebServiceConnector() throws Exception {
+    public void testWebServiceConnector() throws Exception {
         WebServiceConnector connector = new WebServiceConnector();
-        HashMap<String, Value> props = new HashMap<String, Value>();
+        HashMap<String, Value> props = new HashMap<>();
         props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/wsdl/IncidentManagement.wsdl").toString()));
         connector.setPropertyList(props);
         connector.open();
@@ -90,7 +90,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         TransformRule rule = new TransformRule(retrieveIncident);
         rule.getRuleItem("RetrieveIncidentRequest.attachmentData").setScript("true");
         rule.getRuleItem("RetrieveIncidentRequest.model.instance.AssigneeName").setScript("\'test\'");
-        rule.getRuleItem("RetrieveIncidentRequest.model.instance.ClosedTime").setScript("dateFormat(now(), \"yyyy-MM-dd HH:mm:ss\")");
+        rule.getRuleItem("RetrieveIncidentRequest.model.instance.ClosedTime").setScript("dateToString(now(), \"yyyy-MM-dd HH:mm:ss\")");
         Processor transformProcessor = new TransformProcessor();
         List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
         new ElementSerializer(result.get(0), true).writeToXml(System.out);
@@ -112,12 +112,13 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         transformProcessor = new TransformProcessor();
         result = (List<Element>) transformProcessor.execute(rule, null);
         new ElementSerializer(result.get(0), true).writeToXml(System.out);
+        new FormatSerializer(getOpenFundString).writeToXml(System.out);
 
         services = connector.getFormatList(Direction.OUT);
-        getOpenFundString = services.get("getOpenFundString");
-        connector.getFormat(getOpenFundString, "getOpenFundStringResponse.getOpenFundStringResult.string.string", Direction.OUT);
+        Format getOpenFundStringResp = services.get("getOpenFundString");
+        connector.getFormat(getOpenFundStringResp, "getOpenFundStringResponse.getOpenFundStringResult.string.string", Direction.OUT);
         Operation op = connector.getOperation();
-        OperationResult opResult = op.execute(result.get(0), getOpenFundString);
+        OperationResult opResult = op.execute(result.get(0), getOpenFundStringResp);
         List<Element> response = opResult.getResult();
         new ElementSerializer(response.get(0), true).writeToXml(System.out);
         new FormatSerializer(getOpenFundString).writeToXml(System.out);

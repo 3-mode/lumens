@@ -21,7 +21,7 @@ public class TransformRuleItem {
     private TransformRuleItem parent;
     private List<TransformRuleItem> children;
     private Script script;
-    private String orignalScript;
+    private String orignalScriptText;
     private String arrayIterationPath;
     private Format format;
 
@@ -29,12 +29,13 @@ public class TransformRuleItem {
         this.format = format;
     }
 
-    public void setScript(String script) throws Exception {
-        orignalScript = script;
-        if (TransformUtils.isPathFormat(script))
-            this.script = new AccessPathScript(TransformUtils.getAccessPath(script));
+    public void setScript(String scriptText) throws Exception {
+        orignalScriptText = scriptText;
+        String trimedScriptText = scriptText.trim();
+        if (TransformUtils.isPathFormat(trimedScriptText))
+            this.script = new AccessPathScript(TransformUtils.getAccessPath(trimedScriptText));
         else
-            this.script = new JavaScript(format.getFullPath().toString(), script);
+            this.script = new JavaScript(format.getFullPath().toString(), trimedScriptText);
     }
 
     public Script getScript() {
@@ -42,21 +43,18 @@ public class TransformRuleItem {
     }
 
     public String getScriptString() {
-        return orignalScript;
+        return orignalScriptText;
     }
 
     public void setArrayIterationPath(String arrayIterationPath) {
         if (!format.isArray() && format.getParent() != null) {
-            throw new IllegalArgumentException(
-            "iteration path \"" + arrayIterationPath + "\" can not be configured for a no array or no root element");
+            throw new IllegalArgumentException("iteration path \"" + arrayIterationPath + "\" can not be configured for a no array or no root element");
         }
 
         TransformRuleItem item = parent;
         while (item != null) {
-            if (item.arrayIterationPath != null && item.arrayIterationPath.equalsIgnoreCase(
-            arrayIterationPath))
-                throw new IllegalArgumentException(
-                "iteration path \"" + arrayIterationPath + "\" already is configured in its parent element");
+            if (item.arrayIterationPath != null && item.arrayIterationPath.equalsIgnoreCase(arrayIterationPath))
+                throw new IllegalArgumentException("iteration path \"" + arrayIterationPath + "\" already is configured in its parent element");
             item = item.parent;
         }
         ArrayDeque<TransformRuleItem> items = new ArrayDeque<>();
@@ -66,10 +64,8 @@ public class TransformRuleItem {
 
         while (!items.isEmpty()) {
             item = items.removeFirst();
-            if (item.arrayIterationPath != null && item.arrayIterationPath.equalsIgnoreCase(
-            arrayIterationPath))
-                throw new IllegalArgumentException(
-                "iteration path \"" + arrayIterationPath + "\" already is configured in its child element");
+            if (item.arrayIterationPath != null && item.arrayIterationPath.equalsIgnoreCase(arrayIterationPath))
+                throw new IllegalArgumentException("iteration path \"" + arrayIterationPath + "\" already is configured in its child element");
             currentChildren = item.getChildren();
             if (currentChildren != null && !currentChildren.isEmpty())
                 items.addAll(currentChildren);

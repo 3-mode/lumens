@@ -28,7 +28,8 @@ public class WebServiceConnector implements Connector, WebServiceConstants {
     private int proxyPort = 80;
     private String proxyUser;
     private String proxyPassword;
-    private Map<String, Format> formatList;
+    private Map<String, Format> formatListIn;
+    private Map<String, Format> formatListOut;
 
     @Override
     public void open() {
@@ -42,15 +43,25 @@ public class WebServiceConnector implements Connector, WebServiceConstants {
         if (soapClient != null) {
             soapClient.close();
         }
-        formatList = null;
+        formatListIn = null;
+        formatListOut = null;
         soapClient = null;
     }
 
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
-        if (formatList == null)
-            formatList = formatBuilder.getFormatList(direction);
-        return formatList;
+        if (direction == Direction.IN) {
+            if (formatListIn != null)
+                return formatListIn;
+            formatListIn = formatBuilder.getFormatList(direction);
+            return formatListIn;
+        } else if (direction == Direction.OUT) {
+            if (formatListOut != null)
+                return formatListOut;
+            formatListOut = formatBuilder.getFormatList(direction);
+            return formatListOut;
+        }
+        throw new RuntimeException("Not support direction !");
     }
 
     @Override

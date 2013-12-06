@@ -16,29 +16,25 @@ import junit.framework.TestSuite;
 /**
  * Unit test for simple App.
  */
-public class ModelTest
-        extends TestCase
-{
+public class ModelTest extends TestCase {
+
     /**
      * Create the test case
      *
      * @param testName name of the test case
      */
-    public ModelTest(String testName)
-    {
+    public ModelTest(String testName) {
         super(testName);
     }
 
     /**
      * @return the suite of tests being tested
      */
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite(ModelTest.class);
     }
 
-    public void testFormatAndData() throws JAXBException
-    {
+    public void testFormatAndData() throws JAXBException {
         // Create a simple structure, collection and attribute meta data model
         Format root = new DataFormat("root");
         Format person = root.addChild("Person", Form.STRUCT, Type.NONE);
@@ -47,7 +43,7 @@ public class ModelTest
         asset.addChild("name", Form.FIELD, Type.STRING);
         asset.addChild("price", Form.FIELD, Type.FLOAT);
         assertEquals(Type.STRING, person.getChild("asset").getChild("name").
-                getType());
+        getType());
 
         Element personData = new DataElement(person);
         Element nameData = personData.addChild("name");
@@ -57,11 +53,10 @@ public class ModelTest
         assetData.addChild("name").setValue("Mac air book");
         assetData.addChild("price").setValue(12000.05f);
         assertEquals(12000.05f, personData.getChild("asset").getChild("price").
-                getValue().getFloat());
+        getValue().getFloat());
     }
 
-    public void testCollection()
-    {
+    public void testCollection() {
         // Create format
         Format root = new DataFormat("root");
         Format person = root.addChild("Person", Form.STRUCT);
@@ -83,11 +78,10 @@ public class ModelTest
         assetDataItem.addChild("price").setValue(12000.05f);
         assetDataItem.addChild("vendor").addChild("name").setValue("Apple");
         assertEquals(12000.05f, personData.getChild("asset").getChildren().
-                get(0).getChild("price").getValue().getFloat());
+        get(0).getChild("price").getValue().getFloat());
     }
 
-    public void testClone()
-    {
+    public void testClone() {
         // Create format
         Format root = new DataFormat("root");
         Format person = root.addChild("Person", Form.STRUCT);
@@ -101,11 +95,10 @@ public class ModelTest
         Format clonedRoot = root.recursiveClone();
         assertEquals("name", clonedRoot.getChildByPath("Person.name").getName());
         assertEquals("name", clonedRoot.getChildByPath(
-                "Person.asset.vendor.name").getName());
+        "Person.asset.vendor.name").getName());
     }
 
-    public void testElementPath()
-    {
+    public void testElementPath() {
         Path path = new AccessPath("asset.vendor.name");
         Iterator<PathToken> it = path.iterator();
         assertEquals("asset", it.next().toString());
@@ -136,8 +129,7 @@ public class ModelTest
         assertEquals(-1, token.index());
     }
 
-    public void testPathForDataElement() throws Exception
-    {
+    public void testPathForDataElement() throws Exception {
         // Create format
         Format root = new DataFormat("root");
         Format person = root.addChild("Person", Form.STRUCT);
@@ -147,7 +139,7 @@ public class ModelTest
         asset.addChild("name", Form.FIELD, Type.STRING);
         asset.addChild("price", Form.FIELD, Type.FLOAT);
         Format name = asset.addChild("vendor", Form.STRUCT).
-                addChild("name", Form.FIELD, Type.STRING);
+        addChild("name", Form.FIELD, Type.STRING);
         assertEquals("Person.asset.vendor.name", name.getFullPath().toString());
         assertEquals(name, root.getChildByPath("Person.asset.vendor.name"));
 
@@ -158,8 +150,7 @@ public class ModelTest
         assertEquals("James wang", nameData.getValue().getString());
         Element assetData = personData.addChild("asset");
         Element assetDataItem = assetData.addArrayItem();
-        assetDataItem.addChild("test").addArrayItem().setValue(
-                "test collection default index");
+        assetDataItem.addChild("test").addArrayItem().setValue("test collection default index");
         assetDataItem.addChild("name").setValue("Mac air book");
         assetDataItem.addChild("price").setValue(12000.05f);
         assetDataItem.addChild("vendor").addChild("name").setValue("Apple");
@@ -178,24 +169,22 @@ public class ModelTest
         assertNotNull(nameData);
         Element test = personData.getChildByPath("asset.test");
         assertEquals("test collection default index", test.getValue().
-                getString());
+        getString());
 
         // test xml
         ElementSerializer serializer = new ElementSerializer(
-                personData, true);
+        personData, true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
         System.out.println(baos.toString());
     }
 
-    public void testScriptPath()
-    {
+    public void testScriptPath() {
         //var name = @asset.'vendor.info'[0].name+,-,*,/,%,>,<"Hello"
         //var name = @asset.'vendor.info'[0].name; "Hello"
     }
 
-    public void testDateTime() throws ParseException
-    {
+    public void testDateTime() throws ParseException {
         Format dateFormat = new DataFormat("Date", Form.FIELD, Type.DATE);
         Element dateElement = new DataElement(dateFormat);
         dateElement.setValue("2012-04-12T10:22:12Z");
@@ -203,5 +192,4 @@ public class ModelTest
         dateElement.setValue("2012-04-12 10:22:12");
         System.out.println(dateElement.getValue());
     }
-
 }

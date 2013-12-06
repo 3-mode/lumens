@@ -13,6 +13,7 @@ import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.serializer.parser.ProjectHandlerImpl;
 import com.lumens.engine.serializer.parser.ProjectParser;
+import com.lumens.io.JsonSerializer;
 import com.lumens.io.StringUTF8Writer;
 import com.lumens.io.XmlSerializer;
 import com.lumens.model.Format;
@@ -20,7 +21,6 @@ import com.lumens.model.Value;
 import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.transform.TransformRule;
 import com.lumens.processor.transform.serializer.TransformRuleSerializer;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,15 +28,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.json.JSONObject;
-import org.json.XML;
+import org.codehaus.jackson.JsonEncoding;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.xml.sax.InputSource;
 
 /**
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class ProjectSerializer implements XmlSerializer {
+public class ProjectSerializer implements XmlSerializer, JsonSerializer {
 
     private final static String INDENT = "  ";
     private TransformProject project;
@@ -50,14 +52,26 @@ public class ProjectSerializer implements XmlSerializer {
         ProjectParser.parse(new InputSource(in), new ProjectHandlerImpl(project));
     }
 
+    @Override
     public void readFromJson(InputStream in) throws Exception {
+        ObjectMapper om = new ObjectMapper();
+        JsonParser jParser = om.getJsonFactory().createJsonParser(in);
     }
 
+    @Override
     public void writeToJson(OutputStream out) throws Exception {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        writeToXml(baos);
-        JSONObject json = XML.toJSONObject(baos.toString());
-        out.write(json.toString().getBytes("UTF-8"));
+        ObjectMapper om = new ObjectMapper();
+        JsonGenerator jGenerator = om.getJsonFactory().createJsonGenerator(out, JsonEncoding.UTF8);
+        jGenerator.writeStartObject();
+        jGenerator.writeObjectFieldStart("project");
+        jGenerator.writeStringField("name", project.getName());
+        jGenerator.writeStringField("description", project.getDescription());
+        writeDatasourceListToJson(jGenerator, project.getDatasourceList());
+        writeDataTransformationListToJson(jGenerator, project.getDataTransformationList());
+        writeStartEntryListToJson(jGenerator, project.getStartEntryList());
+        jGenerator.writeEndObject();
+        jGenerator.writeEndObject();
+        jGenerator.flush();
     }
 
     @Override
@@ -231,4 +245,172 @@ public class ProjectSerializer implements XmlSerializer {
         ruleXml.initIndent(indent);
         ruleXml.writeToXml(xml.getOutStream());
     }
+
+    //Json
+    private void writeDatasourceListToJson(JsonGenerator jGenerator, List<DataSource> datasourceList) throws Exception {
+        if (datasourceList != null && !datasourceList.isEmpty()) {
+            jGenerator.writeArrayFieldStart("datasource");
+            for (DataSource ds : datasourceList)
+                writeDatasourceToJson(jGenerator, ds);
+            jGenerator.writeEndArray();
+        }
+    }
+
+    private void writeDatasourceToJson(JsonGenerator jGenerator, DataSource ds) throws Exception {
+        jGenerator.writeStartObject();
+        jGenerator.writeStringField("name", ds.getName());
+        jGenerator.writeStringField("class_name", ds.getClassName());
+        jGenerator.writeStringField("description", ds.getDescription());
+        jGenerator.writeObjectFieldStart("position");
+        jGenerator.writeNumberField("x", ds.getX());
+        jGenerator.writeNumberField("y", ds.getY());
+        jGenerator.writeEndObject();
+        writeDatasourceParameterListToJson(jGenerator, ds.getPropertyList());
+        writeRegisterFormatListToJson(jGenerator, ds);
+        writeTargetListToJson(jGenerator, ds.getTargetList());
+        jGenerator.writeEndObject();
+    }
+
+    private void writeDatasourceParameterListToJson(JsonGenerator jGenerator, Map<String, Value> propertyList) throws IOException {
+        if (propertyList != null && !propertyList.isEmpty()) {
+            jGenerator.writeArrayFieldStart("property");
+            Iterator<Entry<String, Value>> it = propertyList.entrySet().iterator();
+            while (it.hasNext()) {
+                Entry<String, Value> entry = it.next();
+                jGenerator.writeStartObject();
+                jGenerator.writeStringField("name", entry.getKey());
+                jGenerator.writeStringField("type", entry.getValue().type().toString());
+                jGenerator.writeStringField("value", entry.getValue().toString());
+                jGenerator.writeEndObject();
+            }
+            jGenerator.writeEndArray();
+        }
+    }
+
+    private void writeRegisterFormatListToJson(JsonGenerator jGenerator, DataSource ds) throws Exception {
+        Map<String, FormatEntry> registeredInFormatList = ds.getRegisteredFormatList(Direction.IN);
+        Map<String, FormatEntry> registeredOutFormatList = ds.getRegisteredFormatList(Direction.OUT);
+        if ((registeredInFormatList != null && !registeredInFormatList.isEmpty())
+            || (registeredOutFormatList != null && !registeredOutFormatList.isEmpty())) {
+            jGenerator.writeArrayFieldStart("format_list");
+            if (registeredInFormatList != null && !registeredInFormatList.isEmpty()) {
+                jGenerator.writeStartObject();
+                jGenerator.writeStringField("direction", Direction.IN.name());
+                Iterator<Entry<String, FormatEntry>> it = registeredInFormatList.entrySet().iterator();
+                jGenerator.writeArrayFieldStart("format_entry");
+                while (it.hasNext()) {
+                    Entry<String, FormatEntry> entry = it.next();
+                    FormatEntry fe = entry.getValue();
+                    jGenerator.writeStartObject();
+                    jGenerator.writeStringField("name", fe.getName());
+                    jGenerator.writeStringField("direction", fe.getDirection().name());
+                    writeFormatToJson(jGenerator, fe.getFormat());
+                    jGenerator.writeEndObject();
+                }
+                jGenerator.writeEndArray();
+                jGenerator.writeEndObject();
+            }
+            if (registeredOutFormatList != null && !registeredOutFormatList.isEmpty()) {
+                jGenerator.writeStartObject();
+                jGenerator.writeStringField("direction", Direction.OUT.name());
+                Iterator<Entry<String, FormatEntry>> it = registeredOutFormatList.entrySet().iterator();
+                jGenerator.writeArrayFieldStart("format_entry");
+                while (it.hasNext()) {
+                    Entry<String, FormatEntry> entry = it.next();
+                    FormatEntry fe = entry.getValue();
+                    jGenerator.writeStartObject();
+                    jGenerator.writeStringField("name", fe.getName());
+                    jGenerator.writeStringField("direction", fe.getDirection().name());
+                    writeFormatToJson(jGenerator, fe.getFormat());
+                    jGenerator.writeEndObject();
+                }
+                jGenerator.writeEndArray();
+                jGenerator.writeEndObject();
+            }
+            jGenerator.writeEndArray();
+        }
+    }
+
+    private void writeTargetListToJson(JsonGenerator jGenerator, Map<String, TransformComponent> targetList) throws IOException {
+        if (targetList != null) {
+            Iterator<Entry<String, TransformComponent>> it = targetList.entrySet().iterator();
+            jGenerator.writeArrayFieldStart("target");
+            while (it.hasNext()) {
+                Entry<String, TransformComponent> entry = it.next();
+                jGenerator.writeStartObject();
+                jGenerator.writeStringField("name", entry.getKey());
+                jGenerator.writeEndObject();
+            }
+            jGenerator.writeEndArray();
+        }
+    }
+
+    private void writeFormatToJson(JsonGenerator jGenerator, Format format) throws Exception {
+        FormatSerializer formatWriter = new FormatSerializer(format);
+        formatWriter.writeToJson(jGenerator);
+    }
+
+    private void writeDataTransformationListToJson(JsonGenerator jGenerator, List<DataTransformation> dataTransformationList) throws Exception {
+        if (dataTransformationList != null && !dataTransformationList.isEmpty()) {
+            jGenerator.writeArrayFieldStart("processor");
+            for (DataTransformation dt : dataTransformationList)
+                writeDataTransformationToJson(jGenerator, dt);
+            jGenerator.writeEndArray();
+        }
+    }
+
+    private void writeDataTransformationToJson(JsonGenerator jGenerator, DataTransformation dt) throws Exception {
+        jGenerator.writeStartObject();
+        jGenerator.writeStringField("name", dt.getName());
+        jGenerator.writeStringField("class_name", dt.getClassName());
+        jGenerator.writeStringField("description", dt.getDescription());
+        jGenerator.writeObjectFieldStart("position");
+        jGenerator.writeNumberField("x", dt.getX());
+        jGenerator.writeNumberField("y", dt.getY());
+        jGenerator.writeEndObject();
+        writeTargetListToJson(jGenerator, dt.getTargetList());
+        writeTransformRuleListToJson(jGenerator, dt.getTransformRuleList());
+        jGenerator.writeEndObject();
+    }
+
+    private void writeStartEntryListToJson(JsonGenerator jGenerator, List<StartEntry> startEntryList) throws Exception {
+        if (startEntryList != null && !startEntryList.isEmpty()) {
+            jGenerator.writeArrayFieldStart("start_entry");
+            for (StartEntry se : startEntryList) {
+                writeStartEntryToJson(jGenerator, se);
+            }
+            jGenerator.writeEndArray();
+        }
+    }
+
+    private void writeStartEntryToJson(JsonGenerator jGenerator, StartEntry se) throws Exception {
+        jGenerator.writeStartObject();
+        jGenerator.writeStringField("name", se.getStartName());
+        jGenerator.writeStringField("entry_name", se.getStartComponent().getName());
+        jGenerator.writeEndObject();
+    }
+
+    private void writeTransformRuleListToJson(JsonGenerator jGenerator, List<TransformRuleEntry> transformRuleList) throws Exception {
+        if (transformRuleList != null && !transformRuleList.isEmpty()) {
+            jGenerator.writeArrayFieldStart("transform_rule_entry");
+            for (TransformRuleEntry ruleEntry : transformRuleList)
+                writeTransformRuleEntryToJson(jGenerator, ruleEntry);
+            jGenerator.writeEndArray();
+        }
+    }
+
+    private void writeTransformRuleEntryToJson(JsonGenerator jGenerator, TransformRuleEntry ruleEntry) throws Exception {
+        jGenerator.writeStartObject();
+        jGenerator.writeStringField("name", ruleEntry.getName());
+        jGenerator.writeStringField("source_name", ruleEntry.getSourceName());
+        jGenerator.writeStringField("target_name", ruleEntry.getTargetName());
+        writeRuleToJson(jGenerator, ruleEntry.getRule());
+        jGenerator.writeEndObject();
+    }
+
+    private void writeRuleToJson(JsonGenerator jGenerator, TransformRule rule) throws Exception {
+        //TransformRuleSerializer ruleXml = new TransformRuleSerializer(rule);
+        //ruleXml.initIndent(indent);
+        //ruleXml.writeToXml(xml.getOutStream());
+    }//*/
 }

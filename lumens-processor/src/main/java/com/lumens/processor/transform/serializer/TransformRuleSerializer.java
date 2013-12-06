@@ -3,6 +3,7 @@
  */
 package com.lumens.processor.transform.serializer;
 
+import com.lumens.io.JsonSerializer;
 import com.lumens.io.StringUTF8Writer;
 import com.lumens.io.XmlSerializer;
 import com.lumens.model.Format;
@@ -15,13 +16,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
+import org.codehaus.jackson.JsonEncoding;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.xml.sax.InputSource;
 
 /**
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class TransformRuleSerializer implements XmlSerializer {
+public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
 
     private TransformRule outputRule;
     private Format ruleFormat;
@@ -54,8 +58,7 @@ public class TransformRuleSerializer implements XmlSerializer {
         writeTransformRuleToXml(xml, outputRule, INDENT);
     }
 
-    private void writeTransformRuleToXml(StringUTF8Writer xml, TransformRule rule, String indent)
-    throws IOException {
+    private void writeTransformRuleToXml(StringUTF8Writer xml, TransformRule rule, String indent) throws IOException {
         xml.print(indent).print("<transform-rule");
         String name = rule.getName();
         if (name != null)
@@ -82,8 +85,8 @@ public class TransformRuleSerializer implements XmlSerializer {
         String script = ruleItem.getScriptString();
         if (script != null) {
             xml.print(nextIndent).println("<script>");
-            xml.print("<![CDATA[");
-            xml.print(script);
+            xml.println("<![CDATA[");
+            xml.println(script);
             xml.println("]]>");
             xml.print(nextIndent).println("</script>");
         }
@@ -92,5 +95,15 @@ public class TransformRuleSerializer implements XmlSerializer {
             while (it.hasNext())
                 writeTransformRuleItemToXml(xml, it.next(), nextIndent);
         xml.print(indent).println("</transform-rule-item>");
+    }
+
+    @Override
+    public void readFromJson(InputStream in) throws Exception {
+    }
+
+    @Override
+    public void writeToJson(OutputStream out) throws Exception {
+        ObjectMapper om = new ObjectMapper();
+        JsonGenerator jGenerator = om.getJsonFactory().createJsonGenerator(out, JsonEncoding.UTF8);
     }
 }

@@ -103,7 +103,7 @@
                             <transform-rule-item format-name="getOpenFundString">
                                 <transform-rule-item format-name="userID">
                                     <script>
-                                      <![CDATA["123"]]>
+                                      <![CDATA[123]]>
                                     </script>
                                 </transform-rule-item>
                             </transform-rule-item>

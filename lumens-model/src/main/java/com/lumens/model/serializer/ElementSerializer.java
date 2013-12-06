@@ -41,46 +41,35 @@ public class ElementSerializer implements XmlSerializer {
         writeElementToXml(element, "", dataOut);
     }
 
-    private void writeElementToXml(Element element, String indent,
-                                   StringUTF8Writer out) throws Exception {
+    private void writeElementToXml(Element element, String indent, StringUTF8Writer out) throws Exception {
         boolean closeTag = false;
         Format format = element.getFormat();
-        out.print(indent).print("<element name=\"").print(format.
-        getName()).print("\" ").
-        print("form=\"");
-        out.print(format.getForm().toString());
-        out.print("\" ").print("type=\"").print(format.getType().toString()).
-        print("\"");
-
-        if (!element.isArray() && format.getType() != Type.NONE && !element.
-        isNull()) {
-            if (!closeTag) {
+        out.print(indent)
+        .print("<element name=\"").print(format.getName()).print("\" ")
+        .print("form=\"").print(format.getForm().toString()).print("\" ").print("type=\"").print(format.getType().toString()).print("\"");
+        if (!element.isArray() && format.getType() != Type.NONE && !element.isNull()) {
+            if (!closeTag)
                 out.print(">");
-            }
             closeTag = true;
-            if (element.isField() || element.getChildren() == null) {
+            if (element.isField() || element.getChildren() == null)
                 out.print(element.getValue().getString());
-            } else {
+            else
                 out.println(element.getValue().getString());
-            }
         }
 
         List<Element> children = element.getChildren();
         if (children != null && children.size() > 0) {
-            if (!closeTag) {
+            if (!closeTag)
                 out.println(">");
-            }
             closeTag = true;
-            for (Element child : children) {
+            for (Element child : children)
                 writeElementToXml(child, indent + INDENT, out);
-            }
         }
         if (closeTag) {
-            if (element.isField() || element.getChildren() == null) {
+            if (element.isField() || element.getChildren() == null)
                 out.println("</element>");
-            } else {
+            else
                 out.print(indent.toString()).println("</element>");
-            }
         } else {
             out.println("/>");
         }
