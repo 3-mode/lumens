@@ -75,8 +75,7 @@ public class DataElement implements Element {
         }
         String name = child.getFormat().getName();
         if (children.containsKey(name)) {
-            throw new IllegalArgumentException("Duplicate child \"" + format.
-            getName() + "\"");
+            throw new IllegalArgumentException("Duplicate child \"" + format.getName() + "\"");
         }
         child.setParent(this);
         children.put(name, child);
@@ -96,7 +95,7 @@ public class DataElement implements Element {
         }
 
         if (arrayItems == null) {
-            arrayItems = new ArrayList<Element>();
+            arrayItems = new ArrayList<>();
         }
         item.setParent(this);
         arrayItems.add(item);
@@ -150,8 +149,7 @@ public class DataElement implements Element {
             if (child != null && (token.isIndexed() || child.isArray() && (it.hasNext() || child.getChildren() != null))) {
                 items = child.getChildren();
                 if (items == null) {
-                    throw new IllegalArgumentException("Error path \"" + path.
-                    toString() + "\"");
+                    throw new IllegalArgumentException("Error path \"" + path.toString() + "\"");
                 }
                 child = items.get(token.isIndexed() ? token.index() : 0);
             }
