@@ -12,7 +12,7 @@ public class JavaScriptBuilder {
     private final String pathEnding = "+-*/ &|!<>\n\r\t^%=;:?,";
 
     public String build(String script) {
-        // TODO prepare the script and convert it to python function
+        // TODO prepare the script and convert it to javascript function
         StringBuilder function = new StringBuilder();
         Long l = System.currentTimeMillis();
         function.append(functionPrefix).append(l).append("(ctx) {\n");
