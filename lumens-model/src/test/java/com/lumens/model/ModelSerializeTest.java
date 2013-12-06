@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.lumens.model;
 
 import com.lumens.model.serializer.ElementSerializer;
@@ -10,10 +6,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import junit.framework.TestCase;
 
-/**
- *
- * @author shaofeng wang (shaofeng.cjpw@gmail.com)
- */
 public class ModelSerializeTest extends TestCase {
 
     public ModelSerializeTest(String testName) {
@@ -62,15 +54,11 @@ public class ModelSerializeTest extends TestCase {
     public void testUnSerializeFromXml() throws Exception {
         Format root = new DataFormat("Root");
         FormatSerializer xmlSerializer = new FormatSerializer(root);
-        InputStream in = null;
-        try {
-            in = ModelSerializeTest.class.getResourceAsStream("/xml/format.xml");
+        try (InputStream in = ModelSerializeTest.class.getResourceAsStream("/xml/format.xml")) {
             xmlSerializer.readFromXml(in);
             xmlSerializer.writeToXml(System.out);
             xmlSerializer.writeToJson(System.out);
             System.out.println();
-        } finally {
-            in.close();
         }
     }
 }
