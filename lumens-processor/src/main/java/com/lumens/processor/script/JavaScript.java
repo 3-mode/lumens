@@ -29,7 +29,7 @@ public class JavaScript implements Script {
         }
     }
     private JavaScriptBuilder builder = new JavaScriptBuilder();
-    private final String orignalScript;
+    private final String orignalScriptText;
     private Scriptable scope;
     private org.mozilla.javascript.Context jsCTX;
     private Function jsFunction;
@@ -38,13 +38,13 @@ public class JavaScript implements Script {
         this("script" + System.currentTimeMillis(), script);
     }
 
-    public JavaScript(String sourceName, String script) throws Exception {
+    public JavaScript(String sourceName, String scriptText) throws Exception {
         // TODO refine here, put the context initialization to gloabl place, in
         // order to load build in function only once
-        this.orignalScript = script;
+        this.orignalScriptText = scriptText;
         jsCTX = org.mozilla.javascript.Context.enter();
         scope = jsCTX.initStandardObjects(globalScope);
-        jsFunction = jsCTX.compileFunction(scope, builder.build(orignalScript), sourceName, 1, null);
+        jsFunction = jsCTX.compileFunction(scope, builder.build(orignalScriptText), sourceName, 1, null);
     }
 
     @Override

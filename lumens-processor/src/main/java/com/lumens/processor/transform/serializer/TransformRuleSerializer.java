@@ -68,8 +68,7 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
         xml.print(indent).println("</transform-rule>");
     }
 
-    private void writeTransformRuleItemToXml(StringUTF8Writer xml, TransformRuleItem ruleItem,
-                                             String indent) throws IOException {
+    private void writeTransformRuleItemToXml(StringUTF8Writer xml, TransformRuleItem ruleItem, String indent) throws IOException {
         if (ruleItem == null)
             return;
 
@@ -105,5 +104,54 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
     public void writeToJson(OutputStream out) throws Exception {
         ObjectMapper om = new ObjectMapper();
         JsonGenerator jGenerator = om.getJsonFactory().createJsonGenerator(out, JsonEncoding.UTF8);
+        writeTransformRuleToJson(jGenerator, outputRule, true);
+    }
+
+    public void writeToJson(JsonGenerator jGenerator) throws Exception {
+        writeTransformRuleToJson(jGenerator, outputRule, false);
+    }
+
+    private void writeTransformRuleToJson(JsonGenerator jGenerator, TransformRule rule, boolean isRoot) throws IOException {
+        if (isRoot)
+            jGenerator.writeStartObject();
+        jGenerator.writeObjectFieldStart("transform_rule");
+        String name = rule.getName();
+        if (name != null)
+            jGenerator.writeStringField("name", name);
+        writeTransformRuleItemToJson(jGenerator, rule.getRootRuleItem(), true);
+        jGenerator.writeEndObject();
+        if (isRoot)
+            jGenerator.writeEndObject();
+    }
+
+    private void writeTransformRuleItemToJson(JsonGenerator jGenerator, TransformRuleItem ruleItem, boolean isRoot) throws IOException {
+        if (ruleItem == null)
+            return;
+        if (isRoot)
+            jGenerator.writeObjectFieldStart("transform_rule_item");
+        else {
+            jGenerator.writeArrayFieldStart("transform_rule_item");
+            jGenerator.writeStartObject();
+        }
+        Format format = ruleItem.getFormat();
+        if (format != null)
+            jGenerator.writeStringField("format_name", format.getName());
+
+        String arrayIterPath = ruleItem.getArrayIterationPath();
+        if (arrayIterPath != null)
+            jGenerator.writeStringField("array_iteration_path", arrayIterPath);
+        String script = ruleItem.getScriptString();
+        if (script != null)
+            jGenerator.writeStringField("script", script);
+        Iterator<TransformRuleItem> it = ruleItem.iterator();
+        if (it != null)
+            while (it.hasNext())
+                writeTransformRuleItemToJson(jGenerator, it.next(), false);
+        if (isRoot)
+            jGenerator.writeEndObject();
+        else {
+            jGenerator.writeEndObject();
+            jGenerator.writeEndArray();
+        }
     }
 }
