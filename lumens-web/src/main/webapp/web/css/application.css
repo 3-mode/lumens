@@ -1,0 +1,25 @@
+/*
+    Document   : main
+    Created on : Jan 29, 2013, 5:53:23 PM
+    Author     : shaofeng wang (shaofeng.cjpw@gmail.com)
+    Description:
+        Purpose of the stylesheet follows.
+*/
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+body {
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-width: 800px;
+}
+
+/****************/
+html,body {
+    height: 100%;
+    width: 100%;
+    margin: 0 0 0 0;
+}
