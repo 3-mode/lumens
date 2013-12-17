@@ -102,8 +102,7 @@ public class TransformProcessor extends AbstractProcessor {
         }
     }
 
-    private List<Element> buildArrayIterationElementList(TransformContext ctx,
-                                                         TransformRuleItem ruleItem) {
+    private List<Element> buildArrayIterationElementList(TransformContext ctx, TransformRuleItem ruleItem) {
         Element elementSearchEntry = ctx.getAccessPathEntry();
         String arrayIterationPathStr = ruleItem.getArrayIterationPath();
         Path arrayIterationPath = new AccessPath(arrayIterationPathStr);
@@ -127,8 +126,7 @@ public class TransformProcessor extends AbstractProcessor {
         return itemList;
     }
 
-    private List<Element> getChildItemsOfCurrentLevel(String pathToken,
-                                                      List<Element> itemList) {
+    private List<Element> getChildItemsOfCurrentLevel(String pathToken, List<Element> itemList) {
         ArrayList<Element> childItems = new ArrayList<>();
         for (Element item : itemList) {
             if (item.isStruct()) {
@@ -145,8 +143,7 @@ public class TransformProcessor extends AbstractProcessor {
         return childItems;
     }
 
-    private void putChildrenElementsIntoProcessQueue(TransformPair item,
-                                                     ArrayDeque<TransformPair> queue) {
+    private void putChildrenElementsIntoProcessQueue(TransformPair item, ArrayDeque<TransformPair> queue) {
         Element currentElement = item.getFirst();
         if (currentElement.isField())
             return;
@@ -163,8 +160,7 @@ public class TransformProcessor extends AbstractProcessor {
         }
     }
 
-    private Element executeTransformRule(TransformContext ctx, TransformRuleItem ruleItem,
-                                         Element result) {
+    private Element executeTransformRule(TransformContext ctx, TransformRuleItem ruleItem, Element result) {
         ctx.setCurrentElement(result);
 
         if (result.isArray())
