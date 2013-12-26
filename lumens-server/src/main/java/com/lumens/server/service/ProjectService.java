@@ -117,7 +117,7 @@ public class ProjectService {
     @GET
     @Path("{projectId}")
     @Produces("application/json")
-    public Response getProjects(@PathParam("projectId") String projectId) throws IOException {
+    public Response getProjectById(@PathParam("projectId") String projectId) throws IOException {
         JsonUtility utility = ServerUtils.createJsonUtility();
         JsonGenerator json = utility.getGenerator();
         json.writeStartObject();
