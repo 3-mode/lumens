@@ -35,7 +35,9 @@ import org.xml.sax.SAXException;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class ProjectHandlerImpl implements ProjectHandler {
+
     public enum ReadStatus {
+
         NONE,
         PROJECT,
         DATASRC,
@@ -46,7 +48,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
     private ReadStatus status = ReadStatus.NONE;
     private TransformProject project;
     private Map<String, TransformComponent> tComponentCache = new HashMap<>();
-    private Map<String, List<String>> linkInfoList = new HashMap<>();
+    private Map<String, List<String>> targetList = new HashMap<>();
     private TransformComponent tc;
     // Format
     private FormatHandler formatHandler;
@@ -77,7 +79,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
 
     @Override
     public void end_project() throws SAXException {
-        Iterator<Entry<String, List<String>>> it = linkInfoList.entrySet().iterator();
+        Iterator<Entry<String, List<String>>> it = targetList.entrySet().iterator();
         while (it.hasNext()) {
             Entry<String, List<String>> entry = it.next();
             TransformComponent s = tComponentCache.get(entry.getKey());
@@ -210,11 +212,9 @@ public class ProjectHandlerImpl implements ProjectHandler {
     }
 
     @Override
-    public void handle_property(final String data,
-                                final Attributes meta) throws SAXException {
+    public void handle_property(final String data, final Attributes meta) throws SAXException {
         if (status == ReadStatus.DATASRC && propList != null) {
-            propList.put(meta.getValue("name"),
-                         new Value(Type.parseString(meta.getValue("type")), data));
+            propList.put(meta.getValue("name"), new Value(Type.parseString(meta.getValue("type")), data));
         } else if (status == ReadStatus.FORMAT && formatHandler != null) {
             formatHandler.handle_property(data, meta);
         }
@@ -232,13 +232,13 @@ public class ProjectHandlerImpl implements ProjectHandler {
     public void handle_target(final Attributes meta) throws SAXException {
         if (tc != null) {
             String srcName = tc.getName();
-            List<String> targetList = linkInfoList.get(srcName);
-            if (targetList == null) {
-                targetList = new ArrayList<>();
-                linkInfoList.put(srcName, targetList);
+            List<String> currentTargetList = this.targetList.get(srcName);
+            if (currentTargetList == null) {
+                currentTargetList = new ArrayList<>();
+                this.targetList.put(srcName, currentTargetList);
             }
             curComponentTargetName = meta.getValue("name");
-            targetList.add(curComponentTargetName);
+            currentTargetList.add(curComponentTargetName);
         }
     }
 
@@ -309,8 +309,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
                 TransformComponent tComp = tComponentCache.get(curComponentTargetName);
                 if (tComp instanceof RegisterFormatComponent) {
                     RegisterFormatComponent rfComp = (RegisterFormatComponent) tComp;
-                    FormatEntry fEntry = rfComp.getRegisteredFormatList(Direction.IN).
-                    get(curRuleEntry.getTargetName());
+                    FormatEntry fEntry = rfComp.getRegisteredFormatList(Direction.IN).get(curRuleEntry.getTargetName());
                     Format format = fEntry.getFormat();
                     ruleList = new ArrayList<>();
                     transformRuleHandler = new TransformRuleHandlerImpl(format, ruleList);

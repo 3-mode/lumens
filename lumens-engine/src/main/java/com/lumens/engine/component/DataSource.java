@@ -23,23 +23,15 @@ import java.util.Map;
  */
 public class DataSource extends AbstractTransformComponent implements RegisterFormatComponent {
 
-    private String name;
-    private String className;
-    private String description;
     private Connector connector;
     private Map<String, FormatEntry> registerOUTFormatList = new HashMap<>();
     private Map<String, FormatEntry> registerINFormatList = new HashMap<>();
+    private Map<String, Value> propertyList = new HashMap<>();
     private Map<String, Format> inFormatList;
     private Map<String, Format> outFormatList;
-    private Map<String, Value> propertyList;
 
     public DataSource(String className) {
-        this.className = className;
-    }
-
-    @Override
-    public String getClassName() {
-        return className;
+        super(className);
     }
 
     public void setPropertyList(Map<String, Value> propertyList) {
@@ -52,7 +44,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
     @Override
     public void open() throws Exception {
-        connector = (Connector) Class.forName(className).newInstance();
+        connector = (Connector) Class.forName(getClassName()).newInstance();
         connector.setPropertyList(propertyList);
         connector.open();
         inFormatList = connector.getFormatList(Direction.IN);
@@ -100,16 +92,6 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
         }
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Connector getConnector() {
         return connector;
     }
@@ -119,8 +101,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
         if (direction == Direction.IN) {
             registerINFormatList.put(formatEntryName, new FormatEntry(formatEntryName, format, Direction.IN));
         } else {
-            registerOUTFormatList.
-            put(formatEntryName, new FormatEntry(formatEntryName, format, Direction.OUT));
+            registerOUTFormatList.put(formatEntryName, new FormatEntry(formatEntryName, format, Direction.OUT));
         }
     }
 

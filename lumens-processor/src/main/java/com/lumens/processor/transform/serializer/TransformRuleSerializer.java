@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.xml.sax.InputSource;
 
@@ -97,10 +98,6 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
     }
 
     @Override
-    public void readFromJson(InputStream in) throws Exception {
-    }
-
-    @Override
     public void writeToJson(OutputStream out) throws Exception {
         ObjectMapper om = new ObjectMapper();
         JsonGenerator jGenerator = om.getJsonFactory().createJsonGenerator(out, JsonEncoding.UTF8);
@@ -153,5 +150,12 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
             jGenerator.writeEndObject();
             jGenerator.writeEndArray();
         }
+    }
+
+    @Override
+    public void readFromJson(InputStream in) throws Exception {
+    }
+
+    public void readFromJson(JsonNode formatJson) throws Exception {
     }
 }

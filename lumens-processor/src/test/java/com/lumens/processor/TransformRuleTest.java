@@ -39,7 +39,7 @@ public class TransformRuleTest extends TestCase {
             a3.addChild("a4", Format.Form.ARRAYOFSTRUCT).addChild("a5", Format.Form.FIELD, Type.STRING);
             a3.addChild("aa4", Format.Form.ARRAYOFSTRUCT).addChild("aa5", Format.Form.FIELD, Type.STRING);
 
-            List<TransformRule> ruleList = new ArrayList<TransformRule>();
+            List<TransformRule> ruleList = new ArrayList<>();
             in = TransformRuleTest.class.getResourceAsStream("/xml/transform-rule.xml");
             TransformRuleSerializer unSerialXml = new TransformRuleSerializer(a1, ruleList);
             unSerialXml.readFromXml(in);

@@ -8,7 +8,6 @@ import com.lumens.engine.component.DataTransformation;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.run.TransformEngine;
 import com.lumens.engine.serializer.ProjectSerializer;
-import com.lumens.engine.serializer.ProjectJsonParser;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
 import com.lumens.model.serializer.FormatSerializer;
@@ -81,7 +80,7 @@ public class EngineTest extends TestCase {
         // Create start point transformation
         String startPoint = "startWS";
         TransformRule rule1 = new TransformRule(getOpenFundStringRequest);
-        rule1.getRuleItem("getOpenFundString.userID").setScript("\"123\"");
+        rule1.getRuleItem("getOpenFundString.userID").setScript("'123'");
         callGetOpenFundString.registerRule(new TransformRuleEntry(startPoint, targetName, rule1));
 
         // Create the loop transformation datasource->transformation->datasource
@@ -111,35 +110,26 @@ public class EngineTest extends TestCase {
         new ProjectSerializer(project).writeToXml(System.out);
         new ProjectSerializer(project).writeToJson(System.out);
         System.out.println();
-        InputStream in = null;
-        try {
-            in = EngineTest.class.getResourceAsStream("/xml/project.xml");
-            // Read project and write it again
-            TransformProject newProject = new TransformProject();
-            ProjectSerializer projXml = new ProjectSerializer(newProject);
-            projXml.readFromXml(in);
-            //projXml.write(System.out);
-            return newProject;
-        } finally {
-            IOUtils.closeQuietly(in);
-        }
+        // Read project and write it again
+        TransformProject newProject = new TransformProject();
+        ProjectSerializer projXml = new ProjectSerializer(newProject);
+        projXml.readFromXml(getResourceAsByteArrayInputStream("/xml/project.xml"));
+        //projXml.write(System.out);
+        return newProject;
     }
 
-    public void TtestSerializeJson() throws Exception {
+    public void testSerializeJson() throws Exception {
         TransformProject project = new TransformProject();
-        new ProjectJsonParser(project).parse(getResourceAsByteArrayInputStream("/json/project.json"));
+        new ProjectSerializer(project).readFromJson(getResourceAsByteArrayInputStream("/json/project.json"));
         assertTrue(project.getDatasourceList().size() == 1);
         assertTrue(project.getDataTransformationList().size() == 2);
+        TransformEngine stEngine = new TransformEngine();
+        stEngine.execute(project);
     }
 
     public InputStream getResourceAsByteArrayInputStream(String url) throws IOException {
-        InputStream in = null;
-        try {
-            in = EngineTest.class.getResourceAsStream(url);
-            ByteArrayInputStream bais = new ByteArrayInputStream(IOUtils.toByteArray(in));
-            return in;
-        } finally {
-            IOUtils.closeQuietly(in);
+        try (InputStream in = EngineTest.class.getResourceAsStream(url)) {
+            return new ByteArrayInputStream(IOUtils.toByteArray(in));
         }
     }
 

@@ -43,8 +43,7 @@ public class ModelSerializeTest extends TestCase {
         assetDataItem.addChild("price").setValue(15000.05f);
         assetDataItem.addChild("vendor").addChild("name").setValue("HP");
 
-        ElementSerializer serializer = new ElementSerializer(
-        personData, true);
+        ElementSerializer serializer = new ElementSerializer(personData, true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
         System.out.println(baos.toString());

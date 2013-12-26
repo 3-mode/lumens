@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.xml.sax.InputSource;
 
@@ -54,8 +54,11 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
 
     @Override
     public void readFromJson(InputStream in) throws Exception {
-        ObjectMapper om = new ObjectMapper();
-        JsonParser jParser = om.getJsonFactory().createJsonParser(in);
+        new ProjectJsonParser(project).parse(in);
+    }
+
+    public void readFromJson(JsonNode projectRootJson) throws Exception {
+        new ProjectJsonParser(project).parse(projectRootJson);
     }
 
     @Override
@@ -409,8 +412,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     }
 
     private void writeRuleToJson(JsonGenerator jGenerator, TransformRule rule) throws Exception {
-        //TransformRuleSerializer ruleXml = new TransformRuleSerializer(rule);
-        //ruleXml.initIndent(indent);
-        //ruleXml.writeToXml(xml.getOutStream());
-    }//*/
+        TransformRuleSerializer ruleWriter = new TransformRuleSerializer(rule);
+        ruleWriter.writeToJson(jGenerator);
+    }
 }

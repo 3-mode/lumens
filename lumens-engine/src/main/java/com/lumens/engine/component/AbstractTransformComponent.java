@@ -15,8 +15,14 @@ public abstract class AbstractTransformComponent implements TransformComponent {
 
     private int x;
     private int y;
+    private String name;
+    private String className;
     private String description;
     private Map<String, TransformComponent> targetList;
+
+    public AbstractTransformComponent(String className) {
+        this.className = className;
+    }
 
     @Override
     public void setX(int x) {
@@ -39,6 +45,16 @@ public abstract class AbstractTransformComponent implements TransformComponent {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public String getDescription() {
         return description;
     }
@@ -49,9 +65,14 @@ public abstract class AbstractTransformComponent implements TransformComponent {
     }
 
     @Override
+    public String getClassName() {
+        return className;
+    }
+
+    @Override
     public void targetTo(TransformComponent target) {
         if (targetList == null)
-            targetList = new HashMap<String, TransformComponent>();
+            targetList = new HashMap<>();
         targetList.put(target.getName(), target);
     }
 

@@ -26,6 +26,7 @@ public class DataTransformation extends AbstractTransformComponent implements Ru
     private Map<String, List<TransformRuleEntry>> ruleFindList = new HashMap<>();
 
     public DataTransformation() {
+        super(null);
         processor = new TransformProcessor();
     }
 
@@ -90,7 +91,7 @@ public class DataTransformation extends AbstractTransformComponent implements Ru
     }
 
     @Override
-    public void open() {
+    public void open() throws Exception {
     }
 
     @Override

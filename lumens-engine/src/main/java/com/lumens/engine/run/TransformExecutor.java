@@ -24,7 +24,7 @@ public class TransformExecutor implements Executor {
 
     @Override
     public List<Executor> execute() {
-        List<Executor> tExList = new ArrayList<Executor>();
+        List<Executor> tExList = new ArrayList<>();
         List<ExecuteContext> exList = tComponent.execute(executeContext);
         if (tComponent.hasTarget()) {
             Map<String, TransformComponent> targetList = tComponent.getTargetList();

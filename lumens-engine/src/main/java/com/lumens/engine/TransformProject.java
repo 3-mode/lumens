@@ -37,8 +37,7 @@ public class TransformProject {
         this.datasourceList = datasourceList;
     }
 
-    public void setDataTransformationList(
-    List<DataTransformation> transformationList) {
+    public void setDataTransformationList(List<DataTransformation> transformationList) {
         this.transformationList = transformationList;
     }
 

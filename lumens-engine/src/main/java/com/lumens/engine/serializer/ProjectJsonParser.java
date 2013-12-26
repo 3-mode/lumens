@@ -3,25 +3,48 @@
  */
 package com.lumens.engine.serializer;
 
+import com.lumens.connector.Direction;
+import com.lumens.engine.StartEntry;
+import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
+import com.lumens.engine.component.DataSource;
+import com.lumens.engine.component.DataTransformation;
+import com.lumens.engine.component.FormatEntry;
+import com.lumens.engine.component.RegisterFormatComponent;
+import com.lumens.engine.component.TransformRuleEntry;
+import com.lumens.model.DataFormat;
+import com.lumens.model.Format;
+import com.lumens.model.Type;
+import com.lumens.model.Value;
+import com.lumens.model.serializer.FormatSerializer;
+import com.lumens.processor.transform.TransformRule;
+import com.lumens.processor.transform.TransformRuleItem;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.NullNode;
 
 /**
  *
  * It is used to parse JSON of project
  */
-public class ProjectJsonParser {
+class ProjectJsonParser {
 
     public static final String PROJECT = "project";
     public static final String NAME = "name";
     public static final String DESCRIPTION = "description";
-    public static final String STARTENTRY_LIST = "start-entry-list";
-    public static final String DATASOURCE_LIST = "datasource-list";
-    public static final String PROCESSOR_LIST = "processor-list";
+    public static final String STARTENTRY_LIST = "start_entry";
+    public static final String DATASOURCE_LIST = "datasource";
+    public static final String PROCESSOR_LIST = "processor";
     private TransformProject project;
+    private Map<String, TransformComponent> tComponentCache = new HashMap<>();
+    private Map<String, List<String>> targetList = new HashMap<>();
 
     public ProjectJsonParser(TransformProject project) {
         this.project = project;
@@ -30,59 +53,282 @@ public class ProjectJsonParser {
     public void parse(InputStream in) throws Exception {
         ObjectMapper om = new ObjectMapper();
         JsonNode json = om.readTree(in);
-        JsonNode projectJson = json.get(PROJECT);
-        readProjectFromJson(projectJson);
+        readProjectFromJson(json.get(PROJECT));
+    }
+
+    public void parse(JsonNode projectRootJson) throws Exception {
+        readProjectFromJson(projectRootJson.get(PROJECT));
+    }
+
+    private boolean isNotNull(JsonNode json) {
+        return json != null && json != NullNode.instance;
     }
 
     private void readProjectFromJson(JsonNode projectJson) {
-        // Read project properties
-        JsonNode nameJson = projectJson.get(NAME);
-        JsonNode descJson = projectJson.get(DESCRIPTION);
-        // Read list
-        readProjectStartEntryFromJson(projectJson.get(STARTENTRY_LIST));
-        readProjectDataSourceListFromJson(projectJson.get(DATASOURCE_LIST));
-        readProjectProcessorListFromJson(projectJson.get(PROCESSOR_LIST));
+        if (isNotNull(projectJson)) {
+            // Read project properties
+            JsonNode nameJson = projectJson.get(NAME);
+            JsonNode descJson = projectJson.get(DESCRIPTION);
+            if (isNotNull(nameJson)) {
+                project.setName(nameJson.asText());
+                project.setDescription(descJson.asText());
+                // Read list
+                readProjectDataSourceListFromJson(projectJson.get(DATASOURCE_LIST));
+                readProjectProcessorListFromJson(projectJson.get(PROCESSOR_LIST));
+                readProjectStartEntryFromJson(projectJson.get(STARTENTRY_LIST));
+                handleTargetList();
+            } else
+                throw new RuntimeException("Invalid project no name !");
+        }
     }
 
-    private void readProjectDataSourceListFromJson(JsonNode dsJson) {
-        if (dsJson.isArray()) {
-            Iterator<JsonNode> it = dsJson.getElements();
+    private void readProjectDataSourceListFromJson(JsonNode dsArrayJson) {
+        if (isNotNull(dsArrayJson) && dsArrayJson.isArray()) {
+            Iterator<JsonNode> it = dsArrayJson.getElements();
             while (it.hasNext())
                 readDataSourceFromJson(it.next());
-        } else if (dsJson.isObject()) {
-            readDataSourceFromJson(dsJson);
         }
     }
 
     private void readProjectProcessorListFromJson(JsonNode processorJson) {
-        if (processorJson.isArray()) {
+        if (isNotNull(processorJson) && processorJson.isArray()) {
             Iterator<JsonNode> it = processorJson.getElements();
             while (it.hasNext())
                 readProcessorFromJson(it.next());
-        } else if (processorJson.isObject()) {
-            readProcessorFromJson(processorJson);
         }
     }
 
     private void readProjectStartEntryFromJson(JsonNode startJson) {
-        if (startJson.isArray()) {
+        if (isNotNull(startJson) && startJson.isArray()) {
             Iterator<JsonNode> it = startJson.getElements();
             while (it.hasNext())
                 readStartEntryFromJson(it.next());
-        } else if (startJson.isObject()) {
-            readStartEntryFromJson(startJson);
         }
     }
 
-    private void readDataSourceFromJson(JsonNode next) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void readDataSourceFromJson(JsonNode datasourceJson) {
+        if (isNotNull(datasourceJson)) {
+            JsonNode classNameJson = datasourceJson.get("class_name");
+            JsonNode nameJson = datasourceJson.get("name");
+            JsonNode dscJson = datasourceJson.get("description");
+            JsonNode posJson = datasourceJson.get("position");
+            if (isNotNull(classNameJson) && isNotNull(nameJson)) {
+                DataSource ds = new DataSource(classNameJson.asText());
+                ds.setName(nameJson.asText());
+                if (isNotNull(dscJson))
+                    ds.setDescription(dscJson.asText());
+                if (isNotNull(posJson)) {
+                    ds.setX(posJson.get("x").asInt());
+                    ds.setY(posJson.get("y").asInt());
+                }
+                project.getDatasourceList().add(ds);
+                tComponentCache.put(ds.getName(), ds);
+                readDataSourceProperties(ds, datasourceJson);
+                readDataSourceFormatList(ds, datasourceJson);
+                readTransformComponentTargetList(ds, datasourceJson);
+            } else
+                throw new RuntimeException("Data source name or class name is invalid !");
+        }
     }
 
-    private void readProcessorFromJson(JsonNode next) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void readProcessorFromJson(JsonNode processorJson) {
+        if (isNotNull(processorJson)) {
+            JsonNode classNameJson = processorJson.get("class_name");
+            JsonNode nameJson = processorJson.get("name");
+            JsonNode dscJson = processorJson.get("description");
+            JsonNode posJson = processorJson.get("position");
+            if (isNotNull(classNameJson) && isNotNull(nameJson)) {
+                if (DataTransformation.class.getName().equals(classNameJson.asText())) {
+                    DataTransformation dt = new DataTransformation();
+                    dt.setName(nameJson.asText());
+                    if (isNotNull(dscJson))
+                        dt.setDescription(dscJson.asText());
+                    if (isNotNull(posJson)) {
+                        dt.setX(posJson.get("x").asInt());
+                        dt.setY(posJson.get("y").asInt());
+                    }
+                    project.getDataTransformationList().add(dt);
+                    tComponentCache.put(dt.getName(), dt);
+                    readTransformComponentTargetList(dt, processorJson);
+                    readTransformRuleEntry(dt, processorJson);
+                } else
+                    throw new RuntimeException("Data source name or class name is invalid !");
+            }
+        }
     }
 
-    private void readStartEntryFromJson(JsonNode next) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void readStartEntryFromJson(JsonNode startEntryJson) {
+        JsonNode nameJson = startEntryJson.get("name");
+        JsonNode entryNameJson = startEntryJson.get("entry_name");
+        if (isNotNull(nameJson) && isNotNull(entryNameJson)) {
+            TransformComponent tComponent = tComponentCache.get(entryNameJson.asText());
+            if (tComponent != null)
+                project.getStartEntryList().add(new StartEntry(nameJson.asText(), tComponent));
+            else
+                throw new RuntimeException("Invalid entry name '" + entryNameJson.asText() + "' !");
+        }
+    }
+
+    private void handleTargetList() {
+        Iterator<Entry<String, List<String>>> it = targetList.entrySet().iterator();
+        while (it.hasNext()) {
+            Entry<String, List<String>> entry = it.next();
+            TransformComponent s = tComponentCache.get(entry.getKey());
+            for (String targetName : entry.getValue()) {
+                TransformComponent t = tComponentCache.get(targetName);
+                if (t != null)
+                    s.targetTo(t);
+            }
+        }
+    }
+
+    private void readDataSourceProperties(DataSource ds, JsonNode datasourceJson) {
+        JsonNode propertiesJson = datasourceJson.get("property");
+        if (isNotNull(propertiesJson) && propertiesJson.isArray()) {
+            Iterator<JsonNode> it = propertiesJson.getElements();
+            while (it.hasNext()) {
+                JsonNode prop = it.next();
+                JsonNode nameJson = prop.get("name");
+                JsonNode typeJson = prop.get("type");
+                JsonNode valueJson = prop.get("value");
+                if (isNotNull(nameJson) && isNotNull(typeJson) && isNotNull(valueJson)) {
+                    ds.getPropertyList().put(nameJson.asText(), new Value(Type.parseString(typeJson.asText()), valueJson.asText()));
+                } else
+                    throw new RuntimeException("The property of data source is invalid !");
+            }
+        }
+    }
+
+    private void readDataSourceFormatList(DataSource ds, JsonNode datasourceJson) {
+        JsonNode formatListJson = datasourceJson.get("format_list");
+        if (isNotNull(formatListJson) && formatListJson.isArray()) {
+            Iterator<JsonNode> it = formatListJson.getElements();
+            while (it.hasNext()) {
+                JsonNode formatListItemJson = it.next();
+                JsonNode formatEntryListJson = formatListItemJson.get("format_entry");
+                if (isNotNull(formatEntryListJson) && formatEntryListJson.isArray()) {
+                    Iterator<JsonNode> entryIt = formatEntryListJson.getElements();
+                    while (entryIt.hasNext()) {
+                        JsonNode formatEntryJson = entryIt.next();
+                        JsonNode nameJson = formatEntryJson.get("name");
+                        JsonNode directJson = formatEntryJson.get("direction");
+                        if (isNotNull(nameJson) && isNotNull(directJson)) {
+                            Direction direct = Direction.valueOf(directJson.asText());
+                            Format format = readFormatFromForEntry(ds, formatEntryJson);
+                            if (format != null)
+                                ds.registerFormat(nameJson.asText(), format, direct);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void readTransformComponentTargetList(TransformComponent tc, JsonNode targetJson) {
+        JsonNode curentTargetListJson = targetJson.get("target");
+        if (isNotNull(curentTargetListJson) && curentTargetListJson.isArray()) {
+            Iterator<JsonNode> it = curentTargetListJson.getElements();
+            while (it.hasNext()) {
+                JsonNode target = it.next();
+                List<String> currentTargetList = targetList.get(tc.getName());
+                if (currentTargetList == null) {
+                    currentTargetList = new ArrayList<>();
+                    targetList.put(tc.getName(), currentTargetList);
+                }
+                JsonNode nameJson = target.get("name");
+                if (isNotNull(nameJson))
+                    currentTargetList.add(nameJson.asText());
+                else
+                    throw new RuntimeException("Invalid target !");
+            }
+        }
+    }
+
+    private Format readFormatFromForEntry(DataSource ds, JsonNode formatEntryJson) {
+        try {
+            Format format = new DataFormat("Root");
+            JsonNode formatJson = formatEntryJson.get("format");
+            if (isNotNull(formatJson))
+                new FormatSerializer(format).readFromJson(formatJson);
+            return format.getChildren() != null && format.getChildren().size() > 0 ? format.getChildren().get(0) : null;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private void readTransformRuleEntry(DataTransformation dt, JsonNode processorJson) {
+        JsonNode transformRuleEntryListJson = processorJson.get("transform_rule_entry");
+        if (isNotNull(transformRuleEntryListJson) && transformRuleEntryListJson.isArray()) {
+            Iterator<JsonNode> it = transformRuleEntryListJson.getElements();
+            while (it.hasNext()) {
+                JsonNode transformRuleEntryJson = it.next();
+                JsonNode nameJson = transformRuleEntryJson.get("name");
+                JsonNode srcJson = transformRuleEntryJson.get("source_name");
+                JsonNode tgtJson = transformRuleEntryJson.get("target_name");
+                if (isNotNull(nameJson) && isNotNull(srcJson) && isNotNull(tgtJson)) {
+                    JsonNode transformRuleJson = transformRuleEntryJson.get("transform_rule");
+                    String targetName = tgtJson.asText();
+                    TransformRule tr = readTransformRuleFromJson(dt, targetName, transformRuleJson);
+                    if (tr != null) {
+                        TransformRuleEntry transformRuleEntry = new TransformRuleEntry(nameJson.asText(), srcJson.asText(), targetName, tr);
+                        dt.registerRule(transformRuleEntry);
+                    }
+                }
+            }
+        }
+    }
+
+    private TransformRule readTransformRuleFromJson(DataTransformation dt, String targetName, JsonNode transformRuleJson) {
+        if (isNotNull(transformRuleJson)) {
+            // get Root transform rule item
+            JsonNode transformRuleItemJson = transformRuleJson.get("transform_rule_item");
+            if (isNotNull(transformRuleItemJson)) {
+                List<String> targets = targetList.get(dt.getName());
+                for (String target : targets) {
+                    TransformComponent tComp = tComponentCache.get(target);
+                    if (tComp instanceof RegisterFormatComponent) {
+                        RegisterFormatComponent rc = (RegisterFormatComponent) tComp;
+                        FormatEntry fEntry = rc.getRegisteredFormatList(Direction.IN).get(targetName);
+                        if (fEntry != null) {
+                            Format format = fEntry.getFormat();
+                            TransformRule rule = new TransformRule(format);
+                            readTransformRuleItemFromJson(rule, transformRuleItemJson, null);
+                            return rule;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private void readTransformRuleItemFromJson(TransformRule rule, JsonNode rootTransformRuleItemJson, String pathToken) {
+        JsonNode transformRuleItemJson = rootTransformRuleItemJson.get("transform_rule_item");
+        if (isNotNull(transformRuleItemJson)) {
+            Iterator<JsonNode> it = transformRuleItemJson.getElements();
+            while (it.hasNext()) {
+                JsonNode ti = it.next();
+                JsonNode fnameJson = ti.get("format_name");
+                if (isNotNull(fnameJson)) {
+                    String formatName = fnameJson.asText();
+                    if (pathToken != null)
+                        formatName = pathToken + '.' + formatName;
+                    TransformRuleItem ritem = rule.getRuleItem(formatName);
+                    JsonNode scriptJson = ti.get("script");
+                    if (isNotNull(scriptJson)) {
+                        try {
+                            ritem.setScript(scriptJson.asText());
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                    JsonNode arrayPath = ti.get("array_iteration_path");
+                    if (isNotNull(arrayPath)) {
+                        ritem.setArrayIterationPath(arrayPath.asText());
+                    }
+                    readTransformRuleItemFromJson(rule, ti, formatName);
+                }
+            }
+        }
     }
 }

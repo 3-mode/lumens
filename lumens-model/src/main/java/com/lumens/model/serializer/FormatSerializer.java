@@ -7,6 +7,8 @@ import com.lumens.io.JsonSerializer;
 import com.lumens.io.StringUTF8Writer;
 import com.lumens.io.XmlSerializer;
 import com.lumens.model.Format;
+import com.lumens.model.Format.Form;
+import com.lumens.model.Type;
 import com.lumens.model.Value;
 import com.lumens.model.serializer.parser.FormatHandlerImpl;
 import com.lumens.model.serializer.parser.FormatParser;
@@ -14,12 +16,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.NullNode;
 import org.xml.sax.InputSource;
 
 /**
@@ -112,10 +117,6 @@ public class FormatSerializer implements XmlSerializer, JsonSerializer {
     }
 
     @Override
-    public void readFromJson(InputStream in) throws Exception {
-    }
-
-    @Override
     public void writeToJson(OutputStream out) throws Exception {
         ObjectMapper om = new ObjectMapper();
         JsonGenerator jGenerator = om.getJsonFactory().createJsonGenerator(out, JsonEncoding.UTF8);
@@ -130,11 +131,32 @@ public class FormatSerializer implements XmlSerializer, JsonSerializer {
         jGenerator.flush();
     }
 
+    @Override
+    public void readFromJson(InputStream in) throws Exception {
+        throw new Exception("Not support !");
+    }
+
+    public void readFromJson(JsonNode formatJson) throws Exception {
+        if (isNotNull(formatJson)) {
+            JsonNode nameJson = formatJson.get("name");
+            JsonNode formJson = formatJson.get("form");
+            JsonNode typeJson = formatJson.get("type");
+            if (isNotNull(nameJson) && isNotNull(formJson)) {
+                Format child = format.addChild(nameJson.asText(), Form.parseString(formJson.asText()),
+                                               isNotNull(typeJson) ? Type.parseString(typeJson.asText()) : Type.NONE);
+                readPropertyFromJson(child, formatJson.get("property"));
+                readFromJson(child, formatJson.get("format"));
+            }
+        }
+    }
+
     private void writeRootFormatToJson(Format format, JsonGenerator jGenerator) throws IOException {
         jGenerator.writeStartObject();
-        jGenerator.writeObjectFieldStart("format");
+        jGenerator.writeArrayFieldStart("format");
+        jGenerator.writeStartObject();
         writeFormatToJson(format, jGenerator);
         jGenerator.writeEndObject();
+        jGenerator.writeEndArray();
         jGenerator.writeEndObject();
     }
 
@@ -167,5 +189,41 @@ public class FormatSerializer implements XmlSerializer, JsonSerializer {
             jGenerator.writeEndObject();
         }
         jGenerator.writeEndArray();
+    }
+
+    private boolean isNotNull(JsonNode json) {
+        return json != null && json != NullNode.instance;
+    }
+
+    private void readPropertyFromJson(Format currentFormat, JsonNode propertyListJson) {
+        if (isNotNull(propertyListJson) && propertyListJson.isArray()) {
+            Iterator<JsonNode> it = propertyListJson.getElements();
+            while (it.hasNext()) {
+                JsonNode propertyJson = it.next();
+                JsonNode nameJson = propertyJson.get("name");
+                JsonNode typeJson = propertyJson.get("type");
+                JsonNode valueJson = propertyJson.get("value");
+                if (isNotNull(nameJson) && isNotNull(typeJson) && isNotNull(valueJson))
+                    currentFormat.setProperty(nameJson.asText(), new Value(Type.parseString(typeJson.asText()), valueJson.asText()));
+            }
+        }
+    }
+
+    private void readFromJson(Format currentFormat, JsonNode formatListJson) throws Exception {
+        if (isNotNull(formatListJson) && formatListJson.isArray()) {
+            Iterator<JsonNode> it = formatListJson.getElements();
+            while (it.hasNext()) {
+                JsonNode formatJson = it.next();
+                JsonNode nameJson = formatJson.get("name");
+                JsonNode formJson = formatJson.get("form");
+                JsonNode typeJson = formatJson.get("type");
+                if (isNotNull(nameJson) && isNotNull(formJson)) {
+                    Format child = currentFormat.addChild(nameJson.asText(), Form.parseString(formJson.asText()),
+                                                          isNotNull(typeJson) ? Type.parseString(typeJson.asText()) : Type.NONE);
+                    readPropertyFromJson(child, formatJson.get("property"));
+                    readFromJson(child, formatJson.get("format"));
+                }
+            }
+        }
     }
 }
