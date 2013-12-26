@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/daoSQL.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE database-access-objects SYSTEM "daoSQL.dtd">
+
+    <database-access-objects>
+    ...
+    </database-access-objects>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT database-access-objects (database-access-object)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT database-access-object (sql)*>
+<!ATTLIST database-access-object
+    name CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT sql (#PCDATA)>
+<!ATTLIST sql
+    name CDATA #IMPLIED
+  >

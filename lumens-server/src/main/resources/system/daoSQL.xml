@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database-access-objects>
+    <database-access-object name="ProjectDAO">
+        <sql name="total">
+ <![CDATA[
+ select count(1) from project
+ ]]>
+        </sql>
+        <sql name="AllProject">
+<![CDATA[
+select id, name, description, data from project
+]]>
+        </sql>
+        <sql name="AllShortProject">
+<![CDATA[
+select id, name, description from project
+]]>
+        </sql>
+        <sql name="FindProject">
+<![CDATA[
+select id, name, description, data from project where id='%s'
+]]>
+        </sql>
+        <sql name="CreateProject">
+<![CDATA[
+insert into project (id, name, description, data) values (?,?,?,?)
+]]>
+        </sql>
+    </database-access-object>
+</database-access-objects>

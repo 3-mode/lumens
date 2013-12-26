@@ -21,6 +21,22 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class Application {
 
     public static void main(String[] args) throws Exception {
+        Application app = Application.createInstance();
+        app.launch();
+    }
+    private static Application application;
+    private ApplicationContext context;
+
+    private static Application createInstance() {
+        application = new Application(new ApplicationContext());
+        return application;
+    }
+
+    private Application(ApplicationContext applicationContext) {
+        this.context = applicationContext;
+    }
+
+    private void launch() throws Exception {
         Server server = new Server();
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(8080);
@@ -39,5 +55,13 @@ public class Application {
         server.setHandler(handlers);
         server.start();
         server.join();
+    }
+
+    public static Application getInstance() {
+        return application;
+    }
+
+    public ApplicationContext getApplicationContext() {
+        return context;
     }
 }
