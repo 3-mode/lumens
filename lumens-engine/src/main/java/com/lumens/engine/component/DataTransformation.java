@@ -5,6 +5,7 @@ package com.lumens.engine.component;
 
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.run.ExecuteContext;
+import com.lumens.engine.run.ResultHandler;
 import com.lumens.model.Element;
 import com.lumens.processor.Processor;
 import com.lumens.processor.transform.TransformProcessor;
@@ -63,12 +64,12 @@ public class DataTransformation extends AbstractTransformComponent implements Ru
 
     @Override
     public List<ExecuteContext> execute(ExecuteContext context) {
-        List<Element> results = new ArrayList<>();
-        String targetId = context.getTargetName();
-        List<TransformRuleEntry> rules = ruleFindList.get(targetId);
+        String targetName = context.getTargetName();
+        List<TransformRuleEntry> rules = ruleFindList.get(targetName);
         List<ExecuteContext> exList = new ArrayList<>();
         Object input = context.getInput();
         for (TransformRuleEntry rule : rules) {
+            List<Element> results = new ArrayList<>();
             if (input != null && input instanceof List) {
                 List list = (List) input;
                 if (!list.isEmpty() && list.get(0) instanceof Element) {
@@ -85,7 +86,10 @@ public class DataTransformation extends AbstractTransformComponent implements Ru
                 if (!result.isEmpty())
                     results.addAll(result);
             }
-            exList.add(new TransformExecuteContext(results, rule.getTargetName()));
+            if (context.getResultHandlers() != null)
+                for (ResultHandler handler : context.getResultHandlers())
+                    handler.process(this, targetName, results);
+            exList.add(new TransformExecuteContext(results, rule.getTargetName(), context.getResultHandlers()));
         }
         return exList;
     }

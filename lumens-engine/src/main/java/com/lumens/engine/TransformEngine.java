@@ -3,13 +3,14 @@
  */
 package com.lumens.engine;
 
-import com.lumens.engine.run.Executor;
-import com.lumens.engine.run.SingleThreadExecuteStack;
-import com.lumens.engine.run.SingleThreadTransformExecuteJob;
-import com.lumens.engine.run.TransformExecutor;
-import java.util.HashMap;
+import com.lumens.engine.run.ExecuteJob;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -17,25 +18,32 @@ import java.util.Map;
  */
 public class TransformEngine {
 
-    private Map<String, SingleThreadTransformExecuteJob> jobList = new HashMap<>();
+    private List<ExecuteJob> jobList = new ArrayList<>();
+    private ThreadPoolExecutor threadPoolExecutor;
+    private static AtomicInteger threadCounter = new AtomicInteger(1);
 
-    public void initialize() {
-    }
+    protected class EngineThreadFactory implements ThreadFactory {
 
-    public void execute(TransformProject project) {
-        // Execute all start rules to drive the ws connector
-        project.getStartEntryList();
-
-    }
-
-    public void executeImpl(TransformComponent transformEntry, String entryName) {
-        SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
-        executorStack.push(
-        new TransformExecutor(transformEntry, new TransformExecuteContext(entryName)));
-        while (!executorStack.isEmpty()) {
-            Executor executor = executorStack.pop();
-            List<Executor> tExList = executor.execute();
-            executorStack.push(tExList);
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "TransformThread-" + threadCounter.getAndIncrement());
         }
+    }
+
+    public TransformEngine() {
+        threadPoolExecutor = new ThreadPoolExecutor(1, 20, 30, TimeUnit.SECONDS, new LinkedBlockingQueue(20), new EngineThreadFactory());
+    }
+
+    public TransformEngine(int maximumPoolSize/*Default 20 threads*/, long keepAliveSecondsTime/*Deault 30 seconds*/) {
+        threadPoolExecutor = new ThreadPoolExecutor(1, maximumPoolSize, keepAliveSecondsTime, TimeUnit.SECONDS, new LinkedBlockingQueue(maximumPoolSize), new EngineThreadFactory());
+    }
+
+    public void execute(ExecuteJob job) throws Exception {
+        // TODO if job is completed, it should be remove to finished list ???
+        threadPoolExecutor.execute((Runnable) job);
+    }
+
+    public ThreadPoolExecutor getThreadPoolExecutor() {
+        return this.threadPoolExecutor;
     }
 }

@@ -6,19 +6,25 @@ import com.lumens.connector.webservice.WebServiceConnector;
 import com.lumens.engine.component.DataSource;
 import com.lumens.engine.component.DataTransformation;
 import com.lumens.engine.component.TransformRuleEntry;
-import com.lumens.engine.run.TransformEngine;
+import com.lumens.engine.run.ResultHandler;
+import com.lumens.engine.run.SingleThreadTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
+import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
+import com.lumens.model.serializer.ElementSerializer;
 import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.transform.TransformRule;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import junit.framework.TestCase;
 import static junit.framework.TestCase.assertTrue;
 import org.apache.commons.io.IOUtils;
@@ -99,10 +105,34 @@ public class EngineTest extends TestCase {
         dtList.add(callGetOpenFundString);
         dtList.add(callGetOpenFundString2);
         TransformProject newProject = doTestProjectSerialize(project);
+
+        // Test SerializeJson
+        TransformProject projectReaded = new TransformProject();
+        new ProjectSerializer(projectReaded).readFromJson(getResourceAsByteArrayInputStream("/json/project.json"));
+        assertTrue(projectReaded.getDatasourceList().size() == 1);
+        assertTrue(projectReaded.getDataTransformationList().size() == 2);
+
         //**********************************************************************
         // Execute all start rules to drive the ws connector
+        class MyResultHandler implements ResultHandler {
+
+            @Override
+            public void process(TransformComponent src, String resultName, List<Element> results) {
+                System.out.println(">>>>>>>>>>>Transform>>>>>>>>>>>>>>>>>>>>");
+                System.out.println("Component name: " + src.getName() + "; Format name: " + resultName + "; result size: " + results.size());
+                try {
+                    new ElementSerializer(results.get(0), true).writeToXml(System.out);
+                } catch (Exception ex) {
+                }
+                System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            }
+        }
+        List<ResultHandler> handlers = new ArrayList<>();
+        handlers.add(new MyResultHandler());
         TransformEngine stEngine = new TransformEngine();
-        stEngine.execute(newProject);
+        stEngine.execute(new SingleThreadTransformExecuteJob(newProject, handlers));
+        stEngine.execute(new SingleThreadTransformExecuteJob(projectReaded));
+        Thread.sleep(10000);
     }
 
     private TransformProject doTestProjectSerialize(TransformProject project) throws Exception {
@@ -116,15 +146,6 @@ public class EngineTest extends TestCase {
         projXml.readFromXml(getResourceAsByteArrayInputStream("/xml/project.xml"));
         //projXml.write(System.out);
         return newProject;
-    }
-
-    public void testSerializeJson() throws Exception {
-        TransformProject project = new TransformProject();
-        new ProjectSerializer(project).readFromJson(getResourceAsByteArrayInputStream("/json/project.json"));
-        assertTrue(project.getDatasourceList().size() == 1);
-        assertTrue(project.getDataTransformationList().size() == 2);
-        TransformEngine stEngine = new TransformEngine();
-        stEngine.execute(project);
     }
 
     public InputStream getResourceAsByteArrayInputStream(String url) throws IOException {

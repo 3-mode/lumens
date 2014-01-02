@@ -4,6 +4,8 @@
 package com.lumens.engine;
 
 import com.lumens.engine.run.ExecuteContext;
+import com.lumens.engine.run.ResultHandler;
+import java.util.List;
 
 /**
  *
@@ -13,15 +15,20 @@ public class TransformExecuteContext implements ExecuteContext {
 
     private Object input;
     private String targetName;
+    private List<ResultHandler> handlers;
 
     public TransformExecuteContext(String targetName) {
-        //TODO
-        this(null, targetName);
+        this(targetName, null);
     }
 
-    public TransformExecuteContext(Object input, String targetName) {
+    public TransformExecuteContext(String targetName, List<ResultHandler> handlers) {
+        this(null, targetName, handlers);
+    }
+
+    public TransformExecuteContext(Object input, String targetName, List<ResultHandler> handlers) {
         this.input = input;
         this.targetName = targetName;
+        this.handlers = handlers;
     }
 
     @Override
@@ -32,5 +39,15 @@ public class TransformExecuteContext implements ExecuteContext {
     @Override
     public String getTargetName() {
         return targetName;
+    }
+
+    @Override
+    public List<ResultHandler> getResultHandlers() {
+        return this.handlers;
+    }
+
+    public TransformExecuteContext addHandler(ResultHandler handler) {
+        this.handlers.add(handler);
+        return this;
     }
 }

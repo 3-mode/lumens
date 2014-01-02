@@ -9,5 +9,7 @@ package com.lumens.engine.run;
  */
 public interface ExecuteJob {
 
-    public void run() throws Exception;
+    public void execute();
+
+    public void join();
 }
