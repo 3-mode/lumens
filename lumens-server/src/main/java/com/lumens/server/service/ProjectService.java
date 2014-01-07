@@ -4,7 +4,6 @@
 package com.lumens.server.service;
 
 import com.lumens.engine.TransformComponent;
-import com.lumens.engine.TransformEngine;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.run.LastResultHandler;
 import com.lumens.engine.run.ResultHandler;
@@ -22,8 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
