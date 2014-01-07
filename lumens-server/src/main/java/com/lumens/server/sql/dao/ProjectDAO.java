@@ -37,7 +37,7 @@ public class ProjectDAO extends BaseDAO {
                     }, new PreparedStatementCallback<Boolean>() {
                         @Override
                         public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                            ps.setString(1, project.Id);
+                            ps.setString(1, project.id);
                             ps.setString(2, project.name);
                             ps.setString(3, project.description);
                             ps.setString(4, project.data);
@@ -51,7 +51,7 @@ public class ProjectDAO extends BaseDAO {
                 }
             }
         });
-        return project.Id;
+        return project.id;
     }
 
     public List<Project> getAllShortProject() {

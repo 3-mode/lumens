@@ -14,13 +14,13 @@ public class ProjectContext {
 
     private Map<ProjectIndex, TransformProject> projecInstanceList = new HashMap<>();
 
-    public ProjectContext add(TransformProject project) {
-        projecInstanceList.put(new ProjectIndex(project.getName(), project.getDescription()), project);
+    public ProjectContext add(String projectID, TransformProject project) {
+        projecInstanceList.put(new ProjectIndex(projectID, project.getDescription()), project);
         return this;
     }
 
-    public ProjectContext remove(TransformProject project) {
-        projecInstanceList.remove(new ProjectIndex(project.getName(), project.getDescription()));
+    public ProjectContext remove(String projectID) {
+        projecInstanceList.remove(new ProjectIndex(projectID, null));
         return this;
     }
 

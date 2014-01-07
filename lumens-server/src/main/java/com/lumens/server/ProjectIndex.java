@@ -5,15 +5,15 @@ package com.lumens.server;
 
 /**
  *
- * Hold the project name and description
+ * Hold the project id and description
  */
 public class ProjectIndex {
 
-    private String projectName;
+    private String id;
     private String description;
 
-    public ProjectIndex(String name, String description) {
-        this.projectName = name;
+    public ProjectIndex(String id, String description) {
+        this.id = id;
         this.description = description;
     }
 
@@ -24,15 +24,8 @@ public class ProjectIndex {
     /**
      * @return the projectName
      */
-    public String getProjectName() {
-        return projectName;
-    }
-
-    /**
-     * @param projectName the projectName to set
-     */
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public String getProjectID() {
+        return id;
     }
 
     /**
@@ -51,18 +44,18 @@ public class ProjectIndex {
 
     @Override
     public String toString() {
-        return this.projectName;
+        return this.id;
     }
 
     @Override
     public int hashCode() {
-        return this.projectName.hashCode();
+        return this.id.hashCode();
     }
 
     @Override
     public boolean equals(Object o) {
         if (o != null && o instanceof ProjectIndex)
-            return this.projectName.equals(((ProjectIndex) o).getProjectName());
+            return this.id.equals(((ProjectIndex) o).getProjectID());
         return false;
     }
 }
