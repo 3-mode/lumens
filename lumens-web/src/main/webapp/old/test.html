@@ -129,6 +129,13 @@
         </style>
         <script type="text/javascript">
             $(function() {
+                $.ajax({
+                    url: "http://localhost:8080/lumens/rest/projects/P-cc0aa7be-ea8e-4fe2-878f-312bf67e299b",
+                    dataType: "application/text",
+                    success: function(data) {
+                        $("body").text(data)
+                    }
+                });
                 var obj = $.parseJSON('[{"name": "james", "id": 1}, {"name" : "tom", "id": 2}]');
                 var div = d3.select("body").selectAll("div");
                 var divData = div.data([1, 2, 4, 8, 16, 32], function(d) {
@@ -153,58 +160,58 @@
         </script>
     </head>
     <body>
-    <input id="text"/>
-    <textarea id="text2"></textarea>
-    <select id="text3">
-        <option value="text1">1</option>
-        <option value="text2">2</option>
-        <option value="text3">3</option>
-    </select>
-    <div class="component" style="position:relative;left:200px;top:400px;width:140px;height:57px;">
-        <div style="border:1px solid rgba(177, 177, 177, .5);background-color:rgb(214, 214, 214);float:top; width:140px; height:25px">
-            <img style="padding-top:3px;padding-left:3px;" src="lumens/images/status/16/disconnect.png"/>
+        <input id="text"/>
+        <textarea id="text2"></textarea>
+        <select id="text3">
+            <option value="text1">1</option>
+            <option value="text2">2</option>
+            <option value="text3">3</option>
+        </select>
+        <div class="component" style="position:relative;left:200px;top:400px;width:140px;height:57px;">
+            <div style="border:1px solid rgba(177, 177, 177, .5);background-color:rgb(214, 214, 214);float:top; width:140px; height:25px">
+                <img style="padding-top:3px;padding-left:3px;" src="lumens/images/status/16/disconnect.png"/>
+            </div>
+            <div style="border:1px solid rgba(177, 177, 177, .3);background-color:rgb(236, 236, 236);width:140px; height:32px"></div>
         </div>
-        <div style="border:1px solid rgba(177, 177, 177, .3);background-color:rgb(236, 236, 236);width:140px; height:32px"></div>
-    </div>
-    <div id="text4" ></div>
-    <div style="position: relative; width: 900px; height:300px; left: 100px; top: 100px;">
-        <div id="test" class="scb"> </div>
-    </div>
-    <div id="jevent_test"></div>
-    <script type="text/javascript">
-        function item_clone() {
-            return $('<div id="draggable-item" style="width:50px;height:20px"/>');
-        }
-        var svg = d3.select("#jevent_test").append("svg");
-        var rr = svg.append("svg:rect")
-        .attr({
-            "width": "100px",
-            "height": "50px"
-        });
-        $(rr.node()).draggable({
-            appendTo: $("#jevent_test"),
-            helper: item_clone
-        });
-        var tt = svg.append("svg:text")
-        .attr({
-            "width": "200px",
-            "height": "100px",
-            "x": 120,
-            "y": 120
-        }).text("Hello World");
-
-        $(tt.node()).droppable({
-            drop: function(e, u) {
-                console.log(this);
+        <div id="text4" ></div>
+        <div style="position: relative; width: 900px; height:300px; left: 100px; top: 100px;">
+            <div id="test" class="scb"> </div>
+        </div>
+        <div id="jevent_test"></div>
+        <script type="text/javascript">
+            function item_clone() {
+                return $('<div id="draggable-item" style="width:50px;height:20px"/>');
             }
-        });
-        $(tt.node()).mousedown(function() {
-            console.log("mousedown");
-        });
-        tt.on("mousedown", function() {
-            console.log("mousedown");
-        });//*/
-    </script>
-    <div id="viz"></div>
-</body>
+            var svg = d3.select("#jevent_test").append("svg");
+            var rr = svg.append("svg:rect")
+            .attr({
+                "width": "100px",
+                "height": "50px"
+            });
+            $(rr.node()).draggable({
+                appendTo: $("#jevent_test"),
+                helper: item_clone
+            });
+            var tt = svg.append("svg:text")
+            .attr({
+                "width": "200px",
+                "height": "100px",
+                "x": 120,
+                "y": 120
+            }).text("Hello World");
+
+            $(tt.node()).droppable({
+                drop: function(e, u) {
+                    console.log(this);
+                }
+            });
+            $(tt.node()).mousedown(function() {
+                console.log("mousedown");
+            });
+            tt.on("mousedown", function() {
+                console.log("mousedown");
+            });//*/
+        </script>
+        <div id="viz"></div>
+    </body>
 </html>
