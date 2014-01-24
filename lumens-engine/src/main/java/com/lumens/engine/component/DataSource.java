@@ -46,11 +46,14 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
     @Override
     public void open() throws Exception {
-        connector = (Connector) Class.forName(getClassName()).newInstance();
-        connector.setPropertyList(propertyList);
-        connector.open();
-        inFormatList = connector.getFormatList(Direction.IN);
-        outFormatList = connector.getFormatList(Direction.OUT);
+        if (!isOpen()) {
+            connector = (Connector) Class.forName(getClassName()).newInstance();
+            connector.setPropertyList(propertyList);
+            connector.open();
+            inFormatList = connector.getFormatList(Direction.IN);
+            outFormatList = connector.getFormatList(Direction.OUT);
+            isOpen = true;
+        }
     }
 
     public Map<String, Format> getFormatList(Direction direction) {
@@ -59,9 +62,12 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
     @Override
     public void close() {
-        connector.close();
-        registerOUTFormatList.clear();
-        registerINFormatList.clear();
+        if (isOpen()) {
+            connector.close();
+            registerOUTFormatList.clear();
+            registerINFormatList.clear();
+            isOpen = false;
+        }
     }
 
     @Override

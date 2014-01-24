@@ -19,6 +19,7 @@ public abstract class AbstractTransformComponent implements TransformComponent {
     private String className;
     private String description;
     private Map<String, TransformComponent> targetList;
+    protected boolean isOpen;
 
     public AbstractTransformComponent(String className) {
         this.className = className;
@@ -84,5 +85,10 @@ public abstract class AbstractTransformComponent implements TransformComponent {
     @Override
     public boolean hasTarget() {
         return targetList != null && !targetList.isEmpty();
+    }
+
+    @Override
+    public boolean isOpen() {
+        return isOpen;
     }
 }

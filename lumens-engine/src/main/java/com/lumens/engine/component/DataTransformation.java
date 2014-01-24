@@ -97,10 +97,12 @@ public class DataTransformation extends AbstractTransformComponent implements Ru
 
     @Override
     public void open() throws Exception {
+        isOpen = true;
     }
 
     @Override
     public void close() {
+        isOpen = false;
     }
 
     @Override

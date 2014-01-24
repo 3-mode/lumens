@@ -80,10 +80,13 @@ public class TransformProject {
     }
 
     public void close() throws Exception {
+
+        if (isOpen()) {
+            for (DataSource ds : datasourceList)
+                ds.close();
+            for (DataTransformation dt : transformationList)
+                dt.close();
+        }
         isOpen = false;
-        for (DataSource ds : datasourceList)
-            ds.close();
-        for (DataTransformation dt : transformationList)
-            dt.close();
     }
 }

@@ -29,6 +29,8 @@ public interface TransformComponent {
 
     public Map<String, TransformComponent> getTargetList();
 
+    public boolean isOpen();
+
     public void open() throws Exception;
 
     public void close();
