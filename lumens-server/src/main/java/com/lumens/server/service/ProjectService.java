@@ -45,6 +45,7 @@ public class ProjectService {
     public static final String PROJECT_EXECUTE = "project-execute";
     public static final String CONTENT = "content";
     public static final String ACTION = "action";
+    public static final String CURRENT__EDITING__PROJECT = "Current_Editing_Project";
     @Context
     private ServletContext context;
 
@@ -100,17 +101,7 @@ public class ProjectService {
             json.writeEndObject();
             return Response.ok().entity(utility.toUTF8String()).build();
         } catch (Exception ex) {
-            try {
-                JsonUtility utility = ServerUtils.createJsonUtility();
-                JsonGenerator json = utility.getGenerator();
-                json.writeStartObject();
-                json.writeStringField("status", "Failed");
-                json.writeStringField("error_message", ex.toString());
-                json.writeEndObject();
-                return Response.ok().entity(utility.toUTF8String()).build();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            return getErrorMessageResponse(ex);
         }
     }
 
@@ -137,17 +128,7 @@ public class ProjectService {
             json.writeEndObject();
             return Response.ok().entity(utility.toUTF8String()).build();
         } catch (Exception ex) {
-            try {
-                utility = ServerUtils.createJsonUtility();
-                json = utility.getGenerator();
-                json.writeStartObject();
-                json.writeStringField("status", "Failed");
-                json.writeStringField("error_message", ex.toString());
-                json.writeEndObject();
-                return Response.ok().entity(utility.toUTF8String()).build();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            return getErrorMessageResponse(ex);
         }
     }
 
@@ -213,16 +194,27 @@ public class ProjectService {
         // Project
         ProjectDAO pDAO = DAOFactory.getProjectDAO();
         Project project = pDAO.getProject(projectID);
-        json.writeStartObject();
-        json.writeStringField("id", project.id);
-        json.writeStringField("name", project.name);
-        json.writeStringField("description", project.description);
-        json.writeStringField("data", project.data);
-        json.writeEndObject();
-        json.writeEndArray();
-        json.writeEndObject();
-        json.writeEndObject();
-        return Response.ok().entity(utility.toUTF8String()).build();
+        TransformProject projectInstance = new TransformProject();
+        try {
+            new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
+            Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
+            if (attr != null)
+                ((TransformProject) attr).close();
+            req.getSession().getServletContext().setAttribute(CURRENT__EDITING__PROJECT, projectInstance);
+
+            json.writeStartObject();
+            json.writeStringField("id", project.id);
+            json.writeStringField("name", project.name);
+            json.writeStringField("description", project.description);
+            json.writeStringField("data", project.data);
+            json.writeEndObject();
+            json.writeEndArray();
+            json.writeEndObject();
+            json.writeEndObject();
+            return Response.ok().entity(utility.toUTF8String()).build();
+        } catch (Exception ex) {
+            return getErrorMessageResponse(ex);
+        }
     }
 
     @GET
@@ -234,5 +226,19 @@ public class ProjectService {
         else if (componentName != null && formatName == null)
             return Response.ok().entity("ok to get connector's format list").build();
         return Response.ok().entity("Not implemented").build();
+    }
+
+    public Response getErrorMessageResponse(Exception ex) {
+        try {
+            JsonUtility utility = ServerUtils.createJsonUtility();
+            JsonGenerator json = utility.getGenerator();
+            json.writeStartObject();
+            json.writeStringField("status", "Failed");
+            json.writeStringField("error_message", ex.toString());
+            json.writeEndObject();
+            return Response.ok().entity(utility.toUTF8String()).build();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
