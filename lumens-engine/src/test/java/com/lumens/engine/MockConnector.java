@@ -45,4 +45,9 @@ public class MockConnector implements Connector {
     public void setPropertyList(Map<String, Value> parameters) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public boolean isOpen() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

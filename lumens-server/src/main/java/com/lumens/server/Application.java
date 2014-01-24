@@ -3,9 +3,10 @@
  */
 package com.lumens.server;
 
-import com.lumens.engine.TransformEngine;
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
+import java.util.ArrayList;
+import java.util.List;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -20,6 +21,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
  * Lumens server entry point
  */
 public class Application {
+
+    public List<String> resultCache = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
         Application app = Application.createInstance();
@@ -64,5 +67,18 @@ public class Application {
 
     public ApplicationContext getApplicationContext() {
         return context;
+    }
+
+    public synchronized void cacheResultString(String result) {
+        if (resultCache.size() < 20)
+            resultCache.add(result);
+        else if (resultCache.size() >= 20) {
+            resultCache.set(resultCache.size() % 20, result);
+        }
+    }
+
+    public synchronized String[] getCacheResultString() {
+        String[] results = new String[resultCache.size()];
+        return resultCache.toArray(results);
     }
 }

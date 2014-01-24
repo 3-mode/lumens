@@ -6,6 +6,7 @@ package com.lumens.engine.run;
 import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.TransformProject;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class SingleThreadTransformExecuteJob implements ExecuteJob, Runnable {
     }
 
     public SingleThreadTransformExecuteJob(TransformProject project) {
-        this(project, null);
+        this(project, new ArrayList<ResultHandler>(1));
     }
 
     @Override

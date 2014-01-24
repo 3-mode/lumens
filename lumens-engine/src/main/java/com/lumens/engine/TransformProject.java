@@ -62,15 +62,21 @@ public class TransformProject {
     }
 
     public void open() throws Exception {
-        try {
-            for (DataSource ds : datasourceList)
+        for (DataSource ds : datasourceList) {
+            try {
                 ds.open();
-            for (DataTransformation dt : transformationList)
-                dt.open();
-            isOpen = true;
-        } catch (Exception ex) {
-            throw new Exception(ex);
+            } catch (Exception ex) {
+                throw new Exception(ex);
+            }
         }
+        for (DataTransformation dt : transformationList) {
+            try {
+                dt.open();
+            } catch (Exception ex) {
+                throw new Exception(ex);
+            }
+        }
+        isOpen = true;
     }
 
     public void close() throws Exception {

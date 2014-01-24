@@ -5,6 +5,7 @@ package com.lumens.engine.component;
 
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.run.ExecuteContext;
+import com.lumens.engine.run.LastResultHandler;
 import com.lumens.engine.run.ResultHandler;
 import com.lumens.model.Element;
 import com.lumens.processor.Processor;
@@ -86,8 +87,8 @@ public class DataTransformation extends AbstractTransformComponent implements Ru
                 if (!result.isEmpty())
                     results.addAll(result);
             }
-            if (context.getResultHandlers() != null)
-                for (ResultHandler handler : context.getResultHandlers())
+            for (ResultHandler handler : context.getResultHandlers())
+                if (!(handler instanceof LastResultHandler))
                     handler.process(this, targetName, results);
             exList.add(new TransformExecuteContext(results, rule.getTargetName(), context.getResultHandlers()));
         }

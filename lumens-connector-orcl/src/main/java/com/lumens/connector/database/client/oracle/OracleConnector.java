@@ -28,6 +28,7 @@ public class OracleConnector implements Connector, DatabaseConstants {
     private String password;
     private boolean fullLoad;
     private String sessionAlter;
+    private boolean isOpen;
 
     @Override
     public void open() {
@@ -35,6 +36,7 @@ public class OracleConnector implements Connector, DatabaseConstants {
         if (dbClient == null) {
             dbClient = new OracleClient(ojdbcURL, connURL, user, password, sessionAlter);
             dbClient.open();
+            isOpen = true;
         }
     }
 
@@ -43,8 +45,10 @@ public class OracleConnector implements Connector, DatabaseConstants {
         if (dbClient != null) {
             dbClient.close();
         }
+        isOpen = false;
         dbClient = null;
         tables = null;
+
     }
 
     @Override
@@ -84,5 +88,10 @@ public class OracleConnector implements Connector, DatabaseConstants {
     @Override
     public Operation getOperation() {
         return new OracleOperation(dbClient);
+    }
+
+    @Override
+    public boolean isOpen() {
+        return isOpen;
     }
 }

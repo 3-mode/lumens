@@ -9,6 +9,7 @@ import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.run.ExecuteContext;
+import com.lumens.engine.run.LastResultHandler;
 import com.lumens.engine.run.ResultHandler;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
@@ -85,8 +86,8 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 OperationResult opRet = operation.execute((Element) input, targetFormat);
                 result.addAll(opRet.getResult());
             }
-            if (context.getResultHandlers() != null)
-                for (ResultHandler handler : context.getResultHandlers())
+            for (ResultHandler handler : context.getResultHandlers())
+                if (!(handler instanceof LastResultHandler))
                     handler.process(this, targetName, result);
             List<ExecuteContext> exList = new ArrayList<>();
             exList.add(new TransformExecuteContext(result, entry.getName(), context.getResultHandlers()));

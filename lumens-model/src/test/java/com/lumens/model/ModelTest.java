@@ -177,6 +177,9 @@ public class ModelTest extends TestCase {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
         System.out.println(baos.toString());
+        baos.reset();
+        serializer.writeToJson(baos);
+        System.out.println(baos.toString());
     }
 
     public void testScriptPath() {

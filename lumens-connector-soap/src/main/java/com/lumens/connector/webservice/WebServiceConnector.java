@@ -30,6 +30,7 @@ public class WebServiceConnector implements Connector, WebServiceConstants {
     private String proxyPassword;
     private Map<String, Format> formatListIn;
     private Map<String, Format> formatListOut;
+    private boolean isOpen;
 
     @Override
     public void open() {
@@ -37,6 +38,7 @@ public class WebServiceConnector implements Connector, WebServiceConstants {
             soapClient = new SOAPClient(this);
             soapClient.open();
             formatBuilder = soapClient.getFormatBuilder();
+            isOpen = true;
         }
     }
 
@@ -48,6 +50,7 @@ public class WebServiceConnector implements Connector, WebServiceConstants {
         formatListIn = null;
         formatListOut = null;
         soapClient = null;
+        isOpen = false;
     }
 
     @Override
@@ -140,5 +143,10 @@ public class WebServiceConnector implements Connector, WebServiceConstants {
      */
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public boolean isOpen() {
+        return isOpen;
     }
 }

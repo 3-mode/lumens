@@ -8,9 +8,13 @@ import com.lumens.io.XmlSerializer;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Type;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import org.codehaus.jackson.JsonEncoding;
+import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  *
@@ -73,5 +77,53 @@ public class ElementSerializer implements XmlSerializer {
         } else {
             out.println("/>");
         }
+    }
+
+    public void writeToJson(OutputStream out) throws Exception {
+        ObjectMapper om = new ObjectMapper();
+        JsonGenerator jGenerator = om.getJsonFactory().createJsonGenerator(out, JsonEncoding.UTF8);
+        writeRootElementToJson(element, jGenerator);
+        jGenerator.flush();
+    }
+
+    public void writeToJson(JsonGenerator jGenerator) throws Exception {
+        jGenerator.writeObjectFieldStart("element");
+        writeElementToJson(element, jGenerator);
+        jGenerator.writeEndObject();
+        jGenerator.flush();
+    }
+
+    private void writeRootElementToJson(Element element, JsonGenerator jGenerator) throws IOException {
+        jGenerator.writeStartObject();
+        jGenerator.writeObjectFieldStart("element");
+        jGenerator.writeStringField("name", element.getFormat().getName());
+        jGenerator.writeStringField("form", element.getFormat().getForm().toString());
+        jGenerator.writeStringField("type", element.getFormat().getType().toString());
+        if (element.getValue() != null)
+            jGenerator.writeStringField("value", element.getValue().getString());
+        if (element.getChildren() != null) {
+            jGenerator.writeArrayFieldStart("element");
+            for (Element child : element.getChildren())
+                writeElementToJson(child, jGenerator);
+            jGenerator.writeEndArray();
+        }
+        jGenerator.writeEndObject();
+        jGenerator.writeEndObject();
+    }
+
+    private void writeElementToJson(Element element, JsonGenerator jGenerator) throws IOException {
+        jGenerator.writeStartObject();
+        jGenerator.writeStringField("name", element.getFormat().getName());
+        jGenerator.writeStringField("form", element.getFormat().getForm().toString());
+        jGenerator.writeStringField("type", element.getFormat().getType().toString());
+        if (element.getValue() != null)
+            jGenerator.writeStringField("value", element.getValue().getString());
+        if (element.getChildren() != null) {
+            jGenerator.writeArrayFieldStart("element");
+            for (Element child : element.getChildren())
+                writeElementToJson(child, jGenerator);
+            jGenerator.writeEndArray();
+        }
+        jGenerator.writeEndObject();
     }
 }

@@ -18,10 +18,12 @@ import com.lumens.server.sql.DAOFactory;
 import com.lumens.server.sql.dao.ProjectDAO;
 import com.lumens.server.sql.entity.Project;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -49,7 +51,7 @@ public class ProjectService {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public Response processProject(String message) {
+    public Response processProject(String message, @Context HttpServletRequest req) {
         JsonNode messageJson = ServerUtils.createJson(message);
         JsonNode contentJson = messageJson.get(CONTENT);
         JsonNode actionJson = messageJson.get(ACTION);
@@ -78,13 +80,12 @@ public class ProjectService {
 
                 @Override
                 public void process(TransformComponent src, String resultName, List<Element> results) {
-                    System.out.println(">>>>>>>>>>>Transform>>>>>>>>>>>>>>>>>>>>");
-                    System.out.println("Component name: " + src.getName() + "; Format name: " + resultName + "; result size: " + results.size());
                     try {
-                        new ElementSerializer(results.get(0), true).writeToXml(System.out);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        new ElementSerializer(results.get(0), true).writeToJson(baos);
+                        Application.getInstance().cacheResultString(baos.toString());
                     } catch (Exception ex) {
                     }
-                    System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                 }
             }
             List<ResultHandler> handlers = new ArrayList<>();
@@ -155,8 +156,29 @@ public class ProjectService {
     }
 
     @GET
+    @Path("/result")
     @Produces("application/json")
-    public Response getProjects(@QueryParam("page") int page) throws IOException {
+    public Response getProjectExecutionResults(@QueryParam("page") int page, @Context HttpServletRequest req) throws IOException {
+        JsonUtility utility = ServerUtils.createJsonUtility();
+        JsonGenerator json = utility.getGenerator();
+        json.writeStartObject();
+        json.writeArrayFieldStart("Result");
+        boolean isFirst = true;
+        for (String result : Application.getInstance().getCacheResultString()) {
+            if (!isFirst)
+                json.writeRaw(',');
+            else
+                isFirst = false;
+            json.writeRaw(result);
+        }
+        json.writeEndArray();
+        json.writeEndObject();
+        return Response.ok().entity(utility.toUTF8String()).build();
+    }
+
+    @GET
+    @Produces("application/json")
+    public Response getProjects(@QueryParam("page") int page, @Context HttpServletRequest req) throws IOException {
         JsonUtility utility = ServerUtils.createJsonUtility();
         JsonGenerator json = utility.getGenerator();
         json.writeStartObject();
@@ -181,7 +203,7 @@ public class ProjectService {
     @GET
     @Path("{projectID}")
     @Produces("application/json")
-    public Response getProjectByID(@PathParam("projectID") String projectID) throws IOException {
+    public Response getProjectByID(@PathParam("projectID") String projectID, @Context HttpServletRequest req) throws IOException {
         JsonUtility utility = ServerUtils.createJsonUtility();
         JsonGenerator json = utility.getGenerator();
         json.writeStartObject();
@@ -201,5 +223,16 @@ public class ProjectService {
         json.writeEndObject();
         json.writeEndObject();
         return Response.ok().entity(utility.toUTF8String()).build();
+    }
+
+    @GET
+    @Path("{projectID}/format")
+    @Produces("application/json")
+    public Response getFormatFromComponent(@QueryParam("component_name") String componentName, @QueryParam("format_name") String formatName, @Context HttpServletRequest req) {
+        if (componentName != null && formatName != null)
+            return Response.ok().entity("ok to get connector's format").build();
+        else if (componentName != null && formatName == null)
+            return Response.ok().entity("ok to get connector's format list").build();
+        return Response.ok().entity("Not implemented").build();
     }
 }

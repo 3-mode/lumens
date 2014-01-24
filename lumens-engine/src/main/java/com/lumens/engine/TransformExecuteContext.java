@@ -5,6 +5,7 @@ package com.lumens.engine;
 
 import com.lumens.engine.run.ExecuteContext;
 import com.lumens.engine.run.ResultHandler;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class TransformExecuteContext implements ExecuteContext {
     private List<ResultHandler> handlers;
 
     public TransformExecuteContext(String targetName) {
-        this(targetName, null);
+        this(targetName, new ArrayList<ResultHandler>(1));
     }
 
     public TransformExecuteContext(String targetName, List<ResultHandler> handlers) {

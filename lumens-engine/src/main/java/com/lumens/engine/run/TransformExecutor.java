@@ -4,6 +4,7 @@
 package com.lumens.engine.run;
 
 import com.lumens.engine.TransformComponent;
+import com.lumens.model.Element;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,12 @@ public class TransformExecutor implements Executor {
         if (!exList.isEmpty() && tExList.isEmpty()) {
             // TODO need log system
             for (ExecuteContext ctx : exList) {
-                System.out.println(String.format("No target component to process '%s'", ctx.getTargetName()));
+                for (ResultHandler handler : executeContext.getResultHandlers()) {
+                    if (handler instanceof LastResultHandler)
+                        handler.process(tComponent, ctx.getTargetName(), (List<Element>) ctx.getInput());
+                    // TODO need log system
+                    System.out.println(String.format("No target component to process '%s'", ctx.getTargetName()));
+                }
             }
         }
         return tExList;
