@@ -52,7 +52,7 @@ public class ConnectorTest extends TestCase implements DatabaseConstants, Oracle
     public void testOracleConnector() throws Exception {
         OracleConnector cntr = new OracleConnector();
         try {
-            HashMap<String, Value> props = new HashMap<String, Value>();
+            HashMap<String, Value> props = new HashMap<>();
             props.put(OJDBC, new Value("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar"));
             props.put(CONNECTION_URL, new Value("jdbc:oracle:thin:@localhost:1521:orcl"));
             props.put(USER, new Value("hr"));
@@ -60,16 +60,16 @@ public class ConnectorTest extends TestCase implements DatabaseConstants, Oracle
             props.put(FULL_LOAD, new Value(true));
             cntr.setPropertyList(props);
             cntr.open();
-            FileOutputStream fos = new FileOutputStream("C:/db.tables.xml");
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            for (Format format : cntr.getFormatList(null).values()) {
-                FormatSerializer xml = new FormatSerializer(format);
-                xml.writeToXml(baos);
+            try (FileOutputStream fos = new FileOutputStream("C:/db.tables.xml")) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                for (Format format : cntr.getFormatList(null).values()) {
+                    FormatSerializer xml = new FormatSerializer(format);
+                    xml.writeToXml(baos);
+                }
+                //String xmlContent = baos.toString("UTF-8");
+                //System.out.println(xmlContent);
+                fos.write(baos.toByteArray());
             }
-            //String xmlContent = baos.toString("UTF-8");
-            //System.out.println(xmlContent);
-            fos.write(baos.toByteArray());
-            fos.close();
         } finally {
             cntr.close();
         }
@@ -171,7 +171,7 @@ public class ConnectorTest extends TestCase implements DatabaseConstants, Oracle
         rule.getRuleItem("fields.DEPARTMENT_ID").setScript("@fields.DEPARTMENT_ID");
 
         Processor transformProcessor = new TransformProcessor();
-        List<Element> employeeTest = new ArrayList<Element>();
+        List<Element> employeeTest = new ArrayList<>();
         for (Element e : result.getResult()) {
             List<Element> resultList = (List<Element>) transformProcessor.execute(rule, e);
             employeeTest.addAll(resultList);

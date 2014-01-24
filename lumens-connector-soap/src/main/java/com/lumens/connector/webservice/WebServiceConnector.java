@@ -33,9 +33,11 @@ public class WebServiceConnector implements Connector, WebServiceConstants {
 
     @Override
     public void open() {
-        soapClient = new SOAPClient(this);
-        soapClient.open();
-        formatBuilder = soapClient.getFormatBuilder();
+        if (soapClient == null) {
+            soapClient = new SOAPClient(this);
+            soapClient.open();
+            formatBuilder = soapClient.getFormatBuilder();
+        }
     }
 
     @Override

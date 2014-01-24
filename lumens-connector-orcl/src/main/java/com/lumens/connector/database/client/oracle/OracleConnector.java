@@ -32,8 +32,10 @@ public class OracleConnector implements Connector, DatabaseConstants {
     @Override
     public void open() {
         // TODO only create oracle client now, select different db client later
-        dbClient = new OracleClient(ojdbcURL, connURL, user, password, sessionAlter);
-        dbClient.open();
+        if (dbClient == null) {
+            dbClient = new OracleClient(ojdbcURL, connURL, user, password, sessionAlter);
+            dbClient.open();
+        }
     }
 
     @Override
@@ -41,6 +43,7 @@ public class OracleConnector implements Connector, DatabaseConstants {
         if (dbClient != null) {
             dbClient.close();
         }
+        dbClient = null;
         tables = null;
     }
 
