@@ -26,5 +26,10 @@ select id, name, description, data from project where id='%s'
 insert into project (id, name, description, data) values (?,?,?,?)
 ]]>
         </sql>
+        <sql name="UpdateProject">
+<![CDATA[
+update project set name=?, description=?, data=? where id=?
+]]>
+        </sql>
     </database-access-object>
 </database-access-objects>

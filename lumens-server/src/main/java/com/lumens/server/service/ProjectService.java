@@ -3,25 +3,33 @@
  */
 package com.lumens.server.service;
 
+import com.lumens.connector.Direction;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
+import com.lumens.engine.component.DataSource;
 import com.lumens.engine.run.LastResultHandler;
 import com.lumens.engine.run.ResultHandler;
 import com.lumens.engine.run.SingleThreadTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.model.Element;
+import com.lumens.model.Format;
 import com.lumens.model.serializer.ElementSerializer;
+import com.lumens.model.serializer.FormatSerializer;
+import com.lumens.processor.Pair;
 import com.lumens.server.Application;
 import com.lumens.server.JsonUtility;
 import com.lumens.server.ServerUtils;
 import com.lumens.server.sql.DAOFactory;
 import com.lumens.server.sql.dao.ProjectDAO;
 import com.lumens.server.sql.entity.Project;
+import com.sun.jersey.api.client.ClientResponse.Status;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -43,6 +51,7 @@ public class ProjectService {
     public static final String PROJECT_CREATE = "project-create";
     public static final String PROJECT_UPDATE = "project-update";
     public static final String PROJECT_EXECUTE = "project-execute";
+    public static final String PROJECT_ACTIVE = "project-active";
     public static final String CONTENT = "content";
     public static final String ACTION = "action";
     public static final String CURRENT__EDITING__PROJECT = "Current_Editing_Project";
@@ -50,28 +59,30 @@ public class ProjectService {
     private ServletContext context;
 
     @POST
+    @Path("{projectID}")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response processProject(String message, @Context HttpServletRequest req) {
+    public Response processProject(@PathParam("projectID") String projectID, String message, @Context HttpServletRequest req) {
         JsonNode messageJson = ServerUtils.createJson(message);
         JsonNode contentJson = messageJson.get(CONTENT);
         JsonNode actionJson = messageJson.get(ACTION);
-        if (ServerUtils.isNotNull(actionJson) && ServerUtils.isNotNull(contentJson)) {
+        if (ServerUtils.isNotNull(actionJson)) {
             String action = actionJson.asText();
-            if (PROJECT_CREATE.equalsIgnoreCase(action))
+            if (PROJECT_CREATE.equalsIgnoreCase(action) && ServerUtils.isNotNull(contentJson))
                 return createProject(contentJson);
-            else if (PROJECT_UPDATE.equalsIgnoreCase(action))
-                return updateProject(contentJson);
+            else if (PROJECT_UPDATE.equalsIgnoreCase(action) && ServerUtils.isNotNull(contentJson))
+                return updateProject(projectID, contentJson);
             else if (PROJECT_EXECUTE.equalsIgnoreCase(action)) {
-                return executeProjectJob(contentJson);
+                return executeProjectJob(projectID);
+            } else if (PROJECT_ACTIVE.equalsIgnoreCase(action)) {
+                return activeProject(projectID, req);
             }
         }
         return Response.ok().entity(String.format("{ \"message\": %s }", "Fail")).build();
     }
 
-    private Response executeProjectJob(JsonNode contentJson) {
+    private Response executeProjectJob(String projectID) {
         try {
-            String projectID = contentJson.get("project_id").asText().trim();
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
             Project project = pDAO.getProject(projectID);
             TransformProject projectInstance = new TransformProject();
@@ -106,14 +117,14 @@ public class ProjectService {
     }
 
     private Response createProject(JsonNode contentJson) {
-        JsonUtility utility = ServerUtils.createJsonUtility();
-        JsonGenerator json = utility.getGenerator();
         try {
             ByteArrayInputStream bais = new ByteArrayInputStream(contentJson.asText().getBytes(UTF_8));
             TransformProject project = new TransformProject();
             new ProjectSerializer(project).readFromJson(bais);
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
             String projectId = pDAO.create(new Project(ServerUtils.generateID("P"), project.getName(), project.getDescription(), contentJson.asText()));
+            JsonUtility utility = ServerUtils.createJsonUtility();
+            JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
             json.writeStringField("status", "OK");
             json.writeObjectFieldStart("result_content");
@@ -132,8 +143,51 @@ public class ProjectService {
         }
     }
 
-    private Response updateProject(JsonNode contentJson) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private Response updateProject(String projectID, JsonNode contentJson) {
+        try {
+            ByteArrayInputStream bais = new ByteArrayInputStream(contentJson.asText().getBytes(UTF_8));
+            TransformProject project = new TransformProject();
+            new ProjectSerializer(project).readFromJson(bais);
+            ProjectDAO pDAO = DAOFactory.getProjectDAO();
+            String projectId = pDAO.update(new Project(projectID, project.getName(), project.getDescription(), contentJson.asText()));
+            JsonUtility utility = ServerUtils.createJsonUtility();
+            JsonGenerator json = utility.getGenerator();
+            json.writeStartObject();
+            json.writeStringField("status", "OK");
+            json.writeObjectFieldStart("result_content");
+            json.writeArrayFieldStart("project");
+            json.writeStartObject();
+            json.writeStringField("id", projectId);
+            json.writeStringField("name", project.getName());
+            json.writeStringField("description", project.getDescription());
+            json.writeEndObject();
+            json.writeEndArray();
+            json.writeEndObject();
+            json.writeEndObject();
+            return Response.ok().entity(utility.toUTF8String()).build();
+        } catch (Exception ex) {
+            return getErrorMessageResponse(ex);
+        }
+    }
+
+    private Response activeProject(String projectID, HttpServletRequest req) {
+        Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
+        if (attr != null) {
+            try {
+                Pair<String, TransformProject> pair = (Pair<String, TransformProject>) attr;
+                pair.getSecond().open();
+                JsonUtility utility = ServerUtils.createJsonUtility();
+                JsonGenerator json = utility.getGenerator();
+                json.writeStartObject();
+                json.writeStringField("status", "OK");
+                json.writeStringField("result_content", String.format("Project '%s' is actived successfully", pair.getSecond().getName()));
+                json.writeEndObject();
+                return Response.ok().entity(utility.toUTF8String()).build();
+            } catch (Exception ex) {
+                return getErrorMessageResponse(ex);
+            }
+        }
+        return Response.status(Status.INTERNAL_SERVER_ERROR).entity("No project is actived, please open the projet first!").build();
     }
 
     @GET
@@ -199,8 +253,8 @@ public class ProjectService {
             new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
             Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
             if (attr != null)
-                ((TransformProject) attr).close();
-            req.getSession().getServletContext().setAttribute(CURRENT__EDITING__PROJECT, projectInstance);
+                ((Pair<String, TransformProject>) attr).getSecond().close();
+            req.getSession().setAttribute(CURRENT__EDITING__PROJECT, new Pair<>(projectID, projectInstance));
 
             json.writeStartObject();
             json.writeStringField("id", project.id);
@@ -220,25 +274,98 @@ public class ProjectService {
     @GET
     @Path("{projectID}/format")
     @Produces("application/json")
-    public Response getFormatFromComponent(@QueryParam("component_name") String componentName, @QueryParam("format_name") String formatName, @Context HttpServletRequest req) {
-        if (componentName != null && formatName != null)
-            return Response.ok().entity("ok to get connector's format").build();
-        else if (componentName != null && formatName == null)
-            return Response.ok().entity("ok to get connector's format list").build();
+    public Response getFormatFromComponent(@PathParam("projectID") String projectID,
+                                           @QueryParam("component_name") String componentName,
+                                           @QueryParam("format_name") String formatName,
+                                           @QueryParam("format_path") String formatPath,
+                                           @QueryParam("direction") String direction,
+                                           @Context HttpServletRequest req) {
+        if (componentName != null && direction != null) {
+            Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
+            if (attr != null) {
+                Pair<String, TransformProject> pair = (Pair<String, TransformProject>) attr;
+                TransformProject project = pair.getSecond();
+                if (!pair.getFirst().equals(projectID))
+                    return getErrorMessageResponse(String.format("The project with id '%s' is not opened and actived", projectID));
+                // To find the datasource format
+                // TODO handle the uncode componentName
+                try {
+                    if (formatName != null) {
+
+                        for (DataSource ds : project.getDatasourceList()) {
+                            if (ds.getName().equals(componentName)) {
+                                Direction direct = Direction.valueOf(direction);
+                                Map<String, Format> formats = ds.getFormatList(direct);
+                                Format requestedFormat = ds.getConnector().getFormat(formats.get(formatName), formatPath, direct);
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                new FormatSerializer(requestedFormat).writeToJson(baos);
+                                JsonUtility utility = ServerUtils.createJsonUtility();
+                                JsonGenerator json = utility.getGenerator();
+                                json.writeStartObject();
+                                json.writeStringField("status", "OK");
+                                json.writeObjectFieldStart("content");
+                                json.writeArrayFieldStart("format_list");
+                                json.writeRaw(baos.toString(UTF_8));
+                                json.writeEndArray();
+                                json.writeEndObject();
+                                json.writeEndObject();
+                                return Response.ok().entity(utility.toUTF8String()).build();
+                            }
+                        }
+
+                    } else if (formatName == null) {
+                        for (DataSource ds : project.getDatasourceList()) {
+                            if (ds.getName().equals(componentName)) {
+                                Map<String, Format> formats = ds.getFormatList(Direction.valueOf(direction));
+                                Iterator<Map.Entry<String, Format>> it = formats.entrySet().iterator();
+                                JsonUtility utility = ServerUtils.createJsonUtility();
+                                JsonGenerator json = utility.getGenerator();
+                                json.writeStartObject();
+                                json.writeStringField("status", "OK");
+                                json.writeObjectFieldStart("content");
+                                // TODO json format
+                                json.writeArrayFieldStart("format_list");
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                boolean isFirst = true;
+                                while (it.hasNext()) {
+                                    baos.reset();
+                                    Format format = ((Map.Entry<String, Format>) it.next()).getValue();
+                                    new FormatSerializer(format).writeToJson(baos);
+                                    if (!isFirst)
+                                        json.writeRaw(',');
+                                    json.writeRaw(baos.toString(UTF_8));
+                                    isFirst = false;
+                                }
+                                json.writeEndArray();
+                                json.writeEndObject();
+                                json.writeEndObject();
+                                return Response.ok().entity(utility.toUTF8String()).build();
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    return getErrorMessageResponse(ex);
+                }
+            }
+        }
         return Response.ok().entity("Not implemented").build();
     }
 
-    public Response getErrorMessageResponse(Exception ex) {
+    private Response getErrorMessageResponse(String error) {
         try {
             JsonUtility utility = ServerUtils.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
             json.writeStringField("status", "Failed");
-            json.writeStringField("error_message", ex.toString());
+            json.writeStringField("error_message", error);
             json.writeEndObject();
             return Response.ok().entity(utility.toUTF8String()).build();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Response getErrorMessageResponse(Exception ex) {
+        return getErrorMessageResponse(ex.toString());
     }
 }
