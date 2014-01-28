@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import junit.framework.TestCase;
 import static junit.framework.TestCase.assertTrue;
 import org.apache.commons.io.IOUtils;
@@ -54,8 +52,14 @@ public class EngineTest extends TestCase {
         Connector connector = datasource.getConnector();
         Format getOpenFundStringRequest = connector.getFormat(consumes.get("getOpenFundString"), "getOpenFundString.userID", Direction.IN);
         Map<String, Format> produces = datasource.getFormatList(Direction.OUT);
-        Format getOpenFundStringResponse = connector.getFormat(produces.get("getOpenFundString"), "getOpenFundStringResponse.getOpenFundStringResult.string", Direction.OUT);
+        Format getOpenFundStringResponse = connector.getFormat(produces.get("getOpenFundString"), "getOpenFundStringResponse", Direction.OUT);
         new FormatSerializer(getOpenFundStringRequest).writeToXml(System.out);
+        new FormatSerializer(getOpenFundStringResponse).writeToXml(System.out);
+        new FormatSerializer(getOpenFundStringResponse).writeToJson(System.out);
+
+        Format getOpenFundStringResponse2 = connector.getFormat(produces.get("getOpenFundDataSet"), "getOpenFundDataSetResponse", Direction.OUT);
+        assertNotNull(getOpenFundStringResponse2.getChild("getOpenFundDataSetResponse").getChild("getOpenFundDataSetResult"));
+        
         // Register format
         String targetName = getOpenFundStringRequest.getName() + (nameCounter++);
         // The code is used to create a format copy for registered request
