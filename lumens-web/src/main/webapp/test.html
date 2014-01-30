@@ -1,0 +1,85 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Bootstrap core CSS -->
+        <link href="lib3rd/boostrap/css/bootstrap.css" rel="stylesheet">
+        <link href="lib3rd/boostrap/css/app_admin.css" rel="stylesheet"> <!-- Add custom CSS here -->
+        <link href="lib3rd/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <link href="lib3rd/morris/morris.css" rel="stylesheet"> <!-- Page Specific CSS -->
+        <link href="css/application.css" rel="stylesheet">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="ID-Data-Component-Container">
+                <div class="Data-Component" style="left:100px;top:50px;">
+                    <div class="Data-Component-icon"><img src="css/img/ds/Database.png"/></div>
+                    <img src="css/img/ds/Deactive.png" style="left:225px; position:absolute;"/>
+                    <div class="Data-Component-Text">
+                        <div class="Data-Component-Title"><b>Database</b></div>
+                        <div class="Data-Component-ShortDsc">jdbc:oracle:thin:@localhost:1521:orcl</div>
+                    </div>
+                </div>
+                <div class="Data-Component" style="left:500px;top:100px;">
+                    <div class="Data-Component-icon"><img src="css/img/ds/Web.png"/></div>
+                    <img src="css/img/ds/Active.png" style="left:225px; position:absolute;"/>
+                    <div class="Data-Component-Text">
+                        <div class="Data-Component-Title"><b>SOAP Web Servie</b></div>
+                        <div class="Data-Component-ShortDsc">https://www.google.com/weather</div>
+                    </div>
+                </div>
+                <svg height="140" version="1.1" width="710" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; left: 50px; top: 50px; position: absolute;">
+                <desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.2</desc>
+                <defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs>
+                <path fill="none" stroke="#cccccc" d="M250,50C350,50,350,90,450,90" stroke-width="3" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
+                <path fill="none" stroke="#cccccc" d="M250,50C350,50,350,90,450,90" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
+                </svg>
+            </div>
+        </div>
+        <!-- JavaScript  -->
+        <!-- Page Specific Plugins -->
+        <script src="lib3rd/jquery/js/jquery.js"></script>
+        <script src="lib3rd/boostrap/js/bootstrap.js"></script>
+        <script src="lib3rd/raphael/raphael-min.js"></script>
+        <script src="lib3rd/morris/morris.min.js"></script>
+        <script src="lib3rd/angularjs/angular.js"></script>
+        <script src="lib3rd/classy.js"></script>
+        <!-- Application -->
+        <script src="js/initialize.js"></script>
+        <script src="js/connector.js"></script>
+        <script src="js/application.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                var DataComponent = Class.$extend({
+                    __init__: function(element) {
+                        this.$elem = element;
+                    },
+                    getXY: function() {
+                        return {
+                            "x": this.$elem.cssInt("left"),
+                            "y": this.$elem.cssInt("top")
+                        };
+                    }
+                });
+                var components = [];
+                $('.Data-Component').each(function(index, element) {
+                    var $elem = $(element);
+                    components.push(new DataComponent($elem));
+                })
+                for (var i = 0; i < components.length; ++i) {
+                    var xy = components[i].getXY();
+                    console.log(xy);
+                }
+                var xy0 = components[0].getXY();
+                var xy1 = components[1].getXY();
+                var paper = Raphael("wrapper", 1, 1);
+                paper.setSize(xy1.x - xy0.x, xy1.y - xy0.y);
+            });
+        </script>
+    </body>
+</html>

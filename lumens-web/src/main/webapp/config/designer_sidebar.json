@@ -1,0 +1,17 @@
+{
+    "name": "NavSideBar",
+    "nav_items": [
+        {
+            "label": "Datasource",
+            "icon_class": "fa-dashboard"
+        },
+        {
+            "label": "Transformation",
+            "icon_class": "fa-file"
+        },
+        {
+            "label": "Designer",
+            "icon_class": "fa-desktop"
+        }
+    ]
+}

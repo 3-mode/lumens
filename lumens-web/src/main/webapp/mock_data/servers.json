@@ -1,0 +1,28 @@
+{
+    "servers": [
+        {
+            "name": "server1.test.com",
+            "ip": "16.49.223.21",
+            "icon": "Drives-Computer-alt-1-Metro-icon",
+            "description": "This is a test server data information 1"
+        },
+        {
+            "name": "server2.test.com",
+            "ip": "16.49.223.22",
+            "icon": "Drives-Computer-alt-1-Metro-icon",
+            "description": "This is a test server data information 2"
+        },
+        {
+            "name": "server3.test.com",
+            "ip": "16.49.223.23",
+            "icon": "Drives-Computer-alt-1-Metro-icon",
+            "description": "This is a test server data information 3"
+        },
+        {
+            "name": "server4.test.com",
+            "ip": "16.49.223.24",
+            "icon": "Operating-Sysytems-Linux-icon",
+            "description": "This is a test server data information 4"
+        }
+    ]
+}

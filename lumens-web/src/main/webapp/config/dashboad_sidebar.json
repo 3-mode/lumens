@@ -1,0 +1,7 @@
+{
+    "modules": [
+        { "id": "id_statistics", "label": "Statistics", "desciption": "Current server statistics of memory, cpu, child servers status." },
+        { "id": "id_fatal_error", "label": "Project Management" },
+        { "id": "id_business_designer", "label": "Business Designer" }
+    ]
+}

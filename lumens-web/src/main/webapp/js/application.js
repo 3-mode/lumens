@@ -2,28 +2,79 @@
  * Application
  */
 Lumens.Application = Class.$extend({
-    __init__: function(id) {
-        this.id = id;
-    },
-    getID: function() {
-        return this.id;
+    __init__: function(ngAppName) {
+        this.ngApp = angular.module(ngAppName, []);
     },
     run: function() {
-        /*Load side bar*/
-        $.get("html/navbar.html", function(data) {
-            $("#navbar").html(data);
-            $.get("html/sidebar_items.html", function(data) {
-                $("#sidebar").html(data);
-            });
+        var _ngApp = this.ngApp;
+        _ngApp
+        .controller('TitleNavbarCtrl', ['$scope', function($scope) {
+                $scope.product_name = 'JAMES';
+            }]
+        )
+        .controller('MainPageCtrl', ['$scope', function($scope) {
+                // Set the default page view as dashboard view
+                // TODO or get localstorge to display last page view
+                $scope.templates = [{"name": "dashboard template", "url": ""}, {"name": "dashboard content template", "url": "html/dashboard.html"}];
+            }])
+        .config(function($controllerProvider) {
+            _ngApp.controllerProvider = $controllerProvider;
+            $controllerProvider.register('TitleNavFunctionsCtrl', ['$scope', '$http', function($scope, $http) {
+                    $http.get('config/modules_headerbar.json').success(function(data) {
+                        $scope.modules = data.modules;
+                        $scope.onTitleNavFunctionsCtrl = function(moduleID) {
+                            var moduleBtn = $('#' + moduleID);
+                            moduleBtn.parent().find('li').removeClass('active');
+                            moduleBtn.addClass('active');
+                            // TODO need to refine
+                            if ("id_dashboard" === moduleID) {
+                                var scope = angular.element('#ID_mainView').scope();
+                                scope.templates = [{"name": "dashboard template", "url": ""}, {"name": "dashboard content template", "url": "html/dashboard.html"}];
+                            }
+                            else if ("id_project_manage" === moduleID) {
+                                var scope = angular.element('#ID_mainView').scope();
+                                scope.templates = [{"name": "dashboard template", "url": ""}, {"name": "dashboard content template", "url": "html/project_manage.html"}];
+                            }
+                            else if ("id_business_designer" === moduleID) {
+                                var scope = angular.element('#ID_mainView').scope();
+                                scope.templates = [{"name": "dashboard template", "url": "html/designer_sidebar.html"}, {"name": "dashboard content template", "url": "html/designer_workspace.html"}];
+                            }
+                        };
+                    });
+                }]
+            );
+            $controllerProvider.register('ServerManageCtrl', ['$scope', '$http', function($scope, $http) {
+                    $http.get('mock_data/servers.json').success(function(data) {
+                        $scope.servers = data.servers;
+                    });
+                }]
+            );
+            $controllerProvider.register('ProjectsCtrl', ['$scope', '$http', function($scope, $http) {
+                    $http.get('mock_data/projects.json').success(function(data) {
+                        $scope.projects = data.projects;
+                    });
+                }]
+            );
+            $controllerProvider.register('DesignerSidebarCtrl', ['$scope', '$http', function($scope, $http) {
+                    $http.get('config/designer_sidebar.json').success(function(data) {
+                        $scope.nav_items = data.nav_items;
+                    });
+                }]
+            );
+            $controllerProvider.register('DesignerWorkspaceCtrl', ['$scope', '$http', function($scope, $http) {
+                    //var compInstance = new Lumens.DataComponent();
+                    //$('#wrapper').append($(compInstance.getComponentHtmlTemplate()));
+                    var _$parent = $('#ID-Data-Component-Container');
+                    var c0 = new Lumens.DataComponent(_$parent, {"x": 50, "y": 50, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                    var c1 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 100, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                    var c2 = new Lumens.DataComponent(_$parent, {"x": 300, "y": 300, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                    new Lumens.Link().from(c0).to(c1).draw();
+                    new Lumens.Link().from(c0).to(c2).draw();
+                }]
+            );
         });
-        /*Load content
-         $.get("html/content.html", function(data) {
-         $("#page-wrapper").html(data);
-         });*/
     }
 });
 
-$(function() {
-    var lumensApp = new Lumens.Application("#LumensApp");
-    lumensApp.run();
-});
+var lumensApp = new Lumens.Application('lumensApp');
+lumensApp.run();
