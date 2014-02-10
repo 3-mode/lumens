@@ -24,6 +24,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
  */
 public class Application {
 
+    private static String OS = System.getProperty("os.name").toLowerCase();
     public List<String> resultCache = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {

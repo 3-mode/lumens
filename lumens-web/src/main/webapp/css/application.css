@@ -38,10 +38,8 @@
  Style definition for data component
 */
 #ID-Data-Component-Container {
-    display: block;
     width: 100%;
-    height: auto;
-    position: absolute;
+    position: relative;
 }
 
 .Data-Component {

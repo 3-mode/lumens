@@ -15,7 +15,7 @@ body {
 }
 
 #wrapper {
-    padding-left: 0;
+    margin-left: 0;
 }
 
 #page-wrapper {
@@ -89,7 +89,7 @@ table.tablesorter thead tr th:hover {
     /* Wrappers */
 
     #wrapper {
-        padding-left: 225px;
+        margin-left: 225px;
     }
 
     #page-wrapper {

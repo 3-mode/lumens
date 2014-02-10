@@ -4,12 +4,14 @@
 Lumens.Application = Class.$extend({
     __init__: function(ngAppName) {
         this.ngApp = angular.module(ngAppName, []);
+        this._nav_side_width = 225;
+        this._nav_header_height = 50;
     },
     run: function() {
         var _ngApp = this.ngApp;
         _ngApp
         .controller('TitleNavbarCtrl', ['$scope', function($scope) {
-                $scope.product_name = 'JAMES';
+                $scope.product_name = 'LUMENS';
             }]
         )
         .controller('MainPageCtrl', ['$scope', function($scope) {
@@ -58,18 +60,32 @@ Lumens.Application = Class.$extend({
             $controllerProvider.register('DesignerSidebarCtrl', ['$scope', '$http', function($scope, $http) {
                     $http.get('config/designer_sidebar.json').success(function(data) {
                         $scope.nav_items = data.nav_items;
+                        var _$designerSideBar = $('#ID_Designer_SideBar').css("height", $(window).height() - lumensApp._nav_header_height);
+                        $(window).resize(function() {
+                            _$designerSideBar.css("height", $(window).height() - lumensApp._nav_header_height);
+                        })
                     });
                 }]
             );
             $controllerProvider.register('DesignerWorkspaceCtrl', ['$scope', '$http', function($scope, $http) {
-                    //var compInstance = new Lumens.DataComponent();
-                    //$('#wrapper').append($(compInstance.getComponentHtmlTemplate()));
+                    // Initalize the workspace panel
+                    var _$wrapper = $('#wrapper')
+                    .css("height", $(window).height() - lumensApp._nav_header_height)
+                    .css("width", $(window).width() - lumensApp._nav_side_width);
+                    $(window).resize(function() {
+                        _$wrapper
+                        .css("height", $(window).height() - lumensApp._nav_header_height)
+                        .css("width", $(window).width() - lumensApp._nav_side_width);
+                    });
+
+                    // mock some components and links
                     var _$parent = $('#ID-Data-Component-Container');
                     var c0 = new Lumens.DataComponent(_$parent, {"x": 50, "y": 50, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
                     var c1 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 100, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
                     var c2 = new Lumens.DataComponent(_$parent, {"x": 300, "y": 300, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
                     new Lumens.Link().from(c0).to(c1).draw();
                     new Lumens.Link().from(c0).to(c2).draw();
+                    var c2 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 500, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
                 }]
             );
         });
