@@ -72,7 +72,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         assertNotNull(o);
     }
 
-    public void testWebServiceConnector() throws Exception {
+    public void TtestWebServiceConnector() throws Exception {
         WebServiceConnector connector = new WebServiceConnector();
         HashMap<String, Value> props = new HashMap<>();
         props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/wsdl/IncidentManagement.wsdl").toString()));
@@ -122,7 +122,6 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         List<Element> response = opResult.getResult();
         new ElementSerializer(response.get(0), true).writeToXml(System.out);
         new FormatSerializer(getOpenFundString).writeToXml(System.out);
-
     }
 
     public void TtestPPMWS() throws Exception {

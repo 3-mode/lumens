@@ -6,25 +6,118 @@
         <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.lumens</groupId>
     <artifactId>lumens-connector-orcl</artifactId>
-    <packaging>jar</packaging>
-
+    <packaging>bundle</packaging>
     <name>lumens-connector-orcl</name>
+    <properties>
+        <connector.app.dir>../assembler/${copyto.module.dir}/orcl</connector.app.dir>
+        <connector.lib.dir>${connector.app.dir}/lib</connector.lib.dir>
+        <connector.test.app.dir>../lumens-server/lumens/addin/orcl</connector.test.app.dir>
+        <connector.test.lib.dir>${connector.test.app.dir}/lib</connector.test.lib.dir>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+                        <Export-Package>com.lumens.connector.database.client.oracle;version=1.0</Export-Package>
+                        <Bundle-Activator>com.lumens.connector.database.client.oracle.Activator</Bundle-Activator>
+                        <Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
+                        <Bundle-Vendor>Lumens Team</Bundle-Vendor>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies-0</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${connector.lib.dir}</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-dependencies-1</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${pom.groupId}</groupId>
+                                    <artifactId>${pom.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${connector.app.dir}</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-dependencies-test-0</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${connector.test.lib.dir}</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <!--<excludeGroupIds>com.lumens</excludeGroupIds>-->
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-dependencies-test-1</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${pom.groupId}</groupId>
+                                    <artifactId>${pom.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${connector.test.app.dir}</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     <dependencies>
         <dependency>
             <groupId>com.lumens</groupId>
             <artifactId>lumens-model</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lumens</groupId>
-            <artifactId>lumens-processor</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.lumens</groupId>
@@ -41,8 +134,16 @@
             <artifactId>commons-io</artifactId>
             <version>2.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.lumens</groupId>
+            <artifactId>lumens-processor</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-io</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 </project>
