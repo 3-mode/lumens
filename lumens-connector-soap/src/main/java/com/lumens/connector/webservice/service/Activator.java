@@ -20,7 +20,7 @@ public class Activator implements AddinActivator {
         addinContext = ctx;
         Map<String, Object> props = new HashMap<>();
         props.put(ConnectorFactory.NAME_PROPERTY, "SOAP");
-        try (InputStream in = this.getClass().getResourceAsStream("img/Web.png")) {
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("img/Web.png")) {
             props.put(ConnectorFactory.INSTANCE_ICON_PROPERTY, IOUtils.toByteArray(in));
         } catch (IOException ex) {
             throw new LumensException(ex);

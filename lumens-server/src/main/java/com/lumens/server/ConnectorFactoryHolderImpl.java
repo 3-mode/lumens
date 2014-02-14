@@ -3,6 +3,8 @@
  */
 package com.lumens.server;
 
+import com.lumens.addin.AddinContext;
+import com.lumens.addin.ServiceEntity;
 import com.lumens.connector.ConnectorFactory;
 import com.lumens.engine.ConnectorFactoryHolder;
 
@@ -12,12 +14,15 @@ import com.lumens.engine.ConnectorFactoryHolder;
  */
 public class ConnectorFactoryHolderImpl implements ConnectorFactoryHolder {
 
+    private AddinContext addinContext;
 
-    public ConnectorFactoryHolderImpl() {
+    public ConnectorFactoryHolderImpl(AddinContext ac) {
+        addinContext = ac;
     }
 
     @Override
     public ConnectorFactory getFactory(String className) {
-        return null;
+        ServiceEntity<ConnectorFactory> se = addinContext.getService(className);
+        return se.getService();
     }
 }

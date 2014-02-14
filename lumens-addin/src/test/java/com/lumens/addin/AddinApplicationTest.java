@@ -22,7 +22,7 @@ public class AddinApplicationTest extends TestCase {
     // public void testHello() {}
 
     public void testAddinEngine() throws Exception {
-        AddinEngine ae = new AddinEngine();
+        AddinEngine ae = new AddinEngine().loadSystemClass(new File("../lumens-server/lumens/module/server/lib").toURI().toURL());
         ae.start();
         AddinContext ac = ae.getAddinContext();
         Addin addin = ac.installAddIn(new File("../lumens-server/lumens/addin/orcl").toURI().toURL());

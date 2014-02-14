@@ -68,8 +68,8 @@ public class Application {
         server.setHandler(handlers);
         context.init();
         System.out.println("Starting server");
-        //server.start();
-        //server.join();
+        server.start();
+        server.join();
         context.clean();
     }
 
