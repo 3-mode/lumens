@@ -34,16 +34,13 @@
             <groupId>com.lumens</groupId>
             <artifactId>lumens-connector-soap</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.lumens</groupId>
             <artifactId>lumens-connector-orcl</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20090211</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

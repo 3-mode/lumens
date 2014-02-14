@@ -25,21 +25,22 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class Application {
 
     private static String OS = System.getProperty("os.name").toLowerCase();
+    private static String WAR_PATH = System.getProperty("lumens.war", "module/web/lumens-web-1.0.war");
+    private static Application application;
+    private ApplicationContext context;
     public List<String> resultCache = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
-        Application app = Application.createInstance();
+        Application app = Application.createInstance(args);
         app.launch();
     }
-    private static Application application;
-    private ApplicationContext context;
 
-    private static Application createInstance() {
-        application = new Application(new ApplicationContext());
+    private static Application createInstance(String[] args) {
+        application = new Application(new ApplicationContext(), args);
         return application;
     }
 
-    private Application(ApplicationContext applicationContext) {
+    private Application(ApplicationContext applicationContext, String[] args) {
         this.context = applicationContext;
     }
 
@@ -51,7 +52,9 @@ public class Application {
         WebAppContext ctx = new WebAppContext();
         ctx.setContextPath("/lumens/ui");
         // TODO it should be configurable
-        ctx.setWar("target/lib/lumens-web-1.0.war");
+        System.out.println("Loading war for UI");
+        ctx.setWar(WAR_PATH);
+        System.out.println("War file was loaded");
         ServletHolder jersey = new ServletHolder(new ServletContainer(new PackagesResourceConfig(new String[]{"com.lumens.server.service"})));
         jersey.setName("Jersey RESTful Service");
         ServletContextHandler restCtx = new ServletContextHandler();
@@ -63,8 +66,11 @@ public class Application {
         HandlerCollection handlers = new HandlerCollection();
         handlers.setHandlers(new Handler[]{ctx, restCtx, new DefaultHandler()});
         server.setHandler(handlers);
-        server.start();
-        server.join();
+        context.init();
+        System.out.println("Starting server");
+        //server.start();
+        //server.join();
+        context.clean();
     }
 
     public static Application getInstance() {

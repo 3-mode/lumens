@@ -4,9 +4,11 @@
 package com.lumens.engine.component;
 
 import com.lumens.connector.Connector;
+import com.lumens.connector.ConnectorFactory;
 import com.lumens.connector.Direction;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
+import com.lumens.engine.EngineContext;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.run.ExecuteContext;
 import com.lumens.engine.run.LastResultHandler;
@@ -47,7 +49,14 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     @Override
     public void open() throws Exception {
         if (!isOpen()) {
-            connector = (Connector) Class.forName(getClassName()).newInstance();
+            // Try to search the OSGI bundle if exist else try to instance it directly
+            if (EngineContext.getContext() != null) {
+                ConnectorFactory factory = EngineContext.getContext().getConnectorFactory(getClassName());
+                if (factory != null)
+                    connector = factory.createConnector(getClassName());
+            }
+            if (connector == null)
+                connector = (Connector) Class.forName(getClassName()).newInstance();
             connector.setPropertyList(propertyList);
             connector.open();
             inFormatList = connector.getFormatList(Direction.IN);

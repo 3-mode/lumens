@@ -6,22 +6,11 @@
     <version>1.0</version>
     <packaging>pom</packaging>
     <name>lumens</name>
-    <modules>
-        <module>lumens-model</module>
-        <module>lumens-processor</module>
-        <module>lumens-connector</module>
-        <module>lumens-engine</module>
-        <module>lumens-log</module>
-        <module>lumens-io</module>
-        <module>lumens-connector-orcl</module>
-        <module>lumens-connector-soap</module>
-        <module>lumens-web</module>
-        <module>lumens-server</module>
-        <module>assembler</module>
-    </modules>
-    <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <copyto.app.dir>target/lumens</copyto.app.dir>
+        <copyto.module.dir>target/lumens/module</copyto.module.dir>
+        <copyto.lib.dir>target/lumens/lib</copyto.lib.dir>
     </properties>
     <build>
         <plugins>
@@ -35,8 +24,32 @@
                 </configuration>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
-
+    <modules>
+        <module>lumens-model</module>
+        <module>lumens-processor</module>
+        <module>lumens-connector</module>
+        <!-- modules begin -->
+        <module>lumens-connector-orcl</module>
+        <module>lumens-connector-soap</module>
+        <!-- modules end -->
+        <module>lumens-engine</module>
+        <module>lumens-log</module>
+        <module>lumens-io</module>
+        <module>lumens-web</module>
+        <module>lumens-server</module>
+        <module>assembler</module>
+        <module>lumens-addin</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

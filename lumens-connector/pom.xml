@@ -6,13 +6,9 @@
         <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.lumens</groupId>
     <artifactId>lumens-connector</artifactId>
-    <packaging>jar</packaging>
-
     <name>lumens-connector</name>
     <dependencies>
         <dependency>
@@ -37,7 +33,4 @@
             <version>2.0-beta9</version>
         </dependency>
     </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 </project>

@@ -1,8 +1,9 @@
-package com.lumens.connector.webservice;
+package com.lumens.connector.webservice.service;
 
+import com.lumens.LumensException;
 import com.lumens.connector.Connector;
 import com.lumens.connector.ConnectorFactory;
-import com.lumens.model.LumensException;
+import com.lumens.connector.webservice.WebServiceConnector;
 
 public class SoapConnectorFactory implements ConnectorFactory {
 

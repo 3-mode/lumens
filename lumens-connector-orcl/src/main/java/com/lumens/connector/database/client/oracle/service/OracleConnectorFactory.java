@@ -1,8 +1,9 @@
-package com.lumens.connector.database.client.oracle;
+package com.lumens.connector.database.client.oracle.service;
 
+import com.lumens.LumensException;
 import com.lumens.connector.Connector;
 import com.lumens.connector.ConnectorFactory;
-import com.lumens.model.LumensException;
+import com.lumens.connector.database.client.oracle.OracleConnector;
 
 public class OracleConnectorFactory implements ConnectorFactory {
 

@@ -10,8 +10,5 @@
     </parent>
     <groupId>com.lumens</groupId>
     <artifactId>lumens-io</artifactId>
-    <version>1.0</version>
     <name>lumens-io</name>
-    <dependencies>
-    </dependencies>
 </project>

@@ -9,7 +9,6 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.lumens</groupId>
     <artifactId>lumens-connector-soap</artifactId>
-    <packaging>bundle</packaging>
     <name>lumens-connector-soap</name>
     <properties>
         <connector.app.dir>../assembler/${copyto.module.dir}/soap</connector.app.dir>
@@ -20,60 +19,22 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <instructions>
-                        <Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
-                        <Export-Package>com.lumens.connector.webservice.*</Export-Package>
-                        <Bundle-Activator>com.lumens.connector.webservice.Activator</Bundle-Activator>
-                        <Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
-                        <Bundle-Vendor>Lumens Team</Bundle-Vendor>
-                    </instructions>
+                    <archive>
+                        <manifestEntries>
+                            <Addin-Name>Lumens SOAP Web Service connector</Addin-Name>
+                            <Addin-Activator>com.lumens.connector.webservice.service.Activator</Addin-Activator>
+                            <Addin-Classpath>lib,3rdparty</Addin-Classpath>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
-                    <execution>
-                        <id>copy-dependencies-0</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${connector.lib.dir}</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                            <excludeGroupIds>com.lumens</excludeGroupIds>
-                            <includeScope>runtime</includeScope>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-dependencies-1</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${pom.groupId}</groupId>
-                                    <artifactId>${pom.artifactId}</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                </artifactItem>
-                            </artifactItems>
-                            <outputDirectory>${connector.app.dir}</outputDirectory>
-                            <overWriteReleases>true</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                        </configuration>
-                    </execution>
-                    
                     <execution>
                         <id>copy-dependencies-test-0</id>
                         <phase>package</phase>
@@ -85,6 +46,7 @@
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
+                            <excludeGroupIds>com.lumens</excludeGroupIds>
                             <includeScope>runtime</includeScope>
                         </configuration>
                     </execution>
@@ -107,6 +69,7 @@
                             <outputDirectory>${connector.test.app.dir}</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
                     </execution>
                 </executions>
@@ -179,6 +142,11 @@
             <artifactId>lumens-processor</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-addin</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

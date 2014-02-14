@@ -8,7 +8,6 @@ import com.lumens.engine.TransformProject;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.server.sql.DAOFactory;
 import com.lumens.server.sql.dao.ProjectDAO;
-import com.lumens.server.sql.entity.Project;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
