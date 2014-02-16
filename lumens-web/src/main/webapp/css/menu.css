@@ -1,0 +1,66 @@
+@font-face {
+    font-family: 'linecons';
+    src:url('fonts/linecons/linecons.eot');
+    src:url('fonts/linecons/linecons.eot?#iefix') format('embedded-opentype'),
+        url('fonts/linecons/linecons.woff') format('woff'),
+        url('fonts/linecons/linecons.ttf') format('truetype'),
+        url('fonts/linecons/linecons.svg#linecons') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-weight: normal;
+    font-style: normal;
+    font-family: 'codropsicons';
+    src:url('fonts/codropsicons/codropsicons.eot');
+    src:url('fonts/codropsicons/codropsicons.eot?#iefix') format('embedded-opentype'),
+        url('fonts/codropsicons/codropsicons.woff') format('woff'),
+        url('fonts/codropsicons/codropsicons.ttf') format('truetype'),
+        url('fonts/codropsicons/codropsicons.svg#codropsicons') format('svg');
+}
+
+@font-face {
+    font-family: 'icomoon';
+    src:url('fonts/icomoon/icomoon.eot?de4bve');
+    src:url('fonts/icomoon/icomoon.eot?#iefixde4bve') format('embedded-opentype'),
+        url('fonts/icomoon/icomoon.woff?de4bve') format('woff'),
+        url('fonts/icomoon/icomoon.ttf?de4bve') format('truetype'),
+        url('fonts/icomoon/icomoon.svg?de4bve#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.side-nav ul li::before {
+    position: absolute;
+    left: 10px;
+    z-index: -1;
+    line-height: 3.5;
+}
+
+.icon-arrow-left:before {
+    content: "\e032";
+}
+
+.icon:before {
+    font-family: 'linecons', 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    display: inline-block;
+    margin-right: 0.6em;
+    -webkit-font-smoothing: antialiased;
+}
+
+.Designer-Side-Bar { font-size: 1.2em; }
+
+.Designer-Side-Bar .Data-Source-Icon:before {
+    content: "\e001";
+}
+
+.Designer-Side-Bar .Data-Transf-Icon:before {
+    content: "\e61e";
+}
