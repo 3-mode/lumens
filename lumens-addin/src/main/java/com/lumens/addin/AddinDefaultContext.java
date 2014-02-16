@@ -24,6 +24,16 @@ public class AddinDefaultContext implements AddinContext {
     private List<Addin> addinList = new ArrayList<>();
     private AddinEngine addinEngine;
 
+    @Override
+    public List<Addin> getAddins() {
+        return addinList;
+    }
+
+    @Override
+    public List<ServiceEntity> getServices() {
+        return new ArrayList<>(services.values());
+    }
+
     protected static class AddinImpl implements Addin {
 
         private AddinContext addinContext;
@@ -36,6 +46,11 @@ public class AddinDefaultContext implements AddinContext {
             this.addinContext = context;
             this.parentPath = parentPath;
             this.urlClassLoader = urlClassLoader;
+        }
+
+        @Override
+        public String toString() {
+            return "Addin {" + "Name=" + addinName + ", Path=" + parentPath + '}';
         }
 
         @Override

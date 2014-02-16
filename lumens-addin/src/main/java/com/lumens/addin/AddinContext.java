@@ -4,6 +4,7 @@
 package com.lumens.addin;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,6 +20,10 @@ public interface AddinContext {
     public Addin installAddIn(URL url);
 
     public Addin getAddin(String name);
+
+    public List<Addin> getAddins();
+
+    public List<ServiceEntity> getServices();
 
     public void start();
 
