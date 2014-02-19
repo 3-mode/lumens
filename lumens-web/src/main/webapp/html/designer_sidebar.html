@@ -1,3 +1,23 @@
-<ul id="ID_Designer_SideBar"class="nav navbar-nav side-nav" ng-controller='DesignerSidebarCtrl'>
-    <li ng-repeat="nav_item in nav_items"><a href="index.html"><i class="fa {{nav_item.icon_class}}"></i> {{nav_item.label}}</a></li>
+<ul id="ID_Designer_SideBar"class="Designer-Side-Bar nav navbar-nav side-nav" ng-controller='DesignerSidebarCtrl'>
+    <li>
+        <a class="icon {{designerNavMenu.iconClass}}" href="#"></i>{{designerNavMenu.name}}</a>
+    </li>
+    <li ng-repeat="menu in designerNavMenu.menu">
+        <a class="icon icon-arrow-left" href="#">
+            <i class="icon {{menu.iconClass}}"></i>{{menu.name}}
+        </a>
+    </li>
 </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -55,7 +55,7 @@ Lumens.Link = Class.$extend({
 Lumens.DataComponent = Class.$extend({
     __init__: function(_$parent, _component) {
         var template = '<div class="Data-Component" style="left:50px;top:50px;">' +
-        '<div class="Data-Component-icon"><img src="css/img/ds/Database.png"/></div>' +
+        '<div class="Data-Component-icon"><img/></div>' +
         '<img class="Data-Component-stauts" src="css/img/ds/Deactive.png"/>' +
         '<div class="Data-Component-Text">' +
         '<div class="Data-Component-Title"><b id="ID_ProductName"></b></div>' +
@@ -72,6 +72,7 @@ Lumens.DataComponent = Class.$extend({
                         _This._from_list[i].redraw();
             }
         });
+        this._$elem.find('.Data-Component-icon').find('img').attr('src', 'css/img/ds/' + _component.product_name + '.png');
         this._$elem.find('#ID_ProductName').text(_component.product_name);
         this._$elem.find('#ID_ShortDsc').text(_component.short_desc);
         this._$elem.css("left", _component.x + 'px');

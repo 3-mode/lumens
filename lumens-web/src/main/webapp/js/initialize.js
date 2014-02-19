@@ -67,3 +67,20 @@ Raphael.fn.connection = function(obj1, obj2, line, bg) {
         };
     }
 };
+
+function generateId() {
+    var chars = "0123456789abcdefghiklmnopqrstuvwxyz",
+    string_length = 16,
+    id = '';
+    for (var i = 0; i < string_length; i++) {
+        var rnum = Math.floor(Math.random() * chars.length);
+        id += chars.substring(rnum, rnum + 1);
+    }
+
+    return id;
+}
+
+Lumens.Id = function($element) {
+    $element.attr("element-id", 'id$' + generateId());
+    return $element;
+}

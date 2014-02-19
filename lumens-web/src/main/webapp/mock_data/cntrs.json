@@ -1,0 +1,33 @@
+{
+    "connector": [
+        {
+            "id": "Database_001",
+            "name": "Database",
+            "icon": "",
+            "parent": "Datasource_001"
+        },
+        {
+            "id": "Oracle_001",
+            "name": "Oracle",
+            "clazz": "com.lumens.connector.oracle.client.OracleConnector",
+            "icon": "",
+            "parent": "Database_001"
+        },
+        {
+            "id": "MySQL_001",
+            "name": "Oracle",
+            "clazz": "com.lumens.connector.oracle.client.OracleConnector",
+            "icon": "",
+            "parent": "Database_001"
+        }
+    ],
+    "tool": [
+        {
+            "id": "Processor_001",
+            "name": "Transformation",
+            "icon": "",
+            "clazz": "",
+            "parent": "BusinessTool_001"
+        }
+    ]
+}

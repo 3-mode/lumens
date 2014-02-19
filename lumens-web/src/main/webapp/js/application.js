@@ -59,7 +59,7 @@ Lumens.Application = Class.$extend({
             );
             $controllerProvider.register('DesignerSidebarCtrl', ['$scope', '$http', function($scope, $http) {
                     $http.get('config/designer_sidebar.json').success(function(data) {
-                        $scope.nav_items = data.nav_items;
+                        $scope.designerNavMenu = data;
                         var _$designerSideBar = $('#ID_Designer_SideBar').css("height", $(window).height() - lumensApp._nav_header_height);
                         $(window).resize(function() {
                             _$designerSideBar.css("height", $(window).height() - lumensApp._nav_header_height);
@@ -72,20 +72,27 @@ Lumens.Application = Class.$extend({
                     var _$wrapper = $('#wrapper')
                     .css("height", $(window).height() - lumensApp._nav_header_height)
                     .css("width", $(window).width() - lumensApp._nav_side_width);
+                    var _$component_container = _$wrapper.find('#ID-Data-Component-Container')
+                    .css("height", _$wrapper.css("height"))
+                    .css("width", _$wrapper.css("width"));
                     $(window).resize(function() {
                         _$wrapper
                         .css("height", $(window).height() - lumensApp._nav_header_height)
                         .css("width", $(window).width() - lumensApp._nav_side_width);
+                        _$component_container
+                        .css("height", _$wrapper.css("height"))
+                        .css("width", _$wrapper.css("width"));
                     });
 
                     // mock some components and links
                     var _$parent = $('#ID-Data-Component-Container');
-                    var c0 = new Lumens.DataComponent(_$parent, {"x": 50, "y": 50, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
-                    var c1 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 100, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
-                    var c2 = new Lumens.DataComponent(_$parent, {"x": 300, "y": 300, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                    var c0 = new Lumens.DataComponent(_$parent, {"x": 50, "y": 50, "product_name": "Oracle", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                    var c1 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 100, "product_name": "MySQL", "short_desc": "jdbc:mysql:thin:@localhost:1521:mysql"});
+                    var c2 = new Lumens.DataComponent(_$parent, {"x": 300, "y": 300, "product_name": "Oracle", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
                     new Lumens.Link().from(c0).to(c1).draw();
                     new Lumens.Link().from(c0).to(c2).draw();
-                    var c2 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 500, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                    var c3 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 500, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                    new Lumens.Link().from(c2).to(c3).draw();
                 }]
             );
         });

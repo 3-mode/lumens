@@ -1,6 +1,21 @@
 /**
 * Application extension style
 */
+a {
+    -moz-outline-style: none; 
+    outline: none;
+    text-decoration:none;
+}
+
+li {
+    -moz-outline-style: none; 
+    list-style-type: none;
+}
+
+.Console-Title {
+    font-size: 1.3em;
+}
+
 .Table-Ext {}
 
 .Table-Ext td {
@@ -66,7 +81,7 @@
 }
 
 .Data-Component-Text {
-    padding-top: 25px;
+    padding-top: 20px;
     padding-left: 5px;
     width: 180px;
     overflow: hidden;

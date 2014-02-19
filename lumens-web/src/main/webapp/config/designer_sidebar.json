@@ -1,17 +1,53 @@
 {
-    "name": "NavSideBar",
-    "nav_items": [
+    "name": "ALL CATEGORIES",
+    "iconClass": "Designer-Side-Bar-Categories",
+    "menu": [
         {
-            "label": "Datasource",
-            "icon_class": "fa-dashboard"
+            "id": "Datasource_001",
+            "name": "Data Source",
+            "iconClass": "Data-Source-Icon",
+            "type": "datasource",
+            "connector": [
+                {
+                    "id": "Database_001",
+                    "name": "Database",
+                    "icon": "",
+                    "parentID": "Datasource_001",
+                    "type": "datasource",
+                    "connector": [
+                        {
+                            "id": "Oracle_001",
+                            "name": "Oracle",
+                            "clazz": "com.lumens.connector.oracle.client.OracleConnector",
+                            "icon": "",
+                            "type": "datasource",
+                            "parentID": "Database_001"
+                        }, {
+                            "id": "MySQL_001",
+                            "name": "MySQL",
+                            "clazz": "com.lumens.connector.mysql.client.MySQLConnector",
+                            "icon": "",
+                            "type": "datasource",
+                            "parentID": "Database_001"
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "label": "Transformation",
-            "icon_class": "fa-file"
-        },
-        {
-            "label": "Designer",
-            "icon_class": "fa-desktop"
+            "id": "BusinessTool_001",
+            "name": "Business Tool",
+            "iconClass": "Data-Transf-Icon",
+            "connector": [
+                {
+                    "id": "Processor_001",
+                    "name": "Transformation",
+                    "icon": "",
+                    "clazz": "",
+                    "parentID": "BusinessTool_001",
+                    "type": "tool"
+                }
+            ]
         }
     ]
 }

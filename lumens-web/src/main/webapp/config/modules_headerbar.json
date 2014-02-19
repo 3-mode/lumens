@@ -1,7 +1,7 @@
 {
     "modules": [
         {"id": "id_dashboard", "label": "Dashboard", "class": "active"},
-        {"id": "id_project_manage", "label": "Project Management", "class": ""},
+        {"id": "id_project_manage", "label": "Management", "class": ""},
         {"id": "id_business_designer", "label": "Business Designer", "class": ""}
     ]
 }

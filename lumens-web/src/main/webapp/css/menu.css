@@ -64,3 +64,15 @@
 .Designer-Side-Bar .Data-Transf-Icon:before {
     content: "\e61e";
 }
+
+.Designer-Side-Bar .Designer-Side-Bar-Categories:before {
+    content: "\e61a";
+}
+
+.Designer-Side-Bar-Back::after {
+    font-family: 'linecons';
+    position: absolute;
+    content: "\e037";
+    right: 10px;
+    font-size: 1.3em;
+}
