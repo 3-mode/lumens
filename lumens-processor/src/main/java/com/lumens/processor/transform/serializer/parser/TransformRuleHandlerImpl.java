@@ -60,9 +60,9 @@ public class TransformRuleHandlerImpl implements TransformRuleHandler {
             if (name != null) {
                 TransformRuleItem child = currentRuleItem.addChild(name);
                 if (child != null) {
-                    String arrayItrPath = meta.getValue("array-iteration-path");
-                    if (arrayItrPath != null)
-                        child.setArrayIterationPath(arrayItrPath);
+                    String forEachPath = meta.getValue("for-each-path");
+                    if (forEachPath != null)
+                        child.setForEachPath(forEachPath);
                     ruleItemStack.add(currentRuleItem);
                     currentRuleItem = child;
                 }

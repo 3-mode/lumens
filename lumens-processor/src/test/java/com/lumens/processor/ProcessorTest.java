@@ -89,7 +89,7 @@ extends TestCase {
 
         TransformRule rule = new TransformRule(asset);
         rule.getRuleItem("Computer.name").setScript("@asset.name");
-        rule.getRuleItem("Computer").setArrayIterationPath("asset");
+        rule.getRuleItem("Computer").setForEachPath("asset");
         assertEquals("@asset.name", rule.getRuleItem("Computer.name").
         getScriptString());
 
@@ -165,9 +165,9 @@ extends TestCase {
         TransformRule rule = new TransformRule(dstFormat);
         rule.getRuleItem("a2.a3.a4.a5").setScript("@b.c.d.e.f");
         rule.getRuleItem("a2.a3.aa4.aa5").setScript("@b.c.d.e.f");
-        rule.getRuleItem("a2").setArrayIterationPath("b");
-        rule.getRuleItem("a2.a3.a4").setArrayIterationPath("b.c.d");
-        rule.getRuleItem("a2.a3.aa4").setArrayIterationPath("b.c.d");
+        rule.getRuleItem("a2").setForEachPath("b");
+        rule.getRuleItem("a2.a3.a4").setForEachPath("b.c.d");
+        rule.getRuleItem("a2.a3.aa4").setForEachPath("b.c.d");
 
         List<Element> result = (List<Element>) transformProcessor.execute(rule, data);
 
@@ -185,7 +185,7 @@ extends TestCase {
         TransformRule rule = new TransformRule(dstFormat);
         rule.getRuleItem("a2.a3.a4.a5").setScript("@b.c.d.e.f");
         rule.getRuleItem("a2.a3.aa4.aa5").setScript("@b.c.d.e.f");
-        rule.getRuleItem("a2").setArrayIterationPath("b");
+        rule.getRuleItem("a2").setForEachPath("b");
         List<Element> result = (List<Element>) transformProcessor.execute(rule, data);
 
         ElementSerializer serializer = new ElementSerializer(result.
@@ -202,7 +202,7 @@ extends TestCase {
         TransformRule rule = new TransformRule(dstFormat);
         rule.getRuleItem("a2.a3.a4.a5").setScript("@b.c.d.e.f");
         rule.getRuleItem("a2.a3.aa4.aa5").setScript("@b.c.d.e.f");
-        rule.getRuleItem("a2.a3.a4").setArrayIterationPath("b.c.d");
+        rule.getRuleItem("a2.a3.a4").setForEachPath("b.c.d");
         List<Element> result = (List<Element>) transformProcessor.execute(rule, data);
 
         ElementSerializer serializer = new ElementSerializer(result.
@@ -220,7 +220,7 @@ extends TestCase {
         TransformRule rule = new TransformRule(dstFormat);
         rule.getRuleItem("a2.a3.a4.a5").setScript("@b.c.d.e.f");
         rule.getRuleItem("a2.a3.aa4.aa5").setScript("@b.c.d.e.f");
-        rule.getRootRuleItem().setArrayIterationPath("b.c.d");
+        rule.getRootRuleItem().setForEachPath("b.c.d");
         List<Element> result = (List<Element>) transformProcessor.execute(rule, data);
 
         for (Element elem : result) {
@@ -239,23 +239,23 @@ extends TestCase {
         TransformRule rule = new TransformRule(dstFormat);
         rule.getRuleItem("a2.a3.a4.a5").setScript("@b.c.d.e.f");
         rule.getRuleItem("a2.a3.aa4.aa5").setScript("@b.c.d.e.f");
-        rule.getRuleItem("a2").setArrayIterationPath("b");
-        rule.getRuleItem("a2.a3.a4").setArrayIterationPath("b.c.d");
-        rule.getRuleItem("a2.a3.aa4").setArrayIterationPath("b.c.d");
+        rule.getRuleItem("a2").setForEachPath("b");
+        rule.getRuleItem("a2.a3.a4").setForEachPath("b.c.d");
+        rule.getRuleItem("a2.a3.aa4").setForEachPath("b.c.d");
         try {
             // It will be error, "b.c.d" is used in child element
-            rule.getRuleItem("a2").setArrayIterationPath("b.c.d");
+            rule.getRuleItem("a2").setForEachPath("b.c.d");
             fail();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            rule.getRuleItem("a2.a3.a4").setArrayIterationPath(null);
-            rule.getRuleItem("a2.a3.aa4").setArrayIterationPath(null);
-            rule.getRuleItem("a2").setArrayIterationPath("b.c.d");
+            rule.getRuleItem("a2.a3.a4").setForEachPath(null);
+            rule.getRuleItem("a2.a3.aa4").setForEachPath(null);
+            rule.getRuleItem("a2").setForEachPath("b.c.d");
         }
 
         try {
             // It will be error, "b.c.d" is used in parent element
-            rule.getRuleItem("a2.a3.a4").setArrayIterationPath("b.c.d");
+            rule.getRuleItem("a2.a3.a4").setForEachPath("b.c.d");
             fail();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -276,9 +276,9 @@ extends TestCase {
         TransformRule rule = new TransformRule(dstFormat);
         rule.getRuleItem("a2.a3.a4.a5").setScript("@b.c.d.e.f");
         rule.getRuleItem("a2.a3.aa4.aa5").setScript(IOUtils.toString(getInputStream("test-script/aa5-script.txt")));
-        rule.getRuleItem("a2").setArrayIterationPath("b");
-        rule.getRuleItem("a2.a3.a4").setArrayIterationPath("b.c.d");
-        rule.getRuleItem("a2.a3.aa4").setArrayIterationPath("b.c.d");
+        rule.getRuleItem("a2").setForEachPath("b");
+        rule.getRuleItem("a2.a3.a4").setForEachPath("b.c.d");
+        rule.getRuleItem("a2.a3.aa4").setForEachPath("b.c.d");
         List<Element> result = (List<Element>) transformProcessor.execute(rule, data);
 
         ElementSerializer serializer = new ElementSerializer(result.get(0), true);

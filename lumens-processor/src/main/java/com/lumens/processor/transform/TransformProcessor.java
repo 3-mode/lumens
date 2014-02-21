@@ -31,11 +31,10 @@ public class TransformProcessor extends AbstractProcessor {
             Element inputElement = input;
             List<Element> results = new ArrayList<>();
             TransformRuleItem ruleItem = transformRule.getRootRuleItem();
-            String arrayIterationPath = ruleItem.getArrayIterationPath();
+            String forEachPath = ruleItem.getForEachPath();
             List<Element> items;
-            if (arrayIterationPath != null) {
-                items = getAllElementsFromEntry(inputElement, new AccessPath(
-                arrayIterationPath));
+            if (forEachPath != null) {
+                items = getAllElementsFromEntry(inputElement, new AccessPath(forEachPath));
             } else {
                 items = new ArrayList<>();
                 items.add(inputElement);
@@ -73,8 +72,7 @@ public class TransformProcessor extends AbstractProcessor {
             List<TransformRuleItem> children = ruleItem.getChildren();
             if (children != null) {
                 for (TransformRuleItem child : children) {
-                    Element childElem = executeTransformRule(ctx, child, currentElement.
-                    newChild(child.getFormat()));
+                    Element childElem = executeTransformRule(ctx, child, currentElement.newChild(child.getFormat()));
                     if (childElem != null)
                         currentElement.addChild(childElem);
                 }
@@ -91,8 +89,7 @@ public class TransformProcessor extends AbstractProcessor {
         return elementSearchEntry;
     }
 
-    private void buildElementArrayItem(TransformContext ctx, TransformRuleItem ruleItem,
-                                       Element currentElement, List<Element> arrayItems) {
+    private void buildElementArrayItem(TransformContext ctx, TransformRuleItem ruleItem, Element currentElement, List<Element> arrayItems) {
         for (Element item : arrayItems) {
             Element childElem = executeTransformRule(ctx, ruleItem, currentElement.newArrayItem());
             if (childElem != null) {
@@ -104,7 +101,7 @@ public class TransformProcessor extends AbstractProcessor {
 
     private List<Element> buildArrayIterationElementList(TransformContext ctx, TransformRuleItem ruleItem) {
         Element elementSearchEntry = ctx.getAccessPathEntry();
-        String arrayIterationPathStr = ruleItem.getArrayIterationPath();
+        String arrayIterationPathStr = ruleItem.getForEachPath();
         Path arrayIterationPath = new AccessPath(arrayIterationPathStr);
 
         if (elementSearchEntry != null && elementSearchEntry.getLevel() > 0)
@@ -113,15 +110,12 @@ public class TransformProcessor extends AbstractProcessor {
         return getAllElementsFromEntry(elementSearchEntry, arrayIterationPath);
     }
 
-    private List<Element> getAllElementsFromEntry(Element arrayElementEntry, Path arrayIterationPath) {
+    private List<Element> getAllElementsFromEntry(Element arrayElementEntry, Path forEachPath) {
         List<Element> itemList = new ArrayList<>();
         itemList.add(arrayElementEntry);
-        String pathToken;
-        Iterator<PathToken> it = arrayIterationPath.iterator();
-        while (!itemList.isEmpty() && it.hasNext()) {
-            pathToken = it.next().toString();
-            itemList = getChildItemsOfCurrentLevel(pathToken, itemList);
-        }
+        Iterator<PathToken> it = forEachPath.iterator();
+        while (!itemList.isEmpty() && it.hasNext())
+            itemList = getChildItemsOfCurrentLevel(it.next().toString(), itemList);
 
         return itemList;
     }
@@ -136,8 +130,7 @@ public class TransformProcessor extends AbstractProcessor {
                 else if (item != null && item.isArray() && item.getChildren().size() > 0)
                     childItems.addAll(item.getChildren());
             } else if (item.isField())
-                throw new RuntimeException(
-                "Wrong path is used for array-to-array or array to struct transform rule");
+                throw new RuntimeException("Wrong path is used for array-to-array or array to struct transform rule");
         }
 
         return childItems;

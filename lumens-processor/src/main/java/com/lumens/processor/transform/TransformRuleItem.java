@@ -22,7 +22,7 @@ public class TransformRuleItem {
     private List<TransformRuleItem> children;
     private Script script;
     private String orignalScriptText;
-    private String arrayIterationPath;
+    private String forEachPath;
     private Format format;
 
     TransformRuleItem(Format format) {
@@ -46,15 +46,15 @@ public class TransformRuleItem {
         return orignalScriptText;
     }
 
-    public void setArrayIterationPath(String arrayIterationPath) {
+    public void setForEachPath(String forEachPath) {
         if (!format.isArray() && format.getParent() != null) {
-            throw new IllegalArgumentException("iteration path \"" + arrayIterationPath + "\" can not be configured for a no array or no root element");
+            throw new IllegalArgumentException("iteration path \"" + forEachPath + "\" can not be configured for a no array or no root element");
         }
 
         TransformRuleItem item = parent;
         while (item != null) {
-            if (item.arrayIterationPath != null && item.arrayIterationPath.equalsIgnoreCase(arrayIterationPath))
-                throw new IllegalArgumentException("iteration path \"" + arrayIterationPath + "\" already is configured in its parent element");
+            if (item.forEachPath != null && item.forEachPath.equalsIgnoreCase(forEachPath))
+                throw new IllegalArgumentException("iteration path \"" + forEachPath + "\" already is configured in its parent element");
             item = item.parent;
         }
         ArrayDeque<TransformRuleItem> items = new ArrayDeque<>();
@@ -64,18 +64,18 @@ public class TransformRuleItem {
 
         while (!items.isEmpty()) {
             item = items.removeFirst();
-            if (item.arrayIterationPath != null && item.arrayIterationPath.equalsIgnoreCase(arrayIterationPath))
-                throw new IllegalArgumentException("iteration path \"" + arrayIterationPath + "\" already is configured in its child element");
+            if (item.forEachPath != null && item.forEachPath.equalsIgnoreCase(forEachPath))
+                throw new IllegalArgumentException("For each path \"" + forEachPath + "\" already is configured in its child element");
             currentChildren = item.getChildren();
             if (currentChildren != null && !currentChildren.isEmpty())
                 items.addAll(currentChildren);
         }
 
-        this.arrayIterationPath = arrayIterationPath;
+        this.forEachPath = forEachPath;
     }
 
-    public String getArrayIterationPath() {
-        return arrayIterationPath;
+    public String getForEachPath() {
+        return forEachPath;
     }
 
     public TransformRuleItem getParent() {

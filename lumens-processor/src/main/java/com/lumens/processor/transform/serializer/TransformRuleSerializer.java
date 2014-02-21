@@ -77,9 +77,9 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
         Format format = ruleItem.getFormat();
         if (format != null)
             xml.print(" format-name=\"").print(format.getName()).print("\"");
-        String arrayIterPath = ruleItem.getArrayIterationPath();
-        if (arrayIterPath != null)
-            xml.print(" array-iteration-path=\"").print(arrayIterPath).print("\"");
+        String forEachPath = ruleItem.getForEachPath();
+        if (forEachPath != null)
+            xml.print(" for-each-path=\"").print(forEachPath).print("\"");
         xml.println(">");
         String nextIndent = indent + INDENT_OFFSET;
         String script = ruleItem.getScriptString();
@@ -134,9 +134,9 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
         if (format != null)
             jGenerator.writeStringField("format_name", format.getName());
 
-        String arrayIterPath = ruleItem.getArrayIterationPath();
-        if (arrayIterPath != null)
-            jGenerator.writeStringField("array_iteration_path", arrayIterPath);
+        String forEachPath = ruleItem.getForEachPath();
+        if (forEachPath != null)
+            jGenerator.writeStringField("for_each_path", forEachPath);
         String script = ruleItem.getScriptString();
         if (script != null)
             jGenerator.writeStringField("script", script);

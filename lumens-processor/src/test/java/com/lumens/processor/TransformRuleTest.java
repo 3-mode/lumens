@@ -44,6 +44,7 @@ public class TransformRuleTest extends TestCase {
             TransformRuleSerializer unSerialXml = new TransformRuleSerializer(a1, ruleList);
             unSerialXml.readFromXml(in);
             TransformRuleSerializer xml = new TransformRuleSerializer(ruleList.get(0));
+            System.out.println("Print the rule structure after read it from a xml : ");
             xml.writeToXml(System.out);
         } finally {
             in.close();

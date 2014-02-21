@@ -2,16 +2,16 @@
 <transform-rule-list>
     <transform-rule name="a1">
         <transform-rule-item format-name="a1">
-            <transform-rule-item format-name="a2" array-iteration-path="b">
+            <transform-rule-item format-name="a2" for-each-path="b">
                 <transform-rule-item format-name="a3">
-                    <transform-rule-item format-name="a4" array-iteration-path="b.c.d">
+                    <transform-rule-item format-name="a4" for-each-path="b.c.d">
                         <transform-rule-item format-name="a5">
                             <script>
 <![CDATA[@b.c.d.e.f]]>
                             </script>
                         </transform-rule-item>
                     </transform-rule-item>
-                    <transform-rule-item format-name="aa4" array-iteration-path="b.c.d">
+                    <transform-rule-item format-name="aa4" for-each-path="b.c.d">
                         <transform-rule-item format-name="aa5">
                             <script>
 <![CDATA[var str = @b.c.d.e.f + "test";
