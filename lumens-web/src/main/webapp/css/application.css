@@ -1,10 +1,18 @@
 /**
 * Application extension style
 */
-a {
+.Lumens {
+
+}
+
+.Lumens a {
     -moz-outline-style: none; 
     outline: none;
     text-decoration:none;
+}
+
+.Lumens ul {
+    list-style: none outside none;
 }
 
 li {
@@ -14,6 +22,10 @@ li {
 
 .Console-Title {
     font-size: 1.3em;
+}
+
+.Console-Brand {
+    letter-spacing: 5px;
 }
 
 .Table-Ext {}

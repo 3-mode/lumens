@@ -1,23 +1,13 @@
 <ul id="ID_Designer_SideBar"class="Designer-Side-Bar nav navbar-nav side-nav" ng-controller='DesignerSidebarCtrl'>
     <li>
-        <a class="icon {{designerNavMenu.iconClass}}" href="#"></i>{{designerNavMenu.name}}</a>
+        <a class="icon {{sidebar.currentMenus.iconClass}}" href="#"></i>{{sidebar.currentMenus.name}}</a>
     </li>
-    <li ng-repeat="menu in designerNavMenu.menu">
-        <a class="icon icon-arrow-left" href="#">
+    <li id="ID_SideBar_Back" ng-hide="sidebar.SidebarBackHide" ng-click="sidebar.onSidebarMenuClick('ID_SideBar_Back')">
+        <a class="Designer-Side-Bar-Back" href="#">back</a>
+    <li>
+    <li ng-repeat="menu in sidebar.currentMenus.menus" ng-click="sidebar.onSidebarMenuClick(menu.id, menu)">
+        <a class="icon" ng-class="{icon_arrow_left: sidebar.hasChildren(menu), Designer_Side_Bar_Data_node: !sidebar.hasChildren(menu)}" href="#">
             <i class="icon {{menu.iconClass}}"></i>{{menu.name}}
         </a>
     </li>
 </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-

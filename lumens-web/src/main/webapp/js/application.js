@@ -58,12 +58,30 @@ Lumens.Application = Class.$extend({
                 }]
             );
             $controllerProvider.register('DesignerSidebarCtrl', ['$scope', '$http', function($scope, $http) {
-                    $http.get('config/designer_sidebar.json').success(function(data) {
-                        $scope.designerNavMenu = data;
-                        var _$designerSideBar = $('#ID_Designer_SideBar').css("height", $(window).height() - lumensApp._nav_header_height);
-                        $(window).resize(function() {
-                            _$designerSideBar.css("height", $(window).height() - lumensApp._nav_header_height);
-                        })
+                    $scope.sidebar = {};
+                    $scope.sidebar.stack = new Array();
+                    var _$designerSideBar = $('#ID_Designer_SideBar').css("height", $(window).height() - lumensApp._nav_header_height);
+                    $(window).resize(function() {
+                        _$designerSideBar.css("height", $(window).height() - lumensApp._nav_header_height);
+                    });
+                    $http.get('config/designer_sidebar.json').success(function(menus) {
+                        $scope.sidebar.currentMenus = menus;
+                        $scope.sidebar.SidebarBackHide = ($scope.sidebar.stack.length === 0 ? "true" : undefined);
+                        $scope.sidebar.onSidebarMenuClick = function(menu_id, menu) {
+                            if ('ID_SideBar_Back' === menu_id) {
+                                console.log("Back to above level");
+                                $scope.sidebar.currentMenus = $scope.sidebar.stack.pop();
+                                $scope.sidebar.SidebarBackHide = ($scope.sidebar.stack.length === 0 ? "true" : undefined);
+                            }
+                            else if (menu.menus) {
+                                $scope.sidebar.stack.push($scope.sidebar.currentMenus);
+                                $scope.sidebar.currentMenus = menu;
+                                $scope.sidebar.SidebarBackHide = ($scope.sidebar.stack.length === 0 ? "true" : undefined);
+                            }
+                        };
+                        $scope.sidebar.hasChildren = function(menu) {
+                            return menu.menus !== null && menu.menus !== undefined;
+                        }
                     });
                 }]
             );

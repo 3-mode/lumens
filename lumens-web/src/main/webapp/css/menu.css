@@ -38,8 +38,12 @@
     line-height: 3.5;
 }
 
-.icon-arrow-left:before {
-    content: "\e032";
+.icon_arrow_left:before {
+    content: "\e6fd";
+}
+
+.icon_arrow_right:after {
+    content: "\e037";
 }
 
 .icon:before {
@@ -69,10 +73,36 @@
     content: "\e61a";
 }
 
+.Designer-Side-Bar .Data-Source-Icon-Inst-Default:before {
+    content: "\e668";
+}
+
+.Designer-Side-Bar-Back {
+    background: rgba(0,0,0,0.1);
+    outline: none;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    display: block;
+    font-size: 0.8em;
+    padding-top: 0.6em !important;
+    padding-bottom: 0.6em !important;
+    position: relative;
+    box-shadow: inset 0 1px rgba(0,0,0,0.1);
+    -webkit-transition: background 0.3s;
+    -moz-transition: background 0.3s;
+    transition: background 0.3s;
+}
+
 .Designer-Side-Bar-Back::after {
-    font-family: 'linecons';
+    font-family: 'linecons', 'icomoon';;
     position: absolute;
     content: "\e037";
-    right: 10px;
+    right: 18px;
     font-size: 1.3em;
+}
+
+.Designer_Side_Bar_Data_node {
+    padding-left: 40px !important;
 }

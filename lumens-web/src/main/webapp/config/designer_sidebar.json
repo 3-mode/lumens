@@ -1,36 +1,36 @@
 {
+    "id": "All",
     "name": "ALL CATEGORIES",
     "iconClass": "Designer-Side-Bar-Categories",
-    "menu": [
+    "menus": [
         {
             "id": "Datasource_001",
             "name": "Data Source",
             "iconClass": "Data-Source-Icon",
             "type": "datasource",
-            "connector": [
+            "menus": [
                 {
-                    "id": "Database_001",
-                    "name": "Database",
-                    "icon": "",
-                    "parentID": "Datasource_001",
+                    "id": "Oracle_001",
+                    "name": "Oracle",
+                    "clazz": "com.lumens.connector.oracle.client.OracleConnector",
+                    "iconClass": "Data-Source-Icon-Inst-Default",
                     "type": "datasource",
-                    "connector": [
-                        {
-                            "id": "Oracle_001",
-                            "name": "Oracle",
-                            "clazz": "com.lumens.connector.oracle.client.OracleConnector",
-                            "icon": "",
-                            "type": "datasource",
-                            "parentID": "Database_001"
-                        }, {
-                            "id": "MySQL_001",
-                            "name": "MySQL",
-                            "clazz": "com.lumens.connector.mysql.client.MySQLConnector",
-                            "icon": "",
-                            "type": "datasource",
-                            "parentID": "Database_001"
-                        }
-                    ]
+                    "parentID": "Database_001"
+                },
+                {
+                    "id": "MySQL_001",
+                    "name": "MySQL",
+                    "clazz": "com.lumens.connector.mysql.client.MySQLConnector",
+                    "iconClass": "Data-Source-Icon-Inst-Default",
+                    "type": "datasource",
+                    "parentID": "Database_001"
+                },
+                {
+                    "id": "WebService_001",
+                    "name": "WebService",
+                    "iconClass": "Data-Source-Icon-Inst-Default",
+                    "parentID": "Datasource_001",
+                    "type": "datasource"
                 }
             ]
         },
@@ -38,11 +38,11 @@
             "id": "BusinessTool_001",
             "name": "Business Tool",
             "iconClass": "Data-Transf-Icon",
-            "connector": [
+            "menus": [
                 {
                     "id": "Processor_001",
                     "name": "Transformation",
-                    "icon": "",
+                    "iconClass": "Data-Source-Icon-Inst-Default",
                     "clazz": "",
                     "parentID": "BusinessTool_001",
                     "type": "tool"
