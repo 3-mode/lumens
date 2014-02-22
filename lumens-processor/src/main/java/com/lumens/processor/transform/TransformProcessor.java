@@ -66,7 +66,7 @@ public class TransformProcessor extends AbstractProcessor {
         ctx.setAccessPathEntry(getAccessPathEntry(ctx, currentElement));
 
         if (currentElement.isArray()) {
-            List<Element> elemList = buildArrayIterationElementList(ctx, ruleItem);
+            List<Element> elemList = buildForEachElementList(ctx, ruleItem);
             buildElementArrayItem(ctx, ruleItem, currentElement, elemList);
         } else if (currentElement.isStruct()) {
             List<TransformRuleItem> children = ruleItem.getChildren();
@@ -99,15 +99,15 @@ public class TransformProcessor extends AbstractProcessor {
         }
     }
 
-    private List<Element> buildArrayIterationElementList(TransformContext ctx, TransformRuleItem ruleItem) {
+    private List<Element> buildForEachElementList(TransformContext ctx, TransformRuleItem ruleItem) {
         Element elementSearchEntry = ctx.getAccessPathEntry();
-        String arrayIterationPathStr = ruleItem.getForEachPath();
-        Path arrayIterationPath = new AccessPath(arrayIterationPathStr);
+        String strForEachPath = ruleItem.getForEachPath();
+        Path forEachPath = new AccessPath(strForEachPath);
 
         if (elementSearchEntry != null && elementSearchEntry.getLevel() > 0)
-            arrayIterationPath = arrayIterationPath.removeLeft(elementSearchEntry.getLevel());
+            forEachPath = forEachPath.removeLeft(elementSearchEntry.getLevel());
 
-        return getAllElementsFromEntry(elementSearchEntry, arrayIterationPath);
+        return getAllElementsFromEntry(elementSearchEntry, forEachPath);
     }
 
     private List<Element> getAllElementsFromEntry(Element arrayElementEntry, Path forEachPath) {
