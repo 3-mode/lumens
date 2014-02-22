@@ -113,8 +113,8 @@ public class DataFormat implements Format {
     @Override
     public Format addChild(Format format) {
         if (childMap == null && childList == null) {
-            childMap = new HashMap<String, Format>();
-            childList = new ArrayList<Format>();
+            childMap = new HashMap<>();
+            childList = new ArrayList<>();
         } else if (childMap.containsKey(format.getName())) {
             throw new IllegalArgumentException("Duplicate child \"" + format.getName() + "\"");
         }

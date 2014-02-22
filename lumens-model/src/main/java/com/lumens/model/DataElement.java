@@ -66,8 +66,7 @@ public class DataElement implements Element {
     @Override
     public Element addChild(Element child) {
         if (isArray()) {
-            throw new RuntimeException(
-            "Error, the data node is an array, it is not an array item");
+            throw new RuntimeException("Error, the data node is an array, it is not an array item");
         }
         if (children == null) {
             children = new HashMap<>();

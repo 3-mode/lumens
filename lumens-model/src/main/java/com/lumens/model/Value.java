@@ -98,8 +98,7 @@ public class Value {
         } else if (value != null && value instanceof String) {
             this.value = parseString(value.toString());
         } else {
-            throw new IllegalArgumentException(
-            "Error, data type is \"" + type() + "\"," + " value type is \"" + value + "\" !");
+            throw new IllegalArgumentException(String.format("Error, data type is '%s', value type is '%s' !", type(), value));
         }
     }
 
@@ -119,8 +118,7 @@ public class Value {
 
     public void set(boolean value) {
         if (!isBoolean()) {
-            throw new IllegalArgumentException(
-            "Error, data type is not Boolean !");
+            throw new IllegalArgumentException("Error, data type is not Boolean !");
         }
         this.value = value;
     }
@@ -148,24 +146,21 @@ public class Value {
 
     public void set(double value) {
         if (!isDouble()) {
-            throw new IllegalArgumentException(
-            "Error, data type is not double !");
+            throw new IllegalArgumentException("Error, data type is not double !");
         }
         this.value = value;
     }
 
     public void set(byte[] value) {
         if (!isBinary()) {
-            throw new IllegalArgumentException(
-            "Error, data type is not binary !");
+            throw new IllegalArgumentException("Error, data type is not binary !");
         }
         this.value = value;
     }
 
     public void set(Date value) {
         if (!isDate()) {
-            throw new IllegalArgumentException(
-            "Error, data type is not date time !");
+            throw new IllegalArgumentException("Error, data type is not date time !");
         }
         this.value = value;
     }
