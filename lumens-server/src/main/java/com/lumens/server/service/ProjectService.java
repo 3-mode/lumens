@@ -112,7 +112,7 @@ public class ProjectService {
             json.writeEndObject();
             return Response.ok().entity(utility.toUTF8String()).build();
         } catch (Exception ex) {
-            return getErrorMessageResponse(ex);
+            return ServerUtils.getErrorMessageResponse(ex);
         }
     }
 
@@ -139,7 +139,7 @@ public class ProjectService {
             json.writeEndObject();
             return Response.ok().entity(utility.toUTF8String()).build();
         } catch (Exception ex) {
-            return getErrorMessageResponse(ex);
+            return ServerUtils.getErrorMessageResponse(ex);
         }
     }
 
@@ -166,7 +166,7 @@ public class ProjectService {
             json.writeEndObject();
             return Response.ok().entity(utility.toUTF8String()).build();
         } catch (Exception ex) {
-            return getErrorMessageResponse(ex);
+            return ServerUtils.getErrorMessageResponse(ex);
         }
     }
 
@@ -184,7 +184,7 @@ public class ProjectService {
                 json.writeEndObject();
                 return Response.ok().entity(utility.toUTF8String()).build();
             } catch (Exception ex) {
-                return getErrorMessageResponse(ex);
+                return ServerUtils.getErrorMessageResponse(ex);
             }
         }
         return Response.status(Status.INTERNAL_SERVER_ERROR).entity("No project is actived, please open the projet first!").build();
@@ -267,7 +267,7 @@ public class ProjectService {
             json.writeEndObject();
             return Response.ok().entity(utility.toUTF8String()).build();
         } catch (Exception ex) {
-            return getErrorMessageResponse(ex);
+            return ServerUtils.getErrorMessageResponse(ex);
         }
     }
 
@@ -286,7 +286,7 @@ public class ProjectService {
                 Pair<String, TransformProject> pair = (Pair<String, TransformProject>) attr;
                 TransformProject project = pair.getSecond();
                 if (!pair.getFirst().equals(projectID))
-                    return getErrorMessageResponse(String.format("The project with id '%s' is not opened and actived", projectID));
+                    return ServerUtils.getErrorMessageResponse(String.format("The project with id '%s' is not opened and actived", projectID));
                 // To find the datasource format
                 // TODO handle the uncode componentName
                 try {
@@ -344,28 +344,10 @@ public class ProjectService {
                         }
                     }
                 } catch (Exception ex) {
-                    return getErrorMessageResponse(ex);
+                    return ServerUtils.getErrorMessageResponse(ex);
                 }
             }
         }
         return Response.ok().entity("Not implemented").build();
-    }
-
-    private Response getErrorMessageResponse(String error) {
-        try {
-            JsonUtility utility = ServerUtils.createJsonUtility();
-            JsonGenerator json = utility.getGenerator();
-            json.writeStartObject();
-            json.writeStringField("status", "Failed");
-            json.writeStringField("error_message", error);
-            json.writeEndObject();
-            return Response.ok().entity(utility.toUTF8String()).build();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Response getErrorMessageResponse(Exception ex) {
-        return getErrorMessageResponse(ex.toString());
     }
 }

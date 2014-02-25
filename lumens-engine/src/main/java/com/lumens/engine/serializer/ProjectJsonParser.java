@@ -324,7 +324,7 @@ class ProjectJsonParser {
                     }
                     JsonNode arrayPath = ti.get("array_iteration_path");
                     if (isNotNull(arrayPath)) {
-                        ritem.setArrayIterationPath(arrayPath.asText());
+                        ritem.setForEachPath(arrayPath.asText());
                     }
                     readTransformRuleItemFromJson(rule, ti, formatName);
                 }

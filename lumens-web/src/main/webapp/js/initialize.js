@@ -13,7 +13,7 @@ Raphael.fn.connection = function(obj1, obj2, line, bg) {
         obj1 = line.from;
         obj2 = line.to;
     }
-//Offset by canvas, because the x and y are absolute values
+    //Offset by canvas, because the x and y are absolute values
     var cx = $(this.canvas).cssFloat("left");
     var cy = $(this.canvas).cssFloat("top");
     var bb1 = obj1.getBBox(), bb2 = obj2.getBBox(),

@@ -127,7 +127,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
     public void TtestPPMWS() throws Exception {
         String ppmWSDL = "http://16.173.232.74:16800/itg/ppmservices/DemandService?wsdl";
         WebServiceConnector connector = new WebServiceConnector();
-        HashMap<String, Value> props = new HashMap<String, Value>();
+        HashMap<String, Value> props = new HashMap<>();
         props.put(WebServiceConnector.WSDL, new Value(ppmWSDL));
         props.put(USER, new Value("admin"));
         props.put(PASSWORD, new Value("admin"));

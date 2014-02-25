@@ -20,56 +20,56 @@ li {
     list-style-type: none;
 }
 
-.Console-Title {
+.console-title {
     font-size: 1.3em;
 }
 
-.Console-Brand {
+.console-brand {
     letter-spacing: 5px;
 }
 
-.Table-Ext {}
+.table-ext {}
 
-.Table-Ext td {
+.table-ext td {
     cursor: pointer;
     height: 65px;
     font-size: 16px;
     overflow: hidden;
 }
 
-.Table-Ext th {
+.table-ext th {
     cursor: pointer;
     height: 30px;
     font-size: 16px;
 }
 
-.Table-Ext > td > div {
+.table-ext > td > div {
     display: block;
     float: left;
 }
 
-.Table-Ext .Td-Text {
+.table-ext .td-text {
     padding-top: 9px;
 }
 
 .module {}
 
-.Server-List-Nav {
+.server-list-nav {
 }
 
-.System-icon {
+.system-icon {
     float: left;
 }
 
 /**
  Style definition for data component
 */
-#ID-Data-Component-Container {
+#id-data-comp-container {
     width: 100%;
     position: relative;
 }
 
-.Data-Component {
+.data-comp {
     border: 2px solid #CCCCCC;
     display: table;
     width:260px;
@@ -81,18 +81,18 @@ li {
     -moz-border-radius: 10px;   
 }
 
-.Data-Component-stauts {
+.data-comp-stauts {
     left:225px;
     position:absolute;
 }
 
-.Data-Component-icon {
+.data-comp-icon {
     padding-top: 12px;
     padding-left: 5px;
     float: left;
 }
 
-.Data-Component-Text {
+.data-comp-text {
     padding-top: 20px;
     padding-left: 5px;
     width: 180px;
@@ -100,12 +100,12 @@ li {
     float: left;
 }
 
-.Data-Component-Title {
+.data-comp-title {
     float: top;
     font-size: 16px;
 }
 
-.Data-Component-ShortDsc {
+.data-comp-shortdsc {
     overflow: hidden;
     white-space: nowrap;  
     text-overflow: ellipsis;  

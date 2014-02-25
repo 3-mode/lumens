@@ -3,16 +3,12 @@ package com.lumens.connector.database.client.oracle.sql;
 import static com.lumens.connector.database.client.oracle.OracleConstants.FIELDS;
 import com.lumens.model.Element;
 import com.lumens.model.Value;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author shaofeng.wang@outlook.com
  */
 public class OracleWriteSQLBuilder extends OracleSQLBuilder {
-
-    private static Logger log = LogManager.getLogger("oracle");
 
     @Override
     public String generateInsertSQL(Element input) {

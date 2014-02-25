@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 
 public class Activator implements AddinActivator {
@@ -19,9 +20,15 @@ public class Activator implements AddinActivator {
     public void start(AddinContext context) {
         addinContext = context;
         Map<String, Object> props = new HashMap<>();
+        props.put(ConnectorFactory.ID_PROPERTY, "Oracle_connector");
         props.put(ConnectorFactory.NAME_PROPERTY, "Oracle");
-        try (InputStream in = Activator.class.getClassLoader().getResourceAsStream("img/Database.png")) {
-            props.put(ConnectorFactory.INSTANCE_ICON_PROPERTY, IOUtils.toByteArray(in));
+        try (InputStream in = Activator.class.getClassLoader().getResourceAsStream("img/Oracle64x64.png")) {
+            props.put(ConnectorFactory.INSTANCE_ICON_PROPERTY, Base64.encodeBase64String(IOUtils.toByteArray(in)));
+        } catch (IOException ex) {
+            throw new LumensException(ex);
+        }
+        try (InputStream in = Activator.class.getClassLoader().getResourceAsStream("img/Oracle24x24.png")) {
+            props.put(ConnectorFactory.CATALOG_ICON_PROPERTY, Base64.encodeBase64String(IOUtils.toByteArray(in)));
         } catch (IOException ex) {
             throw new LumensException(ex);
         }

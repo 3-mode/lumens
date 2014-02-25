@@ -5,17 +5,11 @@ package com.lumens.addin;
 
 import com.lumens.LumensException;
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

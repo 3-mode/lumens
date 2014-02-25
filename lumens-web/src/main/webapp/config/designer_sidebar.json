@@ -1,19 +1,19 @@
 {
     "id": "All",
     "name": "ALL CATEGORIES",
-    "iconClass": "Designer-Side-Bar-Categories",
-    "menus": [
+    "icon_class": "designer-sidebar-categories",
+    "connectors": [
         {
             "id": "Datasource_001",
             "name": "Data Source",
-            "iconClass": "Data-Source-Icon",
+            "icon_class": "data-source-icon",
             "type": "datasource",
-            "menus": [
+            "connectors": [
                 {
                     "id": "Oracle_001",
                     "name": "Oracle",
                     "clazz": "com.lumens.connector.oracle.client.OracleConnector",
-                    "iconClass": "Data-Source-Icon-Inst-Default",
+                    "icon": "css/img/ds/Oracle24x24.png",
                     "type": "datasource",
                     "parentID": "Database_001"
                 },
@@ -21,14 +21,13 @@
                     "id": "MySQL_001",
                     "name": "MySQL",
                     "clazz": "com.lumens.connector.mysql.client.MySQLConnector",
-                    "iconClass": "Data-Source-Icon-Inst-Default",
+                    "icon": "css/img/ds/MySQL24x24.png",
                     "type": "datasource",
                     "parentID": "Database_001"
                 },
                 {
                     "id": "WebService_001",
                     "name": "WebService",
-                    "iconClass": "Data-Source-Icon-Inst-Default",
                     "parentID": "Datasource_001",
                     "type": "datasource"
                 }
@@ -37,12 +36,12 @@
         {
             "id": "BusinessTool_001",
             "name": "Business Tool",
-            "iconClass": "Data-Transf-Icon",
-            "menus": [
+            "icon_class": "data-transf-icon",
+            "connectors": [
                 {
                     "id": "Processor_001",
                     "name": "Transformation",
-                    "iconClass": "Data-Source-Icon-Inst-Default",
+                    "icon_class": "data-source-icon-inst-default",
                     "clazz": "",
                     "parentID": "BusinessTool_001",
                     "type": "tool"

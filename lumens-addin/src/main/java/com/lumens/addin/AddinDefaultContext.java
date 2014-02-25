@@ -118,6 +118,7 @@ public class AddinDefaultContext implements AddinContext {
 
     @Override
     public <T> T registerService(String identifier, T service, Map<String, Object> props) {
+        // TODO check ID, Name, ICON
         services.put(identifier, new ServiceEntity<>(service, props));
         return service;
     }

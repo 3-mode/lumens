@@ -67,6 +67,7 @@
                             <outputDirectory>lumens/module/server</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
                     </execution>
                 </executions>

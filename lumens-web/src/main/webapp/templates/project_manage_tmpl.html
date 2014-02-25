@@ -1,0 +1,24 @@
+<div id="page-wrapper">
+    <table class="table table-hover table-ext" ng-controller="ProjectsCtrl">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Server Type</th>
+                <th>Server Name</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Last Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="project in projects">
+                <td><div class="td-text">{{project.id}}</div></td>
+                <td><img class="system-icon" ng-src="css/img/{{project.icon}}.png" /></td>
+                <td><div class="td-text">{{project.name}}</div></td>
+                <td><div class="td-text">{{project.status}}</div></td>
+                <td><div class="td-text">{{project.description}}</div></td>
+                <td><div class="td-text">{{project.last_message}}</div></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

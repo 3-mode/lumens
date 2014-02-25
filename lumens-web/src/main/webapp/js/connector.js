@@ -5,7 +5,7 @@
 
 Lumens.Link = Class.$extend({
     __init__: function() {
-        this._paper = Raphael("ID-Data-Component-Container", 1, 1);
+        this._paper = Raphael("id-data-comp-container", 1, 1);
     },
     from: function(_component) {
         this._from = _component;
@@ -54,15 +54,17 @@ Lumens.Link = Class.$extend({
 
 Lumens.DataComponent = Class.$extend({
     __init__: function(_$parent, _component) {
-        var template = '<div class="Data-Component" style="left:50px;top:50px;">' +
-        '<div class="Data-Component-icon"><img/></div>' +
-        '<img class="Data-Component-stauts" src="css/img/ds/Deactive.png"/>' +
-        '<div class="Data-Component-Text">' +
-        '<div class="Data-Component-Title"><b id="ID_ProductName"></b></div>' +
-        '<div id="ID_ShortDsc" class="Data-Component-ShortDsc"></div>' +
+        var template =
+        '<div class="data-comp" style="left:50px;top:50px;">' +
+        '<div class="data-comp-icon"><img alt="Embedded Image"/></div>' +
+        '<img class="data-comp-stauts" src="css/img/ds/Deactive.png"/>' +
+        '<div class="data-comp-text">' +
+        '<div class="data-comp-title"><b id="id-product-name"></b></div>' +
+        '<div id="id-shortdsc" class="data-comp-shortdsc"></div>' +
         '</div></div>';
         var _This = this;
         this._$elem = $(template).appendTo(_$parent).draggable({
+            cursor: "move",
             drag: function(event, ui) {
                 if (_This._to_list)
                     for (var i = 0; i < _This._to_list.length; ++i)
@@ -70,11 +72,12 @@ Lumens.DataComponent = Class.$extend({
                 if (_This._from_list)
                     for (var i = 0; i < _This._from_list.length; ++i)
                         _This._from_list[i].redraw();
-            }
+            },
+            stack: ".data-comp"
         });
-        this._$elem.find('.Data-Component-icon').find('img').attr('src', 'css/img/ds/' + _component.product_name + '.png');
-        this._$elem.find('#ID_ProductName').text(_component.product_name);
-        this._$elem.find('#ID_ShortDsc').text(_component.short_desc);
+        this._$elem.find('.data-comp-icon').find('img').attr('src', 'data:image/png;base64,' + _component.instance_ico);
+        this._$elem.find('#id-product-name').text(_component.product_name);
+        this._$elem.find('#id-shortdsc').text(_component.short_desc);
         this._$elem.css("left", _component.x + 'px');
         this._$elem.css("top", _component.y + 'px');
         this._to_list = [];

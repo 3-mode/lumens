@@ -7,8 +7,22 @@ Lumens.Application = Class.$extend({
         this._nav_side_width = 225;
         this._nav_header_height = 50;
     },
+    directives: function() {
+        this.ngApp.directive('datsrcDrag', function() {
+            return {
+                restrict: 'A',
+                link: function($scope, $elem, $attrs) {
+                    $elem.draggable({
+                        appendTo: $('#id-data-comp-container'),
+                        helper: "clone"
+                    });
+                }
+            }
+        });
+        return this;
+    },
     run: function() {
-        var _ngApp = this.ngApp;
+        var _ngApp = this.directives().ngApp;
         _ngApp
         .controller('TitleNavbarCtrl', ['$scope', function($scope) {
                 $scope.product_name = 'LUMENS';
@@ -17,8 +31,9 @@ Lumens.Application = Class.$extend({
         .controller('MainPageCtrl', ['$scope', function($scope) {
                 // Set the default page view as dashboard view
                 // TODO or get localstorge to display last page view
-                $scope.templates = [{"name": "dashboard template", "url": ""}, {"name": "dashboard content template", "url": "html/dashboard.html"}];
-            }])
+                $scope.templates = [{"name": "dashboard template", "url": ""}, {"name": "dashboard content template", "url": "templates/dashboard_tmpl.html"}];
+            }]
+        )
         .config(function($controllerProvider) {
             _ngApp.controllerProvider = $controllerProvider;
             $controllerProvider.register('TitleNavFunctionsCtrl', ['$scope', '$http', function($scope, $http) {
@@ -31,15 +46,15 @@ Lumens.Application = Class.$extend({
                             // TODO need to refine
                             if ("id_dashboard" === moduleID) {
                                 var scope = angular.element('#ID_mainView').scope();
-                                scope.templates = [{"name": "dashboard template", "url": ""}, {"name": "dashboard content template", "url": "html/dashboard.html"}];
+                                scope.templates = [{"name": "dashboard template", "url": ""}, {"name": "dashboard content template", "url": "templates/dashboard_tmpl.html"}];
                             }
                             else if ("id_project_manage" === moduleID) {
                                 var scope = angular.element('#ID_mainView').scope();
-                                scope.templates = [{"name": "dashboard template", "url": ""}, {"name": "dashboard content template", "url": "html/project_manage.html"}];
+                                scope.templates = [{"name": "dashboard template", "url": ""}, {"name": "dashboard content template", "url": "templates/project_manage_tmpl.html"}];
                             }
                             else if ("id_business_designer" === moduleID) {
                                 var scope = angular.element('#ID_mainView').scope();
-                                scope.templates = [{"name": "dashboard template", "url": "html/designer_sidebar.html"}, {"name": "dashboard content template", "url": "html/designer_workspace.html"}];
+                                scope.templates = [{"name": "dashboard template", "url": "templates/designer_sidebar_tmpl.html"}, {"name": "dashboard content template", "url": "templates/designer_workspace_tmpl.html"}];
                             }
                         };
                     });
@@ -64,53 +79,54 @@ Lumens.Application = Class.$extend({
                     $(window).resize(function() {
                         _$designerSideBar.css("height", $(window).height() - lumensApp._nav_header_height);
                     });
-                    $http.get('config/designer_sidebar.json').success(function(menus) {
-                        $scope.sidebar.currentMenus = menus;
-                        $scope.sidebar.SidebarBackHide = ($scope.sidebar.stack.length === 0 ? "true" : undefined);
-                        $scope.sidebar.onSidebarMenuClick = function(menu_id, menu) {
-                            if ('ID_SideBar_Back' === menu_id) {
-                                console.log("Back to above level");
-                                $scope.sidebar.currentMenus = $scope.sidebar.stack.pop();
-                                $scope.sidebar.SidebarBackHide = ($scope.sidebar.stack.length === 0 ? "true" : undefined);
-                            }
-                            else if (menu.menus) {
-                                $scope.sidebar.stack.push($scope.sidebar.currentMenus);
-                                $scope.sidebar.currentMenus = menu;
+                    $http.get('config/component_categories.json').success(function(connectors) {
+                        $scope.sidebar.current_menus = connectors;
+                        $scope.sidebar.SidebarBackHide = true;
+                        $scope.sidebar.onSidebarMenuClick = function(menu) {
+                            if (menu.connectors) {
+                                $scope.sidebar.stack.push($scope.sidebar.current_menus);
+                                $scope.sidebar.current_menus = menu;
                                 $scope.sidebar.SidebarBackHide = ($scope.sidebar.stack.length === 0 ? "true" : undefined);
                             }
                         };
+                        $scope.sidebar.onMenuBackClick = function() {
+                            $scope.sidebar.current_menus = $scope.sidebar.stack.pop();
+                            $scope.sidebar.SidebarBackHide = ($scope.sidebar.stack.length === 0 ? "true" : undefined);
+                        };
                         $scope.sidebar.hasChildren = function(menu) {
-                            return menu.menus !== null && menu.menus !== undefined;
-                        }
+                            return menu.connectors !== null && menu.connectors !== undefined;
+                        };
                     });
                 }]
             );
             $controllerProvider.register('DesignerWorkspaceCtrl', ['$scope', '$http', function($scope, $http) {
                     // Initalize the workspace panel
-                    var _$wrapper = $('#wrapper')
-                    .css("height", $(window).height() - lumensApp._nav_header_height)
-                    .css("width", $(window).width() - lumensApp._nav_side_width);
-                    var _$component_container = _$wrapper.find('#ID-Data-Component-Container')
-                    .css("height", _$wrapper.css("height"))
-                    .css("width", _$wrapper.css("width"));
+                    var _$wrapper = $('#wrapper').css("height", $(window).height() - lumensApp._nav_header_height).css("width", $(window).width() - lumensApp._nav_side_width);
+                    var _$component_container = _$wrapper.find('#id-data-comp-container').css("height", _$wrapper.css("height")).css("width", _$wrapper.css("width"));
                     $(window).resize(function() {
-                        _$wrapper
-                        .css("height", $(window).height() - lumensApp._nav_header_height)
-                        .css("width", $(window).width() - lumensApp._nav_side_width);
-                        _$component_container
-                        .css("height", _$wrapper.css("height"))
-                        .css("width", _$wrapper.css("width"));
+                        _$wrapper.css("height", $(window).height() - lumensApp._nav_header_height).css("width", $(window).width() - lumensApp._nav_side_width);
+                        _$component_container.css("height", _$wrapper.css("height")).css("width", _$wrapper.css("width"));
+                    });
+                    $scope.componentList = new Array();
+                    _$component_container.droppable({
+                        accept: ".designer-sidebar-datanode",
+                        drop: function(event, ui) {
+                            event.preventDefault();
+                            var pos = ui.position;
+                            $scope.componentList.push(new Lumens.DataComponent(_$component_container, {"x": pos.left, "y": pos.top, "product_name": "Oracle", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"}));
+                        }
                     });
 
                     // mock some components and links
-                    var _$parent = $('#ID-Data-Component-Container');
-                    var c0 = new Lumens.DataComponent(_$parent, {"x": 50, "y": 50, "product_name": "Oracle", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
-                    var c1 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 100, "product_name": "MySQL", "short_desc": "jdbc:mysql:thin:@localhost:1521:mysql"});
-                    var c2 = new Lumens.DataComponent(_$parent, {"x": 300, "y": 300, "product_name": "Oracle", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
-                    new Lumens.Link().from(c0).to(c1).draw();
-                    new Lumens.Link().from(c0).to(c2).draw();
-                    var c3 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 500, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
-                    new Lumens.Link().from(c2).to(c3).draw();
+                    /*
+                     var _$parent = $('#id-data-comp-container');
+                     var c0 = new Lumens.DataComponent(_$parent, {"x": 50, "y": 50, "product_name": "Oracle", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                     var c1 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 100, "product_name": "MySQL", "short_desc": "jdbc:mysql:thin:@localhost:1521:mysql"});
+                     var c2 = new Lumens.DataComponent(_$parent, {"x": 300, "y": 300, "product_name": "Oracle", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                     new Lumens.Link().from(c0).to(c1).draw();
+                     new Lumens.Link().from(c0).to(c2).draw();
+                     var c3 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 500, "product_name": "Database", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                     new Lumens.Link().from(c2).to(c3).draw();//*/
                 }]
             );
         });

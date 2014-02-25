@@ -3,15 +3,14 @@
  */
 package com.lumens.server;
 
-import com.lumens.addin.Addin;
+import com.lumens.LumensException;
 import com.lumens.addin.AddinContext;
 import com.lumens.addin.AddinEngine;
 import com.lumens.engine.EngineContext;
 import com.lumens.engine.TransformEngine;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Arrays;
 
 /**
  * Hold all the application information
@@ -47,6 +46,10 @@ public class ApplicationContext {
         return this.engine;
     }
 
+    public AddinEngine getAddinEngine() {
+        return this.addinEngine;
+    }
+
     public void init() {
         try {
             addinEngine = new AddinEngine();
@@ -56,8 +59,10 @@ public class ApplicationContext {
             for (File addinItemFile : addinPathFile.listFiles())
                 ac.installAddIn(addinItemFile.toURI().toURL()).start();
             EngineContext.init(new ConnectorFactoryHolderImpl(ac));
+            // TODO
+            System.out.println("Loaded addin: " + Arrays.toString(ac.getAddins().toArray()));
         } catch (MalformedURLException ex) {
-            Logger.getLogger(ApplicationContext.class.getName()).log(Level.SEVERE, null, ex);
+            throw new LumensException(ex);
         }
     }
 
