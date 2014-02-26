@@ -1,0 +1,373 @@
+
+/****************/
+* {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    height:100%;
+    width:100%;
+    overflow: hidden;
+}
+body {
+    /*background-color: rgb(240, 240, 240);*/
+}
+a, a:focus, a:hover {
+    outline: none;
+    text-decoration: none;
+}
+.lumens {
+
+}
+.lumens table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    white-space:nowrap;
+}
+.lumens .lumens-button {
+    float:left;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+    font-size: 12px !important;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.lumens .lumens-h-active {
+    border-top: 1px solid rgb(61, 61, 61);
+    border-bottom: 1px solid rgb(180, 180, 180);
+    -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
+    background-color: rgb(0, 96, 162); /*Use an background-image to work on IE7,8 */
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+.lumens .lumens-v-active {
+    border-left: 1px solid rgb(61, 61, 61);
+    border-right: 1px solid rgb(61, 61, 61);
+    background-color: rgb(0, 96, 162);
+    -moz-box-shadow: inset 1px 0 3px rgba(0, 0, 0, 0.2), inset -1px 0 3px rgba(40, 40, 40, 0.2);
+    -webkit-box-shadow: inset 1px 0 3px rgba(0, 0, 0, 0.2), inset -1px 0 3px rgba(40, 40, 40, 0.2);
+    box-shadow: inset 1px 0 3px rgba(0, 0, 0, 0.2), inset -1px 0 3px rgba(40, 40, 40, 0.2); 
+    color:white !important;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+/* LUMENS Header styles */
+.lumens .lumens-header-constainer {
+    width:100%;
+    height: auto;
+    float: top;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 2000;
+}
+.lumens .lumens-header { 
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+    background-color: #1C3B5E;
+    background-image: url(images/syshead.png);
+    float: top;
+    height:52px;
+    width:100%;
+    top:0px;
+    left:0px;
+    right:0px;
+}
+.lumens .lumens-logo {
+    background-image: url(images/lumens.png);
+    background-repeat: no-repeat;
+    margin-left: 10px;
+    width: 50px;
+    height: 50px;
+}
+.lumens .lumens-title-layout {
+    float: left;
+    display: block;
+    width: 300px;
+}
+.lumens #lumens-system-title {
+    margin-left: 10px;
+    font-size: 20px;
+    font-weight: bolder;
+    letter-spacing: 3px;
+    color: white;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+.lumens .lumens-nav-toolbar {
+    float: left;
+    height: 51px;
+    width: auto;
+    display: table;
+    background-image: url(images/syshead.png);
+}
+.lumens .lumens-nav-toolbar ul{
+    padding: 0;
+    margin: 0 0 20px 25px;
+}
+.lumens .lumens-nav-toolbar ul {
+    display: block;
+    list-style: none;
+}
+.lumens .lumens-nav-toolbar li {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.6);
+    text-shadow: 0 1px 1px rgb(53, 53, 53);
+    text-align: -webkit-match-parent;
+    display: block;
+    line-height: 51px; 
+    float: left;
+}
+.lumens .lumens-nav-toolbar li a {
+    cursor: pointer;
+}
+.lumens .lumens-nav-toolbar span {
+    margin-right: 15px;
+    margin-left: 15px;
+}
+/* LUMENS Header styles End*/
+/* LUMENS Content styles */
+.lumens .lumens-content-constainer {
+    position: relative;
+    background-color: rgb(240, 240, 240);
+    margin-left: 0px;
+    margin-right: 0px;
+    width:100%;
+    height:100%;
+    overflow: hidden;
+}
+/*** LUMENS secondary menu styles */
+.lumens .lumens-menu-container {
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-right: 1px solid rgb(214, 214, 214);
+}
+.lumens .lumens-menu-placeholder {
+    width: 100%;
+    height: 15px;
+    float: top;
+}
+.lumens .lumens-secondary-menu-container {
+    width:100%;
+    height:auto;
+    display:table;
+    float:left;
+    position:relative;
+    background-color:rgb(240, 240, 240);
+}
+.lumens .lumens-secondary-menu {
+    position:relative;
+    padding:0px;
+    margin:0px;
+    display:table;
+    background-color:rgb(240, 240, 240);
+}
+.lumens .lumens-secondary-menu-section {
+    font-weight: bold;
+    margin-left: 10px;
+    color: #7c7bad;
+}
+.lumens .lumens-secondary-submenu {
+    display: block;
+    list-style-type: disc;
+    padding: 2px 0 8px 0;
+    margin: 0;
+
+}
+.lumens .lumens-secondary-submenu li {
+    text-align: -webkit-match-parent;
+    list-style-type: none;
+    padding: 3px 0 3px 25px !important;
+}
+.lumens .lumens-secondary-submenu li:hover, .lumens .lumens-secondary-submenu li:focus {
+    -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
+    background-color: rgb(0, 96, 162); /*Use an background-image to work on IE7,8 */
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+.lumens .lumens-secondary-submenu a:hover, .lumens .lumens-secondary-submenu a:focus {
+    color: white;
+}
+.lumens .lumens-secondary-submenu li a {
+    display: block;
+    color: #4c4c4c;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+    padding: 3px 4px 2px 0;
+    text-decoration: none;
+    cursor: pointer;
+}
+.lumens .lumens-secondary-submenu .lumens-h-active a {
+    color: white;
+}
+.lumens .lumens-secondary-submenu .lumens-secondary-menu-text {
+    padding-left: 8px;
+    padding-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    max-width: 85%;
+}
+/*** LUMENS secondary menu styles end */
+
+.lumens .lumens-accordion {
+    width: 100%;
+    height: 100%;
+}
+.lumens .lumens-accordion-item {
+}
+.lumens .lumens-accordion-title {
+    height: 25px; 
+    width: 100%;
+    cursor: pointer;
+    background-color: rgb(200, 200, 200);
+    border-top: 1px solid rgb(230, 230, 230);
+    border-bottom: 1px solid rgb(170, 170, 170);
+    color: #4C4C4C;
+}
+.lumens .lumens-accordion-content {
+    display: block;
+    list-style-type: none;
+    padding-top: 5px;
+    padding-bottom: 8px;
+    padding-left: 0px;
+    margin: 0;
+}
+.lumens .lumens-accordion-icon {
+    float: left;
+}
+.lumens .lumens-accordion-icon-expand {
+    background-position: -48px -128px;
+}
+.lumens .lumens-accordion-icon-collapse {
+    background-position: -16px -128px;
+}
+.lumens .lumens-root-layout {
+    display: block;
+    width:100%;
+    height:100%;
+}
+.lumens .lumens-layout {
+    display: block;
+    background-color: #eeeeee;
+}
+.lumens .lumens-layout-horizontal,
+.lumens .lumens-layout-vertical,
+.lumens .lumens-panel
+{
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+.lumens .lumens-tab-panel {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: #eeeeee;
+    min-height: 300px;
+}
+.lumens .lumens-tab-header {
+    width: 100%;
+    line-height: 32px;
+    padding: 0;
+    margin: 0;
+    float: top;
+    list-style: none;
+    border-bottom: 1px solid #C2C2C2;
+    display: table;
+}
+.lumens .lumens-tab {
+    margin-bottom: -1px;
+    width: auto;
+    line-height: 32px;
+    float: left;
+    display: list-item;
+    text-align: -webkit-match-parent;
+    cursor: pointer;
+}
+.lumens .lumens-tab > div {
+    display: block;
+    text-decoration: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border: 1px solid transparent;
+}
+.lumens .lumens-tab > div:hover {
+    background-color: #dddddd;
+}
+.lumens .lumens-tab > div.active {
+    border: 1px solid #C2C2C2;
+    border-bottom-color: #eeeeee;
+}
+.lumens .lumens-tab-content {
+    min-height: 100px;
+    display: block;
+    overflow: hidden;
+}
+.lumens .lumens-tab-content-page {
+    padding: 10px;
+    min-height: 100px;
+    border: 1px solid #C2C2C2;
+    border-top-color: transparent;
+}
+
+
+/**
+ Style definition for data component
+*/
+.lumens #id-main-view {
+    width: 100%;
+    height: 100%;
+}
+
+.lumens .data-comp-container {
+    overflow: auto;
+    position: relative;
+}
+
+.lumens .data-comp {
+    border: 2px solid #CCCCCC;
+    display: table;
+    width:260px;
+    height:90px;
+    position: absolute;
+    background-color: #E4E4E4;
+    border-radius:10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;   
+}
+
+.lumens .data-comp-stauts {
+    left:225px;
+    position:absolute;
+}
+
+.lumens .data-comp-icon {
+    padding-top: 12px;
+    padding-left: 5px;
+    float: left;
+}
+
+.lumens .data-comp-text {
+    padding-top: 20px;
+    padding-left: 5px;
+    width: 180px;
+    overflow: hidden;
+    float: left;
+}
+
+.lumens .data-comp-title {
+    float: top;
+    font-size: 16px;
+}
+
+.lumens .data-comp-shortdsc {
+    overflow: hidden;
+    white-space: nowrap;  
+    text-overflow: ellipsis;  
+    -o-text-overflow: ellipsis; 
+}
