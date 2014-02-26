@@ -35,18 +35,31 @@ Lumens.Application = Class.$extend({
                     panelClass: ["data-comp-container"],
                     panelStyle: {width: "100%", height: "100%"}
                 });
+                // Initialize the business logical panel drop event
+                __this.componentList = [];
+                var $designPanelElement = __this.designPanel.getElement()
+                .attr("id", "id-data-comp-container")
+                .droppable({
+                    accept: ".data-comp-node",
+                    drop: function(event, ui) {
+                        event.preventDefault();
+                        var pos = ui.position;
+                        __this.componentList.push(new Lumens.DataComponent($designPanelElement, {"x": pos.left, "y": pos.top, "product_name": "Oracle", "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"}));
+                    }
+                });
                 // Loading nav menu
                 $http.get("app/mock/nav_menu_mock.json").success(function(data) {
                     __this.navMenu = new Lumens.NavMenu({
                         container: __this.leftPanel.getElement(),
                         width: "100%",
                         height: "auto"
-                    }).configure(data);
-                    var _$parent = __this.designPanel.getElement().attr("id", "id-data-comp-container");
-                    var c0 = new Lumens.DataComponent(_$parent, {"x": 50, "y": 50, "product_name": "Oracle", "icon": data.sections[0].items[0].instance_icon, "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
-                    var c1 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 100, "product_name": "MySQL", "icon": data.sections[0].items[0].instance_icon, "short_desc": "jdbc:mysql:thin:@localhost:1521:mysql"});
-                    var c2 = new Lumens.DataComponent(_$parent, {"x": 300, "y": 300, "product_name": "Oracle", "icon": data.sections[0].items[0].instance_icon, "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
-                    var c3 = new Lumens.DataComponent(_$parent, {"x": 500, "y": 500, "product_name": "Database", "icon": data.sections[0].items[0].instance_icon, "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                    }).configure(data).onItemClick(function(event) {
+                        console.log($.data(event.object.get(0), 'item-data'));
+                    });
+                    var c0 = new Lumens.DataComponent($designPanelElement, {"x": 50, "y": 50, "product_name": "Oracle", "icon": data.sections[0].items[0].instance_icon, "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                    var c1 = new Lumens.DataComponent($designPanelElement, {"x": 500, "y": 100, "product_name": "MySQL", "icon": data.sections[0].items[0].instance_icon, "short_desc": "jdbc:mysql:thin:@localhost:1521:mysql"});
+                    var c2 = new Lumens.DataComponent($designPanelElement, {"x": 300, "y": 300, "product_name": "Oracle", "icon": data.sections[0].items[0].instance_icon, "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
+                    var c3 = new Lumens.DataComponent($designPanelElement, {"x": 500, "y": 500, "product_name": "Database", "icon": data.sections[0].items[0].instance_icon, "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
                     new Lumens.Link().from(c0).to(c1).draw();
                     new Lumens.Link().from(c0).to(c2).draw();
                     new Lumens.Link().from(c2).to(c3).draw();//*/
