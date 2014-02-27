@@ -1,6 +1,5 @@
 if (!window.Lumens)
     window.Lumens = {version: 1.0};
-Lumens.GDI = {};
 jQuery.fn.cssInt = function(prop) {
     return parseInt(this.css(prop), 10) || 0;
 };

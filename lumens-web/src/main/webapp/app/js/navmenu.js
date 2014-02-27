@@ -52,7 +52,7 @@ Lumens.NavMenu = Class.$extend({
         this.$menuContainer.on(this.configuration.event_type, callback);
         return this;
     },
-    configure: function(config) {
+    configure: function(config, handler) {
         this.configuration = config;
         var sections = config.sections;
         for (var i = 0; i < sections.length; ++i) {
@@ -66,7 +66,8 @@ Lumens.NavMenu = Class.$extend({
                 else if (items[j].item_icon_url)
                     item.find('img').attr('src', items[j].item_icon_url);
                 // Store the item information in the item dom node
-                $.data(item.get(0), "item-data", items[j]);
+                if (handler)
+                    handler(item, items[j]);
             }
         }
         return this;

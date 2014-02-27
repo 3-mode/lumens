@@ -4,51 +4,31 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
-        <meta name="author" content="">
+        <meta name="author" content="shaofeng.wang">
         <title>LUMENS</title>
         <!-- Bootstrap core CSS -->
-        <link href="lib3rd/boostrap/css/bootstrap.css" rel="stylesheet">
-        <link href="lib3rd/boostrap/css/app_admin.css" rel="stylesheet"> <!-- Add custom CSS here -->
-        <link href="lib3rd/font-awesome/css/font-awesome.min.css" rel="stylesheet">
         <link href="lib3rd/morris/morris.css" rel="stylesheet"> <!-- Page Specific CSS -->
-        <link href="css/menu.css" rel="stylesheet">
-        <link href="css/application.css" rel="stylesheet">
+        <link href="app/css/lumens.css" rel="stylesheet">
     </head>
-    <body ng-app='lumensApp' class='Lumens'>
-        <div id="ID_mainView" ng-controller="MainPageCtrl">
-            <nav id="navbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header" ng-controller='TitleNavbarCtrl'>
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand console-brand" href="index.html">LUMENS</a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse navbar-ex1-collapse">
-                    <div ng-include="'templates/titlebar_tmpl.html'"></div>
-                    <div ng-include="templates[0].url"></div>
-                </div><!--/.navbar-collapse -->
-            </nav>
-            <div ng-include="templates[1].url"></div>
-        </div>
-
-        <!-- JavaScript  -->
-        <!-- Page Specific Plugins -->
+    <body ng-app='lumens-app' class='lumens'>
+        <div id="id-main-view" ng-controller="MainPageCtrl"></div>
+        <!-- 3rd Party JS Plugins -->
         <script src="lib3rd/jquery/js/jquery.js"></script>
         <script src="lib3rd/jquery/js/jquery-ui.js"></script>
         <script src="lib3rd/boostrap/js/bootstrap.js"></script>
         <script src="lib3rd/raphael/raphael-min.js"></script>
         <script src="lib3rd/morris/morris.min.js"></script>
-        <script src="lib3rd/angularjs/angular.js"></script>
         <script src="lib3rd/classy.js"></script>
-        <!-- Application -->
-        <script src="js/initialize.js"></script>
-        <script src="js/connector.js"></script>
-        <script src="js/application.js"></script>
+        <!-- Application JS  -->
+        <script src="app/js/initialize.js"></script>
+        <script src="app/js/component.js"></script>
+        <script src="app/js/layout.js"></script>
+        <script src="app/js/sysheader.js"></script>
+        <script src="app/js/navbar.js"></script>
+        <script src="app/js/navmenu.js"></script>
+        <!-- Angular JS -->
+        <script src="lib3rd/angularjs/angular.js"></script>
+        <!-- Application Entry JS -->
+        <script src="app/lumens.js"></script>
     </body>
 </html>

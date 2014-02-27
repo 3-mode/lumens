@@ -54,6 +54,7 @@ Lumens.Link = Class.$extend({
 
 Lumens.DataComponent = Class.$extend({
     __init__: function(_$parent, _component) {
+        this._configure = _component;
         var template =
         '<div class="data-comp" style="left:50px;top:50px;">' +
         '<div class="data-comp-icon"><img/></div>' +
@@ -75,13 +76,19 @@ Lumens.DataComponent = Class.$extend({
             },
             stack: ".data-comp"
         });
-        this._$elem.find('.data-comp-icon').find('img').attr('src', 'data:image/png;base64,' + _component.icon);
-        this._$elem.find('#id-product-name').text(_component.product_name);
+        if (_component.data.instance_icon)
+            this._$elem.find('.data-comp-icon').find('img').attr('src', 'data:image/png;base64,' + _component.data.instance_icon);
+        else if (_component.data.instance_icon_url)
+            this._$elem.find('.data-comp-icon').find('img').attr('src', _component.data.instance_icon_url);
+        this._$elem.find('#id-product-name').text(_component.data.name);
         this._$elem.find('#id-shortdsc').text(_component.short_desc);
         this._$elem.css("left", _component.x + 'px');
         this._$elem.css("top", _component.y + 'px');
         this._to_list = [];
         this._from_list = [];
+    },
+    getConfig: function() {
+        return this._configure;
     },
     getXY: function() {
         return {
