@@ -5,56 +5,36 @@
 
 Lumens.Link = Class.$extend({
     __init__: function() {
-        this._paper = Raphael("id-data-comp-container", 1, 1);
+        this.$paper = Raphael("id-data-comp-container", 1, 1);
     },
-    from: function(_component) {
-        this._from = _component;
-        _component.to(this);
+    from: function(component) {
+        this.$from = component;
+        component.to(this);
         return this;
     },
-    to: function(_component) {
-        this._to = _component;
-        _component.from(this);
+    to: function(component) {
+        this.$to = component;
+        component.from(this);
         return this;
     },
     draw: function() {
-        var bb0 = this._from.getBBox();
-        var bb1 = this._to.getBBox();
-        var minXY = {
-            "x": bb0.x < bb1.x ? bb0.x : bb1.x,
-            "y": bb0.y < bb1.y ? bb0.y : bb1.y
-        };
-        var maxXY = {
-            "x": bb0.x2 < bb1.x2 ? bb1.x2 : bb0.x2,
-            "y": bb0.y2 < bb1.y2 ? bb1.y2 : bb0.y2
-        };
-        this._paper.setSize(maxXY.x - minXY.x, maxXY.y - minXY.y);
-        $(this._paper.canvas).css("position", "absolute").css('left', minXY.x + 'px').css('top', minXY.y + 'px');
-        this._connection = this._paper.connection(this._from, this._to, "#CCCCCC", "#CCCCCC");
-    },
-    redraw: function() {
-        if (this._connection) {
-            var bb0 = this._from.getBBox();
-            var bb1 = this._to.getBBox();
-            var minXY = {
-                "x": bb0.x < bb1.x ? bb0.x : bb1.x,
-                "y": bb0.y < bb1.y ? bb0.y : bb1.y
-            };
-            var maxXY = {
-                "x": bb0.x2 < bb1.x2 ? bb1.x2 : bb0.x2,
-                "y": bb0.y2 < bb1.y2 ? bb1.y2 : bb0.y2
-            };
-            this._paper.setSize(maxXY.x - minXY.x, maxXY.y - minXY.y);
-            $(this._paper.canvas).css("position", "absolute").css('left', minXY.x + 'px').css('top', minXY.y + 'px');
-            this._paper.connection(this._connection);
-        }
+        var bb0 = this.$from.getBBox();
+        var bb1 = this.$to.getBBox();
+        var min = {"x": bb0.x < bb1.x ? bb0.x : bb1.x, "y": bb0.y < bb1.y ? bb0.y : bb1.y};
+        var max = {"x": bb0.x2 < bb1.x2 ? bb1.x2 : bb0.x2, "y": bb0.y2 < bb1.y2 ? bb1.y2 : bb0.y2};
+        this.$paper.setSize(max.x - min.x, max.y - min.y);
+        $(this.$paper.canvas).css("position", "absolute").css('left', min.x + 'px').css('top', min.y + 'px');
+        if (this.$connection)
+            this.$paper.connection(this.$connection);
+        else
+            this.$connection = this.$paper.connection(this.$from, this.$to, "#CCCCCC", "#CCCCCC");
         return this;
     }
 });
 
 Lumens.DataComponent = Class.$extend({
-    __init__: function(_$parent, _component) {
-        this._configure = _component;
+    __init__: function($parent, config) {
+        this.configure = config;
         var template =
         '<div class="data-comp" style="left:50px;top:50px;">' +
         '<div class="data-comp-icon"><img/></div>' +
@@ -63,37 +43,52 @@ Lumens.DataComponent = Class.$extend({
         '<div class="data-comp-title"><b id="id-product-name"></b></div>' +
         '<div id="id-shortdsc" class="data-comp-shortdsc"></div>' +
         '</div></div>';
-        var _This = this;
-        this._$elem = $(template).appendTo(_$parent).draggable({
+        var __this = this;
+        this.$elem = $(template).appendTo($parent)
+        .draggable({
             cursor: "move",
-            drag: function(event, ui) {
-                if (_This._to_list)
-                    for (var i = 0; i < _This._to_list.length; ++i)
-                        _This._to_list[i].redraw();
-                if (_This._from_list)
-                    for (var i = 0; i < _This._from_list.length; ++i)
-                        _This._from_list[i].redraw();
-            },
-            stack: ".data-comp"
+            stack: ".data-comp",
+            drag: function() {
+                if (__this.$to_list)
+                    for (var i = 0; i < __this.$to_list.length; ++i)
+                        __this.$to_list[i].draw();
+                if (__this.$from_list)
+                    for (var i = 0; i < __this.$from_list.length; ++i)
+                        __this.$from_list[i].draw();
+            }
+        })
+        .droppable({
+            accept: ".data-comp-icon",
+            drop: function(event, ui) {
+                event.preventDefault();
+                var data_comp = $.data(ui.draggable.get(0), "data-comp");
+                new Lumens.Link().from(data_comp).to(__this).draw();
+            }
         });
-        if (_component.data.instance_icon)
-            this._$elem.find('.data-comp-icon').find('img').attr('src', 'data:image/png;base64,' + _component.data.instance_icon);
-        else if (_component.data.instance_icon_url)
-            this._$elem.find('.data-comp-icon').find('img').attr('src', _component.data.instance_icon_url);
-        this._$elem.find('#id-product-name').text(_component.data.name);
-        this._$elem.find('#id-shortdsc').text(_component.short_desc);
-        this._$elem.css("left", _component.x + 'px');
-        this._$elem.css("top", _component.y + 'px');
-        this._to_list = [];
-        this._from_list = [];
+        $.data(this.$elem.find(".data-comp-icon").draggable({
+            appendTo: $("#id-data-comp-container"),
+            stack: ".data-comp",
+            helper: "clone"
+        }).get(0), "data-comp", this);
+
+        if (config.data.instance_icon)
+            this.$elem.find('.data-comp-icon').find('img').attr('src', 'data:image/png;base64,' + config.data.instance_icon);
+        else if (config.data.instance_icon_url)
+            this.$elem.find('.data-comp-icon').find('img').attr('src', config.data.instance_icon_url);
+        this.$elem.find('#id-product-name').text(config.data.name);
+        this.$elem.find('#id-shortdsc').text(config.short_desc);
+        this.$elem.css("left", config.x + 'px');
+        this.$elem.css("top", config.y + 'px');
+        this.$to_list = [];
+        this.$from_list = [];
     },
     getConfig: function() {
-        return this._configure;
+        return this.configure;
     },
     getXY: function() {
         return {
-            "x": this._$elem.cssInt("left"),
-            "y": this._$elem.cssInt("top")
+            "x": this.$elem.cssInt("left"),
+            "y": this.$elem.cssInt("top")
         };
     },
     getBBox: function() {
@@ -108,29 +103,29 @@ Lumens.DataComponent = Class.$extend({
         }
     },
     to: function(link) {
-        this._to_list.push(link);
+        this.$to_list.push(link);
     },
     from: function(link) {
-        this._from_list.push(link);
+        this.$from_list.push(link);
     },
-    remove_from: function(_component) {
-        var length = this._from_list.length;
+    remove_from: function(link) {
+        var length = this.$from_list.length;
         while (length > 0) {
-            if (this._from_list[--length] === _component)
+            if (this.$from_list[--length] === link)
                 break;
         }
         if (length >= 0)
-            this._from_list.splice(length, 1);
+            this.$from_list.splice(length, 1);
         return this;
     },
-    remove_to: function(_component) {
-        var length = this._to_list.length;
+    remove_to: function(link) {
+        var length = this.$to_list.length;
         while (length > 0) {
-            if (this._to_list[--length] === _component)
+            if (this.$to_list[--length] === link)
                 break;
         }
         if (length >= 0)
-            this._to_list.splice(length, 1);
+            this.$to_list.splice(length, 1);
         return this;
     }
 });
