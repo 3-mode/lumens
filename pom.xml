@@ -35,6 +35,8 @@
         </pluginManagement>
     </build>
     <modules>
+        <module>lumens-io</module>
+        <module>lumens-log</module>
         <module>lumens-model</module>
         <module>lumens-processor</module>
         <module>lumens-connector</module>
@@ -43,8 +45,6 @@
         <module>lumens-connector-soap</module>
         <!-- modules end -->
         <module>lumens-engine</module>
-        <module>lumens-log</module>
-        <module>lumens-io</module>
         <module>lumens-web</module>
         <module>lumens-server</module>
         <module>assembler</module>
