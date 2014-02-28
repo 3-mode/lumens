@@ -49,7 +49,7 @@ Lumens.Application = Class.$extend({
                             event.preventDefault();
                             var data = $.data(ui.draggable.get(0), "item-data");
                             var pos = ui.position;
-                            __this.componentList.push(new Lumens.DataComponent($designPanelElement, {"x": pos.left, "y": pos.top, "data": data, "short_desc": "To configure"}));
+                            __this.componentList.push(new Lumens.DataComponent($designPanelElement, {"x": pos.left, "y": pos.top, "data": data, "short_desc": "[ to configure ]"}));
                         }
                     });
 

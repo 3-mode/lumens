@@ -346,10 +346,11 @@ a, a:focus, a:hover {
     padding-top: 12px;
     padding-left: 5px;
     float: left;
+    cursor: pointer;
 }
 
 .lumens .data-comp-text {
-    padding-top: 20px;
+    padding-top: 24px;
     padding-left: 5px;
     width: 180px;
     overflow: hidden;

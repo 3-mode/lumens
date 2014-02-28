@@ -34,9 +34,10 @@ Lumens.Link = Class.$extend({
 
 Lumens.DataComponent = Class.$extend({
     __init__: function($parent, config) {
+        this.$parent = $parent;
         this.configure = config;
         var template =
-        '<div class="data-comp" style="left:50px;top:50px;">' +
+        '<div class="data-comp lumens_boostrap" style="left:50px;top:50px;">' +
         '<div class="data-comp-icon"><img/></div>' +
         '<img class="data-comp-stauts" src="css/img/ds/Deactive.png"/>' +
         '<div class="data-comp-text">' +
@@ -65,7 +66,10 @@ Lumens.DataComponent = Class.$extend({
                 new Lumens.Link().from(data_comp).to(__this).draw();
             }
         });
-        $.data(this.$elem.find(".data-comp-icon").draggable({
+        $.data(this.$elem.find(".data-comp-icon")
+        .on("click", function() {
+        })
+        .draggable({
             appendTo: $("#id-data-comp-container"),
             helper: function() {
                 return $(this).clone().zIndex(20000).css("opacity", "0.7");
