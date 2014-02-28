@@ -326,7 +326,7 @@ a, a:focus, a:hover {
 }
 
 .lumens .data-comp {
-    border: 2px solid #CCCCCC;
+    border: 1px solid #CCCCCC;
     display: table;
     width:260px;
     height:90px;
