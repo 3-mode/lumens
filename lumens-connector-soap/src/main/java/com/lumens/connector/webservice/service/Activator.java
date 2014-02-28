@@ -22,6 +22,7 @@ public class Activator implements AddinActivator {
         Map<String, Object> props = new HashMap<>();
         props.put(ConnectorFactory.ID_PROPERTY, "SOAP_connector");
         props.put(ConnectorFactory.NAME_PROPERTY, "SOAP");
+        props.put(ConnectorFactory.CLASS_NAME_PROPERTY, WebServiceConnector.class.getName());
         try (InputStream in = Activator.class.getClassLoader().getResourceAsStream("img/Web64x64.png")) {
             props.put(ConnectorFactory.INSTANCE_ICON_PROPERTY, Base64.encodeBase64String(IOUtils.toByteArray(in)));
         } catch (IOException ex) {
