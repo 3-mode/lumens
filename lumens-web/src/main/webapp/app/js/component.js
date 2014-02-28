@@ -67,8 +67,9 @@ Lumens.DataComponent = Class.$extend({
         });
         $.data(this.$elem.find(".data-comp-icon").draggable({
             appendTo: $("#id-data-comp-container"),
-            stack: ".data-comp",
-            helper: "clone"
+            helper: function() {
+                return $(this).clone().zIndex(20000);
+            }
         }).get(0), "data-comp", this);
 
         if (config.data.instance_icon)
