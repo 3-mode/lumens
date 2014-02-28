@@ -32,6 +32,8 @@ Lumens.Application = Class.$extend({
                         panelClass: ["lumens-menu-container"],
                         panelStyle: {width: "100%", height: "100%"}
                     });
+
+                    // Create desgin workspace panel
                     __this.designPanel = new Lumens.Panel(__this.workspaceLayout.getPart2Element())
                     .configure({
                         panelClass: ["data-comp-container"],
@@ -47,9 +49,10 @@ Lumens.Application = Class.$extend({
                             event.preventDefault();
                             var data = $.data(ui.draggable.get(0), "item-data");
                             var pos = ui.position;
-                            __this.componentList.push(new Lumens.DataComponent($designPanelElement, {"x": pos.left, "y": pos.top, "data": data, "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"}));
+                            __this.componentList.push(new Lumens.DataComponent($designPanelElement, {"x": pos.left, "y": pos.top, "data": data, "short_desc": "To configure"}));
                         }
                     });
+
                     // Loading nav menu
                     $.get("app/mock/nav_menu_mock.json").success(function(data) {
                         __this.navMenu = new Lumens.NavMenu({
