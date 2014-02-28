@@ -37,16 +37,16 @@ Lumens.DataComponent = Class.$extend({
         this.$parent = $parent;
         this.configure = config;
         var template =
-        '<div class="data-comp lumens_boostrap" style="left:50px;top:50px;">' +
-        '<div class="data-comp-icon"><img/></div>' +
-        '<img class="data-comp-stauts" src="css/img/ds/Deactive.png"/>' +
-        '<div class="data-comp-text">' +
-        '<div class="data-comp-title"><b id="id-product-name"></b></div>' +
-        '<div id="id-shortdsc" class="data-comp-shortdsc"></div>' +
-        '</div></div>';
+                '<div class="data-comp lumens_boostrap" style="left:50px;top:50px;">' +
+                '<div class="data-comp-icon"><img/></div>' +
+                '<img class="data-comp-stauts" src="css/img/ds/Deactive.png"/>' +
+                '<div class="data-comp-text">' +
+                '<div class="data-comp-title"><b id="id-product-name"></b></div>' +
+                '<div id="id-shortdsc" class="data-comp-shortdsc"></div>' +
+                '</div></div>';
         var __this = this;
         this.$elem = $(template).appendTo($parent)
-        .draggable({
+                .draggable({
             cursor: "move",
             stack: ".data-comp",
             drag: function() {
@@ -58,18 +58,20 @@ Lumens.DataComponent = Class.$extend({
                         __this.$from_list[i].draw();
             }
         })
-        .droppable({
+                .droppable({
             accept: ".data-comp-icon",
             drop: function(event, ui) {
                 event.preventDefault();
+                if (ui.draggable.get(0) === $(this).find(".data-comp-icon").get(0))
+                    return;
                 var data_comp = $.data(ui.draggable.get(0), "data-comp");
                 new Lumens.Link().from(data_comp).to(__this).draw();
             }
         });
         $.data(this.$elem.find(".data-comp-icon")
-        .on("click", function() {
+                .on("click", function() {
         })
-        .draggable({
+                .draggable({
             appendTo: $("#id-data-comp-container"),
             helper: function() {
                 return $(this).clone().zIndex(20000).css("opacity", "0.7");

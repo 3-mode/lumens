@@ -18,9 +18,14 @@ Lumens.NavMenu = Class.$extend({
         this.Section = Class.$extend({
             __init__: function(sectionName) {
                 var section = $('<div/>').appendTo(__this.$nav);
-                var sectionTitle = $('<div class="lumens-secondary-menu-section"></div>').appendTo(section);
-                sectionTitle.html(sectionName);
+                var sectionBar = $('<div class="lumens-secondary-menu-section"><span id="id-section-icon" class="icon-expand"/><span id="id-section-name"></span></div>').appendTo(section);
                 var sectionContent = $('<ul class="lumens-secondary-submenu"/>').appendTo(section);
+                sectionBar.find("#id-section-name").html(sectionName);
+                sectionBar.on("click", function(event, ui) {
+                    sectionBar.find("#id-section-icon").toggleClass("icon-collapse");
+                    sectionBar.find("#id-section-icon").toggleClass("icon-expand");
+                    sectionContent.toggle(300);
+                });
                 var items = [];
                 //Operation functions
                 this.addItem = function(itemName) {
@@ -43,7 +48,7 @@ Lumens.NavMenu = Class.$extend({
         this.clickCallBack = function(event) {
             __this.$menuContainer.trigger(jQuery.Event(__this.configuration.event_type, {
                 module_id: $(this).attr("module-id"),
-                name: $(this).find('span').html(),
+                name: $(this).find('.lumens-secondary-menu-text').text(),
                 object: $(this)
             }));
         }

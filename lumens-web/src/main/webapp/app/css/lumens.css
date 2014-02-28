@@ -18,6 +18,36 @@ a, a:focus, a:hover {
     text-decoration: none;
 }
 .lumens {}
+@font-face {
+    font-family: 'icomoon';
+    src:url('icomoon/icomoon.eot?de4bve');
+    src:url('icomoon/icomoon.eot?#iefixde4bve') format('embedded-opentype'),
+        url('icomoon/icomoon.woff?de4bve') format('woff'),
+        url('icomoon/icomoon.ttf?de4bve') format('truetype'),
+        url('icomoon/icomoon.svg?de4bve#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    font-family: 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.lumens .icon-collapse:before {
+    content: "\e6fd";
+}
+.lumens .icon-expand:before {
+    content: "\e6fe";
+}
 .lumens table {
     border-spacing: 0;
     border-collapse: collapse;
@@ -162,8 +192,9 @@ a, a:focus, a:hover {
     background-color:rgb(240, 240, 240);
 }
 .lumens .lumens-secondary-menu-section {
+    cursor: pointer;
     font-weight: bold;
-    margin-left: 10px;
+    font-size: 16px;
     color: #7c7bad;
 }
 .lumens .lumens-secondary-submenu {
@@ -319,12 +350,10 @@ a, a:focus, a:hover {
     width: 100%;
     height: 100%;
 }
-
 .lumens .data-comp-container {
     overflow: auto;
     position: relative;
 }
-
 .lumens .data-comp {
     border: 1px solid #CCCCCC;
     display: table;
@@ -336,19 +365,16 @@ a, a:focus, a:hover {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;   
 }
-
 .lumens .data-comp-stauts {
     left:225px;
     position:absolute;
 }
-
 .lumens .data-comp-icon {
     padding-top: 12px;
     padding-left: 5px;
     float: left;
     cursor: pointer;
 }
-
 .lumens .data-comp-text {
     padding-top: 24px;
     padding-left: 5px;
@@ -356,12 +382,10 @@ a, a:focus, a:hover {
     overflow: hidden;
     float: left;
 }
-
 .lumens .data-comp-title {
     float: top;
     font-size: 16px;
 }
-
 .lumens .data-comp-shortdsc {
     overflow: hidden;
     white-space: nowrap;  
