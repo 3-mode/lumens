@@ -68,7 +68,7 @@ Lumens.DataComponent = Class.$extend({
         $.data(this.$elem.find(".data-comp-icon").draggable({
             appendTo: $("#id-data-comp-container"),
             helper: function() {
-                return $(this).clone().zIndex(20000);
+                return $(this).clone().zIndex(20000).css("opacity", "0.7");
             }
         }).get(0), "data-comp", this);
 
