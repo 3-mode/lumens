@@ -354,6 +354,16 @@ a, a:focus, a:hover {
     overflow: auto;
     position: relative;
 }
+.lumens .data-comp-container > svg {
+    pointer-events: none;
+    position: absolute !important;
+}
+svg circle {
+    pointer-events:visible;    
+}
+svg path {
+    pointer-events:visible;    
+}
 .lumens .data-comp {
     border: 1px solid #CCCCCC;
     display: table;

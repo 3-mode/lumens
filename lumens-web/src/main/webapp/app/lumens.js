@@ -34,24 +34,8 @@ Lumens.Application = Class.$extend({
                     });
 
                     // Create desgin workspace panel
-                    __this.designPanel = new Lumens.Panel(__this.workspaceLayout.getPart2Element())
-                    .configure({
-                        panelClass: ["data-comp-container"],
-                        panelStyle: {width: "100%", height: "100%"}
-                    });
-                    // Initialize the business logical panel drop event
-                    __this.componentList = [];
-                    var $designPanelElement = __this.designPanel.getElement()
-                    .attr("id", "id-data-comp-container")
-                    .droppable({
-                        accept: ".data-comp-node",
-                        drop: function(event, ui) {
-                            event.preventDefault();
-                            var data = $.data(ui.draggable.get(0), "item-data");
-                            var pos = ui.position;
-                            __this.componentList.push(new Lumens.DataComponent($designPanelElement, {"x": pos.left, "y": pos.top, "data": data, "short_desc": "[ to configure ]"}));
-                        }
-                    });
+                    __this.designPanel = new Lumens.ComponentPanel(__this.workspaceLayout.getPart2Element())
+                    .configure({width: "100%", height: "100%"});
 
                     // Loading nav menu
                     $.get("app/mock/nav_menu_mock.json").success(function(data) {

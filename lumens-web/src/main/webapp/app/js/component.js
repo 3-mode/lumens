@@ -27,7 +27,7 @@ Lumens.Link = Class.$extend({
         if (this.$connection)
             this.$paper.connection(this.$connection);
         else
-            this.$connection = this.$paper.connection(this.$from, this.$to, "#CCCCCC", "#CCCCCC");
+            this.$connection = this.$paper.connection(this.$from, this.$to, "#CCCCCC");
         return this;
     }
 });

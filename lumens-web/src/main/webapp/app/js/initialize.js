@@ -60,21 +60,23 @@ Raphael.fn.connection = function(obj1, obj2, line) {
     } else {
         var color = typeof line === "string" ? line : "#000";
         var connection = {
-            line: this.path(path).attr({stroke: color, fill: "none", "stroke-width": 3}),
+            color: color,
+            line: this.path(path).attr({stroke: color, fill: "none", "stroke-width": 4}),
             circle: this.circle(x4, y4, 5).attr({stroke: color, fill: color}),
             from: obj1,
             to: obj2
         };
+        var highlightColor = "#0086DB";
         connection.line.hover(function() {
-            connection.line.attr({stroke: "#4696ca"});
-            connection.circle.attr({stroke: "#4696ca", fill: "#4696ca"});
+            connection.line.attr({stroke: highlightColor});
+            connection.circle.attr({stroke: highlightColor, fill: highlightColor});
         }, function() {
             connection.line.attr({stroke: color});
             connection.circle.attr({stroke: color, fill: color});
         });
         connection.circle.hover(function() {
-            connection.line.attr({stroke: "#4696ca"});
-            connection.circle.attr({stroke: "#4696ca", fill: "#4696ca"});
+            connection.line.attr({stroke: highlightColor});
+            connection.circle.attr({stroke: highlightColor, fill: highlightColor});
         }, function() {
             connection.line.attr({stroke: color});
             connection.circle.attr({stroke: color, fill: color});

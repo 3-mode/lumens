@@ -162,3 +162,29 @@ Lumens.Panel = Class.$extend({
         this.$parentContainer.unbind("resize", this.layout);
     }
 });
+
+Lumens.ComponentPanel = Lumens.Panel.$extend({
+    __init__: function(container) {
+        this.$super(container);
+        this.componentList = [];
+    },
+    configure: function(panelStyle) {
+        var config = {
+            panelClass: ["data-comp-container"],
+            panelStyle: panelStyle
+        }
+        var __this = this;
+        this.getElement()
+        .attr("id", "id-data-comp-container")
+        .droppable({
+            accept: ".data-comp-node",
+            drop: function(event, ui) {
+                event.preventDefault();
+                var data = $.data(ui.draggable.get(0), "item-data");
+                var pos = ui.position;
+                __this.componentList.push(new Lumens.DataComponent(__this.getElement(), {"x": pos.left, "y": pos.top, "data": data, "short_desc": "[ to configure ]"}));
+            }
+        });
+        this.$super(config);
+    }
+});
