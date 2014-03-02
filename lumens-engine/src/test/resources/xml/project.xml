@@ -2,7 +2,7 @@
     <description>
       <![CDATA[test project description demo]]>
     </description>
-    <datasource-list>
+    <resource-list>
         <datasource name="ChinaMobile-WebService-SOAP" class-name="com.lumens.connector.webservice.WebServiceConnector">
             <description>
               <![CDATA[this is testing demo datasource for web service]]>
@@ -89,9 +89,9 @@
                 <target name="GetOpenFundString2-WS-Transform"/>
             </target-list>
         </datasource>
-    </datasource-list>
-    <processor-list>
-        <processor name="GetOpenFundString-WS-Transform" class-name="com.lumens.engine.component.DataTransformation">
+    </resource-list>
+    <instrument-list>
+        <transformator name="GetOpenFundString-WS-Transform" class-name="com.lumens.engine.component.instrument.DataTransformator">
             <position x="0" y="0"/>
             <target-list>
                 <target name="ChinaMobile-WebService-SOAP"/>
@@ -111,8 +111,8 @@
                     </transform-rule>
                 </transform-rule-entry>
             </transform-rule-list>
-        </processor>
-        <processor name="GetOpenFundString2-WS-Transform" class-name="com.lumens.engine.component.DataTransformation">
+        </transformator>
+        <transformator name="GetOpenFundString2-WS-Transform" class-name="com.lumens.engine.component.instrument.DataTransformator">
             <position x="0" y="0"/>
             <target-list>
                 <target name="ChinaMobile-WebService-SOAP"/>
@@ -132,8 +132,8 @@
                     </transform-rule>
                 </transform-rule-entry>
             </transform-rule-list>
-        </processor>
-    </processor-list>
+        </transformator>
+    </instrument-list>
     <start-entry-list>
         <start-entry name="startWS" entry-name="GetOpenFundString-WS-Transform" />
     </start-entry-list>

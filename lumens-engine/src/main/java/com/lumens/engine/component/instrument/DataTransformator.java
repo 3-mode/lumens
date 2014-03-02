@@ -1,9 +1,13 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.engine.component;
+package com.lumens.engine.component.instrument;
 
 import com.lumens.engine.TransformExecuteContext;
+import com.lumens.engine.component.AbstractTransformComponent;
+import com.lumens.engine.Instrument;
+import com.lumens.engine.component.RuleComponent;
+import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.run.ExecuteContext;
 import com.lumens.engine.run.LastResultHandler;
 import com.lumens.engine.run.ResultHandler;
@@ -20,14 +24,14 @@ import java.util.Map;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class DataTransformation extends AbstractTransformComponent implements RuleComponent {
+public class DataTransformator extends AbstractTransformComponent implements RuleComponent, Instrument {
 
     private String name;
     private Processor processor;
     private List<TransformRuleEntry> ruleList = new ArrayList<>();
     private Map<String, List<TransformRuleEntry>> ruleFindList = new HashMap<>();
 
-    public DataTransformation() {
+    public DataTransformator() {
         super(null);
         processor = new TransformProcessor();
     }
@@ -131,6 +135,6 @@ public class DataTransformation extends AbstractTransformComponent implements Ru
 
     @Override
     public String getClassName() {
-        return DataTransformation.class.getName();
+        return DataTransformator.class.getName();
     }
 }

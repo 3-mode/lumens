@@ -3,8 +3,8 @@
  */
 package com.lumens.engine;
 
-import com.lumens.engine.component.DataSource;
-import com.lumens.engine.component.DataTransformation;
+import com.lumens.engine.component.resource.DataSource;
+import com.lumens.engine.component.instrument.DataTransformator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class TransformProject {
 
     private List<DataSource> datasourceList = new ArrayList<>();
-    private List<DataTransformation> transformationList = new ArrayList<>();
+    private List<DataTransformator> transformatorList = new ArrayList<>();
     private List<StartEntry> startList = new ArrayList<>();
     private String name;
     private String description;
@@ -37,12 +37,12 @@ public class TransformProject {
         this.datasourceList = datasourceList;
     }
 
-    public void setDataTransformationList(List<DataTransformation> transformationList) {
-        this.transformationList = transformationList;
+    public void setTransformatorList(List<DataTransformator> transformatorList) {
+        this.transformatorList = transformatorList;
     }
 
-    public List<DataTransformation> getDataTransformationList() {
-        return transformationList;
+    public List<DataTransformator> getDataTransformatorList() {
+        return transformatorList;
     }
 
     public String getDescription() {
@@ -69,7 +69,7 @@ public class TransformProject {
                 throw new Exception(ex);
             }
         }
-        for (DataTransformation dt : transformationList) {
+        for (DataTransformator dt : transformatorList) {
             try {
                 dt.open();
             } catch (Exception ex) {
@@ -84,7 +84,7 @@ public class TransformProject {
         if (isOpen()) {
             for (DataSource ds : datasourceList)
                 ds.close();
-            for (DataTransformation dt : transformationList)
+            for (DataTransformator dt : transformatorList)
                 dt.close();
         }
         isOpen = false;

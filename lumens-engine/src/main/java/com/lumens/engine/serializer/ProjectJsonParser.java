@@ -7,8 +7,8 @@ import com.lumens.connector.Direction;
 import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
-import com.lumens.engine.component.DataSource;
-import com.lumens.engine.component.DataTransformation;
+import com.lumens.engine.component.resource.DataSource;
+import com.lumens.engine.component.instrument.DataTransformator;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.RegisterFormatComponent;
 import com.lumens.engine.component.TransformRuleEntry;
@@ -41,7 +41,7 @@ class ProjectJsonParser {
     public static final String DESCRIPTION = "description";
     public static final String STARTENTRY_LIST = "start_entry";
     public static final String DATASOURCE_LIST = "datasource";
-    public static final String PROCESSOR_LIST = "processor";
+    public static final String TRANSFORMATOR_LIST = "transformator";
     private TransformProject project;
     private Map<String, TransformComponent> tComponentCache = new HashMap<>();
     private Map<String, List<String>> targetList = new HashMap<>();
@@ -74,7 +74,7 @@ class ProjectJsonParser {
                 project.setDescription(descJson.asText());
                 // Read list
                 readProjectDataSourceListFromJson(projectJson.get(DATASOURCE_LIST));
-                readProjectProcessorListFromJson(projectJson.get(PROCESSOR_LIST));
+                readProjectInstrumentListFromJson(projectJson.get(TRANSFORMATOR_LIST));
                 readProjectStartEntryFromJson(projectJson.get(STARTENTRY_LIST));
                 handleTargetList();
             } else
@@ -90,9 +90,9 @@ class ProjectJsonParser {
         }
     }
 
-    private void readProjectProcessorListFromJson(JsonNode processorJson) {
-        if (isNotNull(processorJson) && processorJson.isArray()) {
-            Iterator<JsonNode> it = processorJson.getElements();
+    private void readProjectInstrumentListFromJson(JsonNode transformatorJson) {
+        if (isNotNull(transformatorJson) && transformatorJson.isArray()) {
+            Iterator<JsonNode> it = transformatorJson.getElements();
             while (it.hasNext())
                 readProcessorFromJson(it.next());
         }
@@ -131,15 +131,15 @@ class ProjectJsonParser {
         }
     }
 
-    private void readProcessorFromJson(JsonNode processorJson) {
-        if (isNotNull(processorJson)) {
-            JsonNode classNameJson = processorJson.get("class_name");
-            JsonNode nameJson = processorJson.get("name");
-            JsonNode dscJson = processorJson.get("description");
-            JsonNode posJson = processorJson.get("position");
+    private void readProcessorFromJson(JsonNode transformatorJson) {
+        if (isNotNull(transformatorJson)) {
+            JsonNode classNameJson = transformatorJson.get("class_name");
+            JsonNode nameJson = transformatorJson.get("name");
+            JsonNode dscJson = transformatorJson.get("description");
+            JsonNode posJson = transformatorJson.get("position");
             if (isNotNull(classNameJson) && isNotNull(nameJson)) {
-                if (DataTransformation.class.getName().equals(classNameJson.asText())) {
-                    DataTransformation dt = new DataTransformation();
+                if (DataTransformator.class.getName().equals(classNameJson.asText())) {
+                    DataTransformator dt = new DataTransformator();
                     dt.setName(nameJson.asText());
                     if (isNotNull(dscJson))
                         dt.setDescription(dscJson.asText());
@@ -147,12 +147,12 @@ class ProjectJsonParser {
                         dt.setX(posJson.get("x").asInt());
                         dt.setY(posJson.get("y").asInt());
                     }
-                    project.getDataTransformationList().add(dt);
+                    project.getDataTransformatorList().add(dt);
                     tComponentCache.put(dt.getName(), dt);
-                    readTransformComponentTargetList(dt, processorJson);
-                    readTransformRuleEntry(dt, processorJson);
+                    readTransformComponentTargetList(dt, transformatorJson);
+                    readTransformRuleEntry(dt, transformatorJson);
                 } else
-                    throw new RuntimeException("Data source name or class name is invalid !");
+                    throw new RuntimeException("Processor name or class name is invalid !");
             }
         }
     }
@@ -256,8 +256,8 @@ class ProjectJsonParser {
         }
     }
 
-    private void readTransformRuleEntry(DataTransformation dt, JsonNode processorJson) {
-        JsonNode transformRuleEntryListJson = processorJson.get("transform_rule_entry");
+    private void readTransformRuleEntry(DataTransformator dt, JsonNode transformatorJson) {
+        JsonNode transformRuleEntryListJson = transformatorJson.get("transform_rule_entry");
         if (isNotNull(transformRuleEntryListJson) && transformRuleEntryListJson.isArray()) {
             Iterator<JsonNode> it = transformRuleEntryListJson.getElements();
             while (it.hasNext()) {
@@ -278,7 +278,7 @@ class ProjectJsonParser {
         }
     }
 
-    private TransformRule readTransformRuleFromJson(DataTransformation dt, String targetName, JsonNode transformRuleJson) {
+    private TransformRule readTransformRuleFromJson(DataTransformator dt, String targetName, JsonNode transformRuleJson) {
         if (isNotNull(transformRuleJson)) {
             // get Root transform rule item
             JsonNode transformRuleItemJson = transformRuleJson.get("transform_rule_item");

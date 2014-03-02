@@ -7,8 +7,8 @@ import com.lumens.connector.Direction;
 import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
-import com.lumens.engine.component.DataSource;
-import com.lumens.engine.component.DataTransformation;
+import com.lumens.engine.component.resource.DataSource;
+import com.lumens.engine.component.instrument.DataTransformator;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.RegisterFormatComponent;
 import com.lumens.engine.component.RuleComponent;
@@ -110,11 +110,11 @@ public class ProjectHandlerImpl implements ProjectHandler {
     }
 
     @Override
-    public void start_datasource_list(final Attributes meta) throws SAXException {
+    public void start_resource_list(final Attributes meta) throws SAXException {
     }
 
     @Override
-    public void end_datasource_list() throws SAXException {
+    public void end_resource_list() throws SAXException {
     }
 
     @Override
@@ -243,15 +243,15 @@ public class ProjectHandlerImpl implements ProjectHandler {
     }
 
     @Override
-    public void start_processor_list(final Attributes meta) throws SAXException {
+    public void start_instrument_list(final Attributes meta) throws SAXException {
     }
 
     @Override
-    public void end_processor_list() throws SAXException {
+    public void end_instrument_list() throws SAXException {
     }
 
     @Override
-    public void start_processor(final Attributes meta) throws SAXException {
+    public void start_transformator(final Attributes meta) throws SAXException {
         if (status == ReadStatus.PROJECT) {
             status = ReadStatus.DATAPSR;
             String className = meta.getValue("class-name");
@@ -269,9 +269,9 @@ public class ProjectHandlerImpl implements ProjectHandler {
     }
 
     @Override
-    public void end_processor() throws SAXException {
+    public void end_transformator() throws SAXException {
         if (status == ReadStatus.DATAPSR)
-            project.getDataTransformationList().add((DataTransformation) tc);
+            project.getDataTransformatorList().add((DataTransformator) tc);
         status = ReadStatus.PROJECT;
     }
 

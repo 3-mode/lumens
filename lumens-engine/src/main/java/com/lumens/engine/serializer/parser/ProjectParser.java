@@ -70,42 +70,61 @@ public class ProjectParser implements ContentHandler {
     public final void startElement(java.lang.String ns, java.lang.String name, java.lang.String qname, org.xml.sax.Attributes attrs) throws org.xml.sax.SAXException {
         dispatch(true);
         context.push(new Object[]{qname, new org.xml.sax.helpers.AttributesImpl(attrs)});
-        if ("transform-rule-item".equals(qname)) {
-            handler.start_transform_rule_item(attrs);
-        } else if ("position".equals(qname)) {
-            handler.handle_position(attrs);
-        } else if ("format-entry".equals(qname)) {
-            handler.start_format_entry(attrs);
-        } else if ("start-entry-list".equals(qname)) {
-            handler.start_start_entry_list(attrs);
-        } else if ("transform-rule-entry".equals(qname)) {
-            handler.start_transform_rule_entry(attrs);
-        } else if ("target-list".equals(qname)) {
-            handler.start_target_list(attrs);
-        } else if ("transform-rule".equals(qname)) {
-            handler.start_transform_rule(attrs);
-        } else if ("format".equals(qname)) {
-            handler.start_format(attrs);
-        } else if ("processor-list".equals(qname)) {
-            handler.start_processor_list(attrs);
-        } else if ("property-list".equals(qname)) {
-            handler.start_property_list(attrs);
-        } else if ("format-list".equals(qname)) {
-            handler.start_format_list(attrs);
-        } else if ("transform-rule-list".equals(qname)) {
-            handler.start_transform_rule_list(attrs);
-        } else if ("project".equals(qname)) {
-            handler.start_project(attrs);
-        } else if ("datasource-list".equals(qname)) {
-            handler.start_datasource_list(attrs);
-        } else if ("start-entry".equals(qname)) {
-            handler.handle_start_entry(attrs);
-        } else if ("target".equals(qname)) {
-            handler.handle_target(attrs);
-        } else if ("processor".equals(qname)) {
-            handler.start_processor(attrs);
-        } else if ("datasource".equals(qname)) {
-            handler.start_datasource(attrs);
+        switch (qname) {
+            case "transform-rule-item":
+                handler.start_transform_rule_item(attrs);
+                break;
+            case "position":
+                handler.handle_position(attrs);
+                break;
+            case "format-entry":
+                handler.start_format_entry(attrs);
+                break;
+            case "start-entry-list":
+                handler.start_start_entry_list(attrs);
+                break;
+            case "transform-rule-entry":
+                handler.start_transform_rule_entry(attrs);
+                break;
+            case "target-list":
+                handler.start_target_list(attrs);
+                break;
+            case "transform-rule":
+                handler.start_transform_rule(attrs);
+                break;
+            case "format":
+                handler.start_format(attrs);
+                break;
+            case "instrument-list":
+                handler.start_instrument_list(attrs);
+                break;
+            case "property-list":
+                handler.start_property_list(attrs);
+                break;
+            case "format-list":
+                handler.start_format_list(attrs);
+                break;
+            case "transform-rule-list":
+                handler.start_transform_rule_list(attrs);
+                break;
+            case "project":
+                handler.start_project(attrs);
+                break;
+            case "resource-list":
+                handler.start_resource_list(attrs);
+                break;
+            case "start-entry":
+                handler.handle_start_entry(attrs);
+                break;
+            case "target":
+                handler.handle_target(attrs);
+                break;
+            case "transformator":
+                handler.start_transformator(attrs);
+                break;
+            case "datasource":
+                handler.start_datasource(attrs);
+                break;
         }
     }
 
@@ -117,36 +136,52 @@ public class ProjectParser implements ContentHandler {
     public final void endElement(java.lang.String ns, java.lang.String name, java.lang.String qname) throws org.xml.sax.SAXException {
         dispatch(false);
         context.pop();
-        if ("transform-rule-item".equals(qname)) {
-            handler.end_transform_rule_item();
-        } else if ("format-entry".equals(qname)) {
-            handler.end_format_entry();
-        } else if ("start-entry-list".equals(qname)) {
-            handler.end_start_entry_list();
-        } else if ("transform-rule-entry".equals(qname)) {
-            handler.end_transform_rule_entry();
-        } else if ("target-list".equals(qname)) {
-            handler.end_target_list();
-        } else if ("transform-rule".equals(qname)) {
-            handler.end_transform_rule();
-        } else if ("format".equals(qname)) {
-            handler.end_format();
-        } else if ("processor-list".equals(qname)) {
-            handler.end_processor_list();
-        } else if ("property-list".equals(qname)) {
-            handler.end_property_list();
-        } else if ("format-list".equals(qname)) {
-            handler.end_format_list();
-        } else if ("transform-rule-list".equals(qname)) {
-            handler.end_transform_rule_list();
-        } else if ("project".equals(qname)) {
-            handler.end_project();
-        } else if ("datasource-list".equals(qname)) {
-            handler.end_datasource_list();
-        } else if ("processor".equals(qname)) {
-            handler.end_processor();
-        } else if ("datasource".equals(qname)) {
-            handler.end_datasource();
+        switch (qname) {
+            case "transform-rule-item":
+                handler.end_transform_rule_item();
+                break;
+            case "format-entry":
+                handler.end_format_entry();
+                break;
+            case "start-entry-list":
+                handler.end_start_entry_list();
+                break;
+            case "transform-rule-entry":
+                handler.end_transform_rule_entry();
+                break;
+            case "target-list":
+                handler.end_target_list();
+                break;
+            case "transform-rule":
+                handler.end_transform_rule();
+                break;
+            case "format":
+                handler.end_format();
+                break;
+            case "instrument-list":
+                handler.end_instrument_list();
+                break;
+            case "property-list":
+                handler.end_property_list();
+                break;
+            case "format-list":
+                handler.end_format_list();
+                break;
+            case "transform-rule-list":
+                handler.end_transform_rule_list();
+                break;
+            case "project":
+                handler.end_project();
+                break;
+            case "resource-list":
+                handler.end_resource_list();
+                break;
+            case "transformator":
+                handler.end_transformator();
+                break;
+            case "datasource":
+                handler.end_datasource();
+                break;
         }
     }
 
@@ -193,20 +228,24 @@ public class ProjectParser implements ContentHandler {
         Object[] ctx = (Object[]) context.peek();
         String here = (String) ctx[0];
         org.xml.sax.Attributes attrs = (org.xml.sax.Attributes) ctx[1];
-        if ("property".equals(here)) {
-            if (fireOnlyIfMixed)
-                throw new IllegalStateException("Unexpected characters() event! (Missing DTD?)");
-            handler.handle_property(buffer.length() == 0 ? null : buffer.toString(), attrs);
-        } else if ("script".equals(here)) {
-            if (fireOnlyIfMixed)
-                throw new IllegalStateException("Unexpected characters() event! (Missing DTD?)");
-            handler.handle_script(buffer.length() == 0 ? null : buffer.toString(), attrs);
-        } else if ("description".equals(here)) {
-            if (fireOnlyIfMixed)
-                throw new IllegalStateException("Unexpected characters() event! (Missing DTD?)");
-            handler.handle_description(buffer.length() == 0 ? null : buffer.toString(), attrs);
-        } else {
-            //do not care
+        switch (here) {
+            case "property":
+                if (fireOnlyIfMixed)
+                    throw new IllegalStateException("Unexpected characters() event! (Missing DTD?)");
+                handler.handle_property(buffer.length() == 0 ? null : buffer.toString(), attrs);
+                break;
+            case "script":
+                if (fireOnlyIfMixed)
+                    throw new IllegalStateException("Unexpected characters() event! (Missing DTD?)");
+                handler.handle_script(buffer.length() == 0 ? null : buffer.toString(), attrs);
+                break;
+            case "description":
+                if (fireOnlyIfMixed)
+                    throw new IllegalStateException("Unexpected characters() event! (Missing DTD?)");
+                handler.handle_description(buffer.length() == 0 ? null : buffer.toString(), attrs);
+                break;
+            default:
+                break;
         }
         buffer.delete(0, buffer.length());
     }

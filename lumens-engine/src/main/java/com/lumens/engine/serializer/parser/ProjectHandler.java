@@ -146,13 +146,13 @@ public interface ProjectHandler {
      *
      * @param meta attributes
      */
-    public void start_processor_list(final Attributes meta) throws SAXException;
+    public void start_instrument_list(final Attributes meta) throws SAXException;
 
     /**
      *
      * A container element end event handling method.
      */
-    public void end_processor_list() throws SAXException;
+    public void end_instrument_list() throws SAXException;
 
     /**
      *
@@ -216,13 +216,13 @@ public interface ProjectHandler {
      *
      * @param meta attributes
      */
-    public void start_datasource_list(final Attributes meta) throws SAXException;
+    public void start_resource_list(final Attributes meta) throws SAXException;
 
     /**
      *
      * A container element end event handling method.
      */
-    public void end_datasource_list() throws SAXException;
+    public void end_resource_list() throws SAXException;
 
     /**
      *
@@ -255,13 +255,13 @@ public interface ProjectHandler {
      *
      * @param meta attributes
      */
-    public void start_processor(final Attributes meta) throws SAXException;
+    public void start_transformator(final Attributes meta) throws SAXException;
 
     /**
      *
      * A container element end event handling method.
      */
-    public void end_processor() throws SAXException;
+    public void end_transformator() throws SAXException;
 
     /**
      *

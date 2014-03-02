@@ -3,8 +3,8 @@ package com.lumens.engine;
 import com.lumens.connector.Connector;
 import com.lumens.connector.Direction;
 import com.lumens.connector.webservice.WebServiceConnector;
-import com.lumens.engine.component.DataSource;
-import com.lumens.engine.component.DataTransformation;
+import com.lumens.engine.component.resource.DataSource;
+import com.lumens.engine.component.instrument.DataTransformator;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.run.ResultHandler;
 import com.lumens.engine.run.SingleThreadTransformExecuteJob;
@@ -59,7 +59,7 @@ public class EngineTest extends TestCase {
 
         Format getOpenFundStringResponse2 = connector.getFormat(produces.get("getOpenFundDataSet"), "getOpenFundDataSetResponse", Direction.OUT);
         assertNotNull(getOpenFundStringResponse2.getChild("getOpenFundDataSetResponse").getChild("getOpenFundDataSetResult"));
-        
+
         // Register format
         String targetName = getOpenFundStringRequest.getName() + (nameCounter++);
         // The code is used to create a format copy for registered request
@@ -74,11 +74,11 @@ public class EngineTest extends TestCase {
 
         //******************************************************************************************
         // Create transformation to a data source
-        DataTransformation callGetOpenFundString = new DataTransformation();
+        DataTransformator callGetOpenFundString = new DataTransformator();
         callGetOpenFundString.setName("GetOpenFundString-WS-Transform");
         callGetOpenFundString.setDescription("Test DT 1");
 
-        DataTransformation callGetOpenFundString2 = new DataTransformation();
+        DataTransformator callGetOpenFundString2 = new DataTransformator();
         callGetOpenFundString2.setName("GetOpenFundString2-WS-Transform");
         callGetOpenFundString2.setDescription("Test DT 2");
 
@@ -104,7 +104,7 @@ public class EngineTest extends TestCase {
         project.setDescription("test project description demo");
         project.getStartEntryList().add(new StartEntry("startWS", callGetOpenFundString));
         List<DataSource> dsList = project.getDatasourceList();
-        List<DataTransformation> dtList = project.getDataTransformationList();
+        List<DataTransformator> dtList = project.getDataTransformatorList();
         dsList.add(datasource);
         dtList.add(callGetOpenFundString);
         dtList.add(callGetOpenFundString2);
@@ -114,7 +114,7 @@ public class EngineTest extends TestCase {
         TransformProject projectReaded = new TransformProject();
         new ProjectSerializer(projectReaded).readFromJson(getResourceAsByteArrayInputStream("/json/project.json"));
         assertTrue(projectReaded.getDatasourceList().size() == 1);
-        assertTrue(projectReaded.getDataTransformationList().size() == 2);
+        assertTrue(projectReaded.getDataTransformatorList().size() == 2);
 
         //**********************************************************************
         // Execute all start rules to drive the ws connector
@@ -148,6 +148,8 @@ public class EngineTest extends TestCase {
         TransformProject newProject = new TransformProject();
         ProjectSerializer projXml = new ProjectSerializer(newProject);
         projXml.readFromXml(getResourceAsByteArrayInputStream("/xml/project.xml"));
+        // TODO check project object
+
         //projXml.write(System.out);
         return newProject;
     }

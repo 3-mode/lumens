@@ -1,7 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.engine.component;
+package com.lumens.engine.component.resource;
 
 import com.lumens.connector.Connector;
 import com.lumens.connector.ConnectorFactory;
@@ -10,6 +10,10 @@ import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.engine.EngineContext;
 import com.lumens.engine.TransformExecuteContext;
+import com.lumens.engine.component.AbstractTransformComponent;
+import com.lumens.engine.component.FormatEntry;
+import com.lumens.engine.component.RegisterFormatComponent;
+import com.lumens.engine.Resource;
 import com.lumens.engine.run.ExecuteContext;
 import com.lumens.engine.run.LastResultHandler;
 import com.lumens.engine.run.ResultHandler;
@@ -25,7 +29,7 @@ import java.util.Map;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class DataSource extends AbstractTransformComponent implements RegisterFormatComponent {
+public class DataSource extends AbstractTransformComponent implements RegisterFormatComponent, Resource {
 
     private Connector connector;
     private Map<String, FormatEntry> registerOUTFormatList = new HashMap<>();

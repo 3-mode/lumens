@@ -7,8 +7,8 @@ import com.lumens.connector.Direction;
 import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
-import com.lumens.engine.component.DataSource;
-import com.lumens.engine.component.DataTransformation;
+import com.lumens.engine.component.resource.DataSource;
+import com.lumens.engine.component.instrument.DataTransformator;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.serializer.parser.ProjectHandlerImpl;
@@ -70,7 +70,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         jGenerator.writeStringField("name", project.getName());
         jGenerator.writeStringField("description", project.getDescription());
         writeDatasourceListToJson(jGenerator, project.getDatasourceList());
-        writeDataTransformationListToJson(jGenerator, project.getDataTransformationList());
+        writeDataTransformatorListToJson(jGenerator, project.getDataTransformatorList());
         writeStartEntryListToJson(jGenerator, project.getStartEntryList());
         jGenerator.writeEndObject();
         jGenerator.writeEndObject();
@@ -86,17 +86,17 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         .print("<![CDATA[").print(project.getDescription()).println("]]>").print(INDENT)
         .println("</description>");
         writeDatasourceListToXml(xml, project.getDatasourceList(), INDENT);
-        writeDataTransformationListToXml(xml, project.getDataTransformationList(), INDENT);
+        writeDataTransformationListToXml(xml, project.getDataTransformatorList(), INDENT);
         writeStartEntryListToXml(xml, project.getStartEntryList(), INDENT);
         xml.println("</project>");
     }
 
     private void writeDatasourceListToXml(StringUTF8Writer xml, List<DataSource> datasourceList, String indent) throws Exception {
         if (datasourceList != null && !datasourceList.isEmpty()) {
-            xml.print(indent).println("<datasource-list>");
+            xml.print(indent).println("<resource-list>");
             for (DataSource ds : datasourceList)
                 writeDatasourceToXml(xml, ds, indent + INDENT);
-            xml.print(indent).println("</datasource-list>");
+            xml.print(indent).println("</resource-list>");
         }
     }
 
@@ -178,29 +178,29 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         formatXml.writeToXml(xml.getOutStream());
     }
 
-    private void writeDataTransformationListToXml(StringUTF8Writer xml, List<DataTransformation> dataTransformationList, String indent) throws Exception {
-        if (dataTransformationList != null && !dataTransformationList.isEmpty()) {
+    private void writeDataTransformationListToXml(StringUTF8Writer xml, List<DataTransformator> dataTransformatorList, String indent) throws Exception {
+        if (dataTransformatorList != null && !dataTransformatorList.isEmpty()) {
             String nextIndent = indent + INDENT;
             xml.print(indent)
-            .println("<processor-list>");
-            for (DataTransformation dt : dataTransformationList) {
-                writeDataTransformationToXml(xml, dt, nextIndent);
+            .println("<instrument-list>");
+            for (DataTransformator dt : dataTransformatorList) {
+                writeDataTransformatorToXml(xml, dt, nextIndent);
             }
             xml.print(indent)
-            .println("</processor-list>");
+            .println("</instrument-list>");
         }
     }
 
-    private void writeDataTransformationToXml(StringUTF8Writer xml, DataTransformation dt, String indent) throws Exception {
+    private void writeDataTransformatorToXml(StringUTF8Writer xml, DataTransformator dt, String indent) throws Exception {
         String nextIndent = indent + INDENT;
         xml.print(indent)
-        .print("<processor name=\"").print(dt.getName()).print("\" class-name=\"").
+        .print("<transformator name=\"").print(dt.getName()).print("\" class-name=\"").
         print(dt.getClassName()).println("\">");
         xml.print(nextIndent).print("<position x=\"").print(Integer.toString(dt.getX())).print("\" y=\"").print(Integer.toString(dt.getY())).println("\"/>");
         writeTargetListToXml(xml, dt.getTargetList(), nextIndent);
         writeTransformRuleList(xml, dt.getTransformRuleList(), nextIndent);
         xml.print(indent)
-        .println("</processor>");
+        .println("</transformator>");
     }
 
     private void writeStartEntryListToXml(StringUTF8Writer xml, List<StartEntry> startEntryList, String indent) throws Exception {
@@ -217,7 +217,6 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     }
 
     private void writeStartEntryToXml(StringUTF8Writer xml, StartEntry se, String indent) throws Exception {
-        String nextIndent = indent + INDENT;
         xml.print(indent).print("<start-entry name=\"").print(se.getStartName()).print("\" entry-name=\"").print(se.getStartComponent().getName()).println("\"/>");
     }
 
@@ -353,16 +352,16 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         formatWriter.writeToJson(jGenerator);
     }
 
-    private void writeDataTransformationListToJson(JsonGenerator jGenerator, List<DataTransformation> dataTransformationList) throws Exception {
-        if (dataTransformationList != null && !dataTransformationList.isEmpty()) {
-            jGenerator.writeArrayFieldStart("processor");
-            for (DataTransformation dt : dataTransformationList)
-                writeDataTransformationToJson(jGenerator, dt);
+    private void writeDataTransformatorListToJson(JsonGenerator jGenerator, List<DataTransformator> dataTransformatorList) throws Exception {
+        if (dataTransformatorList != null && !dataTransformatorList.isEmpty()) {
+            jGenerator.writeArrayFieldStart("transformator");
+            for (DataTransformator dt : dataTransformatorList)
+                writeDataTransformatorToJson(jGenerator, dt);
             jGenerator.writeEndArray();
         }
     }
 
-    private void writeDataTransformationToJson(JsonGenerator jGenerator, DataTransformation dt) throws Exception {
+    private void writeDataTransformatorToJson(JsonGenerator jGenerator, DataTransformator dt) throws Exception {
         jGenerator.writeStartObject();
         jGenerator.writeStringField("name", dt.getName());
         jGenerator.writeStringField("class_name", dt.getClassName());
