@@ -62,7 +62,7 @@ Raphael.fn.connection = function(obj1, obj2, line) {
         var connection = {
             color: color,
             line: this.path(path).attr({stroke: color, fill: "none", "stroke-width": 4}),
-            circle: this.circle(x4, y4, 5).attr({stroke: color, fill: color}),
+            circle: this.circle(x4, y4, 6).attr({stroke: color, fill: color}),
             from: obj1,
             to: obj2
         };

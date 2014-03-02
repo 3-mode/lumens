@@ -32,36 +32,48 @@ Lumens.Application = Class.$extend({
                         panelClass: ["lumens-menu-container"],
                         panelStyle: {width: "100%", height: "100%"}
                     });
-
-                    // Create desgin workspace panel
-                    __this.designPanel = new Lumens.ComponentPanel(__this.workspaceLayout.getPart2Element())
-                    .configure({width: "100%", height: "100%"});
-
-                    // Loading nav menu
-                    $.get("app/mock/nav_menu_mock.json").success(function(data) {
-                        __this.navMenu = new Lumens.NavMenu({
-                            container: __this.leftPanel.getElement(),
-                            width: "100%",
-                            height: "auto"
-                        }).configure(data, function(item, data) {
-                            $.data(item.find("a").addClass("data-comp-node").draggable({
-                                appendTo: $("#id-data-comp-container"),
-                                helper: "clone"
-                            }).get(0), "item-data", data);
+                    // Load menu category
+                    $.get("app/mock/nav_menu_mock.json", function(menu) {
+                        // Load data source category
+                        $.get("app/mock/data_source_category.json", function(data_source_items) {
+                            //Load instrument category
+                            $.get("app/mock/instrument_category.json", function(instrument_items) {
+                                menu.sections[0].items = data_source_items.items;
+                                menu.sections[1].items = instrument_items.items;
+                                __this.compCagegory = {};
+                                $.each(data_source_items.items, function() {
+                                    __this.compCagegory[this.id] = this;
+                                });
+                                $.each(instrument_items.items, function() {
+                                    __this.compCagegory[this.id] = this;
+                                });
+                                // Create desgin workspace panel
+                                __this.designPanel = new Lumens.ComponentPanel(__this.workspaceLayout.getPart2Element()).configure({width: "100%", height: "100%"});
+                                // Create left menu
+                                __this.navMenu = new Lumens.NavMenu({
+                                    container: __this.leftPanel.getElement(),
+                                    width: "100%",
+                                    height: "auto"
+                                }).configure(menu, function(item, data) {
+                                    $.data(item.find("a").addClass("data-comp-node").draggable({
+                                        appendTo: $("#id-data-comp-container"),
+                                        helper: "clone"
+                                    }).get(0), "item-data", data);
+                                });
+                                __this.projectImporter = new Lumens.ProjectImporter(__this.compCagegory, __this.designPanel).importById();
+                            });
                         });
-                        /*
-                         var c0 = new Lumens.DataComponent($designPanelElement, {"x": 50, "y": 50, "product_name": "Oracle", "data": data.sections[0].items[0], "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
-                         var c1 = new Lumens.DataComponent($designPanelElement, {"x": 500, "y": 100, "product_name": "MySQL", "data": data.sections[0].items[0], "short_desc": "jdbc:mysql:thin:@localhost:1521:mysql"});
-                         var c2 = new Lumens.DataComponent($designPanelElement, {"x": 300, "y": 300, "product_name": "Oracle", "data": data.sections[0].items[0], "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
-                         var c3 = new Lumens.DataComponent($designPanelElement, {"x": 500, "y": 500, "product_name": "Database", "data": data.sections[0].items[0], "short_desc": "jdbc:oracle:thin:@localhost:1521:orcl"});
-                         new Lumens.Link().from(c0).to(c1).draw();
-                         new Lumens.Link().from(c0).to(c2).draw();
-                         new Lumens.Link().from(c2).to(c3).draw();//*/
                     });
                 }
                 // <******* Design View ------------------------------------------------------------
             }]
-        );
+        )
+        .config(function($controllerProvider) {
+            $controllerProvider.register('DataCompCtrl', ['$scope', '$http', function($scope, $http) {
+                    console.log("DataCompCtrl");
+                }]
+            );
+        });
         return this;
     }
 });

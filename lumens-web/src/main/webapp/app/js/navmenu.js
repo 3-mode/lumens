@@ -65,7 +65,7 @@ Lumens.NavMenu = Class.$extend({
             var items = sections[i].items;
             for (var j = 0; j < items.length; ++j) {
                 var item = section.addItem(items[j].name);
-                item.attr("module-id", items[j].module_id).on('click', this.clickCallBack);
+                item.attr("module-id", items[j].id).on('click', this.clickCallBack);
                 if (items[j].item_icon)
                     item.find('img').attr('src', 'data:image/png;base64,' + items[j].item_icon);
                 else if (items[j].item_icon_url)

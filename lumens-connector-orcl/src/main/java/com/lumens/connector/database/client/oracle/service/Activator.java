@@ -20,7 +20,7 @@ public class Activator implements AddinActivator {
     public void start(AddinContext context) {
         addinContext = context;
         Map<String, Object> props = new HashMap<>();
-        props.put(ConnectorFactory.ID_PROPERTY, "Oracle_connector");
+        props.put(ConnectorFactory.ID_PROPERTY, OracleConnector.CONNECTOR_ID);
         props.put(ConnectorFactory.NAME_PROPERTY, "Oracle");
         props.put(ConnectorFactory.CLASS_NAME_PROPERTY, OracleConnector.class.getName());
         try (InputStream in = Activator.class.getClassLoader().getResourceAsStream("img/Oracle64x64.png")) {

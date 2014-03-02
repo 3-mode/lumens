@@ -19,6 +19,7 @@ import java.util.Map;
  */
 public class OracleConnector implements Connector, DatabaseConstants {
 
+    public static final String CONNECTOR_ID = "id_oracle";
     public static final String SESSION_ALTER = "SESSION_ALTER";
     private OracleClient dbClient;
     private Map<String, Format> tables;
@@ -93,5 +94,10 @@ public class OracleConnector implements Connector, DatabaseConstants {
     @Override
     public boolean isOpen() {
         return isOpen;
+    }
+
+    @Override
+    public String getId() {
+        return CONNECTOR_ID;
     }
 }

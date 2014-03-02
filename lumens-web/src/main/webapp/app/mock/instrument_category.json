@@ -1,0 +1,28 @@
+{
+    "items": [
+        {
+            "name": "Transformator",
+            "id": "id_transformator",
+            "item_icon_url": "app/css/img/Transform24x24.png",
+            "instance_icon_url": "app/css/img/Transform64x64.png"
+        },
+        {
+            "name": "Router",
+            "id": "id_router",
+            "item_icon_url": "app/css/img/Transform24x24.png",
+            "instance_icon_url": "app/css/img/Transform64x64.png"
+        },
+        {
+            "name": "Spliter",
+            "id": "id_spliter",
+            "item_icon_url": "app/css/img/Transform24x24.png",
+            "instance_icon_url": "app/css/img/Transform64x64.png"
+        },
+        {
+            "name": "Composer ",
+            "id": "id_composer",
+            "item_icon_url": "app/css/img/Transform24x24.png",
+            "instance_icon_url": "app/css/img/Transform64x64.png"
+        }
+    ]
+}

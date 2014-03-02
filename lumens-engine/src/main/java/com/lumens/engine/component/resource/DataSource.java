@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -40,6 +42,23 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
     public DataSource(String className) {
         super(className);
+        // Try to search the OSGI bundle if exist else try to instance it directly
+        if (EngineContext.getContext() != null) {
+            ConnectorFactory factory = EngineContext.getContext().getConnectorFactory(getClassName());
+            if (factory != null)
+                connector = factory.createConnector(getClassName());
+        }
+        if (connector == null) {
+            try {
+                connector = (Connector) Class.forName(getClassName()).newInstance();
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                throw new RuntimeException(ex.getCause());
+            }
+        }
+    }
+
+    public String getResourceId() {
+        return connector.getId();
     }
 
     public void setPropertyList(Map<String, Value> propertyList) {
@@ -53,14 +72,6 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     @Override
     public void open() throws Exception {
         if (!isOpen()) {
-            // Try to search the OSGI bundle if exist else try to instance it directly
-            if (EngineContext.getContext() != null) {
-                ConnectorFactory factory = EngineContext.getContext().getConnectorFactory(getClassName());
-                if (factory != null)
-                    connector = factory.createConnector(getClassName());
-            }
-            if (connector == null)
-                connector = (Connector) Class.forName(getClassName()).newInstance();
             connector.setPropertyList(propertyList);
             connector.open();
             inFormatList = connector.getFormatList(Direction.IN);

@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public interface Connector extends Configurable {
 
+    public String getId();
+
     public boolean isOpen();
 
     public void open();

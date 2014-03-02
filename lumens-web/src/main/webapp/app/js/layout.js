@@ -169,11 +169,11 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
         this.componentList = [];
     },
     configure: function(panelStyle) {
+        var __this = this;
         var config = {
             panelClass: ["data-comp-container"],
             panelStyle: panelStyle
-        }
-        var __this = this;
+        };
         this.getElement()
         .attr("id", "id-data-comp-container")
         .droppable({
@@ -181,10 +181,15 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
             drop: function(event, ui) {
                 event.preventDefault();
                 var data = $.data(ui.draggable.get(0), "item-data");
-                var pos = ui.position;
-                __this.componentList.push(new Lumens.DataComponent(__this.getElement(), {"x": pos.left, "y": pos.top, "data": data, "short_desc": "[ to configure ]"}));
+                __this.addComponent({x: ui.position.left, y: ui.position.top}, data);
             }
         });
         this.$super(config);
+        return this;
+    },
+    addComponent: function(position, data) {
+        var component = new Lumens.DataComponent(this.getElement(), {"x": position.x, "y": position.y, "data": data, "short_desc": "[ to configure ]"});
+        this.componentList.push(component);
+        return component;
     }
 });

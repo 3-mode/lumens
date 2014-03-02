@@ -103,7 +103,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     private void writeDatasourceToXml(StringUTF8Writer xml, DataSource ds, String indent) throws Exception {
         String nextIndent = indent + INDENT;
         xml.print(indent)
-        .print("<datasource name=\"").print(ds.getName()).print("\" class-name=\"").print(ds.getClassName()).println("\">");
+        .print("<datasource id=\"").print(ds.getResourceId()).print("\" name=\"").print(ds.getName()).print("\" class-name=\"").print(ds.getClassName()).println("\">");
         xml.print(nextIndent)
         .println("<description>")
         .print("<![CDATA[").print(ds.getDescription()).println("]]>").print(nextIndent)
@@ -194,7 +194,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     private void writeDataTransformatorToXml(StringUTF8Writer xml, DataTransformator dt, String indent) throws Exception {
         String nextIndent = indent + INDENT;
         xml.print(indent)
-        .print("<transformator name=\"").print(dt.getName()).print("\" class-name=\"").
+        .print("<transformator id=\"").print(dt.getInstrumentId()).print("\" name=\"").print(dt.getName()).print("\" class-name=\"").
         print(dt.getClassName()).println("\">");
         xml.print(nextIndent).print("<position x=\"").print(Integer.toString(dt.getX())).print("\" y=\"").print(Integer.toString(dt.getY())).println("\"/>");
         writeTargetListToXml(xml, dt.getTargetList(), nextIndent);
@@ -260,6 +260,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
 
     private void writeDatasourceToJson(JsonGenerator jGenerator, DataSource ds) throws Exception {
         jGenerator.writeStartObject();
+        jGenerator.writeStringField("id", ds.getResourceId());
         jGenerator.writeStringField("name", ds.getName());
         jGenerator.writeStringField("class_name", ds.getClassName());
         jGenerator.writeStringField("description", ds.getDescription());
@@ -363,6 +364,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
 
     private void writeDataTransformatorToJson(JsonGenerator jGenerator, DataTransformator dt) throws Exception {
         jGenerator.writeStartObject();
+        jGenerator.writeStringField("id", dt.getInstrumentId());
         jGenerator.writeStringField("name", dt.getName());
         jGenerator.writeStringField("class_name", dt.getClassName());
         jGenerator.writeStringField("description", dt.getDescription());

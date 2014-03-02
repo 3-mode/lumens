@@ -36,6 +36,10 @@ public class DataTransformator extends AbstractTransformComponent implements Rul
         processor = new TransformProcessor();
     }
 
+    public String getInstrumentId() {
+        return "id_transformator";
+    }
+
     @Override
     public void registerRule(TransformRuleEntry rule) {
         for (TransformRuleEntry r : ruleList)

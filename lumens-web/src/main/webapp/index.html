@@ -7,13 +7,10 @@
         <meta name="author" content="shaofeng.wang">
         <title>LUMENS</title>
         <!-- Bootstrap core CSS -->
-        <link href="lib3rd/morris/morris.css" rel="stylesheet">
+        <link rel="stylesheet" href="lib3rd/morris/morris.css">
         <!-- Page Specific CSS -->
-        <link href="app/css/lumens_boostrap.css" rel="stylesheet">
-        <link href="app/css/lumens.css" rel="stylesheet">
-    </head>
-    <body ng-app='lumens-app' class='lumens'>
-        <div id="id-main-view" ng-controller="MainPageCtrl"></div>
+        <link rel="stylesheet" href="app/css/lumens_boostrap.css">
+        <link rel="stylesheet" href="app/css/lumens.css">
         <!-- 3rd Party JS Plugins -->
         <script src="lib3rd/jquery/js/jquery.js"></script>
         <script src="lib3rd/jquery/js/jquery-ui.js"></script>
@@ -21,13 +18,18 @@
         <script src="lib3rd/raphael/raphael-min.js"></script>
         <script src="lib3rd/morris/morris.min.js"></script>
         <script src="lib3rd/classy.js"></script>
+    </head>
+    <body ng-app='lumens-app' class='lumens'>
+        <div id="id-main-view" ng-controller="MainPageCtrl"></div>
         <!-- Application JS  -->
         <script src="app/js/initialize.js"></script>
-        <script src="app/js/component.js"></script>
         <script src="app/js/layout.js"></script>
         <script src="app/js/sysheader.js"></script>
         <script src="app/js/navbar.js"></script>
         <script src="app/js/navmenu.js"></script>
+        <!-- Business JS  -->
+        <script src="app/js/component.js"></script>
+        <script src="app/js/project.js"></script>
         <!-- Angular JS -->
         <script src="lib3rd/angularjs/angular.js"></script>
         <!-- Application Entry JS -->
