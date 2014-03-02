@@ -6,7 +6,7 @@ package com.lumens.server.service;
 import com.lumens.connector.Direction;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
-import com.lumens.engine.component.DataSource;
+import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.run.LastResultHandler;
 import com.lumens.engine.run.ResultHandler;
 import com.lumens.engine.run.SingleThreadTransformExecuteJob;
@@ -77,6 +77,20 @@ public class ProjectService {
             } else if (PROJECT_ACTIVE.equalsIgnoreCase(action)) {
                 return activeProject(projectID, req);
             }
+        }
+        return Response.ok().entity(String.format("{ \"message\": %s }", "Fail")).build();
+    }
+
+    @POST
+    @Consumes("application/json")
+    public Response createProject(String message, @Context HttpServletRequest req) {
+        JsonNode messageJson = ServerUtils.createJson(message);
+        JsonNode contentJson = messageJson.get(CONTENT);
+        JsonNode actionJson = messageJson.get(ACTION);
+        if (ServerUtils.isNotNull(actionJson)) {
+            String action = actionJson.asText();
+            if (PROJECT_CREATE.equalsIgnoreCase(action) && ServerUtils.isNotNull(contentJson))
+                return createProject(contentJson);
         }
         return Response.ok().entity(String.format("{ \"message\": %s }", "Fail")).build();
     }

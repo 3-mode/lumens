@@ -34,12 +34,12 @@ public class DatasourceCategoryService {
             for (ServiceEntity service : Application.getInstance().getApplicationContext().getAddinEngine().getAddinContext().getServices()) {
                 Map<String, Object> props = service.getPropertList();
                 json.writeStartObject();
-                json.writeStringField("module_id", props.get(ConnectorFactory.ID_PROPERTY).toString());
+                json.writeStringField("id", props.get(ConnectorFactory.ID_PROPERTY).toString());
                 json.writeStringField("name", props.get(ConnectorFactory.NAME_PROPERTY).toString());
                 json.writeStringField("type", "datasource");
                 json.writeStringField("item_icon", props.get(ConnectorFactory.CATALOG_ICON_PROPERTY).toString());
                 json.writeStringField("instance_icon", props.get(ConnectorFactory.INSTANCE_ICON_PROPERTY).toString());
-                json.writeStringField("connector_class_name", props.get(ConnectorFactory.CLASS_NAME_PROPERTY).toString());
+                json.writeStringField("class_name", props.get(ConnectorFactory.CLASS_NAME_PROPERTY).toString());
                 json.writeEndObject();
             }
             json.writeEndArray();
