@@ -28,6 +28,7 @@ Lumens.RootLayout = Class.$extend({
  * {
  *   mode: "horizontal/vertical",
  *   collapse: "1",
+ *   useRatio: true,
  *   part1Size: 200,
  *   part2Size: "100%"
  * }
@@ -37,31 +38,56 @@ Lumens.SplitLayout = Class.$extend({
         this.$parentContainer = container.getElement ? container.getElement() : container;
         this.$theLayout = Lumens.Id($('<div class="lumens-layout"></div>').appendTo(this.$parentContainer));
     },
-    computePartsLayoutSize: function() {
-        if (this.layoutConfig && this.layoutConfig.mode === "horizontal") {
-            if (this.part1Layout && this.part2Layout) {
-                this.part1Layout.css("height", "100%");
-                this.part2Layout.css("height", "100%");
-                if (this.layoutConfig.part1Size) {
-                    this.part1Layout.css("width", this.layoutConfig.part1Size + "px");
-                    this.part2Layout.css("width", (this.$theLayout.width() - this.layoutConfig.part1Size) + "px");
-                }
-                else if (this.layoutConfig.part2Size) {
-                    this.part1Layout.css("width", (this.$theLayout.width() - this.layoutConfig.part2Size) + "px");
-                    this.part2Layout.css("width", this.layoutConfig.part2Size + "px");
-                }
+    computePartsLayoutSize: function(layoutConfig) {
+        if (layoutConfig)
+            this.layoutConfig = layoutConfig;
+
+        if (this.layoutConfig) {
+            // Compute ratio for all parts' size
+            if (this.layoutConfig.useRatio) {
+                if (!this.layoutConfig.part1Ratio && this.layoutConfig.part1Size)
+                    this.layoutConfig.part1Ratio = $.percentToFloat(this.layoutConfig.part1Size);
+                else if (!this.layoutConfig.part2Ratio && this.layoutConfig.part2Size)
+                    this.layoutConfig.part2Ratio = $.percentToFloat(this.layoutConfig.part2Size);
             }
-        } else if (this.layoutConfig && this.layoutConfig.mode === "vertical") {
-            if (this.part1Layout && this.part2Layout) {
-                this.part1Layout.css("width", "100%");
-                this.part2Layout.css("width", "100%");
-                if (this.layoutConfig.part1Size) {
-                    this.part1Layout.css("height", this.layoutConfig.part1Size + "px");
-                    this.part2Layout.css("height", (this.$theLayout.height() - this.layoutConfig.part1Size) + "px");
+
+            if (this.layoutConfig.mode === "horizontal") {
+                if (this.part1Layout && this.part2Layout) {
+                    this.part1Layout.css("height", "100%");
+                    this.part2Layout.css("height", "100%");
+                    // Compute pane size from ratio
+                    if (this.layoutConfig.part1Ratio)
+                        this.layoutConfig.part1Size = this.layoutConfig.part1Ratio * this.$theLayout.width();
+                    else if (this.layoutConfig.part2Ratio)
+                        this.layoutConfig.part2Size = this.layoutConfig.part2Ratio * this.$theLayout.width();
+                    // Compute child panel size
+                    if (this.layoutConfig.part1Size) {
+                        this.part1Layout.css("width", this.layoutConfig.part1Size + "px");
+                        this.part2Layout.css("width", (this.$theLayout.width() - this.layoutConfig.part1Size) + "px");
+                    }
+                    else if (this.layoutConfig.part2Size) {
+                        this.part1Layout.css("width", (this.$theLayout.width() - this.layoutConfig.part2Size) + "px");
+                        this.part2Layout.css("width", this.layoutConfig.part2Size + "px");
+                    }
                 }
-                else if (this.layoutConfig.part2Size) {
-                    this.part1Layout.css("height", (this.$theLayout.height() - this.layoutConfig.part2Size) + "px");
-                    this.part2Layout.css("height", this.layoutConfig.part2Size + "px");
+            } else if (this.layoutConfig.mode === "vertical") {
+                if (this.part1Layout && this.part2Layout) {
+                    this.part1Layout.css("width", "100%");
+                    this.part2Layout.css("width", "100%");
+                    // Compute pane size from ratio
+                    if (this.layoutConfig.part1Ratio)
+                        this.layoutConfig.part1Size = this.layoutConfig.part1Ratio * this.$theLayout.height();
+                    else if (this.layoutConfig.part2Ratio)
+                        this.layoutConfig.part2Size = this.layoutConfig.part2Ratio * this.$theLayout.height();
+                    // Compute child panel size
+                    if (this.layoutConfig.part1Size) {
+                        this.part1Layout.css("height", this.layoutConfig.part1Size + "px");
+                        this.part2Layout.css("height", (this.$theLayout.height() - this.layoutConfig.part1Size) + "px");
+                    }
+                    else if (this.layoutConfig.part2Size) {
+                        this.part1Layout.css("height", (this.$theLayout.height() - this.layoutConfig.part2Size) + "px");
+                        this.part2Layout.css("height", this.layoutConfig.part2Size + "px");
+                    }
                 }
             }
         }
@@ -71,6 +97,7 @@ Lumens.SplitLayout = Class.$extend({
         this.layout = function(e) {
             if (e && e.target !== this)
                 return;
+            console.log("layout in splitpanel")
             __this.$theLayout.css("width", __this.$parentContainer.width());
             __this.$theLayout.css("height", __this.$parentContainer.height());
             __this.computePartsLayoutSize();
@@ -163,6 +190,65 @@ Lumens.Panel = Class.$extend({
     }
 });
 
+/**
+ * 
+ * {
+ * mode: "vertical",
+ * useRatio: true/false,
+ * part1Size: "30%"/300
+ * }
+ */
+Lumens.ResizableSplitPanel = Lumens.SplitLayout.$extend({
+    __init__: function(container) {
+        this.$super(container);
+    },
+    configure: function(config) {
+        var __this = this;
+        this.$super(config);
+        this.resizablePanel = new Lumens.SplitLayout(this.getPart2Element())
+        .configure({
+            mode: config.mode,
+            part1Size: "18"
+        });
+        this.resizablePanel.getPart1Element().addClass("lumens-resize-grip")
+        .append('<div class="lumens-resize-grip-border"><span class="lumens-resize-grip-button"/></div>')
+        .draggable({
+            axis: "horizontal" === config.mode ? "x" : "y",
+            start: function() {
+                __this.resizablePanel.getElement().toggleClass("lumens-drag-border");
+            },
+            stop: "horizontal" === config.mode ? function() {
+                // TODO change other parts height value here
+            } : function() {
+                // TODO change other parts height value here
+                __this.resizablePanel.getElement().toggleClass("lumens-drag-border");
+                if (__this.layoutConfig.useRatio) {
+                    __this.layoutConfig.part1Ratio = Math.abs(__this.layoutConfig.part1Size + $(this).cssFloat("top")) / __this.getElement().height();
+                    var maxRatio = 1 - $(this).height() / __this.getElement().height();
+                    if (__this.layoutConfig.part1Ratio > maxRatio)
+                        __this.layoutConfig.part1Ratio = maxRatio;
+                }
+                else {
+                    __this.layoutConfig.part1Size = __this.layoutConfig.part1Size + $(this).cssFloat("top");
+                    var maxHeight = __this.getElement().height() - $(this).height();
+                    if (__this.layoutConfig.part1Size < 0)
+                        __this.layoutConfig.part1Size = 0;
+                    else if (__this.layoutConfig.part1Size > maxHeight)
+                        __this.layoutConfig.part1Size = maxHeight;
+                }
+                $(this).css("top", "0px");
+                __this.getElement().trigger("resize");
+            }
+        });
+        return this;
+    },
+    getPart2Element: function() {
+        if (this.resizablePanel)
+            return this.resizablePanel.getPart2Element();
+        return this.$super();
+    }
+});
+
 Lumens.ComponentPanel = Lumens.Panel.$extend({
     __init__: function(container) {
         this.$super(container);
@@ -188,7 +274,7 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
         return this;
     },
     addComponent: function(position, data) {
-        var component = new Lumens.DataComponent(this.getElement(), {"x": position.x, "y": position.y, "data": data, "short_desc": "[ to configure ]"});
+        var component = new Lumens.DataComponent(this.getElement(), {x: position.x, y: position.y, data: data, short_desc: "[ to configure ]"});
         this.componentList.push(component);
         return component;
     }

@@ -9,6 +9,18 @@ jQuery.fn.cssFloat = function(prop) {
     return parseFloat(this.css(prop)) || 0;
 };
 
+jQuery.extend({
+    percentToFloat: function(value) {
+        return parseFloat(value.substring(0, value.length - 1)) / 100.0;
+    }
+});
+
+if (typeof String.prototype.endsWith !== 'function') {
+    String.prototype.endsWith = function(suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+}
+
 Raphael.fn.connection = function(obj1, obj2, line) {
     if (obj1.line && obj1.from && obj1.to) {
         line = obj1;

@@ -48,6 +48,9 @@ a, a:focus, a:hover {
 .lumens .icon-expand:before {
     content: "\e6fe";
 }
+.lumens .icon-grip-button:before {
+    content: "\e70e";
+}
 .lumens table {
     border-spacing: 0;
     border-collapse: collapse;
@@ -287,6 +290,29 @@ a, a:focus, a:hover {
     display: block;
     margin: 0;
     padding: 0;
+}
+.lumens .lumens-resize-grip {
+    z-index: 20000;
+    overflow: hidden;
+    cursor: n-resize;
+}
+.lumens .lumens-resize-grip-border {
+    overflow: hidden;
+    height: 18px;
+    border-top: 1px solid #C0C0C0;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.lumens .lumens-resize-grip-button {
+    display:block;
+    margin-left: 45%;
+    width: 28px;
+    height: 18px;
+    background-image: url(img/vdragger.png);
+    background-repeat: no-repeat;
+}
+.lumens .lumens-drag-border {
+    border-top: 1px solid #C0C0C0;
 }
 .lumens .lumens-tab-panel {
     width: 100%;
