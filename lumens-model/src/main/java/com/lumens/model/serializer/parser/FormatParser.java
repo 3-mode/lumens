@@ -69,10 +69,13 @@ public class FormatParser implements ContentHandler {
             qname,
             new org.xml.sax.helpers.AttributesImpl(attrs)
         });
-        if ("format-list".equals(qname)) {
-            handler.start_format_list(attrs);
-        } else if ("format".equals(qname)) {
-            handler.start_format(attrs);
+        switch (qname) {
+            case "format-list":
+                handler.start_format_list(attrs);
+                break;
+            case "format":
+                handler.start_format(attrs);
+                break;
         }
     }
 
@@ -85,10 +88,13 @@ public class FormatParser implements ContentHandler {
                                  java.lang.String qname) throws org.xml.sax.SAXException {
         dispatch(false);
         context.pop();
-        if ("format-list".equals(qname)) {
-            handler.end_format_list();
-        } else if ("format".equals(qname)) {
-            handler.end_format();
+        switch (qname) {
+            case "format-list":
+                handler.end_format_list();
+                break;
+            case "format":
+                handler.end_format();
+                break;
         }
     }
 
