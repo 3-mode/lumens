@@ -48,7 +48,7 @@ Lumens.Application = Class.$extend({
                                 $.each(instrument_items.items, function() {
                                     __this.compCagegory[this.id] = this;
                                 });
-                                __this.designAndInfoPanel = new Lumens.ResizableSplitPanel(__this.workspaceLayout.getPart2Element()).configure({
+                                __this.designAndInfoPanel = new Lumens.ResizableSplitLayout(__this.workspaceLayout.getPart2Element()).configure({
                                     mode: "vertical",
                                     useRatio: true,
                                     part1Size: "60%"

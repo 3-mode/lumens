@@ -197,7 +197,7 @@ Lumens.Panel = Class.$extend({
  * part1Size: "30%"/300
  * }
  */
-Lumens.ResizableSplitPanel = Lumens.SplitLayout.$extend({
+Lumens.ResizableSplitLayout = Lumens.SplitLayout.$extend({
     __init__: function(container) {
         this.$super(container);
     },
