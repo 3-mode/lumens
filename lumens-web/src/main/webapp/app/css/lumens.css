@@ -29,7 +29,7 @@ a, a:focus, a:hover {
     font-style: normal;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+[class^="icon-"], [class*=" icon-"], [class^="lumens-icon-"] {
     font-family: 'icomoon';
     speak: none;
     font-style: normal;
@@ -50,6 +50,18 @@ a, a:focus, a:hover {
 }
 .lumens .icon-grip-button:before {
     content: "\e70e";
+}
+.lumens .lumens-gradient{
+    width:300px;
+    height:150px;
+    /*IE start*/
+    filter:alpha(opacity=20 finishopacity=10 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#eeeeee,endcolorstr=rgba(187, 187, 187, 0.5),gradientType=0);
+    -ms-filter:alpha(opacity=20 finishopacity=10 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#eeeeee,endcolorstr=rgba(187, 187, 187, 0.5),gradientType=0);/*IE8*/	
+    /*IE end*/
+    background: #eeeeee; /* If the browser not support gradient then use single color background color */
+    background:-moz-linear-gradient(top, #eeeeee, rgba(187, 187, 187, 0.5));  
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#eeeeee), to(rgba(187, 187, 187, 0.5)));  
+    background:-o-linear-gradient(top, #eeeeee, rgba(187, 187, 187, 0.5)); 
 }
 .lumens table {
     border-spacing: 0;
@@ -291,28 +303,28 @@ a, a:focus, a:hover {
     margin: 0;
     padding: 0;
 }
-.lumens .lumens-resize-grip {
+.lumens .lumens-v-resize-grip-border {
+    overflow: hidden;
+    height: 18px;
+}
+.lumens .lumens-v-resize-grip {
     z-index: 20000;
     overflow: hidden;
     cursor: n-resize;
 }
-.lumens .lumens-resize-grip-border {
-    overflow: hidden;
-    height: 18px;
-    border-top: 1px solid #C0C0C0;
-    margin-left: 20px;
-    margin-right: 20px;
+.lumens .lumens-v-drag-border {
+    border-top: 3px dotted #C0C0C0;
 }
-.lumens .lumens-resize-grip-button {
+.lumens .lumens-v-resize-grip-button {
     display:block;
-    margin-left: 45%;
+    margin-left: 47%;
     width: 28px;
     height: 18px;
     background-image: url(img/vdragger.png);
     background-repeat: no-repeat;
 }
-.lumens .lumens-drag-border {
-    border-top: 1px solid #C0C0C0;
+.lumens .lumens-v-resizable-border {
+    border-top: 3px solid rgba(63, 63, 63, 0.1);
 }
 .lumens .lumens-tab-panel {
     width: 100%;
@@ -429,3 +441,57 @@ svg path {
     -o-text-overflow: ellipsis; 
 }
 .lumens .data-comp-node {}
+
+/*Tree*/
+.lumens .lumens-tree {
+    font-size: 18px;
+    color: #757575;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.lumens .lumens-00-level {
+    padding-left: 10px;
+    padding-top: 8px;
+}
+.lumens .lumens-0n-level {
+    padding-left: 10px;
+}
+.lumens .lumens-tree-folder, .lumens .lumens-tree-file {
+    padding-top: 8px;
+}
+.lumens .lumens-tree-folder-header {
+}
+.lumens .lumens-tree-node {
+    white-space: nowrap;
+    color: #757575;
+}
+.lumens .lumens-tree-folder-header > i, .lumens .lumens-tree-node > i {
+    float:left;
+}
+.lumens .lumens-tree-folder-name {
+    font-size: 18px;
+    display: block;
+    cursor: pointer;
+}
+.lumens .lumens-tree-folder-content {
+    padding-left: 20px;
+}
+.lumens .lumens-icon-folder-node:before {
+    font-size: 16px;
+    margin-right: 2px;
+    content: "\e7c3";
+}
+.lumens .lumens-icon-file-node:before {
+    font-size: 16px;
+    margin-right: 2px;
+    content: "\e7c1";
+}
+.lumens .lumens-icon-folder-open:before {
+    font-size: 13px;
+    content: "\e6af";
+}
+.lumens .lumens-icon-folder-close:before {
+    font-size: 13px;
+    content: "\e6b0";
+}

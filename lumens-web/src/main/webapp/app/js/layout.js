@@ -97,7 +97,6 @@ Lumens.SplitLayout = Class.$extend({
         this.layout = function(e) {
             if (e && e.target !== this)
                 return;
-            console.log("layout in splitpanel")
             __this.$theLayout.css("width", __this.$parentContainer.width());
             __this.$theLayout.css("height", __this.$parentContainer.height());
             __this.computePartsLayoutSize();
@@ -191,7 +190,7 @@ Lumens.Panel = Class.$extend({
 });
 
 /**
- * 
+ * Now only support vertical draggable resize split panel
  * {
  * mode: "vertical",
  * useRatio: true/false,
@@ -210,18 +209,19 @@ Lumens.ResizableSplitPanel = Lumens.SplitLayout.$extend({
             mode: config.mode,
             part1Size: "18"
         });
-        this.resizablePanel.getPart1Element().addClass("lumens-resize-grip")
-        .append('<div class="lumens-resize-grip-border"><span class="lumens-resize-grip-button"/></div>')
+        this.resizablePanel.getElement().addClass("lumens-v-resizable-border");
+        this.resizablePanel.getPart1Element().addClass("lumens-v-resize-grip")
+        .append('<div class="lumens-v-resize-grip-border"><span class="lumens-v-resize-grip-button"/></div>')
         .draggable({
             axis: "horizontal" === config.mode ? "x" : "y",
             start: function() {
-                __this.resizablePanel.getElement().toggleClass("lumens-drag-border");
+                __this.resizablePanel.getPart1Element().toggleClass("lumens-v-drag-border");
             },
             stop: "horizontal" === config.mode ? function() {
                 // TODO change other parts height value here
             } : function() {
                 // TODO change other parts height value here
-                __this.resizablePanel.getElement().toggleClass("lumens-drag-border");
+                __this.resizablePanel.getPart1Element().toggleClass("lumens-v-drag-border");
                 if (__this.layoutConfig.useRatio) {
                     __this.layoutConfig.part1Ratio = Math.abs(__this.layoutConfig.part1Size + $(this).cssFloat("top")) / __this.getElement().height();
                     var maxRatio = 1 - $(this).height() / __this.getElement().height();
@@ -273,8 +273,14 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
         this.$super(config);
         return this;
     },
-    addComponent: function(position, data) {
-        var component = new Lumens.DataComponent(this.getElement(), {x: position.x, y: position.y, data: data, short_desc: "[ to configure ]"});
+    addComponent: function(position, component_category, component_info) {
+        var component = new Lumens.DataComponent(this.getElement(),
+        {
+            x: position.x, y: position.y,
+            category: component_category,
+            component_info: component_info,
+            short_desc: (component_info && component_info.name) ? component_info.name : "[to do]"
+        });
         this.componentList.push(component);
         return component;
     }

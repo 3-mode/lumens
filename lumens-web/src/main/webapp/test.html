@@ -8,77 +8,140 @@ and open the template in the editor.
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- Bootstrap core CSS -->
-        <link href="lib3rd/boostrap/css/bootstrap.css" rel="stylesheet">
-        <link href="lib3rd/boostrap/css/app_admin.css" rel="stylesheet"> <!-- Add custom CSS here -->
-        <link href="lib3rd/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-        <link href="lib3rd/morris/morris.css" rel="stylesheet"> <!-- Page Specific CSS -->
-        <link href="css/application.css" rel="stylesheet">
+        <!-- Bootstrap core CSS -->
+        <link href="lib3rd/morris/morris.css" rel="stylesheet">
+        <!-- Page Specific CSS -->
+        <link href="app/css/lumens_boostrap.css" rel="stylesheet">
+        <link href="app/css/lumens.css" rel="stylesheet">
     </head>
-    <body>
-        <div id="wrapper">
-            <div id="ID-Data-Component-Container">
-                <div class="Data-Component" style="left:100px;top:50px;">
-                    <div class="Data-Component-icon"><img src="css/img/ds/Database.png"/></div>
-                    <img src="css/img/ds/Deactive.png" style="left:225px; position:absolute;"/>
-                    <div class="Data-Component-Text">
-                        <div class="Data-Component-Title"><b>Database</b></div>
-                        <div class="Data-Component-ShortDsc">jdbc:oracle:thin:@localhost:1521:orcl</div>
-                    </div>
-                </div>
-                <div class="Data-Component" style="left:500px;top:100px;">
-                    <div class="Data-Component-icon"><img src="css/img/ds/Web.png"/></div>
-                    <img src="css/img/ds/Active.png" style="left:225px; position:absolute;"/>
-                    <div class="Data-Component-Text">
-                        <div class="Data-Component-Title"><b>SOAP Web Servie</b></div>
-                        <div class="Data-Component-ShortDsc">https://www.google.com/weather</div>
-                    </div>
-                </div>
-                <svg height="140" version="1.1" width="710" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; left: 50px; top: 50px; position: absolute;">
-                <desc style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">Created with Raphaël 2.1.2</desc>
-                <defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></defs>
-                <path fill="none" stroke="#cccccc" d="M250,50C350,50,350,90,450,90" stroke-width="3" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-                <path fill="none" stroke="#cccccc" d="M250,50C350,50,350,90,450,90" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
-                </svg>
-            </div>
-        </div>
+    <body class="lumens">
+        <div id="id-main-view"></div>
         <!-- JavaScript  -->
         <!-- Page Specific Plugins -->
         <script src="lib3rd/jquery/js/jquery.js"></script>
+        <script src="lib3rd/jquery/js/jquery-ui.js"></script>
         <script src="lib3rd/boostrap/js/bootstrap.js"></script>
         <script src="lib3rd/raphael/raphael-min.js"></script>
         <script src="lib3rd/morris/morris.min.js"></script>
-        <script src="lib3rd/angularjs/angular.js"></script>
         <script src="lib3rd/classy.js"></script>
-        <!-- Application -->
-        <script src="js/initialize.js"></script>
-        <script src="js/connector.js"></script>
-        <script src="js/application.js"></script>
+        <!-- Application JS  -->
+        <script src="app/js/initialize.js"></script>
+        <script src="app/js/component.js"></script>
+        <script src="app/js/project.js"></script>
+        <script src="app/js/layout.js"></script>
+        <script src="app/js/sysheader.js"></script>
+        <script src="app/js/navbar.js"></script>
+        <script src="app/js/navmenu.js"></script>
+        <script src="app/js/tree.js"></script>
         <script type="text/javascript">
-            $(function() {
-                var DataComponent = Class.$extend({
-                    __init__: function(element) {
-                        this.$elem = element;
-                    },
-                    getXY: function() {
-                        return {
-                            "x": this.$elem.cssInt("left"),
-                            "y": this.$elem.cssInt("top")
-                        };
-                    }
-                });
-                var components = [];
-                $('.Data-Component').each(function(index, element) {
-                    var $elem = $(element);
-                    components.push(new DataComponent($elem));
-                })
-                for (var i = 0; i < components.length; ++i) {
-                    var xy = components[i].getXY();
-                    console.log(xy);
+            var obj = {
+                item: {
+                    name: "james"
                 }
-                var xy0 = components[0].getXY();
-                var xy1 = components[1].getXY();
-                var paper = Raphael("wrapper", 1, 1);
-                paper.setSize(xy1.x - xy0.x, xy1.y - xy0.y);
+            };
+            var rootLayout = new Lumens.RootLayout($('#id-main-view')).configure();
+            var theLayout = new Lumens.ResizableSplitPanel(rootLayout).configure({
+                mode: "vertical",
+                useRatio: true,
+                part1Size: "60%"
+            });
+            var topPanel = new Lumens.SplitLayout(theLayout.getPart1Element()).configure({
+                mode: "horizontal",
+                useRatio: true,
+                part1Size: "50%",
+                part2Size: "50%"
+            });
+            var leftPanel = new Lumens.Panel(topPanel.getPart1Element()).configure({
+                panelStyle: {width: "100%", height: "100%", overflow: "auto"}
+            });
+            var rightPanel = new Lumens.Panel(topPanel.getPart2Element()).configure({
+                panelStyle: {width: "100%", height: "100%", overflow: "auto"}
+            });
+            var bottomPanel = new Lumens.Panel(theLayout.getPart2Element()).configure({
+                panelClass: ["lumens-gradient"],
+                panelStyle: {width: "100%", height: "100%"}
+            });
+
+            var tree = new Lumens.Tree(leftPanel.getElement()).configure({
+                dblclick: function(parent, current) {
+                    if (current.hasContent() || !current.isFolder())
+                        return;
+                    current.addChildList(current.getLevel() > 3 ?
+                    [
+                        {
+                            name: "[string]test" + current.getId(),
+                            nodeType: "file"
+                        },
+                        {
+                            name: "[int]test2" + current.getId(),
+                            nodeType: "file"
+                        }
+                    ] :
+                    [
+                        {
+                            name: "test" + current.getId(),
+                            nodeType: "folder"
+                        },
+                        {
+                            name: "test2" + current.getId(),
+                            nodeType: "folder"
+                        }
+                    ]);
+                },
+                handler: function(parentNode) {
+                    parentNode.addEntryList([
+                        {
+                            name: "test",
+                            nodeType: "folder"
+                        },
+                        {
+                            name: "test2",
+                            nodeType: "folder"
+                        }
+                    ]);
+                },
+                draggable: true
+            });
+
+            var tree2 = new Lumens.Tree(rightPanel.getElement()).configure({
+                dblclick: function(parent, current) {
+                    if (current.hasContent() || !current.isFolder())
+                        return;
+                    current.addChildList(current.getLevel() > 3 ?
+                    [
+                        {
+                            name: "[string]test" + current.getId(),
+                            nodeType: "file"
+                        },
+                        {
+                            name: "[int]test2" + current.getId(),
+                            nodeType: "file"
+                        }
+                    ] :
+                    [
+                        {
+                            name: "test" + current.getId(),
+                            nodeType: "folder"
+                        },
+                        {
+                            name: "test2" + current.getId(),
+                            nodeType: "folder"
+                        }
+                    ]);
+                },
+                handler: function(parentNode) {
+                    parentNode.addEntryList([
+                        {
+                            name: "test",
+                            nodeType: "folder"
+                        },
+                        {
+                            name: "test2",
+                            nodeType: "folder"
+                        }
+                    ]);
+                },
+                droppable: true
             });
         </script>
     </body>

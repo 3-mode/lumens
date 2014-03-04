@@ -40,6 +40,7 @@ Lumens.Application = Class.$extend({
                             $.get("app/mock/instrument_category.json", function(instrument_items) {
                                 menu.sections[0].items = data_source_items.items;
                                 menu.sections[1].items = instrument_items.items;
+                                // Create a dictionary to find the correct icon
                                 __this.compCagegory = {};
                                 $.each(data_source_items.items, function() {
                                     __this.compCagegory[this.id] = this;
@@ -65,6 +66,9 @@ Lumens.Application = Class.$extend({
                                         helper: "clone"
                                     }).get(0), "item-data", data);
                                 });
+                                __this.infoPanel = new Lumens.Panel(__this.designAndInfoPanel.getPart2Element())
+                                .configure({panelStyle: {"width": "100%", "height": "100%"}, panelClass: ["lumens-gradient"]});
+
                                 __this.projectImporter = new Lumens.ProjectImporter(__this.compCagegory, __this.designPanel).importById();
                             });
                         });
@@ -72,13 +76,7 @@ Lumens.Application = Class.$extend({
                 }
                 // <******* Design View ------------------------------------------------------------
             }]
-        )
-        .config(function($controllerProvider) {
-            $controllerProvider.register('DataCompCtrl', ['$scope', '$http', function($scope, $http) {
-                    console.log("DataCompCtrl");
-                }]
-            );
-        });
+        );
         return this;
     }
 });

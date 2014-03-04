@@ -15,10 +15,10 @@ Lumens.ProjectImporter = Class.$extend({
                 var compDict = {};
                 var project = $.parseJSON(projectData.content.project[0].data).project;
                 $.each(project.datasource, function() {
-                    compDict[this.name] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.id]);
+                    compDict[this.name] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.id], this);
                 });
                 $.each(project.transformator, function() {
-                    compDict[this.name] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.id]);
+                    compDict[this.name] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.id], this);
                 });
                 $.each(project.datasource, function() {
                     if (compDict[this.name]) {

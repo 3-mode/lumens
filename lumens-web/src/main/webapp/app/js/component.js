@@ -69,7 +69,8 @@ Lumens.DataComponent = Class.$extend({
             }
         });
         $.data(this.$elem.find(".data-comp-icon")
-        .on("click", function() {
+        .on("dblclick", function() {
+            console.log(__this.configure.component_info);
         })
         .draggable({
             appendTo: $("#id-data-comp-container"),
@@ -78,11 +79,11 @@ Lumens.DataComponent = Class.$extend({
             }
         }).get(0), "data-comp", this);
 
-        if (config.data.instance_icon)
-            this.$elem.find('.data-comp-icon').find('img').attr('src', 'data:image/png;base64,' + config.data.instance_icon);
-        else if (config.data.instance_icon_url)
-            this.$elem.find('.data-comp-icon').find('img').attr('src', config.data.instance_icon_url);
-        this.$elem.find('#id-product-name').text(config.data.name);
+        if (config.category.instance_icon)
+            this.$elem.find('.data-comp-icon').find('img').attr('src', 'data:image/png;base64,' + config.category.instance_icon);
+        else if (config.category.instance_icon_url)
+            this.$elem.find('.data-comp-icon').find('img').attr('src', config.category.instance_icon_url);
+        this.$elem.find('#id-product-name').text(config.category.name);
         this.$elem.find('#id-shortdsc').text(config.short_desc);
         this.$elem.css("left", config.x + 'px');
         this.$elem.css("top", config.y + 'px');
