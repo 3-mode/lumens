@@ -1,8 +1,10 @@
-/**
- * 
- * Connector implementation, logic and drawing
+/* 
+ * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
+/**
+ * Connector implementation, logic and drawing
+ */
 Lumens.Link = Class.$extend({
     __init__: function() {
         this.$paper = Raphael("id-data-comp-container", 1, 1);
@@ -70,7 +72,8 @@ Lumens.DataComponent = Class.$extend({
         });
         $.data(this.$elem.find(".data-comp-icon")
         .on("dblclick", function() {
-            console.log(__this.configure.component_info);
+            if (__this.configure.dblclickHandler)
+                __this.configure.dblclickHandler(__this.configure.component_info);
         })
         .draggable({
             appendTo: $("#id-data-comp-container"),

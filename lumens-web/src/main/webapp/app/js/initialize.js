@@ -1,3 +1,7 @@
+/* 
+ * Copyright Lumens Team, Inc. All Rights Reserved.
+ */
+
 if (!window.Lumens)
     window.Lumens = {version: 1.0};
 

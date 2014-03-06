@@ -324,19 +324,19 @@ a, a:focus, a:hover {
     background-repeat: no-repeat;
 }
 .lumens .lumens-v-resizable-border {
-    border-top: 3px solid rgba(63, 63, 63, 0.1);
+    border-top: 1px solid #C2C2C2;
 }
 .lumens .lumens-tab-panel {
     width: 100%;
     height: auto;
     display: block;
     background: #eeeeee;
-    min-height: 300px;
+    min-height: 200px;
 }
 .lumens .lumens-tab-header {
     width: 100%;
     line-height: 32px;
-    padding: 0;
+    padding: 0 0 0 15px;
     margin: 0;
     float: top;
     list-style: none;
@@ -370,14 +370,13 @@ a, a:focus, a:hover {
 }
 .lumens .lumens-tab-content {
     min-height: 100px;
+    min-width: 500px;
     display: block;
     overflow: hidden;
 }
 .lumens .lumens-tab-content-page {
     padding: 10px;
     min-height: 100px;
-    border: 1px solid #C2C2C2;
-    border-top-color: transparent;
 }
 
 
@@ -445,7 +444,7 @@ svg path {
 /*Tree*/
 .lumens .lumens-tree {
     font-size: 18px;
-    color: #757575;
+    color: #5A5A5A;
     display: block;
     width: 100%;
     height: 100%;
@@ -464,7 +463,7 @@ svg path {
 }
 .lumens .lumens-tree-node {
     white-space: nowrap;
-    color: #757575;
+    color: #5A5A5A;
 }
 .lumens .lumens-tree-folder-header > i, .lumens .lumens-tree-node > i {
     float:left;
@@ -494,4 +493,32 @@ svg path {
 .lumens .lumens-icon-folder-close:before {
     font-size: 13px;
     content: "\e6b0";
+}
+
+/*Form component Styles*/
+.lumens .lumens-window-title {
+    float: left;
+    top: 0;
+    white-space: nowrap;  
+    padding-left: 10px;
+    color: #5A5A5A;
+}
+.lumens .lumens-window-buttons {
+    float:right;
+    top: 0;
+    padding-right: 10px;
+    color: #5A5A5A;
+}
+.lumens .lumens-window-buttons > span {
+    cursor: pointer;
+    padding-right: 6px;
+}
+.lumens .lumens-min:before {
+    content: url(img/min.png);
+}
+.lumens .lumens-mid:before {
+    content: url(img/mid.png);
+}
+.lumens .lumens-max:before {
+    content: url(img/max.png);
 }

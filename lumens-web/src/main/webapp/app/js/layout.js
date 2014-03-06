@@ -1,3 +1,7 @@
+/* 
+ * Copyright Lumens Team, Inc. All Rights Reserved.
+ */
+
 Lumens.RootLayout = Class.$extend({
     __init__: function(container) {
         this.$parentContainer = container ? container : $('body');
@@ -207,7 +211,7 @@ Lumens.ResizableSplitLayout = Lumens.SplitLayout.$extend({
         this.resizablePanel = new Lumens.SplitLayout(this.getPart2Element())
         .configure({
             mode: config.mode,
-            part1Size: "18"
+            part1Size: "12"
         });
         this.resizablePanel.getElement().addClass("lumens-v-resizable-border");
         this.resizablePanel.getPart1Element().addClass("lumens-v-resize-grip")
@@ -256,10 +260,6 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
     },
     configure: function(panelStyle) {
         var __this = this;
-        var config = {
-            panelClass: ["data-comp-container"],
-            panelStyle: panelStyle
-        };
         this.getElement()
         .attr("id", "id-data-comp-container")
         .droppable({
@@ -270,16 +270,21 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
                 __this.addComponent({x: ui.position.left, y: ui.position.top}, data);
             }
         });
-        this.$super(config);
+        this.$super({
+            panelClass: ["data-comp-container"],
+            panelStyle: panelStyle
+        });
         return this;
     },
     addComponent: function(position, component_category, component_info) {
-        var component = new Lumens.DataComponent(this.getElement(),
-        {
+        var component = new Lumens.DataComponent(this.getElement(), {
             x: position.x, y: position.y,
             category: component_category,
             component_info: component_info,
-            short_desc: (component_info && component_info.name) ? component_info.name : "[to do]"
+            short_desc: (component_info && component_info.name) ? component_info.name : "[to do]",
+            dblclickHandler: function(dbl_component_info) {
+                console.log(dbl_component_info);
+            }
         });
         this.componentList.push(component);
         return component;

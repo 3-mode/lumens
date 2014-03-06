@@ -1,0 +1,9 @@
+<div style="width: 100%; height: auto; overflow: hidden;" class="lumens-gradient">
+    <div>{{component.name}}</div>
+    <div>{{component.description}}</div>
+    <div>
+        <ul>
+            <li ng-repeat="prop in component.property">{{prop.name}}[{{prop.type}}]: {{prop.value}}</li>
+        </ul>
+    </div>
+</div>
