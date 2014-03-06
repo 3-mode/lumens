@@ -33,7 +33,7 @@ Lumens.Application = Class.$extend({
                     panelStyle: {width: "100%", height: "100%"}
                 });
                 // Load menu category
-                $.get("app/mock/nav_menu_mock.json", function(menu) {
+                $.get("app/config/desgin_nav_menu.json", function(menu) {
                     // Load data source category
                     $.get("app/mock/data_source_category.json", function(data_source_items) {
                         //Load instrument category
@@ -48,13 +48,13 @@ Lumens.Application = Class.$extend({
                             $.each(instrument_items.items, function() {
                                 __this.compCagegory[this.id] = this;
                             });
-                            __this.designAndInfoPanel = new Lumens.ResizableSplitLayout(__this.workspaceLayout.getPart2Element()).configure({
+                            __this.designAndInfoPanel = new Lumens.ResizableVSplitLayoutExt(__this.workspaceLayout.getPart2Element()).configure({
                                 mode: "vertical",
                                 useRatio: true,
                                 part1Size: "60%"
                             });
                             // Create desgin workspace panel
-                            __this.designPanel = new Lumens.ComponentPanel(__this.designAndInfoPanel.getPart1Element()).configure({width: "100%", height: "100%"});
+                            __this.designPanel = new Lumens.ComponentPanel(__this.designAndInfoPanel.getPart1Element(), $scope).configure({width: "100%", height: "100%"});
                             // Create left menu
                             __this.navMenu = new Lumens.NavMenu({
                                 container: __this.leftPanel.getElement(),
@@ -66,10 +66,32 @@ Lumens.Application = Class.$extend({
                                     helper: "clone"
                                 }).get(0), "item-data", data);
                             });
-                            __this.infoPanel = new Lumens.Panel(__this.designAndInfoPanel.getPart2Element())
-                            .configure({panelStyle: {"width": "100%", "height": "100%"}, panelClass: ["lumens-gradient"]});
 
-                            __this.projectImporter = new Lumens.ProjectImporter(__this.compCagegory, __this.designPanel).importById();
+                            // Create info form panel
+                            __this.designAndInfoPanel.getTitleElement().append($compile('<b>Project: {{project.name}}</b>')($scope));
+                            var tabsContainer = new Lumens.Panel(__this.designAndInfoPanel.getPart2Element()).configure({
+                                panelStyle: {"height": "100%", "width": "100%", "overflow": "auto"}
+                            });
+                            function tabDescription($tabContent) {
+                                $http.get("app/templates/project_summary_tmpl.html").success(function(project_summary_tmpl) {
+                                    $tabContent.append($compile(project_summary_tmpl)($scope));
+                                });
+                            }
+                            function tabProperties($tabContent) {
+                                $http.get("app/templates/comp_props_form_tmpl.html").success(function(comp_props_tmpl) {
+                                    $tabContent.append($compile(comp_props_tmpl)($scope));
+                                });
+                            }
+                            __this.tabs = new Lumens.TabPanel(tabsContainer.getElement())
+                            .configure({
+                                tab: [
+                                    {id: "id-project-info", label: "Summary", content: tabDescription},
+                                    {id: "id-component-selected-props", label: "Properties", content: tabProperties},
+                                    {id: "id-component-format-list", label: "Formats", content: undefined}
+                                ]
+                            });
+
+                            __this.projectImporter = new Lumens.ProjectImporter(__this.compCagegory, __this.designPanel, $scope).importById();
                         });
                     });
                 });

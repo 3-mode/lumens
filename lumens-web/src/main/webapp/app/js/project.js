@@ -3,10 +3,11 @@
  */
 
 Lumens.ProjectImporter = Class.$extend({
-    __init__: function(compCagegory, componentPanel) {
+    __init__: function(compCagegory, componentPanel, $scope) {
         this.projectServiceUrl = "app/mock/get_project.json";
         this.compCagegory = compCagegory;
         this.componentPanel = componentPanel;
+        this.$scope = $scope;
     },
     importById: function(projectId) {
         var __this = this;
@@ -14,6 +15,10 @@ Lumens.ProjectImporter = Class.$extend({
             if (projectData.content && projectData.content.project && projectData.content.project.length > 0) {
                 var compDict = {};
                 var project = $.parseJSON(projectData.content.project[0].data).project;
+                // ==================== Update angular JS data model ====================
+                __this.$scope.$apply(function() {
+                    __this.$scope.project = project;
+                });
                 $.each(project.datasource, function() {
                     compDict[this.name] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.id], this);
                 });

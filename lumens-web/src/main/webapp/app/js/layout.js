@@ -79,10 +79,12 @@ Lumens.SplitLayout = Class.$extend({
                     this.part1Layout.css("width", "100%");
                     this.part2Layout.css("width", "100%");
                     // Compute pane size from ratio
-                    if (this.layoutConfig.part1Ratio)
-                        this.layoutConfig.part1Size = this.layoutConfig.part1Ratio * this.$theLayout.height();
-                    else if (this.layoutConfig.part2Ratio)
-                        this.layoutConfig.part2Size = this.layoutConfig.part2Ratio * this.$theLayout.height();
+                    if (this.layoutConfig.useRatio) {
+                        if (this.layoutConfig.part1Ratio)
+                            this.layoutConfig.part1Size = this.layoutConfig.part1Ratio * this.$theLayout.height();
+                        else if (this.layoutConfig.part2Ratio)
+                            this.layoutConfig.part2Size = this.layoutConfig.part2Ratio * this.$theLayout.height();
+                    }
                     // Compute child panel size
                     if (this.layoutConfig.part1Size) {
                         this.part1Layout.css("height", this.layoutConfig.part1Size + "px");
@@ -193,6 +195,49 @@ Lumens.Panel = Class.$extend({
     }
 });
 
+Lumens.ComponentPanel = Lumens.Panel.$extend({
+    __init__: function(container, $scope) {
+        this.$super(container);
+        this.$scope = $scope;
+        this.componentList = [];
+    },
+    configure: function(panelStyle) {
+        var __this = this;
+        this.getElement()
+        .attr("id", "id-data-comp-container")
+        .droppable({
+            accept: ".data-comp-node",
+            drop: function(event, ui) {
+                event.preventDefault();
+                var data = $.data(ui.draggable.get(0), "item-data");
+                __this.addComponent({x: ui.position.left, y: ui.position.top}, data);
+            }
+        });
+        this.$super({
+            panelClass: ["data-comp-container"],
+            panelStyle: panelStyle
+        });
+        return this;
+    },
+    addComponent: function(position, component_category, component_info) {
+        var __this = this;
+        var component = new Lumens.DataComponent(this.getElement(), {
+            x: position.x, y: position.y,
+            category: component_category,
+            component_info: component_info,
+            short_desc: (component_info && component_info.name) ? component_info.name : "[to do]",
+            dblclickHandler: function(dbl_component_info) {
+                console.log(dbl_component_info);
+                __this.$scope.$apply(function() {
+                    __this.$scope.component = dbl_component_info;
+                });
+            }
+        });
+        this.componentList.push(component);
+        return component;
+    }
+});
+
 /**
  * Now only support vertical draggable resize split panel
  * {
@@ -219,22 +264,20 @@ Lumens.ResizableSplitLayout = Lumens.SplitLayout.$extend({
         .draggable({
             axis: "horizontal" === config.mode ? "x" : "y",
             start: function() {
-                __this.resizablePanel.getPart1Element().toggleClass("lumens-v-drag-border");
+                __this.resizeStart();
             },
             stop: "horizontal" === config.mode ? function() {
-                // TODO change other parts height value here
+                // TODO change other parts width value here
             } : function() {
-                // TODO change other parts height value here
-                __this.resizablePanel.getPart1Element().toggleClass("lumens-v-drag-border");
                 if (__this.layoutConfig.useRatio) {
                     __this.layoutConfig.part1Ratio = Math.abs(__this.layoutConfig.part1Size + $(this).cssFloat("top")) / __this.getElement().height();
-                    var maxRatio = 1 - $(this).height() / __this.getElement().height();
+                    var maxRatio = 1 - __this.getOffset() / __this.getElement().height();
                     if (__this.layoutConfig.part1Ratio > maxRatio)
                         __this.layoutConfig.part1Ratio = maxRatio;
                 }
                 else {
                     __this.layoutConfig.part1Size = __this.layoutConfig.part1Size + $(this).cssFloat("top");
-                    var maxHeight = __this.getElement().height() - $(this).height();
+                    var maxHeight = __this.getElement().height() - __this.getOffset();
                     if (__this.layoutConfig.part1Size < 0)
                         __this.layoutConfig.part1Size = 0;
                     else if (__this.layoutConfig.part1Size > maxHeight)
@@ -242,9 +285,21 @@ Lumens.ResizableSplitLayout = Lumens.SplitLayout.$extend({
                 }
                 $(this).css("top", "0px");
                 __this.getElement().trigger("resize");
+                __this.resizeStop();
             }
         });
         return this;
+    },
+    resizeStart: function() {
+        if (this.resizablePanel)
+            this.resizablePanel.getPart1Element().toggleClass("lumens-v-drag-border");
+    },
+    resizeStop: function() {
+        if (this.resizablePanel)
+            this.resizablePanel.getPart1Element().toggleClass("lumens-v-drag-border");
+    },
+    getOffset: function() {
+        return 12;
     },
     getPart2Element: function() {
         if (this.resizablePanel)
@@ -253,40 +308,77 @@ Lumens.ResizableSplitLayout = Lumens.SplitLayout.$extend({
     }
 });
 
-Lumens.ComponentPanel = Lumens.Panel.$extend({
+Lumens.ResizableVSplitLayoutExt = Lumens.ResizableSplitLayout.$extend({
     __init__: function(container) {
         this.$super(container);
-        this.componentList = [];
     },
-    configure: function(panelStyle) {
+    configure: function(config) {
+        if (!config.useRatio)
+            throw "Ratio mode must be used";
+
         var __this = this;
-        this.getElement()
-        .attr("id", "id-data-comp-container")
-        .droppable({
-            accept: ".data-comp-node",
-            drop: function(event, ui) {
-                event.preventDefault();
-                var data = $.data(ui.draggable.get(0), "item-data");
-                __this.addComponent({x: ui.position.left, y: ui.position.top}, data);
-            }
+        this.$super(config);
+        this.$contentPanel = new Lumens.SplitLayout(this.getPart2Element()).configure({
+            mode: "vertical",
+            part1Size: "32"
         });
-        this.$super({
-            panelClass: ["data-comp-container"],
-            panelStyle: panelStyle
+        this.$titleBar = $('<div class="lumens-window-title"><span id="id-title"></span></div>' +
+        '<div class="lumens-window-buttons"><span class="lumens-min"/><span class="lumens-mid"/><span class="lumens-max"/></div>')
+        .appendTo(this.$contentPanel.getPart1Element());
+        function initBeforeMinMidMax() {
+            __this.keepUseRatio = __this.layoutConfig.useRatio;
+            __this.keepPart1Size = __this.layoutConfig.part1Size;
+            __this.keepPart2Size = __this.layoutConfig.part2Size;
+            __this.keepPart1Ratio = __this.layoutConfig.part1Ratio;
+            __this.keepPart2Ratio = __this.layoutConfig.part2Ratio;
+            __this.layoutConfig.useRatio = undefined;
+            __this.layoutConfig.part1Size = undefined;
+            __this.layoutConfig.part2Size = undefined;
+            __this.layoutConfig.part1Ratio = undefined;
+            __this.layoutConfig.part2Ratio = undefined;
+        }
+        this.$titleBar.find(".lumens-min").click(function() {
+            __this.isMin = true;
+            initBeforeMinMidMax();
+            // Min size
+            __this.layoutConfig.part2Size = __this.getOffset();
+            __this.getElement().trigger("resize");
+
+        });
+        this.$titleBar.find(".lumens-mid").click(function() {
+            initBeforeMinMidMax();
+            __this.layoutConfig.useRatio = true;
+            __this.layoutConfig.part1Ratio = 0.65;
+            __this.getElement().trigger("resize");
+        });
+        this.$titleBar.find(".lumens-max").click(function() {
+            initBeforeMinMidMax();
+            __this.layoutConfig.useRatio = true;
+            __this.layoutConfig.part1Ratio = 0.15;
+            __this.getElement().trigger("resize");
         });
         return this;
     },
-    addComponent: function(position, component_category, component_info) {
-        var component = new Lumens.DataComponent(this.getElement(), {
-            x: position.x, y: position.y,
-            category: component_category,
-            component_info: component_info,
-            short_desc: (component_info && component_info.name) ? component_info.name : "[to do]",
-            dblclickHandler: function(dbl_component_info) {
-                console.log(dbl_component_info);
-            }
-        });
-        this.componentList.push(component);
-        return component;
+    resizeStart: function() {
+        if (this.isMin) {
+            this.layoutConfig.useRatio = true;
+            this.layoutConfig.part1Size = this.getElement().height() - this.layoutConfig.part2Size;
+            this.layoutConfig.part1Ratio = this.layoutConfig.part1Size / this.getElement().height();
+            this.layoutConfig.part2Size = undefined;
+            this.layoutConfig.part2Ratio = undefined;
+            this.isMin = false;
+        }
+        this.$super();
+    },
+    getTitleElement: function() {
+        return this.$titleBar.find('#id-title');
+    },
+    getOffset: function() {
+        return this.$super() + 32;
+    },
+    getPart2Element: function() {
+        if (this.$contentPanel)
+            return this.$contentPanel.getPart2Element();
+        return this.$super();
     }
 });

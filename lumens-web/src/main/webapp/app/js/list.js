@@ -1,37 +1,35 @@
-$(function() {
-    Hrcms.List = {};
-    Hrcms.List.create = function(container) {
-        var tThis = {};
-        var accordionHolder = $('<div class="hrcms-accordion"></div>').appendTo(container);
+Lumens.List = Class.$extend({
+    __init__: function(container) {
+        var accordionHolder = $('<div class="lumens-accordion"></div>').appendTo(container);
 
         function resizeHandler(e) {
             if (e && e.target !== this)
                 return;
-            accordionHolder.find(".hrcms-accordion-content").trigger("resize");
+            accordionHolder.find(".lumens-accordion-content").trigger("resize");
         }
         container.resize(resizeHandler);
 
         var sectionTempl =
-        '<div class="hrcms-accordion-item">' +
-        '  <div class="hrcms-accordion-title">' +
+        '<div class="lumens-accordion-item">' +
+        '  <div class="lumens-accordion-title">' +
         '    <div style="padding-top: 5px; padding-left: 10px;">' +
-        '      <div class="ui-icon hrcms-accordion-icon hrcms-accordion-icon-collapse"></div>' +
+        '      <div class="ui-icon lumens-accordion-icon lumens-accordion-icon-collapse"></div>' +
         '      <b></b>' +
         '    </div>' +
         '  </div>' +
-        '  <ul class="hrcms-accordion-content"><li></li></ul>' +
+        '  <ul class="lumens-accordion-content"><li></li></ul>' +
         '</div>';
 
 
         function doExpandCollapse(accordion) {
             accordion.find("ul").toggle(300);
-            accordion.find(".hrcms-accordion-icon")
-            .toggleClass("hrcms-accordion-icon-expand")
-            .toggleClass("hrcms-accordion-icon-collapse");
+            accordion.find(".lumens-accordion-icon")
+            .toggleClass("lumens-accordion-icon-expand")
+            .toggleClass("lumens-accordion-icon-collapse");
         }
         function loadForm(config, accordion) {
             if (config.activate)
-                config.activate(accordion, accordion.find(".hrcms-accordion-title"), accordion.find(".hrcms-accordion-icon").hasClass("hrcms-accordion-icon-expand"));
+                config.activate(accordion, accordion.find(".lumens-accordion-title"), accordion.find(".lumens-accordion-icon").hasClass("lumens-accordion-icon-expand"));
 
             /*$.ajaxSetup({cache: false});
              $.ajax({
@@ -48,7 +46,7 @@ $(function() {
         function addAccordion(config, i) {
             var accordion = $(sectionTempl).appendTo(accordionHolder);
             accordion.find("b").html(config.titleList[i]);
-            var accordionTitle = accordion.find(".hrcms-accordion-title");
+            var accordionTitle = accordion.find(".lumens-accordion-title");
             var form = accordion.find("ul");
             form.toggle(100);
             accordionTitle.attr("id", config.IdList[i])
@@ -57,8 +55,8 @@ $(function() {
                 // Load data
                 if (accordion.find("li").children().length === 0 && config.activate) {
                     if (config.activate)
-                        config.activate(accordion, accordion.find(".hrcms-accordion-title"),
-                        accordion.find(".hrcms-accordion-icon").hasClass("hrcms-accordion-icon-expand"));
+                        config.activate(accordion, accordion.find(".lumens-accordion-title"),
+                        accordion.find(".lumens-accordion-icon").hasClass("lumens-accordion-icon-expand"));
                 }
 
             });
@@ -67,13 +65,13 @@ $(function() {
             for (var i = 0; i < config.titleList.length; ++i) {
                 addAccordion(config, i);
             }
-            var accordions = accordionHolder.find(".hrcms-accordion-item");
+            var accordions = accordionHolder.find(".lumens-accordion-item");
             if (accordions.length) {
                 var accordion = $(accordions[0]);
                 doExpandCollapse($(accordions[0]));
                 if (config.activate)
-                    config.activate(accordion, accordion.find(".hrcms-accordion-title"),
-                    accordion.find(".hrcms-accordion-icon").hasClass("hrcms-accordion-icon-expand"));
+                    config.activate(accordion, accordion.find(".lumens-accordion-title"),
+                    accordion.find(".lumens-accordion-icon").hasClass("lumens-accordion-icon-expand"));
 
             }
 
