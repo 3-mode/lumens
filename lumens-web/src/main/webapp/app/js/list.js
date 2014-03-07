@@ -1,90 +1,71 @@
 Lumens.List = Class.$extend({
     __init__: function(container) {
-        var accordionHolder = $('<div class="lumens-accordion"></div>').appendTo(container);
+        this.$container = container;
+        this.$accordionHolder = $('<div class="lumens-accordion"></div>').appendTo(this.$container);
+        this.$container.resize(this.layout);
 
-        function resizeHandler(e) {
-            if (e && e.target !== this)
-                return;
-            accordionHolder.find(".lumens-accordion-content").trigger("resize");
-        }
-        container.resize(resizeHandler);
-
-        var sectionTempl =
+        this.sectionHTMLTemplate =
         '<div class="lumens-accordion-item">' +
         '  <div class="lumens-accordion-title">' +
         '    <div style="padding-top: 5px; padding-left: 10px;">' +
-        '      <div class="ui-icon lumens-accordion-icon lumens-accordion-icon-collapse"></div>' +
-        '      <b></b>' +
+        '      <div class="lumens-accordion-icon icon-collapse">' +
+        '         <b></b>' +
+        '      </div>' +
         '    </div>' +
         '  </div>' +
         '  <ul class="lumens-accordion-content"><li></li></ul>' +
         '</div>';
-
-
-        function doExpandCollapse(accordion) {
-            accordion.find("ul").toggle(300);
-            accordion.find(".lumens-accordion-icon")
-            .toggleClass("lumens-accordion-icon-expand")
-            .toggleClass("lumens-accordion-icon-collapse");
-        }
-        function loadForm(config, accordion) {
-            if (config.activate)
-                config.activate(accordion, accordion.find(".lumens-accordion-title"), accordion.find(".lumens-accordion-icon").hasClass("lumens-accordion-icon-expand"));
-
-            /*$.ajaxSetup({cache: false});
-             $.ajax({
-             type: "GET",
-             url: config.formURLList[i],
-             dataType: "html",
-             success: function(formTempl) {
-             $(formTempl).appendTo(accordion.find("li"));
-             // Load data
-             
-             }
-             });*/
-        }
-        function addAccordion(config, i) {
-            var accordion = $(sectionTempl).appendTo(accordionHolder);
-            accordion.find("b").html(config.titleList[i]);
-            var accordionTitle = accordion.find(".lumens-accordion-title");
-            var form = accordion.find("ul");
-            form.toggle(100);
-            accordionTitle.attr("id", config.IdList[i])
-            .click(function(event) {
-                doExpandCollapse(accordion);
-                // Load data
-                if (accordion.find("li").children().length === 0 && config.activate) {
-                    if (config.activate)
-                        config.activate(accordion, accordion.find(".lumens-accordion-title"),
-                        accordion.find(".lumens-accordion-icon").hasClass("lumens-accordion-icon-expand"));
-                }
-
-            });
-        }
-        tThis.configure = function(config) {
-            for (var i = 0; i < config.titleList.length; ++i) {
-                addAccordion(config, i);
-            }
-            var accordions = accordionHolder.find(".lumens-accordion-item");
-            if (accordions.length) {
-                var accordion = $(accordions[0]);
-                doExpandCollapse($(accordions[0]));
+    },
+    remove: function() {
+        this.$accordionHolder.unbind();
+        this.$accordionHolder.remove();
+        this.$container.unbind("resize", this.layout);
+    },
+    layout: function(e) {
+        if (e && e.target !== this)
+            return;
+        this.$accordionHolder.find(".lumens-accordion-content").trigger("resize");
+    },
+    doExpandCollapse: function(accordion) {
+        accordion.find("ul").toggle(300);
+        accordion.find(".lumens-accordion-icon")
+        .toggleClass("icon-expand")
+        .toggleClass("icon-collapse");
+    },
+    addAccordion: function(config, i) {
+        var __this = this;
+        var accordion = $(this.sectionHTMLTemplate).appendTo(this.$accordionHolder);
+        accordion.find("b").html(config.titleList[i]);
+        var accordionTitle = accordion.find(".lumens-accordion-title");
+        var form = accordion.find("ul");
+        form.toggle(100);
+        accordionTitle.attr("id", config.IdList[i])
+        .click(function() {
+            __this.doExpandCollapse(accordion);
+            // Load data
+            if (accordion.find("li").children().length === 0 && config.activate) {
                 if (config.activate)
                     config.activate(accordion, accordion.find(".lumens-accordion-title"),
-                    accordion.find(".lumens-accordion-icon").hasClass("lumens-accordion-icon-expand"));
-
+                    accordion.find(".lumens-accordion-icon").hasClass("icon-expand"));
             }
-
-            return this;
+        });
+    },
+    configure: function(config) {
+        for (var i = 0; i < config.titleList.length; ++i) {
+            this.addAccordion(config, i);
         }
-
-        tThis.remove = function() {
-            accordionHolder.unbind();
-            accordionHolder.remove();
-            container.unbind("resize", resizeHandler);
+        var accordions = this.$accordionHolder.find(".lumens-accordion-item");
+        if (accordions.length) {
+            var accordion = $(accordions[0]);
+            this.doExpandCollapse($(accordions[0]));
+            if (config.activate)
+                config.activate(accordion, accordion.find(".lumens-accordion-title"), accordion.find(".lumens-accordion-icon").hasClass("icon-expand"));
         }
-        // end
-        return tThis;
+        return this;
+    },
+    loadForm: function(config, accordion) {
+        if (config.activate)
+            config.activate(accordion, accordion.find(".lumens-accordion-title"), accordion.find(".lumens-accordion-icon").hasClass("icon-expand"));
     }
 });
 

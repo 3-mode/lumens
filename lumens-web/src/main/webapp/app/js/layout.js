@@ -348,7 +348,7 @@ Lumens.ResizableVSplitLayoutExt = Lumens.ResizableSplitLayout.$extend({
         this.$titleBar.find(".lumens-mid").click(function() {
             initBeforeMinMidMax();
             __this.layoutConfig.useRatio = true;
-            __this.layoutConfig.part1Ratio = 0.65;
+            __this.layoutConfig.part1Ratio = 0.60;
             __this.getElement().trigger("resize");
         });
         this.$titleBar.find(".lumens-max").click(function() {

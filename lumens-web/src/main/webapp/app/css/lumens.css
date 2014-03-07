@@ -261,13 +261,16 @@ a, a:focus, a:hover {
 .lumens .lumens-accordion-item {
 }
 .lumens .lumens-accordion-title {
-    height: 25px; 
+    height: 40px; 
     width: 100%;
     cursor: pointer;
-    background-color: rgb(200, 200, 200);
+    background-color: rgb(218, 218, 218);
     border-top: 1px solid rgb(230, 230, 230);
-    border-bottom: 1px solid rgb(170, 170, 170);
+    border-bottom: 1px solid rgb(184, 184, 184);
     color: #4C4C4C;
+    border-radius:8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;   
 }
 .lumens .lumens-accordion-content {
     display: block;
@@ -279,12 +282,7 @@ a, a:focus, a:hover {
 }
 .lumens .lumens-accordion-icon {
     float: left;
-}
-.lumens .lumens-accordion-icon-expand {
-    background-position: -48px -128px;
-}
-.lumens .lumens-accordion-icon-collapse {
-    background-position: -16px -128px;
+    padding-top: 6px;
 }
 .lumens .lumens-root-layout {
     display: block;
@@ -359,6 +357,12 @@ a, a:focus, a:hover {
     padding-right: 10px;
     padding-top: 3px;
     padding-bottom: 3px;
+    border-top-left-radius: 10px;
+    -webkit-border-top-left-radius: 10px;
+    -moz-border-top-left-radius: 10px;   
+    border-top-right-radius:10px;
+    -webkit-border-top-right-radius: 10px;
+    -moz-border-top-right-radius: 10px;   
     border: 1px solid transparent;
 }
 .lumens .lumens-tab > div:hover {

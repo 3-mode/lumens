@@ -68,7 +68,7 @@ Lumens.Application = Class.$extend({
                             });
 
                             // Create info form panel
-                            __this.designAndInfoPanel.getTitleElement().append($compile('<b>Project: {{project.name}}</b>')($scope));
+                            __this.designAndInfoPanel.getTitleElement().append($compile('<b>Name: {{project.name}}</b>')($scope));
                             var tabsContainer = new Lumens.Panel(__this.designAndInfoPanel.getPart2Element()).configure({
                                 panelStyle: {"height": "100%", "width": "100%", "overflow": "auto"}
                             });
@@ -85,9 +85,9 @@ Lumens.Application = Class.$extend({
                             __this.tabs = new Lumens.TabPanel(tabsContainer.getElement())
                             .configure({
                                 tab: [
-                                    {id: "id-project-info", label: "Summary", content: tabDescription},
-                                    {id: "id-component-selected-props", label: "Properties", content: tabProperties},
-                                    {id: "id-component-format-list", label: "Formats", content: undefined}
+                                    {id: "id-project-info", label: "Project Summary", content: tabDescription},
+                                    {id: "id-component-selected-props", label: "Component Properties", content: tabProperties},
+                                    {id: "id-component-format-list", label: "Data Formats", content: undefined}
                                 ]
                             });
 
