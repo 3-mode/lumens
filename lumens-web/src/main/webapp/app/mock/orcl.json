@@ -1,0 +1,34 @@
+{
+    "component.properties": [
+        {
+            "name": "OJDBC",
+            "label": "JDBC Driver",
+            "type": "String"
+        },
+        {
+            "name": "ConnectionURL",
+            "label": "JDBC URL",
+            "type": "String"
+        },
+        {
+            "name": "User",
+            "label": "User",
+            "type": "String"
+        },
+        {
+            "name": "Password",
+            "label": "Password",
+            "type": "String"
+        },
+        {
+            "name": "SessionAlter",
+            "label": "Session Alter",
+            "type": "String"
+        },
+        {
+            "name": "FullLoad",
+            "label": "Load all table fields",
+            "type": "Boolean"
+        }
+    ]
+}
