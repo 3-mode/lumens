@@ -4,7 +4,7 @@
 
 Lumens.ProjectImporter = Class.$extend({
     __init__: function(compCagegory, componentPanel, $scope) {
-        this.projectServiceUrl = "app/mock/get_project.json";
+        this.projectServiceUrl = "app/mock/json/get_project.json";
         this.compCagegory = compCagegory;
         this.componentPanel = componentPanel;
         this.$scope = $scope;

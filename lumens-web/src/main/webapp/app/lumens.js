@@ -9,6 +9,13 @@ Lumens.Application = Class.$extend({
         var __this = this;
         this.$ngApp.controller('MainViewCtrl', function($scope, $http, $compile) {
             // Set the default page view as dashboard view
+            __this.rootLayout = new Lumens.RootLayout($('#id-main-view')).configure();
+            __this.theLayout = new Lumens.SplitLayout(__this.rootLayout).configure({
+                mode: "vertical",
+                part1Size: 52
+            });
+            __this.sysHeader = new Lumens.Header(__this.theLayout.getPart1Element()).setSysTitle("JAMES");
+            __this.navToolbar = new Lumens.NavToolbar(__this.sysHeader.getElement()).configure(Lumens.SysToolbar_Config);
             // TODO or get localstorge to display last page view
             // TODO Dashboad View
             // TODO Manage View                
@@ -16,13 +23,6 @@ Lumens.Application = Class.$extend({
             // ******* Design View ------------------------------------------------------------>
             if (true)
             {
-                __this.rootLayout = new Lumens.RootLayout($('#id-main-view')).configure();
-                __this.theLayout = new Lumens.SplitLayout(__this.rootLayout).configure({
-                    mode: "vertical",
-                    part1Size: 52
-                });
-                __this.sysHeader = new Lumens.Header(__this.theLayout.getPart1Element()).setSysTitle("JAMES");
-                __this.navToolbar = new Lumens.NavToolbar(__this.sysHeader.getElement()).configure(Lumens.SysToolbar_Config);
                 __this.workspaceLayout = new Lumens.SplitLayout(__this.theLayout.getPart2Element()).configure({
                     mode: "horizontal",
                     part1Size: 220
@@ -35,9 +35,9 @@ Lumens.Application = Class.$extend({
                 // Load menu category
                 $.get("app/config/desgin_nav_menu.json", function(menu) {
                     // Load data source category
-                    $.get("app/mock/data_source_category.json", function(data_source_items) {
+                    $.get("app/mock/json/data_source_category.json", function(data_source_items) {
                         //Load instrument category
-                        $.get("app/mock/instrument_category.json", function(instrument_items) {
+                        $.get("app/mock/json/instrument_category.json", function(instrument_items) {
                             menu.sections[0].items = data_source_items.items;
                             menu.sections[1].items = instrument_items.items;
                             // Create a dictionary to find the correct icon
@@ -51,7 +51,7 @@ Lumens.Application = Class.$extend({
                             __this.designAndInfoPanel = new Lumens.ResizableVSplitLayoutExt(__this.workspaceLayout.getPart2Element()).configure({
                                 mode: "vertical",
                                 useRatio: true,
-                                part1Size: "60%"
+                                part1Size: "55%"
                             });
                             // Create desgin workspace panel
                             __this.designPanel = new Lumens.ComponentPanel(__this.designAndInfoPanel.getPart1Element(), $scope).configure({width: "100%", height: "100%"});
@@ -72,20 +72,73 @@ Lumens.Application = Class.$extend({
                             var tabsContainer = new Lumens.Panel(__this.designAndInfoPanel.getPart2Element()).configure({
                                 panelStyle: {"height": "100%", "width": "100%", "overflow": "auto"}
                             });
-                            function tabDescription($tabContent) {
-                                $http.get("app/templates/project_summary_tmpl.html").success(function(project_summary_tmpl) {
-                                    $tabContent.append($compile(project_summary_tmpl)($scope));
+                            function tabSummary($tabContent) {
+                                __this.tabs.projSummaryList = new Lumens.List($tabContent).configure({
+                                    IdList: [
+                                        "Description",
+                                        "Resources",
+                                        "Instruments"
+                                    ],
+                                    titleList: [
+                                        "Description",
+                                        "Resources",
+                                        "Instruments"
+                                    ],
+                                    buildContent: function(itemContent, isExpand, title) {
+                                        if (isExpand) {
+                                            var itemID = title.attr("id");
+                                            if (itemID === "Description") {
+                                                $http.get("app/templates/project_desc_tmpl.html").success(function(project_desc_tmpl) {
+                                                    itemContent.append($compile(project_desc_tmpl)($scope));
+                                                });
+                                            }
+                                            else if (itemID === "Resources") {
+                                                $http.get("app/templates/resources_tmpl.html").success(function(resources_tmpl) {
+                                                    itemContent.append($compile(resources_tmpl)($scope));
+                                                });
+                                            }
+                                            else if (itemID === "Instruments") {
+                                                $http.get("app/templates/instruments_tmpl.html").success(function(instruments_tmpl) {
+                                                    itemContent.append($compile(instruments_tmpl)($scope));
+                                                });
+                                            }
+                                        }
+                                    }
                                 });
                             }
                             function tabProperties($tabContent) {
-                                $http.get("app/templates/comp_props_form_tmpl.html").success(function(comp_props_tmpl) {
-                                    $tabContent.append($compile(comp_props_tmpl)($scope));
+                                __this.tabs.compPropsList = new Lumens.List($tabContent).configure({
+                                    IdList: [
+                                        "ComponentProps"
+                                    ],
+                                    buildContent: function(itemContent, isExpand, title, titleText) {
+                                        if (isExpand) {
+                                            var itemID = title.attr("id");
+                                            if (itemID === "ComponentProps") {
+                                                $scope.componentPropHtmlTemplateURL = "app/mock/html/orcl.html";
+                                                $http.get("app/mock/json/orcl.json").success(function(i18n) {
+                                                    $http.get("app/mock/json/define.json").success(function(define) {
+                                                        $scope.componentI18N = i18n;
+                                                        $scope.componentDefine = define;
+                                                        titleText.append($compile('<span ng-model="component.name">{{component.name}}</span>')($scope));
+                                                        $http.get("app/templates/comp_props_form_tmpl.html").success(function(comp_props_form_tmpl) {
+                                                            itemContent.append($compile(comp_props_form_tmpl)($scope));
+                                                        });
+                                                    });
+                                                });
+                                            }
+                                        }
+                                    }
                                 });
                             }
-                            __this.tabs = new Lumens.TabPanel(tabsContainer.getElement())
-                            .configure({
+                            var buttonBar = $('<div class="lumens-button-bar"><input type=button value="Save" /><input type=button value="Delete" /></div>').appendTo(tabsContainer.getElement());
+                            buttonBar.find('input[value="Save"]').click(function() {
+                                console.log($scope);
+                            });
+                            __this.tabs = new Lumens.TabPanel(tabsContainer.getElement());
+                            __this.tabs.configure({
                                 tab: [
-                                    {id: "id-project-info", label: "Project Summary", content: tabDescription},
+                                    {id: "id-project-info", label: "Project Summary", content: tabSummary},
                                     {id: "id-component-selected-props", label: "Component Properties", content: tabProperties},
                                     {id: "id-component-format-list", label: "Data Formats", content: undefined}
                                 ]

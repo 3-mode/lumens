@@ -26,9 +26,11 @@
         <script src="app/js/sysheader.js"></script>
         <script src="app/js/navbar.js"></script>
         <script src="app/js/navmenu.js"></script>
+        <script src="app/js/list.js"></script>
         <!-- Business JS  -->
         <script src="app/js/component.js"></script>
         <script src="app/js/project.js"></script>
+        <script src="app/mvp/controllers.js"></script>
         <!-- Angular JS -->
         <script src="lib3rd/angularjs/angular.js"></script>
         <!-- Application Entry JS -->
@@ -36,14 +38,8 @@
         <script src="app/js/tab.js"></script>
         <script type="text/javascript">
             var app = angular.module('lumensTest', []);
-            function CompInfoFormCtrl($scope, $http) {
-                $http.get("app/mock/get_project.json").success(function(projectData) {
-                    if (projectData.content && projectData.content.project && projectData.content.project.length > 0) {
-                        $scope.project = $.parseJSON(projectData.content.project[0].data).project;
-                    }
-                });
-            }
             function MainTestCtrl($scope, $http, $compile) {
+                $scope.componentPropHtmlTemplateURL = "app/mock/html/orcl.html";
                 var rootLayout = new Lumens.RootLayout($('#id-main-view')).configure();
                 var theLayout = new Lumens.ResizableVSplitLayoutExt(rootLayout).configure({
                     mode: "vertical",
@@ -103,23 +99,39 @@
                     },
                     draggable: true
                 });
-                $scope.onClick = function($scope) {
-                    console.log("clicked");
-                    console.log(this);
-                    if ($scope.project)
-                        $scope.project.name = "test click";
-                }
-                $($compile('<div style="background-color: gray; width: 100px; height: 50px; top: 10px; left: 10px;"/>')($scope)).appendTo(rightPanel.getElement())
+                $($compile('<div style="background-color: gray; width: 100px; height: 50px; top: 50px; left: 50px; position: relative; display: block;">Oracle</div>')($scope))
+                .appendTo(rightPanel.getElement())
                 .click(function() {
                     $scope.$apply(function() {
-                        if ($scope.project)
-                            $scope.project.name = "test click Query the person's name who owns the mobile number by ChinaMobile service";
+                        if ($scope.project) {
+                            $scope.project.name = "test click " + $scope.project.name;
+                            $scope.component = $scope.project.datasource[0];
+                            $scope.componentProps = {"Description": $scope.component.description};
+                            if ($scope.component.property)
+                                $.each($scope.component.property, function() {
+                                    $scope.componentProps[this.name] = this.value;
+                                })
+                        }
                     })
                 });
-                $.get("app/mock/get_project.json", function(projectData) {
+                $($compile('<div style="background-color: gray; width: 100px; height: 50px; top: 50px; left: 250px; position: relative; display: block;">Transformator</div>')($scope))
+                .appendTo(rightPanel.getElement())
+                .click(function() {
+                    $scope.$apply(function() {
+                        if ($scope.project) {
+                            $scope.project.name = "test click " + $scope.project.name;
+                            $scope.component = $scope.project.transformator[0];
+                            $scope.componentProps = {"Description": $scope.component.description};
+                            if ($scope.component.property)
+                                $.each($scope.component.property, function() {
+                                    $scope.componentProps[this.name] = this.value;
+                                })
+                        }
+                    })
+                });
+                $.get("app/mock/json/get_project.json", function(projectData) {
                     if (projectData.content && projectData.content.project && projectData.content.project.length > 0) {
                         $scope.project = $.parseJSON(projectData.content.project[0].data).project;
-                        $scope.component = $scope.project.datasource[0];
                     }
                 });
                 theLayout.getTitleElement().append($compile('<b>Project: {{project.name}}</b>')($scope));
@@ -127,43 +139,83 @@
                     panelStyle: {"height": "100%", "width": "100%", "overflow": "auto"}
                 });
                 function tabSummary($tabContent) {
-                    $http.get("app/templates/project_summary_tmpl.html").success(function(project_summary_tmpl) {
-                        $tabContent.append($compile(project_summary_tmpl)($scope));
-                    });
-                    $scope.$watch('project.description', function(newValue, oldValue) {
-                        console.log(newValue);
-                        console.log(oldValue);
+                    var list = new Lumens.List($tabContent).configure({
+                        IdList: [
+                            "Description",
+                            "Resources",
+                            "Instruments"
+                        ],
+                        titleList: [
+                            "Description",
+                            "Resources",
+                            "Instruments"
+                        ],
+                        buildContent: function(itemContent, isExpand, title) {
+                            if (isExpand) {
+                                var itemID = title.attr("id");
+                                if (itemID === "Description") {
+                                    $http.get("app/templates/project_desc_tmpl.html").success(function(project_desc_tmpl) {
+                                        itemContent.append($compile(project_desc_tmpl)($scope));
+                                    });
+                                }
+                                else if (itemID === "Resources") {
+                                    $http.get("app/templates/resources_tmpl.html").success(function(resources_tmpl) {
+                                        itemContent.append($compile(resources_tmpl)($scope));
+                                    });
+                                }
+                                else if (itemID === "Instruments") {
+                                    $http.get("app/templates/instruments_tmpl.html").success(function(instruments_tmpl) {
+                                        itemContent.append($compile(instruments_tmpl)($scope));
+                                    });
+                                }
+                            }
+                        }
                     });
                 }
                 function tabProperties($tabContent) {
-                    $http.get("app/templates/comp_props_form_tmpl.html").success(function(comp_props_tmpl) {
-                        $tabContent.append($compile(comp_props_tmpl)($scope));
+                    var list = new Lumens.List($tabContent).configure({
+                        IdList: [
+                            "ComponentProps"
+                        ],
+                        titleList: [
+                        ],
+                        buildContent: function(itemContent, isExpand, title, titleText) {
+                            if (isExpand) {
+                                var itemID = title.attr("id");
+                                if (itemID === "ComponentProps") {
+                                    $http.get("app/mock/json/orcl.json").success(function(i18n) {
+                                        $http.get("app/mock/json/define.json").success(function(define) {
+                                            $scope.componentI18N = i18n;
+                                            $scope.componentDefine = define;
+                                            titleText.append($compile('<span ng-model="component.name">{{component.name}}</span>')($scope));
+                                            $http.get("app/templates/comp_props_form_tmpl.html").success(function(comp_props_form_tmpl) {
+                                                itemContent.append($compile(comp_props_form_tmpl)($scope));
+                                            });
+                                        });
+                                    });
+                                }
+                            }
+                        }
                     });
                 }
+                var buttonBar = $('<div class="lumens-button-bar"><input type=button value="Save" /><input type=button value="Delete" /></div>').appendTo(tabsContainer.getElement());
+                buttonBar.find('input[value="Save"]').click(function() {
+                    var scope = angular.element("#id-comp-props-form").scope();
+                    console.log($scope);
+                    console.log(scope);
+                });
                 var tabs = new Lumens.TabPanel(tabsContainer.getElement())
                 .configure({
                     tab: [
-                        {id: "id1", label: "Summary", content: tabSummary},
-                        {id: "id2", label: "Properties", content: tabProperties},
+                        {id: "id1", label: "Project Summary", content: tabSummary},
+                        {id: "id2", label: "Component Properties", content: tabProperties},
                         {id: "id3", label: "Data Formats", content: undefined}
-                    ]
+                    ],
+                    activate: function(actived, activedContent) {
+                        console.log(actived);
+                        console.log(activedContent);
+                    }
                 });
-                /*
-                 // Load menu category
-                 $http.get("app/mock/nav_menu_mock.json").success(function(menu) {
-                 // Load data source category
-                 $http.get("app/mock/data_source_category.json").success(function(data_source_items) {
-                 //Load instrument category
-                 $http.get("app/mock/instrument_category.json").success(function(instrument_items) {
-                 menu.sections[0].items = data_source_items.items;
-                 menu.sections[1].items = instrument_items.items;
-                 console.log(menu);
-                 $http.get("app/templates/component_form_tmpl.html").success(function(templateHTML) {
-                 $compile(templateHTML)($scope).appendTo(bottomPanel.getElement());
-                 });
-                 });
-                 });
-                 });//*/
             }
         </script>
     </body>

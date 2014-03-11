@@ -210,6 +210,7 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
             drop: function(event, ui) {
                 event.preventDefault();
                 var data = $.data(ui.draggable.get(0), "item-data");
+                // TODO create component object in $scope
                 __this.addComponent({x: ui.position.left, y: ui.position.top}, data);
             }
         });
@@ -230,6 +231,12 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
                 console.log(dbl_component_info);
                 __this.$scope.$apply(function() {
                     __this.$scope.component = dbl_component_info;
+                    __this.$scope.componentProps = {"Description": __this.$scope.component.description};
+                    if (__this.$scope.component && __this.$scope.component.property) {
+                        $.each(__this.$scope.component.property, function() {
+                            __this.$scope.componentProps[this.name] = this.value;
+                        });
+                    }
                 });
             }
         });
@@ -322,10 +329,10 @@ Lumens.ResizableVSplitLayoutExt = Lumens.ResizableSplitLayout.$extend({
             mode: "vertical",
             part1Size: "32"
         });
-        this.$titleBar = $('<div class="lumens-window-title"><span id="id-title"></span></div>' +
-        '<div class="lumens-window-buttons"><span class="lumens-min"/><span class="lumens-mid"/><span class="lumens-max"/></div>')
+        this.$titleBar = $('<div style="float:top;"><div id="id-title" class="lumens-window-title"></div><div class="lumens-window-buttons"><span class="lumens-min"/><span class="lumens-mid"/><span class="lumens-max"/></div></div>')
         .appendTo(this.$contentPanel.getPart1Element());
         function initBeforeMinMidMax() {
+            __this.isMin = false;
             __this.keepUseRatio = __this.layoutConfig.useRatio;
             __this.keepPart1Size = __this.layoutConfig.part1Size;
             __this.keepPart2Size = __this.layoutConfig.part2Size;
@@ -338,8 +345,8 @@ Lumens.ResizableVSplitLayoutExt = Lumens.ResizableSplitLayout.$extend({
             __this.layoutConfig.part2Ratio = undefined;
         }
         this.$titleBar.find(".lumens-min").click(function() {
-            __this.isMin = true;
             initBeforeMinMidMax();
+            __this.isMin = true;
             // Min size
             __this.layoutConfig.part2Size = __this.getOffset();
             __this.getElement().trigger("resize");

@@ -101,6 +101,10 @@ Raphael.fn.connection = function(obj1, obj2, line) {
     }
 };
 
+function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+}
+
 Lumens.Id = function($element) {
     var chars = "0123456789abcdefghiklmnopqrstuvwxyz", string_length = 16, id = '';
     for (var i = 0; i < string_length; i++) {

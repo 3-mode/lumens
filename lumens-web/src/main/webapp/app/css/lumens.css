@@ -342,6 +342,7 @@ a, a:focus, a:hover {
     display: table;
 }
 .lumens .lumens-tab {
+    padding-right: 10px;
     margin-bottom: -1px;
     width: auto;
     line-height: 32px;
@@ -506,6 +507,8 @@ svg path {
     white-space: nowrap;  
     padding-left: 10px;
     color: #5A5A5A;
+    text-overflow: ellipsis;
+    width: auto;
 }
 .lumens .lumens-window-buttons {
     float:right;
@@ -525,4 +528,22 @@ svg path {
 }
 .lumens .lumens-max:before {
     content: url(img/max.png);
+}
+.lumens .lumens-button-bar {
+    height: 30px;
+    padding-left:15px;
+    padding-bottom: 15px;
+}
+.lumens .lumens-button-bar > input {
+    width: 80px;
+    padding: 3px 8px 3px 8px;     
+    font-size: 16px;
+    border-radius:5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;   
+    background-color: #eeeeee;
+    border: 1px solid #c2c2c2;
+}
+.lumens .lumens-button-bar > input:hover {
+    background-color: #dddddd;
 }
