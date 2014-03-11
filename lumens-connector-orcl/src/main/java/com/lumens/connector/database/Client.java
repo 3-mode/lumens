@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.database;
 
+import com.lumens.connector.Direction;
 import com.lumens.model.Format;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public interface Client {
 
     public void close();
 
-    public Map<String, Format> getFormatList(boolean fullLoad);
+    public Map<String, Format> getFormatList(Direction direction, boolean fullLoad);
 
     public Format getFormat(Format format);
 }

@@ -19,15 +19,13 @@ import java.util.Map;
  */
 public class OracleConnector implements Connector, DatabaseConstants {
 
-    public static final String CONNECTOR_ID = "id_oracle";
-    public static final String SESSION_ALTER = "SESSION_ALTER";
     private OracleClient dbClient;
     private Map<String, Format> tables;
     private String ojdbcURL;
     private String connURL;
     private String user;
     private String password;
-    private boolean fullLoad;
+    private boolean fullLoad = true;
     private String sessionAlter;
     private boolean isOpen;
 
@@ -55,7 +53,7 @@ public class OracleConnector implements Connector, DatabaseConstants {
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
         if (tables == null)
-            tables = dbClient.getFormatList(fullLoad);
+            tables = dbClient.getFormatList(direction, fullLoad);
         return tables;
     }
 
@@ -94,10 +92,5 @@ public class OracleConnector implements Connector, DatabaseConstants {
     @Override
     public boolean isOpen() {
         return isOpen;
-    }
-
-    @Override
-    public String getId() {
-        return CONNECTOR_ID;
     }
 }

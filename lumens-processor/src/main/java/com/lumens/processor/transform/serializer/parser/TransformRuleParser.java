@@ -67,12 +67,16 @@ public class TransformRuleParser implements ContentHandler {
                                    java.lang.String qname, org.xml.sax.Attributes attrs) throws org.xml.sax.SAXException {
         dispatch(true);
         context.push(new Object[]{qname, new org.xml.sax.helpers.AttributesImpl(attrs)});
-        if ("transform-rule-item".equals(qname)) {
-            handler.start_transform_rule_item(attrs);
-        } else if ("transform-rule-list".equals(qname)) {
-            handler.start_transform_rule_list(attrs);
-        } else if ("transform-rule".equals(qname)) {
-            handler.start_transform_rule(attrs);
+        switch (qname) {
+            case "transform-rule-item":
+                handler.start_transform_rule_item(attrs);
+                break;
+            case "transform-rule-list":
+                handler.start_transform_rule_list(attrs);
+                break;
+            case "transform-rule":
+                handler.start_transform_rule(attrs);
+                break;
         }
     }
 
@@ -84,12 +88,16 @@ public class TransformRuleParser implements ContentHandler {
     public final void endElement(java.lang.String ns, java.lang.String name, java.lang.String qname) throws org.xml.sax.SAXException {
         dispatch(false);
         context.pop();
-        if ("transform-rule-item".equals(qname)) {
-            handler.end_transform_rule_item();
-        } else if ("transform-rule-list".equals(qname)) {
-            handler.end_transform_rule_list();
-        } else if ("transform-rule".equals(qname)) {
-            handler.end_transform_rule();
+        switch (qname) {
+            case "transform-rule-item":
+                handler.end_transform_rule_item();
+                break;
+            case "transform-rule-list":
+                handler.end_transform_rule_list();
+                break;
+            case "transform-rule":
+                handler.end_transform_rule();
+                break;
         }
     }
 

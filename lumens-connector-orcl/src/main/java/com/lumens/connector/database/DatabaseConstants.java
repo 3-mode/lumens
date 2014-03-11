@@ -11,4 +11,5 @@ public interface DatabaseConstants {
     public static final String USER = "User";
     public static final String PASSWORD = "Password";
     public static final String FULL_LOAD = "FullLoad";
+    public static final String SESSION_ALTER = "SessionAlter";
 }

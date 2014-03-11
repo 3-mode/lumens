@@ -19,7 +19,6 @@ import java.util.Map;
  */
 public class WebServiceConnector implements Connector, WebServiceConstants {
 
-    public final static String CONNECTOR_ID = "id_soap";
     private SOAPClient soapClient;
     private FormatBuilder formatBuilder;
     private String wsdlURL;
@@ -149,10 +148,5 @@ public class WebServiceConnector implements Connector, WebServiceConstants {
     @Override
     public boolean isOpen() {
         return isOpen;
-    }
-
-    @Override
-    public String getId() {
-        return CONNECTOR_ID;
     }
 }

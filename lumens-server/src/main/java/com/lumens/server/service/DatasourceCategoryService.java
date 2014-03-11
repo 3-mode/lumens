@@ -5,8 +5,8 @@ package com.lumens.server.service;
 
 import com.lumens.addin.ServiceEntity;
 import com.lumens.connector.ConnectorFactory;
+import com.lumens.io.JsonUtility;
 import com.lumens.server.Application;
-import com.lumens.server.JsonUtility;
 import com.lumens.server.ServerUtils;
 import java.util.Map;
 import javax.ws.rs.GET;
@@ -27,7 +27,7 @@ public class DatasourceCategoryService {
     @Produces("application/json")
     public Response getComponentCategories() {
         try {
-            JsonUtility utility = ServerUtils.createJsonUtility();
+            JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
             json.writeArrayFieldStart("items");
@@ -37,7 +37,7 @@ public class DatasourceCategoryService {
                 json.writeStringField("id", props.get(ConnectorFactory.ID_PROPERTY).toString());
                 json.writeStringField("name", props.get(ConnectorFactory.NAME_PROPERTY).toString());
                 json.writeStringField("type", "datasource");
-                json.writeStringField("item_icon", props.get(ConnectorFactory.CATALOG_ICON_PROPERTY).toString());
+                json.writeStringField("item_icon", props.get(ConnectorFactory.ITEM_ICON_PROPERTY).toString());
                 json.writeStringField("instance_icon", props.get(ConnectorFactory.INSTANCE_ICON_PROPERTY).toString());
                 json.writeStringField("class_name", props.get(ConnectorFactory.CLASS_NAME_PROPERTY).toString());
                 json.writeEndObject();

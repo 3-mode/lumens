@@ -1,11 +1,15 @@
 package com.lumens.connector;
 
+import com.lumens.addin.AddinContext;
+import com.lumens.addin.AddinEngine;
+import com.lumens.addin.ServiceEntity;
 import com.lumens.connector.database.client.oracle.OracleConnector;
 import com.lumens.connector.database.DatabaseConstants;
 import com.lumens.connector.database.client.oracle.OracleClient;
 import com.lumens.connector.database.client.oracle.OracleConstants;
 import static com.lumens.connector.database.client.oracle.OracleConstants.FIELDS;
 import com.lumens.connector.database.client.oracle.OracleOperation;
+import com.lumens.connector.database.client.oracle.service.Activator;
 import com.lumens.connector.database.client.oracle.sql.OracleQuerySQLBuilder;
 import com.lumens.connector.database.client.oracle.sql.OracleWriteSQLBuilder;
 import com.lumens.model.DataElement;
@@ -22,6 +26,7 @@ import com.lumens.processor.transform.TransformRule;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import junit.framework.Test;
@@ -177,12 +182,21 @@ public class ConnectorTest extends TestCase implements DatabaseConstants, Oracle
             employeeTest.addAll(resultList);
         }
         assertTrue(employeeTest.size() == result.getResult().size());
-        OracleWriteSQLBuilder sqlWrite = new OracleWriteSQLBuilder();
         for (Element e : employeeTest) {
             oo.execute(e, null);
         }
 
         // Ending
         client.close();
+    }
+
+    public void testAddin() throws Exception {
+        AddinEngine ae = new AddinEngine();
+        ae.start();
+        AddinContext ac = ae.getAddinContext();
+        Activator activator = new Activator();
+        activator.start(ac);
+        ServiceEntity<ConnectorFactory> se = ac.getService(OracleConnector.class.getName());
+        System.out.println(Arrays.toString(se.getPropertList().entrySet().toArray()));
     }
 }

@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -34,14 +32,16 @@ import java.util.logging.Logger;
 public class DataSource extends AbstractTransformComponent implements RegisterFormatComponent, Resource {
 
     private Connector connector;
-    private Map<String, FormatEntry> registerOUTFormatList = new HashMap<>();
-    private Map<String, FormatEntry> registerINFormatList = new HashMap<>();
+    private Map<String, FormatEntry> registerOUTFormatList;
+    private Map<String, FormatEntry> registerINFormatList;
     private Map<String, Value> propertyList = new HashMap<>();
     private Map<String, Format> inFormatList;
     private Map<String, Format> outFormatList;
 
     public DataSource(String className) {
         super(className);
+        registerOUTFormatList = new HashMap<>();
+        registerINFormatList = new HashMap<>();
         // Try to search the OSGI bundle if exist else try to instance it directly
         if (EngineContext.getContext() != null) {
             ConnectorFactory factory = EngineContext.getContext().getConnectorFactory(getClassName());
@@ -52,13 +52,14 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             try {
                 connector = (Connector) Class.forName(getClassName()).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                throw new RuntimeException(ex.getCause());
+                throw new RuntimeException(ex);
             }
         }
     }
 
     public String getResourceId() {
-        return connector.getId();
+        // TODO
+        return "";
     }
 
     public void setPropertyList(Map<String, Value> propertyList) {
@@ -74,13 +75,17 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
         if (!isOpen()) {
             connector.setPropertyList(propertyList);
             connector.open();
-            inFormatList = connector.getFormatList(Direction.IN);
-            outFormatList = connector.getFormatList(Direction.OUT);
             isOpen = true;
         }
     }
 
     public Map<String, Format> getFormatList(Direction direction) {
+        if (isOpen()) {
+            if (direction == Direction.IN && inFormatList == null)
+                inFormatList = connector.getFormatList(Direction.IN);
+            else if (direction == Direction.OUT && outFormatList == null)
+                outFormatList = connector.getFormatList(Direction.OUT);
+        }
         return direction == Direction.IN ? inFormatList : outFormatList;
     }
 
@@ -88,8 +93,8 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     public void close() {
         if (isOpen()) {
             connector.close();
-            registerOUTFormatList.clear();
-            registerINFormatList.clear();
+            inFormatList = null;
+            outFormatList = null;
             isOpen = false;
         }
     }

@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.database.client.oracle;
 
+import com.lumens.connector.Direction;
 import com.lumens.connector.database.DbUtils;
 import com.lumens.connector.database.client.AbstractClient;
 import static com.lumens.connector.database.client.oracle.OracleConstants.DATA_LENGTH;
@@ -59,7 +60,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
     }
 
     @Override
-    public Map<String, Format> getFormatList(boolean fullLoad) {
+    public Map<String, Format> getFormatList(Direction direction, boolean fullLoad) {
         Map<String, Format> tables = new HashMap<>();
         Statement stat = null;
         PreparedStatement preparedStat = null;
@@ -76,8 +77,10 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                     Format table = new DataFormat(tableName, Form.STRUCT);
                     tables.put(tableName, table);
                     table.addChild(FIELDS, Form.STRUCT);
-                    table.addChild(OPERATION, Form.FIELD, Type.STRING);
-                    table.addChild(CLAUSE, Form.FIELD, Type.STRING);
+                    if (direction == Direction.IN) {
+                        table.addChild(OPERATION, Form.FIELD, Type.STRING);
+                        table.addChild(CLAUSE, Form.FIELD, Type.STRING);
+                    }
                     table.setProperty(DESCRIPTION, new Value(description));
                     table.setProperty(TYPE, new Value(type));
                     if (fullLoad) {
@@ -105,7 +108,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
             ret = stat.executeQuery(String.format(TABLECOLUMNS, format.getName()));
             if (!ret.isClosed()) {
                 Format fields = format.getChild(FIELDS);
-                if (fields != null) {
+                if (fields != null && fields.getChildren() == null || fields.getChildren().size() == 0) {
                     while (ret.next()) {
                         String columnName = ret.getString(1);
                         String dataType = ret.getString(2);

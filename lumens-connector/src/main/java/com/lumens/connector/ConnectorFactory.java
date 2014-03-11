@@ -9,11 +9,15 @@ package com.lumens.connector;
  */
 public interface ConnectorFactory {
 
-    public String ID_PROPERTY = "connector.id";
-    public String NAME_PROPERTY = "connector.name";
-    public String CLASS_NAME_PROPERTY = "connector.class.name";
-    public String INSTANCE_ICON_PROPERTY = "connector.instance.icon";
-    public String CATALOG_ICON_PROPERTY = "connector.catalog.icon";
+    public String DESCRIPTOR = "descriptor";
+    public String TYPE_PROPERTY = "type";
+    public String ID_PROPERTY = "id";
+    public String NAME_PROPERTY = "name";
+    public String CLASS_NAME_PROPERTY = "class_name";
+    public String INSTANCE_ICON_PROPERTY = "instance_icon";
+    public String ITEM_ICON_PROPERTY = "item_icon";
+    public String PROPS_PROPERTY = "property";
+    public String I18N_PROPERTY = "i18n";
 
     public Connector createConnector(String className);
 }

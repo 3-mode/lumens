@@ -20,7 +20,6 @@ public class Activator implements AddinActivator {
     public void start(AddinContext ctx) {
         addinContext = ctx;
         Map<String, Object> props = new HashMap<>();
-        props.put(ConnectorFactory.ID_PROPERTY, WebServiceConnector.CONNECTOR_ID);
         props.put(ConnectorFactory.NAME_PROPERTY, "SOAP");
         props.put(ConnectorFactory.CLASS_NAME_PROPERTY, WebServiceConnector.class.getName());
         try (InputStream in = Activator.class.getClassLoader().getResourceAsStream("img/Web64x64.png")) {
@@ -29,7 +28,7 @@ public class Activator implements AddinActivator {
             throw new LumensException(ex);
         }
         try (InputStream in = Activator.class.getClassLoader().getResourceAsStream("img/Web24x24.png")) {
-            props.put(ConnectorFactory.CATALOG_ICON_PROPERTY, Base64.encodeBase64String(IOUtils.toByteArray(in)));
+            props.put(ConnectorFactory.ITEM_ICON_PROPERTY, Base64.encodeBase64String(IOUtils.toByteArray(in)));
         } catch (IOException ex) {
             throw new LumensException(ex);
         }

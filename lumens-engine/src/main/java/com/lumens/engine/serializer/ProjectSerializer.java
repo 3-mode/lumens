@@ -86,18 +86,18 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         .print("<![CDATA[").print(project.getDescription()).println("]]>").print(INDENT)
         .println("</description>");
         writeDatasourceListToXml(xml, project.getDatasourceList(), INDENT);
-        writeDataTransformationListToXml(xml, project.getDataTransformatorList(), INDENT);
+        writeDataTransformatorListToXml(xml, project.getDataTransformatorList(), INDENT);
         writeStartEntryListToXml(xml, project.getStartEntryList(), INDENT);
         xml.println("</project>");
     }
 
     private void writeDatasourceListToXml(StringUTF8Writer xml, List<DataSource> datasourceList, String indent) throws Exception {
+        xml.print(indent).println("<resource-list>");
         if (datasourceList != null && !datasourceList.isEmpty()) {
-            xml.print(indent).println("<resource-list>");
             for (DataSource ds : datasourceList)
                 writeDatasourceToXml(xml, ds, indent + INDENT);
-            xml.print(indent).println("</resource-list>");
         }
+        xml.print(indent).println("</resource-list>");
     }
 
     private void writeDatasourceToXml(StringUTF8Writer xml, DataSource ds, String indent) throws Exception {
@@ -119,25 +119,25 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     }
 
     private void writeTargetListToXml(StringUTF8Writer xml, Map<String, TransformComponent> targetList, String indent) throws IOException {
+        xml.print(indent)
+        .println("<target-list>");
         if (targetList != null) {
             String nextIndent = indent + INDENT;
-            xml.print(indent)
-            .println("<target-list>");
             Iterator<Entry<String, TransformComponent>> it = targetList.entrySet().iterator();
             while (it.hasNext()) {
                 Entry<String, TransformComponent> entry = it.next();
                 xml.print(nextIndent).print("<target ").print("name=\"").print(entry.getKey()).println("\"/>");
             }
-            xml.print(indent)
-            .println("</target-list>");
         }
+        xml.print(indent)
+        .println("</target-list>");
     }
 
     private void writeDatasourceParameterListToXml(StringUTF8Writer xml, Map<String, Value> propertyList, String indent) throws IOException {
+        xml.print(indent)
+        .println("<property-list>");
         if (propertyList != null && !propertyList.isEmpty()) {
             String nextIndent = indent + INDENT;
-            xml.print(indent)
-            .println("<property-list>");
             Iterator<Entry<String, Value>> it = propertyList.entrySet().iterator();
             while (it.hasNext()) {
                 Entry<String, Value> entry = it.next();
@@ -147,16 +147,17 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
                 xml.print(entry.getValue().toString());
                 xml.println("</property>");
             }
-            xml.print(indent)
-            .println("</property-list>");
         }
+        xml.print(indent)
+        .println("</property-list>");
     }
 
     private void writeRegisterFormatListToXml(StringUTF8Writer xml, Direction direction, Map<String, FormatEntry> registeredFormatList, String indent) throws Exception {
+        xml.print(indent)
+        .print("<format-list direction=\"").print(direction.name()).println("\">");
         if (registeredFormatList != null && !registeredFormatList.isEmpty()) {
             String nextIndent = indent + INDENT;
-            xml.print(indent)
-            .print("<format-list direction=\"").print(direction.name()).println("\">");
+
             Iterator<Entry<String, FormatEntry>> it = registeredFormatList.entrySet().iterator();
             while (it.hasNext()) {
                 Entry<String, FormatEntry> entry = it.next();
@@ -167,9 +168,9 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
                 xml.print(nextIndent)
                 .println("</format-entry>");
             }
-            xml.print(indent)
-            .println("</format-list>");
         }
+        xml.print(indent)
+        .println("</format-list>");
     }
 
     private void writeFormatToXml(StringUTF8Writer xml, Format format, String indent) throws Exception {
@@ -178,17 +179,18 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         formatXml.writeToXml(xml.getOutStream());
     }
 
-    private void writeDataTransformationListToXml(StringUTF8Writer xml, List<DataTransformator> dataTransformatorList, String indent) throws Exception {
+    private void writeDataTransformatorListToXml(StringUTF8Writer xml, List<DataTransformator> dataTransformatorList, String indent) throws Exception {
+        xml.print(indent)
+        .println("<instrument-list>");
         if (dataTransformatorList != null && !dataTransformatorList.isEmpty()) {
             String nextIndent = indent + INDENT;
-            xml.print(indent)
-            .println("<instrument-list>");
+
             for (DataTransformator dt : dataTransformatorList) {
                 writeDataTransformatorToXml(xml, dt, nextIndent);
             }
-            xml.print(indent)
-            .println("</instrument-list>");
         }
+        xml.print(indent)
+        .println("</instrument-list>");
     }
 
     private void writeDataTransformatorToXml(StringUTF8Writer xml, DataTransformator dt, String indent) throws Exception {
@@ -250,12 +252,12 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
 
     //Json
     private void writeDatasourceListToJson(JsonGenerator jGenerator, List<DataSource> datasourceList) throws Exception {
+        jGenerator.writeArrayFieldStart("datasource");
         if (datasourceList != null && !datasourceList.isEmpty()) {
-            jGenerator.writeArrayFieldStart("datasource");
             for (DataSource ds : datasourceList)
                 writeDatasourceToJson(jGenerator, ds);
-            jGenerator.writeEndArray();
         }
+        jGenerator.writeEndArray();
     }
 
     private void writeDatasourceToJson(JsonGenerator jGenerator, DataSource ds) throws Exception {
@@ -275,8 +277,8 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     }
 
     private void writeDatasourceParameterListToJson(JsonGenerator jGenerator, Map<String, Value> propertyList) throws IOException {
+        jGenerator.writeArrayFieldStart("property");
         if (propertyList != null && !propertyList.isEmpty()) {
-            jGenerator.writeArrayFieldStart("property");
             Iterator<Entry<String, Value>> it = propertyList.entrySet().iterator();
             while (it.hasNext()) {
                 Entry<String, Value> entry = it.next();
@@ -286,16 +288,17 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
                 jGenerator.writeStringField("value", entry.getValue().toString());
                 jGenerator.writeEndObject();
             }
-            jGenerator.writeEndArray();
         }
+        jGenerator.writeEndArray();
     }
 
     private void writeRegisterFormatListToJson(JsonGenerator jGenerator, DataSource ds) throws Exception {
         Map<String, FormatEntry> registeredInFormatList = ds.getRegisteredFormatList(Direction.IN);
         Map<String, FormatEntry> registeredOutFormatList = ds.getRegisteredFormatList(Direction.OUT);
+        jGenerator.writeArrayFieldStart("format_list");
         if ((registeredInFormatList != null && !registeredInFormatList.isEmpty())
             || (registeredOutFormatList != null && !registeredOutFormatList.isEmpty())) {
-            jGenerator.writeArrayFieldStart("format_list");
+
             if (registeredInFormatList != null && !registeredInFormatList.isEmpty()) {
                 jGenerator.writeStartObject();
                 jGenerator.writeStringField("direction", Direction.IN.name());
@@ -330,22 +333,22 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
                 jGenerator.writeEndArray();
                 jGenerator.writeEndObject();
             }
-            jGenerator.writeEndArray();
         }
+        jGenerator.writeEndArray();
     }
 
     private void writeTargetListToJson(JsonGenerator jGenerator, Map<String, TransformComponent> targetList) throws IOException {
+        jGenerator.writeArrayFieldStart("target");
         if (targetList != null) {
             Iterator<Entry<String, TransformComponent>> it = targetList.entrySet().iterator();
-            jGenerator.writeArrayFieldStart("target");
             while (it.hasNext()) {
                 Entry<String, TransformComponent> entry = it.next();
                 jGenerator.writeStartObject();
                 jGenerator.writeStringField("name", entry.getKey());
                 jGenerator.writeEndObject();
             }
-            jGenerator.writeEndArray();
         }
+        jGenerator.writeEndArray();
     }
 
     private void writeFormatToJson(JsonGenerator jGenerator, Format format) throws Exception {
@@ -354,12 +357,12 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     }
 
     private void writeDataTransformatorListToJson(JsonGenerator jGenerator, List<DataTransformator> dataTransformatorList) throws Exception {
+        jGenerator.writeArrayFieldStart("transformator");
         if (dataTransformatorList != null && !dataTransformatorList.isEmpty()) {
-            jGenerator.writeArrayFieldStart("transformator");
             for (DataTransformator dt : dataTransformatorList)
                 writeDataTransformatorToJson(jGenerator, dt);
-            jGenerator.writeEndArray();
         }
+        jGenerator.writeEndArray();
     }
 
     private void writeDataTransformatorToJson(JsonGenerator jGenerator, DataTransformator dt) throws Exception {
