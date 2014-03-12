@@ -144,8 +144,7 @@ public class EngineTest extends TestCase implements SoapConstants {
         // Execute all start rules to drive the ws connector
         List<ResultHandler> handlers = new ArrayList<>();
 
-        handlers.add(
-        new MyResultHandler());
+        handlers.add(new MyResultHandler());
         TransformEngine stEngine = new TransformEngine();
 
         stEngine.execute(new SingleThreadTransformExecuteJob(newProject, handlers));
