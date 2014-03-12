@@ -28,8 +28,8 @@ public class AddinApplicationTest extends TestCase {
         Addin addin = ac.installAddIn(new File("../lumens-server/lumens/addin/orcl").toURI().toURL());
         addin.start();
         System.out.println("Loaded addin: " + addin.getName());
-        ServiceEntity<ConnectorFactory> se = addin.getService("com.lumens.connector.database.client.oracle.OracleConnector");
-        Connector c = se.getService().createConnector("com.lumens.connector.database.client.oracle.OracleConnector");
+        ServiceEntity<ConnectorFactory> se = addin.getService("id-oracle-jdbc");
+        Connector c = se.getService().createConnector();
         assertNotNull(c);
         System.out.println("Created class instance: " + c);
         System.out.println("Properties: " + Arrays.toString(se.getPropertList().entrySet().toArray()));

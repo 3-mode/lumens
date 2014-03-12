@@ -117,13 +117,10 @@ Lumens.Application = Class.$extend({
                                             if (itemID === "ComponentProps") {
                                                 $scope.componentPropHtmlTemplateURL = "app/mock/html/orcl.html";
                                                 $http.get("app/mock/json/orcl.json").success(function(i18n) {
-                                                    $http.get("app/mock/json/define.json").success(function(define) {
-                                                        $scope.componentI18N = i18n;
-                                                        $scope.componentDefine = define;
-                                                        titleText.append($compile('<span ng-model="component.name">{{component.name}}</span>')($scope));
-                                                        $http.get("app/templates/comp_props_form_tmpl.html").success(function(comp_props_form_tmpl) {
-                                                            itemContent.append($compile(comp_props_form_tmpl)($scope));
-                                                        });
+                                                    $scope.componentI18N = i18n;
+                                                    titleText.append($compile('<span ng-model="component.name">{{component.name}}</span>')($scope));
+                                                    $http.get("app/templates/comp_props_form_tmpl.html").success(function(comp_props_form_tmpl) {
+                                                        itemContent.append($compile(comp_props_form_tmpl)($scope));
                                                     });
                                                 });
                                             }

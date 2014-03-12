@@ -9,8 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>com.lumens</groupId>
-    <artifactId>lumens-io</artifactId>
-    <name>lumens-io</name>
+    <artifactId>lumens-commons</artifactId>
+    <name>lumens-commons</name>
     <dependencies>
         <dependency>
             <groupId>commons-io</groupId>

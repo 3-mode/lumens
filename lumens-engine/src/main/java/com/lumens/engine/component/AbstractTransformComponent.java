@@ -16,13 +16,13 @@ public abstract class AbstractTransformComponent implements TransformComponent {
     private int x;
     private int y;
     private String name;
-    private String className;
+    private String identifier;
     private String description;
     private Map<String, TransformComponent> targetList;
     protected boolean isOpen;
 
-    public AbstractTransformComponent(String className) {
-        this.className = className;
+    public AbstractTransformComponent(String identifier) {
+        this.identifier = identifier;
     }
 
     @Override
@@ -66,8 +66,8 @@ public abstract class AbstractTransformComponent implements TransformComponent {
     }
 
     @Override
-    public String getClassName() {
-        return className;
+    public String getIdentifier() {
+        return identifier;
     }
 
     @Override

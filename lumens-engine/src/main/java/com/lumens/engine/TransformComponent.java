@@ -47,5 +47,5 @@ public interface TransformComponent {
 
     public void setDescription(String description);
 
-    public String getClassName();
+    public String getIdentifier();
 }

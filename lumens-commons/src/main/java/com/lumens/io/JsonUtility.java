@@ -66,4 +66,8 @@ public class JsonUtility {
     public static boolean isNotNull(JsonNode json) {
         return json != null && json != NullNode.instance;
     }
+
+    public static boolean isNull(JsonNode json) {
+        return json == null || json == NullNode.instance;
+    }
 }

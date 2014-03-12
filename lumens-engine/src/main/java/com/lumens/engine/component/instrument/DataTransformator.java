@@ -32,12 +32,8 @@ public class DataTransformator extends AbstractTransformComponent implements Rul
     private Map<String, List<TransformRuleEntry>> ruleFindList = new HashMap<>();
 
     public DataTransformator() {
-        super(null);
+        super("id-transformator");
         processor = new TransformProcessor();
-    }
-
-    public String getInstrumentId() {
-        return "id_transformator";
     }
 
     @Override
@@ -135,10 +131,5 @@ public class DataTransformator extends AbstractTransformComponent implements Rul
 
     public List<TransformRuleEntry> getTransformRuleList() {
         return ruleList;
-    }
-
-    @Override
-    public String getClassName() {
-        return DataTransformator.class.getName();
     }
 }

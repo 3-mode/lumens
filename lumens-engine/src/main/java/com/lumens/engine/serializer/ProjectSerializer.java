@@ -103,10 +103,10 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     private void writeDatasourceToXml(StringUTF8Writer xml, DataSource ds, String indent) throws Exception {
         String nextIndent = indent + INDENT;
         xml.print(indent)
-        .print("<datasource id=\"").print(ds.getResourceId()).print("\" name=\"").print(ds.getName()).print("\" class-name=\"").print(ds.getClassName()).println("\">");
+        .print("<datasource id=\"").print(ds.getIdentifier()).print("\" name=\"").print(ds.getName() == null ? "" : ds.getName()).println("\">");
         xml.print(nextIndent)
         .println("<description>")
-        .print("<![CDATA[").print(ds.getDescription()).println("]]>").print(nextIndent)
+        .print("<![CDATA[").print(ds.getDescription() == null ? "" : ds.getDescription()).println("]]>").print(nextIndent)
         .println("</description>");
         xml.print(nextIndent)
         .print("<position x=\"").print(Integer.toString(ds.getX())).print("\" y=\"").print(Integer.toString(ds.getY())).println("\"/>");
@@ -157,7 +157,6 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         .print("<format-list direction=\"").print(direction.name()).println("\">");
         if (registeredFormatList != null && !registeredFormatList.isEmpty()) {
             String nextIndent = indent + INDENT;
-
             Iterator<Entry<String, FormatEntry>> it = registeredFormatList.entrySet().iterator();
             while (it.hasNext()) {
                 Entry<String, FormatEntry> entry = it.next();
@@ -184,7 +183,6 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         .println("<instrument-list>");
         if (dataTransformatorList != null && !dataTransformatorList.isEmpty()) {
             String nextIndent = indent + INDENT;
-
             for (DataTransformator dt : dataTransformatorList) {
                 writeDataTransformatorToXml(xml, dt, nextIndent);
             }
@@ -196,13 +194,14 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     private void writeDataTransformatorToXml(StringUTF8Writer xml, DataTransformator dt, String indent) throws Exception {
         String nextIndent = indent + INDENT;
         xml.print(indent)
-        .print("<transformator id=\"").print(dt.getInstrumentId()).print("\" name=\"").print(dt.getName()).print("\" class-name=\"").
-        print(dt.getClassName()).println("\">");
+        .print("<transformator id=\"").print(dt.getIdentifier()).print("\" name=\"").print(dt.getName() == null ? "" : dt.getName()).println("\">").print(nextIndent)
+        .println("<description>")
+        .print("<![CDATA[").print(dt.getDescription() == null ? "" : dt.getDescription()).println("]]>").print(nextIndent)
+        .println("</description>");
         xml.print(nextIndent).print("<position x=\"").print(Integer.toString(dt.getX())).print("\" y=\"").print(Integer.toString(dt.getY())).println("\"/>");
         writeTargetListToXml(xml, dt.getTargetList(), nextIndent);
         writeTransformRuleList(xml, dt.getTransformRuleList(), nextIndent);
-        xml.print(indent)
-        .println("</transformator>");
+        xml.print(indent).println("</transformator>");
     }
 
     private void writeStartEntryListToXml(StringUTF8Writer xml, List<StartEntry> startEntryList, String indent) throws Exception {
@@ -262,10 +261,9 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
 
     private void writeDatasourceToJson(JsonGenerator jGenerator, DataSource ds) throws Exception {
         jGenerator.writeStartObject();
-        jGenerator.writeStringField("id", ds.getResourceId());
-        jGenerator.writeStringField("name", ds.getName());
-        jGenerator.writeStringField("class_name", ds.getClassName());
-        jGenerator.writeStringField("description", ds.getDescription());
+        jGenerator.writeStringField("id", ds.getIdentifier());
+        jGenerator.writeStringField("name", ds.getName() == null ? "" : ds.getName());
+        jGenerator.writeStringField("description", ds.getDescription() == null ? "" : ds.getDescription());
         jGenerator.writeObjectFieldStart("position");
         jGenerator.writeNumberField("x", ds.getX());
         jGenerator.writeNumberField("y", ds.getY());
@@ -367,10 +365,9 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
 
     private void writeDataTransformatorToJson(JsonGenerator jGenerator, DataTransformator dt) throws Exception {
         jGenerator.writeStartObject();
-        jGenerator.writeStringField("id", dt.getInstrumentId());
-        jGenerator.writeStringField("name", dt.getName());
-        jGenerator.writeStringField("class_name", dt.getClassName());
-        jGenerator.writeStringField("description", dt.getDescription());
+        jGenerator.writeStringField("id", dt.getIdentifier());
+        jGenerator.writeStringField("name", dt.getName() == null ? "" : dt.getName());
+        jGenerator.writeStringField("description", dt.getDescription() == null ? "" : dt.getDescription());
         jGenerator.writeObjectFieldStart("position");
         jGenerator.writeNumberField("x", dt.getX());
         jGenerator.writeNumberField("y", dt.getY());

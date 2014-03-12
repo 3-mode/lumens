@@ -3,9 +3,9 @@ package com.lumens.connector;
 import com.lumens.addin.AddinContext;
 import com.lumens.addin.AddinEngine;
 import com.lumens.addin.ServiceEntity;
-import com.lumens.connector.database.client.oracle.OracleConnector;
 import com.lumens.connector.database.DatabaseConstants;
 import com.lumens.connector.database.client.oracle.OracleClient;
+import com.lumens.connector.database.client.oracle.OracleConnectorFactory;
 import com.lumens.connector.database.client.oracle.OracleConstants;
 import static com.lumens.connector.database.client.oracle.OracleConstants.FIELDS;
 import com.lumens.connector.database.client.oracle.OracleOperation;
@@ -55,7 +55,7 @@ public class ConnectorTest extends TestCase implements DatabaseConstants, Oracle
     }
 
     public void testOracleConnector() throws Exception {
-        OracleConnector cntr = new OracleConnector();
+        Connector cntr = new OracleConnectorFactory().createConnector();
         try {
             HashMap<String, Value> props = new HashMap<>();
             props.put(OJDBC, new Value("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar"));
@@ -196,7 +196,7 @@ public class ConnectorTest extends TestCase implements DatabaseConstants, Oracle
         AddinContext ac = ae.getAddinContext();
         Activator activator = new Activator();
         activator.start(ac);
-        ServiceEntity<ConnectorFactory> se = ac.getService(OracleConnector.class.getName());
+        ServiceEntity<ConnectorFactory> se = ac.getService("id-oracle-jdbc");
         System.out.println(Arrays.toString(se.getPropertList().entrySet().toArray()));
     }
 }

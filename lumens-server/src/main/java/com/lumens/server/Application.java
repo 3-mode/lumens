@@ -66,11 +66,11 @@ public class Application {
         HandlerCollection handlers = new HandlerCollection();
         handlers.setHandlers(new Handler[]{ctx, restCtx, new DefaultHandler()});
         server.setHandler(handlers);
-        context.init();
+        context.start();
         System.out.println("Starting server");
         server.start();
         server.join();
-        context.clean();
+        context.stop();
     }
 
     public static Application getInstance() {

@@ -18,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>com.lumens</groupId>
-            <artifactId>lumens-io</artifactId>
+            <artifactId>lumens-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

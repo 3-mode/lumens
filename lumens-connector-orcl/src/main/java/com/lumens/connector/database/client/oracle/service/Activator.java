@@ -1,17 +1,20 @@
 package com.lumens.connector.database.client.oracle.service;
 
-import com.lumens.addin.AbstractActivator;
+import com.lumens.connector.database.client.oracle.OracleConnectorFactory;
+import com.lumens.addin.AddinActivator;
 import com.lumens.addin.AddinContext;
-import com.lumens.connector.database.client.oracle.OracleConnector;
+import com.lumens.connector.ConnectorFactory;
+import com.lumens.descriptor.DescriptorUtils;
 
-public class Activator extends AbstractActivator {
+public class Activator implements AddinActivator {
 
     private AddinContext addinContext;
 
     @Override
     public void start(AddinContext context) {
         addinContext = context;
-        addinContext.registerService(OracleConnector.class.getName(), new OracleConnectorFactory(), super.processDescriptor(Activator.class));
+        ConnectorFactory factory = new OracleConnectorFactory();
+        addinContext.registerService(factory.getIdentifier(), factory, DescriptorUtils.processDescriptor(Activator.class, "orcl", factory.getIdentifier()));
     }
 
     @Override

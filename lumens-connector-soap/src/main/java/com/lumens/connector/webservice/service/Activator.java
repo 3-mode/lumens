@@ -1,16 +1,10 @@
 package com.lumens.connector.webservice.service;
 
-import com.lumens.LumensException;
+import com.lumens.connector.webservice.soap.SoapConnectorFactory;
 import com.lumens.addin.AddinActivator;
 import com.lumens.addin.AddinContext;
 import com.lumens.connector.ConnectorFactory;
-import com.lumens.connector.webservice.WebServiceConnector;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
+import com.lumens.descriptor.DescriptorUtils;
 
 public class Activator implements AddinActivator {
 
@@ -19,21 +13,8 @@ public class Activator implements AddinActivator {
     @Override
     public void start(AddinContext ctx) {
         addinContext = ctx;
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConnectorFactory.NAME_PROPERTY, "SOAP");
-        props.put(ConnectorFactory.CLASS_NAME_PROPERTY, WebServiceConnector.class.getName());
-        try (InputStream in = Activator.class.getClassLoader().getResourceAsStream("img/Web64x64.png")) {
-            props.put(ConnectorFactory.INSTANCE_ICON_PROPERTY, Base64.encodeBase64String(IOUtils.toByteArray(in)));
-        } catch (IOException ex) {
-            throw new LumensException(ex);
-        }
-        try (InputStream in = Activator.class.getClassLoader().getResourceAsStream("img/Web24x24.png")) {
-            props.put(ConnectorFactory.ITEM_ICON_PROPERTY, Base64.encodeBase64String(IOUtils.toByteArray(in)));
-        } catch (IOException ex) {
-            throw new LumensException(ex);
-        }
-
-        addinContext.registerService(WebServiceConnector.class.getName(), new SoapConnectorFactory(), props);
+        ConnectorFactory factory = new SoapConnectorFactory();
+        addinContext.registerService(factory.getIdentifier(), factory, DescriptorUtils.processDescriptor(Activator.class, "soap", factory.getIdentifier()));
     }
 
     @Override

@@ -18,7 +18,7 @@ public class EngineContext {
         this.fHolder = fHolder;
     }
 
-    public static void init(ConnectorFactoryHolder fHolder) {
+    public static void start(ConnectorFactoryHolder fHolder) {
         instance = new EngineContext(fHolder);
     }
 

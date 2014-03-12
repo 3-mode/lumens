@@ -17,7 +17,7 @@ import java.util.Map;
  *
  * @author shaofeng wang
  */
-public class OracleConnector implements Connector, DatabaseConstants {
+class OracleConnector implements Connector, DatabaseConstants {
 
     private OracleClient dbClient;
     private Map<String, Format> tables;

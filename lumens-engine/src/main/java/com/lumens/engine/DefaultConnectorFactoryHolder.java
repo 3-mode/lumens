@@ -1,22 +1,21 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.server;
+package com.lumens.engine;
 
 import com.lumens.addin.AddinContext;
 import com.lumens.addin.ServiceEntity;
 import com.lumens.connector.ConnectorFactory;
-import com.lumens.engine.ConnectorFactoryHolder;
 
 /**
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class ConnectorFactoryHolderImpl implements ConnectorFactoryHolder {
+public class DefaultConnectorFactoryHolder implements ConnectorFactoryHolder {
 
     private AddinContext addinContext;
 
-    public ConnectorFactoryHolderImpl(AddinContext ac) {
+    public DefaultConnectorFactoryHolder(AddinContext ac) {
         addinContext = ac;
     }
 

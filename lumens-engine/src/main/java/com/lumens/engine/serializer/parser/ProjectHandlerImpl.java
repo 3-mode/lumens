@@ -121,10 +121,10 @@ public class ProjectHandlerImpl implements ProjectHandler {
     public void start_datasource(final Attributes meta) throws SAXException {
         if (status == ReadStatus.PROJECT) {
             status = ReadStatus.DATASRC;
-            String className = meta.getValue("class-name");
-            if (className == null || className.isEmpty())
-                throw new SAXException("Class name can not be empty !");
-            tc = new DataSource(className);
+            String id = meta.getValue("id");
+            if (id == null || id.isEmpty())
+                throw new SAXException("Identifier can not be empty !");
+            tc = new DataSource(id);
             String name = meta.getValue("name");
             if (name == null || name.isEmpty())
                 throw new SAXException("Data source name can not be empty !");
@@ -254,16 +254,13 @@ public class ProjectHandlerImpl implements ProjectHandler {
     public void start_transformator(final Attributes meta) throws SAXException {
         if (status == ReadStatus.PROJECT) {
             status = ReadStatus.DATAPSR;
-            String className = meta.getValue("class-name");
-            if (className == null || className.isEmpty())
-                throw new SAXException("Error, the property 'class-name' is empty !");
-            try {
-                tc = (TransformComponent) (Class.forName(className).newInstance());
-                tc.setName(meta.getValue("name"));
-                tComponentCache.put(tc.getName(), tc);
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-                throw new SAXException(e);
-            }
+            String id = meta.getValue("id");
+            tc = new DataTransformator();
+            if (id == null || id.isEmpty() || !tc.getIdentifier().equals(id))
+                throw new SAXException("Error, the property 'id' is empty !");
+            tc = new DataTransformator();
+            tc.setName(meta.getValue("name"));
+            tComponentCache.put(tc.getName(), tc);
         } else
             throw new SAXException("Error status \'" + status + "\' to read processor list!");
     }

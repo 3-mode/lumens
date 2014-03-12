@@ -1,8 +1,8 @@
-package com.lumens.connector.webservice;
+package com.lumens.connector.webservice.soap;
 
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
-import com.lumens.connector.webservice.soap.SOAPClient;
+import com.lumens.connector.webservice.soap.SoapClient;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import org.apache.axiom.soap.SOAPEnvelope;
@@ -11,18 +11,18 @@ import org.apache.axiom.soap.SOAPEnvelope;
  *
  * @author shaofeng wang
  */
-public class WebServiceOperation implements Operation {
+public class SoapOperation implements Operation {
 
-    private SOAPClient client;
+    private SoapClient client;
 
-    public WebServiceOperation(SOAPClient client) {
+    public SoapOperation(SoapClient client) {
         this.client = client;
     }
 
     @Override
     public OperationResult execute(Element input, Format output) throws Exception {
         SOAPEnvelope envelope = client.execute(input);
-        return new WebServiceResult(output, envelope);
+        return new SoapResult(output, envelope);
     }
 
     @Override

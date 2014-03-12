@@ -22,12 +22,17 @@
         </dependency>
         <dependency>
             <groupId>com.lumens</groupId>
-            <artifactId>lumens-io</artifactId>
+            <artifactId>lumens-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.lumens</groupId>
             <artifactId>lumens-processor</artifactId>
+            <version>${project.version}</version>
+        </dependency> 
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-addin</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

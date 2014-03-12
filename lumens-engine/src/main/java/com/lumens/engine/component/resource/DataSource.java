@@ -38,28 +38,16 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     private Map<String, Format> inFormatList;
     private Map<String, Format> outFormatList;
 
-    public DataSource(String className) {
-        super(className);
+    public DataSource(String identifier) {
+        super(identifier);
         registerOUTFormatList = new HashMap<>();
         registerINFormatList = new HashMap<>();
         // Try to search the OSGI bundle if exist else try to instance it directly
         if (EngineContext.getContext() != null) {
-            ConnectorFactory factory = EngineContext.getContext().getConnectorFactory(getClassName());
+            ConnectorFactory factory = EngineContext.getContext().getConnectorFactory(getIdentifier());
             if (factory != null)
-                connector = factory.createConnector(getClassName());
+                connector = factory.createConnector();
         }
-        if (connector == null) {
-            try {
-                connector = (Connector) Class.forName(getClassName()).newInstance();
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-    }
-
-    public String getResourceId() {
-        // TODO
-        return "";
     }
 
     public void setPropertyList(Map<String, Value> propertyList) {

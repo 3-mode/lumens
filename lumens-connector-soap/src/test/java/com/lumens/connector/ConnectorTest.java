@@ -1,9 +1,12 @@
 package com.lumens.connector;
 
-import com.lumens.connector.webservice.WebServiceConnector;
-import com.lumens.connector.webservice.WebServiceConstants;
-import com.lumens.connector.webservice.soap.SOAPConstants;
-import com.lumens.connector.webservice.soap.SOAPMessageBuilder;
+import com.lumens.addin.AddinContext;
+import com.lumens.addin.AddinEngine;
+import com.lumens.addin.ServiceEntity;
+import com.lumens.connector.webservice.service.Activator;
+import com.lumens.connector.webservice.soap.SoapConnectorFactory;
+import com.lumens.connector.webservice.soap.SoapConstants;
+import com.lumens.connector.webservice.soap.SoapMessageBuilder;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
@@ -12,6 +15,7 @@ import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.Processor;
 import com.lumens.processor.transform.TransformProcessor;
 import com.lumens.processor.transform.TransformRule;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +28,7 @@ import org.apache.axiom.soap.SOAPEnvelope;
 /**
  * Unit test for simple App.
  */
-public class ConnectorTest extends TestCase implements SOAPConstants, WebServiceConstants {
+public class ConnectorTest extends TestCase implements SoapConstants {
 
     /**
      * Create the test case
@@ -44,8 +48,8 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
 
     public void testCCS02WebService() throws Exception {
         HashMap<String, Value> props = new HashMap<>();
-        props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/Symantec_CC/UsernameSecurity_1.wsdl").toString()));
-        WebServiceConnector connector = new WebServiceConnector();
+        props.put(WSDL, new Value(getClass().getResource("/Symantec_CC/UsernameSecurity_1.wsdl").toString()));
+        Connector connector = new SoapConnectorFactory().createConnector();
         connector.setPropertyList(props);
         connector.open();
         Map<String, Format> consumes = connector.getFormatList(Direction.IN);
@@ -60,7 +64,7 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
         new ElementSerializer(result.get(0), true).writeToXml(System.out);
         connector.close();
-        SOAPMessageBuilder soapBuilder = new SOAPMessageBuilder();
+        SoapMessageBuilder soapBuilder = new SoapMessageBuilder();
         SOAPEnvelope envelope = soapBuilder.buildSOAPMessage(result.get(0));
         System.out.println(envelope);
         OMElement o = envelope.getBody();
@@ -72,10 +76,10 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         assertNotNull(o);
     }
 
-    public void TtestWebServiceConnector() throws Exception {
-        WebServiceConnector connector = new WebServiceConnector();
+    public void TtestSoapConnector() throws Exception {
+        Connector connector = new SoapConnectorFactory().createConnector();
         HashMap<String, Value> props = new HashMap<>();
-        props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/wsdl/IncidentManagement.wsdl").toString()));
+        props.put(WSDL, new Value(getClass().getResource("/wsdl/IncidentManagement.wsdl").toString()));
         connector.setPropertyList(props);
         connector.open();
         Map<String, Format> services = connector.getFormatList(Direction.IN);
@@ -95,13 +99,13 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
         new ElementSerializer(result.get(0), true).writeToXml(System.out);
         connector.close();
-        SOAPMessageBuilder soapBuilder = new SOAPMessageBuilder();
+        SoapMessageBuilder soapBuilder = new SoapMessageBuilder();
         SOAPEnvelope envelope = soapBuilder.buildSOAPMessage(result.get(0));
         System.out.println(envelope);
 
-        props.put(WebServiceConnector.WSDL, new Value(getClass().getResource("/wsdl/ChinaOpenFundWS.asmx").toString()));
-        props.put(WebServiceConnector.PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
-        props.put(WebServiceConnector.PROXY_PORT, new Value(8080));
+        props.put(WSDL, new Value(getClass().getResource("/wsdl/ChinaOpenFundWS.asmx").toString()));
+        props.put(PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
+        props.put(PROXY_PORT, new Value(8080));
         connector.setPropertyList(props);
         connector.open();
         services = connector.getFormatList(Direction.IN);
@@ -126,9 +130,9 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
 
     public void TtestPPMWS() throws Exception {
         String ppmWSDL = "http://16.173.232.74:16800/itg/ppmservices/DemandService?wsdl";
-        WebServiceConnector connector = new WebServiceConnector();
+        Connector connector = new SoapConnectorFactory().createConnector();
         HashMap<String, Value> props = new HashMap<>();
-        props.put(WebServiceConnector.WSDL, new Value(ppmWSDL));
+        props.put(WSDL, new Value(ppmWSDL));
         props.put(USER, new Value("admin"));
         props.put(PASSWORD, new Value("admin"));
         connector.setPropertyList(props);
@@ -154,5 +158,15 @@ public class ConnectorTest extends TestCase implements SOAPConstants, WebService
         assertNotNull(getRequests.getChildByPath("getRequestsResponse.return.simpleFields.stringValue"));
         //List<Element> response = op.execute(result.get(0), getRequests);
         //new DataElementXmlSerializer(response.get(0), "UTF-8", true).write(System.out);
+    }
+
+    public void testAddin() throws Exception {
+        AddinEngine ae = new AddinEngine();
+        ae.start();
+        AddinContext ac = ae.getAddinContext();
+        Activator activator = new Activator();
+        activator.start(ac);
+        ServiceEntity<ConnectorFactory> se = ac.getService("id-soap");
+        System.out.println(Arrays.toString(se.getPropertList().entrySet().toArray()));
     }
 }

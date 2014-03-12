@@ -35,7 +35,7 @@
         </pluginManagement>
     </build>
     <modules>
-        <module>lumens-io</module>
+        <module>lumens-commons</module>
         <module>lumens-log</module>
         <module>lumens-model</module>
         <module>lumens-processor</module>

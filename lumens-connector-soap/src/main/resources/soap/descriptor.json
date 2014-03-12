@@ -1,0 +1,40 @@
+{
+    "id-soap": {
+        "name": "SoapName",
+        "type": "datasource",
+        "item_icon": "img/Web24x24.png",
+        "instance_icon": "img/Web64x64.png",
+        "html": "html/soap.html",
+        "i18n": "i18n/soap.json",
+        "property": [
+            {
+                "name": "WSDL",
+                "type": "String"
+            },
+            {
+                "name": "User",
+                "type": "String"
+            },
+            {
+                "name": "Password",
+                "type": "String"
+            },
+            {
+                "name": "ProxyAddress",
+                "type": "String"
+            },
+            {
+                "name": "ProxyPort",
+                "type": "Integer"
+            },
+            {
+                "name": "ProxyUser",
+                "type": "String"
+            },
+            {
+                "name": "ProxyPassword",
+                "type": "String"
+            }
+        ]
+    }
+}

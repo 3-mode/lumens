@@ -108,12 +108,12 @@ class ProjectJsonParser {
 
     private void readDataSourceFromJson(JsonNode datasourceJson) {
         if (isNotNull(datasourceJson)) {
-            JsonNode classNameJson = datasourceJson.get("class_name");
+            JsonNode idJson = datasourceJson.get("id");
             JsonNode nameJson = datasourceJson.get("name");
             JsonNode dscJson = datasourceJson.get("description");
             JsonNode posJson = datasourceJson.get("position");
-            if (isNotNull(classNameJson) && isNotNull(nameJson)) {
-                DataSource ds = new DataSource(classNameJson.asText());
+            if (isNotNull(idJson) && isNotNull(nameJson)) {
+                DataSource ds = new DataSource(idJson.asText());
                 ds.setName(nameJson.asText());
                 if (isNotNull(dscJson))
                     ds.setDescription(dscJson.asText());
@@ -133,13 +133,13 @@ class ProjectJsonParser {
 
     private void readProcessorFromJson(JsonNode transformatorJson) {
         if (isNotNull(transformatorJson)) {
-            JsonNode classNameJson = transformatorJson.get("class_name");
+            JsonNode idJson = transformatorJson.get("id");
             JsonNode nameJson = transformatorJson.get("name");
             JsonNode dscJson = transformatorJson.get("description");
             JsonNode posJson = transformatorJson.get("position");
-            if (isNotNull(classNameJson) && isNotNull(nameJson)) {
-                if (DataTransformator.class.getName().equals(classNameJson.asText())) {
-                    DataTransformator dt = new DataTransformator();
+            if (isNotNull(idJson) && isNotNull(nameJson)) {
+                DataTransformator dt = new DataTransformator();
+                if (dt.getIdentifier().equals(idJson.asText())) {
                     dt.setName(nameJson.asText());
                     if (isNotNull(dscJson))
                         dt.setDescription(dscJson.asText());

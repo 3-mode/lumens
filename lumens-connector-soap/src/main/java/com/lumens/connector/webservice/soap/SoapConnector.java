@@ -1,13 +1,13 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.webservice;
+package com.lumens.connector.webservice.soap;
 
 import com.lumens.connector.Connector;
 import com.lumens.connector.FormatBuilder;
 import com.lumens.connector.Operation;
 import com.lumens.connector.Direction;
-import com.lumens.connector.webservice.soap.SOAPClient;
+import com.lumens.connector.webservice.soap.SoapClient;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
 import java.util.Map;
@@ -17,9 +17,9 @@ import java.util.Map;
  *
  * @author shaofeng wang
  */
-public class WebServiceConnector implements Connector, WebServiceConstants {
+class SoapConnector implements Connector, SoapConstants {
 
-    private SOAPClient soapClient;
+    private SoapClient soapClient;
     private FormatBuilder formatBuilder;
     private String wsdlURL;
     private String user;
@@ -35,7 +35,7 @@ public class WebServiceConnector implements Connector, WebServiceConstants {
     @Override
     public void open() {
         if (soapClient == null) {
-            soapClient = new SOAPClient(this);
+            soapClient = new SoapClient(this);
             soapClient.open();
             formatBuilder = soapClient.getFormatBuilder();
             isOpen = true;
@@ -101,10 +101,10 @@ public class WebServiceConnector implements Connector, WebServiceConstants {
 
     @Override
     public Operation getOperation() {
-        return new WebServiceOperation(getClient());
+        return new SoapOperation(getClient());
     }
 
-    protected SOAPClient getClient() {
+    protected SoapClient getClient() {
         return soapClient;
     }
 
