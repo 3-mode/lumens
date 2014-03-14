@@ -1,8 +1,9 @@
 /* 
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-Lumens.controllers = angular.module("lumens-controllers", []);
-Lumens.controllers.controller("MainViewCtrl", function($scope, $http, $compile) {
+
+Lumens.controllers = angular.module("lumens-controllers", ["ngRoute"]);
+Lumens.controllers.controller("MainViewCtrl", function($scope, $route, $http, $compile) {
     // Set the default page view as dashboard view
     Lumens.system.rootLayout = new Lumens.RootLayout($('#id-main-view')).configure();
     Lumens.system.theLayout = new Lumens.SplitLayout(Lumens.system.rootLayout).configure({
@@ -11,24 +12,39 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $http, $compile) 
     });
     Lumens.system.sysHeader = new Lumens.Header(Lumens.system.theLayout.getPart1Element()).setSysTitle("JAMES");
     Lumens.system.navToolbar = new Lumens.NavToolbar(Lumens.system.sysHeader.getElement()).configure(Lumens.SysToolbar_Config);
-    Lumens.system.navToolbar.onButtonClick(function(event) {
-        var curSysModuleID = event.moduleID;
-    });
+    Lumens.system.theLayout.getPart2Element().append($compile('<div ng-view />')($scope));
 })
-.controller("DashboardViewCtrl", function($scope, $http, $compile) {
-    console.log("in DashboardViewCtrl")
+.controller("DashboardViewCtrl", function($scope, $route, $http, $compile) {
+    console.log("in DashboardViewCtrl");
+    Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
+    if (Lumens.system.designView.workspaceLayout)
+        Lumens.system.designView.workspaceLayout.getElement().hide();
 })
-.controller("ManageViewCtrl", function($scope, $http, $compile) {
-
+.controller("ManageViewCtrl", function($scope, $route, $http, $compile) {
+    console.log("in ManageViewCtrl");
+    Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
+    if (Lumens.system.designView.workspaceLayout)
+        Lumens.system.designView.workspaceLayout.getElement().hide();
 })
-.controller("DesignViewCtrl", function($scope, $http, $compile) {
+.controller("DesignViewCtrl", function($scope, $route, $http, $compile) {
     // Set the default page view as dashboard view
     // ******* Design View ------------------------------------------------------------>
-    $scope.workspaceLayout = new Lumens.SplitLayout(Lumens.system.theLayout.getPart2Element()).configure({
+    Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
+    if (!Lumens.system.designView.scope)
+        Lumens.system.designView.scope = $scope;
+    else
+        $scope = Lumens.system.designView.scope;
+
+    if (Lumens.system.designView.workspaceLayout) {
+        Lumens.system.designView.workspaceLayout.getElement().show();
+        Lumens.system.designView.workspaceLayout.getElement().trigger("resize");
+        return;
+    }
+    Lumens.system.designView.workspaceLayout = new Lumens.SplitLayout(Lumens.system.theLayout.getPart2Element()).configure({
         mode: "horizontal",
         part1Size: 220
     });
-    $scope.leftPanel = new Lumens.Panel($scope.workspaceLayout.getPart1Element())
+    Lumens.system.designView.leftPanel = new Lumens.Panel(Lumens.system.designView.workspaceLayout.getPart1Element())
     .configure({
         panelClass: ["lumens-menu-container"],
         panelStyle: {width: "100%", height: "100%"}
@@ -49,14 +65,14 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $http, $compile) 
                 $.each(instrument_items.items, function() {
                     $scope.compCagegory[this.id] = this;
                 });
-                $scope.designAndInfoPanel = new Lumens.ResizableVSplitLayoutExt($scope.workspaceLayout.getPart2Element()).configure({
+                Lumens.system.designView.designAndInfoPanel = new Lumens.ResizableVSplitLayoutExt(Lumens.system.designView.workspaceLayout.getPart2Element()).configure({
                     mode: "vertical",
                     useRatio: true,
                     part1Size: "55%"
                 });
                 // Create desgin workspace panel
                 $scope.currentComponent = {name: "to select"};
-                $scope.designPanel = new Lumens.ComponentPanel($scope.designAndInfoPanel.getPart1Element())
+                Lumens.system.designView.designPanel = new Lumens.ComponentPanel(Lumens.system.designView.designAndInfoPanel.getPart1Element())
                 .configure({
                     componentDblclick: function(category_info, component_info) {
                         console.log(component_info);
@@ -75,8 +91,8 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $http, $compile) 
                     panelStyle: {width: "100%", height: "100%"}
                 });
                 // Create left menu
-                $scope.navMenu = new Lumens.NavMenu({
-                    container: $scope.leftPanel.getElement(),
+                Lumens.system.designView.navMenu = new Lumens.NavMenu({
+                    container: Lumens.system.designView.leftPanel.getElement(),
                     width: "100%",
                     height: "auto"
                 }).configure(menu, function(item, data) {
@@ -87,12 +103,13 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $http, $compile) 
                 });
 
                 // Create info form panel
-                $scope.designAndInfoPanel.getTitleElement().append($compile('<b>Name: {{project.name}}</b>')($scope));
-                var tabsContainer = new Lumens.Panel($scope.designAndInfoPanel.getPart2Element()).configure({
+                Lumens.system.designView.designAndInfoPanel.getTitleElement().append($compile('<b>Name: {{project.name}}</b>')($scope));
+                Lumens.system.designView.tabsContainer = new Lumens.Panel(Lumens.system.designView.designAndInfoPanel.getPart2Element())
+                .configure({
                     panelStyle: {"height": "100%", "width": "100%", "overflow": "auto"}
                 });
                 function tabSummary($tabContent) {
-                    $scope.tabs.projSummaryList = new Lumens.List($tabContent).configure({
+                    Lumens.system.designView.tabs.projSummaryList = new Lumens.List($tabContent).configure({
                         IdList: [
                             "Description",
                             "Resources",
@@ -126,7 +143,7 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $http, $compile) 
                     });
                 }
                 function tabProperties($tabContent) {
-                    $scope.tabs.compPropsList = new Lumens.List($tabContent).configure({
+                    Lumens.system.designView.tabs.compPropsList = new Lumens.List($tabContent).configure({
                         IdList: [
                             "ComponentProps"
                         ],
@@ -143,12 +160,12 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $http, $compile) 
                         }
                     });
                 }
-                var buttonBar = $('<div class="lumens-button-bar"><input type=button value="Save" /><input type=button value="Delete" /></div>').appendTo(tabsContainer.getElement());
+                var buttonBar = $('<div class="lumens-button-bar"><input type=button value="Save" /><input type=button value="Delete" /></div>').appendTo(Lumens.system.designView.tabsContainer.getElement());
                 buttonBar.find('input[value="Save"]').click(function() {
                     console.log($scope);
                 });
-                $scope.tabs = new Lumens.TabPanel(tabsContainer.getElement());
-                $scope.tabs.configure({
+                Lumens.system.designView.tabs = new Lumens.TabPanel(Lumens.system.designView.tabsContainer.getElement());
+                Lumens.system.designView.tabs.configure({
                     tab: [
                         {id: "id-project-info", label: "Project Summary", content: tabSummary},
                         {id: "id-component-selected-props", label: "Component Properties", content: tabProperties},
@@ -156,7 +173,7 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $http, $compile) 
                     ]
                 });
 
-                $scope.projectImporter = new Lumens.ProjectImporter($scope.compCagegory, $scope.designPanel, $scope).importById();
+                $scope.projectImporter = new Lumens.ProjectImporter($scope.compCagegory, Lumens.system.designView.designPanel, $scope).importById();
             });
         });
     });

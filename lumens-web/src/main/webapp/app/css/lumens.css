@@ -14,6 +14,7 @@ body {
     /*background-color: rgb(240, 240, 240);*/
 }
 a, a:focus, a:hover {
+    color:inherit;
     outline: none;
     text-decoration: none;
 }
@@ -160,9 +161,6 @@ a, a:focus, a:hover {
     display: block;
     line-height: 51px; 
     float: left;
-}
-.lumens .lumens-nav-toolbar li a {
-    cursor: pointer;
 }
 .lumens .lumens-nav-toolbar span {
     margin-right: 15px;

@@ -109,7 +109,7 @@ Lumens.Id = function($element) {
 };
 
 Lumens.SysToolbar_Config = {
-    default_active: "id-desinger-view",
+    default_active: "id-dashboard-view",
     event_type: "SysToolbar",
     buttons:
     [
@@ -126,4 +126,8 @@ Lumens.SysToolbar_Config = {
             module_id: "id-desinger-view"
         }
     ]
+};
+
+Lumens.system = {
+    designView: {}
 };

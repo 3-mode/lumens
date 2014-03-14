@@ -4,7 +4,7 @@
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- Page Specific CSS -->
-        <link rel="stylesheet" href="lib3rd/morris/morris.css">
+        <link rel="stylesheet" href="libs/morris/morris.css">
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="app/css/lumens_boostrap.css">
         <link rel="stylesheet" href="app/css/lumens.css">
@@ -12,35 +12,32 @@
     <body class="lumens" ng-app="lumensTest">
         <div id="id-main-view" ng-controller="MainTestCtrl"><test></test></div>
         <!-- JavaScript  -->
-        <!-- Page Specific Plugins -->
-        <script src="lib3rd/jquery/js/jquery.js"></script>
-        <script src="lib3rd/jquery/js/jquery-ui.js"></script>
-        <script src="lib3rd/boostrap/js/bootstrap.js"></script>
-        <script src="lib3rd/raphael/raphael-min.js"></script>
-        <script src="lib3rd/morris/morris.min.js"></script>
-        <script src="lib3rd/classy.js"></script>
-        <!-- Application JS  -->
-        <script src="app/js/initialize.js"></script>
+        <script src="libs/jquery/js/jquery.js"></script>
+        <script src="libs/jquery/js/jquery-ui.js"></script>
+        <script src="libs/boostrap/js/bootstrap.js"></script>
+        <script src="libs/raphael/raphael-min.js"></script>
+        <script src="libs/morris/morris.min.js"></script>
+        <script src="libs/classy.js"></script>
+        <script src="libs/base64.js"></script>
+
+        <script src="app/bootstrap.js"></script>
+        <script src="app/i18n/en_US.js"></script>
         <script src="app/js/layout.js"></script>
         <script src="app/js/sysheader.js"></script>
         <script src="app/js/navbar.js"></script>
         <script src="app/js/navmenu.js"></script>
+        <script src="app/js/tab.js"></script>
+        <script src="app/js/tree.js"></script>
         <script src="app/js/list.js"></script>
-        <!-- Business JS  -->
         <script src="app/js/component.js"></script>
         <script src="app/js/project.js"></script>
-        <script src="app/mvp/controllers.js"></script>
-        <script src="app/mvp/directives.js"></script>
         <!-- Angular JS -->
-        <script src="lib3rd/angularjs/angular.js"></script>
-        <!-- Application Entry JS -->
-        <script src="app/js/tree.js"></script>
-        <script src="app/js/tab.js"></script>
+        <script src="libs/angular/angular.js"></script>
+        <script src="libs/angular/angular-resource.js"></script>
+        <!-- Application Angular Modules -->
+        <script src="app/mvp/directives.js"></script>
         <script type="text/javascript">
-            Lumens.appModule = angular.module('lumensTest', []);
-            $.each(Lumens.directives, function() {
-                Lumens.appModule.directive(this.tag, this.handler);
-            })
+            Lumens.appModule = angular.module('lumensTest', ["lumens-directives"]);
             function MainTestCtrl($scope, $http, $compile, $sce) {
                 $scope.currentComponent = {name: "to select"};
                 var rootLayout = new Lumens.RootLayout($('#id-main-view')).configure();

@@ -5,11 +5,11 @@ Lumens.$ngApp = angular.module("lumens-app", ["lumens-directives", "lumens-contr
 Lumens.$ngApp.config(function($routeProvider) {
     $routeProvider
     .when("/id-dashboard-view", {
-        template: "",
+        template: '<div font-size: 18px;">DashboardViewCtrl</div>',
         controller: "DashboardViewCtrl"
     })
     .when("/id-management-view", {
-        template: "",
+        template: '<div font-size: 18px;">ManageViewCtrl</div>',
         controller: "ManageViewCtrl"
     })
     .when("/id-desinger-view", {
