@@ -112,6 +112,7 @@ Lumens.SplitLayout = Class.$extend({
                 __this.part2Layout.trigger("resize");
         };
         this.$parentContainer.resize(this.layout);
+        this.$theLayout.resize(this.layout);
         this.layout();
         this.layoutConfig = config;
         if (this.layoutConfig.mode === "horizontal") {
@@ -137,7 +138,7 @@ Lumens.SplitLayout = Class.$extend({
         return  this.part2Layout;
     },
     getElement: function() {
-        return  this.$parentContainer;
+        return  this.$theLayout;
     },
     remove: function() {
         if (this.part1Layout)
