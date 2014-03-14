@@ -1,10 +1,6 @@
 /* 
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-
-if (!window.Lumens)
-    window.Lumens = {version: 1.0};
-
 jQuery.fn.cssInt = function(prop) {
     return parseInt(this.css(prop), 10) || 0;
 };
@@ -100,10 +96,8 @@ Raphael.fn.connection = function(obj1, obj2, line) {
         return connection;
     }
 };
-
-function resizeIframe(obj) {
-    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
-}
+if (!window.Lumens)
+    window.Lumens = {version: 1.0};
 
 Lumens.Id = function($element) {
     var chars = "0123456789abcdefghiklmnopqrstuvwxyz", string_length = 16, id = '';

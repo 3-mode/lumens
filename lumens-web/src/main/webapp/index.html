@@ -5,10 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="shaofeng.wang">
-        <title>JAMES</title>
-        <!-- Bootstrap core CSS -->
-        <link rel="stylesheet" href="lib3rd/morris/morris.css">
+        <title>JAMES</title> 
         <!-- Page Specific CSS -->
+        <link rel="stylesheet" href="lib3rd/morris/morris.css">
+        <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="app/css/lumens_boostrap.css">
         <link rel="stylesheet" href="app/css/lumens.css">
         <!-- 3rd Party JS Plugins -->
@@ -21,20 +21,23 @@
         <script src="lib3rd/base64.js"></script>
     </head>
     <body ng-app='lumens-app' class='lumens'>
-        <div id="id-main-view" ng-controller="MainViewCtrl"></div>
-        <!-- Application UI element JS  -->
-        <script src="app/js/initialize.js"></script>
+        <div id="id-main-view" ng-controller="DesignViewCtrl"></div>
+        <!-- Application JS  -->
+        <script src="app/bootstrap.js"></script>
+        <script src="app/i18n/en_US.js"></script>
         <script src="app/js/layout.js"></script>
         <script src="app/js/sysheader.js"></script>
         <script src="app/js/navbar.js"></script>
         <script src="app/js/navmenu.js"></script>
         <script src="app/js/tab.js"></script>
         <script src="app/js/list.js"></script>
-        <!-- Business JS  -->
         <script src="app/js/component.js"></script>
         <script src="app/js/project.js"></script>
         <!-- Angular JS -->
         <script src="lib3rd/angularjs/angular.js"></script>
+        <!-- Application Angular Modules -->
+        <script src="app/mvp/controllers.js"></script>
+        <script src="app/mvp/directives.js"></script>
         <!-- Application Entry JS -->
         <script src="app/lumens.js"></script>
     </body>

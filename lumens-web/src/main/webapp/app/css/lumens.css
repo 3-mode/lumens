@@ -530,7 +530,7 @@ svg path {
     content: url(img/max.png);
 }
 .lumens .lumens-button-bar {
-    height: 30px;
+    /*height: 30px;*/
     padding-left:15px;
     padding-bottom: 15px;
 }

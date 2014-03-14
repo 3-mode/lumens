@@ -2,7 +2,7 @@
     "items": [
         {
             "name": "Transformator",
-            "id": "id_transformator",
+            "id": "id-transformator",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png"
         },

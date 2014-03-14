@@ -196,15 +196,14 @@ Lumens.Panel = Class.$extend({
 });
 
 Lumens.ComponentPanel = Lumens.Panel.$extend({
-    __init__: function(container, $scope) {
+    __init__: function(container) {
         this.$super(container);
-        this.$scope = $scope;
         this.componentList = [];
     },
-    configure: function(panelStyle) {
+    configure: function(config) {
         var __this = this;
-        this.getElement()
-        .attr("id", "id-data-comp-container")
+        this.componentDblclick = config.componentDblclick;
+        this.getElement().attr("id", "id-data-comp-container")
         .droppable({
             accept: ".data-comp-node",
             drop: function(event, ui) {
@@ -216,29 +215,17 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
         });
         this.$super({
             panelClass: ["data-comp-container"],
-            panelStyle: panelStyle
+            panelStyle: config.panelStyle
         });
         return this;
     },
-    addComponent: function(position, component_category, component_info) {
-        var __this = this;
+    addComponent: function(position, category_info, component_info) {
         var component = new Lumens.DataComponent(this.getElement(), {
             x: position.x, y: position.y,
-            category: component_category,
+            category_info: category_info,
             component_info: component_info,
             short_desc: (component_info && component_info.name) ? component_info.name : "[to do]",
-            dblclickHandler: function(dbl_component_info) {
-                console.log(dbl_component_info);
-                __this.$scope.$apply(function() {
-                    __this.$scope.component = dbl_component_info;
-                    __this.$scope.componentProps = {"Description": __this.$scope.component.description};
-                    if (__this.$scope.component && __this.$scope.component.property) {
-                        $.each(__this.$scope.component.property, function() {
-                            __this.$scope.componentProps[this.name] = this.value;
-                        });
-                    }
-                });
-            }
+            componentDblclick: this.componentDblclick
         });
         this.componentList.push(component);
         return component;

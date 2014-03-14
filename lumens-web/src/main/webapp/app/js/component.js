@@ -66,27 +66,27 @@ Lumens.DataComponent = Class.$extend({
                 event.preventDefault();
                 if (ui.draggable.get(0) === $(this).find(".data-comp-icon").get(0))
                     return;
-                var data_comp = $.data(ui.draggable.get(0), "data-comp");
+                var data_comp = ui.draggable.data("data-comp");
                 new Lumens.Link().from(data_comp).to(__this).draw();
             }
         });
-        $.data(this.$elem.find(".data-comp-icon")
+        this.$elem.find(".data-comp-icon")
         .on("dblclick", function() {
-            if (__this.configure.dblclickHandler)
-                __this.configure.dblclickHandler(__this.configure.component_info);
+            if (__this.configure.componentDblclick)
+                __this.configure.componentDblclick(__this.configure.category_info, __this.configure.component_info);
         })
         .draggable({
             appendTo: $("#id-data-comp-container"),
             helper: function() {
                 return $(this).clone().zIndex(20000).css("opacity", "0.7");
             }
-        }).get(0), "data-comp", this);
+        }).data("data-comp", this);
 
-        if (config.category.instance_icon)
-            this.$elem.find('.data-comp-icon').find('img').attr('src', 'data:image/png;base64,' + config.category.instance_icon);
-        else if (config.category.instance_icon_url)
-            this.$elem.find('.data-comp-icon').find('img').attr('src', config.category.instance_icon_url);
-        this.$elem.find('#id-product-name').text(config.category.name);
+        if (config.category_info.instance_icon)
+            this.$elem.find('.data-comp-icon').find('img').attr('src', 'data:image/png;base64,' + config.category_info.instance_icon);
+        else if (config.category_info.instance_icon_url)
+            this.$elem.find('.data-comp-icon').find('img').attr('src', config.category_info.instance_icon_url);
+        this.$elem.find('#id-product-name').text(config.category_info.name);
         this.$elem.find('#id-shortdsc').text(config.short_desc);
         this.$elem.css("left", config.x + 'px');
         this.$elem.css("top", config.y + 'px');

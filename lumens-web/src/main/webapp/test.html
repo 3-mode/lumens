@@ -3,15 +3,14 @@
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <!-- Bootstrap core CSS -->
-        <!-- Bootstrap core CSS -->
-        <link href="lib3rd/morris/morris.css" rel="stylesheet">
         <!-- Page Specific CSS -->
-        <link href="app/css/lumens_boostrap.css" rel="stylesheet">
-        <link href="app/css/lumens.css" rel="stylesheet">
+        <link rel="stylesheet" href="lib3rd/morris/morris.css">
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="app/css/lumens_boostrap.css">
+        <link rel="stylesheet" href="app/css/lumens.css">
     </head>
     <body class="lumens" ng-app="lumensTest">
-        <div id="id-main-view" ng-controller="MainTestCtrl"></div>
+        <div id="id-main-view" ng-controller="MainTestCtrl"><test></test></div>
         <!-- JavaScript  -->
         <!-- Page Specific Plugins -->
         <script src="lib3rd/jquery/js/jquery.js"></script>
@@ -31,15 +30,19 @@
         <script src="app/js/component.js"></script>
         <script src="app/js/project.js"></script>
         <script src="app/mvp/controllers.js"></script>
+        <script src="app/mvp/directives.js"></script>
         <!-- Angular JS -->
         <script src="lib3rd/angularjs/angular.js"></script>
         <!-- Application Entry JS -->
         <script src="app/js/tree.js"></script>
         <script src="app/js/tab.js"></script>
         <script type="text/javascript">
-            var app = angular.module('lumensTest', []);
-            function MainTestCtrl($scope, $http, $compile) {
-                $scope.componentPropHtmlTemplateURL = "app/mock/html/orcl.html";
+            Lumens.appModule = angular.module('lumensTest', []);
+            $.each(Lumens.directives, function() {
+                Lumens.appModule.directive(this.tag, this.handler);
+            })
+            function MainTestCtrl($scope, $http, $compile, $sce) {
+                $scope.currentComponent = {name: "to select"};
                 var rootLayout = new Lumens.RootLayout($('#id-main-view')).configure();
                 var theLayout = new Lumens.ResizableVSplitLayoutExt(rootLayout).configure({
                     mode: "vertical",
@@ -103,35 +106,44 @@
                     $($compile('<div style="background-color: gray; width: 100px; height: 50px; top: 50px; left: 50px; position: relative; display: block;">Oracle</div>')($scope))
                     .appendTo(rightPanel.getElement())
                     .click(function() {
-                        console.log($(this).data("item-data"));
+                        var currentComponentConfig = $(this).data("item-data");
+                        console.log(currentComponentConfig);
                         $scope.$apply(function() {
                             if ($scope.project) {
                                 $scope.project.name = "test click " + $scope.project.name;
-                                $scope.component = $scope.project.datasource[0];
-                                $scope.componentProps = {"Description": $scope.component.description};
-                                if ($scope.component.property)
-                                    $.each($scope.component.property, function() {
+                                $scope.currentComponent = $scope.project.datasource[0];
+                                $scope.currentComponentConfig = currentComponentConfig;
+                                $scope.componentI18N = currentComponentConfig.i18n;
+                                $scope.componentForm = $compile(currentComponentConfig.html)($scope);
+                                $scope.componentProps = {"Description": $scope.currentComponent.description};
+                                if ($scope.currentComponent.property)
+                                    $.each($scope.currentComponent.property, function() {
+                                        $scope.componentProps[this.name] = this.value;
+                                    })
+                            }
+                        })
+                    }).data("item-data", data_source_category.items[1]);
+
+                    $($compile('<div style="background-color: gray; width: 100px; height: 50px; top: 50px; left: 250px; position: relative; display: block;">SOAP</div>')($scope))
+                    .appendTo(rightPanel.getElement())
+                    .click(function() {
+                        var currentComponentConfig = $(this).data("item-data");
+                        console.log(currentComponentConfig);
+                        $scope.$apply(function() {
+                            if ($scope.project) {
+                                $scope.project.name = "test click " + $scope.project.name;
+                                $scope.currentComponent = $scope.project.datasource[1];
+                                $scope.currentComponentConfig = currentComponentConfig;
+                                $scope.componentI18N = currentComponentConfig.i18n;
+                                $scope.componentForm = $compile(currentComponentConfig.html)($scope);
+                                $scope.componentProps = {"Description": $scope.currentComponent.description};
+                                if ($scope.currentComponent.property)
+                                    $.each($scope.currentComponent.property, function() {
                                         $scope.componentProps[this.name] = this.value;
                                     })
                             }
                         })
                     }).data("item-data", data_source_category.items[0]);
-
-                    $($compile('<div style="background-color: gray; width: 100px; height: 50px; top: 50px; left: 250px; position: relative; display: block;">Transformator</div>')($scope))
-                    .appendTo(rightPanel.getElement())
-                    .click(function() {
-                        $scope.$apply(function() {
-                            if ($scope.project) {
-                                $scope.project.name = "test click " + $scope.project.name;
-                                $scope.component = $scope.project.transformator[0];
-                                $scope.componentProps = {"Description": $scope.component.description};
-                                if ($scope.component.property)
-                                    $.each($scope.component.property, function() {
-                                        $scope.componentProps[this.name] = this.value;
-                                    })
-                            }
-                        })
-                    });
                 });
 
                 $.get("app/mock/json/get_project.json", function(projectData) {
@@ -188,12 +200,9 @@
                             if (isExpand) {
                                 var itemID = title.attr("id");
                                 if (itemID === "ComponentProps") {
-                                    $http.get("app/mock/json/orcl.json").success(function(i18n) {
-                                        $scope.componentI18N = i18n;
-                                        titleText.append($compile('<span ng-model="component.name">{{component.name}}</span>')($scope));
-                                        $http.get("app/templates/comp_props_form_tmpl.html").success(function(comp_props_form_tmpl) {
-                                            itemContent.append($compile(comp_props_form_tmpl)($scope));
-                                        });
+                                    titleText.append($compile('<span ng-model="currentComponent.name">{{currentComponent.name}}</span>')($scope));
+                                    $http.get("app/templates/comp_props_form_tmpl.html").success(function(comp_props_form_tmpl) {
+                                        itemContent.append($compile(comp_props_form_tmpl)($scope));
                                     });
                                 }
                             }
@@ -202,9 +211,7 @@
                 }
                 var buttonBar = $('<div class="lumens-button-bar"><input type=button value="Save" /><input type=button value="Delete" /></div>').appendTo(tabsContainer.getElement());
                 buttonBar.find('input[value="Save"]').click(function() {
-                    var scope = angular.element("#id-comp-props-form").scope();
                     console.log($scope);
-                    console.log(scope);
                 });
                 var tabs = new Lumens.TabPanel(tabsContainer.getElement())
                 .configure({
