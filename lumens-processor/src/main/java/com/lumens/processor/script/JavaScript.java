@@ -19,16 +19,14 @@ public class JavaScript implements Script {
         try {
             org.mozilla.javascript.Context ctx = org.mozilla.javascript.Context.enter();
             globalScope = ctx.initStandardObjects();
-            ctx.evaluateString(globalScope,
-                               ScriptUtils.loadJS("com/lumens/processor/script/build-in.js"),
-                               "build-in", 1, null);
+            ctx.evaluateString(globalScope, ScriptUtils.loadJS("com/lumens/processor/script/build-in.js"), "build-in", 1, null);
         } catch (Exception e) {
             // TODO Process the log4j
         } finally {
             org.mozilla.javascript.Context.exit();
         }
     }
-    private JavaScriptBuilder builder = new JavaScriptBuilder();
+    private final JavaScriptBuilder builder = new JavaScriptBuilder();
     private final String orignalScriptText;
     private Scriptable scope;
     private org.mozilla.javascript.Context jsCTX;
