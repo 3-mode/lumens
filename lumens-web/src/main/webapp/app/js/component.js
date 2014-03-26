@@ -73,7 +73,7 @@ Lumens.DataComponent = Class.$extend({
         this.$elem.find(".data-comp-icon")
         .on("dblclick", function() {
             if (__this.configure.componentDblclick)
-                __this.configure.componentDblclick(__this.configure.category_info, __this.configure.component_info);
+                __this.configure.componentDblclick(__this.configure);
         })
         .draggable({
             appendTo: $("#id-data-comp-container"),

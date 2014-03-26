@@ -24,7 +24,8 @@ Lumens.List = Class.$extend({
     layout: function(e) {
         if (e && e.target !== this)
             return;
-        this.$accordionHolder.find(".lumens-accordion-content").trigger("resize");
+        if (this.$accordionHolder)
+            this.$accordionHolder.find(".lumens-accordion-content").trigger("resize");
     },
     doExpandCollapse: function(accordion) {
         accordion.find("ul").toggle(200);

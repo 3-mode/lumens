@@ -4,13 +4,14 @@
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- Page Specific CSS -->
+        <link rel="stylesheet" href="libs/jquery/css/smoothness/jquery-ui-1.10.0.css">
         <link rel="stylesheet" href="libs/morris/morris.css">
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="app/css/lumens_boostrap.css">
         <link rel="stylesheet" href="app/css/lumens.css">
     </head>
     <body class="lumens" ng-app="lumensTest">
-        <div id="id-main-view" ng-controller="MainTestCtrl"><test></test></div>
+        <div id="id-main-view" ng-controller="MainTestCtrl"></div>
         <!-- JavaScript  -->
         <script src="libs/jquery/js/jquery.js"></script>
         <script src="libs/jquery/js/jquery-ui.js"></script>
@@ -58,7 +59,6 @@
                 var rightPanel = new Lumens.Panel(topPanel.getPart2Element()).configure({
                     panelStyle: {width: "100%", height: "100%", overflow: "auto"}
                 });
-
                 var tree = new Lumens.Tree(leftPanel.getElement()).configure({
                     dblclick: function(parent, current) {
                         if (current.hasContent() || !current.isFolder())
@@ -133,7 +133,7 @@
                                 $scope.currentComponentConfig = currentComponentConfig;
                                 $scope.componentI18N = currentComponentConfig.i18n;
                                 $scope.componentForm = $compile(currentComponentConfig.html)($scope);
-                                $scope.componentProps = {"Description": $scope.currentComponent.description};
+                                $scope.componentProps = {"Description": $scope.currentComponent.description ? $scope.currentComponent.description : ""};
                                 if ($scope.currentComponent.property)
                                     $.each($scope.currentComponent.property, function() {
                                         $scope.componentProps[this.name] = this.value;
@@ -189,9 +189,12 @@
                 function tabProperties($tabContent) {
                     var list = new Lumens.List($tabContent).configure({
                         IdList: [
-                            "ComponentProps"
+                            "ComponentProps",
+                            "ComponentFormats"
                         ],
                         titleList: [
+                            "",
+                            "Format"
                         ],
                         buildContent: function(itemContent, isExpand, title, titleText) {
                             if (isExpand) {
@@ -202,25 +205,54 @@
                                         itemContent.append($compile(comp_props_form_tmpl)($scope));
                                     });
                                 }
+                                else if (itemID === "ComponentFormats") {
+                                    var parentPanel = new Lumens.Panel(itemContent).configure({
+                                        panelStyle: {width: "100%", "min-height": "350px", overflow: "hidden", "background-color": "rgb(197, 197, 197)", "float": "top"}
+                                    });
+                                    var leftPanel = new Lumens.Panel(parentPanel.getElement()).configure({
+                                        panelClass: ["formatResize"],
+                                        panelStyle: {width: "50%", "min-height": "300px", overflow: "auto", "background-color": "rgb(153, 152, 152)", "float": "left"}
+                                    });
+                                    var rightPanel = new Lumens.Panel(parentPanel.getElement()).configure({
+                                        panelClass: ["formatResize"],
+                                        panelStyle: {width: "50%", "min-height": "300px", overflow: "auto", "background-color": "rgb(143, 143, 143)", "float": "left"}
+                                    });
+                                    parentPanel.getElement().resizable({
+                                        handles: 's',
+                                        alsoResize: '.formatResize'
+                                    });
+                                }
                             }
                         }
                     });
                 }
-                var buttonBar = $('<div class="lumens-button-bar"><input type=button value="Save" /><input type=button value="Delete" /></div>').appendTo(tabsContainer.getElement());
-                buttonBar.find('input[value="Save"]').click(function() {
-                    console.log($scope);
-                });
-                var tabs = new Lumens.TabPanel(tabsContainer.getElement())
-                .configure({
-                    tab: [
-                        {id: "id1", label: "Project Summary", content: tabSummary},
-                        {id: "id2", label: "Component Properties", content: tabProperties},
-                        {id: "id3", label: "Data Formats", content: undefined}
-                    ],
-                    activate: function(actived, activedContent) {
-                        console.log(actived);
-                        console.log(activedContent);
-                    }
+                function tabDataFormatList($tabContent) {
+                    /*
+                     var topPanel = new Lumens.SplitLayout($tabContent).configure({
+                     mode: "horizontal",
+                     useRatio: true,
+                     part1Size: "50%",
+                     part2Size: "50%"
+                     });//*/
+                    var leftPanel = new Lumens.Panel($tabContent).configure({
+                        panelStyle: {width: "50%", height: "100%", overflow: "auto", "background-color": "gray"}
+                    });
+                    var rightPanel = new Lumens.Panel($tabContent).configure({
+                        panelStyle: {width: "50%", height: "100%", overflow: "auto", "background-color": "gray"}
+                    });
+                }
+                $http.get("app/templates/design_command_tmpl.html").success(function(design_command_tmpl) {
+                    var buttonBar = $(design_command_tmpl).appendTo(tabsContainer.getElement());
+                    buttonBar.find('.lumens-button').click(function() {
+                        console.log($scope);
+                    })
+                    var tabs = new Lumens.TabPanel(tabsContainer.getElement())
+                    .configure({
+                        tab: [
+                            {id: "id1", label: "Project Configuration", content: tabSummary},
+                            {id: "id2", label: "Component Configuration", content: tabProperties}
+                        ]
+                    });
                 });
             }
         </script>

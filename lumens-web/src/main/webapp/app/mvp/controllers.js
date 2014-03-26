@@ -18,28 +18,18 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $route, $http, $c
     console.log("in DashboardViewCtrl");
     Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
     if (Lumens.system.designView.workspaceLayout)
-        Lumens.system.designView.workspaceLayout.getElement().hide();
+        Lumens.system.designView.workspaceLayout.remove();
 })
 .controller("ManageViewCtrl", function($scope, $route, $http, $compile) {
     console.log("in ManageViewCtrl");
     Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
     if (Lumens.system.designView.workspaceLayout)
-        Lumens.system.designView.workspaceLayout.getElement().hide();
+        Lumens.system.designView.workspaceLayout.remove();
 })
 .controller("DesignViewCtrl", function($scope, $route, $http, $compile) {
     // Set the default page view as dashboard view
     // ******* Design View ------------------------------------------------------------>
     Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
-    if (!Lumens.system.designView.scope)
-        Lumens.system.designView.scope = $scope;
-    else
-        $scope = Lumens.system.designView.scope;
-
-    if (Lumens.system.designView.workspaceLayout) {
-        Lumens.system.designView.workspaceLayout.getElement().show();
-        Lumens.system.designView.workspaceLayout.getElement().trigger("resize");
-        return;
-    }
     Lumens.system.designView.workspaceLayout = new Lumens.SplitLayout(Lumens.system.theLayout.getPart2Element()).configure({
         mode: "horizontal",
         part1Size: 220
@@ -68,23 +58,28 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $route, $http, $c
                 Lumens.system.designView.designAndInfoPanel = new Lumens.ResizableVSplitLayoutExt(Lumens.system.designView.workspaceLayout.getPart2Element()).configure({
                     mode: "vertical",
                     useRatio: true,
-                    part1Size: "55%"
+                    part1Size: "40%"
                 });
                 // Create desgin workspace panel
                 $scope.currentComponent = {name: "to select"};
                 Lumens.system.designView.designPanel = new Lumens.ComponentPanel(Lumens.system.designView.designAndInfoPanel.getPart1Element())
                 .configure({
-                    componentDblclick: function(category_info, component_info) {
-                        console.log(component_info);
+                    componentDblclick: function(config) {
+                        console.log(config);
                         $scope.$apply(function() {
-                            $scope.currentComponent = component_info;
-                            $scope.componentForm = $compile(category_info.html)($scope);
-                            $scope.componentI18N = category_info.i18n;
-                            $scope.componentProps = {"Description": component_info.description};
-                            if ($scope.currentComponent && $scope.currentComponent.property) {
-                                $.each($scope.currentComponent.property, function() {
-                                    $scope.componentProps[this.name] = this.value;
-                                });
+                            $scope.componentForm = $compile(config.category_info.html)($scope);
+                            $scope.componentI18N = config.category_info.i18n;
+                            $scope.componentProps = {"Description": (config.component_info && config.component_info.description) ? config.component_info.description : ""};
+                            if (config.component_info) {
+                                $scope.currentComponent = config.component_info;
+                                if (config.component_info.property) {
+                                    $.each(config.component_info.property, function() {
+                                        $scope.componentProps[this.name] = this.value;
+                                    });
+                                }
+                            }
+                            else {
+                                $scope.currentComponent = {name: "to do"};
                             }
                         });
                     },
@@ -106,7 +101,7 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $route, $http, $c
                 Lumens.system.designView.designAndInfoPanel.getTitleElement().append($compile('<b>Name: {{project.name}}</b>')($scope));
                 Lumens.system.designView.tabsContainer = new Lumens.Panel(Lumens.system.designView.designAndInfoPanel.getPart2Element())
                 .configure({
-                    panelStyle: {"height": "100%", "width": "100%", "overflow": "auto"}
+                    panelStyle: {"height": "100%", "width": "100%", "overflow-y": "scroll", "overflow-x": "auto"}
                 });
                 function tabSummary($tabContent) {
                     Lumens.system.designView.tabs.projSummaryList = new Lumens.List($tabContent).configure({
@@ -142,10 +137,15 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $route, $http, $c
                         }
                     });
                 }
-                function tabProperties($tabContent) {
+                function tabConfiguration($tabContent) {
                     Lumens.system.designView.tabs.compPropsList = new Lumens.List($tabContent).configure({
                         IdList: [
-                            "ComponentProps"
+                            "ComponentProps",
+                            "ComponentFormats"
+                        ],
+                        titleList: [
+                            "",
+                            "Format List"
                         ],
                         buildContent: function(itemContent, isExpand, title, titleText) {
                             if (isExpand) {
@@ -156,22 +156,130 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $route, $http, $c
                                         itemContent.append($compile(comp_props_form_tmpl)($scope));
                                     });
                                 }
+                                else if (itemID === "ComponentFormats") {
+                                    buildDataFormatList(itemContent);
+                                }
                             }
                         }
                     });
                 }
-                var buttonBar = $('<div class="lumens-button-bar"><input type=button value="Save" /><input type=button value="Delete" /></div>').appendTo(Lumens.system.designView.tabsContainer.getElement());
-                buttonBar.find('input[value="Save"]').click(function() {
-                    console.log($scope);
-                });
-                Lumens.system.designView.tabs = new Lumens.TabPanel(Lumens.system.designView.tabsContainer.getElement());
-                Lumens.system.designView.tabs.configure({
-                    tab: [
-                        {id: "id-project-info", label: "Project Summary", content: tabSummary},
-                        {id: "id-component-selected-props", label: "Component Properties", content: tabProperties},
-                        {id: "id-component-format-list", label: "Data Formats", content: undefined}
-                    ]
-                });
+                function buildDataFormatList($parent) {
+                    var panelContainer = new Lumens.SplitLayout($parent).configure({
+                        mode: "horizontal",
+                        disabeAutoChildrenSize: true,
+                        useRatio: true,
+                        width: "100%",
+                        part1Size: "45%",
+                        part2Size: "55%"
+                    });
+                    panelContainer.getElement().css({"min-height": "350px", "border-bottom": "2px solid rgb(214, 214, 214)"});
+                    panelContainer.getPart1Element().addClass("formatResize");
+                    panelContainer.getPart2Element().addClass("formatResize");
+                    var leftPanel = new Lumens.Panel(panelContainer.getPart1Element()).configure({
+                        panelStyle: {width: "100%", "height": "100%", "min-height": "350px", overflow: "auto", "border-top": "1px solid rgb(214, 214, 214)", "border-right": "1px solid rgb(214, 214, 214)"}
+                    });
+                    var rightPanel = new Lumens.Panel(panelContainer.getPart2Element()).configure({
+                        panelStyle: {width: "100%", "height": "100%", "min-height": "350px", overflow: "auto", "border-top": "1px solid rgb(214, 214, 214)"}
+                    });
+                    panelContainer.getElement().resizable({
+                        handles: 's',
+                        alsoResize: '.formatResize'
+                    });
+
+                    var tree1 = new Lumens.Tree(leftPanel.getElement()).configure({
+                        dblclick: function(parent, current) {
+                            if (current.hasContent() || !current.isFolder())
+                                return;
+                            current.addChildList(current.getLevel() > 20 ?
+                            [
+                                {
+                                    name: "[string]test" + current.getId(),
+                                    nodeType: "file"
+                                },
+                                {
+                                    name: "[int]test2" + current.getId(),
+                                    nodeType: "file"
+                                }
+                            ] :
+                            [
+                                {
+                                    name: "test" + current.getId(),
+                                    nodeType: "folder"
+                                },
+                                {
+                                    name: "test2" + current.getId(),
+                                    nodeType: "folder"
+                                }
+                            ]);
+                        },
+                        handler: function(parentNode) {
+                            parentNode.addEntryList([
+                                {
+                                    name: "test",
+                                    nodeType: "folder"
+                                },
+                                {
+                                    name: "test2",
+                                    nodeType: "folder"
+                                }
+                            ]);
+                        },
+                        draggable: true
+                    });
+
+                    var tree2 = new Lumens.Tree(rightPanel.getElement()).configure({
+                        dblclick: function(parent, current) {
+                            if (current.hasContent() || !current.isFolder())
+                                return;
+                            current.addChildList(current.getLevel() > 3 ?
+                            [
+                                {
+                                    name: "[string]test" + current.getId(),
+                                    nodeType: "file"
+                                },
+                                {
+                                    name: "[int]test2" + current.getId(),
+                                    nodeType: "file"
+                                }
+                            ] :
+                            [
+                                {
+                                    name: "test" + current.getId(),
+                                    nodeType: "folder"
+                                },
+                                {
+                                    name: "test2" + current.getId(),
+                                    nodeType: "folder"
+                                }
+                            ]);
+                        },
+                        handler: function(parentNode) {
+                            parentNode.addEntryList([{
+                                    name: "test",
+                                    nodeType: "folder"
+                                },
+                                {
+                                    name: "test2",
+                                    nodeType: "folder"
+                                }
+                            ]);
+                        },
+                        draggable: true
+                    });
+                }
+                $http.get("app/templates/design_command_tmpl.html").success(function(design_command_tmpl) {
+                    var buttonBar = $(design_command_tmpl).appendTo(Lumens.system.designView.tabsContainer.getElement());
+                    buttonBar.find('.lumens-button').click(function() {
+                        console.log(this);
+                    });
+                    Lumens.system.designView.tabs = new Lumens.TabPanel(Lumens.system.designView.tabsContainer.getElement());
+                    Lumens.system.designView.tabs.configure({
+                        tab: [
+                            {id: "id-project-info", label: "Project Summary", content: tabSummary},
+                            {id: "id-component-selected-props", label: "Component Properties", content: tabConfiguration}
+                        ]
+                    });
+                })
 
                 $scope.projectImporter = new Lumens.ProjectImporter($scope.compCagegory, Lumens.system.designView.designPanel, $scope).importById();
             });

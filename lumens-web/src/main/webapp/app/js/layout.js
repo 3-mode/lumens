@@ -59,40 +59,50 @@ Lumens.SplitLayout = Class.$extend({
                 if (this.part1Layout && this.part2Layout) {
                     this.part1Layout.css("height", "100%");
                     this.part2Layout.css("height", "100%");
-                    // Compute pane size from ratio
-                    if (this.layoutConfig.part1Ratio)
-                        this.layoutConfig.part1Size = this.layoutConfig.part1Ratio * this.$theLayout.width();
-                    else if (this.layoutConfig.part2Ratio)
-                        this.layoutConfig.part2Size = this.layoutConfig.part2Ratio * this.$theLayout.width();
-                    // Compute child panel size
-                    if (this.layoutConfig.part1Size) {
-                        this.part1Layout.css("width", this.layoutConfig.part1Size + "px");
-                        this.part2Layout.css("width", (this.$theLayout.width() - this.layoutConfig.part1Size) + "px");
-                    }
-                    else if (this.layoutConfig.part2Size) {
-                        this.part1Layout.css("width", (this.$theLayout.width() - this.layoutConfig.part2Size) + "px");
-                        this.part2Layout.css("width", this.layoutConfig.part2Size + "px");
+                    if (this.layoutConfig.disabeAutoChildrenSize) {
+                        this.part1Layout.css("width", this.layoutConfig.part1Size);
+                        this.part2Layout.css("width", this.layoutConfig.part2Size);
+                    } else {
+                        // Compute pane size from ratio
+                        if (this.layoutConfig.part1Ratio)
+                            this.layoutConfig.part1Size = this.layoutConfig.part1Ratio * this.$theLayout.width();
+                        else if (this.layoutConfig.part2Ratio)
+                            this.layoutConfig.part2Size = this.layoutConfig.part2Ratio * this.$theLayout.width();
+                        // Compute child panel size
+                        if (this.layoutConfig.part1Size) {
+                            this.part1Layout.css("width", this.layoutConfig.part1Size + "px");
+                            this.part2Layout.css("width", (this.$theLayout.width() - this.layoutConfig.part1Size) + "px");
+                        }
+                        else if (this.layoutConfig.part2Size) {
+                            this.part1Layout.css("width", (this.$theLayout.width() - this.layoutConfig.part2Size) + "px");
+                            this.part2Layout.css("width", this.layoutConfig.part2Size + "px");
+                        }
                     }
                 }
             } else if (this.layoutConfig.mode === "vertical") {
                 if (this.part1Layout && this.part2Layout) {
                     this.part1Layout.css("width", "100%");
                     this.part2Layout.css("width", "100%");
-                    // Compute pane size from ratio
-                    if (this.layoutConfig.useRatio) {
-                        if (this.layoutConfig.part1Ratio)
-                            this.layoutConfig.part1Size = this.layoutConfig.part1Ratio * this.$theLayout.height();
-                        else if (this.layoutConfig.part2Ratio)
-                            this.layoutConfig.part2Size = this.layoutConfig.part2Ratio * this.$theLayout.height();
-                    }
-                    // Compute child panel size
-                    if (this.layoutConfig.part1Size) {
-                        this.part1Layout.css("height", this.layoutConfig.part1Size + "px");
-                        this.part2Layout.css("height", (this.$theLayout.height() - this.layoutConfig.part1Size) + "px");
-                    }
-                    else if (this.layoutConfig.part2Size) {
-                        this.part1Layout.css("height", (this.$theLayout.height() - this.layoutConfig.part2Size) + "px");
-                        this.part2Layout.css("height", this.layoutConfig.part2Size + "px");
+                    if (this.layoutConfig.disabeAutoChildrenSize) {
+                        this.part1Layout.css("height", this.layoutConfig.part1Size);
+                        this.part2Layout.css("height", this.layoutConfig.part2Size);
+                    } else {
+                        // Compute pane size from ratio
+                        if (this.layoutConfig.useRatio) {
+                            if (this.layoutConfig.part1Ratio)
+                                this.layoutConfig.part1Size = this.layoutConfig.part1Ratio * this.$theLayout.height();
+                            else if (this.layoutConfig.part2Ratio)
+                                this.layoutConfig.part2Size = this.layoutConfig.part2Ratio * this.$theLayout.height();
+                        }
+                        // Compute child panel size
+                        if (this.layoutConfig.part1Size) {
+                            this.part1Layout.css("height", this.layoutConfig.part1Size + "px");
+                            this.part2Layout.css("height", (this.$theLayout.height() - this.layoutConfig.part1Size) + "px");
+                        }
+                        else if (this.layoutConfig.part2Size) {
+                            this.part1Layout.css("height", (this.$theLayout.height() - this.layoutConfig.part2Size) + "px");
+                            this.part2Layout.css("height", this.layoutConfig.part2Size + "px");
+                        }
                     }
                 }
             }
@@ -103,8 +113,14 @@ Lumens.SplitLayout = Class.$extend({
         this.layout = function(e) {
             if (e && e.target !== this)
                 return;
-            __this.$theLayout.css("width", __this.$parentContainer.width());
-            __this.$theLayout.css("height", __this.$parentContainer.height());
+            if (!config.width)
+                __this.$theLayout.css("width", __this.$parentContainer.width());
+            else
+                __this.$theLayout.css("width", config.width);
+            if (!config.height)
+                __this.$theLayout.css("height", __this.$parentContainer.height());
+            else
+                __this.$theLayout.css("height", config.height);
             __this.computePartsLayoutSize();
             if (__this.part1Layout)
                 __this.part1Layout.trigger("resize");
