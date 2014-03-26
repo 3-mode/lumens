@@ -1,6 +1,9 @@
 /* 
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
+/* 
+ * Copyright Lumens Team, Inc. All Rights Reserved.
+ */
 Lumens.NavToolbar = Class.$extend({
     __init__: function(containerObj) {
         this.$container = containerObj;

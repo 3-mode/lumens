@@ -1,3 +1,6 @@
+/* 
+ * Copyright Lumens Team, Inc. All Rights Reserved.
+ */
 Lumens.List = Class.$extend({
     __init__: function(container) {
         this.$container = container;
