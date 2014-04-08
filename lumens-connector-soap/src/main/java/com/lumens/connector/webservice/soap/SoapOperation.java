@@ -2,7 +2,6 @@ package com.lumens.connector.webservice.soap;
 
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
-import com.lumens.connector.webservice.soap.SoapClient;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import org.apache.axiom.soap.SOAPEnvelope;

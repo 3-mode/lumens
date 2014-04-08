@@ -85,8 +85,6 @@ public class FormatFromWsdlBuilder implements FormatBuilder, SoapConstants, XMLE
     private XSModelHolder xsModel;
     private Map<String, Element> schemaCache;
     private static final Map<String, Type> buildinTypes = new HashMap<>();
-    private Map<String, Format> consumeServices;
-    private Map<String, Format> produceServices;
 
     static {
         buildinTypes.put("string", Type.STRING);
@@ -139,8 +137,6 @@ public class FormatFromWsdlBuilder implements FormatBuilder, SoapConstants, XMLE
 
     public void loadWSDL() {
         try {
-            consumeServices = null;
-            produceServices = null;
             WSDLReader wsdlReader11 = WSDLFactory.newInstance().newWSDLReader();
             definition = wsdlReader11.readWSDL(wsdlURL);
             xsModel = new XSModelHolder();
@@ -510,14 +506,15 @@ public class FormatFromWsdlBuilder implements FormatBuilder, SoapConstants, XMLE
                 Binding binding = port.getBinding();
                 List<BindingOperation> bindingOperations = binding.getBindingOperations();
                 for (BindingOperation bindingOperation : bindingOperations) {
+                    ExtensibilityElement oper = getSOAPOperation(bindingOperation);
                     String name = bindingOperation.getName();
-                    if (services.get(name) != null) {
+                    if (oper == null || services.get(name) != null) {
                         continue;
                     }
                     Format portFmt = new DataFormat(name, Form.STRUCT);
                     services.put(name, portFmt);
                     portFmt.setProperty(SOAPENDPOINT, new Value(endPoint));
-                    String soapAction = getSOAPAction(bindingOperation);
+                    String soapAction = getSOAPAction(oper);
                     if (soapAction != null) {
                         portFmt.setProperty(SOAPACTION, new Value(soapAction));
                     }
@@ -579,18 +576,25 @@ public class FormatFromWsdlBuilder implements FormatBuilder, SoapConstants, XMLE
         }
     }
 
-    private static String getSOAPAction(BindingOperation bindingOperation) {
-        // Get SOAP Action
-        List<ExtensibilityElement> extElemList = bindingOperation.
-        getExtensibilityElements();
+    private static ExtensibilityElement getSOAPOperation(BindingOperation bindingOperation) {
+        List<ExtensibilityElement> extElemList = bindingOperation.getExtensibilityElements();
         for (ExtensibilityElement extElem : extElemList) {
-            if (extElem instanceof SOAPOperation) {
-                SOAPOperation soapOper = (SOAPOperation) extElem;
-                return soapOper.getSoapActionURI();
-            } else if (extElem instanceof SOAP12Operation) {
-                SOAP12Operation soapOper = (SOAP12Operation) extElem;
-                return soapOper.getSoapActionURI();
-            }
+            if (extElem instanceof SOAPOperation)
+                return (SOAPOperation) extElem;
+            else if (extElem instanceof SOAP12Operation)
+                return (SOAP12Operation) extElem;
+        }
+        return null;
+    }
+
+    private static String getSOAPAction(ExtensibilityElement oper) {
+        // Get SOAP Action
+        if (oper instanceof SOAPOperation) {
+            SOAPOperation soapOper = (SOAPOperation) oper;
+            return soapOper.getSoapActionURI();
+        } else if (oper instanceof SOAP12Operation) {
+            SOAP12Operation soapOper = (SOAP12Operation) oper;
+            return soapOper.getSoapActionURI();
         }
         return null;
     }
