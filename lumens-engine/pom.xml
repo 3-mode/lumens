@@ -36,6 +36,16 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz-jobs</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+        <dependency>
             <groupId>com.lumens</groupId>
             <artifactId>lumens-connector-soap</artifactId>
             <version>${project.version}</version>
