@@ -7,7 +7,6 @@ import com.lumens.connector.Connector;
 import com.lumens.connector.FormatBuilder;
 import com.lumens.connector.Operation;
 import com.lumens.connector.Direction;
-import com.lumens.connector.webservice.soap.SoapClient;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
 import java.util.Map;
@@ -55,6 +54,7 @@ class SoapConnector implements Connector, SoapConstants {
 
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
+        formatBuilder.initalize();
         if (direction == Direction.IN) {
             if (formatListIn != null)
                 return formatListIn;

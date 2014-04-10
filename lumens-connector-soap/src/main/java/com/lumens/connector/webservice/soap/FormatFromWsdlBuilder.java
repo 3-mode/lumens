@@ -112,6 +112,12 @@ public class FormatFromWsdlBuilder implements FormatBuilder, SoapConstants, XMLE
         buildinTypes.put("hexBinary", Type.BINARY);
     }
 
+    @Override
+    public void initalize() {
+        if (definition == null)
+            loadWSDL();
+    }
+
     private class XSModelHolder {
 
         private List<XSModel> models = new ArrayList<>();
@@ -135,7 +141,7 @@ public class FormatFromWsdlBuilder implements FormatBuilder, SoapConstants, XMLE
         this.wsdlURL = wsdlURL;
     }
 
-    public void loadWSDL() {
+    private void loadWSDL() {
         try {
             WSDLReader wsdlReader11 = WSDLFactory.newInstance().newWSDLReader();
             definition = wsdlReader11.readWSDL(wsdlURL);

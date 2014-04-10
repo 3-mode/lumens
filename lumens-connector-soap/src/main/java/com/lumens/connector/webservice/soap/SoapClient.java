@@ -79,8 +79,6 @@ public class SoapClient implements SoapConstants {
             } else {
                 System.setProperty("http.useProxy", Boolean.toString(false));
             }
-
-            formatBuilder.loadWSDL();
         } catch (AxisFault ex) {
             throw new RuntimeException(ex);
         }
