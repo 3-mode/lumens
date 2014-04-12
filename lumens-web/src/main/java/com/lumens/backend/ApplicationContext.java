@@ -15,20 +15,22 @@ public class ApplicationContext {
     private static String ADDIN_PATH = System.getProperty("lumens.addin", "addin");
     private TransformEngine engine;
     private ProjectContext projectContext;
-    public List<String> resultCache = new ArrayList<>();
+    private List<String> resultCache = new ArrayList<>();
+    private String strRealPath;
     private static ApplicationContext context;
 
-    public static void createInstance() {
-        context = new ApplicationContext();
+    public static void createInstance(String realPath) {
+        context = new ApplicationContext(realPath);
     }
 
     public static ApplicationContext get() {
         return context;
     }
 
-    public ApplicationContext() {
+    public ApplicationContext(String realPath) {
         engine = new TransformEngine();
         projectContext = new ProjectContext();
+        strRealPath = realPath;
     }
 
     public ProjectContext getProjectContext() {
@@ -47,6 +49,10 @@ public class ApplicationContext {
 
     public TransformEngine getTransformEngine() {
         return this.engine;
+    }
+
+    public String getRealPath() {
+        return strRealPath;
     }
 
     public synchronized void cacheResultString(String result) {
