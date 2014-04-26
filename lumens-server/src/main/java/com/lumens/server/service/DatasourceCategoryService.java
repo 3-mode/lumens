@@ -31,7 +31,7 @@ public class DatasourceCategoryService {
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
             json.writeArrayFieldStart("items");
-            for (ServiceEntity service : Application.getInstance().getApplicationContext().getTransformEngine().getAddinEngine().getAddinContext().getServices()) {
+            for (ServiceEntity service : Application.get().getApplicationContext().getTransformEngine().getAddinEngine().getAddinContext().getServices()) {
                 Map<String, Object> props = service.getPropertList();
                 json.writeObject(props.get(DescriptorUtils.DESCRIPTOR));
             }

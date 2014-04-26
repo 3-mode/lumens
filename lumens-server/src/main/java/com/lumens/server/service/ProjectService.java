@@ -109,14 +109,14 @@ public class ProjectService {
                     try {
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         new ElementSerializer(results.get(0), true).writeToJson(baos);
-                        Application.getInstance().cacheResultString(baos.toString());
+                        Application.get().cacheResultString(baos.toString());
                     } catch (Exception ex) {
                     }
                 }
             }
             List<ResultHandler> handlers = new ArrayList<>();
             handlers.add(new MyResultHandler());
-            Application.getInstance().getApplicationContext().getTransformEngine().execute(new SingleThreadTransformExecuteJob(projectInstance, handlers));
+            Application.get().getApplicationContext().getTransformEngine().execute(new SingleThreadTransformExecuteJob(projectInstance, handlers));
             // TODO to run the project job
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
@@ -213,7 +213,7 @@ public class ProjectService {
         json.writeStartObject();
         json.writeArrayFieldStart("Result");
         boolean isFirst = true;
-        for (String result : Application.getInstance().getCacheResultString()) {
+        for (String result : Application.get().getCacheResultString()) {
             if (!isFirst)
                 json.writeRaw(',');
             else

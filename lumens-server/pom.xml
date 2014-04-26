@@ -13,7 +13,8 @@
     <artifactId>lumens-server</artifactId>
     <packaging>jar</packaging>
     <properties>
-        <copyto.module.dir>lumens/module/server/lib</copyto.module.dir>
+        <module.server.dir>${copyto.module.dir}/server</module.server.dir>
+        <module.server.lib.dir>${copyto.module.dir}/server/lib</module.server.lib.dir>
     </properties>
     <build>
         <plugins>
@@ -36,13 +37,13 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-dependencies-0</id>
+                        <id>copy-dependencies-lib</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>lumens/module/server/lib</outputDirectory>
+                            <outputDirectory>${module.server.lib.dir}</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
@@ -50,7 +51,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-dependencies-test-0</id>
+                        <id>copy-dependencies-server</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy</goal>
@@ -64,10 +65,36 @@
                                     <overWrite>true</overWrite>
                                 </artifactItem>
                             </artifactItems>
-                            <outputDirectory>lumens/module/server</outputDirectory>
+                            <outputDirectory>${module.server.dir}</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <!-- here the phase you need -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/lumens/module/server/etc</outputDirectory>
+                            <resources>          
+                                <resource>
+                                    <directory>src/main/resources/etc</directory>
+                                    <includes>
+                                        <include>webdefault.xml</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
@@ -78,22 +105,27 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>9.1.0.RC1</version>
+            <version>9.1.4.v20140401</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
-            <version>9.1.0.RC1</version>
+            <version>9.1.4.v20140401</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-http</artifactId>
-            <version>9.1.0.RC1</version>
+            <version>9.1.4.v20140401</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <version>9.1.0.RC1</version>
+            <version>9.1.4.v20140401</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-deploy</artifactId>
+            <version>9.1.4.v20140401</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
