@@ -32,14 +32,19 @@
         <script src="app/js/list.js"></script>
         <script src="app/js/component.js"></script>
         <script src="app/js/project.js"></script>
+        <script src="app/js/functions.js"></script>
         <!-- Angular JS -->
         <script src="libs/angular/angular.js"></script>
         <script src="libs/angular/angular-resource.js"></script>
         <!-- Application Angular Modules -->
         <script src="app/mvp/directives.js"></script>
+        <script src="app/mvp/services.js"></script>
         <script type="text/javascript">
-            Lumens.appModule = angular.module('lumensTest', ["lumens-directives"]);
-            function MainTestCtrl($scope, $http, $compile, $sce) {
+            Lumens.appModule = angular.module('lumensTest', ["lumens-directives", "lumens-services"]);
+            function MainTestCtrl($scope, $http, $compile, $sce, FormatList, ProjectList, ProjectById) {
+                console.log("FormatList: ", FormatList.getIN({component_name: 'Database:@()!- HR'}));
+                console.log("ProjectList:", ProjectList.get());
+                console.log("ProjectById:", ProjectById.get({project_id: "P-d05a3113-d440-4b32-9723-b261eeaf284c"}));
                 $scope.currentComponent = {name: "to select"};
                 var rootLayout = new Lumens.RootLayout($('#id-main-view')).configure();
                 var theLayout = new Lumens.ResizableVSplitLayoutExt(rootLayout).configure({
@@ -47,61 +52,12 @@
                     useRatio: true,
                     part1Size: "30%"
                 });
-                var topPanel = new Lumens.SplitLayout(theLayout.getPart1Element()).configure({
-                    mode: "horizontal",
-                    useRatio: true,
-                    part1Size: "50%",
-                    part2Size: "50%"
-                });
-                var leftPanel = new Lumens.Panel(topPanel.getPart1Element()).configure({
+                var topPanel = new Lumens.Panel(theLayout.getPart1Element()).configure({
                     panelStyle: {width: "100%", height: "100%", overflow: "auto"}
-                });
-                var rightPanel = new Lumens.Panel(topPanel.getPart2Element()).configure({
-                    panelStyle: {width: "100%", height: "100%", overflow: "auto"}
-                });
-                var tree = new Lumens.Tree(leftPanel.getElement()).configure({
-                    dblclick: function(parent, current) {
-                        if (current.hasContent() || !current.isFolder())
-                            return;
-                        current.addChildList(current.getLevel() > 3 ?
-                        [
-                            {
-                                name: "[string]test" + current.getId(),
-                                nodeType: "file"
-                            },
-                            {
-                                name: "[int]test2" + current.getId(),
-                                nodeType: "file"
-                            }
-                        ] :
-                        [
-                            {
-                                name: "test" + current.getId(),
-                                nodeType: "folder"
-                            },
-                            {
-                                name: "test2" + current.getId(),
-                                nodeType: "folder"
-                            }
-                        ]);
-                    },
-                    handler: function(parentNode) {
-                        parentNode.addEntryList([
-                            {
-                                name: "test",
-                                nodeType: "folder"
-                            },
-                            {
-                                name: "test2",
-                                nodeType: "folder"
-                            }
-                        ]);
-                    },
-                    draggable: true
                 });
                 $http.get("app/mock/json/data_source_category.json").success(function(data_source_category) {
                     $($compile('<div style="background-color: gray; width: 100px; height: 50px; top: 50px; left: 50px; position: relative; display: block;">Oracle</div>')($scope))
-                    .appendTo(rightPanel.getElement())
+                    .appendTo(topPanel.getElement())
                     .click(function() {
                         var currentComponentConfig = $(this).data("item-data");
                         console.log(currentComponentConfig);
@@ -122,7 +78,7 @@
                     }).data("item-data", data_source_category.items[1]);
 
                     $($compile('<div style="background-color: gray; width: 100px; height: 50px; top: 50px; left: 250px; position: relative; display: block;">SOAP</div>')($scope))
-                    .appendTo(rightPanel.getElement())
+                    .appendTo(topPanel.getElement())
                     .click(function() {
                         var currentComponentConfig = $(this).data("item-data");
                         console.log(currentComponentConfig);
@@ -193,52 +149,13 @@
                             "ComponentFormats"
                         ],
                         titleList: [
-                            "",
+                            $compile('<span data-bind="currentComponent.name">{{currentComponent.name}}</span>')($scope),
                             "Format"
                         ],
-                        buildContent: function(itemContent, isExpand, title, titleText) {
-                            if (isExpand) {
-                                var itemID = title.attr("id");
-                                if (itemID === "ComponentProps") {
-                                    titleText.append($compile('<span ng-model="currentComponent.name">{{currentComponent.name}}</span>')($scope));
-                                    $http.get("app/templates/comp_props_form_tmpl.html").success(function(comp_props_form_tmpl) {
-                                        itemContent.append($compile(comp_props_form_tmpl)($scope));
-                                    });
-                                }
-                                else if (itemID === "ComponentFormats") {
-                                    var parentPanel = new Lumens.Panel(itemContent).configure({
-                                        panelStyle: {width: "100%", "min-height": "350px", overflow: "hidden", "background-color": "rgb(197, 197, 197)", "float": "top"}
-                                    });
-                                    var leftPanel = new Lumens.Panel(parentPanel.getElement()).configure({
-                                        panelClass: ["formatResize"],
-                                        panelStyle: {width: "50%", "min-height": "300px", overflow: "auto", "background-color": "rgb(153, 152, 152)", "float": "left"}
-                                    });
-                                    var rightPanel = new Lumens.Panel(parentPanel.getElement()).configure({
-                                        panelClass: ["formatResize"],
-                                        panelStyle: {width: "50%", "min-height": "300px", overflow: "auto", "background-color": "rgb(143, 143, 143)", "float": "left"}
-                                    });
-                                    parentPanel.getElement().resizable({
-                                        handles: 's',
-                                        alsoResize: '.formatResize'
-                                    });
-                                }
-                            }
-                        }
-                    });
-                }
-                function tabDataFormatList($tabContent) {
-                    /*
-                     var topPanel = new Lumens.SplitLayout($tabContent).configure({
-                     mode: "horizontal",
-                     useRatio: true,
-                     part1Size: "50%",
-                     part2Size: "50%"
-                     });//*/
-                    var leftPanel = new Lumens.Panel($tabContent).configure({
-                        panelStyle: {width: "50%", height: "100%", overflow: "auto", "background-color": "gray"}
-                    });
-                    var rightPanel = new Lumens.Panel($tabContent).configure({
-                        panelStyle: {width: "50%", height: "100%", overflow: "auto", "background-color": "gray"}
+                        contentList: [
+                            $compile('<div dynamic-property-form="componentForm"/>')($scope),
+                            $compile('<div dynamic-format-list="currentComponent"/>')($scope)
+                        ]
                     });
                 }
                 $http.get("app/templates/design_command_tmpl.html").success(function(design_command_tmpl) {

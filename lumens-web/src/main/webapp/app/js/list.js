@@ -39,6 +39,9 @@ Lumens.List = Class.$extend({
         var accordion = $(this.sectionHTMLTemplate).appendTo(this.$accordionHolder);
         if (config.titleList && config.titleList.length > i)
             accordion.find("b").html(config.titleList[i]);
+        if (config.contentList && config.contentList.length > i)
+            accordion.find("#content-holder").append(config.contentList[i]);
+
         var accordionTitle = accordion.find(".lumens-accordion-title");
         var form = accordion.find("ul");
         form.toggle(200);

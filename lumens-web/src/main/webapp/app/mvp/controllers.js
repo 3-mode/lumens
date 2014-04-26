@@ -1,3 +1,5 @@
+'use strict';
+
 /* 
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
@@ -144,127 +146,13 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $route, $http, $c
                             "ComponentFormats"
                         ],
                         titleList: [
-                            "",
-                            "Format List"
+                            $compile('<span data-bind="currentComponent.name">{{currentComponent.name}}</span>')($scope),
+                            "Format"
                         ],
-                        buildContent: function(itemContent, isExpand, title, titleText) {
-                            if (isExpand) {
-                                var itemID = title.attr("id");
-                                if (itemID === "ComponentProps") {
-                                    titleText.append($compile('<span ng-model="currentComponent.name">{{currentComponent.name}}</span>')($scope));
-                                    $http.get("app/templates/comp_props_form_tmpl.html").success(function(comp_props_form_tmpl) {
-                                        itemContent.append($compile(comp_props_form_tmpl)($scope));
-                                    });
-                                }
-                                else if (itemID === "ComponentFormats") {
-                                    buildDataFormatList(itemContent);
-                                }
-                            }
-                        }
-                    });
-                }
-                function buildDataFormatList($parent) {
-                    var panelContainer = new Lumens.SplitLayout($parent).configure({
-                        mode: "horizontal",
-                        disabeAutoChildrenSize: true,
-                        useRatio: true,
-                        width: "100%",
-                        part1Size: "45%",
-                        part2Size: "55%"
-                    });
-                    panelContainer.getElement().css({"min-height": "350px", "border-bottom": "2px solid rgb(214, 214, 214)"});
-                    panelContainer.getPart1Element().addClass("formatResize");
-                    panelContainer.getPart2Element().addClass("formatResize");
-                    var leftPanel = new Lumens.Panel(panelContainer.getPart1Element()).configure({
-                        panelStyle: {width: "100%", "height": "100%", "min-height": "350px", overflow: "auto", "border-top": "1px solid rgb(214, 214, 214)", "border-right": "1px solid rgb(214, 214, 214)"}
-                    });
-                    var rightPanel = new Lumens.Panel(panelContainer.getPart2Element()).configure({
-                        panelStyle: {width: "100%", "height": "100%", "min-height": "350px", overflow: "auto", "border-top": "1px solid rgb(214, 214, 214)"}
-                    });
-                    panelContainer.getElement().resizable({
-                        handles: 's',
-                        alsoResize: '.formatResize'
-                    });
-
-                    var tree1 = new Lumens.Tree(leftPanel.getElement()).configure({
-                        dblclick: function(parent, current) {
-                            if (current.hasContent() || !current.isFolder())
-                                return;
-                            current.addChildList(current.getLevel() > 20 ?
-                            [
-                                {
-                                    name: "[string]test" + current.getId(),
-                                    nodeType: "file"
-                                },
-                                {
-                                    name: "[int]test2" + current.getId(),
-                                    nodeType: "file"
-                                }
-                            ] :
-                            [
-                                {
-                                    name: "test" + current.getId(),
-                                    nodeType: "folder"
-                                },
-                                {
-                                    name: "test2" + current.getId(),
-                                    nodeType: "folder"
-                                }
-                            ]);
-                        },
-                        handler: function(parentNode) {
-                            parentNode.addEntryList([
-                                {
-                                    name: "test",
-                                    nodeType: "folder"
-                                },
-                                {
-                                    name: "test2",
-                                    nodeType: "folder"
-                                }
-                            ]);
-                        },
-                        draggable: true
-                    });
-
-                    var tree2 = new Lumens.Tree(rightPanel.getElement()).configure({
-                        dblclick: function(parent, current) {
-                            if (current.hasContent() || !current.isFolder())
-                                return;
-                            current.addChildList(current.getLevel() > 3 ?
-                            [
-                                {
-                                    name: "[string]test" + current.getId(),
-                                    nodeType: "file"
-                                },
-                                {
-                                    name: "[int]test2" + current.getId(),
-                                    nodeType: "file"
-                                }
-                            ] :
-                            [
-                                {
-                                    name: "test" + current.getId(),
-                                    nodeType: "folder"
-                                },
-                                {
-                                    name: "test2" + current.getId(),
-                                    nodeType: "folder"
-                                }
-                            ]);
-                        },
-                        handler: function(parentNode) {
-                            parentNode.addEntryList([{
-                                    name: "test",
-                                    nodeType: "folder"
-                                },
-                                {
-                                    name: "test2",
-                                    nodeType: "folder"
-                                }
-                            ]);
-                        },
-                        draggable: true
+                        contentList: [
+                            $compile('<div dynamic-property-form="componentForm"/>')($scope),
+                            $compile('<div dynamic-format-list="currentComponent"/>')($scope)
+                        ]
                     });
                 }
                 $http.get("app/templates/design_command_tmpl.html").success(function(design_command_tmpl) {

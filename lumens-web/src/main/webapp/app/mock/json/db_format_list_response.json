@@ -1,0 +1,1421 @@
+{
+    "status": "OK",
+    "content": {
+        "format_list": [
+            {
+                "format": [
+                    {
+                        "name": "COUNTRIES",
+                        "form": "Struct",
+                        "type": "None",
+                        "property": [
+                            {
+                                "name": "description",
+                                "type": "String",
+                                "value": "country table. Contains 25 rows. References with locations table."
+                            },
+                            {
+                                "name": "type",
+                                "type": "String",
+                                "value": "TABLE"
+                            }
+                        ],
+                        "format": [
+                            {
+                                "name": "fields",
+                                "form": "Struct",
+                                "type": "None",
+                                "format": [
+                                    {
+                                        "name": "COUNTRY_ID",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "CHAR"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "2"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "COUNTRY_NAME",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "40"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "REGION_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "operation",
+                                "form": "Field",
+                                "type": "String"
+                            },
+                            {
+                                "name": "clause",
+                                "form": "Field",
+                                "type": "String"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "format": [
+                    {
+                        "name": "DEPARTMENTS",
+                        "form": "Struct",
+                        "type": "None",
+                        "property": [
+                            {
+                                "name": "description",
+                                "type": "String",
+                                "value": "Departments table that shows details of departments where employees\nwork. Contains 27 rows; references with locations, employees, and job_history tables."
+                            },
+                            {
+                                "name": "type",
+                                "type": "String",
+                                "value": "TABLE"
+                            }
+                        ],
+                        "format": [
+                            {
+                                "name": "fields",
+                                "form": "Struct",
+                                "type": "None",
+                                "format": [
+                                    {
+                                        "name": "DEPARTMENT_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "DEPARTMENT_NAME",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "30"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "MANAGER_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "LOCATION_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "operation",
+                                "form": "Field",
+                                "type": "String"
+                            },
+                            {
+                                "name": "clause",
+                                "form": "Field",
+                                "type": "String"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "format": [
+                    {
+                        "name": "LOCATIONS",
+                        "form": "Struct",
+                        "type": "None",
+                        "property": [
+                            {
+                                "name": "description",
+                                "type": "String",
+                                "value": "Locations table that contains specific address of a specific office,\nwarehouse, and/or production site of a company. Does not store addresses /\nlocations of customers. Contains 23 rows; references with the\ndepartments and countries tables. "
+                            },
+                            {
+                                "name": "type",
+                                "type": "String",
+                                "value": "TABLE"
+                            }
+                        ],
+                        "format": [
+                            {
+                                "name": "fields",
+                                "form": "Struct",
+                                "type": "None",
+                                "format": [
+                                    {
+                                        "name": "LOCATION_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "STREET_ADDRESS",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "40"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "POSTAL_CODE",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "12"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "CITY",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "30"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "STATE_PROVINCE",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "25"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "COUNTRY_ID",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "CHAR"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "2"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "operation",
+                                "form": "Field",
+                                "type": "String"
+                            },
+                            {
+                                "name": "clause",
+                                "form": "Field",
+                                "type": "String"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "format": [
+                    {
+                        "name": "JOBS",
+                        "form": "Struct",
+                        "type": "None",
+                        "property": [
+                            {
+                                "name": "description",
+                                "type": "String",
+                                "value": "jobs table with job titles and salary ranges. Contains 19 rows.\nReferences with employees and job_history table."
+                            },
+                            {
+                                "name": "type",
+                                "type": "String",
+                                "value": "TABLE"
+                            }
+                        ],
+                        "format": [
+                            {
+                                "name": "fields",
+                                "form": "Struct",
+                                "type": "None",
+                                "format": [
+                                    {
+                                        "name": "JOB_ID",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "10"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "JOB_TITLE",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "35"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "MIN_SALARY",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "MAX_SALARY",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "operation",
+                                "form": "Field",
+                                "type": "String"
+                            },
+                            {
+                                "name": "clause",
+                                "form": "Field",
+                                "type": "String"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "format": [
+                    {
+                        "name": "EMP_DETAILS_VIEW",
+                        "form": "Struct",
+                        "type": "None",
+                        "property": [
+                            {
+                                "name": "description",
+                                "type": "String",
+                                "value": ""
+                            },
+                            {
+                                "name": "type",
+                                "type": "String",
+                                "value": "VIEW"
+                            }
+                        ],
+                        "format": [
+                            {
+                                "name": "fields",
+                                "form": "Struct",
+                                "type": "None",
+                                "format": [
+                                    {
+                                        "name": "COUNTRY_NAME",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "40"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "REGION_NAME",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "25"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "EMPLOYEE_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "JOB_ID",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "10"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "MANAGER_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "DEPARTMENT_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "LOCATION_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "COUNTRY_ID",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "CHAR"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "2"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "FIRST_NAME",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "20"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "LAST_NAME",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "25"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "SALARY",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "COMMISSION_PCT",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "DEPARTMENT_NAME",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "30"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "JOB_TITLE",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "35"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "CITY",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "30"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "STATE_PROVINCE",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "25"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "operation",
+                                "form": "Field",
+                                "type": "String"
+                            },
+                            {
+                                "name": "clause",
+                                "form": "Field",
+                                "type": "String"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "format": [
+                    {
+                        "name": "REGIONS",
+                        "form": "Struct",
+                        "type": "None",
+                        "property": [
+                            {
+                                "name": "description",
+                                "type": "String",
+                                "value": ""
+                            },
+                            {
+                                "name": "type",
+                                "type": "String",
+                                "value": "TABLE"
+                            }
+                        ],
+                        "format": [
+                            {
+                                "name": "fields",
+                                "form": "Struct",
+                                "type": "None",
+                                "format": [
+                                    {
+                                        "name": "REGION_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "REGION_NAME",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "25"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "operation",
+                                "form": "Field",
+                                "type": "String"
+                            },
+                            {
+                                "name": "clause",
+                                "form": "Field",
+                                "type": "String"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "format": [
+                    {
+                        "name": "EMPLOYEES",
+                        "form": "Struct",
+                        "type": "None",
+                        "property": [
+                            {
+                                "name": "description",
+                                "type": "String",
+                                "value": "employees table. Contains 107 rows. References with departments,\njobs, job_history tables. Contains a self reference."
+                            },
+                            {
+                                "name": "type",
+                                "type": "String",
+                                "value": "TABLE"
+                            }
+                        ],
+                        "format": [
+                            {
+                                "name": "fields",
+                                "form": "Struct",
+                                "type": "None",
+                                "format": [
+                                    {
+                                        "name": "EMPLOYEE_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "FIRST_NAME",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "20"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "LAST_NAME",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "25"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "EMAIL",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "25"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "PHONE_NUMBER",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "20"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "HIRE_DATE",
+                                        "form": "Field",
+                                        "type": "Date",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "DATE"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "7"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "JOB_ID",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "10"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "SALARY",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "COMMISSION_PCT",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "MANAGER_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "DEPARTMENT_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "operation",
+                                "form": "Field",
+                                "type": "String"
+                            },
+                            {
+                                "name": "clause",
+                                "form": "Field",
+                                "type": "String"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "format": [
+                    {
+                        "name": "JOB_HISTORY",
+                        "form": "Struct",
+                        "type": "None",
+                        "property": [
+                            {
+                                "name": "description",
+                                "type": "String",
+                                "value": "Table that stores job history of the employees. If an employee\nchanges departments within the job or changes jobs within the department,\nnew rows get inserted into this table with old job information of the\nemployee. Contains a complex primary key: employee_id+start_date.\nContains 25 rows. References with jobs, employees, and departments tables."
+                            },
+                            {
+                                "name": "type",
+                                "type": "String",
+                                "value": "TABLE"
+                            }
+                        ],
+                        "format": [
+                            {
+                                "name": "fields",
+                                "form": "Struct",
+                                "type": "None",
+                                "format": [
+                                    {
+                                        "name": "EMPLOYEE_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "START_DATE",
+                                        "form": "Field",
+                                        "type": "Date",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "DATE"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "7"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "END_DATE",
+                                        "form": "Field",
+                                        "type": "Date",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "DATE"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "7"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "JOB_ID",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "10"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "DEPARTMENT_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "operation",
+                                "form": "Field",
+                                "type": "String"
+                            },
+                            {
+                                "name": "clause",
+                                "form": "Field",
+                                "type": "String"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "format": [
+                    {
+                        "name": "EMPLOYEES_TEST",
+                        "form": "Struct",
+                        "type": "None",
+                        "property": [
+                            {
+                                "name": "description",
+                                "type": "String",
+                                "value": "employees table. Contains 107 rows. References with departments,\njobs, job_history tables. Contains a self reference."
+                            },
+                            {
+                                "name": "type",
+                                "type": "String",
+                                "value": "TABLE"
+                            }
+                        ],
+                        "format": [
+                            {
+                                "name": "fields",
+                                "form": "Struct",
+                                "type": "None",
+                                "format": [
+                                    {
+                                        "name": "EMPLOYEE_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "FIRST_NAME",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "20"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "LAST_NAME",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "25"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "EMAIL",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "25"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "PHONE_NUMBER",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "20"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "HIRE_DATE",
+                                        "form": "Field",
+                                        "type": "Date",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "DATE"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "7"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "JOB_ID",
+                                        "form": "Field",
+                                        "type": "String",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "VARCHAR2"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "10"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "SALARY",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "COMMISSION_PCT",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "MANAGER_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "DEPARTMENT_ID",
+                                        "form": "Field",
+                                        "type": "Integer",
+                                        "property": [
+                                            {
+                                                "name": "data_type",
+                                                "type": "String",
+                                                "value": "NUMBER"
+                                            },
+                                            {
+                                                "name": "data_length",
+                                                "type": "String",
+                                                "value": "22"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "operation",
+                                "form": "Field",
+                                "type": "String"
+                            },
+                            {
+                                "name": "clause",
+                                "form": "Field",
+                                "type": "String"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
