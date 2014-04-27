@@ -11,10 +11,8 @@
     <artifactId>lumens-connector-orcl</artifactId>
     <name>lumens-connector-orcl</name>
     <properties>
-        <connector.app.dir>../assembler/${copyto.module.dir}/orcl</connector.app.dir>
-        <connector.lib.dir>${connector.app.dir}/lib</connector.lib.dir>
-        <connector.test.app.dir>../lumens-server/lumens/addin/orcl</connector.test.app.dir>
-        <connector.test.lib.dir>${connector.test.app.dir}/lib</connector.test.lib.dir>
+        <connector.app.dir>${copyto.addin.dir}/orcl</connector.app.dir>
+        <connector.lib.dir>${copyto.addin.dir}/orcl/lib</connector.lib.dir>
     </properties>
     <build>
         <plugins>
@@ -36,13 +34,13 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-dependencies-test-0</id>
+                        <id>copy-dependencies-lib</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${connector.test.lib.dir}</outputDirectory>
+                            <outputDirectory>${connector.lib.dir}</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
@@ -51,7 +49,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-dependencies-test-1</id>
+                        <id>copy-dependencies-addin</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy</goal>
@@ -66,7 +64,7 @@
                                     <overWrite>true</overWrite>
                                 </artifactItem>
                             </artifactItems>
-                            <outputDirectory>${connector.test.app.dir}</outputDirectory>
+                            <outputDirectory>${connector.app.dir}</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>

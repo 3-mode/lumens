@@ -101,7 +101,8 @@ public class AddinDefaultContext implements AddinContext {
                 String[] classPaths = classPathDefine.split(",");
                 for (String classPath : classPaths) {
                     File dependencyClassPathFile = new File(path + '/' + classPath);
-                    acl.addJarLocationOrPathLoactionURL(dependencyClassPathFile.toURI().toURL());
+                    if (dependencyClassPathFile.exists())
+                        acl.addJarLocationOrPathLoactionURL(dependencyClassPathFile.toURI().toURL());
                 }
             }
         }

@@ -8,9 +8,9 @@
     <name>lumens</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <copyto.app.dir>target/lumens</copyto.app.dir>
-        <copyto.module.dir>target/lumens/module</copyto.module.dir>
-        <copyto.lib.dir>target/lumens/lib</copyto.lib.dir>
+        <copyto.app.dir>../dist/lumens</copyto.app.dir>
+        <copyto.module.dir>../dist/lumens/module</copyto.module.dir>
+        <copyto.addin.dir>../dist/lumens/addin</copyto.addin.dir>
     </properties>
     <build>
         <plugins>

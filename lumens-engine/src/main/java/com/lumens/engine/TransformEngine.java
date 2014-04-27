@@ -26,6 +26,7 @@ public class TransformEngine {
     private AddinEngine addinEngine;
     private List<ExecuteJob> jobList = new ArrayList<>();
     private ThreadPoolExecutor threadPoolExecutor;
+    private ClassLoader addinClassLoader;
     private static AtomicInteger threadCounter = new AtomicInteger(1);
 
     protected class EngineThreadFactory implements ThreadFactory {
@@ -37,10 +38,16 @@ public class TransformEngine {
     }
 
     public TransformEngine() {
+        this(TransformEngine.class.getClassLoader());
+    }
+
+    public TransformEngine(ClassLoader addinClassLoader) {
+        this.addinClassLoader = addinClassLoader;
         threadPoolExecutor = new ThreadPoolExecutor(1, 20, 30, TimeUnit.SECONDS, new LinkedBlockingQueue(20), new EngineThreadFactory());
     }
 
-    public TransformEngine(int maximumPoolSize/*Default 20 threads*/, long keepAliveSecondsTime/*Deault 30 seconds*/) {
+    public TransformEngine(ClassLoader addinClassLoader, int maximumPoolSize/*Default 20 threads*/, long keepAliveSecondsTime/*Deault 30 seconds*/) {
+        this.addinClassLoader = addinClassLoader;
         threadPoolExecutor = new ThreadPoolExecutor(1, maximumPoolSize, keepAliveSecondsTime, TimeUnit.SECONDS, new LinkedBlockingQueue(maximumPoolSize), new EngineThreadFactory());
     }
 
@@ -55,9 +62,10 @@ public class TransformEngine {
 
     public void start(String addinPath) {
         try {
-            addinEngine = new AddinEngine();
+            addinEngine = new AddinEngine(addinClassLoader);
             addinEngine.start();
             AddinContext ac = addinEngine.getAddinContext();
+            System.out.println("Addin path: " + addinPath);
             File addinPathFile = new File(addinPath);
             for (File addinItemFile : addinPathFile.listFiles())
                 ac.installAddIn(addinItemFile.toURI().toURL()).start();

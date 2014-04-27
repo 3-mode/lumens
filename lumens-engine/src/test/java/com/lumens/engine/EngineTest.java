@@ -49,7 +49,7 @@ public class EngineTest extends TestCase implements SoapConstants {
 
     public EngineTest(String testName) {
         super(testName);
-        AddinEngine ae = new AddinEngine();
+        AddinEngine ae = new AddinEngine(EngineTest.class.getClassLoader());
         ae.start();
         AddinContext ac = ae.getAddinContext();
         new com.lumens.connector.database.client.oracle.service.Activator().start(ac);

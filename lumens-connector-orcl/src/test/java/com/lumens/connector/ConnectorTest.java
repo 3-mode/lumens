@@ -191,7 +191,7 @@ public class ConnectorTest extends TestCase implements DatabaseConstants, Oracle
     }
 
     public void testAddin() throws Exception {
-        AddinEngine ae = new AddinEngine();
+        AddinEngine ae = new AddinEngine(ConnectorTest.class.getClassLoader());
         ae.start();
         AddinContext ac = ae.getAddinContext();
         Activator activator = new Activator();

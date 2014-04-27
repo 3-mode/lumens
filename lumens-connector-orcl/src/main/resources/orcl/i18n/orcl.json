@@ -5,5 +5,6 @@
     "User": "User",
     "Password": "Password",
     "SessionAlter": "Session Alter",
-    "FullLoad": "Load all table fields"
+    "FullLoad": "Load all table fields",
+    "Description": "Description"
 }

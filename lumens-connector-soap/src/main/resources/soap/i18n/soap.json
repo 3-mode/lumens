@@ -6,5 +6,6 @@
     "ProxyAddress": "Proxy Address",
     "ProxyPort": "Proxy Port",
     "ProxyUser": "Proxy User",
-    "ProxyPassword": "Proxy Password"
+    "ProxyPassword": "Proxy Password",
+    "Description": "Description"
 }
