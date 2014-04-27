@@ -12,23 +12,26 @@ import java.util.List;
  */
 public class ApplicationContext {
 
-    private static String ADDIN_PATH = System.getProperty("lumens.addin", "addin");
+    private static String LUMENS_BASE = System.getProperty("lumens.base", "X:\\PRODUCT\\lumens\\dist\\lumens");
     private TransformEngine engine;
     private ProjectContext projectContext;
     private List<String> resultCache = new ArrayList<>();
     private String strRealPath;
     private static ApplicationContext context;
 
-    public static void createInstance(String realPath) {
-        context = new ApplicationContext(realPath);
+    public static void createInstance(ClassLoader classLoader) {
+        // TODO
+        System.out.println("Lumens Base: " + LUMENS_BASE);
+        context = new ApplicationContext(classLoader, LUMENS_BASE);
+        context.start();
     }
 
     public static ApplicationContext get() {
         return context;
     }
 
-    public ApplicationContext(String realPath) {
-        engine = new TransformEngine();
+    public ApplicationContext(ClassLoader classLoader, String realPath) {
+        engine = new TransformEngine(classLoader);
         projectContext = new ProjectContext();
         strRealPath = realPath;
     }
@@ -69,7 +72,7 @@ public class ApplicationContext {
     }
 
     public void start() {
-        engine.start(ADDIN_PATH);
+        engine.start(getRealPath() + "/addin");
     }
 
     public void stop() {

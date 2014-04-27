@@ -11,7 +11,7 @@ Lumens.ProjectImporter = Class.$extend({
     },
     importById: function(projectId) {
         var __this = this;
-        $.get(this.projectServiceUrl, function(projectData) {
+        $.getJSON(this.projectServiceUrl, function(projectData) {
             if (projectData.content && projectData.content.project && projectData.content.project.length > 0) {
                 var compDict = {};
                 var project = $.parseJSON(projectData.content.project[0].data).project;

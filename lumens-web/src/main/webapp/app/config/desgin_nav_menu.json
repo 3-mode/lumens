@@ -1,11 +1,7 @@
 {
     "event_type": "NavMenu_Design_Tool",
     "sections": [
-        {
-            "name": "Resources"
-        },
-        {
-            "name": "Instruments"
-        }
+        {"name": "Resources"},
+        {"name": "Instruments"}
     ]
 }

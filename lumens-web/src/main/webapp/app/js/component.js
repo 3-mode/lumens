@@ -41,7 +41,7 @@ Lumens.DataComponent = Class.$extend({
         var template =
         '<div class="data-comp lumens_boostrap" style="left:50px;top:50px;">' +
         '<div class="data-comp-icon"><img/></div>' +
-        '<img class="data-comp-stauts" src="css/img/ds/Deactive.png"/>' +
+        '<img class="data-comp-stauts" src="app/css/img/ds/Deactive.png"/>' +
         '<div class="data-comp-text">' +
         '<div class="data-comp-title"><b id="id-product-name"></b></div>' +
         '<div id="id-shortdsc" class="data-comp-shortdsc"></div>' +

@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -228,6 +230,12 @@ public class ProjectService {
     @GET
     @Produces("application/json")
     public Response getProjects(@QueryParam("page") int page, @Context HttpServletRequest req) throws IOException {
+        try {
+            // TODO
+            Thread.sleep(5000);
+        } catch (InterruptedException ex) {
+        }
+        //
         JsonUtility utility = JsonUtility.createJsonUtility();
         JsonGenerator json = utility.getGenerator();
         json.writeStartObject();

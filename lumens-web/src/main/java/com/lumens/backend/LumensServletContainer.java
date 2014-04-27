@@ -16,7 +16,7 @@ public class LumensServletContainer extends ServletContainer {
     @Override
     protected void init(WebConfig webConfig) throws ServletException {
         super.init(webConfig);
-        System.out.println("The current path: " + super.getServletContext().getRealPath(""));
-        ApplicationContext.createInstance(super.getServletContext().getRealPath(""));
+        ApplicationContext.createInstance(this.getServletContext().getClassLoader());
+        System.out.println("Addin loaded");
     }
 }

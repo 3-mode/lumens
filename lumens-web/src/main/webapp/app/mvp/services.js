@@ -6,13 +6,52 @@
 
 Lumens.services = angular.module('lumens-services', ['ngResource']);
 // Services
+Lumens.services.factory('DesignNavMenu', function($resource) {
+    return $resource("app/config/desgin_nav_menu.json", {}, {
+        get: {method: 'GET', isArray: false}
+    });
+});
+Lumens.services.factory('DesignButtons', function($http, $q) {
+    return {
+        get: function(onResponse) {
+            var deferred = $q.defer();
+            $http.get("app/templates/design_command_tmpl.html").then(function(response) {
+                deferred.resolve(response.data);
+                if (onResponse)
+                    onResponse(response.data);
+            });
+            return deferred.promise;
+        }};
+});
+Lumens.services.factory('ProjectListModal', function($http, $q) {
+    return {
+        get: function(onResponse) {
+            var deferred = $q.defer();
+            $http.get("app/templates/projects_modal_tmpl.html").then(function(response) {
+                deferred.resolve(response.data);
+                if (onResponse)
+                    onResponse(response.data);
+            });
+            return deferred.promise;
+        }};
+});
+Lumens.services.factory('DatasourceCategory', function($resource) {
+    return $resource("rest/categories/components", {}, {
+        get: {method: 'GET', isArray: false}
+    });
+});
+Lumens.services.factory('InstrumentCategory', function($resource) {
+    return $resource("app/mock/json/instrument_category.json", {}, {
+        get: {method: 'GET', isArray: false}
+    });
+});
 Lumens.services.factory('ProjectList', function($resource) {
-    return $resource("../rest/projects", {}, {
+    return $resource("rest/projects", {}, {
         get: {method: 'GET', isArray: false}
     });
 });
 Lumens.services.factory('ProjectById', function($resource) {
-    return $resource("../rest/projects/:project_id", {}, {
+    return $resource("rest/projects/:project_id", {}, {
         get: {method: 'GET', isArray: false}
     });
 });

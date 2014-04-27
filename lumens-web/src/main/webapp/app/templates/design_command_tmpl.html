@@ -1,1 +1,10 @@
-<div class="lumens-button-bar"><a class="lumens-button">New</a><a class="lumens-button">Open</a><a class="lumens-button">Save</a><a class="lumens-button">Delete</a></div>
+<div>
+    <div class="lumens-button-bar">
+        <a class="lumens-button" ng-click="barClick('id_new')" id='id_new'>{{i18n.id_new}}</a>
+        <a class="lumens-button" ng-click="barClick('id_open')" id='id_open'>{{i18n.id_open}}</a>
+        <a class="lumens-button" ng-click="barClick('id_active')" id='id_active'>{{i18n.id_active}}</a>
+        <a class="lumens-button" ng-click="barClick('id_save')" id='id_save'>{{i18n.id_save}}</a>
+        <a class="lumens-button lumens-button-delete" ng-click="barClick('id_delete')" id='id_delete'>{{i18n.id_delete}}</a>
+    </div>
+    <div id="projectlist_dialog" class="lumens_bootstrap"></div>
+</div>

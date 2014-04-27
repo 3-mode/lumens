@@ -13,6 +13,6 @@ public class DAOFactory {
     private static ApplicationContext context = new ClassPathXmlApplicationContext("system/datasource-config.xml");
 
     public static ProjectDAO getProjectDAO() {
-        return (ProjectDAO) context.getBean("ProjectDAO");
+        return (ProjectDAO) context.getBean("projectDAO");
     }
 }
