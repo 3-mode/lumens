@@ -31,6 +31,12 @@ Lumens.Link = Class.$extend({
         else
             this.$connection = this.$paper.connection(this.$from, this.$to, "#CCCCCC");
         return this;
+    },
+    getTo: function() {
+        return this.$to;
+    },
+    getFrom: function() {
+        return this.$from;
     }
 });
 
@@ -72,8 +78,8 @@ Lumens.DataComponent = Class.$extend({
         });
         this.$elem.find(".data-comp-icon")
         .on("dblclick", function() {
-            if (__this.configure.componentDblclick)
-                __this.configure.componentDblclick(__this.configure);
+            if (__this.configure.onComponentDblclick)
+                __this.configure.onComponentDblclick(__this);
         })
         .draggable({
             appendTo: $("#id-data-comp-container"),
@@ -119,7 +125,7 @@ Lumens.DataComponent = Class.$extend({
     from: function(link) {
         this.$from_list.push(link);
     },
-    remove_from: function(link) {
+    removeFromLink: function(link) {
         var length = this.$from_list.length;
         while (length > 0) {
             if (this.$from_list[--length] === link)
@@ -129,7 +135,7 @@ Lumens.DataComponent = Class.$extend({
             this.$from_list.splice(length, 1);
         return this;
     },
-    remove_to: function(link) {
+    removeToLink: function(link) {
         var length = this.$to_list.length;
         while (length > 0) {
             if (this.$to_list[--length] === link)
@@ -138,5 +144,11 @@ Lumens.DataComponent = Class.$extend({
         if (length >= 0)
             this.$to_list.splice(length, 1);
         return this;
+    },
+    getFromLinkList: function() {
+        return this.$from_list;
+    },
+    getToLinkList: function() {
+        return this.$to_list;
     }
 });

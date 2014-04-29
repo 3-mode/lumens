@@ -219,15 +219,24 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
     },
     configure: function(config) {
         var __this = this;
-        this.componentDblclick = config.componentDblclick;
+        this.onComponentDblclick = config.onComponentDblclick;
+        this.onBeforeComponentAdd = config.onBeforeComponentAdd;
+        this.onAfterComponentAdd = config.onAfterComponentAdd;
         this.getElement().attr("id", "id-data-comp-container")
         .droppable({
             accept: ".data-comp-node",
             drop: function(event, ui) {
                 event.preventDefault();
-                var data = $.data(ui.draggable.get(0), "item-data");
+                var category_info = $.data(ui.draggable.get(0), "item-data");
                 // TODO create component object in $scope
-                __this.addComponent({x: ui.position.left, y: ui.position.top}, data);
+                var status = true;
+                if (__this.onBeforeComponentAdd)
+                    status = __this.onBeforeComponentAdd(category_info);
+                if (status) {
+                    var addedComponent = __this.addComponent({x: ui.position.left, y: ui.position.top}, category_info);
+                    if (__this.onAfterComponentAdd)
+                        __this.onAfterComponentAdd(addedComponent);
+                }
             }
         });
         this.$super({
@@ -242,10 +251,14 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
             category_info: category_info,
             component_info: component_info,
             short_desc: (component_info && component_info.name) ? component_info.name : "[to do]",
-            componentDblclick: this.componentDblclick
+            onComponentDblclick: this.onComponentDblclick
         });
         this.componentList.push(component);
         return component;
+    },
+    emptyComponent: function() {
+        this.getElement().empty();
+        componentList = [];
     }
 });
 

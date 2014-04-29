@@ -7,15 +7,15 @@
             </div>
             <div class="modal-body">
                 <div id='projectLoading'><img src='app/css/img/loading.gif'/></div>
-                <table class="table table-hover" style="display: none;">
+                <table class="table" style="display: none;">
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Description</th>
                         </tr>
                     </thead>
-                    <tbody ng-repeat="project in projects">
-                        <tr style="cursor: pointer;" project-id="{{project.id}}">
+                    <tbody ng-init="selectIndex = 0">
+                        <tr ng-repeat="project in projects" project-id="{{project.id}}" style="cursor: pointer;" ng-click="selectProject($event)">
                             <td>{{project.name}}</td>
                             <td>{{project.description}}</td>
                         </tr>
@@ -24,7 +24,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Open Project</button>
+                <button type="button" class="btn btn-primary" ng-click="openProject()">Open Project</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

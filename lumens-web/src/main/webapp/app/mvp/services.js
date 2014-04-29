@@ -36,7 +36,7 @@ Lumens.services.factory('ProjectListModal', function($http, $q) {
         }};
 });
 Lumens.services.factory('DatasourceCategory', function($resource) {
-    return $resource("rest/categories/components", {}, {
+    return $resource("rest/category/component", {}, {
         get: {method: 'GET', isArray: false}
     });
 });
@@ -46,12 +46,12 @@ Lumens.services.factory('InstrumentCategory', function($resource) {
     });
 });
 Lumens.services.factory('ProjectList', function($resource) {
-    return $resource("rest/projects", {}, {
+    return $resource("rest/project", {}, {
         get: {method: 'GET', isArray: false}
     });
 });
 Lumens.services.factory('ProjectById', function($resource) {
-    return $resource("rest/projects/:project_id", {}, {
+    return $resource("rest/project/:project_id", {}, {
         get: {method: 'GET', isArray: false}
     });
 });

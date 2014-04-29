@@ -31,10 +31,8 @@ Lumens.directives.directive("dynamicFormatList", function() {
                 return scope[bindVar];
             }
             scope.$watch(getStringValue, function(component) {
-                console.log("dynamicFormatList: ", element.parent().attr("display"));
                 element.empty();
                 buildDataFormatList(element, component);
-                console.log("Current component: ", component, element);
             });
         }
     };

@@ -78,11 +78,14 @@ DesignNavMenu, DatasourceCategory, InstrumentCategory, DesignButtons, ProjectLis
                                     ProjectListModal.get(function(projects_modal_tmpl) {
                                         var projectListDialog = buttonBar.find("#projectlist_dialog");
                                         projectListDialog.append($compile(projects_modal_tmpl)($scope));
-                                        $('#projectListModal').on("hidden.bs.modal", function(e) {
+                                        $('#projectListModal').on("hidden.bs.modal", function() {
                                             projectListDialog.empty();
-                                        }).modal();
+                                        }).modal({backdrop: "static"});
                                     });
                                 }
+                            }
+                            else if ("id_new" === id) {
+                                $scope.projectOperator.create();
                             }
                             else
                                 console.log("Clicked:", id);
@@ -99,7 +102,9 @@ DesignNavMenu, DatasourceCategory, InstrumentCategory, DesignButtons, ProjectLis
                     $scope.currentComponent = {name: "to select"};
                     Lumens.system.designView.designPanel = new Lumens.ComponentPanel(Lumens.system.designView.designAndInfoPanel.getPart1Element())
                     .configure({
-                        componentDblclick: function(config) {
+                        panelStyle: {width: "100%", height: "100%"},
+                        onComponentDblclick: function(component) {
+                            var config = component.configure;
                             console.log(config);
                             $scope.$apply(function() {
                                 $scope.componentForm = $compile(config.category_info.html)($scope);
@@ -118,8 +123,14 @@ DesignNavMenu, DatasourceCategory, InstrumentCategory, DesignButtons, ProjectLis
                                 }
                             });
                         },
-                        panelStyle: {width: "100%", height: "100%"}
+                        onBeforeComponentAdd: function() {
+                            
+                        },
+                        onAfterComponentAdd: function(component) {
+                            console.log("Added compnoent:", component);
+                        }
                     });
+                    $scope.projectOperator = new Lumens.ProjectOperator($scope.compCagegory, Lumens.system.designView.designPanel, $scope);
                     // Create left menu
                     Lumens.system.designView.navMenu = new Lumens.NavMenu({
                         container: Lumens.system.designView.leftPanel.getElement(),
@@ -197,17 +208,36 @@ DesignNavMenu, DatasourceCategory, InstrumentCategory, DesignButtons, ProjectLis
                             {id: "id-component-format-list", label: "Format List", content: tabFormatList}
                         ]
                     });
-                    $scope.projectImporter = new Lumens.ProjectImporter($scope.compCagegory, Lumens.system.designView.designPanel, $scope).importById();
                 })
             });
         });
     });
     // <******* Design View ------------------------------------------------------------
 })
-.controller("ProjectListCtrl", function($scope, $element, ProjectList) {
+.controller("ProjectListCtrl", function($scope, $element, ProjectList, ProjectById) {
     var projectListContent = $element.find(".modal-body");
-    ProjectList.get(function(projects) {
-        $scope.projects = projects.content.project;
+    var projectOperator = $scope.$parent.projectOperator;
+    $scope.selectProject = function(event) {
+        $scope.currentProjectId = $(event.target).parent().attr("project-id");
+        projectListContent.find(".lumens-v-active").removeClass("lumens-v-active");
+        projectListContent.find("tr[project-id='" + $scope.currentProjectId + "']").addClass("lumens-v-active");
+    };
+    $scope.openProject = function() {
+        console.log("Current project:", $scope.currentProjectId);
+        if ($scope.currentProjectId) {
+            ProjectById.get({project_id: $scope.currentProjectId}, function(projectData) {
+                if (projectOperator)
+                    projectOperator.import(projectData);
+            });
+        }
+        else {
+            // TODO
+            console.error("Error no project selected !");
+        }
+        $element.modal("hide");
+    };
+    ProjectList.get(function(projectsResponse) {
+        $scope.projects = projectsResponse.content.project;
         projectListContent.find("#projectLoading").remove();
         projectListContent.children().show();
     });
