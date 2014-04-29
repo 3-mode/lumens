@@ -19,11 +19,11 @@ import org.codehaus.jackson.JsonGenerator;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-@Path("/categories")
-public class DatasourceCategoryService {
+@Path("/category")
+public class CategoryService {
 
     @GET
-    @Path("/components")
+    @Path("/component")
     @Produces("application/json")
     public Response getComponentCategories() {
         try {

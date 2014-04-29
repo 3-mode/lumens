@@ -30,8 +30,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -46,7 +44,7 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonNode;
 
-@Path("/projects")
+@Path("/project")
 public class ProjectService {
 
     public static final String UTF_8 = "UTF-8";
@@ -229,10 +227,10 @@ public class ProjectService {
 
     @GET
     @Produces("application/json")
-    public Response getProjects(@QueryParam("page") int page, @Context HttpServletRequest req) throws IOException {
+    public Response listProject(@QueryParam("page") int page, @Context HttpServletRequest req) throws IOException {
         try {
             // TODO
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException ex) {
         }
         //
@@ -260,7 +258,7 @@ public class ProjectService {
     @GET
     @Path("{projectID}")
     @Produces("application/json")
-    public Response getProjectByID(@PathParam("projectID") String projectID, @Context HttpServletRequest req) throws IOException {
+    public Response getProject(@PathParam("projectID") String projectID, @Context HttpServletRequest req) throws IOException {
         JsonUtility utility = JsonUtility.createJsonUtility();
         JsonGenerator json = utility.getGenerator();
         json.writeStartObject();

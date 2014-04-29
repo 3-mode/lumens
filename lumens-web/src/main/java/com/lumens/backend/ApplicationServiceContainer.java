@@ -11,12 +11,12 @@ import javax.servlet.ServletException;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class LumensServletContainer extends ServletContainer {
+public class ApplicationServiceContainer extends ServletContainer {
 
     @Override
     protected void init(WebConfig webConfig) throws ServletException {
         super.init(webConfig);
-        ApplicationContext.createInstance(this.getServletContext().getClassLoader());
+        ApplicationContext.createInstance(getServletContext().getClassLoader());
         System.out.println("Addin loaded");
     }
 }
