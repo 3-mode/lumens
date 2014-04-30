@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response;
 public class JobService {
 
     @GET
-    @Path("/")
     @Produces("application/json")
     public Response listJob() {
         return Response.ok().entity("{ 'do' : 'list' }").build();
@@ -33,7 +32,6 @@ public class JobService {
     }
 
     @POST
-    @Path("/")
     @Produces("application/json")
     public Response createJob(String jobJSONString) {
         return Response.ok().entity("{ 'do' : 'create job' }").build();
