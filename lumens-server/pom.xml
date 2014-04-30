@@ -85,7 +85,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/lumens/module/server/etc</outputDirectory>
+                            <outputDirectory>${module.server.dir}/etc</outputDirectory>
                             <resources>          
                                 <resource>
                                     <directory>src/main/resources/etc</directory>
