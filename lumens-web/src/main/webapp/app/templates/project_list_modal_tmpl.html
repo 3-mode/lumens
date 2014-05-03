@@ -5,7 +5,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title" id="myModalLabel">Project Catalog</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body table-responsive">
                 <div id='projectLoading'><img src='app/css/img/loading.gif'/></div>
                 <table class="table" style="display: none;">
                     <thead>
@@ -14,10 +14,9 @@
                             <th>Description</th>
                         </tr>
                     </thead>
-                    <tbody ng-init="selectIndex = 0">
-                        <tr ng-repeat="project in projects" project-id="{{project.id}}" style="cursor: pointer;" ng-click="selectProject($event)">
-                            <td>{{project.name}}</td>
-                            <td>{{project.description}}</td>
+                    <tbody>
+                        <tr ng-repeat="project in projects" project-id="{{project.id}}" style="cursor: pointer;" ng-class="{'lumens-h-active':{{$index}}===selectIndex}" ng-click="selectProject($index, $event)" ng-dblclick="openProject()">
+                            <td>{{project.name}}</td><td>{{project.description}}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -1,7 +1,7 @@
-<div>
-    <div class="lumens-button-bar" ng-init="button_ids=['id_new', 'id_open', 'id_active', 'id_save', 'id_close']">
-        <a ng-repeat="id_btn in button_ids" class="lumens-button" ng-click="barClick(id_btn)">{{i18n[id_btn]}}</a>
+<div ng-controller="DesginCmdCtrl">
+    <div class="lumens-button-bar">
+        <a ng-repeat="id_btn in ['id_new', 'id_open', 'id_save', 'id_deploy', 'id_active', 'id_close']" class="lumens-button" ng-click="onCommand(id_btn)">{{i18n[id_btn]}}</a>
         <a class="lumens-button lumens-button-delete" ng-click="barClick('id_delete')">{{i18n.id_delete}}</a>
     </div>
-    <div id="projectlist_dialog" class="lumens_bootstrap"></div>
+    <div id="project_dialog" class="lumens_bootstrap"></div>
 </div>

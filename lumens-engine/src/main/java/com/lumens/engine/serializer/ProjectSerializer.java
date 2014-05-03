@@ -282,8 +282,22 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
                 Entry<String, Value> entry = it.next();
                 jGenerator.writeStartObject();
                 jGenerator.writeStringField("name", entry.getKey());
-                jGenerator.writeStringField("type", entry.getValue().type().toString());
-                jGenerator.writeStringField("value", entry.getValue().toString());
+                Value v = entry.getValue();
+                jGenerator.writeStringField("type", v.type().toString());
+                if (v.isByte())
+                    jGenerator.writeNumberField("value", v.getByte());
+                else if (v.isShort())
+                    jGenerator.writeNumberField("value", v.getShort());
+                else if (v.isInt())
+                    jGenerator.writeNumberField("value", v.getInt());
+                else if (v.isLong())
+                    jGenerator.writeNumberField("value", v.getLong());
+                else if (v.isFloat())
+                    jGenerator.writeNumberField("value", v.getFloat());
+                else if (v.isDouble())
+                    jGenerator.writeNumberField("value", v.getDouble());
+                else
+                    jGenerator.writeStringField("value", v.toString());
                 jGenerator.writeEndObject();
             }
         }

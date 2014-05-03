@@ -4,23 +4,23 @@
 
 function buildDataFormatList($parent, component) {
     /*var titleContainer = new Lumens.SplitLayout($parent).configure({
-        mode: "horizontal",
-        disabeAutoChildrenSize: true,
-        useRatio: true,
-        width: "100%",
-        part1Size: "45%",
-        part2Size: "55%"
-    });
-    titleContainer.getElement().css({"min-height": "30px", "border-bottom": "1px solid rgb(214, 214, 214)"});
-    var titleLeftPanel = new Lumens.Panel(titleContainer.getPart1Element()).configure({
-        panelStyle: {width: "100%", "height": "30px", overflow: "hidden", "border-right": "1px solid rgb(214, 214, 214)"}
-    });
-    titleLeftPanel.getElement().append('<div style="padding-left:20px;">Meta Format</div>');
-    var titleRightPanel = new Lumens.Panel(titleContainer.getPart2Element()).configure({
-        panelStyle: {width: "100%", "height": "25px", overflow: "hidden"}
-    });
-    titleRightPanel.getElement().append('<div style="padding-left:20px;">Registered Format</div>');
-    //*/
+     mode: "horizontal",
+     disabeAutoChildrenSize: true,
+     useRatio: true,
+     width: "100%",
+     part1Size: "45%",
+     part2Size: "55%"
+     });
+     titleContainer.getElement().css({"min-height": "30px", "border-bottom": "1px solid rgb(214, 214, 214)"});
+     var titleLeftPanel = new Lumens.Panel(titleContainer.getPart1Element()).configure({
+     panelStyle: {width: "100%", "height": "30px", overflow: "hidden", "border-right": "1px solid rgb(214, 214, 214)"}
+     });
+     titleLeftPanel.getElement().append('<div style="padding-left:20px;">Meta Format</div>');
+     var titleRightPanel = new Lumens.Panel(titleContainer.getPart2Element()).configure({
+     panelStyle: {width: "100%", "height": "25px", overflow: "hidden"}
+     });
+     titleRightPanel.getElement().append('<div style="padding-left:20px;">Registered Format</div>');
+     //*/
     var panelContainer = new Lumens.SplitLayout($parent).configure({
         mode: "horizontal",
         disabeAutoChildrenSize: true,
@@ -117,4 +117,18 @@ function buildDataFormatList($parent, component) {
             });
         }
     }
+}
+
+function ComponentProperty(propOfCategory, propList) {
+    var returnProp = {
+        name: propOfCategory.name,
+        type: propOfCategory.type
+    };
+    $.each(propList, function() {
+        if (propOfCategory.name === this.name) {
+            returnProp.value = this.value;
+            return false;
+        }
+    });
+    return returnProp;
 }

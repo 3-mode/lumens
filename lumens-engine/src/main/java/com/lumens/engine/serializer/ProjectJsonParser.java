@@ -191,7 +191,7 @@ class ProjectJsonParser {
                 JsonNode nameJson = prop.get("name");
                 JsonNode typeJson = prop.get("type");
                 JsonNode valueJson = prop.get("value");
-                if (isNotNull(nameJson) && isNotNull(typeJson) && isNotNull(valueJson)) {
+                if (isNotNull(valueJson) && isNotNull(nameJson) && isNotNull(typeJson) ) {
                     ds.getPropertyList().put(nameJson.asText(), new Value(Type.parseString(typeJson.asText()), valueJson.asText()));
                 } else
                     throw new RuntimeException("The property of data source is invalid !");

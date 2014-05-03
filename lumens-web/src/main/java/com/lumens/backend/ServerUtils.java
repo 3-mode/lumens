@@ -4,14 +4,13 @@
 package com.lumens.backend;
 
 import com.lumens.io.JsonUtility;
-import java.util.UUID;
 import javax.ws.rs.core.Response;
 import org.codehaus.jackson.JsonGenerator;
 
 public class ServerUtils {
 
-    public static String generateID(String prefix) {
-        return prefix + '-' + UUID.randomUUID().toString();
+    public static long generateID() {
+        return System.currentTimeMillis();
     }
 
     public static Response getErrorMessageResponse(String error) {

@@ -14,8 +14,8 @@ Lumens.directives.directive("dynamicPropertyForm", function() {
                 return scope[bindVar];
             }
             scope.$watch(getStringValue, function(compiledTmpl) {
+                element.empty();
                 if (compiledTmpl) {
-                    element.empty();
                     element.append(compiledTmpl);
                 }
             });

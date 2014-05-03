@@ -3,24 +3,28 @@
         {
             "name": "Transformator",
             "id": "id-transformator",
+            "type": "transformator",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png"
         },
         {
             "name": "Router",
             "id": "id_router",
+            "type": "router",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png"
         },
         {
             "name": "Spliter",
             "id": "id_spliter",
+            "type": "spliter",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png"
         },
         {
             "name": "Composer ",
             "id": "id_composer",
+            "type": "composer",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png"
         }

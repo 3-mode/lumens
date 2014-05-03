@@ -112,6 +112,7 @@ a, a:focus, a:hover {
     -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
     background-color: #3276b1; /*Use an background-image to work on IE7,8 */
+    color:white !important;
 }
 .lumens .lumens-v-active {
     border-left: 1px solid rgb(61, 61, 61);
@@ -205,6 +206,7 @@ a, a:focus, a:hover {
 /*** LUMENS secondary menu styles */
 .lumens .lumens-menu-container {
     position: relative;
+    z-index: 10;
     overflow-y: auto;
     overflow-x: hidden;
     border-right: 1px solid rgb(214, 214, 214);
@@ -287,19 +289,18 @@ a, a:focus, a:hover {
     height: 40px; 
     width: 100%;
     cursor: pointer;
-    background-color: rgb(218, 218, 218);
-    border-top: 1px solid rgb(230, 230, 230);
+    background-color: rgb(240, 240, 240);
     border-bottom: 1px solid rgb(184, 184, 184);
     color: #4C4C4C;
-    border-radius:8px;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;   
+    border-radius:12px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;   
 }
 .lumens .lumens-accordion-content {
     display: block;
     list-style-type: none;
-    padding-top: 5px;
-    padding-bottom: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px;
     padding-left: 0px;
     margin: 0;
 }
@@ -561,22 +562,23 @@ svg path {
 }
 .lumens .lumens-button-bar {
     height: 46px;
-    padding-left: 12px;
     display: block;
     color:white !important;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-    border-bottom: 1px solid rgb(214, 214, 214);
-    -moz-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.1), inset -1px 0 5px rgba(40, 40, 40, 0.1);
-    -webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.1), inset -1px 0 5px rgba(40, 40, 40, 0.1);
-    box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.1), inset -1px 0 5px rgba(40, 40, 40, 0.1); 
+    width: 100%;
+    cursor: pointer;
+    background-color: rgb(240, 240, 240);
+    border-bottom: 1px solid rgb(184, 184, 184);
+    border-radius: 12px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
 }
 .lumens .lumens-button {
     cursor: pointer;
     display: inline-block;
-    padding: 6px 15px;
+    padding: 5px 12px;
     margin-top: 8px;
     margin-left: 10px;
-    font-size: 16px !important;
+    font-size: 15px !important;
     text-align: center;
     color: #fff;
     background-color: #428bca;
@@ -586,7 +588,16 @@ svg path {
 }
 .lumens .lumens-button-delete {
     background-color: #B8B8B8 !important;
+    float: right;
+    margin-right: 10px;
 }
 .lumens .lumens-button:hover {
     background-color: #3276b1 !important;
+}
+@media (min-width: 100px) {
+    .lumens .lumens-message {
+        width: 500px;
+        margin: 30px auto;
+        z-index: 2000;
+    }
 }

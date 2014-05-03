@@ -30,35 +30,41 @@
 <table style="margin-top: 10px;">
     <tbody>
         <tr>
+            <td class="label-style must">{{componentI18N.Name}}</td>
+            <td class="value-style-colspan-3" colspan="3">
+                <input type="text" ng-model="componentProps.Name.value"/>
+            </td>
+        </tr>
+        <tr>
             <td class="label-style must">{{componentI18N.WSDL}}</td>
             <td class="value-style-colspan-3" colspan="3">
-                <input type="text" ng-model="componentProps.WSDL"/></td>
+                <input type="text" ng-model="componentProps.WSDL.value"/></td>
         </tr>
         <tr>
             <td class="label-style">{{componentI18N.User}}</td>
             <td class="value-style">
-                <input type="text" ng-model="componentProps.User"/></td>
+                <input type="text" ng-model="componentProps.User.value"/></td>
             <td class="label-style">{{componentI18N.Password}}</td>
             <td class="value-style">
-                <input type="password" ng-model="componentProps.Password"/></td>
+                <input type="password" ng-model="componentProps.Password.value"/></td>
         </tr>
         <tr>
             <td class="label-style">{{componentI18N.ProxyAddress}}</td>
             <td class="value-style">
-                <input type="text" ng-model="componentProps.ProxyAddress"/>
+                <input type="text" ng-model="componentProps.ProxyAddress.value"/>
             </td>
             <td class="label-style">{{componentI18N.ProxyPort}}</td>
             <td class="value-style">
-                <input type="number" ng-model="componentProps.ProxyPort"/>
+                <input type="number" ng-model="componentProps.ProxyPort.value"/>
             </td>
         </tr>
         <tr>
             <td class="label-style">{{componentI18N.ProxyUser}}</td>
             <td class="value-style">
-                <input type="text" ng-model="componentProps.ProxyUser"/></td>
+                <input type="text" ng-model="componentProps.ProxyUser.value"/></td>
             <td class="label-style">{{componentI18N.ProxyPassword}}</td>
             <td class="value-style">
-                <input type="password" ng-model="componentProps.ProxyPassword"/>
+                <input type="password" ng-model="componentProps.ProxyPassword.value"/>
             </td>
         </tr>
         <tr>
@@ -67,7 +73,7 @@
         <tr>
             <td class="label-style">{{componentI18N.Description}}</td>
             <td class="value-textarea-style-colspan-3" colspan="3">
-                <textarea ng-model="componentProps.Description">{{componentProps.Description}}</textarea>
+                <textarea ng-model="componentProps.Description.value">{{componentProps.Description.value}}</textarea>
             </td>
         </tr>
     </tbody>

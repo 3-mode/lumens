@@ -19,6 +19,7 @@ import com.lumens.model.serializer.ElementSerializer;
 import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.Pair;
 import com.lumens.backend.ServerUtils;
+import com.lumens.backend.ServiceConstants;
 import com.lumens.backend.sql.DAOFactory;
 import com.lumens.backend.sql.dao.ProjectDAO;
 import com.lumens.backend.sql.entity.Project;
@@ -45,16 +46,8 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonNode;
 
 @Path("/project")
-public class ProjectService {
+public class ProjectService implements ServiceConstants {
 
-    public static final String UTF_8 = "UTF-8";
-    public static final String PROJECT_CREATE = "project-create";
-    public static final String PROJECT_UPDATE = "project-update";
-    public static final String PROJECT_EXECUTE = "project-execute";
-    public static final String PROJECT_ACTIVE = "project-active";
-    public static final String CONTENT = "content";
-    public static final String ACTION = "action";
-    public static final String CURRENT__EDITING__PROJECT = "Current_Editing_Project";
     @Context
     private ServletContext context;
 
@@ -62,19 +55,19 @@ public class ProjectService {
     @Path("{projectID}")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response processProject(@PathParam("projectID") String projectID, String message, @Context HttpServletRequest req) {
+    public Response processProject(@PathParam("projectID") long projectID, String message, @Context HttpServletRequest req) {
         JsonNode messageJson = JsonUtility.createJson(message);
         JsonNode contentJson = messageJson.get(CONTENT);
         JsonNode actionJson = messageJson.get(ACTION);
         if (JsonUtility.isNotNull(actionJson)) {
             String action = actionJson.asText();
-            if (PROJECT_CREATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
+            if (CREATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
                 return createProject(contentJson);
-            else if (PROJECT_UPDATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
+            else if (UPDATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
                 return updateProject(projectID, contentJson);
-            else if (PROJECT_EXECUTE.equalsIgnoreCase(action)) {
+            else if (EXECUTE.equalsIgnoreCase(action)) {
                 return executeProjectJob(projectID);
-            } else if (PROJECT_ACTIVE.equalsIgnoreCase(action)) {
+            } else if (ACTIVE.equalsIgnoreCase(action)) {
                 return activeProject(projectID, req);
             }
         }
@@ -89,13 +82,13 @@ public class ProjectService {
         JsonNode actionJson = messageJson.get(ACTION);
         if (JsonUtility.isNotNull(actionJson)) {
             String action = actionJson.asText();
-            if (PROJECT_CREATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
+            if (CREATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
                 return createProject(contentJson);
         }
         return Response.ok().entity(String.format("{ \"message\": %s }", "Fail")).build();
     }
 
-    private Response executeProjectJob(String projectID) {
+    private Response executeProjectJob(long projectID) {
         try {
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
             Project project = pDAO.getProject(projectID);
@@ -136,7 +129,7 @@ public class ProjectService {
             TransformProject project = new TransformProject();
             new ProjectSerializer(project).readFromJson(bais);
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
-            String projectId = pDAO.create(new Project(ServerUtils.generateID("P"), project.getName(), project.getDescription(), contentJson.asText()));
+            long projectId = pDAO.create(new Project(ServerUtils.generateID(), project.getName(), project.getDescription(), contentJson.asText()));
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
@@ -144,7 +137,7 @@ public class ProjectService {
             json.writeObjectFieldStart("result_content");
             json.writeArrayFieldStart("project");
             json.writeStartObject();
-            json.writeStringField("id", projectId);
+            json.writeNumberField("id", projectId);
             json.writeStringField("name", project.getName());
             json.writeStringField("description", project.getDescription());
             json.writeEndObject();
@@ -157,13 +150,13 @@ public class ProjectService {
         }
     }
 
-    private Response updateProject(String projectID, JsonNode contentJson) {
+    private Response updateProject(long projectID, JsonNode contentJson) {
         try {
             ByteArrayInputStream bais = new ByteArrayInputStream(contentJson.asText().getBytes(UTF_8));
             TransformProject project = new TransformProject();
             new ProjectSerializer(project).readFromJson(bais);
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
-            String projectId = pDAO.update(new Project(projectID, project.getName(), project.getDescription(), contentJson.asText()));
+            long projectId = pDAO.update(new Project(projectID, project.getName(), project.getDescription(), contentJson.asText()));
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
@@ -171,7 +164,7 @@ public class ProjectService {
             json.writeObjectFieldStart("result_content");
             json.writeArrayFieldStart("project");
             json.writeStartObject();
-            json.writeStringField("id", projectId);
+            json.writeNumberField("id", projectId);
             json.writeStringField("name", project.getName());
             json.writeStringField("description", project.getDescription());
             json.writeEndObject();
@@ -184,7 +177,7 @@ public class ProjectService {
         }
     }
 
-    private Response activeProject(String projectID, HttpServletRequest req) {
+    private Response activeProject(long projectID, HttpServletRequest req) {
         Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
         if (attr != null) {
             try {
@@ -244,7 +237,7 @@ public class ProjectService {
         ProjectDAO pDAO = DAOFactory.getProjectDAO();
         for (Project project : pDAO.getAllShortProject()) {
             json.writeStartObject();
-            json.writeStringField("id", project.id);
+            json.writeNumberField("id", project.id);
             json.writeStringField("name", project.name);
             json.writeStringField("description", project.description);
             json.writeEndObject();
@@ -258,7 +251,7 @@ public class ProjectService {
     @GET
     @Path("{projectID}")
     @Produces("application/json")
-    public Response getProject(@PathParam("projectID") String projectID, @Context HttpServletRequest req) throws IOException {
+    public Response getProject(@PathParam("projectID") long projectID, @Context HttpServletRequest req) throws IOException {
         JsonUtility utility = JsonUtility.createJsonUtility();
         JsonGenerator json = utility.getGenerator();
         json.writeStartObject();
@@ -277,7 +270,7 @@ public class ProjectService {
             req.getSession().setAttribute(CURRENT__EDITING__PROJECT, new Pair<>(projectID, projectInstance));
 
             json.writeStartObject();
-            json.writeStringField("id", project.id);
+            json.writeNumberField("id", project.id);
             json.writeStringField("name", project.name);
             json.writeStringField("description", project.description);
             json.writeStringField("data", project.data);

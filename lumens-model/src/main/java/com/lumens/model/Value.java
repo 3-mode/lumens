@@ -266,7 +266,7 @@ public class Value {
     public boolean isNull() {
         return value == null;
     }
-
+    
     private Object parseString(String value) {
         if (isBoolean()) {
             return Boolean.parseBoolean(value);

@@ -215,6 +215,7 @@ Lumens.Panel = Class.$extend({
 Lumens.ComponentPanel = Lumens.Panel.$extend({
     __init__: function(container) {
         this.$super(container);
+        this.componentCounter = 0;
         this.componentList = [];
     },
     configure: function(config) {
@@ -245,20 +246,44 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
         });
         return this;
     },
+    getComponentList: function() {
+        return this.componentList;
+    },
     addComponent: function(position, category_info, component_info) {
+        component_info = this.initComponentInfo(category_info, component_info);
         var component = new Lumens.DataComponent(this.getElement(), {
             x: position.x, y: position.y,
             category_info: category_info,
             component_info: component_info,
-            short_desc: (component_info && component_info.name) ? component_info.name : "[to do]",
+            short_desc: component_info.name,
             onComponentDblclick: this.onComponentDblclick
         });
         this.componentList.push(component);
         return component;
     },
     emptyComponent: function() {
+        this.componentCounter = 0;
         this.getElement().empty();
         componentList = [];
+    },
+    initComponentInfo: function(category_info, component_info) {
+        if (component_info)
+            return component_info
+        component_info = {
+            id: category_info.id,
+            name: "[ to do " + (++this.componentCounter) + " ]",
+            description: "",
+            target: [],
+            position: {x: 0, y: 0}
+        };
+        if (category_info.type === "datasource") {
+            component_info.property = [];
+            component_info.format_list = [];
+        }
+        else {
+            component_info.transform_rule_entry = [];
+        }
+        return component_info;
     }
 });
 

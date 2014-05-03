@@ -1,5 +1,6 @@
 {
     "SoapName": "SOAP",
+    "Name": "Name",
     "WSDL": "WSDL Address",
     "User": "User",
     "Password": "Password",

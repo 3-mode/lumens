@@ -14,7 +14,15 @@ jQuery.extend({
         return parseFloat(value.substring(0, value.length - 1)) / 100.0;
     }
 });
-
+if (typeof String.prototype.format !== 'function') {
+    String.prototype.format = function() {
+        var formatted = this;
+        for (var arg in arguments) {
+            formatted = formatted.replace("{" + arg + "}", arguments[arg]);
+        }
+        return formatted;
+    };
+}
 if (typeof String.prototype.endsWith !== 'function') {
     String.prototype.endsWith = function(suffix) {
         return this.indexOf(suffix, this.length - suffix.length) !== -1;
@@ -96,6 +104,7 @@ Raphael.fn.connection = function(obj1, obj2, line) {
         return connection;
     }
 };
+
 if (!window.Lumens)
     window.Lumens = {version: 1.0};
 

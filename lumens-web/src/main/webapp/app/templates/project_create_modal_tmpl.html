@@ -1,0 +1,26 @@
+<div id="projectCreateModal" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" ng-controller="ProjectCreateCtrl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">New Project</h4>
+            </div>
+            <div class="modal-body table-responsive" ng-init="projectDescription=''">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="inputProjectName">Name</label>
+                        <input ng-model="projectName" type="text" class="form-control" id="inputProjectName" placeholder="Project name">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputProjectDescription">Description</label>
+                        <textarea ng-model="projectDescription" class="form-control" rows="3" id="inputProjectDescription"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="createProject()">Create Project</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

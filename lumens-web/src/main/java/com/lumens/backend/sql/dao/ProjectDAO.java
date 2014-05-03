@@ -24,7 +24,7 @@ public class ProjectDAO extends BaseDAO {
         return super.getTotal("ProjectDAO/total");
     }
 
-    public String create(final Project project) {
+    public long create(final Project project) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus paramTransactionStatus) {
@@ -37,7 +37,7 @@ public class ProjectDAO extends BaseDAO {
                     }, new PreparedStatementCallback<Boolean>() {
                         @Override
                         public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                            ps.setString(1, project.id);
+                            ps.setLong(1, project.id);
                             ps.setString(2, project.name);
                             ps.setString(3, project.description);
                             ps.setString(4, project.data);
@@ -54,7 +54,7 @@ public class ProjectDAO extends BaseDAO {
         return project.id;
     }
 
-    public String update(final Project project) {
+    public long update(final Project project) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus paramTransactionStatus) {
@@ -70,7 +70,7 @@ public class ProjectDAO extends BaseDAO {
                             ps.setString(1, project.name);
                             ps.setString(2, project.description);
                             ps.setString(3, project.data);
-                            ps.setString(4, project.id);
+                            ps.setLong(4, project.id);
                             return ps.execute();
                         }
                     });
@@ -95,7 +95,7 @@ public class ProjectDAO extends BaseDAO {
         return pList;
     }
 
-    public Project getProject(String projectId) {
+    public Project getProject(long projectId) {
         final List<Project> pList = new ArrayList<>();
         jdbcTemplate.query(sqlManager.getSQL("ProjectDAO/FindProject", projectId), new RowCallbackHandler() {
             @Override

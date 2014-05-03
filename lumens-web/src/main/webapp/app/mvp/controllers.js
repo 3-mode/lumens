@@ -28,24 +28,29 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $route, $http, $c
     if (Lumens.system.designView.workspaceLayout)
         Lumens.system.designView.workspaceLayout.remove();
 })
-.controller("DesignViewCtrl", function($scope, $route, $http, $compile,
-DesignNavMenu, DatasourceCategory, InstrumentCategory, DesignButtons, ProjectListModal, ProjectById, FormatList) {
+.controller("DesignViewCtrl", function(
+$scope, $route, $http, $compile,
+DesignNavMenu, SuccessTemplate, WarningTemplate, PropFormTemplate,
+DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     // Test services
     console.log("FormatList: ", FormatList.getIN({component_name: 'Database:@()!- HR'}));
-    console.log("ProjectById:", ProjectById.get({project_id: "P-d05a3113-d440-4b32-9723-b261eeaf284c"}))
     // Set the default page view as dashboard view
-    $scope.i18n = Lumens.i18n;
+    var i18n = $scope.i18n = Lumens.i18n;
+    var desgin = $scope.desgin = {};
     // ******* Design View ------------------------------------------------------------>
     Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
     Lumens.system.designView.workspaceLayout = new Lumens.SplitLayout(Lumens.system.theLayout.getPart2Element()).configure({
         mode: "horizontal",
         part1Size: 220
     });
-    Lumens.system.designView.leftPanel = new Lumens.Panel(Lumens.system.designView.workspaceLayout.getPart1Element())
+    desgin.leftPanel = new Lumens.Panel(Lumens.system.designView.workspaceLayout.getPart1Element())
     .configure({
         panelClass: ["lumens-menu-container"],
         panelStyle: {width: "100%", height: "100%"}
     });
+    // Load success/warning template
+    $scope.messageBox = new Lumens.Message({success: SuccessTemplate, warning: WarningTemplate});
+
     // Load menu category
     DesignNavMenu.get(function(menu) {
         // Load data source category
@@ -66,33 +71,15 @@ DesignNavMenu, DatasourceCategory, InstrumentCategory, DesignButtons, ProjectLis
                     $.each(instrument_items.items, function() {
                         $scope.compCagegory[this.id] = this;
                     });
-                    Lumens.system.designView.barPanel = new Lumens.SplitLayout(Lumens.system.designView.workspaceLayout.getPart2Element()).configure({
+                    desgin.barPanel = new Lumens.SplitLayout(Lumens.system.designView.workspaceLayout.getPart2Element()).configure({
                         mode: "vertical",
                         part1Size: 48
                     });
                     DesignButtons.get(function(design_command_tmpl) {
-                        var buttonBar = $compile(design_command_tmpl)($scope).appendTo(Lumens.system.designView.barPanel.getPart1Element());
-                        $scope.barClick = function(id) {
-                            if ("id_open" === id) {
-                                if ($('#projectListModal').length === 0) {
-                                    ProjectListModal.get(function(projects_modal_tmpl) {
-                                        var projectListDialog = buttonBar.find("#projectlist_dialog");
-                                        projectListDialog.append($compile(projects_modal_tmpl)($scope));
-                                        $('#projectListModal').on("hidden.bs.modal", function() {
-                                            projectListDialog.empty();
-                                        }).modal({backdrop: "static"});
-                                    });
-                                }
-                            }
-                            else if ("id_new" === id) {
-                                $scope.projectOperator.create();
-                            }
-                            else
-                                console.log("Clicked:", id);
-                        };
+                        $compile(design_command_tmpl)($scope).appendTo(desgin.barPanel.getPart1Element());
                     });
 
-                    Lumens.system.designView.designAndInfoPanel = new Lumens.ResizableVSplitLayoutExt(Lumens.system.designView.barPanel.getPart2Element())
+                    desgin.designAndInfoPanel = new Lumens.ResizableVSplitLayoutExt(desgin.barPanel.getPart2Element())
                     .configure({
                         mode: "vertical",
                         useRatio: true,
@@ -100,40 +87,46 @@ DesignNavMenu, DatasourceCategory, InstrumentCategory, DesignButtons, ProjectLis
                     });
                     // Create desgin workspace panel
                     $scope.currentComponent = {name: "to select"};
-                    Lumens.system.designView.designPanel = new Lumens.ComponentPanel(Lumens.system.designView.designAndInfoPanel.getPart1Element())
+                    desgin.designPanel = new Lumens.ComponentPanel(desgin.designAndInfoPanel.getPart1Element())
                     .configure({
                         panelStyle: {width: "100%", height: "100%"},
                         onComponentDblclick: function(component) {
+                            console.log("Dblclick:", component);
                             var config = component.configure;
-                            console.log(config);
                             $scope.$apply(function() {
                                 $scope.componentForm = $compile(config.category_info.html)($scope);
                                 $scope.componentI18N = config.category_info.i18n;
-                                $scope.componentProps = {"Description": (config.component_info && config.component_info.description) ? config.component_info.description : ""};
+                                $scope.componentProps = {
+                                    "Description": {value: (config.component_info && config.component_info.description) ? config.component_info.description : ""},
+                                    "Name": {value: (config.component_info && config.component_info.name) ? config.component_info.name : ""}
+                                };
                                 if (config.component_info) {
+                                    $scope.currentCategory = config.category_info;
+                                    $.each(config.category_info.property, function() {
+                                        $scope.componentProps[this.name] = ComponentProperty(this, config.component_info.property);
+                                    });
                                     $scope.currentComponent = config.component_info;
-                                    if (config.component_info.property) {
-                                        $.each(config.component_info.property, function() {
-                                            $scope.componentProps[this.name] = this.value;
-                                        });
-                                    }
                                 }
                                 else {
-                                    $scope.currentComponent = {name: "to do"};
+                                    $scope.currentComponent = {name: "to select"};
                                 }
                             });
                         },
                         onBeforeComponentAdd: function() {
-                            
+                            if ($scope.project)
+                                return true;
+                            $scope.messageBox.showWarning(i18n.id_no_project_warning, desgin.designPanel.getElement());
+                            return false;
                         },
                         onAfterComponentAdd: function(component) {
                             console.log("Added compnoent:", component);
+                            $scope.projectOperator.add(component.configure.component_info, component.configure.category_info.type);
                         }
                     });
-                    $scope.projectOperator = new Lumens.ProjectOperator($scope.compCagegory, Lumens.system.designView.designPanel, $scope);
+                    $scope.projectOperator = new Lumens.ProjectOperator($scope.compCagegory, desgin.designPanel, $scope);
                     // Create left menu
-                    Lumens.system.designView.navMenu = new Lumens.NavMenu({
-                        container: Lumens.system.designView.leftPanel.getElement(),
+                    desgin.navMenu = new Lumens.NavMenu({
+                        container: desgin.leftPanel.getElement(),
                         width: "100%",
                         height: "auto"
                     }).configure(menu, function(item, data) {
@@ -144,13 +137,13 @@ DesignNavMenu, DatasourceCategory, InstrumentCategory, DesignButtons, ProjectLis
                     });
 
                     // Create info form panel
-                    Lumens.system.designView.designAndInfoPanel.getTitleElement().append($compile('<b>Name: {{project.name}}</b>')($scope));
-                    Lumens.system.designView.tabsContainer = new Lumens.Panel(Lumens.system.designView.designAndInfoPanel.getPart2Element())
+                    desgin.designAndInfoPanel.getTitleElement().append($compile('<b>Name: {{project.name}}</b>')($scope));
+                    desgin.tabsContainer = new Lumens.Panel(desgin.designAndInfoPanel.getPart2Element())
                     .configure({
-                        panelStyle: {"height": "100%", "width": "100%", "overflow-y": "scroll", "overflow-x": "auto"}
+                        panelStyle: {"height": "100%", "width": "100%", "position": "relative", "overflow-y": "scroll", "overflow-x": "auto"}
                     });
                     function tabSummary($tabContent) {
-                        Lumens.system.designView.tabs.projSummaryList = new Lumens.List($tabContent).configure({
+                        desgin.tabs.projSummaryList = new Lumens.List($tabContent).configure({
                             IdList: [
                                 "Description",
                                 "Resources",
@@ -184,24 +177,31 @@ DesignNavMenu, DatasourceCategory, InstrumentCategory, DesignButtons, ProjectLis
                         });
                     }
                     function tabConfiguration($tabContent) {
-                        Lumens.system.designView.tabs.compPropsList = new Lumens.List($tabContent).configure({
+                        desgin.tabs.compPropsList = new Lumens.List($tabContent).configure({
                             IdList: [
                                 "ComponentProps"
                             ],
                             titleList: [
-                                $compile('<span data-bind="currentComponent.name">{{currentComponent.name}}</span>')($scope)
+                                $compile('<span data-bind="currentCategory.name">{{currentCategory.name}}</span>')($scope)
                             ],
-                            contentList: [
-                                $compile('<div dynamic-property-form="componentForm"/>')($scope)
-                            ]
+                            buildContent: function(itemContent, isExpand, title) {
+                                if (isExpand) {
+                                    var itemID = title.attr("id");
+                                    if (itemID === "ComponentProps") {
+                                        PropFormTemplate.get(function(propFormTmpl) {
+                                            itemContent.append($compile(propFormTmpl)($scope));
+                                        })
+                                    }
+                                }
+                            }
                         });
                     }
                     function tabFormatList($tabContent) {
                         $tabContent.append($compile('<div dynamic-format-list="currentComponent"/>')($scope));
 
                     }
-                    Lumens.system.designView.tabs = new Lumens.TabPanel(Lumens.system.designView.tabsContainer.getElement());
-                    Lumens.system.designView.tabs.configure({
+                    desgin.tabs = new Lumens.TabPanel(desgin.tabsContainer.getElement());
+                    desgin.tabs.configure({
                         tab: [
                             {id: "id-project-info", label: "Project Summary", content: tabSummary},
                             {id: "id-component-selected-props", label: "Component Properties", content: tabConfiguration},
@@ -214,25 +214,73 @@ DesignNavMenu, DatasourceCategory, InstrumentCategory, DesignButtons, ProjectLis
     });
     // <******* Design View ------------------------------------------------------------
 })
-.controller("ProjectListCtrl", function($scope, $element, ProjectList, ProjectById) {
-    var projectListContent = $element.find(".modal-body");
+.controller("DesginCmdCtrl", function($scope, $element, $compile, ProjectListModal, ProjectCreateModal, ProjectSave) {
+    // Handle desgin command button event
+    console.log("In DesginCmdCtrl", $element);
+    var i18n = $scope.$parent.i18n;
     var projectOperator = $scope.$parent.projectOperator;
-    $scope.selectProject = function(event) {
+    var messageBoxParent = $scope.$parent.desgin.designPanel.getElement();
+    var messageBox = $scope.$parent.messageBox;
+    $scope.onCommand = function(id) {
+        if ("id_open" === id) {
+            if ($element.find('#projectListModal').length === 0) {
+                ProjectListModal.get(function(project_list_modal_tmpl) {
+                    var projectListDialog = $element.find("#project_dialog");
+                    projectListDialog.append($compile(project_list_modal_tmpl)($scope));
+                    $('#projectListModal').on("hidden.bs.modal", function() {
+                        projectListDialog.empty();
+                    }).modal({backdrop: "static"});
+                });
+            }
+        }
+        else if ("id_new" === id) {
+            if ($element.find('#projectCreateModal').length === 0) {
+                ProjectCreateModal.get(function(project_create_modal_tmpl) {
+                    var projectCreateDialog = $element.find("#project_dialog");
+                    projectCreateDialog.append($compile(project_create_modal_tmpl)($scope));
+                    $('#projectCreateModal').on("hidden.bs.modal", function() {
+                        projectCreateDialog.empty();
+                    }).modal({backdrop: "static"});
+                });
+            }
+        }
+        else if ("id_save" === id) {
+            projectOperator.sync();
+            console.log("Saving project:", projectOperator.get());
+            console.log("Saveing propery:", $scope.$parent.componentProps);
+            ProjectSave.save(projectOperator.get(), function(response) {
+                console.log("Save project status:", response);
+                if (response.status === "OK") {
+                    var project = response.result_content.project[0];
+                    projectOperator.setId(project.id);
+                    messageBox.showSuccess(i18n.id_save_project.format(project.name), messageBoxParent);
+                }
+            });
+        }
+        else
+            console.log("Clicked:", id);
+    };
+})
+.controller("ProjectListCtrl", function($scope, $element, ProjectList, ProjectById) {
+    var i18n = $scope.$parent.i18n;
+    var projectOperator = $scope.$parent.projectOperator;
+    var messageBox = $scope.$parent.messageBox;
+    var projectListContent = $element.find(".modal-body");
+    $scope.selectProject = function(index, event) {
+        $scope.selectIndex = index;
         $scope.currentProjectId = $(event.target).parent().attr("project-id");
-        projectListContent.find(".lumens-v-active").removeClass("lumens-v-active");
-        projectListContent.find("tr[project-id='" + $scope.currentProjectId + "']").addClass("lumens-v-active");
     };
     $scope.openProject = function() {
-        console.log("Current project:", $scope.currentProjectId);
+        console.log("Opening project:", $scope.currentProjectId);
         if ($scope.currentProjectId) {
             ProjectById.get({project_id: $scope.currentProjectId}, function(projectData) {
                 if (projectOperator)
-                    projectOperator.import(projectData);
+                    projectOperator.import($scope.currentProjectId, projectData);
             });
         }
         else {
-            // TODO
-            console.error("Error no project selected !");
+            messageBox.showWarning(i18n.id_no_project_select_warning, projectListContent);
+            return;
         }
         $element.modal("hide");
     };
@@ -241,4 +289,17 @@ DesignNavMenu, DatasourceCategory, InstrumentCategory, DesignButtons, ProjectLis
         projectListContent.find("#projectLoading").remove();
         projectListContent.children().show();
     });
+})
+.controller("ProjectCreateCtrl", function($scope, $element) {
+    // Handle desgin command button event
+    console.log("In ProjectCreateCtrl", $element);
+    var i18n = $scope.$parent.i18n;
+    var messageBoxParent = $scope.$parent.desgin.designPanel.getElement();
+    var messageBox = $scope.$parent.messageBox;
+    var projectOperator = $scope.$parent.projectOperator;
+    $scope.createProject = function() {
+        projectOperator.create($scope.projectName, $scope.projectDescription);
+        messageBox.showSuccess(i18n.id_new_project_successfully, messageBoxParent);
+        $element.modal("hide");
+    };
 });

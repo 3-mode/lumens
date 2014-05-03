@@ -18,7 +18,7 @@ select id, name, description from project
         </sql>
         <sql name="FindProject">
 <![CDATA[
-select id, name, description, data from project where id='%s'
+select id, name, description, data from project where id = %d
 ]]>
         </sql>
         <sql name="CreateProject">
@@ -28,7 +28,7 @@ insert into project (id, name, description, data) values (?,?,?,?)
         </sql>
         <sql name="UpdateProject">
 <![CDATA[
-update project set name=?, description=?, data=? where id=?
+update project set name=?, description=?, data=? where id = ?
 ]]>
         </sql>
     </database-access-object>

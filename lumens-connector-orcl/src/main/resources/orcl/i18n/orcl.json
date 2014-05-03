@@ -1,5 +1,6 @@
 {
     "OracleName": "Oracle",
+    "Name": "Name",
     "OJDBC": "JDBC Driver",
     "ConnectionURL": "JDBC URL",
     "User": "User",
