@@ -3,13 +3,17 @@
  */
 package com.lumens.engine.component;
 
+import com.lumens.processor.transform.TransformRule;
+
 /**
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public interface RuleComponent {
 
-    public void registerRule(TransformRuleEntry rule);
+    public TransformRule registerRule(FormatEntry srcFormatEntry, FormatEntry destFormatEntry);
+
+    public TransformRule registerRule(TransformRuleEntry rule);
 
     public TransformRuleEntry removeRule(String ruleName);
 }

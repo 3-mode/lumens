@@ -191,10 +191,9 @@ class ProjectJsonParser {
                 JsonNode nameJson = prop.get("name");
                 JsonNode typeJson = prop.get("type");
                 JsonNode valueJson = prop.get("value");
-                if (isNotNull(valueJson) && isNotNull(nameJson) && isNotNull(typeJson) ) {
+                if (isNotNull(valueJson) && isNotNull(nameJson) && isNotNull(typeJson)) {
                     ds.getPropertyList().put(nameJson.asText(), new Value(Type.parseString(typeJson.asText()), valueJson.asText()));
-                } else
-                    throw new RuntimeException("The property of data source is invalid !");
+                }
             }
         }
     }
@@ -265,12 +264,13 @@ class ProjectJsonParser {
                 JsonNode nameJson = transformRuleEntryJson.get("name");
                 JsonNode srcJson = transformRuleEntryJson.get("source_name");
                 JsonNode tgtJson = transformRuleEntryJson.get("target_name");
-                if (isNotNull(nameJson) && isNotNull(srcJson) && isNotNull(tgtJson)) {
+                JsonNode srcFmtJson = transformRuleEntryJson.get("source_format_name");
+                JsonNode tgtFmtJson = transformRuleEntryJson.get("target_format_name");
+                if (isNotNull(nameJson) && isNotNull(srcJson) && isNotNull(tgtJson) && isNotNull(srcFmtJson) && isNotNull(tgtFmtJson)) {
                     JsonNode transformRuleJson = transformRuleEntryJson.get("transform_rule");
-                    String targetName = tgtJson.asText();
-                    TransformRule tr = readTransformRuleFromJson(dt, targetName, transformRuleJson);
+                    TransformRule tr = readTransformRuleFromJson(dt, tgtJson.asText(), tgtFmtJson.asText(), transformRuleJson);
                     if (tr != null) {
-                        TransformRuleEntry transformRuleEntry = new TransformRuleEntry(nameJson.asText(), srcJson.asText(), targetName, tr);
+                        TransformRuleEntry transformRuleEntry = new TransformRuleEntry(nameJson.asText(), srcJson.asText(), srcFmtJson.asText(), tgtJson.asText(), tgtFmtJson.asText(), tr);
                         dt.registerRule(transformRuleEntry);
                     }
                 }
@@ -278,23 +278,20 @@ class ProjectJsonParser {
         }
     }
 
-    private TransformRule readTransformRuleFromJson(DataTransformator dt, String targetName, JsonNode transformRuleJson) {
+    private TransformRule readTransformRuleFromJson(DataTransformator dt, String targetName, String targetFmtName, JsonNode transformRuleJson) {
         if (isNotNull(transformRuleJson)) {
             // get Root transform rule item
             JsonNode transformRuleItemJson = transformRuleJson.get("transform_rule_item");
             if (isNotNull(transformRuleItemJson)) {
-                List<String> targets = targetList.get(dt.getName());
-                for (String target : targets) {
-                    TransformComponent tComp = tComponentCache.get(target);
-                    if (tComp instanceof RegisterFormatComponent) {
-                        RegisterFormatComponent rc = (RegisterFormatComponent) tComp;
-                        FormatEntry fEntry = rc.getRegisteredFormatList(Direction.IN).get(targetName);
-                        if (fEntry != null) {
-                            Format format = fEntry.getFormat();
-                            TransformRule rule = new TransformRule(format);
-                            readTransformRuleItemFromJson(rule, transformRuleItemJson, null);
-                            return rule;
-                        }
+                TransformComponent tComp = tComponentCache.get(targetName);
+                if (tComp instanceof RegisterFormatComponent) {
+                    RegisterFormatComponent rc = (RegisterFormatComponent) tComp;
+                    FormatEntry fEntry = rc.getRegisteredFormatList(Direction.IN).get(targetFmtName);
+                    if (fEntry != null) {
+                        Format format = fEntry.getFormat();
+                        TransformRule rule = new TransformRule(format);
+                        readTransformRuleItemFromJson(rule, transformRuleItemJson, null);
+                        return rule;
                     }
                 }
             }

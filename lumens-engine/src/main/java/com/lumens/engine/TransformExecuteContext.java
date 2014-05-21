@@ -15,20 +15,20 @@ import java.util.List;
 public class TransformExecuteContext implements ExecuteContext {
 
     private Object input;
-    private String targetName;
+    private String targetFmtName;
     private List<ResultHandler> handlers;
 
     public TransformExecuteContext(String targetName) {
         this(targetName, new ArrayList<ResultHandler>(1));
     }
 
-    public TransformExecuteContext(String targetName, List<ResultHandler> handlers) {
-        this(null, targetName, handlers);
+    public TransformExecuteContext(String targetFmtName, List<ResultHandler> handlers) {
+        this(null, targetFmtName, handlers);
     }
 
-    public TransformExecuteContext(Object input, String targetName, List<ResultHandler> handlers) {
+    public TransformExecuteContext(Object input, String targetFmtName, List<ResultHandler> handlers) {
         this.input = input;
-        this.targetName = targetName;
+        this.targetFmtName = targetFmtName;
         this.handlers = handlers;
     }
 
@@ -38,8 +38,8 @@ public class TransformExecuteContext implements ExecuteContext {
     }
 
     @Override
-    public String getTargetName() {
-        return targetName;
+    public String getTargetFormatName() {
+        return targetFmtName;
     }
 
     @Override

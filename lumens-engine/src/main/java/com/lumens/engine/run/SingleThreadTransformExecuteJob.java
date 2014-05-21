@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author shaofeng wang (shaofeng.cjpw@gmail.com)
+ * @author shaofeng wang (shaofeng.wang@outlook.com)
  */
 public class SingleThreadTransformExecuteJob implements ExecuteJob, Runnable {
 
@@ -42,7 +42,7 @@ public class SingleThreadTransformExecuteJob implements ExecuteJob, Runnable {
             List<StartEntry> startList = project.getStartEntryList();
             for (StartEntry entry : startList) {
                 SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
-                executorStack.push(new TransformExecutor(entry.getStartComponent(), new TransformExecuteContext(entry.getStartName(), handlers)));
+                executorStack.push(new TransformExecutor(entry.getStartComponent(), new TransformExecuteContext(entry.getStartFormatName(), handlers)));
                 while (!executorStack.isEmpty()) {
                     Executor executor = executorStack.pop();
                     List<Executor> tExList = executor.execute();

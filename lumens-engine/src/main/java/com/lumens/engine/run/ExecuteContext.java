@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface ExecuteContext {
 
-    public String getTargetName();
+    public String getTargetFormatName();
 
     public Object getInput();
 

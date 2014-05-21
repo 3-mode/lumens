@@ -13,26 +13,22 @@ public class TransformRuleEntry {
 
     private String name;
     private String sourceName;
-    private String targetSource;
+    private String targetName;
+    private String sourceFmtName;
+    private String targetFmtName;
     private TransformRule rule;
 
-    public TransformRuleEntry(String name, String sourceName, String targetName, TransformRule rule) {
+    public TransformRuleEntry(String name, String sourceName, String sourceFmtName, String targetName, String targetFmtName, TransformRule rule) {
         this.name = name;
         this.sourceName = sourceName;
-        this.targetSource = targetName;
+        this.targetName = targetName;
+        this.sourceFmtName = sourceFmtName;
+        this.targetFmtName = targetFmtName;
         this.rule = rule;
     }
 
-    public TransformRuleEntry(String sourceName, String targetName, TransformRule rule) {
-        this(sourceName + '-' + targetName, sourceName, targetName, rule);
-    }
-
-    public TransformRuleEntry(String name, String sourceName, String targetName) {
-        this(name, sourceName, targetName, null);
-    }
-
-    public TransformRuleEntry(String sourceName, String targetName) {
-        this(sourceName + '-' + targetName, sourceName, targetName, null);
+    public TransformRuleEntry(String sourceName, String sourceFmtName, String targetName, String targetFmtName, TransformRule rule) {
+        this(sourceName + '-' + targetName, sourceName, sourceFmtName, targetName, targetFmtName, rule);
     }
 
     public String getName() {
@@ -47,8 +43,16 @@ public class TransformRuleEntry {
         return this.sourceName;
     }
 
+    public String getSourceFormatName() {
+        return this.sourceFmtName;
+    }
+
     public String getTargetName() {
-        return this.targetSource;
+        return this.targetName;
+    }
+
+    public String getTargetFormatName() {
+        return this.targetFmtName;
     }
 
     public TransformRule getRule() {

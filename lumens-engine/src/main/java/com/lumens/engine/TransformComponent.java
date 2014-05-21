@@ -23,11 +23,17 @@ public interface TransformComponent {
 
     public void targetTo(TransformComponent target);
 
+    public void sourceFrom(TransformComponent target);
+
     public boolean hasTarget();
+    
+    public boolean hasSource();
 
     public boolean isSingleTarget();
 
     public Map<String, TransformComponent> getTargetList();
+
+    public Map<String, TransformComponent> getSourceList();
 
     public boolean isOpen();
 

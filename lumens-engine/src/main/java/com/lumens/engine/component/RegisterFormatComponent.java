@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface RegisterFormatComponent {
 
-    public void registerFormat(String formatEntryName, Format format, Direction direction);
+    public FormatEntry registerFormat(String formatEntryName, Format format, Direction direction);
 
     public FormatEntry removeFormat(String formatEntryName, Direction direction);
 

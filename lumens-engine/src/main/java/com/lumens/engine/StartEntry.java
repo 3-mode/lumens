@@ -10,10 +10,10 @@ package com.lumens.engine;
 public class StartEntry {
 
     private TransformComponent tComponent;
-    private String startEntryName;
+    private String startFormatName;
 
-    public StartEntry(String name, TransformComponent component) {
-        this.startEntryName = name;
+    public StartEntry(String formatName, TransformComponent component) {
+        this.startFormatName = formatName;
         this.tComponent = component;
     }
 
@@ -25,9 +25,9 @@ public class StartEntry {
     }
 
     /**
-     * @return the startEntryName
+     * @return the startFormatName
      */
-    public String getStartName() {
-        return startEntryName;
+    public String getStartFormatName() {
+        return startFormatName;
     }
 }

@@ -6,6 +6,7 @@ import com.lumens.connector.Connector;
 import com.lumens.connector.Direction;
 import com.lumens.connector.database.DatabaseConstants;
 import com.lumens.connector.webservice.soap.SoapConstants;
+import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.component.instrument.DataTransformator;
 import com.lumens.engine.component.TransformRuleEntry;
@@ -26,11 +27,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import junit.framework.TestCase;
 import static junit.framework.TestCase.assertTrue;
 import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
-public class EngineTest extends TestCase implements SoapConstants {
+public class EngineTest extends Assert implements SoapConstants {
 
     class MyResultHandler implements ResultHandler {
 
@@ -47,8 +49,7 @@ public class EngineTest extends TestCase implements SoapConstants {
         }
     }
 
-    public EngineTest(String testName) {
-        super(testName);
+    public EngineTest() {
         AddinEngine ae = new AddinEngine(EngineTest.class.getClassLoader());
         ae.start();
         AddinContext ac = ae.getAddinContext();
@@ -57,7 +58,8 @@ public class EngineTest extends TestCase implements SoapConstants {
         EngineContext.start(new DefaultConnectorFactoryHolder(ac));
     }
 
-    public void TtestEngine1() throws Exception {
+    @Test
+    public void testEngineWithWebservice() throws Exception {
         int nameCounter = 1;
         // Create ws connector to read data
         HashMap<String, Value> props = new HashMap<>();
@@ -90,11 +92,11 @@ public class EngineTest extends TestCase implements SoapConstants {
         // The code is used to create a format copy for registered request
         getOpenFundStringRequest = getOpenFundStringRequest.recursiveClone();
         getOpenFundStringResponse = getOpenFundStringResponse.recursiveClone();
-        datasource.registerFormat(targetName, getOpenFundStringRequest, Direction.IN);
-        datasource.registerFormat(targetName, getOpenFundStringResponse, Direction.OUT);
+        FormatEntry targetInEntry = datasource.registerFormat(targetName, getOpenFundStringRequest, Direction.IN);
+        FormatEntry targetOutEntry = datasource.registerFormat(targetName, getOpenFundStringResponse, Direction.OUT);
         String targetName2 = getOpenFundStringRequest.getName() + (nameCounter++);
-        datasource.registerFormat(targetName2, getOpenFundStringRequest, Direction.IN);
-        datasource.registerFormat(targetName2, getOpenFundStringResponse, Direction.OUT);
+        FormatEntry target2InEntry = datasource.registerFormat(targetName2, getOpenFundStringRequest, Direction.IN);
+        FormatEntry target2OutEntry = datasource.registerFormat(targetName2, getOpenFundStringResponse, Direction.OUT);
         //******************************************************************************************
         // Create transformation to a data source
         DataTransformator callGetOpenFundString = new DataTransformator();
@@ -111,21 +113,18 @@ public class EngineTest extends TestCase implements SoapConstants {
         datasource.targetTo(callGetOpenFundString2);
         callGetOpenFundString2.targetTo(datasource);
         // Create start point transformation
-        String startPoint = "startWS";
-        TransformRule rule1 = new TransformRule(getOpenFundStringRequest);
+        TransformRule rule1 = callGetOpenFundString.registerRule(null, targetInEntry);
         rule1.getRuleItem("getOpenFundString.userID").setScript("'123'");
-        callGetOpenFundString.registerRule(new TransformRuleEntry(startPoint, targetName, rule1));
+
         // Create the loop transformation datasource->transformation->datasource
-        TransformRule rule2 = new TransformRule(getOpenFundStringRequest);
+        TransformRule rule2 = callGetOpenFundString2.registerRule(targetOutEntry, target2InEntry);
         rule2.getRuleItem("getOpenFundString.userID").setScript("@getOpenFundStringResponse.getOpenFundStringResult.string");
-        callGetOpenFundString2.registerRule(new TransformRuleEntry(targetName, targetName2, rule2));
 
         //*************Test project********************************************
         TransformProject project = new TransformProject();
 
         project.setName("The demo project");
         project.setDescription("test project description demo");
-        project.getStartEntryList().add(new StartEntry("startWS", callGetOpenFundString));
         List<DataSource> dsList = project.getDatasourceList();
         List<DataTransformator> dtList = project.getDataTransformatorList();
         dsList.add(datasource);
@@ -152,6 +151,7 @@ public class EngineTest extends TestCase implements SoapConstants {
         Thread.sleep(10000);
     }
 
+    @Test
     public void testOracleConnectorInEngine() throws Exception {
         HashMap<String, Value> props = new HashMap<>();
         props.put(DatabaseConstants.OJDBC, new Value("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar"));
@@ -174,8 +174,8 @@ public class EngineTest extends TestCase implements SoapConstants {
         Format returnOut = connector.getFormat(produces.get("EMPLOYEES_TEST"), "fields", Direction.OUT);
         inputArg = inputArg.recursiveClone();
         returnOut = returnOut.recursiveClone();
-        datasource.registerFormat("sqlSelect", inputArg, Direction.IN);
-        datasource.registerFormat("sqlSelect", returnOut, Direction.OUT);
+        FormatEntry inFormatEntry = datasource.registerFormat("sqlSelect", inputArg, Direction.IN);
+        FormatEntry outFormatEntry = datasource.registerFormat("sqlSelect", returnOut, Direction.OUT);
 
         DataSource ws = new DataSource("id-soap");
         Map<String, Value> wsProps = new HashMap<>();
@@ -195,14 +195,12 @@ public class EngineTest extends TestCase implements SoapConstants {
         queryEmployeeTestTableTransformator.setY(100);
         queryEmployeeTestTableTransformator.targetTo(datasource);
 
-        TransformRule rule = new TransformRule(inputArg);
+        TransformRule rule = queryEmployeeTestTableTransformator.registerRule(null, inFormatEntry);
         rule.getRuleItem("operation").setScript("\"select\"");
-        queryEmployeeTestTableTransformator.registerRule(new TransformRuleEntry("start", "sqlSelect", rule));
 
         TransformProject project = new TransformProject();
         project.setName("demo oracle project");
         project.setDescription("It is used to query empolyee test table all records");
-        project.getStartEntryList().add(new StartEntry("start", queryEmployeeTestTableTransformator));
         List<DataSource> dsList = project.getDatasourceList();
         List<DataTransformator> dtList = project.getDataTransformatorList();
         dsList.add(datasource);

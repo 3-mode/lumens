@@ -16,10 +16,11 @@ public abstract class AbstractTransformComponent implements TransformComponent {
     private int x;
     private int y;
     private String name;
+    protected boolean isOpen;
     private String identifier;
     private String description;
-    private Map<String, TransformComponent> targetList;
-    protected boolean isOpen;
+    private Map<String, TransformComponent> sourceList = new HashMap<>();
+    private Map<String, TransformComponent> targetList = new HashMap<>();
 
     public AbstractTransformComponent(String identifier) {
         this.identifier = identifier;
@@ -71,10 +72,16 @@ public abstract class AbstractTransformComponent implements TransformComponent {
     }
 
     @Override
+    public void sourceFrom(TransformComponent source) {
+        if (!sourceList.containsKey(source.getName()))
+            sourceList.put(source.getName(), source);
+    }
+
+    @Override
     public void targetTo(TransformComponent target) {
-        if (targetList == null)
-            targetList = new HashMap<>();
-        targetList.put(target.getName(), target);
+        target.sourceFrom(this);
+        if (!targetList.containsKey(target.getName()))
+            targetList.put(target.getName(), target);
     }
 
     @Override
@@ -83,8 +90,18 @@ public abstract class AbstractTransformComponent implements TransformComponent {
     }
 
     @Override
+    public Map<String, TransformComponent> getSourceList() {
+        return sourceList;
+    }
+
+    @Override
     public boolean hasTarget() {
-        return targetList != null && !targetList.isEmpty();
+        return !targetList.isEmpty();
+    }
+
+    @Override
+    public boolean hasSource() {
+        return !sourceList.isEmpty();
     }
 
     @Override

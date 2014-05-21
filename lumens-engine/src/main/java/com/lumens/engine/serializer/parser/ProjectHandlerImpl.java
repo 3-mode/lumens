@@ -160,7 +160,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
     @Override
     public void start_format_entry(final Attributes meta) throws SAXException {
         if (status == ReadStatus.DATASRC && registeredFormatList != null) {
-            formatEntry = new FormatEntry(meta.getValue("name"), null,
+            formatEntry = new FormatEntry(tc.getName(), meta.getValue("name"), null,
                                           Direction.valueOf(meta.getValue("direction")));
             registeredFormatList.put(formatEntry.getName(), formatEntry);
             if (formatList == null) {
@@ -283,9 +283,12 @@ public class ProjectHandlerImpl implements ProjectHandler {
     @Override
     public void start_transform_rule_entry(Attributes meta) throws SAXException {
         if (status == ReadStatus.DATAPSR) {
+
             curRuleEntry = new TransformRuleEntry(meta.getValue("name"),
                                                   meta.getValue("source-name"),
-                                                  meta.getValue("target-name"));
+                                                  meta.getValue("source-format-name"),
+                                                  meta.getValue("target-name"),
+                                                  meta.getValue("target-format-name"), null);
         }
     }
 
@@ -306,7 +309,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
                 TransformComponent tComp = tComponentCache.get(curComponentTargetName);
                 if (tComp instanceof RegisterFormatComponent) {
                     RegisterFormatComponent rfComp = (RegisterFormatComponent) tComp;
-                    FormatEntry fEntry = rfComp.getRegisteredFormatList(Direction.IN).get(curRuleEntry.getTargetName());
+                    FormatEntry fEntry = rfComp.getRegisteredFormatList(Direction.IN).get(curRuleEntry.getTargetFormatName());
                     Format format = fEntry.getFormat();
                     ruleList = new ArrayList<>();
                     transformRuleHandler = new TransformRuleHandlerImpl(format, ruleList);
@@ -362,6 +365,6 @@ public class ProjectHandlerImpl implements ProjectHandler {
 
     @Override
     public void handle_start_entry(Attributes meta) throws SAXException {
-        startList.add(new StartEntry(meta.getValue("name"), tComponentCache.get(meta.getValue("entry-name"))));
+        startList.add(new StartEntry(meta.getValue("format-name"), tComponentCache.get(meta.getValue("target-name"))));
     }
 }

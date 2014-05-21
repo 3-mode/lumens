@@ -218,7 +218,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     }
 
     private void writeStartEntryToXml(StringUTF8Writer xml, StartEntry se, String indent) throws Exception {
-        xml.print(indent).print("<start-entry name=\"").print(se.getStartName()).print("\" entry-name=\"").print(se.getStartComponent().getName()).println("\"/>");
+        xml.print(indent).print("<start-entry format-name=\"").print(se.getStartFormatName()).print("\" target-name=\"").print(se.getStartComponent().getName()).println("\"/>");
     }
 
     private void writeTransformRuleList(StringUTF8Writer xml, List<TransformRuleEntry> transformRuleList, String indent) throws Exception {
@@ -234,13 +234,13 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     }
 
     private void writeTransformRuleEntry(StringUTF8Writer xml, TransformRuleEntry ruleEntry, String indent) throws Exception {
-        xml.print(indent)
-        .print("<transform-rule-entry name=\"").print(ruleEntry.getName()).print("\"");
+        xml.print(indent).print("<transform-rule-entry name=\"").print(ruleEntry.getName()).print("\"");
         xml.print(" source-name=\"").print(ruleEntry.getSourceName()).print("\"");
-        xml.print(" target-name=\"").print(ruleEntry.getTargetName()).println("\">");
+        xml.print(" target-name=\"").print(ruleEntry.getTargetName()).print("\"");
+        xml.print(" source-format-name=\"").print(ruleEntry.getSourceFormatName()).print("\"");
+        xml.print(" target-format-name=\"").print(ruleEntry.getTargetFormatName()).println("\">");
         writeRuleToXml(xml, ruleEntry.getRule(), indent + INDENT);
-        xml.print(indent)
-        .println("</transform-rule-entry>");
+        xml.print(indent).println("</transform-rule-entry>");
     }
 
     private void writeRuleToXml(StringUTF8Writer xml, TransformRule rule, String indent) throws Exception {
@@ -403,8 +403,8 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
 
     private void writeStartEntryToJson(JsonGenerator jGenerator, StartEntry se) throws Exception {
         jGenerator.writeStartObject();
-        jGenerator.writeStringField("name", se.getStartName());
-        jGenerator.writeStringField("entry_name", se.getStartComponent().getName());
+        jGenerator.writeStringField("format_name", se.getStartFormatName());
+        jGenerator.writeStringField("target_name", se.getStartComponent().getName());
         jGenerator.writeEndObject();
     }
 
@@ -422,6 +422,8 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         jGenerator.writeStringField("name", ruleEntry.getName());
         jGenerator.writeStringField("source_name", ruleEntry.getSourceName());
         jGenerator.writeStringField("target_name", ruleEntry.getTargetName());
+        jGenerator.writeStringField("source_format_name", ruleEntry.getSourceFormatName());
+        jGenerator.writeStringField("target_format_name", ruleEntry.getTargetFormatName());
         writeRuleToJson(jGenerator, ruleEntry.getRule());
         jGenerator.writeEndObject();
     }

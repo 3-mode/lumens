@@ -3,6 +3,7 @@
  */
 package com.lumens.engine;
 
+import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.component.instrument.DataTransformator;
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ public class TransformProject {
 
     private List<DataSource> datasourceList = new ArrayList<>();
     private List<DataTransformator> transformatorList = new ArrayList<>();
-    private List<StartEntry> startList = new ArrayList<>();
     private String name;
     private String description;
     private boolean isOpen;
@@ -54,6 +54,13 @@ public class TransformProject {
     }
 
     public List<StartEntry> getStartEntryList() {
+        List<StartEntry> startList = new ArrayList<>();
+        for (DataTransformator dt : transformatorList) {
+            // build start point list
+            for (TransformRuleEntry tr : dt.getTransformRuleList())
+                if (tr.getSourceName().equals(dt.getName()))
+                    startList.add(new StartEntry(tr.getSourceFormatName(), dt));
+        }
         return startList;
     }
 
@@ -62,25 +69,18 @@ public class TransformProject {
     }
 
     public void open() throws Exception {
-        for (DataSource ds : datasourceList) {
-            try {
+        try {
+            for (DataSource ds : datasourceList)
                 ds.open();
-            } catch (Exception ex) {
-                throw new Exception(ex);
-            }
-        }
-        for (DataTransformator dt : transformatorList) {
-            try {
+            for (DataTransformator dt : transformatorList)
                 dt.open();
-            } catch (Exception ex) {
-                throw new Exception(ex);
-            }
+            isOpen = true;
+        } catch (Exception ex) {
+            throw new Exception(ex);
         }
-        isOpen = true;
     }
 
     public void close() throws Exception {
-
         if (isOpen()) {
             for (DataSource ds : datasourceList)
                 ds.close();

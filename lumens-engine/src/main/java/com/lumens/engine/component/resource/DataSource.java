@@ -47,6 +47,8 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             ConnectorFactory factory = EngineContext.getContext().getConnectorFactory(getIdentifier());
             if (factory != null)
                 connector = factory.createConnector();
+            else
+                throw new RuntimeException("The '" + getIdentifier() + "' is not supported");
         }
     }
 
@@ -90,20 +92,17 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     @Override
     public List<ExecuteContext> execute(ExecuteContext context) {
         try {
-            String targetName = context.getTargetName();
-            FormatEntry entry = registerOUTFormatList.get(targetName);
+            String targetFmtName = context.getTargetFormatName();
+            FormatEntry entry = registerOUTFormatList.get(targetFmtName);
             Format targetFormat = entry.getFormat();
             List<Element> result = new ArrayList<>();
             Object input = context.getInput();
             Operation operation = connector.getOperation();
             if (input instanceof List) {
-                List list = (List) input;
-                if (!list.isEmpty() && list.get(0) instanceof Element) {
-                    List<Element> inputDataList = (List<Element>) list;
-                    for (Element data : inputDataList) {
-                        OperationResult opRet = operation.execute(data, targetFormat);
-                        result.addAll(opRet.getResult());
-                    }
+                List<Element> inputDataList = (List<Element>) input;
+                for (Element data : inputDataList) {
+                    OperationResult opRet = operation.execute(data, targetFormat);
+                    result.addAll(opRet.getResult());
                 }
             } else if (input instanceof Element) {
                 OperationResult opRet = operation.execute((Element) input, targetFormat);
@@ -111,7 +110,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             }
             for (ResultHandler handler : context.getResultHandlers())
                 if (!(handler instanceof LastResultHandler))
-                    handler.process(this, targetName, result);
+                    handler.process(this, targetFmtName, result);
             List<ExecuteContext> exList = new ArrayList<>();
             exList.add(new TransformExecuteContext(result, entry.getName(), context.getResultHandlers()));
             return exList;
@@ -125,11 +124,15 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     }
 
     @Override
-    public void registerFormat(String formatEntryName, Format format, Direction direction) {
+    public FormatEntry registerFormat(String formatEntryName, Format format, Direction direction) {
         if (direction == Direction.IN) {
-            registerINFormatList.put(formatEntryName, new FormatEntry(formatEntryName, format, Direction.IN));
+            FormatEntry inFmtEntry = new FormatEntry(this.getName(), formatEntryName, format, Direction.IN);
+            registerINFormatList.put(formatEntryName, inFmtEntry);
+            return inFmtEntry;
         } else {
-            registerOUTFormatList.put(formatEntryName, new FormatEntry(formatEntryName, format, Direction.OUT));
+            FormatEntry outFmtEntry = new FormatEntry(this.getName(), formatEntryName, format, Direction.OUT);
+            registerOUTFormatList.put(formatEntryName, outFmtEntry);
+            return outFmtEntry;
         }
     }
 
@@ -153,7 +156,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
     @Override
     public boolean accept(ExecuteContext ctx) {
-        return registerINFormatList.containsKey(ctx.getTargetName());
+        return registerINFormatList.containsKey(ctx.getTargetFormatName());
     }
 
     @Override
