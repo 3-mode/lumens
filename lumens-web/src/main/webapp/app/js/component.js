@@ -84,7 +84,7 @@ Lumens.DataComponent = Class.$extend({
         .draggable({
             appendTo: $("#id-data-comp-container"),
             helper: function() {
-                return $(this).clone().zIndex(20000).css("opacity", "0.7");
+                return $(this).clone().zIndex(2000).css("opacity", "0.7");
             }
         }).data("data-comp", this);
 
@@ -98,6 +98,9 @@ Lumens.DataComponent = Class.$extend({
         this.$elem.css("top", config.y + 'px');
         this.$to_list = [];
         this.$from_list = [];
+    },
+    setShortDescription: function(shortDesc) {
+        this.$elem.find('#id-shortdsc').text(shortDesc);
     },
     getConfig: function() {
         return this.configure;

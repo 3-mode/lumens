@@ -164,6 +164,13 @@ Lumens.SplitLayout = Class.$extend({
         this.$theLayout.unbind();
         this.$theLayout.remove();
         this.$parentContainer.unbind("resize", this.layout);
+    },
+    hide: function() {
+        this.$theLayout.hide();
+    },
+    show: function() {
+        this.$theLayout.show();
+        this.$theLayout.trigger("resize");
     }
 });
 

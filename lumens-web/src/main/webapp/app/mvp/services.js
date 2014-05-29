@@ -23,6 +23,18 @@ Lumens.services.factory('DesignButtons', function($http, $q) {
             return deferred.promise;
         }};
 });
+Lumens.services.factory('ErrorTemplate', function($http, $q) {
+    return {
+        get: function(onResponse) {
+            var deferred = $q.defer();
+            $http.get("app/templates/error_tmpl.html").then(function(response) {
+                deferred.resolve(response.data);
+                if (onResponse)
+                    onResponse(response.data);
+            });
+            return deferred.promise;
+        }};
+});
 Lumens.services.factory('WarningTemplate', function($http, $q) {
     return {
         get: function(onResponse) {
@@ -47,11 +59,47 @@ Lumens.services.factory('SuccessTemplate', function($http, $q) {
             return deferred.promise;
         }};
 });
+Lumens.services.factory('SmallMessageTmplate', function($http, $q) {
+    return {
+        get: function(onResponse) {
+            var deferred = $q.defer();
+            $http.get("app/templates/small_message_tmpl.html").then(function(response) {
+                deferred.resolve(response.data);
+                if (onResponse)
+                    onResponse(response.data);
+            });
+            return deferred.promise;
+        }};
+});
 Lumens.services.factory('PropFormTemplate', function($http, $q) {
     return {
         get: function(onResponse) {
             var deferred = $q.defer();
             $http.get("app/templates/property_form_tmpl.html").then(function(response) {
+                deferred.resolve(response.data);
+                if (onResponse)
+                    onResponse(response.data);
+            });
+            return deferred.promise;
+        }};
+});
+Lumens.services.factory('TransformListTemplate', function($http, $q) {
+    return {
+        get: function(onResponse) {
+            var deferred = $q.defer();
+            $http.get("app/templates/transform_list_tmpl.html").then(function(response) {
+                deferred.resolve(response.data);
+                if (onResponse)
+                    onResponse(response.data);
+            });
+            return deferred.promise;
+        }};
+});
+Lumens.services.factory('TransformEditTemplate', function($http, $q) {
+    return {
+        get: function(onResponse) {
+            var deferred = $q.defer();
+            $http.get("app/templates/transform_edit_tmpl.html").then(function(response) {
                 deferred.resolve(response.data);
                 if (onResponse)
                     onResponse(response.data);
@@ -71,7 +119,6 @@ Lumens.services.factory('ProjectListModal', function($http, $q) {
             return deferred.promise;
         }};
 });
-
 Lumens.services.factory('ProjectCreateModal', function($http, $q) {
     return {
         get: function(onResponse) {

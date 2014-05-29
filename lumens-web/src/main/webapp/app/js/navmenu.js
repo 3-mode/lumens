@@ -50,7 +50,7 @@ Lumens.NavMenu = Class.$extend({
             }
         });
         this.clickCallBack = function(event) {
-            __this.$menuContainer.trigger(jQuery.Event(__this.configuration.event_type, {
+            __this.$menuContainer.trigger($.Event(__this.configuration.event_type, {
                 module_id: $(this).attr("module-id"),
                 name: $(this).find('.lumens-secondary-menu-text').text(),
                 object: $(this)

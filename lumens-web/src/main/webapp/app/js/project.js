@@ -8,8 +8,20 @@ Lumens.ProjectOperator = Class.$extend({
         this.componentPanel = componentPanel;
         this.$scope = $scope;
     },
+    isValid: function() {
+        return this.$scope.project
+    },
+    close: function() {
+        this.componentPanel.emptyComponent();
+        this.projectId = undefined;
+        this.$scope.componentForm = undefined;
+        this.$scope.componentProps = {Name: {value: "to select"}};
+        this.$scope.categoryInfo = {name: "to select"};
+        this.$scope.currentComponent = {name: "to select"};
+    },
     create: function(name, description) {
         this.componentPanel.emptyComponent();
+        this.projectId = undefined;
         this.$scope.project = {
             name: name,
             description: description,
@@ -18,8 +30,8 @@ Lumens.ProjectOperator = Class.$extend({
             start_entry: []
         };
         this.$scope.componentForm = undefined;
-        this.$scope.componentI18N = undefined;
-        this.$scope.componentProps = {};
+        this.$scope.componentProps = {Name: {value: "to select"}};
+        this.$scope.categoryInfo = {name: "to select"};
         this.$scope.currentComponent = {name: "to select"};
     },
     get: function() {
@@ -44,6 +56,8 @@ Lumens.ProjectOperator = Class.$extend({
         $.each(componentList, function() {
             var curComp = this;
             curComp.configure.component_info.position = curComp.getXY();
+            // Reset the target list
+            curComp.configure.component_info.target = [];
             $.each(this.getToLinkList(), function() {
                 var targetComp = this.getTo();
                 curComp.configure.component_info.target.push({name: targetComp.configure.component_info.name});
@@ -53,14 +67,14 @@ Lumens.ProjectOperator = Class.$extend({
     setId: function(projectId) {
         this.projectId = projectId;
     },
-    import: function(projectId, projectData) {
+    import: function(projectData) {
         console.log("<============= Opening a project ==============>");
         var __this = this;
-        __this.projectId = projectId;
+        __this.close();
         this.componentPanel.emptyComponent();
         if (projectData.content && projectData.content.project && projectData.content.project.length > 0) {
             var compDict = {};
-            this.create();
+            __this.projectId = projectData.content.project[0].id;
             var project = this.$scope.project = $.parseJSON(projectData.content.project[0].data).project;
             console.log("Opened project:", project);
             // ==================== Update angular JS data model ====================

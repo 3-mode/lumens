@@ -1,0 +1,48 @@
+{
+    "transform_rule_entry": [
+        {
+            "name": "startWS-getOpenFundString1",
+            "source_name": "startWS",
+            "target_name": "getOpenFundString1",
+            "transform_rule": {
+                "name": "getOpenFundString",
+                "transform_rule_item": {
+                    "format_name": "getOpenFundString",
+                    "transform_rule_item": [
+                        {
+                            "format_name": "getOpenFundString",
+                            "transform_rule_item": [
+                                {
+                                    "format_name": "userID",
+                                    "script": "'123'"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "getOpenFundString1-getOpenFundString2",
+            "source_name": "getOpenFundString1",
+            "target_name": "getOpenFundString2",
+            "transform_rule": {
+                "name": "getOpenFundString",
+                "transform_rule_item": {
+                    "format_name": "getOpenFundString",
+                    "transform_rule_item": [
+                        {
+                            "format_name": "getOpenFundString",
+                            "transform_rule_item": [
+                                {
+                                    "format_name": "userID",
+                                    "script": "@getOpenFundStringResponse.getOpenFundStringResult.string"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+<div class="lumens-bootstrap lumens-transform-list table-responsive" ng-controller="TransformListCtrl">
+    <div ng-init="selectTargetName = 'All'">
+        <div style="float: left; padding-top: 6px; margin-right: 15px;"><b>Current Component: </b>{{componentProps.Name.value}}</div>
+        <div style="display: inline-block;">
+            <div style="float: left; padding-top: 6px; margin-right: 15px;"><b>Target Component</b></div>
+            <select class="form-control lumens-target-list" ng-model="selectTargetName">
+                <option ng-if="currentComponent && currentComponent.target"
+                        ng-repeat="targetName in theTargetNameList">{{targetName}}</option>
+            </select>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Source Name</th>
+                <th>Target Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="lumens-transform-item" style="cursor: pointer;" 
+                ng-if="currentComponent && currentComponent.transform_rule_entry"
+                ng-repeat="rule in theTransformRuleEntryList" ng-dblclick="openTransformEditing()">
+                <td>{{rule.name}}</td><td>{{rule.source_format_name}}</td><td>{{rule.target_format_name}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

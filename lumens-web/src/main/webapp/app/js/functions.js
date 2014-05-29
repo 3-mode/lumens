@@ -29,14 +29,14 @@ function buildDataFormatList($parent, component) {
         part1Size: "45%",
         part2Size: "55%"
     });
-    panelContainer.getElement().css({"min-height": "350px", "border-bottom": "2px solid rgb(214, 214, 214)"});
+    panelContainer.getElement().css({"min-height": "100px", "height": "350px", "border-bottom": "2px solid rgb(214, 214, 214)"});
     panelContainer.getPart1Element().addClass("formatResize");
     panelContainer.getPart2Element().addClass("formatResize");
     var leftPanel = new Lumens.Panel(panelContainer.getPart1Element()).configure({
-        panelStyle: {width: "100%", "height": "100%", "min-height": "350px", overflow: "auto", "border-right": "1px solid rgb(214, 214, 214)"}
+        panelStyle: {width: "100%", "height": "100%", "min-height": "100px", overflow: "auto", "border-right": "1px solid rgb(214, 214, 214)"}
     });
     var rightPanel = new Lumens.Panel(panelContainer.getPart2Element()).configure({
-        panelStyle: {width: "100%", "height": "100%", "min-height": "350px", overflow: "auto"}
+        panelStyle: {width: "100%", "height": "100%", "min-height": "100px", overflow: "auto"}
     });
     panelContainer.getElement().resizable({
         handles: 's',
@@ -119,16 +119,77 @@ function buildDataFormatList($parent, component) {
     }
 }
 
-function ComponentProperty(propOfCategory, propList) {
-    var returnProp = {
-        name: propOfCategory.name,
-        type: propOfCategory.type
+function ComponentPropertyList(config) {
+    var category = config.category_info;
+    var compinfo = config.component_info;
+    var componentProps = {
+        "Description": {label: category.i18n.Description, value: (compinfo && compinfo.description) ? compinfo.description : "", type: "String"},
+        "Name": {label: category.i18n.Name, value: (compinfo && compinfo.name) ? compinfo.name : "", type: "String"}
     };
-    $.each(propList, function() {
-        if (propOfCategory.name === this.name) {
-            returnProp.value = this.value;
-            return false;
+    if (!category.property)
+        return componentProps;
+
+    $.each(category.property, function() {
+        var category_property = this;
+        componentProps[category_property.name] = {
+            label: category.i18n[category_property.name],
+            name: category_property.name,
+            type: category_property.type
         }
-    });
-    return returnProp;
+        $.each(compinfo.property, function() {
+            if (this.name === category_property.name) {
+                componentProps[category_property.name].value = this.value;
+                return false;
+            }
+        })
+    })
+    return componentProps;
+}
+
+function applyProperty(componentProps, currentComponent) {
+    currentComponent.property = [];
+    currentComponent.name = componentProps.Name.value;
+    currentComponent.description = componentProps.Description.value;
+    for (var propName in componentProps) {
+        if (propName === "Description" || propName === "Name")
+            continue;
+        var prop = componentProps[propName];
+        currentComponent.property.push({
+            name: propName,
+            type: prop.type,
+            value: prop.value
+        });
+    }
+}
+
+function buildTransformationList($parent, component) {
+    console.log("Transformation List:", component);
+    var transformationList = component.transform_rule_entry;
+    if (transformationList) {
+        var IdTitleList = [];
+        var contentList = [];
+        $.each(transformationList, function() {
+            IdTitleList.push(this.name);
+            contentList.push($('<div style="padding-left:30px;"><b>' + this.source_name + "--->" + this.target_name + '</b></div>'));
+        });
+        new Lumens.List($parent).configure({
+            IdList: IdTitleList,
+            titleList: IdTitleList,
+            contentList: contentList
+        });
+    }
+}
+
+function isFormatOf(formatEntryList, formatName) {
+    for (var i = 0; i < formatEntryList.length; ++i)
+        if (formatEntryList[i].name === formatName)
+            return true;
+    return false;
+}
+
+function getTargetComponentFormatList(componentList, selectTargetName) {
+    for (var i = 0; i < componentList.length; ++i)
+        if (componentList[i].configure.short_desc === selectTargetName)
+            return componentList[i].configure.component_info.format_list;
+    return undefined;
 }

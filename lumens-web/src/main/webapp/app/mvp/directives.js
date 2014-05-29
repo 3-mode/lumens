@@ -37,3 +37,18 @@ Lumens.directives.directive("dynamicFormatList", function() {
         }
     };
 });
+Lumens.directives.directive("dynamicTransformationList", function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attr) {
+            var bindVar = attr.dynamicTransformationList;
+            function getStringValue() {
+                return scope[bindVar];
+            }
+            scope.$watch(getStringValue, function(component) {
+                element.empty();
+                buildTransformationList(element, component);
+            });
+        }
+    };
+});

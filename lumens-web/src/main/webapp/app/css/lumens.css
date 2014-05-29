@@ -184,7 +184,7 @@ a, a:focus, a:hover {
     color: rgba(255, 255, 255, 0.6);
     text-shadow: 0 1px 1px rgb(53, 53, 53);
     text-align: -webkit-match-parent;
-    display: block;
+    display: inline-block;
     line-height: 51px; 
     float: left;
 }
@@ -586,6 +586,12 @@ svg path {
     -moz-border-radius: 3px;
     border-radius: 3px;
 }
+.lumens .lumens-button-message {
+    height: 46px;
+    display: inline-block;
+    float: left;
+    padding-left: 12px;
+}
 .lumens .lumens-button-delete {
     background-color: #B8B8B8 !important;
     float: right;
@@ -594,10 +600,35 @@ svg path {
 .lumens .lumens-button:hover {
     background-color: #3276b1 !important;
 }
+.lumens .lumens-apply-bar {
+    height: 27px;
+    display: block;
+    color:white !important;
+    width: 100%;
+    cursor: pointer;
+    background-color: rgb(240, 240, 240);
+}
+.lumens .lumens-modal-holder {
+    z-index: 2100;
+}
 @media (min-width: 100px) {
     .lumens .lumens-message {
         width: 500px;
         margin: 30px auto;
-        z-index: 2000;
+    }
+}
+.lumens .lumens-transform-list {
+    display: block;
+    overflow: auto;
+    position: relative;
+    color: #4C4C4C;
+}
+.lumens .lumens-transform-item:hover {
+    background-color: #3276b1 !important;
+    color: white;
+}
+@media (min-width: 200px) {
+    .lumens .lumens-target-list {
+        width: 300px;
     }
 }

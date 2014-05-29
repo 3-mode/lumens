@@ -30,7 +30,7 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $route, $http, $c
 })
 .controller("DesignViewCtrl", function(
 $scope, $route, $http, $compile,
-DesignNavMenu, SuccessTemplate, WarningTemplate, PropFormTemplate,
+DesignNavMenu, SuccessTemplate, WarningTemplate, ErrorTemplate, PropFormTemplate, TransformListTemplate,
 DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     // Test services
     console.log("FormatList: ", FormatList.getIN({component_name: 'Database:@()!- HR'}));
@@ -48,8 +48,22 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         panelClass: ["lumens-menu-container"],
         panelStyle: {width: "100%", height: "100%"}
     });
-    // Load success/warning template
-    $scope.messageBox = new Lumens.Message({success: SuccessTemplate, warning: WarningTemplate});
+    // Init variable
+    $scope.categoryInfo = {name: "to select"};
+    $scope.componentProps = {Name: {value: "to select"}};
+    // Load templates
+    $scope.messageBox = new Lumens.Message({success: SuccessTemplate, warning: WarningTemplate, error: ErrorTemplate});
+    TransformListTemplate.get(function(templ) {
+        $scope.transformTemplate = templ;
+    });
+    $scope.onApplyProperty = function(event) {
+        console.log("Apply:", event);
+        console.log("Current editing props:", $scope.componentProps);
+        console.log("Current editing component:", $scope.currentComponent);
+        // *** TODO shortDescription changed then the related linked component target name should be changed also
+        $scope.currentUIComponent.setShortDescription($scope.componentProps.Name.value);
+        applyProperty($scope.componentProps, $scope.currentComponent);
+    };
 
     // Load menu category
     DesignNavMenu.get(function(menu) {
@@ -86,30 +100,18 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                         part1Size: "40%"
                     });
                     // Create desgin workspace panel
-                    $scope.currentComponent = {name: "to select"};
                     desgin.designPanel = new Lumens.ComponentPanel(desgin.designAndInfoPanel.getPart1Element())
                     .configure({
                         panelStyle: {width: "100%", height: "100%"},
                         onComponentDblclick: function(component) {
                             console.log("Dblclick:", component);
+                            $scope.currentUIComponent = component;
                             var config = component.configure;
                             $scope.$apply(function() {
                                 $scope.componentForm = $compile(config.category_info.html)($scope);
-                                $scope.componentI18N = config.category_info.i18n;
-                                $scope.componentProps = {
-                                    "Description": {value: (config.component_info && config.component_info.description) ? config.component_info.description : ""},
-                                    "Name": {value: (config.component_info && config.component_info.name) ? config.component_info.name : ""}
-                                };
-                                if (config.component_info) {
-                                    $scope.currentCategory = config.category_info;
-                                    $.each(config.category_info.property, function() {
-                                        $scope.componentProps[this.name] = ComponentProperty(this, config.component_info.property);
-                                    });
-                                    $scope.currentComponent = config.component_info;
-                                }
-                                else {
-                                    $scope.currentComponent = {name: "to select"};
-                                }
+                                $scope.categoryInfo = config.category_info;
+                                $scope.componentProps = ComponentPropertyList(config);
+                                $scope.currentComponent = config.component_info ? config.component_info : $scope.currentComponent
                             });
                         },
                         onBeforeComponentAdd: function() {
@@ -182,7 +184,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                                 "ComponentProps"
                             ],
                             titleList: [
-                                $compile('<span data-bind="currentCategory.name">{{currentCategory.name}}</span>')($scope)
+                                $compile('<span data-bind="categoryInfo.name">{{categoryInfo.name}}</span>')($scope)
                             ],
                             buildContent: function(itemContent, isExpand, title) {
                                 if (isExpand) {
@@ -196,8 +198,8 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                             }
                         });
                     }
-                    function tabFormatList($tabContent) {
-                        $tabContent.append($compile('<div dynamic-format-list="currentComponent"/>')($scope));
+                    function tabTransformationList($tabContent) {
+                        $tabContent.append($compile($scope.transformTemplate)($scope));
 
                     }
                     desgin.tabs = new Lumens.TabPanel(desgin.tabsContainer.getElement());
@@ -205,7 +207,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                         tab: [
                             {id: "id-project-info", label: "Project Summary", content: tabSummary},
                             {id: "id-component-selected-props", label: "Component Properties", content: tabConfiguration},
-                            {id: "id-component-format-list", label: "Format List", content: tabFormatList}
+                            {id: "id-component-transformation-list", label: "Transformations", content: tabTransformationList}
                         ]
                     });
                 })
@@ -217,10 +219,10 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
 .controller("DesginCmdCtrl", function($scope, $element, $compile, ProjectListModal, ProjectCreateModal, ProjectSave) {
     // Handle desgin command button event
     console.log("In DesginCmdCtrl", $element);
-    var i18n = $scope.$parent.i18n;
-    var projectOperator = $scope.$parent.projectOperator;
-    var messageBoxParent = $scope.$parent.desgin.designPanel.getElement();
-    var messageBox = $scope.$parent.messageBox;
+    var i18n = $scope.i18n;
+    var projectOperator = $scope.projectOperator;
+    var messageBoxParent = $scope.desgin.designPanel.getElement();
+    var messageBox = $scope.messageBox;
     $scope.onCommand = function(id) {
         if ("id_open" === id) {
             if ($element.find('#projectListModal').length === 0) {
@@ -245,26 +247,30 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             }
         }
         else if ("id_save" === id) {
-            projectOperator.sync();
-            console.log("Saving project:", projectOperator.get());
-            console.log("Saveing propery:", $scope.$parent.componentProps);
-            ProjectSave.save(projectOperator.get(), function(response) {
-                console.log("Save project status:", response);
-                if (response.status === "OK") {
-                    var project = response.result_content.project[0];
-                    projectOperator.setId(project.id);
-                    messageBox.showSuccess(i18n.id_save_project.format(project.name), messageBoxParent);
-                }
-            });
+            if (projectOperator.isValid()) {
+                projectOperator.sync();
+                console.log("Saving project:", projectOperator.get());
+                console.log("Saveing propery:", $scope.$parent.componentProps);
+                ProjectSave.save(projectOperator.get(), function(response) {
+                    console.log("Save project status:", response);
+                    if (response.status === "OK") {
+                        var project = response.result_content.project[0];
+                        projectOperator.setId(project.id);
+                        messageBox.showSuccess(i18n.id_save_project.format(project.name), messageBoxParent);
+                    }
+                    else
+                        messageBox.showError(i18n.id_save_proj_err.format(project.name), messageBoxParent);
+                });
+            }
         }
         else
             console.log("Clicked:", id);
     };
 })
 .controller("ProjectListCtrl", function($scope, $element, ProjectList, ProjectById) {
-    var i18n = $scope.$parent.i18n;
-    var projectOperator = $scope.$parent.projectOperator;
-    var messageBox = $scope.$parent.messageBox;
+    var i18n = $scope.i18n;
+    var projectOperator = $scope.projectOperator;
+    var messageBox = $scope.messageBox;
     var projectListContent = $element.find(".modal-body");
     $scope.selectProject = function(index, event) {
         $scope.selectIndex = index;
@@ -275,7 +281,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         if ($scope.currentProjectId) {
             ProjectById.get({project_id: $scope.currentProjectId}, function(projectData) {
                 if (projectOperator)
-                    projectOperator.import($scope.currentProjectId, projectData);
+                    projectOperator.import(projectData);
             });
         }
         else {
@@ -291,15 +297,89 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     });
 })
 .controller("ProjectCreateCtrl", function($scope, $element) {
-    // Handle desgin command button event
     console.log("In ProjectCreateCtrl", $element);
     var i18n = $scope.$parent.i18n;
-    var messageBoxParent = $scope.$parent.desgin.designPanel.getElement();
-    var messageBox = $scope.$parent.messageBox;
-    var projectOperator = $scope.$parent.projectOperator;
+    var messageBoxParent = $scope.desgin.designPanel.getElement();
+    var projectInfoContent = $element.find(".modal-body");
+    var messageBox = $scope.messageBox;
+    var projectOperator = $scope.projectOperator;
     $scope.createProject = function() {
-        projectOperator.create($scope.projectName, $scope.projectDescription);
-        messageBox.showSuccess(i18n.id_new_project_successfully, messageBoxParent);
-        $element.modal("hide");
+        if ($scope.projectName) {
+            projectOperator.create($scope.projectName, $scope.projectDescription);
+            messageBox.showSuccess(i18n.id_new_project_successfully, messageBoxParent);
+            $element.modal("hide");
+        }
+        else
+            messageBox.showWarning(i18n.id_no_project_name, projectInfoContent);
     };
+})
+.controller("TransformListCtrl", function($scope, $compile, $element, TransformEditTemplate) {
+    console.log("In TransformListCtrl", $element);
+    var componentList = $scope.desgin.designPanel.getComponentList();
+
+    $scope.backFromTransformEditing = function() {
+        $scope.transformEditPanel.remove();
+        Lumens.system.designView.workspaceLayout.show();
+    }
+
+    $scope.openTransformEditing = function() {
+        Lumens.system.designView.workspaceLayout.hide();
+        //TODO show to the transform editing
+        TransformEditTemplate.get(function(transformEditTemplate) {
+            $scope.transformEditPanel = new Lumens.ResizableVSplitLayoutExt(Lumens.system.theLayout.getPart2Element())
+            .configure({
+                mode: "vertical",
+                useRatio: true,
+                part1Size: "40%"
+            });
+            $compile(transformEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart1Element());
+        });
+    };
+
+    // Init the trnasformation rule list to show all rules
+    $scope.$watch(function() {
+        return $scope.currentComponent;
+    }, function(currentComponent) {
+        $scope.theTargetNameList = ["All"];
+        if (currentComponent && currentComponent.target) {
+            $.each(currentComponent.target, function() {
+                $scope.theTargetNameList.push(this.name);
+            });
+            if (currentComponent.transform_rule_entry) {
+                $.each(currentComponent.transform_rule_entry, function() {
+                    if ($scope.selectTargetName === "All") {
+                        $scope.theTransformRuleEntryList.push(this);
+                    }
+                });
+            }
+        }
+    });
+
+    // if the select a target then only list the related rules
+    $scope.$watch(function() {
+        return $scope.selectTargetName;
+    }, function(selectTargetName) {
+        $scope.theTransformRuleEntryList = [];
+        if ($scope.currentComponent && $scope.currentComponent.transform_rule_entry) {
+            $.each($scope.currentComponent.transform_rule_entry, function() {
+                if (selectTargetName === "All") {
+                    $scope.theTransformRuleEntryList.push(this);
+                }
+                else {
+                    var targetComponentFormatList = getTargetComponentFormatList(componentList, selectTargetName);
+                    if (targetComponentFormatList) {
+                        if (targetComponentFormatList.length > 0 && targetComponentFormatList[0].direction === "IN") {
+                            var formatINList = targetComponentFormatList[0];
+                            if (formatINList.format_entry && isFormatOf(formatINList.format_entry, this.target_format_name)) {
+                                $scope.theTransformRuleEntryList.push(this);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+})
+.controller("TransformEditCtrl", function($scope, $element) {
+
 });
