@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="shaofeng.wang">
+        <title>JAMES</title> 
+        <!-- Page Specific CSS -->
+        <link rel="stylesheet" href="libs/jquery/css/smoothness/jquery-ui-1.10.0.css">
+        <link rel="stylesheet" href="libs/morris/morris.css">
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="app/css/lumens_bootstrap.css">
+        <link rel="stylesheet" href="app/css/lumens.css">
+        <!-- 3rd Party JS Plugins -->
+        <script src="libs/jquery/js/jquery.js"></script>
+        <script src="libs/jquery/js/jquery-ui.js"></script>
+        <script src="libs/bootstrap/js/bootstrap.js"></script>
+        <script src="libs/raphael/raphael-min.js"></script>
+        <script src="libs/morris/morris.min.js"></script>
+        <script src="libs/classy.js"></script>
+        <script src="libs/json2.js"></script>
+        <script src="libs/base64.js"></script>
+        <!-- Application JS  -->
+        <script src="app/bootstrap.js"></script>
+        <script src="app/i18n/en_US.js"></script>
+        <script src="app/js/layout.js"></script>
+        <script src="app/js/sysheader.js"></script>
+        <script src="app/js/navbar.js"></script>
+        <script src="app/js/navmenu.js"></script>
+        <script src="app/js/tab.js"></script>
+        <script src="app/js/list.js"></script> 
+        <script src="app/js/tree.js"></script>
+        <script src="app/js/component.js"></script>
+        <script src="app/js/project.js"></script>
+        <script src="app/js/functions.js"></script>
+        <!-- Angular JS -->
+        <script src="libs/angular/angular.js"></script>
+        <script src="libs/angular/angular-route.js"></script>
+        <script src="libs/angular/angular-resource.js"></script>
+        <!-- Application Angular Modules -->
+        <script src="app/mvp/controllers.js"></script>
+        <script src="app/mvp/directives.js"></script>
+        <script src="app/mvp/services.js"></script>
+        <!-- Application Entry JS -->
+        <script src="app/lumens.js"></script>
+        <style type="text/css">
+            .format-panel {
+                overflow: auto;
+            }
+            .format-panel-border {
+                box-sizing:border-box;
+                -moz-box-sizing:border-box;
+                -webkit-box-sizing:border-box;
+                border-left: 1px solid #C2C2C2;
+                border-right: 1px solid #C2C2C2;
+            }
+        </style>
+        <script type="text/javascript">
+            var appModule = angular.module('lumensTest', ["lumens-directives", "lumens-services", "lumens-controllers", "ngRoute"]);
+            function MainTestCtrl($scope, $http, $compile, $sce, TransformEditTemplate, ProjectById, FormatList) {
+                TransformEditTemplate.get(function(transformEditTemplate) {
+                    $scope.transformEditPanel = new Lumens.ResizableVSplitLayoutExt($("body"))
+                    .configure({
+                        mode: "vertical",
+                        useRatio: true,
+                        part1Size: "40%"
+                    });
+                    $compile(transformEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart1Element());
+                    $(window).resize(function(evt) {
+                        if (evt.target !== this)
+                            return;
+                        $scope.transformEditPanel.getElement().trigger("resize");
+                        $scope.transformEditPanel.getElement().find(".format-panel").trigger("resize");
+                    });
+                });
+
+                ProjectById.get({project_id: 1398880523481}, function(projectData) {
+                    $scope.project = $.parseJSON(projectData.content.project[0].data).project;
+                    $scope.currentComponent = $scope.project.transformator[0];
+                    if ($scope.currentComponent.id === "id-transformator") {
+                        $scope.transformRuleEntry = $scope.project.transformator[0].transform_rule_entry[0];
+                        ProjectById.operate({project_id: 1398880523481}, {action: 'active'}, function(result) {
+                            console.log(result);
+                            FormatList.getIN({project_id: 1398880523481, component_name: $scope.transformRuleEntry.target_name}, function(result2) {
+                                $scope.targetFormatList = result2.content.format_list;
+                            })
+                        });
+                        //$scope.sourceFormatList = getSourceComponent($scope.project, $scope.transformRuleEntry);
+                        //$scope.targetFormatList = getTargetComponent($scope.project, $scope.transformRuleEntry);
+                    }
+                });
+            }
+            function getSourceComponent(project, transformRuleEntry) {
+                var sourceName = transformRuleEntry.source_name;
+                var sourceFormatName = transformRuleEntry.source_format_name;
+                for (var i in project.datasource) {
+                    var datasource = project.datasource[i];
+                    if (datasource.name === sourceName) {
+                        var formatEntryList;
+                        if (datasource.format_list.length > 1 && datasource.format_list[0].direction === "OUT")
+                            formatEntryList = datasource.format_list[0].format_entry;
+                        else if (datasource.format_list.length > 1 && datasource.format_list[1].direction === "OUT")
+                            formatEntryList = datasource.format_list[1].format_entry;
+
+                        return formatEntryList;
+                    }
+                }
+            }
+            function getTargetComponent(project, transformRuleEntry) {
+                var targetName = transformRuleEntry.target_name;
+                var targetFormatName = transformRuleEntry.target_format_name;
+                for (var i in project.datasource) {
+                    var datasource = project.datasource[i];
+                    if (datasource.name === targetName) {
+                        var formatEntryList;
+                        if (datasource.format_list.length > 1 && datasource.format_list[0].direction === "OUT")
+                            formatEntryList = datasource.format_list[0].format_entry;
+                        else if (datasource.format_list.length > 1 && datasource.format_list[1].direction === "OUT")
+                            formatEntryList = datasource.format_list[1].format_entry;
+                        return formatEntryList;
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body ng-app='lumensTest' class='lumens' ng-controller="MainTestCtrl">
+    </body>
+</html>
