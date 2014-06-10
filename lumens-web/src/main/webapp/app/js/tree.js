@@ -3,11 +3,12 @@
  */
 
 Lumens.TreeNode = Class.$extend({
-    __init__: function(type, name, data, parent, classes) {
+    __init__: function(type, label, name, data, parent, classes) {
         var __this = this;
         this.children = {size: 0, map: {}};
         this.$parent = parent;
         this.nodeType = type;
+        this.label = label;
         this.name = name;
         this.data = data;
         this.dblclickHandler = parent.dblclickHandler;
@@ -28,7 +29,7 @@ Lumens.TreeNode = Class.$extend({
             this.$fContent = $('<div class="lumens-tree-folder-content" style="display:none;"></div>').appendTo(this.$folder);
         }
         //-------------------------------------------------
-        this.$fHeader.find('.lumens-tree-folder-name').text(name);
+        this.$fHeader.find('.lumens-tree-folder-name').html(label);
         if (this.draggable)
             this.$fHeader.find(".lumens-tree-node").draggable({
                 helper: function() {
@@ -88,7 +89,7 @@ Lumens.TreeNode = Class.$extend({
             throw "Current node is not folder type, no child";
         var parent = this;
         $.each(nodes, function() {
-            var entry = new Lumens.TreeNode(this.nodeType, this.name, this.data, parent);
+            var entry = new Lumens.TreeNode(this.nodeType, this.label, this.name, this.data, parent);
             parent.children.map[entry.getId()] = entry;
             parent.children.size++;
         });
@@ -109,7 +110,7 @@ Lumens.Tree = Class.$extend({
     addEntryList: function(entryList) {
         var parent = this;
         $.each(entryList, function() {
-            var entry = new Lumens.TreeNode(this.nodeType, this.name, this.data, parent, parent.children.size ? "lumens-0n-level" : "lumens-00-level");
+            var entry = new Lumens.TreeNode(this.nodeType, this.label, this.name, this.data, parent, parent.children.size ? "lumens-0n-level" : "lumens-00-level");
             parent.children.map[entry.getId()] = entry;
             parent.children.size++;
         });

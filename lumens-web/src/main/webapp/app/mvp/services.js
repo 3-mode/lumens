@@ -147,8 +147,9 @@ Lumens.services.factory('ProjectList', function($resource) {
     });
 });
 Lumens.services.factory('ProjectById', function($resource) {
-    return $resource("rest/project/:project_id", {}, {
-        get: {method: 'GET', isArray: false}
+    return $resource("rest/project/:project_id", {project_id: '@project_id'}, {
+        get: {method: 'GET', isArray: false},
+        operate: {method: 'POST', isArray: false}
     });
 });
 Lumens.services.factory('ProjectSave', function($http) {
@@ -164,7 +165,7 @@ Lumens.services.factory('ProjectSave', function($http) {
     };
 });
 Lumens.services.factory('FormatList', function($resource) {
-    return $resource("app/mock/json/db_format_list_response.json?component_name=:component_name&direction=:direction", {}, {
+    return $resource("rest/project/:project_id/format?component_name=:component_name&direction=:direction", {}, {
         getIN: {method: 'GET', params: {direction: 'IN'}, isArray: false},
         getOUT: {method: 'GET', params: {direction: 'OUT'}, isArray: false}
     });

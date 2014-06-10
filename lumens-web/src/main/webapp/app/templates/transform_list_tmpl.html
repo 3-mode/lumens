@@ -18,9 +18,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="lumens-transform-item" style="cursor: pointer;" 
+            <tr class="lumens-transform-item" style="cursor: pointer;"
                 ng-if="currentComponent && currentComponent.transform_rule_entry"
-                ng-repeat="rule in theTransformRuleEntryList" ng-dblclick="openTransformEditing()">
+                ng-repeat="rule in transformRuleEntryList" ng-dblclick="openTransformEditing()">
                 <td>{{rule.name}}</td><td>{{rule.source_format_name}}</td><td>{{rule.target_format_name}}</td>
             </tr>
         </tbody>

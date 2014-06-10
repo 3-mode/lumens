@@ -54,7 +54,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     // Load templates
     $scope.messageBox = new Lumens.Message({success: SuccessTemplate, warning: WarningTemplate, error: ErrorTemplate});
     TransformListTemplate.get(function(templ) {
-        $scope.transformTemplate = templ;
+        $scope.transformListTemplate = templ;
     });
     $scope.onApplyProperty = function(event) {
         console.log("Apply:", event);
@@ -105,6 +105,8 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                         panelStyle: {width: "100%", height: "100%"},
                         onComponentDblclick: function(component) {
                             console.log("Dblclick:", component);
+                            if ($scope.currentUIComponent === component)
+                                return;
                             $scope.currentUIComponent = component;
                             var config = component.configure;
                             $scope.$apply(function() {
@@ -199,7 +201,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                         });
                     }
                     function tabTransformationList($tabContent) {
-                        $tabContent.append($compile($scope.transformTemplate)($scope));
+                        $tabContent.append($compile($scope.transformListTemplate)($scope));
 
                     }
                     desgin.tabs = new Lumens.TabPanel(desgin.tabsContainer.getElement());
@@ -348,7 +350,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             if (currentComponent.transform_rule_entry) {
                 $.each(currentComponent.transform_rule_entry, function() {
                     if ($scope.selectTargetName === "All") {
-                        $scope.theTransformRuleEntryList.push(this);
+                        $scope.transformRuleEntryList.push(this);
                     }
                 });
             }
@@ -359,11 +361,11 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     $scope.$watch(function() {
         return $scope.selectTargetName;
     }, function(selectTargetName) {
-        $scope.theTransformRuleEntryList = [];
+        $scope.transformRuleEntryList = [];
         if ($scope.currentComponent && $scope.currentComponent.transform_rule_entry) {
             $.each($scope.currentComponent.transform_rule_entry, function() {
                 if (selectTargetName === "All") {
-                    $scope.theTransformRuleEntryList.push(this);
+                    $scope.transformRuleEntryList.push(this);
                 }
                 else {
                     var targetComponentFormatList = getTargetComponentFormatList(componentList, selectTargetName);
@@ -371,7 +373,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                         if (targetComponentFormatList.length > 0 && targetComponentFormatList[0].direction === "IN") {
                             var formatINList = targetComponentFormatList[0];
                             if (formatINList.format_entry && isFormatOf(formatINList.format_entry, this.target_format_name)) {
-                                $scope.theTransformRuleEntryList.push(this);
+                                $scope.transformRuleEntryList.push(this);
                             }
                         }
                     }
