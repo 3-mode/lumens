@@ -223,7 +223,7 @@ public class ProjectService implements ServiceConstants {
     public Response listProject(@QueryParam("page") int page, @Context HttpServletRequest req) throws IOException {
         try {
             // TODO
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (InterruptedException ex) {
         }
         //
@@ -266,7 +266,7 @@ public class ProjectService implements ServiceConstants {
             new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
             Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
             if (attr != null)
-                ((Pair<String, TransformProject>) attr).getSecond().close();
+                ((Pair<Long, TransformProject>) attr).getSecond().close();
             req.getSession().setAttribute(CURRENT__EDITING__PROJECT, new Pair<>(projectID, projectInstance));
 
             json.writeStartObject();
@@ -287,7 +287,7 @@ public class ProjectService implements ServiceConstants {
     @GET
     @Path("{projectID}/format")
     @Produces("application/json")
-    public Response getFormatFromComponent(@PathParam("projectID") String projectID,
+    public Response getFormatFromComponent(@PathParam("projectID") long projectID,
                                            @QueryParam("component_name") String componentName,
                                            @QueryParam("format_name") String formatName,
                                            @QueryParam("format_path") String formatPath,
@@ -296,9 +296,9 @@ public class ProjectService implements ServiceConstants {
         if (componentName != null && direction != null) {
             Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
             if (attr != null) {
-                Pair<String, TransformProject> pair = (Pair<String, TransformProject>) attr;
+                Pair<Long, TransformProject> pair = (Pair<Long, TransformProject>) attr;
                 TransformProject project = pair.getSecond();
-                if (!pair.getFirst().equals(projectID))
+                if (pair.getFirst() != projectID)
                     return ServerUtils.getErrorMessageResponse(String.format("The project with id '%s' is not opened and actived", projectID));
                 // To find the datasource format
                 // TODO handle the uncode componentName

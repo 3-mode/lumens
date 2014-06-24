@@ -1,4 +1,5 @@
 Lumens.i18n = {
+    // Project List Ctrl
     id_new: "New",
     id_open: "Open",
     id_deploy: "Deploy",
@@ -13,4 +14,8 @@ Lumens.i18n = {
     id_save_project: "The project '{0}' is saved successfully",
     id_save_proj_err: "The project '{0}' can't be saved !",
     id_no_project_name: "The project name is must !",
+    // Script Editor
+    id_script_back: "Back",
+    id_script_apply: "Apply",
+    id_script_validate: "Validate"
 };

@@ -117,6 +117,12 @@ Lumens.Id = function($element) {
     return $element.attr("element-id", 'id$' + id);
 };
 
+Lumens.isMultipleLink = function(type) {
+    if (type === "datasource")
+        return true;
+    return false;
+};
+
 Lumens.SysToolbar_Config = {
     event_type: "SysToolbar",
     buttons:

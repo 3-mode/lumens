@@ -59,7 +59,7 @@ Lumens.SplitLayout = Class.$extend({
                 if (this.part1Layout && this.part2Layout) {
                     this.part1Layout.css("height", "100%");
                     this.part2Layout.css("height", "100%");
-                    if (this.layoutConfig.disabeAutoChildrenSize) {
+                    if (this.layoutConfig.disableAutoChildrenSize) {
                         this.part1Layout.css("width", this.layoutConfig.part1Size);
                         this.part2Layout.css("width", this.layoutConfig.part2Size);
                     } else {
@@ -83,7 +83,7 @@ Lumens.SplitLayout = Class.$extend({
                 if (this.part1Layout && this.part2Layout) {
                     this.part1Layout.css("width", "100%");
                     this.part2Layout.css("width", "100%");
-                    if (this.layoutConfig.disabeAutoChildrenSize) {
+                    if (this.layoutConfig.disableAutoChildrenSize) {
                         this.part1Layout.css("height", this.layoutConfig.part1Size);
                         this.part2Layout.css("height", this.layoutConfig.part2Size);
                     } else {
@@ -376,7 +376,7 @@ Lumens.ResizableVSplitLayoutExt = Lumens.ResizableSplitLayout.$extend({
         this.$super(config);
         this.$contentPanel = new Lumens.SplitLayout(this.getPart2Element()).configure({
             mode: "vertical",
-            part1Size: "32"
+            part1Size: 22
         });
         this.$titleBar = $('<div style="float:top;"><div id="id-title" class="lumens-window-title"></div><div class="lumens-window-buttons"><span class="lumens-min"/><span class="lumens-mid"/><span class="lumens-max"/></div></div>')
         .appendTo(this.$contentPanel.getPart1Element());
@@ -430,7 +430,7 @@ Lumens.ResizableVSplitLayoutExt = Lumens.ResizableSplitLayout.$extend({
         return this.$titleBar.find('#id-title');
     },
     getOffset: function() {
-        return this.$super() + 32;
+        return this.$super() + 22;
     },
     getPart2Element: function() {
         if (this.$contentPanel)

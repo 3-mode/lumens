@@ -315,7 +315,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             messageBox.showWarning(i18n.id_no_project_name, projectInfoContent);
     };
 })
-.controller("TransformListCtrl", function($scope, $compile, $element, TransformEditTemplate) {
+.controller("TransformListCtrl", function($scope, $compile, $element, TransformEditTemplate, ScriptEditTemplate) {
     console.log("In TransformListCtrl", $element);
     var componentList = $scope.desgin.designPanel.getComponentList();
 
@@ -335,6 +335,16 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 part1Size: "40%"
             });
             $compile(transformEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart1Element());
+            $(window).resize(function(evt) {
+                if (evt.target !== this)
+                    return;
+                $scope.transformEditPanel.getElement().trigger("resize");
+                $scope.transformEditPanel.getElement().find(".lumens-format-panel").trigger("resize");
+            });
+            // Load script editing panel
+            ScriptEditTemplate.get(function(scriptEditTemplate) {
+                $compile(scriptEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart2Element());
+            })
         });
     };
 
@@ -382,6 +392,55 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         }
     });
 })
-.controller("TransformEditCtrl", function($scope, $element) {
-
+.controller("TransformEditCtrl", function($scope, $element, ProjectById, FormatList) {
+    console.log("In TransformEditCtrl");
+    $scope.$parent.scriptNodeScope = $scope;
+    var projectOperator = $scope.projectOperator;
+    var currentScriptNode;
+    $scope.currentComponent = $scope.project.transformator[0];
+    if ($scope.currentComponent.id === "id-transformator") {
+        $scope.transformRuleEntity = {
+            transformRuleEntry: $scope.project.transformator[0].transform_rule_entry[0],
+            clickCallBack: function(target) {
+                currentScriptNode = target;
+                $scope.$apply(function() {
+                    $scope.$parent.transformRuleScript = target.getScript();
+                });
+            }
+        };
+        var unbindWatch = $scope.$watch(function() {
+            return $scope.transformRuleScript;
+        }, function(scriptEditorText) {
+            console.log("Changed script: ", scriptEditorText);
+            if (currentScriptNode)
+                currentScriptNode.setScript(scriptEditorText);
+        });
+        $scope.$on('$destroy', function() {
+            unbindWatch();
+        });
+        ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function(result) {
+            console.log(result);
+            FormatList.getIN({project_id: projectOperator.get().projectId, component_name: $scope.transformRuleEntity.transformRuleEntry.target_name}, function(result2) {
+                $scope.targetFormatList = result2.content.format_list;
+            });
+        });
+    }
+})
+.controller("RuleScriptCtrl", function($scope) {
+    $scope.$parent.scriptEditorScope = $scope;
+    $scope.onCommand = function(id_script_btn) {
+        if (id_script_btn === "id_script_apply") {
+            $scope.$parent.transformRuleScript = $scope.transformRuleScriptEditor.getValue();
+        }
+        else if (id_script_btn === "id_script_validate") {
+            console.log("Validate transform_rule_entity:", $scope.transformRuleEntity.transformRuleEntry);
+        }
+        else if (id_script_btn === "id_script_back") {
+            $scope.transformEditPanel.remove();
+            $scope.scriptNodeScope.$destroy();
+            $scope.scriptEditorScope.$destroy();
+            Lumens.system.designView.workspaceLayout.show();
+        }
+    }
+    console.log("In RuleScriptCtrl");
 });

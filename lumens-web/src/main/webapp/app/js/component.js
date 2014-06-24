@@ -44,6 +44,7 @@ Lumens.DataComponent = Class.$extend({
     __init__: function($parent, config) {
         this.$parent = $parent;
         this.configure = config;
+        this.isMultipleLink = Lumens.isMultipleLink(config.category_info.type);
         var template =
         '<div class="data-comp lumens_boostrap" style="left:50px;top:50px;">' +
         '<div class="data-comp-icon"><img/></div>' +
@@ -70,9 +71,23 @@ Lumens.DataComponent = Class.$extend({
             accept: ".data-comp-icon",
             drop: function(event, ui) {
                 event.preventDefault();
-                if (ui.draggable.get(0) === $(this).find(".data-comp-icon").get(0))
+                if (ui.draggable[0] === $(this).find(".data-comp-icon")[0])
                     return;
                 var data_comp = ui.draggable.data("data-comp");
+                if (!__this.isMultipleLink) {
+                    if (__this.$from_list.length > 0) {
+                        // TODO i18n, message box
+                        alert("'" + __this.configure.short_desc + "' Can't link many times");
+                        return;
+                    }
+                }
+                if (!data_comp.isMultipleLink) {
+                    if (data_comp.$to_list.length > 0) {
+                        // TODO i18n, message box
+                        alert("'" + data_comp.configure.short_desc + "' Can't link many times");
+                        return;
+                    }
+                }
                 new Lumens.Link().from(data_comp).to(__this).draw();
             }
         });

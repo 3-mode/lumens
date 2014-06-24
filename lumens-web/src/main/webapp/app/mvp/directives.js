@@ -8,11 +8,11 @@ Lumens.directives = angular.module("lumens-directives", []);
 Lumens.directives.directive("dynamicPropertyForm", function() {
     return {
         restrict: 'A',
-        link: function(scope, element, attr) {
+        link: function($scope, element, attr) {
             function getStringValue() {
-                return scope[attr.dynamicPropertyForm];
+                return $scope[attr.dynamicPropertyForm];
             }
-            scope.$watch(getStringValue, function(compiledTmpl) {
+            $scope.$watch(getStringValue, function(compiledTmpl) {
                 element.empty();
                 if (compiledTmpl) {
                     element.append(compiledTmpl);
@@ -24,11 +24,11 @@ Lumens.directives.directive("dynamicPropertyForm", function() {
 Lumens.directives.directive("dynamicFormatList", function() {
     return {
         restrict: 'A',
-        link: function(scope, element, attr) {
+        link: function($scope, element, attr) {
             function getStringValue() {
-                return scope[attr.dynamicFormatList];
+                return $scope[attr.dynamicFormatList];
             }
-            scope.$watch(getStringValue, function(component) {
+            $scope.$watch(getStringValue, function(component) {
                 element.empty();
                 buildDataFormatList(element, component);
             });
@@ -38,11 +38,11 @@ Lumens.directives.directive("dynamicFormatList", function() {
 Lumens.directives.directive("dynamicTransformationList", function() {
     return {
         restrict: 'A',
-        link: function(scope, element, attr) {
+        link: function($scope, element, attr) {
             function getStringValue() {
-                return scope[attr.dynamicTransformationList];
+                return $scope[attr.dynamicTransformationList];
             }
-            scope.$watch(getStringValue, function(component) {
+            $scope.$watch(getStringValue, function(component) {
                 element.empty();
                 buildTransformationList(element, component);
             });
@@ -52,11 +52,11 @@ Lumens.directives.directive("dynamicTransformationList", function() {
 Lumens.directives.directive("formatList", function() {
     return {
         restrict: 'A',
-        link: function(scope, element, attr) {
+        link: function($scope, element, attr) {
             function getStringValue() {
-                return scope[attr.formatList];
+                return $scope[attr.formatList];
             }
-            scope.$watch(getStringValue, function(formatList) {
+            $scope.$watch(getStringValue, function(formatList) {
                 element.empty();
                 if (formatList) {
                     console.log("Format list:", formatList);
@@ -67,19 +67,49 @@ Lumens.directives.directive("formatList", function() {
     };
 });
 
-Lumens.directives.directive("ruleEntry", function() {
+Lumens.directives.directive("ruleEntity", function() {
     return {
         restrict: 'A',
-        link: function(scope, element, attr) {
+        link: function($scope, element, attr) {
             function getStringValue() {
-                return scope[attr.ruleEntry];
+                return $scope[attr.ruleEntity];
             }
-            scope.$watch(getStringValue, function(ruleEntry) {
+            $scope.$watch(getStringValue, function(ruleEntity) {
                 element.empty();
-                if (ruleEntry) {
-                    console.log("Rule list:", ruleEntry);
-                    buildTransformRuleTree(element, ruleEntry);
+                if (ruleEntity) {
+                    console.log("Rule list:", ruleEntity);
+                    buildTransformRuleTree(element, ruleEntity);
                 }
+            });
+        }
+    };
+});
+
+
+Lumens.directives.directive("scriptEditor", function() {
+    return {
+        restrict: 'E',
+        link: function($scope, element, attr) {
+            if (element.find("#scriptEditor").length === 0)
+                element.append('<div id="scriptEditor" class="lumens-rule-script" />');
+            $scope[attr.scriptEditorHolder] = CodeMirror(element.find("#scriptEditor").get(0), {
+                mode: "javascript",
+                lineNumbers: true,
+                dragDrop: true,
+                theme: "eclipse"
+            });
+            function getStringValue() {
+                return $scope[attr.scriptVar];
+            }
+            var unbind = $scope.$watch(getStringValue, function(scriptEditorText) {
+                console.log("scriptEditorText:", scriptEditorText);
+                if (!scriptEditorText)
+                    scriptEditorText = "";
+                $scope[attr.scriptEditorHolder].setValue(scriptEditorText);
+            });
+            $scope.$on('$destroy', function() {
+                console.log("$destroy");
+                unbind();
             });
         }
     };
