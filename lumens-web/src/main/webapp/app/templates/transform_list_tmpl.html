@@ -1,28 +1,67 @@
-<div class="lumens-bootstrap lumens-transform-list table-responsive" ng-controller="TransformListCtrl">
-    <div ng-init="selectTargetName = 'All'">
-        <div style="float: left; padding-top: 6px; margin-right: 15px;"><b>Current Component: </b>{{componentProps.Name.value}}</div>
-        <div style="display: inline-block;">
-            <div style="float: left; padding-top: 6px; margin-right: 15px;"><b>Target Component</b></div>
-            <select class="form-control lumens-target-list" ng-model="selectTargetName">
-                <option ng-if="currentComponent && currentComponent.target"
-                        ng-repeat="targetName in theTargetNameList">{{targetName}}</option>
-            </select>
+<div class="lumens-transform-list" ng-controller="TransformListCtrl">
+    <div ng-if="currentUIComponent.configure.category_info.type !== 'datasource'">
+        <div style="display: inline-block; height: 48px; width: 100%; border-bottom: 1px solid rgb(214, 214, 214);">
+            <div style="display: inline-block;">
+                <div style="float: left; padding-top: 6px; margin-right: 15px;">Instrument:</div>
+                <div style="float: left; padding-top: 6px; margin-right: 15px;">{{componentProps.Name.value}}</div>
+            </div>
+            <div style="display: inline-block;">
+                <div style="float: left; padding-top: 6px; margin-right: 15px;">Source:</div>
+                <div style="float: left; padding-top: 6px; margin-right: 15px;">{{componentProps.Name.value}}</div>
+            </div>
+            <div style="display: inline-block;">
+                <div style="float: left; padding-top: 6px; margin-right: 15px;">Target:</div>
+                <div style="float: left; padding-top: 6px; margin-right: 15px;">{{theTargetNameList[0]}}</div>
+            </div>
+        </div>
+        <div class="lumens-button-bar">
+            <a ng-repeat="id_rule_btn in ['id_rule_new', 'id_rule_delete']" class="lumens-button" ng-click="onRuleCommand(id_rule_btn)">{{i18n[id_rule_btn]}}</a>
+        </div>
+        <div id="rule_edit_dialog" class="lumens-bootstrap lumens-modal-holder"></div>
+        <div class="lumens-bootstrap  table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Input</th>
+                        <th>Output</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="lumens-transform-item" style="cursor: pointer;"
+                        ng-if="currentComponent && currentComponent.transform_rule_entry"
+                        ng-repeat="rule in transformRuleEntryList" ng-dblclick="openTransformEditing(rule)">
+                        <td>{{rule.name}}</td><td>{{rule.source_format_name}}</td><td>{{rule.target_format_name}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Source Name</th>
-                <th>Target Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="lumens-transform-item" style="cursor: pointer;"
-                ng-if="currentComponent && currentComponent.transform_rule_entry"
-                ng-repeat="rule in transformRuleEntryList" ng-dblclick="openTransformEditing()">
-                <td>{{rule.name}}</td><td>{{rule.source_format_name}}</td><td>{{rule.target_format_name}}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div ng-if="currentUIComponent.configure.category_info.type === 'datasource'">
+        <div style="display: inline-block; height: 48px; width: 100%; border-bottom: 1px solid rgb(214, 214, 214);">
+            <div style="float: left; padding-top: 6px; margin-right: 15px;">Datasource: {{componentProps.Name.value}}</div>
+        </div>
+        <div class="lumens-button-bar">
+            <a ng-repeat="id_rule_btn in ['id_format_new', 'id_format_delete']" class="lumens-button" ng-click="onFormatCommand(id_script_btn)">{{i18n[id_rule_btn]}}</a>
+        </div>
+        <div id="format_edit_dialog" class="lumens-bootstrap lumens-modal-holder"></div>
+        <div class="lumens-bootstrap  table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Input</th>
+                        <th>Output</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="lumens-transform-item" style="cursor: pointer;"
+                        ng-if="currentComponent && currentComponent.transform_rule_entry"
+                        ng-repeat="rule in transformRuleEntryList" ng-dblclick="openTransformEditing(rule)">
+                        <td>{{rule.name}}</td><td>{{rule.source_format_name}}</td><td>{{rule.target_format_name}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

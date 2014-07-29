@@ -14,6 +14,7 @@ function createGetTemplateObject($http, $q, url) {
         }
     };
 }
+
 function buildDataFormatList($parent, formatList) {
     if (formatList) {
         var formatTree = new Lumens.Tree($parent).configure({
@@ -55,78 +56,81 @@ function buildDataFormatList($parent, formatList) {
     return null;
 }
 
+function getAppendTransformRuleItems(first, second) {
+    var temp = [];
+    $.each(second, function() {
+        var second_item = this;
+        var isDuplicated = false;
+        $.each(first, function() {
+            if (second_item.format_name === this.format_name) {
+                isDuplicated = true;
+                return false;
+            }
+        })
+        if (!isDuplicated)
+            temp.push(this);
+    });
+    return temp;
+}
+
+function buildTransformRuleItemStructure(parentRuleItem, formats) {
+    if (!formats || !formats.length)
+        return;
+    parentRuleItem.transform_rule_item = [];
+    $.each(formats, function() {
+        var transformRuleItem = {
+            format_name: this.name
+        };
+        parentRuleItem.transform_rule_item.push(transformRuleItem);
+        buildTransformRuleItemStructure(transformRuleItem, this.format);
+    });
+}
+
+function buildTransformRuleItemPathStructure(parentNode, path, index, childTransformRuleItem) {
+    var curParentData = parentNode.data;
+    var entryData = [];
+    while (index < path.length) {
+        if (!curParentData.transform_rule_item)
+            curParentData.transform_rule_item = [];
+        var transformRuleItem = {
+            format_name: path[index].name
+        };
+        curParentData.transform_rule_item.push(transformRuleItem);
+        if (entryData.length === 0)
+            entryData.push(transformRuleItem);
+        curParentData = transformRuleItem;
+        ++index;
+    }
+    // Put child into its correct location
+    if (!curParentData.transform_rule_item)
+        curParentData.transform_rule_item = [];
+    if (parentNode.children.map[childTransformRuleItem.format_name]) {
+        parentNode = parentNode.children.map[childTransformRuleItem.format_name];
+        curParentData = parentNode.data;
+        var appended = getAppendTransformRuleItems(curParentData.transform_rule_item, childTransformRuleItem.transform_rule_item);
+        curParentData.transform_rule_item = curParentData.transform_rule_item.concat(appended);
+        if (entryData.length === 0)
+            entryData = entryData.concat(appended);
+    }
+    else {
+        curParentData.transform_rule_item.push(childTransformRuleItem);
+        if (entryData.length === 0)
+            entryData.push(childTransformRuleItem);
+    }
+    var nodeList = [];
+    $.each(entryData, function() {
+        nodeList.push({
+            label: this.format_name,
+            name: this.format_name,
+            nodeType: this.transform_rule_item && this.transform_rule_item.length > 0 ? "folder" : "file",
+            data: this
+        });
+    });
+    parentNode.addChildList(nodeList);
+}
+
 function buildTransformRuleTree($parent, ruleEntity) {
     if (ruleEntity && ruleEntity.transformRuleEntry) {
-        function getAppendTransformRuleItems(first, second) {
-            var temp = [];
-            $.each(second, function() {
-                var second_item = this;
-                var isDuplicated = false;
-                $.each(first, function() {
-                    if (second_item.format_name === this.format_name) {
-                        isDuplicated = true;
-                        return false;
-                    }
-                })
-                if (!isDuplicated)
-                    temp.push(this);
-            });
-            return temp;
-        }
-        function buildTransformRuleItemStructure(parentRuleItem, formats) {
-            if (!formats || !formats.length)
-                return;
-            parentRuleItem.transform_rule_item = [];
-            $.each(formats, function() {
-                var transformRuleItem = {
-                    format_name: this.name
-                };
-                parentRuleItem.transform_rule_item.push(transformRuleItem);
-                buildTransformRuleItemStructure(transformRuleItem, this.format);
-            });
-        }
-        function buildTransformRuleItemPathStructure(parentNode, path, index, childTransformRuleItem) {
-            var curParentData = parentNode.data;
-            var entryData = [];
-            while (index < path.length) {
-                if (!curParentData.transform_rule_item)
-                    curParentData.transform_rule_item = [];
-                var transformRuleItem = {
-                    format_name: path[index].name
-                };
-                curParentData.transform_rule_item.push(transformRuleItem);
-                if (entryData.length === 0)
-                    entryData.push(transformRuleItem);
-                curParentData = transformRuleItem;
-                ++index;
-            }
-            // Put child into its correct location
-            if (!curParentData.transform_rule_item)
-                curParentData.transform_rule_item = [];
-            if (parentNode.children.map[childTransformRuleItem.format_name]) {
-                parentNode = parentNode.children.map[childTransformRuleItem.format_name];
-                curParentData = parentNode.data;
-                var appended = getAppendTransformRuleItems(curParentData.transform_rule_item, childTransformRuleItem.transform_rule_item);
-                curParentData.transform_rule_item = curParentData.transform_rule_item.concat(appended);
-                if (entryData.length === 0)
-                    entryData = entryData.concat(appended);
-            }
-            else {
-                curParentData.transform_rule_item.push(childTransformRuleItem);
-                if (entryData.length === 0)
-                    entryData.push(childTransformRuleItem);
-            }
-            var nodeList = [];
-            $.each(entryData, function() {
-                nodeList.push({
-                    label: this.format_name,
-                    name: this.format_name,
-                    nodeType: this.transform_rule_item && this.transform_rule_item.length > 0 ? "folder" : "file",
-                    data: this
-                });
-            });
-            parentNode.addChildList(nodeList);
-        }
         var transformRuleTree = new Lumens.Tree($parent).configure({
             handler: function(parentNode) {
                 var transformRuleItem = ruleEntity.transformRuleEntry.transform_rule.transform_rule_item;
@@ -140,6 +144,7 @@ function buildTransformRuleTree($parent, ruleEntity) {
                 parentNode.addEntryList(entryList);
             },
             drop: function(data, current, parent) {
+                console.log("Dropped 2", data);
                 // TODO
                 var Root = current.getRoot();
                 var path = data.location;

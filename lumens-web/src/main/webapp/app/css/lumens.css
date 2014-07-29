@@ -638,7 +638,7 @@ svg path {
     color: white;
 }
 @media (min-width: 200px) {
-    .lumens .lumens-target-list {
+    .lumens .lumens-input, .lumens .lumens-select {
         width: 300px;
     }
 }

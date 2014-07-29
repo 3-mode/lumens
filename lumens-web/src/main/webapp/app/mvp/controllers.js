@@ -1,5 +1,3 @@
-'use strict';
-
 /* 
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
@@ -319,12 +317,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     console.log("In TransformListCtrl", $element);
     var componentList = $scope.desgin.designPanel.getComponentList();
 
-    $scope.backFromTransformEditing = function() {
-        $scope.transformEditPanel.remove();
-        Lumens.system.designView.workspaceLayout.show();
-    }
-
-    $scope.openTransformEditing = function() {
+    function showRuleEditor() {
         Lumens.system.designView.workspaceLayout.hide();
         //TODO show to the transform editing
         TransformEditTemplate.get(function(transformEditTemplate) {
@@ -346,13 +339,31 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 $compile(scriptEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart2Element());
             })
         });
+    }
+
+    $scope.onRuleCommand = function(id_btn) {
+        if (id_btn === "id_rule_new") {
+            showRuleEditor();
+        } else if (id_btn === "id_rule_delete") {
+        }
+    };
+
+    $scope.openTransformEditing = function(rule) {
+        console.log("Opening rule: ", rule);
+        $scope.currentTransformRule = rule;
+        showRuleEditor();
+    };
+
+    $scope.backFromTransformEditing = function() {
+        $scope.transformEditPanel.remove();
+        Lumens.system.designView.workspaceLayout.show();
     };
 
     // Init the trnasformation rule list to show all rules
     $scope.$watch(function() {
         return $scope.currentComponent;
     }, function(currentComponent) {
-        $scope.theTargetNameList = ["All"];
+        $scope.theTargetNameList = [];
         if (currentComponent && currentComponent.target) {
             $.each(currentComponent.target, function() {
                 $scope.theTargetNameList.push(this.name);
@@ -397,17 +408,74 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     $scope.$parent.scriptNodeScope = $scope;
     var projectOperator = $scope.projectOperator;
     var currentScriptNode;
-    $scope.currentComponent = $scope.project.transformator[0];
     if ($scope.currentComponent.id === "id-transformator") {
-        $scope.transformRuleEntity = {
-            transformRuleEntry: $scope.project.transformator[0].transform_rule_entry[0],
-            clickCallBack: function(target) {
-                currentScriptNode = target;
-                $scope.$apply(function() {
-                    $scope.$parent.transformRuleScript = target.getScript();
-                });
+        function buildTransformRuleEntry(ruleEntry) {
+            return {
+                // TODO
+                transformRuleEntry: ruleEntry,
+                clickCallBack: function(target) {
+                    currentScriptNode = target;
+                    $scope.$apply(function() {
+                        $scope.$parent.transformRuleScript = target.getScript();
+                    });
+                }
+            };
+        }
+        function buildTransformRuleTree(location_tokens) {
+            var rootRuleItem, currentRuleItem;
+            $.each(location_tokens, function() {
+                if (!rootRuleItem) {
+                    currentRuleItem = rootRuleItem = {
+                        "format_name": this.name
+                    };
+                } else {
+                    currentRuleItem.transform_rule_item = [{
+                            "format_name": this.name
+                        }];
+                    currentRuleItem = currentRuleItem.transform_rule_item[0];
+                }
+            });
+            return {root: rootRuleItem, last: currentRuleItem};
+        }
+        var sourceComponentName, targetComponentName;
+        if ($scope.currentUIComponent.$from_list && $scope.currentUIComponent.$from_list.length > 0 && $scope.currentUIComponent.$from_list[0].$from)
+            sourceComponentName = $scope.currentUIComponent.$from_list[0].$from.configure.component_info.name;
+        if ($scope.currentUIComponent.$to_list && $scope.currentUIComponent.$to_list.length > 0 && $scope.currentUIComponent.$to_list[0].$to)
+            targetComponentName = $scope.currentUIComponent.$to_list[0].$to.configure.component_info.name;
+        console.log("transform source:" + sourceComponentName + ", target:" + targetComponentName);
+        $element.find("div[rule-entity]").droppable({
+            greedy: true,
+            accept: ".lumens-tree-node",
+            drop: function(event, ui) {
+                var data = $.data(ui.draggable.get(0), "tree-node-data");
+                console.log("Dropped", data);
+                // TODO compare root
+                // TODO append to exist correctly
+                var tree = buildTransformRuleTree(data.location);
+                tree.last.transform_rule_item = [{
+                        "format_name": data.child.name
+                    }];
+                buildTransformRuleItemStructure(tree.last, data.child.format);
+                var transformRuleEntry = [
+                    {
+                        "name": "new",
+                        "source_name": "s1",
+                        "target_name": "t1",
+                        "transform_rule": {
+                            "name": "new",
+                            "transform_rule_item": tree.root
+                        }
+                    }
+                ];
+                if ($scope.currentComponent.transform_rule_entry) {
+                    $scope.currentComponent.transform_rule_entry.concat(transformRuleEntry);
+                    $scope.$apply(function() {
+                        $scope.transformRuleEntity = buildTransformRuleEntry(transformRuleEntry[0]);
+                    });
+                }
             }
-        };
+        });
+        $scope.transformRuleEntity = buildTransformRuleEntry($scope.currentComponent.transform_rule_entry[0]);
         var unbindWatch = $scope.$watch(function() {
             return $scope.transformRuleScript;
         }, function(scriptEditorText) {
@@ -418,12 +486,23 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         $scope.$on('$destroy', function() {
             unbindWatch();
         });
-        ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function(result) {
-            console.log(result);
-            FormatList.getIN({project_id: projectOperator.get().projectId, component_name: $scope.transformRuleEntity.transformRuleEntry.target_name}, function(result2) {
-                $scope.targetFormatList = result2.content.format_list;
+
+        if (sourceComponentName) {
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function(result) {
+                console.log(result);
+                FormatList.getIN({project_id: projectOperator.get().projectId, component_name: sourceComponentName}, function(result) {
+                    $scope.sourceFormatList = result.content.format_list;
+                });
             });
-        });
+        }
+        if (targetComponentName) {
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function(result) {
+                console.log(result);
+                FormatList.getIN({project_id: projectOperator.get().projectId, component_name: targetComponentName}, function(result) {
+                    $scope.targetFormatList = result.content.format_list;
+                });
+            });
+        }
     }
 })
 .controller("RuleScriptCtrl", function($scope) {

@@ -41,6 +41,7 @@ Lumens.TreeNode = Class.$extend({
             }).data("tree-node-data", {child: data, location: this.getLocationPath(this)});
         if (this.droppable) {
             this.$fHeader.find(".lumens-tree-node").droppable({
+                greedy: true,
                 hoverClass: "lumens-tree-node-hover",
                 accept: ".lumens-tree-node",
                 drop: function(event, ui) {
