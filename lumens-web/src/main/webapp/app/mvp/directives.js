@@ -85,7 +85,6 @@ Lumens.directives.directive("ruleEntity", function() {
     };
 });
 
-
 Lumens.directives.directive("scriptEditor", function() {
     return {
         restrict: 'E',

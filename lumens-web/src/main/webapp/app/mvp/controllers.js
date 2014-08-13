@@ -327,7 +327,8 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 useRatio: true,
                 part1Size: "40%"
             });
-            $compile(transformEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart1Element());
+            var transforEditor = $compile(transformEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart1Element());
+            var scope = transforEditor.scope();
             $(window).resize(function(evt) {
                 if (evt.target !== this)
                     return;
@@ -336,7 +337,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             });
             // Load script editing panel
             ScriptEditTemplate.get(function(scriptEditTemplate) {
-                $compile(scriptEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart2Element());
+                $compile(scriptEditTemplate)(scope).appendTo($scope.transformEditPanel.getPart2Element());
             })
         });
     }
@@ -403,7 +404,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         }
     });
 })
-.controller("TransformEditCtrl", function($scope, $element, ProjectById, FormatList) {
+.controller("TransformEditCtrl", function($scope, $element, $compile, ProjectById, FormatList, FormatRegistryModal, RuleRegistryModal) {
     console.log("In TransformEditCtrl");
     $scope.$parent.scriptNodeScope = $scope;
     var projectOperator = $scope.projectOperator;
@@ -455,6 +456,8 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 tree.last.transform_rule_item = [{
                         "format_name": data.child.name
                     }];
+                if (data.child.name !== tree.last.format_name)
+                    tree.last = tree.last.transform_rule_item[0];
                 buildTransformRuleItemStructure(tree.last, data.child.format);
                 var transformRuleEntry = [
                     {
@@ -492,6 +495,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 console.log(result);
                 FormatList.getIN({project_id: projectOperator.get().projectId, component_name: sourceComponentName}, function(result) {
                     $scope.sourceFormatList = result.content.format_list;
+                    $scope.displaySourceFormatList = $scope.sourceFormatList;
                 });
             });
         }
@@ -500,8 +504,43 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 console.log(result);
                 FormatList.getIN({project_id: projectOperator.get().projectId, component_name: targetComponentName}, function(result) {
                     $scope.targetFormatList = result.content.format_list;
+                    $scope.displayTargetFormatList = $scope.targetFormatList;
                 });
             });
+        }
+
+        $scope.onCommand = function(btn_id, side) {
+            console.log(btn_id, side);
+            $scope.selectedSide = side;
+            if (side && "id_format_reg_edit_btn" === btn_id) {
+                if ("left" === side)
+                    $scope.currentFormatList = $scope.sourceFormatList;
+                else if ("right" === side)
+                    $scope.currentFormatList = $scope.targetFormatList;
+
+                FormatRegistryModal.get(function(format_reg_edit_tmpl) {
+                    var formatRegEditDialog = $element.find("#reg_edit_dialog");
+                    formatRegEditDialog.append($compile(format_reg_edit_tmpl)($scope));
+                    $('#formatRegistryModal').on("hidden.bs.modal", function() {
+                        formatRegEditDialog.empty();
+                    }).modal({backdrop: "static"});
+                });
+            }
+            else if ("id_rule_reg_edit_btn" === btn_id) {
+                RuleRegistryModal.get(function(rule_reg_edit_tmpl) {
+                    var ruleRegEditDialog = $element.find("#reg_edit_dialog");
+                    ruleRegEditDialog.append($compile(rule_reg_edit_tmpl)($scope));
+                    $('#ruleRegistryModal').on("hidden.bs.modal", function() {
+                        ruleRegEditDialog.empty();
+                    }).modal({backdrop: "static"});
+                });
+            }
+            else if ("id_format_reg_filter_btn" === btn_id) {
+                console.log("input:", $scope.inputFormatRegName);
+                console.log("input format:", $scope.inputSelectedFormatName);
+                console.log("output:", $scope.outputFormatRegName);
+                console.log("outut format:", $scope.outputSelectedFormatName);
+            }
         }
     }
 })
@@ -520,6 +559,40 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             $scope.scriptEditorScope.$destroy();
             Lumens.system.designView.workspaceLayout.show();
         }
+        else if (id_script_btn === "id_rule_fmt_save") {
+            // TODO parsing the rule to get the input registed format
+            // TODO pasring the rule to get the output registed format
+            // TODO save the rule, input format, output format
+            // TODO show them in the list of transformator's rules
+            console.log("input:", $scope.inputFormatRegName);
+            console.log("input format:", $scope.inputSelectedFormatName);
+            console.log("output:", $scope.outputFormatRegName);
+            console.log("outut format:", $scope.outputSelectedFormatName);
+        }
     }
     console.log("In RuleScriptCtrl");
+})
+.controller("FormatRegistryCtrl", function($scope, $element) {
+    if ($scope.selectedSide === 'left')
+        $scope.registeredFormatName = $scope.inputFormatRegName;
+    else if ($scope.selectedSide === 'right')
+        $scope.registeredFormatName = $scope.outputFormatRegName;
+
+    $scope.saveFormatRegistry = function() {
+        if ($scope.selectedSide === 'left') {
+            $scope.$parent.inputFormatRegName = $scope.registeredFormatName;
+            $scope.$parent.inputSelectedFormatName = $scope.selectedFormatName;
+        }
+        else if ($scope.selectedSide === 'right') {
+            $scope.$parent.outputFormatRegName = $scope.registeredFormatName;
+            $scope.$parent.outputSelectedFormatName = $scope.selectedFormatName;
+        }
+        $element.modal("hide");
+    }
+})
+.controller("RuleRegistryCtrl", function($scope, $element) {
+    $scope.saveRuleRegistry = function() {
+        $scope.$parent.ruleRegName = $scope.registeredRuleName;
+        $element.modal("hide");
+    }
 });

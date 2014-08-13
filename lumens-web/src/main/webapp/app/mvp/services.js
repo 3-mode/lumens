@@ -41,6 +41,12 @@ Lumens.services.factory('ProjectListModal', function($http, $q) {
 Lumens.services.factory('ProjectCreateModal', function($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/project_create_modal_tmpl.html");
 });
+Lumens.services.factory('FormatRegistryModal', function($http, $q) {
+    return createGetTemplateObject($http, $q, "app/templates/format_registry_modal_tmpl.html");
+});
+Lumens.services.factory('RuleRegistryModal', function($http, $q) {
+    return createGetTemplateObject($http, $q, "app/templates/rule_registry_modal_tmpl.html");
+});
 Lumens.services.factory('ScriptEditTemplate', function($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/script_edit_tmpl.html");
 });

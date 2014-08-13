@@ -14,12 +14,17 @@ Lumens.i18n = {
     id_script_back: "Back",
     id_script_apply: "Apply",
     id_script_validate: "Validate",
+    id_rule_fmt_save: "Save",
     // Rule list Ctrls
     id_rule_new: "New",
     id_rule_delete: "Delete",
     // Format list Ctrls
     id_format_new: "New",
     id_format_delete: "Delete",
+    // Format registry
+    id_format_reg_edit_btn: "Edit",
+    id_format_reg_filter_btn: "Filter",
+    id_rule_reg_edit_btn: "Edit",
     // Messages
     id_no_project_warning: "Please create a new project first before you design an integration solution.",
     id_new_project_successfully: "A new project is created successfully.",
