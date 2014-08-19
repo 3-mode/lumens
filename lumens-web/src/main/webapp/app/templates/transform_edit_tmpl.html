@@ -1,0 +1,35 @@
+<div ng-controller="TransformEditCtrl" style="height:100%;">
+    <div style="height:45px;width:100%;float:top;border-bottom:1px solid #C2C2C2;">
+        <div style="float:left;width:32%;height:100%;">
+            <div style="display: inline-block;">
+                <div style="float:left; padding-top:12px; padding-left:5px; margin-right:15px;">Input:</div>
+                <div style="float:left; padding-top:12px; padding-left:5px; margin-right:15px;">{{inputFormatRegName}}</div>
+                <a class="lumens-button" ng-click="onCommand('id_format_reg_edit_btn', 'left')">{{i18n['id_format_reg_edit_btn']}}</a>
+                <a class="lumens-button" ng-click="onCommand('id_format_reg_filter_btn', 'left')">{{i18n['id_format_reg_filter_btn']}}</a>
+            </div>
+        </div>
+        <div style="float:left;width:36%;height:100%;">
+            <div style="display: inline-block;">
+                <div style="float:left; padding-top:12px; padding-left:10px; margin-right:15px;">Name:</div>
+                <div style="float:left; padding-top:12px; padding-left:5px; margin-right:15px;">{{ruleRegName}}</div>
+                <a class="lumens-button" ng-click="onCommand('id_rule_reg_edit_btn')">{{i18n['id_rule_reg_edit_btn']}}</a>
+            </div>
+        </div>
+        <div style="float:left;width:32%;height:100%;">
+            <div style="display: inline-block;">
+                <div style="float:left; padding-top:12px; padding-left:5px; margin-right:15px;">Output:</div>
+                <div style="float:left; padding-top:12px; padding-left:5px; margin-right:15px;">{{outputFormatRegName}}</div>
+                <a class="lumens-button" ng-click="onCommand('id_format_reg_edit_btn', 'right')">{{i18n['id_format_reg_edit_btn']}}</a>
+                <a class="lumens-button" ng-click="onCommand('id_format_reg_filter_btn', 'right')">{{i18n['id_format_reg_filter_btn']}}</a>
+            </div>
+        </div>
+        <div id="reg_edit_dialog" class="lumens-bootstrap lumens-modal-holder"></div>
+    </div>
+    <div style="height:calc(100% - 50px);width:100%;float:top;">
+        <div format-list="displaySourceFormatList" class="lumens-format-panel" style="float:left;width:32%;height:100%;"></div>
+        <div class="lumens-format-panel-border" style="float:left;width:36%;height:100%;">
+            <div rule-entity="transformRuleEntity" class="lumens-format-panel" style="width:100%;height:100%;"></div>
+        </div>
+        <div format-list="displayTargetFormatList" class="lumens-format-panel" style="float:left;width:32%;height:100%;"></div>
+    </div>
+</div>

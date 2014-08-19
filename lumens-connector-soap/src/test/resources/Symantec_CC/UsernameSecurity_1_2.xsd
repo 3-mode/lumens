@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://www.symantec.com/CSM/Applications/AssetSystem/Asset" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.symantec.com/CSM/Applications/AssetSystem/Asset" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/">
+  <xs:import schemaLocation="UsernameSecurity_1_2_3.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/Attribute"/>
+  <xs:import schemaLocation="UsernameSecurity_1.xsd" namespace="http://schemas.microsoft.com/2003/10/Serialization/"/>
+  <xs:import schemaLocation="UsernameSecurity_1_2_3_4_5.xsd" namespace="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.AssetBizLayerInterfaces"/>
+  <xs:import schemaLocation="UsernameSecurity_1_2_3_4_5_6.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetType"/>
+  <xs:complexType name="Asset">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Attributes" nillable="true" type="q1:ArrayOfAttribute" xmlns:q1="http://www.symantec.com/CSM/Applications/AssetSystem/Attribute"/>
+      <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="ID" type="ser:guid"/>
+      <xs:element minOccurs="0" name="Path" nillable="true" type="xs:string"/>
+      <xs:element minOccurs="0" name="SchemaType" type="q2:AssetSchemaType" xmlns:q2="http://schemas.datacontract.org/2004/07/Symantec.CSM.AssetSystem.AssetBizLayerInterfaces"/>
+      <xs:element minOccurs="0" name="Type" nillable="true" type="q3:AssetType" xmlns:q3="http://www.symantec.com/CSM/Applications/AssetSystem/AssetType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Asset" nillable="true" type="tns:Asset"/>
+  <xs:complexType name="ArrayOfAsset">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Asset" nillable="true" type="tns:Asset"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAsset" nillable="true" type="tns:ArrayOfAsset"/>
+</xs:schema>

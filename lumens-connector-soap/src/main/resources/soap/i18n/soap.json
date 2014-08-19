@@ -1,0 +1,12 @@
+{
+    "SoapName": "SOAP",
+    "Name": "Name",
+    "WSDL": "WSDL Address",
+    "User": "User",
+    "Password": "Password",
+    "ProxyAddress": "Proxy Address",
+    "ProxyPort": "Proxy Port",
+    "ProxyUser": "Proxy User",
+    "ProxyPassword": "Proxy Password",
+    "Description": "Description"
+}

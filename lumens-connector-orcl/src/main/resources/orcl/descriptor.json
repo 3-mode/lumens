@@ -1,0 +1,36 @@
+{
+    "id-oracle-jdbc": {
+        "name": "OracleName",
+        "type": "datasource",
+        "item_icon": "img/Oracle24x24.png",
+        "instance_icon": "img/Oracle64x64.png",
+        "html": "html/orcl.html",
+        "i18n": "i18n/orcl.json",
+        "property": [
+            {
+                "name": "OJDBC",
+                "type": "String"
+            },
+            {
+                "name": "ConnectionURL",
+                "type": "String"
+            },
+            {
+                "name": "User",
+                "type": "String"
+            },
+            {
+                "name": "Password",
+                "type": "String"
+            },
+            {
+                "name": "SessionAlter",
+                "type": "String"
+            },
+            {
+                "name": "FullLoad",
+                "type": "Boolean"
+            }
+        ]
+    }
+}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="shaofeng.wang">
+        <title>LUMENS</title>
+        <link rel="stylesheet" href="app/css/lumens.css">
+        <script src="libs/jquery/js/jquery.js"></script>
+    </head>
+    <body>
+        <div style="overflow: hidden;"><div style="padding-left: 35%; width: auto; font-size: 80px; color: #C2C2C2"><b>WELCOME2</b></div></div>
+        <ul id="projectList"></ul>
+        <script type="text/javascript">
+            $.getJSON("rest/projects", function(projectList) {
+                console.log("projectList:", projectList);
+            })
+        </script>
+    </body>
+</html>

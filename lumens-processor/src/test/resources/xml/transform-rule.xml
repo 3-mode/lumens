@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transform-rule-list>
+    <transform-rule name="a1">
+        <transform-rule-item format-name="a1">
+            <transform-rule-item format-name="a2" for-each-path="b">
+                <transform-rule-item format-name="a3">
+                    <transform-rule-item format-name="a4" for-each-path="b.c.d">
+                        <transform-rule-item format-name="a5">
+                            <script>
+<![CDATA[@b.c.d.e.f]]>
+                            </script>
+                        </transform-rule-item>
+                    </transform-rule-item>
+                    <transform-rule-item format-name="aa4" for-each-path="b.c.d">
+                        <transform-rule-item format-name="aa5">
+                            <script>
+<![CDATA[var str = @b.c.d.e.f + "test";
+if (str != null)
+    str = str + " test again";
+return str;]]>
+                            </script>
+                        </transform-rule-item>
+                    </transform-rule-item>
+                </transform-rule-item>
+            </transform-rule-item>
+        </transform-rule-item>
+    </transform-rule>
+</transform-rule-list>

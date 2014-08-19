@@ -1,0 +1,11 @@
+{
+    "OracleName": "Oracle",
+    "Name": "Name",
+    "OJDBC": "JDBC Driver",
+    "ConnectionURL": "JDBC URL",
+    "User": "User",
+    "Password": "Password",
+    "SessionAlter": "Session Alter",
+    "FullLoad": "Load all table fields",
+    "Description": "Description"
+}

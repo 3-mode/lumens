@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="shaofeng.wang">
+        <title>JAMES</title> 
+        <!-- Page Specific CSS -->
+        <link rel="stylesheet" href="libs/jquery/css/smoothness/jquery-ui-1.10.0.css">
+        <link rel="stylesheet" href="libs/morris/morris.css">
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="app/css/lumens_bootstrap.css">
+        <link rel="stylesheet" href="app/css/lumens.css">
+        <!-- 3rd Party JS Plugins -->
+        <script src="libs/jquery/js/jquery.js"></script>
+        <script src="libs/jquery/js/jquery-ui.js"></script>
+        <script src="libs/bootstrap/js/bootstrap.js"></script>
+        <script src="libs/raphael/raphael-min.js"></script>
+        <script src="libs/morris/morris.min.js"></script>
+        <script src="libs/classy.js"></script>
+        <script src="libs/json2.js"></script>
+        <script src="libs/base64.js"></script>
+        <!-- Application JS  -->
+        <script src="app/bootstrap.js"></script>
+        <script src="app/i18n/en_US.js"></script>
+        <script src="app/js/layout.js"></script>
+        <script src="app/js/sysheader.js"></script>
+        <script src="app/js/navbar.js"></script>
+        <script src="app/js/navmenu.js"></script>
+        <script src="app/js/tab.js"></script>
+        <script src="app/js/list.js"></script> 
+        <script src="app/js/tree.js"></script>
+        <script src="app/js/component.js"></script>
+        <script src="app/js/project.js"></script>
+        <script src="app/js/functions.js"></script>
+        <!-- Angular JS -->
+        <script src="libs/angular/angular.js"></script>
+        <script src="libs/angular/angular-route.js"></script>
+        <script src="libs/angular/angular-resource.js"></script>
+        <!-- Application Angular Modules -->
+        <script src="app/mvp/controllers.js"></script>
+        <script src="app/mvp/directives.js"></script>
+        <script src="app/mvp/services.js"></script>
+        <!-- Application Entry JS -->
+        <script src="app/lumens.js"></script>
+        <script type="text/javascript">
+            var appModule = angular.module('lumensTest', ["lumens-directives", "lumens-services", "lumens-controllers", "ngRoute"]);
+            function MainTestCtrl($scope, $http, $compile, $sce, DesignButtons, ProjectListModal) {
+                $scope.i18n = Lumens.i18n;
+                $scope.openProject = function(e) {
+                    console.log("open project");
+                }
+                DesignButtons.get(function(design_command_tmpl) {
+                    var buttonBar = $compile(design_command_tmpl)($scope).appendTo($("#id-main-view"));
+                    $scope.barClick = function(id) {
+                        if ("id_open" === id) {
+                            if ($('#projectListModal').length === 0) {
+                                ProjectListModal.get(function(projects_modal_tmpl) {
+                                    var projectListDialog = buttonBar.find("#projectlist_dialog");
+                                    projectListDialog.append($compile(projects_modal_tmpl)($scope));
+                                    $('#projectListModal').on("hidden.bs.modal", function() {
+                                        projectListDialog.empty();
+                                    }).modal({backdrop: "static"});
+                                });
+                            }
+                        }
+                        else
+                            console.log("Clicked:", id);
+                    };
+                });
+            }
+        </script>
+    </head>
+    <body ng-app='lumensTest' class='lumens'>
+        <div id="id-main-view" ng-controller="MainTestCtrl">
+        </div>
+    </body>
+</html>

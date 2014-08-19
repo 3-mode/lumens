@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSearchCriteria" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.symantec.com/CSM/Applications/AssetSystem/AssetSearchCriteria">
+  <xs:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8.xsd" namespace="http://www.symantec.com/CSM/Applications/AssetSystem/AssetTypeAssetAttributePair"/>
+  <xs:import schemaLocation="UsernameSecurity_1_2_3_4_5_6_7_8_9.xsd" namespace="http://schemas.datacontract.org/2004/07/Symantec.CSM.Business.Shared"/>
+  <xs:complexType name="AssetSearchCriteria">
+    <xs:complexContent mixed="false">
+      <xs:extension base="q1:SearchCriteria" xmlns:q1="http://schemas.datacontract.org/2004/07/Symantec.CSM.Business.Shared">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AssetTypeAssetAtributePair" nillable="true" type="q2:AssetTypeAssetAttributePair" xmlns:q2="http://www.symantec.com/CSM/Applications/AssetSystem/AssetTypeAssetAttributePair"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AssetSearchCriteria" nillable="true" type="tns:AssetSearchCriteria"/>
+</xs:schema>

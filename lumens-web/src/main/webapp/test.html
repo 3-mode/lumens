@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Page Specific CSS -->
+        <!-- Page Specific CSS -->
+        <link rel="stylesheet" href="libs/jquery/css/smoothness/jquery-ui-1.10.0.css">
+        <link rel="stylesheet" href="libs/morris/morris.css">
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="app/css/lumens_bootstrap.css">
+        <link rel="stylesheet" href="app/css/lumens.css">
+        <!-- 3rd Party JS Plugins -->
+        <script src="libs/jquery/js/jquery.js"></script>
+        <script src="libs/jquery/js/jquery-ui.js"></script>
+        <script src="libs/bootstrap/js/bootstrap.js"></script>
+        <script src="libs/raphael/raphael-min.js"></script>
+        <script src="libs/morris/morris.min.js"></script>
+        <script src="libs/classy.js"></script>
+        <script src="libs/json2.js"></script>
+        <script src="libs/base64.js"></script>
+        <!-- Application JS  -->
+        <script src="app/bootstrap.js"></script>
+        <script src="app/i18n/en_US.js"></script>
+        <script src="app/js/layout.js"></script>
+        <script src="app/js/sysheader.js"></script>
+        <script src="app/js/navbar.js"></script>
+        <script src="app/js/navmenu.js"></script>
+        <script src="app/js/tab.js"></script>
+        <script src="app/js/list.js"></script> 
+        <script src="app/js/tree.js"></script>
+        <script src="app/js/component.js"></script>
+        <script src="app/js/message.js"></script>
+        <script src="app/js/project.js"></script>
+        <script src="app/js/functions.js"></script>
+        <!-- Angular JS -->
+        <script src="libs/angular/angular.js"></script>
+        <script src="libs/angular/angular-route.js"></script>
+        <script src="libs/angular/angular-resource.js"></script>
+        <!-- Application Angular Modules -->
+        <script src="app/mvp/controllers.js"></script>
+        <script src="app/mvp/directives.js"></script>
+        <script src="app/mvp/services.js"></script>
+        <!-- Application Entry JS -->
+        <script src="app/lumens.js"></script>
+    </head>
+    <body class="lumens" ng-app="lumensTest">
+        <div id="id-main-view" ng-controller="MainTestCtrl"></div>
+        <script type="text/javascript">
+            Lumens.appModule = angular.module('lumensTest', ["lumens-directives", "lumens-services"]);
+            function MainTestCtrl($scope, $http, $compile, $sce, FormatList, ProjectList, ProjectById) {
+                console.log("FormatList: ", FormatList.getIN({component_name: 'Database:@()!- HR'}));
+                console.log("ProjectList:", ProjectList.get());
+                console.log("ProjectById:", ProjectById.get({project_id: "1398880523481"}));
+                $scope.currentComponent = {name: "to select"};
+                var rootLayout = new Lumens.RootLayout($('#id-main-view')).configure();
+                var theLayout = new Lumens.ResizableVSplitLayoutExt(rootLayout).configure({
+                    mode: "vertical",
+                    useRatio: true,
+                    part1Size: "30%"
+                });
+                var topPanel = new Lumens.Panel(theLayout.getPart1Element()).configure({
+                    panelStyle: {width: "100%", height: "100%", overflow: "auto"}
+                });
+                $http.get("app/mock/json/data_source_category.json").success(function(data_source_category) {
+                    $($compile('<div style="background-color: gray; width: 100px; height: 50px; top: 50px; left: 50px; position: relative; display: block;">Oracle</div>')($scope))
+                    .appendTo(topPanel.getElement())
+                    .click(function() {
+                        var currentComponentConfig = $(this).data("item-data");
+                        console.log(currentComponentConfig);
+                        $scope.$apply(function() {
+                            if ($scope.project) {
+                                $scope.project.name = "test click " + $scope.project.name;
+                                $scope.currentComponent = $scope.project.datasource[0];
+                                $scope.currentComponentConfig = currentComponentConfig;
+                                $scope.componentI18N = currentComponentConfig.i18n;
+                                $scope.componentForm = $compile(currentComponentConfig.html)($scope);
+                                $scope.componentProps = {"Description": $scope.currentComponent.description};
+                                if ($scope.currentComponent.property)
+                                    $.each($scope.currentComponent.property, function() {
+                                        $scope.componentProps[this.name] = this.value;
+                                    })
+                            }
+                        })
+                    }).data("item-data", data_source_category.items[1]);
+
+                    $($compile('<div style="background-color: gray; width: 100px; height: 50px; top: 50px; left: 250px; position: relative; display: block;">SOAP</div>')($scope))
+                    .appendTo(topPanel.getElement())
+                    .click(function() {
+                        var currentComponentConfig = $(this).data("item-data");
+                        console.log(currentComponentConfig);
+                        $scope.$apply(function() {
+                            if ($scope.project) {
+                                $scope.project.name = "test click " + $scope.project.name;
+                                $scope.currentComponent = $scope.project.datasource[1];
+                                $scope.currentComponentConfig = currentComponentConfig;
+                                $scope.componentI18N = currentComponentConfig.i18n;
+                                $scope.componentForm = $compile(currentComponentConfig.html)($scope);
+                                $scope.componentProps = {"Description": $scope.currentComponent.description ? $scope.currentComponent.description : ""};
+                                if ($scope.currentComponent.property)
+                                    $.each($scope.currentComponent.property, function() {
+                                        $scope.componentProps[this.name] = this.value;
+                                    })
+                            }
+                        })
+                    }).data("item-data", data_source_category.items[0]);
+                });
+
+                $.get("app/mock/json/get_project.json", function(projectData) {
+                    if (projectData.content && projectData.content.project && projectData.content.project.length > 0) {
+                        $scope.project = $.parseJSON(projectData.content.project[0].data).project;
+                    }
+                });
+                theLayout.getTitleElement().append($compile('<b>Project: {{project.name}}</b>')($scope));
+                var tabsContainer = new Lumens.Panel(theLayout.getPart2Element()).configure({
+                    panelStyle: {"height": "100%", "width": "100%", "overflow": "auto"}
+                });
+                function tabSummary($tabContent) {
+                    var list = new Lumens.List($tabContent).configure({
+                        IdList: [
+                            "Description",
+                            "Resources",
+                            "Instruments"
+                        ],
+                        titleList: [
+                            "Description",
+                            "Resources",
+                            "Instruments"
+                        ],
+                        buildContent: function(itemContent, isExpand, title) {
+                            if (isExpand) {
+                                var itemID = title.attr("id");
+                                if (itemID === "Description") {
+                                    $http.get("app/templates/project_desc_tmpl.html").success(function(project_desc_tmpl) {
+                                        itemContent.append($compile(project_desc_tmpl)($scope));
+                                    });
+                                }
+                                else if (itemID === "Resources") {
+                                    $http.get("app/templates/resources_tmpl.html").success(function(resources_tmpl) {
+                                        itemContent.append($compile(resources_tmpl)($scope));
+                                    });
+                                }
+                                else if (itemID === "Instruments") {
+                                    $http.get("app/templates/instruments_tmpl.html").success(function(instruments_tmpl) {
+                                        itemContent.append($compile(instruments_tmpl)($scope));
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+                function tabProperties($tabContent) {
+                    var list = new Lumens.List($tabContent).configure({
+                        IdList: [
+                            "ComponentProps",
+                            "ComponentFormats"
+                        ],
+                        titleList: [
+                            $compile('<span data-bind="currentComponent.name">{{currentComponent.name}}</span>')($scope),
+                            "Format"
+                        ],
+                        contentList: [
+                            $compile('<div dynamic-property-form="componentForm"/>')($scope),
+                            $compile('<div dynamic-format-list="currentComponent"/>')($scope)
+                        ]
+                    });
+                }
+                $http.get("app/templates/design_command_tmpl.html").success(function(design_command_tmpl) {
+                    var buttonBar = $(design_command_tmpl).appendTo(tabsContainer.getElement());
+                    buttonBar.find('.lumens-button').click(function() {
+                        console.log($scope);
+                    })
+                    var tabs = new Lumens.TabPanel(tabsContainer.getElement())
+                    .configure({
+                        tab: [
+                            {id: "id1", label: "Project Configuration", content: tabSummary},
+                            {id: "id2", label: "Component Configuration", content: tabProperties}
+                        ]
+                    });
+                });
+            }
+        </script>
+    </body>
+</html>

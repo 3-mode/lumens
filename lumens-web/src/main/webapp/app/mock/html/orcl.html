@@ -1,0 +1,63 @@
+<style type="text/css">
+    input, textarea {
+        font-size: 16px;
+        margin-left:3px;
+        width:100%;
+        height:100%;
+    }
+    .must {
+        color: red;
+    }
+    .label-style {
+        width: 100px;
+        height: 30px;
+        text-align: right;
+    }
+    .value-style {
+        width: 250px;
+        height: 30px;
+        border-left:1px solid rgb(163, 163, 163);
+    }
+    .value-style-colspan-3 {
+        height: 30px;
+        border-left: 1px solid rgb(163, 163, 163);
+    }
+    .value-textarea-style-colspan-3 {
+        height: 60px;
+        border-left: 1px solid rgb(163, 163, 163);
+    }
+</style>
+<table style="margin-top: 10px;">
+    <tbody>
+        <tr>
+            <td class="label-style must">{{componentI18N.OJDBC}}</td>
+            <td class="value-style">
+                <input type="text" ng-model="componentProps.OJDBC" value="{{componentProps.OJDBC}}"/></td>
+            <td class="label-style must">{{componentI18N.ConnectionURL}}</td>
+            <td class="value-style">
+                <input type="text" ng-model="componentProps.ConnectionURL" value="{{componentProps.ConnectionURL}}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-style must">{{componentI18N.User}}</td>
+            <td class="value-style">
+                <input type="text" ng-model="componentProps.User" value="{{componentProps.User}}"/></td>
+            <td class="label-style must">{{componentI18N.Password}}</td>
+            <td class="value-style">
+                <input type="password" ng-model="componentProps.Password" value="{{componentProps.Password}}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-style">{{componentI18N.SessionAlter}}</td>
+            <td class="value-style-colspan-3" colspan="3">
+                <input type="text" ng-model="componentProps.SessionAlter" value="{{componentProps.SessionAlter}}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-style">{{componentI18N.Description}}</td>
+            <td class="value-textarea-style-colspan-3" colspan="3">
+                <textarea ng-model="componentProps.Description">{{componentProps.Description}}</textarea>
+            </td>
+        </tr>
+    </tbody>
+</table>

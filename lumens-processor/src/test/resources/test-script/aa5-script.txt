@@ -1,0 +1,4 @@
+var str = @b.c.d.e.f + "test";
+if (str != null)
+    str = str + " test again";
+return str;

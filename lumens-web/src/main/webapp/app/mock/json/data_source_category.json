@@ -1,0 +1,39 @@
+{
+    "items": [
+        {
+            "id": "id-rest",
+            "name": "RESTful",
+            "type": "datasource",
+            "item_icon_url": "app/css/img/Transform24x24.png",
+            "instance_icon_url": "app/css/img/Transform64x64.png"
+        },
+        {
+            "id": "id-ldap",
+            "name": "LDAP",
+            "type": "datasource",
+            "item_icon_url": "app/css/img/Transform24x24.png",
+            "instance_icon_url": "app/css/img/Transform64x64.png"
+        },
+        {
+            "id": "id-mail",
+            "name": "Mail",
+            "type": "datasource",
+            "item_icon_url": "app/css/img/Transform24x24.png",
+            "instance_icon_url": "app/css/img/Transform64x64.png"
+        },
+        {
+            "id": "id-xml",
+            "name": "XML",
+            "type": "datasource",
+            "item_icon_url": "app/css/img/Transform24x24.png",
+            "instance_icon_url": "app/css/img/Transform64x64.png"
+        },
+        {
+            "id": "id-text",
+            "name": "Text",
+            "type": "datasource",
+            "item_icon_url": "app/css/img/Transform24x24.png",
+            "instance_icon_url": "app/css/img/Transform64x64.png"
+        }
+    ]
+}

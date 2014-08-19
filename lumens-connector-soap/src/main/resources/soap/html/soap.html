@@ -1,0 +1,80 @@
+<style type="text/css">
+    input, textarea {
+        font-size: 16px;
+        margin-left:3px;
+        width:100%;
+        height:100%;
+    }
+    .must {
+        color: red;
+    }
+    .label-style {
+        width: 130px;
+        height: 30px;
+        text-align: right;
+    }
+    .value-style {
+        width: 250px;
+        height: 30px;
+        border-left:1px solid rgb(163, 163, 163);
+    }
+    .value-style-colspan-3 {
+        height: 30px;
+        border-left: 1px solid rgb(163, 163, 163);
+    }
+    .value-textarea-style-colspan-3 {
+        height: 60px;
+        border-left: 1px solid rgb(163, 163, 163);
+    }
+</style>
+<table style="margin-top: 10px;">
+    <tbody>
+        <tr>
+            <td class="label-style must">{{componentProps.Name.label}}</td>
+            <td class="value-style-colspan-3" colspan="3">
+                <input type="text" ng-model="componentProps.Name.value"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-style must">{{componentProps.WSDL.label}}</td>
+            <td class="value-style-colspan-3" colspan="3">
+                <input type="text" ng-model="componentProps.WSDL.value"/></td>
+        </tr>
+        <tr>
+            <td class="label-style">{{componentProps.User.label}}</td>
+            <td class="value-style">
+                <input type="text" ng-model="componentProps.User.value"/></td>
+            <td class="label-style">{{componentProps.Password.label}}</td>
+            <td class="value-style">
+                <input type="password" ng-model="componentProps.Password.value"/></td>
+        </tr>
+        <tr>
+            <td class="label-style">{{componentProps.ProxyAddress.label}}</td>
+            <td class="value-style">
+                <input type="text" ng-model="componentProps.ProxyAddress.value"/>
+            </td>
+            <td class="label-style">{{componentProps.ProxyPort.label}}</td>
+            <td class="value-style">
+                <input type="number" ng-model="componentProps.ProxyPort.value"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-style">{{componentProps.ProxyUser.label}}</td>
+            <td class="value-style">
+                <input type="text" ng-model="componentProps.ProxyUser.value"/></td>
+            <td class="label-style">{{componentProps.ProxyPassword.label}}</td>
+            <td class="value-style">
+                <input type="password" ng-model="componentProps.ProxyPassword.value"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4"></td>
+        </tr>
+        <tr>
+            <td class="label-style">{{componentProps.Description.label}}</td>
+            <td class="value-textarea-style-colspan-3" colspan="3">
+                <textarea ng-model="componentProps.Description.value">{{componentProps.Description.value}}</textarea>
+            </td>
+        </tr>
+    </tbody>
+</table>

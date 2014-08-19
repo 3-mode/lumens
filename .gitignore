@@ -1,0 +1,14 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.prefs
+/lumens-connector-orcl/target/
+/lumens-connector-ws/target/
+/lumens-connector-soap/target/
+/target/
+/assembler/target/
+/lumens-addin/target/
+/lumens-commons/target/

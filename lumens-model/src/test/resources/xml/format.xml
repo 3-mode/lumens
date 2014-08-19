@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<format-list>
+    <format name="getOpenFundString" form="Struct" type="None" >
+        <property name="targetNamespace" type="String">http://WebXml.com.cn/</property>
+        <property name="SOAPAddress" type="String">http://www.webxml.com.cn/WebServices/ChinaOpenFundWS.asmx</property>
+        <property name="SOAPAction" type="String">http://WebXml.com.cn/getOpenFundString</property>
+        <property name="BindingOutput" type="String"></property>
+        <property name="BindingInput" type="String"></property>
+        <format name="getOpenFundStringResponse" form="Struct" type="None" >
+            <property name="targetNamespace" type="String">http://WebXml.com.cn/</property>
+            <property name="SOAPMessage" type="Integer">1</property>
+            <format name="getOpenFundStringResult" form="Struct" type="None" >
+                <property name="targetNamespace" type="String">http://WebXml.com.cn/</property>
+                <format name="string" form="ArrayOfField" type="String" >
+                    <property name="targetNamespace" type="String">http://WebXml.com.cn/</property>
+                </format>
+            </format>
+        </format>
+    </format>
+    <format name="getOpenFundString2" form="Struct" type="None" >
+        <property name="targetNamespace" type="String">http://WebXml.com.cn/</property>
+        <property name="SOAPAddress" type="String">http://www.webxml.com.cn/WebServices/ChinaOpenFundWS.asmx</property>
+        <property name="SOAPAction" type="String">http://WebXml.com.cn/getOpenFundString</property>
+        <property name="BindingOutput" type="String"></property>
+        <property name="BindingInput" type="String"></property>
+        <format name="getOpenFundStringResponse" form="Struct" type="None" >
+            <property name="targetNamespace" type="String">http://WebXml.com.cn/</property>
+            <property name="SOAPMessage" type="Integer">1</property>
+            <format name="getOpenFundStringResult" form="Struct" type="None" >
+                <property name="targetNamespace" type="String">http://WebXml.com.cn/</property>
+                <format name="string" form="ArrayOfField" type="String" >
+                    <property name="targetNamespace" type="String">http://WebXml.com.cn/</property>
+                </format>
+            </format>
+        </format>
+        <format name="getOpenFundStringResponse2" form="Struct" type="None" >
+            <property name="targetNamespace" type="String">http://WebXml.com.cn/</property>
+            <property name="SOAPMessage" type="Integer">1</property>
+            <format name="getOpenFundStringResult" form="Struct" type="None" >
+                <property name="targetNamespace" type="String">http://WebXml.com.cn/</property>
+                <format name="string" form="ArrayOfField" type="String" >
+                    <property name="targetNamespace" type="String">http://WebXml.com.cn/</property>
+                </format>
+            </format>
+        </format>
+    </format>
+</format-list>

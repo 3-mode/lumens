@@ -1,0 +1,35 @@
+{
+    "component.ui": "html/orcl.html",
+    "component.i18n": "i18n/orcl.json",
+    "component.id": "id-oracle-jdbc",
+    "component.name": "OracleName",
+    "component.class.name": "com.lumens.connector.database.client.oracle.OracleConnector",
+    "component.instance.icon": "img/Oracle64x64.png",
+    "component.catalog.icon": "img/Oracle24x24.png",
+    "component.properties": [
+        {
+            "name": "OJDBC",
+            "type": "String"
+        },
+        {
+            "name": "ConnectionURL",
+            "type": "String"
+        },
+        {
+            "name": "User",
+            "type": "String"
+        },
+        {
+            "name": "Password",
+            "type": "String"
+        },
+        {
+            "name": "SessionAlter",
+            "type": "String"
+        },
+        {
+            "name": "FullLoad",
+            "type": "Boolean"
+        }
+    ]
+}
