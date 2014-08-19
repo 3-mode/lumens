@@ -10,7 +10,7 @@ import com.lumens.server.sql.Table;
 public class Project {
 
     @Column(name = "id")
-    public String id;
+    public Long id;
     @Column(name = "name")
     public String name;
     @Column(name = "description")
@@ -18,7 +18,7 @@ public class Project {
     @Column(name = "data")
     public String data;
 
-    public Project(String id, String name, String description, String content) {
+    public Project(Long id, String name, String description, String content) {
         this.id = id;
         this.name = name;
         this.description = description;
