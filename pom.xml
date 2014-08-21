@@ -54,6 +54,7 @@
         <module>lumens-server</module>
         <module>assembler</module>
         <module>lumens-addin</module>
+        <module>lumens-connector-xml</module>
     </modules>
     <dependencies>
         <dependency>
