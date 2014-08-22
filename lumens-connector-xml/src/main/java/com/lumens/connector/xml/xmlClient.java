@@ -6,12 +6,15 @@
 
 package com.lumens.connector.xml;
 
+import java.io.InputStream;
+import com.lumens.model.serializer.FormatSerializer;
+
 /**
  *
  * @author whiskey
  */
 public class xmlClient {
-    xmlConnector xml = null;
+    xmlConnector xml;
     
     xmlClient(xmlConnector cnt){
         xml = cnt;
@@ -20,4 +23,12 @@ public class xmlClient {
     String getVersion(){ return null;};
     //void open();
     //void close();
+    
+    public void init()
+    {
+    }
+    
+    public void parseXml(InputStream in)
+    {
+    }        
 }

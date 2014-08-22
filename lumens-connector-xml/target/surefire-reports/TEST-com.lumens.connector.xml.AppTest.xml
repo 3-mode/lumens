@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.015" errors="0" skipped="0" tests="1" name="com.lumens.connector.xml.AppTest">
+<testsuite failures="0" time="0.011" errors="0" skipped="0" tests="1" name="com.lumens.connector.xml.AppTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.7.0_60\jre\bin"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.os.patch.level" value=""/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="E:\Source\lumens\lumens-connector-xml"/>
+    <property name="user.dir" value="D:\git\lumens_whiskeyfly\lumens-connector-xml"/>
     <property name="java.runtime.version" value="1.7.0_60-b19"/>
     <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
     <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.7.0_60\jre\lib\endorsed"/>
@@ -61,5 +61,5 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase time="0" classname="com.lumens.connector.xml.AppTest" name="testApp"/>
+  <testcase time="0.001" classname="com.lumens.connector.xml.AppTest" name="testApp"/>
 </testsuite>
