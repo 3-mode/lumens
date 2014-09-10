@@ -9,10 +9,9 @@ Lumens.directives.directive("dynamicPropertyForm", function() {
     return {
         restrict: 'A',
         link: function($scope, element, attr) {
-            function getStringValue() {
+            $scope.$watch(function() {
                 return $scope[attr.dynamicPropertyForm];
-            }
-            $scope.$watch(getStringValue, function(compiledTmpl) {
+            }, function(compiledTmpl) {
                 element.empty();
                 if (compiledTmpl) {
                     element.append(compiledTmpl);
@@ -25,10 +24,9 @@ Lumens.directives.directive("dynamicFormatList", function() {
     return {
         restrict: 'A',
         link: function($scope, element, attr) {
-            function getStringValue() {
+            $scope.$watch(function() {
                 return $scope[attr.dynamicFormatList];
-            }
-            $scope.$watch(getStringValue, function(component) {
+            }, function(component) {
                 element.empty();
                 buildDataFormatList(element, component);
             });
@@ -39,10 +37,9 @@ Lumens.directives.directive("dynamicTransformationList", function() {
     return {
         restrict: 'A',
         link: function($scope, element, attr) {
-            function getStringValue() {
+            $scope.$watch(function() {
                 return $scope[attr.dynamicTransformationList];
-            }
-            $scope.$watch(getStringValue, function(component) {
+            }, function(component) {
                 element.empty();
                 buildTransformationList(element, component);
             });
@@ -53,10 +50,9 @@ Lumens.directives.directive("formatList", function() {
     return {
         restrict: 'A',
         link: function($scope, element, attr) {
-            function getStringValue() {
+            $scope.$watch(function() {
                 return $scope[attr.formatList];
-            }
-            $scope.$watch(getStringValue, function(formatList) {
+            }, function(formatList) {
                 element.empty();
                 if (formatList) {
                     console.log("Format list:", formatList);
@@ -71,10 +67,9 @@ Lumens.directives.directive("ruleEntity", function() {
     return {
         restrict: 'A',
         link: function($scope, element, attr) {
-            function getStringValue() {
+            $scope.$watch(function() {
                 return $scope[attr.ruleEntity];
-            }
-            $scope.$watch(getStringValue, function(ruleEntity) {
+            }, function(ruleEntity) {
                 element.empty();
                 if (ruleEntity) {
                     console.log("Rule list:", ruleEntity);
@@ -97,10 +92,10 @@ Lumens.directives.directive("scriptEditor", function() {
                 dragDrop: true,
                 theme: "eclipse"
             });
-            function getStringValue() {
+
+            var unbind = $scope.$watch(function() {
                 return $scope[attr.scriptVar];
-            }
-            var unbind = $scope.$watch(getStringValue, function(scriptEditorText) {
+            }, function(scriptEditorText) {
                 console.log("scriptEditorText:", scriptEditorText);
                 if (!scriptEditorText)
                     scriptEditorText = "";

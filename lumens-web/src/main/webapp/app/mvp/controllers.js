@@ -404,8 +404,9 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         }
     });
 })
-.controller("TransformEditCtrl", function($scope, $element, $compile, ProjectById, FormatList, FormatRegistryModal, RuleRegistryModal) {
+.controller("TransformEditCtrl", function($scope, $element, $compile, ProjectById, FormatList, FormatRegistryModal, RuleRegistryModal, ScriptSync) {
     console.log("In TransformEditCtrl");
+    $scope.scriptSyncCallback = ScriptSync;
     $scope.$parent.scriptNodeScope = $scope;
     var projectOperator = $scope.projectOperator;
     var currentScriptNode;
@@ -540,31 +541,32 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 console.log("input format:", $scope.inputSelectedFormatName);
                 console.log("output:", $scope.outputFormatRegName);
                 console.log("outut format:", $scope.outputSelectedFormatName);
+                ScriptSync.sync("#############test###############");
                 if ("left" === side) {
                     if ($scope.displaySourceFormatList.length > 1 && $scope.inputSelectedFormatName && $scope.inputSelectedFormatName !== "" && $scope.displaySourceFormatList) {
                         var displaySourceFormatList = [];
                         for (var i = 0; i < $scope.displaySourceFormatList.length; ++i) {
                             if ($scope.displaySourceFormatList[i].format[0].name === $scope.inputSelectedFormatName) {
                                 displaySourceFormatList.push($scope.displaySourceFormatList[i]);
-                                $scope.$parent.displaySourceFormatList = displaySourceFormatList;
+                                $scope.displaySourceFormatList = displaySourceFormatList;
                                 break;
                             }
                         }
                     } else {
-                        $scope.$parent.displaySourceFormatList = $scope.sourceFormatList;
+                        $scope.displaySourceFormatList = $scope.sourceFormatList;
                     }
                 } else if ("right" === side) {
-                    if ($scope.displayTargetFormatList.length > 1 && $scope.inputSelectedFormatName && $scope.inputSelectedFormatName !== "" && $scope.displayTargetFormatList) {
+                    if ($scope.displayTargetFormatList.length > 1 && $scope.outputSelectedFormatName && $scope.outputSelectedFormatName !== "" && $scope.displayTargetFormatList) {
                         var displayTargetFormatList = [];
                         for (var i = 0; i < $scope.displayTargetFormatList.length; ++i) {
-                            if ($scope.displayTargetFormatList[i].format[0].name === $scope.inputSelectedFormatName) {
-                                displaySourceFormatList.push($scope.displayTargetFormatList[i]);
-                                $scope.$parent.displayTargetFormatList = displayTargetFormatList;
+                            if ($scope.displayTargetFormatList[i].format[0].name === $scope.outputSelectedFormatName) {
+                                displayTargetFormatList.push($scope.displayTargetFormatList[i]);
+                                $scope.displayTargetFormatList = displayTargetFormatList;
                                 break;
                             }
                         }
                     } else {
-                        $scope.$parent.displayTargetFormatList = $scope.targetFormatList;
+                        $scope.displayTargetFormatList = $scope.targetFormatList;
                     }
                 }
             }

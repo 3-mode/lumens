@@ -95,3 +95,11 @@ Lumens.services.factory('FormatByPath', function($resource) {
         getOUT: {method: 'GET', params: {direction: 'OUT'}, isArray: false}
     });
 });
+Lumens.services.factory('ScriptSync', function($scope) {
+    console.log($scope);
+    return {
+        sync: function(message) {
+            console.log(message, $scope);
+        }
+    }
+});
