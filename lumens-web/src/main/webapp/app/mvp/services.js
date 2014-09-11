@@ -95,10 +95,39 @@ Lumens.services.factory('FormatByPath', function($resource) {
         getOUT: {method: 'GET', params: {direction: 'OUT'}, isArray: false}
     });
 });
-Lumens.services.factory('ScriptSync', function($scope) {
-    console.log($scope);
+Lumens.services.factory('RuleEditorService', function() {
     return {
-        sync: function(message) {
+        create: function() {
+            var scopes = [];
+            return {
+                addScope: function(scope) {
+                    scopes.push(scope);
+                },
+                destroy: function() {
+                    $.each(scopes, function(i) {
+                        scopes[i].$destroy();
+                    });
+                    scopes = [];
+                },
+                sync: function(script) {
+                    $.each(scopes, function(i) {
+                        scopes[i].setScript(script);
+                    });
+                }
+            }
+        }
+    }
+});
+Lumens.services.factory('RuleRegister', function() {
+    return {
+        build: function($scope, message) {
+            console.log(message, $scope);
+        }
+    }
+});
+Lumens.services.factory('FormatRegister', function() {
+    return {
+        build: function($scope, message) {
             console.log(message, $scope);
         }
     }

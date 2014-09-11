@@ -313,8 +313,10 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             messageBox.showWarning(i18n.id_no_project_name, projectInfoContent);
     };
 })
-.controller("TransformListCtrl", function($scope, $compile, $element, TransformEditTemplate, ScriptEditTemplate) {
+.controller("TransformListCtrl", function($scope, $compile, $element, TransformEditTemplate, ScriptEditTemplate, RuleEditorService) {
     console.log("In TransformListCtrl", $element);
+    $scope.ruleEditorService = RuleEditorService.create();
+
     var componentList = $scope.desgin.designPanel.getComponentList();
 
     function showRuleEditor() {
@@ -328,7 +330,6 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 part1Size: "40%"
             });
             var transforEditor = $compile(transformEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart1Element());
-            var scope = transforEditor.scope();
             $(window).resize(function(evt) {
                 if (evt.target !== this)
                     return;
@@ -337,7 +338,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             });
             // Load script editing panel
             ScriptEditTemplate.get(function(scriptEditTemplate) {
-                $compile(scriptEditTemplate)(scope).appendTo($scope.transformEditPanel.getPart2Element());
+                $compile(scriptEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart2Element());
             })
         });
     }
@@ -404,22 +405,22 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         }
     });
 })
-.controller("TransformEditCtrl", function($scope, $element, $compile, ProjectById, FormatList, FormatRegistryModal, RuleRegistryModal, ScriptSync) {
+.controller("TransformEditCtrl", function($scope, $element, $compile, ProjectById, FormatList, FormatRegistryModal, RuleRegistryModal) {
     console.log("In TransformEditCtrl");
-    $scope.scriptSyncCallback = ScriptSync;
-    $scope.$parent.scriptNodeScope = $scope;
+    $scope.ruleEditorService.addScope($scope);
+    $scope.setScript = function(script) {
+        if ($scope.currentScriptNode)
+            $scope.currentScriptNode.setScript(script);
+    }
     var projectOperator = $scope.projectOperator;
-    var currentScriptNode;
     if ($scope.currentComponent.id === "id-transformator") {
         function buildTransformRuleEntry(ruleEntry) {
             return {
                 // TODO
                 transformRuleEntry: ruleEntry,
                 clickCallBack: function(target) {
-                    currentScriptNode = target;
-                    $scope.$apply(function() {
-                        $scope.$parent.transformRuleScript = target.getScript();
-                    });
+                    $scope.currentScriptNode = target;
+                    $scope.ruleEditorService.sync(target.getScript());
                 }
             };
         }
@@ -480,16 +481,6 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             }
         });
         $scope.transformRuleEntity = buildTransformRuleEntry($scope.currentComponent.transform_rule_entry[0]);
-        var unbindWatch = $scope.$watch(function() {
-            return $scope.transformRuleScript;
-        }, function(scriptEditorText) {
-            console.log("Changed script: ", scriptEditorText);
-            if (currentScriptNode)
-                currentScriptNode.setScript(scriptEditorText);
-        });
-        $scope.$on('$destroy', function() {
-            unbindWatch();
-        });
 
         if (sourceComponentName) {
             ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function(result) {
@@ -541,7 +532,6 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 console.log("input format:", $scope.inputSelectedFormatName);
                 console.log("output:", $scope.outputFormatRegName);
                 console.log("outut format:", $scope.outputSelectedFormatName);
-                ScriptSync.sync("#############test###############");
                 if ("left" === side) {
                     if ($scope.displaySourceFormatList.length > 1 && $scope.inputSelectedFormatName && $scope.inputSelectedFormatName !== "" && $scope.displaySourceFormatList) {
                         var displaySourceFormatList = [];
@@ -573,19 +563,23 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         }
     }
 })
-.controller("RuleScriptCtrl", function($scope) {
-    $scope.$parent.scriptEditorScope = $scope;
+.controller("RuleScriptCtrl", function($scope, RuleRegister, FormatRegister) {
+    $scope.ruleEditorService.addScope($scope);
+    $scope.setScript = function(script) {
+        if (!script)
+            script = "";
+        $scope.transformRuleScriptEditor.setValue(script);
+    };
     $scope.onCommand = function(id_script_btn) {
         if (id_script_btn === "id_script_apply") {
-            $scope.$parent.transformRuleScript = $scope.transformRuleScriptEditor.getValue();
+            $scope.ruleEditorService.sync($scope.transformRuleScriptEditor.getValue());
         }
         else if (id_script_btn === "id_script_validate") {
             console.log("Validate transform_rule_entity:", $scope.transformRuleEntity.transformRuleEntry);
         }
         else if (id_script_btn === "id_script_back") {
             $scope.transformEditPanel.remove();
-            $scope.scriptNodeScope.$destroy();
-            $scope.scriptEditorScope.$destroy();
+            $scope.ruleEditorService.destroy();
             Lumens.system.designView.workspaceLayout.show();
         }
         else if (id_script_btn === "id_rule_fmt_save") {
@@ -597,6 +591,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             console.log("input format:", $scope.inputSelectedFormatName);
             console.log("output:", $scope.outputFormatRegName);
             console.log("outut format:", $scope.outputSelectedFormatName);
+            var registedTargetFormat, registerSourceFormat;
         }
     }
     console.log("In RuleScriptCtrl");
