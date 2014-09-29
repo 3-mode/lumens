@@ -9,11 +9,11 @@ package com.lumens.connector.xml;
  */
 public class XmlClientFactory {
 
-    XmlClient createDOMClient(XmlConnector cnt) {
-        return new DOMClient();
+    static XmlClient createDOMClient(XmlConnector cntr){
+        return new DomClient(cntr);
     }
 
-    XmlClient createSAXClient(XmlConnector cnt) {
-        return new SAXClient();
+    static XmlClient createSAXClient(XmlConnector cntr){
+        return new SaxClient(cntr);
     }
 }

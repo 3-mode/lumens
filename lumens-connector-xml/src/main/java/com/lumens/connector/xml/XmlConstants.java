@@ -11,5 +11,6 @@ public interface XmlConstants {
 
     public static final String VERSION = "version";
     public static final String ENCODING = "encoding";
-    public static final String PATH = "path";
+    public static final String XMLPATH = "xmlpath";
+    public static final String XSDPATH = "xsdpath";
 }
