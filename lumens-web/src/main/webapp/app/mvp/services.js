@@ -127,8 +127,55 @@ Lumens.services.factory('RuleRegister', function() {
 });
 Lumens.services.factory('FormatRegister', function() {
     return {
-        build: function($scope, message) {
-            console.log(message, $scope);
+        build: function($scope) {
+            var inRegName = $scope.inputFormatRegName;
+            var inSelectedName = $scope.inputSelectedFormatName;
+            var outRegName = $scope.outputFormatRegName;
+            var outSelectedName = $scope.outputSelectedFormatName;
+            var tranformRuleEntry = $scope.transformRuleEntity.transformRuleEntry;
+            var selectedSourceFormat = this.findFormat($scope.displaySourceFormatList, inSelectedName);
+            var selectedTargetFormat = this.findFormat($scope.displayTargetFormatList, outSelectedName);
+            this.rootSourceFormat = dupliateFormat(selectedSourceFormat);
+            this.rootTargetFormat = dupliateFormat(selectedTargetFormat);
+            if ($scope.displayTargetFormatList) {
+                // TODO Build the registedformat tree
+                if (tranformRuleEntry.transform_rule.transform_rule_item) {
+                    buildRegistedFormat(tranformRuleEntry.transform_rule.transform_rule_item, $scope.displayTargetFormatList, selectedSourceFormat)
+                }
+            }
+            if (selectedSourceFormat) {
+                // TODO Build the registedformat tree
+            }
+        },
+        // Private memeber functions
+        duplicateFormat: function(format) {
+            return  {
+                form: format.form,
+                name: format.name,
+                property: format.property,
+                type: format.type
+            };
+        },
+        buildRegistedFormat: function(ruleItem, targetFormats, sourceFormat) {
+            var refTargetFormat = this.findFormat(targetFormats, ruleItem.format_name);
+            if (ruleItem.script) {
+                var sourceFormatPaths = parseScriptFindSourceFormat(ruleItem.script);
+                buildRegistedSourceFormat(sourceFormat, sourceFormatPaths);
+            }
+            var ruleItems = ruleItem.transform_rule_item;
+            for (var i = 0; i < ruleItems.length; ++i)
+                buildRegistedFormat(ruleItems[i], refTargetFormat, sourceFormat);
+        },
+        buildRegistedSourceFormat: function(sourceFormat, sourceFormatPaths) {
+            if (this.rootSourceFormat) {
+                // TODO parse the format paths to build required format for source
+            }
+        },
+        findFormat: function(formatList, formatName) {
+            for (var i = 0; i < formatList.length; ++i)
+                if (formatList[i].format[0].name === formatName)
+                    return formatList[i].format[0];
+            return null;
         }
     }
 });

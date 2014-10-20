@@ -313,7 +313,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             messageBox.showWarning(i18n.id_no_project_name, projectInfoContent);
     };
 })
-.controller("TransformListCtrl", function($scope, $compile, $element, TransformEditTemplate, ScriptEditTemplate, RuleEditorService) {
+.controller("TransformListCtrl", function($scope, $compile, $element, TransformEditTemplate, RuleEditorService) {
     console.log("In TransformListCtrl", $element);
     $scope.ruleEditorService = RuleEditorService.create();
 
@@ -336,10 +336,6 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 $scope.transformEditPanel.getElement().trigger("resize");
                 $scope.transformEditPanel.getElement().find(".lumens-format-panel").trigger("resize");
             });
-            // Load script editing panel
-            ScriptEditTemplate.get(function(scriptEditTemplate) {
-                $compile(scriptEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart2Element());
-            })
         });
     }
 
@@ -405,9 +401,13 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         }
     });
 })
-.controller("TransformEditCtrl", function($scope, $element, $compile, ProjectById, FormatList, FormatRegistryModal, RuleRegistryModal) {
+.controller("TransformEditCtrl", function($scope, $element, $compile, ProjectById, FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
     console.log("In TransformEditCtrl");
     $scope.ruleEditorService.addScope($scope);
+    // Load script editing panel
+    ScriptEditTemplate.get(function(scriptEditTemplate) {
+        $compile(scriptEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart2Element());
+    })
     $scope.setScript = function(script) {
         if ($scope.currentScriptNode)
             $scope.currentScriptNode.setScript(script);
@@ -584,8 +584,11 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         }
         else if (id_script_btn === "id_rule_fmt_save") {
             // TODO parsing the rule to get the input registed format
+            var registedFormat = FormatRegister.build($scope);
             // TODO pasring the rule to get the output registed format
+            // ********
             // TODO save the rule, input format, output format
+            // ******
             // TODO show them in the list of transformator's rules
             console.log("input:", $scope.inputFormatRegName);
             console.log("input format:", $scope.inputSelectedFormatName);
@@ -597,10 +600,14 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     console.log("In RuleScriptCtrl");
 })
 .controller("FormatRegistryCtrl", function($scope, $element) {
-    if ($scope.selectedSide === 'left')
+    if ($scope.selectedSide === 'left') {
         $scope.registeredFormatName = $scope.inputFormatRegName;
-    else if ($scope.selectedSide === 'right')
+        $scope.selectedFormatName = $scope.inputSelectedFormatName
+    }
+    else if ($scope.selectedSide === 'right') {
         $scope.registeredFormatName = $scope.outputFormatRegName;
+        $scope.selectedFormatName = $scope.outputSelectedFormatName
+    }
 
     $scope.saveFormatRegistry = function() {
         if ($scope.selectedSide === 'left') {

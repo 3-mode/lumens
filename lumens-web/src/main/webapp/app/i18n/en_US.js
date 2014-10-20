@@ -17,6 +17,7 @@ Lumens.i18n = {
     id_rule_fmt_save: "Save",
     // Rule list Ctrls
     id_rule_new: "New",
+    id_rule_edit: "Edit",
     id_rule_delete: "Delete",
     // Format list Ctrls
     id_format_new: "New",
