@@ -132,6 +132,7 @@ Lumens.services.factory('FormatRegister', function() {
             var inSelectedName = $scope.inputSelectedFormatName;
             var outRegName = $scope.outputFormatRegName;
             var outSelectedName = $scope.outputSelectedFormatName;
+            console.log("Rule entity:", $scope.transformRuleEntity);
             var tranformRuleEntry = $scope.transformRuleEntity.transformRuleEntry;
             var selectedSourceFormat = this.findFormat($scope.displaySourceFormatList, inSelectedName);
             var selectedTargetFormat = this.findFormat($scope.displayTargetFormatList, outSelectedName);

@@ -50,21 +50,25 @@
         <script type="text/javascript">
             var appModule = angular.module('LumensQUnit', ["lumens-directives", "lumens-services", "lumens-controllers", "ngRoute"]);
             function MainQUnitCtrl($scope, $http, FormatRegister) {
-                $scope.inputFormatRegName = "JOBS-Source";
-                $scope.inputSelectedFormatName = "JOBS";
-                $scope.outputFormatRegName = "DEPART-Target"
-                $scope.outputSelectedFormatName = "DEPARTMENTS";
-                $scope.displaySourceFormatList;
-                $scope.displayTargetFormatList;
-                $scope.transformRuleEntity.transformRuleEntry;
-                FormatRegister.build($scope);
+                $http.get("app/mock/json/hr_tables.json").success(function(data) {
+                    console.log("Mocked data:", data);
+                    $scope.displaySourceFormatList = $scope.displayTargetFormatList = data;
+                    $scope.inputFormatRegName = "JOBS-Source";
+                    $scope.inputSelectedFormatName = "JOBS";
+                    $scope.outputFormatRegName = "DEPART-Target"
+                    $scope.outputSelectedFormatName = "DEPARTMENTS";
+                    $scope.transformRuleEntity = {
+                        
+                    };
+                    //FormatRegister.build($scope);
 
-                QUnit.test("Register Format testing", function(assert) {
-                    assert.ok(1 === "1", "Passed!");
-                });
-                QUnit.test("Register Format testing", function(assert) {
-                    assert.ok(1 === "1", "Passed!");
-                });
+                    QUnit.test("Register Format testing", function(assert) {
+                        assert.ok(1 == "1", "Passed!");
+                    });
+                    QUnit.test("Register Format testing 2", function(assert) {
+                        assert.ok(1 == "1", "Passed!");
+                    });
+                })
             }
         </script>
     </head>
