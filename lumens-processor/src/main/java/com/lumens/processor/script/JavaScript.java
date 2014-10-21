@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Hewlett-Packard Development Company, L.P. All Rights Reserved.
+ * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 package com.lumens.processor.script;
 
