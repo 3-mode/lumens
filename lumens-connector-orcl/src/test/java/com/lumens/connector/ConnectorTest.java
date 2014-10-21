@@ -59,18 +59,22 @@ public class ConnectorTest extends TestCase implements DatabaseConstants, Oracle
         try {
             HashMap<String, Value> props = new HashMap<>();
             props.put(OJDBC, new Value("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar"));
-            props.put(CONNECTION_URL, new Value("jdbc:oracle:thin:@localhost:1521:orcl"));
+            props.put(CONNECTION_URL, new Value("jdbc:oracle:thin:@localhost:1521:xe"));
             props.put(USER, new Value("hr"));
             props.put(PASSWORD, new Value("hr"));
             props.put(FULL_LOAD, new Value(true));
             cntr.setPropertyList(props);
             cntr.open();
-            try (FileOutputStream fos = new FileOutputStream("C:/db.tables.xml")) {
+            try (FileOutputStream fos = new FileOutputStream("C:/db.tables.json")) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                baos.write("[".getBytes());
                 for (Format format : cntr.getFormatList(null).values()) {
-                    FormatSerializer xml = new FormatSerializer(format);
-                    xml.writeToXml(baos);
+                    if (baos.size() >= "[".getBytes().length)
+                        baos.write(",".getBytes());
+                    FormatSerializer writer = new FormatSerializer(format);
+                    writer.writeToJson(baos);
                 }
+                baos.write("]".getBytes());
                 //String xmlContent = baos.toString("UTF-8");
                 //System.out.println(xmlContent);
                 fos.write(baos.toByteArray());
