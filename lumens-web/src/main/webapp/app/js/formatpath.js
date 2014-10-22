@@ -13,9 +13,9 @@ Lumens.FormatPath = Class.$extend({
             var c = strPath.charAt(index);
             if (c === '.' && !quoteFound) {
                 if (index === 0 || index + 1 === length) {
-                    throw "Error strPath format \"" + strPath + "\"";
+                    throw "Error string path of format \"" + strPath + "\"";
                 }
-                tokens.add(removeQuote(strPath.substring(found, index)));
+                this.tokens.push(this.removeQuote(strPath.substring(found, index)));
                 found = index + 1;
             } else if (c === '\'') {
                 quoteFound = !quoteFound;
@@ -23,8 +23,14 @@ Lumens.FormatPath = Class.$extend({
             ++index;
         }
         if (found < length && index === length) {
-            tokens.add(removeQuote(strPath.substring(found, index)));
+            this.tokens.push(this.removeQuote(strPath.substring(found, index)));
         }
+    },
+    tokenCount: function() {
+        return this.tokens.length;
+    },
+    token: function(i) {
+        return this.tokens[i];
     },
     removeQuote: function(strToken) {
         if (strToken.charAt(0) === '\'' && strToken.charAt(strToken.length - 1) === '\'') {
