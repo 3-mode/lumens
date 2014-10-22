@@ -36,6 +36,7 @@
         <script src="app/js/tree.js"></script>
         <script src="app/js/component.js"></script>
         <script src="app/js/project.js"></script>
+        <script src="app/js/formatpath.js"></script>
         <script src="app/js/functions.js"></script>
         <!-- Angular JS -->
         <script src="libs/angular/angular.js"></script>
@@ -57,17 +58,16 @@
                     $scope.inputSelectedFormatName = "JOBS";
                     $scope.outputFormatRegName = "DEPART-Target"
                     $scope.outputSelectedFormatName = "DEPARTMENTS";
-                    $scope.transformRuleEntity = {
-                        
-                    };
-                    //FormatRegister.build($scope);
-
-                    QUnit.test("Register Format testing", function(assert) {
-                        assert.ok(1 == "1", "Passed!");
-                    });
-                    QUnit.test("Register Format testing 2", function(assert) {
-                        assert.ok(1 == "1", "Passed!");
-                    });
+                    $http.get("app/mock/json/rule_count-depart.json").success(function(rule) {
+                        $scope.transformRuleEntity = rule;
+                        FormatRegister.build($scope);
+                        QUnit.test("Register Format testing", function(assert) {
+                            assert.ok(1 == "1", "Passed!");
+                        });
+                        QUnit.test("Register Format testing 2", function(assert) {
+                            assert.ok(1 == "1", "Passed!");
+                        });
+                    })
                 })
             }
         </script>

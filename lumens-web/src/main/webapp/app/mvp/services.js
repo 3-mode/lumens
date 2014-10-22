@@ -127,6 +127,7 @@ Lumens.services.factory('RuleRegister', function() {
 });
 Lumens.services.factory('FormatRegister', function() {
     return {
+        pathEnding: "+-*/ &|!<>\n\r\t^%=;:?,",
         build: function($scope) {
             var inRegName = $scope.inputFormatRegName;
             var inSelectedName = $scope.inputSelectedFormatName;
@@ -141,7 +142,7 @@ Lumens.services.factory('FormatRegister', function() {
             if ($scope.displayTargetFormatList) {
                 // TODO Build the registedformat tree
                 if (tranformRuleEntry.transform_rule.transform_rule_item) {
-                    buildRegistedFormat(tranformRuleEntry.transform_rule.transform_rule_item, $scope.displayTargetFormatList, selectedSourceFormat)
+                    this.buildRegistedFormat(tranformRuleEntry.transform_rule.transform_rule_item, $scope.displayTargetFormatList, selectedSourceFormat)
                 }
             }
             if (selectedSourceFormat) {
@@ -158,19 +159,62 @@ Lumens.services.factory('FormatRegister', function() {
             };
         },
         buildRegistedFormat: function(ruleItem, targetFormats, sourceFormat) {
+            if (!targetFormats || !ruleItem || !sourceFormat)
+                return;
             var refTargetFormat = this.findFormat(targetFormats, ruleItem.format_name);
             if (ruleItem.script) {
-                var sourceFormatPaths = parseScriptFindSourceFormat(ruleItem.script);
-                buildRegistedSourceFormat(sourceFormat, sourceFormatPaths);
+                var sourceFormatPaths = this.parseScriptFindSourceFormat(ruleItem.script);
+                this.buildRegistedSourceFormat(sourceFormat, sourceFormatPaths);
             }
             var ruleItems = ruleItem.transform_rule_item;
-            for (var i = 0; i < ruleItems.length; ++i)
-                buildRegistedFormat(ruleItems[i], refTargetFormat, sourceFormat);
+            if (ruleItems) {
+                for (var i = 0; i < ruleItems.length; ++i)
+                    this.buildRegistedFormat(ruleItems[i], refTargetFormat.format, sourceFormat);
+            }
         },
         buildRegistedSourceFormat: function(sourceFormat, sourceFormatPaths) {
             if (this.rootSourceFormat) {
                 // TODO parse the format paths to build required format for source
+                for (var i = 0; i < sourceFormatPaths.length; ++i) {
+                    var path = new Lumens.FormatPath(sourceFormatPaths[i]);
+                    console.log("Paring path:", path);
+                }
             }
+        },
+        parseScriptFindSourceFormat: function(strScript) {
+            // The same algorithm to see lumens-processor module's JavaScriptBuilder.java
+            console.log("Parsing script:", strScript);
+            var paths = [];
+            var bQuote = false;
+            for (var i = 0; i < strScript.length; ++i) {
+                var c = strScript.charAt(i);
+                if (c === '\"')
+                    bQuote = !bQuote;
+                if (bQuote || c !== '@') {
+                    continue;
+                } else if (c === '@') { // find all @a.b.c format line in this strScript
+                    i++;
+                    if (i < strScript.length) {
+                        var singleQuote = false;
+                        var path = "";
+                        while (i < strScript.length) {
+                            c = strScript.charAt(i);
+                            if (c === '\'')
+                                singleQuote = !singleQuote;
+                            if (!singleQuote && this.pathEnding.indexOf(c) > -1) {
+                                paths.push(path);
+                                break;
+                            } else {
+                                path += c;
+                                ++i;
+                                if (i === strScript.length)
+                                    paths.push(path);
+                            }
+                        }
+                    }
+                }
+            }
+            return paths;
         },
         findFormat: function(formatList, formatName) {
             for (var i = 0; i < formatList.length; ++i)

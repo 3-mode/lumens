@@ -1,0 +1,21 @@
+{
+    "transformRuleEntry":
+            {
+                "name": "Shaofeng Wang <shaofeng.wang@outlook.com>",
+                "source_name": "s1",
+                "target_name": "t1",
+                "transform_rule": {
+                    "name": "New",
+                    "transform_rule_item": {
+                        "format_name": "DEPARTMENTS",
+                        "script": "",
+                        "transform_rule_item": [
+                            {
+                                "format_name": "DEPARTMENT_ID",
+                                "script": "@field.JOB_ID + @field.Description"
+                            }
+                        ]
+                    }
+                }
+            }
+}
