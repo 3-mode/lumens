@@ -463,11 +463,11 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 buildTransformRuleItemStructure(tree.last, data.child.format);
                 var transformRuleEntry = [
                     {
-                        "name": "new",
-                        "source_name": "s1",
-                        "target_name": "t1",
+                        "name": "Transform-Rule-Define",
+                        "source_name": "",
+                        "target_name": "",
                         "transform_rule": {
-                            "name": "new",
+                            "name": tree.root.format_name,
                             "transform_rule_item": tree.root
                         }
                     }
@@ -584,17 +584,12 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         }
         else if (id_script_btn === "id_rule_fmt_save") {
             // TODO parsing the rule to get the input registed format
-            var registedFormat = FormatRegister.build($scope);
             // TODO pasring the rule to get the output registed format
+            var registedFormats = FormatRegister.build($scope);
             // ********
             // TODO save the rule, input format, output format
             // ******
             // TODO show them in the list of transformator's rules
-            console.log("input:", $scope.inputFormatRegName);
-            console.log("input format:", $scope.inputSelectedFormatName);
-            console.log("output:", $scope.outputFormatRegName);
-            console.log("outut format:", $scope.outputSelectedFormatName);
-            var registedTargetFormat, registerSourceFormat;
         }
     }
     console.log("In RuleScriptCtrl");

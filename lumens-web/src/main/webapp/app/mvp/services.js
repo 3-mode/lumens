@@ -132,11 +132,15 @@ Lumens.services.factory('FormatRegister', function() {
             var inRegName = $scope.inputFormatRegName;
             var inSelectedName = $scope.inputSelectedFormatName;
             var outRegName = $scope.outputFormatRegName;
+            var ruleRegName = $scope.ruleRegName;
             var outSelectedName = $scope.outputSelectedFormatName;
             console.log("Rule entity:", $scope.transformRuleEntity);
             var tranformRuleEntry = $scope.transformRuleEntity.transformRuleEntry;
-            var selectedSourceFormat = this.findFormat($scope.displaySourceFormatList, inSelectedName);
-            var selectedTargetFormat = this.findFormat($scope.displayTargetFormatList, outSelectedName);
+            tranformRuleEntry.name = ruleRegName;
+            tranformRuleEntry.source_name = inRegName;
+            tranformRuleEntry.target_name = outRegName;
+            var selectedSourceFormat = this.findRootFormat($scope.displaySourceFormatList, inSelectedName);
+            var selectedTargetFormat = this.findRootFormat($scope.displayTargetFormatList, outSelectedName);
             this.rootSourceFormat = this.duplicateFormat(selectedSourceFormat);
             this.rootTargetFormat = this.duplicateFormat(selectedTargetFormat);
             if ($scope.displayTargetFormatList) {
@@ -145,9 +149,12 @@ Lumens.services.factory('FormatRegister', function() {
                     this.buildRegistedFormat(tranformRuleEntry.transform_rule.transform_rule_item, $scope.displayTargetFormatList, selectedSourceFormat)
                 }
             }
-            if (selectedSourceFormat) {
-                // TODO Build the registedformat tree
-            }
+            console.log("Completed source and target building:\n", this.rootSourceFormat, this.rootTargetFormat);
+            return {
+                sourceFormat: this.rootSourceFormat,
+                targetFormat: this.rootTargetFormat,
+                ruleEntry: tranformRuleEntry
+            };
         },
         // Private memeber functions
         duplicateFormat: function(format) {
@@ -159,27 +166,87 @@ Lumens.services.factory('FormatRegister', function() {
             };
         },
         buildRegistedFormat: function(ruleItem, targetFormats, sourceFormat) {
-            if (!targetFormats || !ruleItem || !sourceFormat)
+            if (!ruleItem || !targetFormats || !sourceFormat)
                 return;
-            var refTargetFormat = this.findFormat(targetFormats, ruleItem.format_name);
+            var refTargetFormat = this.findRootFormat(targetFormats, ruleItem.format_name);
             if (ruleItem.script) {
                 var sourceFormatPaths = this.parseScriptFindSourceFormat(ruleItem.script);
-                this.buildRegistedSourceFormat(sourceFormat, sourceFormatPaths);
+                console.log("Source format paths:", sourceFormatPaths);
+                this.buildRegistedSourceFormat(this.rootSourceFormat, sourceFormat, sourceFormatPaths);
             }
             var ruleItems = ruleItem.transform_rule_item;
             if (ruleItems) {
                 for (var i = 0; i < ruleItems.length; ++i)
-                    this.buildRegistedFormat(ruleItems[i], refTargetFormat.format, sourceFormat);
+                    this.buildRegistedTargetFormat(this.rootTargetFormat, ruleItems[i], refTargetFormat.format, this.rootSourceFormat, sourceFormat);
             }
         },
-        buildRegistedSourceFormat: function(sourceFormat, sourceFormatPaths) {
-            if (this.rootSourceFormat) {
+        buildRegistedTargetFormat: function(registedParentFormat, ruleItem, targetFormats, registedSourceParentFormat, sourceFormat) {
+            if (!ruleItem || !targetFormats || !registedParentFormat)
+                return false;
+            if (ruleItem.script) {
+                var sourceFormatPaths = this.parseScriptFindSourceFormat(ruleItem.script);
+                console.log("Source format paths:", sourceFormatPaths);
+                this.buildRegistedSourceFormat(registedSourceParentFormat, sourceFormat, sourceFormatPaths);
+            }
+            var childFormat1 = this.findChildFormat(this.rootTargetFormat.format, ruleItem.format_name);
+            var childFormat2 = this.findChildFormat(targetFormats, ruleItem.format_name);
+            if (!childFormat2)
+                return false;
+            if (!childFormat1) {
+                childFormat1 = {
+                    form: childFormat2.form,
+                    name: childFormat2.name,
+                    property: childFormat2.property,
+                    type: childFormat2.type
+                };
+                if (!registedParentFormat.format)
+                    registedParentFormat.format = [childFormat1];
+                else
+                    registedParentFormat.format.push(childFormat1);
+            }
+            var ruleItems = ruleItem.transform_rule_item;
+            if (ruleItems) {
+                for (var i = 0; i < ruleItems.length; ++i)
+                    this.buildRegistedTargetFormat(childFormat1, ruleItems[i], childFormat2.format, registedSourceParentFormat, sourceFormat);
+            }
+            return true;
+        },
+        buildRegistedSourceFormat: function(registedParentFormat, sourceParentFormat, sourceFormatPaths) {
+            if (registedParentFormat && sourceParentFormat) {
                 // TODO parse the format paths to build required format for source
                 for (var i = 0; i < sourceFormatPaths.length; ++i) {
                     var path = new Lumens.FormatPath(sourceFormatPaths[i]);
-                    console.log("Paring path:", path);
+                    if (!this.buildRegisterSourceChildFormatFromOrignalFormat(registedParentFormat, sourceParentFormat, path, 0))
+                        continue;
                 }
             }
+        },
+        buildRegistedSourceChildFormat: function(registedParentFormat, sourceParentFormat, path, tokenIdx) {
+            for (var i = tokenIdx; i < path.tokenCount(); ++i) {
+                if (!this.buildRegisterSourceChildFormatFromOrignalFormat(registedParentFormat, sourceParentFormat, path, tokenIdx))
+                    continue;
+            }
+        },
+        buildRegisterSourceChildFormatFromOrignalFormat: function(registedParentFormat, sourceParentFormat, path, tokenIdx) {
+            var childFormat1 = this.findChildFormat(registedParentFormat.format, path.token(tokenIdx));
+            var childFormat2 = this.findChildFormat(sourceParentFormat.format, path.token(tokenIdx));
+            if (!childFormat2)
+                return false;
+            if (!childFormat1) {
+                childFormat1 = {
+                    form: childFormat2.form,
+                    name: childFormat2.name,
+                    property: childFormat2.property,
+                    type: childFormat2.type
+                };
+                if (!registedParentFormat.format)
+                    registedParentFormat.format = [childFormat1];
+                else
+                    registedParentFormat.format.push(childFormat1);
+            }
+            if (childFormat1)
+                this.buildRegistedSourceChildFormat(childFormat1, childFormat2, path, tokenIdx + 1);
+            return true;
         },
         parseScriptFindSourceFormat: function(strScript) {
             // The same algorithm to see lumens-processor module's JavaScriptBuilder.java
@@ -216,10 +283,20 @@ Lumens.services.factory('FormatRegister', function() {
             }
             return paths;
         },
-        findFormat: function(formatList, formatName) {
-            for (var i = 0; i < formatList.length; ++i)
-                if (formatList[i].format[0].name === formatName)
-                    return formatList[i].format[0];
+        findRootFormat: function(formatList, formatName) {
+            if (formatList) {
+                for (var i = 0; i < formatList.length; ++i)
+                    if (formatList[i].format[0].name === formatName)
+                        return formatList[i].format[0];
+            }
+            return null;
+        },
+        findChildFormat: function(formatList, formatName) {
+            if (formatList) {
+                for (var i = 0; i < formatList.length; ++i)
+                    if (formatList[i].name === formatName)
+                        return formatList[i];
+            }
             return null;
         }
     }
