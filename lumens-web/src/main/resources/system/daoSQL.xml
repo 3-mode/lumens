@@ -3,32 +3,32 @@
     <database-access-object name="ProjectDAO">
         <sql name="total">
  <![CDATA[
- select count(1) from project
+ SELECT count(1) FROM project
  ]]>
         </sql>
         <sql name="AllProject">
 <![CDATA[
-select id, name, description, data from project
+SELECT id, name, description, data FROM project
 ]]>
         </sql>
         <sql name="AllShortProject">
 <![CDATA[
-select id, name, description from project
+SELECT id, name, description FROM project
 ]]>
         </sql>
         <sql name="FindProject">
 <![CDATA[
-select id, name, description, data from project where id = %d
+SELECT id, name, description, data FROM project WHERE id = %d
 ]]>
         </sql>
         <sql name="CreateProject">
 <![CDATA[
-insert into project (id, name, description, data) values (?,?,?,?)
+INSERT INTO project (id, name, description, data) VALUES (?,?,?,?)
 ]]>
         </sql>
         <sql name="UpdateProject">
 <![CDATA[
-update project set name=?, description=?, data=? where id = ?
+UPDATE project set name=?, description=?, data=? WHERE id = ?
 ]]>
         </sql>
     </database-access-object>
