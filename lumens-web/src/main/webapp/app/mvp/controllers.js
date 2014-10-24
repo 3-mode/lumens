@@ -359,21 +359,31 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
 
     // Init the trnasformation rule list to show all rules
     $scope.$watch(function() {
-        return $scope.currentComponent;
-    }, function(currentComponent) {
-        $scope.theTargetNameList = [];
-        if (currentComponent && currentComponent.target) {
-            $.each(currentComponent.target, function() {
-                $scope.theTargetNameList.push(this.name);
+        return $scope.currentUIComponent;
+    }, function(currentUIComponent) {
+        if (currentUIComponent.configure.component_info.transform_rule_entry) {
+            $.each(currentUIComponent.configure.component_info.transform_rule_entry, function() {
+                if ($scope.selectTargetName === "All") {
+                    $scope.transformRuleEntryList.push(this);
+                }
             });
-            if (currentComponent.transform_rule_entry) {
-                $.each(currentComponent.transform_rule_entry, function() {
-                    if ($scope.selectTargetName === "All") {
-                        $scope.transformRuleEntryList.push(this);
-                    }
-                });
-            }
         }
+        if (currentUIComponent &&
+        currentUIComponent.$from_list &&
+        currentUIComponent.$from_list.length > 0 &&
+        currentUIComponent.$from_list[0].$from) {
+            $scope.theSourceNameList = [currentUIComponent.$from_list[0].$from.configure.short_desc];
+        }
+        else
+            $scope.theSourceNameList = [currentUIComponent.configure.short_desc];
+        if (currentUIComponent &&
+        currentUIComponent.$to_list &&
+        currentUIComponent.$to_list.length > 0 &&
+        currentUIComponent.$to_list[0].$to) {
+            $scope.theTargetNameList = [currentUIComponent.$to_list[0].$to.configure.short_desc];
+        }
+        else
+            $scope.theTargetNameList = [];
     });
 
     // if the select a target then only list the related rules
@@ -585,7 +595,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         else if (id_script_btn === "id_rule_fmt_save") {
             // TODO parsing the rule to get the input registed format
             // TODO pasring the rule to get the output registed format
-            var registedFormats = FormatRegister.build($scope);
+            var registedTransformInfo = FormatRegister.build($scope);
             // ********
             // TODO save the rule, input format, output format
             // ******

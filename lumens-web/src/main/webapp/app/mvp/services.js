@@ -129,16 +129,14 @@ Lumens.services.factory('FormatRegister', function() {
     return {
         pathEnding: "+-*/ &|!<>\n\r\t^%=;:?,",
         build: function($scope) {
-            var inRegName = $scope.inputFormatRegName;
             var inSelectedName = $scope.inputSelectedFormatName;
-            var outRegName = $scope.outputFormatRegName;
             var ruleRegName = $scope.ruleRegName;
             var outSelectedName = $scope.outputSelectedFormatName;
             console.log("Rule entity:", $scope.transformRuleEntity);
             var tranformRuleEntry = $scope.transformRuleEntity.transformRuleEntry;
             tranformRuleEntry.name = ruleRegName;
-            tranformRuleEntry.source_name = inRegName;
-            tranformRuleEntry.target_name = outRegName;
+            tranformRuleEntry.source_name = $scope.inputFormatRegName;
+            tranformRuleEntry.target_name = $scope.outputFormatRegName;
             var selectedSourceFormat = this.findRootFormat($scope.displaySourceFormatList, inSelectedName);
             var selectedTargetFormat = this.findRootFormat($scope.displayTargetFormatList, outSelectedName);
             this.rootSourceFormat = this.duplicateFormat(selectedSourceFormat);
@@ -150,13 +148,74 @@ Lumens.services.factory('FormatRegister', function() {
                 }
             }
             console.log("Completed source and target building:\n", this.rootSourceFormat, this.rootTargetFormat);
-            return {
+            var result = {
                 sourceFormat: this.rootSourceFormat,
                 targetFormat: this.rootTargetFormat,
                 ruleEntry: tranformRuleEntry
             };
+            this.saveToFormatList($scope, result, "IN");
+            this.saveToFormatList($scope, result, "OUT");
+            return result;
         },
         // Private memeber functions
+        saveToFormatList: function($scope, result, direction) {
+            var formatList, formatEntryHolder, formatName, format;
+            if (direction === "IN") {
+                if (!$scope.currentUIComponent.$to_list ||
+                !$scope.currentUIComponent.$to_list[0] ||
+                !$scope.currentUIComponent.$to_list[0].$to.configure.component_info)
+                    return;
+                formatName = $scope.outputFormatRegName;
+                format = result.targetFormat;
+                formatList = $scope.currentUIComponent.$to_list[0].$to.configure.component_info.format_list;
+            }
+            else {
+                if (!$scope.currentUIComponent.$from_list ||
+                !$scope.currentUIComponent.$from_list[0] ||
+                !$scope.currentUIComponent.$from_list[0].$from.configure.component_info)
+                    return;
+                formatName = $scope.inputFormatRegName;
+                format = result.sourceFormat;
+                formatList = $scope.currentUIComponent.$from_list[0].$from.configure.component_info.format_list;
+            }
+            if (formatList && formatList.length > 0) {
+                for (var i = 0; i < formatList.length > 0; ++i) {
+                    if (formatList[i].direction === direction) {
+                        formatEntryHolder = formatList[i];
+                        break;
+                    }
+                }
+            }
+            if (!formatEntryHolder) {
+                formatList.push({
+                    direction: direction,
+                    format_entry: [{
+                            direction: direction,
+                            format: [format],
+                            name: formatName
+                        }]});
+            }
+            else if (formatEntryHolder.format_entry) {
+                for (var i = 0; i < formatEntryHolder.format_entry.length; ++i) {
+                    // If found the same reg name, replace it
+                    if (formatName === formatEntryHolder.format_entry[i].name) {
+                        formatEntryHolder.format_entry[i].format = [format];
+                        return;
+                    }
+                }
+                formatEntryHolder.format_entry.push({
+                    direction: direction,
+                    format: [format],
+                    name: formatName
+                });
+            }
+            else
+                formatEntryHolder.format_entry = [{
+                        direction: direction,
+                        format: [format],
+                        name: formatName
+                    }];
+        },
         duplicateFormat: function(format) {
             return  {
                 form: format.form,
