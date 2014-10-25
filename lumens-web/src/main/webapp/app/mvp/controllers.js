@@ -15,13 +15,13 @@ Lumens.controllers.controller("MainViewCtrl", function($scope, $route, $http, $c
     Lumens.system.theLayout.getPart2Element().append($compile('<div ng-view />')($scope));
 })
 .controller("DashboardViewCtrl", function($scope, $route, $http, $compile) {
-    console.log("in DashboardViewCtrl");
+    LumensLog.log("in DashboardViewCtrl");
     Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
     if (Lumens.system.designView.workspaceLayout)
         Lumens.system.designView.workspaceLayout.remove();
 })
 .controller("ManageViewCtrl", function($scope, $route, $http, $compile) {
-    console.log("in ManageViewCtrl");
+    LumensLog.log("in ManageViewCtrl");
     Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
     if (Lumens.system.designView.workspaceLayout)
         Lumens.system.designView.workspaceLayout.remove();
@@ -31,7 +31,7 @@ $scope, $route, $http, $compile,
 DesignNavMenu, SuccessTemplate, WarningTemplate, ErrorTemplate, PropFormTemplate, TransformListTemplate,
 DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     // Test services
-    console.log("FormatList: ", FormatList.getIN({component_name: 'Database:@()!- HR'}));
+    LumensLog.log("FormatList: ", FormatList.getIN({component_name: 'Database:@()!- HR'}));
     // Set the default page view as dashboard view
     var i18n = $scope.i18n = Lumens.i18n;
     var desgin = $scope.desgin = {};
@@ -55,9 +55,9 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         $scope.transformListTemplate = templ;
     });
     $scope.onApplyProperty = function(event) {
-        console.log("Apply:", event);
-        console.log("Current editing props:", $scope.componentProps);
-        console.log("Current editing component:", $scope.currentComponent);
+        LumensLog.log("Apply:", event);
+        LumensLog.log("Current editing props:", $scope.componentProps);
+        LumensLog.log("Current editing component:", $scope.currentComponent);
         // *** TODO shortDescription changed then the related linked component target name should be changed also
         $scope.currentUIComponent.setShortDescription($scope.componentProps.Name.value);
         applyProperty($scope.componentProps, $scope.currentComponent);
@@ -102,7 +102,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                     .configure({
                         panelStyle: {width: "100%", height: "100%"},
                         onComponentDblclick: function(component) {
-                            console.log("Dblclick:", component);
+                            LumensLog.log("Dblclick:", component);
                             if ($scope.currentUIComponent === component)
                                 return;
                             $scope.currentUIComponent = component;
@@ -121,7 +121,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                             return false;
                         },
                         onAfterComponentAdd: function(component) {
-                            console.log("Added compnoent:", component);
+                            LumensLog.log("Added compnoent:", component);
                             $scope.projectOperator.add(component.configure.component_info, component.configure.category_info.type);
                         }
                     });
@@ -218,7 +218,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
 })
 .controller("DesginCmdCtrl", function($scope, $element, $compile, ProjectListModal, ProjectCreateModal, ProjectSave) {
     // Handle desgin command button event
-    console.log("In DesginCmdCtrl", $element);
+    LumensLog.log("In DesginCmdCtrl", $element);
     var i18n = $scope.i18n;
     var projectOperator = $scope.projectOperator;
     var messageBoxParent = $scope.desgin.designPanel.getElement();
@@ -249,10 +249,10 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         else if ("id_save" === id) {
             if (projectOperator.isValid()) {
                 projectOperator.sync();
-                console.log("Saving project:", projectOperator.get());
-                console.log("Saveing propery:", $scope.$parent.componentProps);
+                LumensLog.log("Saving project:", projectOperator.get());
+                LumensLog.log("Saveing propery:", $scope.$parent.componentProps);
                 ProjectSave.save(projectOperator.get(), function(response) {
-                    console.log("Save project status:", response);
+                    LumensLog.log("Save project status:", response);
                     if (response.status === "OK") {
                         var project = response.result_content.project[0];
                         projectOperator.setId(project.id);
@@ -264,7 +264,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             }
         }
         else
-            console.log("Clicked:", id);
+            LumensLog.log("Clicked:", id);
     };
 })
 .controller("ProjectListCtrl", function($scope, $element, ProjectList, ProjectById) {
@@ -277,7 +277,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         $scope.currentProjectId = $(event.target).parent().attr("project-id");
     };
     $scope.openProject = function() {
-        console.log("Opening project:", $scope.currentProjectId);
+        LumensLog.log("Opening project:", $scope.currentProjectId);
         if ($scope.currentProjectId) {
             ProjectById.get({project_id: $scope.currentProjectId}, function(projectData) {
                 if (projectOperator)
@@ -297,7 +297,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     });
 })
 .controller("ProjectCreateCtrl", function($scope, $element) {
-    console.log("In ProjectCreateCtrl", $element);
+    LumensLog.log("In ProjectCreateCtrl", $element);
     var i18n = $scope.$parent.i18n;
     var messageBoxParent = $scope.desgin.designPanel.getElement();
     var projectInfoContent = $element.find(".modal-body");
@@ -314,7 +314,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     };
 })
 .controller("TransformListCtrl", function($scope, $compile, $element, TransformEditTemplate, RuleEditorService) {
-    console.log("In TransformListCtrl", $element);
+    LumensLog.log("In TransformListCtrl", $element);
     $scope.ruleEditorService = RuleEditorService.create();
 
     var componentList = $scope.desgin.designPanel.getComponentList();
@@ -347,7 +347,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     };
 
     $scope.openTransformEditing = function(rule) {
-        console.log("Opening rule: ", rule);
+        LumensLog.log("Opening rule: ", rule);
         $scope.currentTransformRule = rule;
         showRuleEditor();
     };
@@ -361,6 +361,8 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     $scope.$watch(function() {
         return $scope.currentUIComponent;
     }, function(currentUIComponent) {
+        if (!currentUIComponent || !currentUIComponent.configure)
+            return;
         if (currentUIComponent.configure.component_info.transform_rule_entry) {
             $.each(currentUIComponent.configure.component_info.transform_rule_entry, function() {
                 if ($scope.selectTargetName === "All") {
@@ -368,16 +370,14 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 }
             });
         }
-        if (currentUIComponent &&
-        currentUIComponent.$from_list &&
+        if (currentUIComponent.$from_list &&
         currentUIComponent.$from_list.length > 0 &&
         currentUIComponent.$from_list[0].$from) {
             $scope.theSourceNameList = [currentUIComponent.$from_list[0].$from.configure.short_desc];
         }
         else
             $scope.theSourceNameList = [currentUIComponent.configure.short_desc];
-        if (currentUIComponent &&
-        currentUIComponent.$to_list &&
+        if (currentUIComponent.$to_list &&
         currentUIComponent.$to_list.length > 0 &&
         currentUIComponent.$to_list[0].$to) {
             $scope.theTargetNameList = [currentUIComponent.$to_list[0].$to.configure.short_desc];
@@ -412,7 +412,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     });
 })
 .controller("TransformEditCtrl", function($scope, $element, $compile, ProjectById, FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
-    console.log("In TransformEditCtrl");
+    LumensLog.log("In TransformEditCtrl");
     $scope.ruleEditorService.addScope($scope);
     // Load script editing panel
     ScriptEditTemplate.get(function(scriptEditTemplate) {
@@ -455,13 +455,13 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             sourceComponentName = $scope.currentUIComponent.$from_list[0].$from.configure.component_info.name;
         if ($scope.currentUIComponent.$to_list && $scope.currentUIComponent.$to_list.length > 0 && $scope.currentUIComponent.$to_list[0].$to)
             targetComponentName = $scope.currentUIComponent.$to_list[0].$to.configure.component_info.name;
-        console.log("transform source:" + sourceComponentName + ", target:" + targetComponentName);
+        LumensLog.log("transform source:" + sourceComponentName + ", target:" + targetComponentName);
         $element.find("div[rule-entity]").droppable({
             greedy: true,
             accept: ".lumens-tree-node",
             drop: function(event, ui) {
                 var data = $.data(ui.draggable.get(0), "tree-node-data");
-                console.log("Dropped", data);
+                LumensLog.log("Dropped", data);
                 // TODO compare root
                 // TODO append to exist correctly
                 var tree = buildTransformRuleTree(data.location);
@@ -494,7 +494,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
 
         if (sourceComponentName) {
             ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function(result) {
-                console.log(result);
+                LumensLog.log(result);
                 FormatList.getIN({project_id: projectOperator.get().projectId, component_name: sourceComponentName}, function(result) {
                     $scope.sourceFormatList = result.content.format_list;
                     $scope.displaySourceFormatList = $scope.sourceFormatList;
@@ -503,7 +503,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         }
         if (targetComponentName) {
             ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function(result) {
-                console.log(result);
+                LumensLog.log(result);
                 FormatList.getIN({project_id: projectOperator.get().projectId, component_name: targetComponentName}, function(result) {
                     $scope.targetFormatList = result.content.format_list;
                     $scope.displayTargetFormatList = $scope.targetFormatList;
@@ -512,7 +512,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
         }
 
         $scope.onCommand = function(btn_id, side) {
-            console.log(btn_id, side);
+            LumensLog.log(btn_id, side);
             $scope.selectedSide = side;
             if (side && "id_format_reg_edit_btn" === btn_id) {
                 if ("left" === side)
@@ -538,10 +538,10 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 });
             }
             else if ("id_format_reg_filter_btn" === btn_id) {
-                console.log("input:", $scope.inputFormatRegName);
-                console.log("input format:", $scope.inputSelectedFormatName);
-                console.log("output:", $scope.outputFormatRegName);
-                console.log("outut format:", $scope.outputSelectedFormatName);
+                LumensLog.log("input:", $scope.inputFormatRegName);
+                LumensLog.log("input format:", $scope.inputSelectedFormatName);
+                LumensLog.log("output:", $scope.outputFormatRegName);
+                LumensLog.log("outut format:", $scope.outputSelectedFormatName);
                 if ("left" === side) {
                     if ($scope.displaySourceFormatList.length > 1 && $scope.inputSelectedFormatName && $scope.inputSelectedFormatName !== "" && $scope.displaySourceFormatList) {
                         var displaySourceFormatList = [];
@@ -585,7 +585,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             $scope.ruleEditorService.sync($scope.transformRuleScriptEditor.getValue());
         }
         else if (id_script_btn === "id_script_validate") {
-            console.log("Validate transform_rule_entity:", $scope.transformRuleEntity.transformRuleEntry);
+            LumensLog.log("Validate transform_rule_entity:", $scope.transformRuleEntity.transformRuleEntry);
         }
         else if (id_script_btn === "id_script_back") {
             $scope.transformEditPanel.remove();
@@ -602,7 +602,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             // TODO show them in the list of transformator's rules
         }
     }
-    console.log("In RuleScriptCtrl");
+    LumensLog.log("In RuleScriptCtrl");
 })
 .controller("FormatRegistryCtrl", function($scope, $element) {
     if ($scope.selectedSide === 'left') {
