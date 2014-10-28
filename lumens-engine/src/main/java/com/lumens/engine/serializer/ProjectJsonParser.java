@@ -247,8 +247,8 @@ class ProjectJsonParser {
         try {
             Format format = new DataFormat("Root");
             JsonNode formatJson = formatEntryJson.get("format");
-            if (isNotNull(formatJson))
-                new FormatSerializer(format).readFromJson(formatJson);
+            if (isNotNull(formatJson) && formatJson.isArray() && formatJson.size() > 0)
+                new FormatSerializer(format).readFromJson(formatJson.get(0));
             return format.getChildren() != null && format.getChildren().size() > 0 ? format.getChildren().get(0) : null;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
