@@ -94,7 +94,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
         try {
             String targetFmtName = context.getTargetFormatName();
             FormatEntry entry = registerOUTFormatList.get(targetFmtName);
-            Format targetFormat = entry.getFormat();
+            Format targetFormat = entry != null ? entry.getFormat() : null;
             List<Element> result = new ArrayList<>();
             Object input = context.getInput();
             Operation operation = connector.getOperation();
