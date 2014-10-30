@@ -135,8 +135,8 @@ Lumens.services.factory('FormatRegister', function() {
             LumensLog.log("Rule entity:", $scope.transformRuleEntity);
             var transformRuleEntry = $scope.transformRuleEntity.transformRuleEntry;
             transformRuleEntry.name = ruleRegName;
-            transformRuleEntry.source_name = isInValidSource($scope) ? $scope.currentUIComponent.$from_list[0].$from.configure.short_desc : $scope.currentUIComponent.configure.short_desc;
-            transformRuleEntry.target_name = isInValidTarget($scope) ? $scope.currentUIComponent.$to_list[0].$to.configure.short_desc : "";
+            transformRuleEntry.source_name = this.isInValidSource($scope) === false ? $scope.currentUIComponent.$from_list[0].$from.configure.short_desc : $scope.currentUIComponent.configure.short_desc;
+            transformRuleEntry.target_name = this.isInValidTarget($scope) === false ? $scope.currentUIComponent.$to_list[0].$to.configure.short_desc : "";
             transformRuleEntry.source_format_name = $scope.inputFormatRegName ? $scope.inputFormatRegName : ($scope.outputFormatRegName ? $scope.outputFormatRegName : "");
             transformRuleEntry.target_format_name = $scope.outputFormatRegName ? $scope.outputFormatRegName : "";
             var selectedSourceFormat = this.findRootFormat($scope.displaySourceFormatList, inSelectedName);
@@ -161,9 +161,9 @@ Lumens.services.factory('FormatRegister', function() {
             return result;
         },
         isInValidSource: function($scope) {
-            return !$scope.currentUIComponent.$to_list ||
-            !$scope.currentUIComponent.$to_list[0] ||
-            !$scope.currentUIComponent.$to_list[0].$to.configure.component_info;
+            return !$scope.currentUIComponent.$from_list ||
+            !$scope.currentUIComponent.$from_list[0] ||
+            !$scope.currentUIComponent.$from_list[0].$from.configure.component_info;
         },
         isInValidTarget: function($scope) {
             return !$scope.currentUIComponent.$to_list ||
@@ -172,95 +172,76 @@ Lumens.services.factory('FormatRegister', function() {
         },
         // Private memeber functions
         saveToTransformList: function($scope, result) {
-            if (!$scope.currentUIComponent ||
-            !$scope.currentUIComponent.configure ||
-            !$scope.currentUIComponent.configure.component_info)
-                return;
-            var componentInfo = $scope.currentUIComponent.configure.component_info
-            if (componentInfo.transform_rule_entry) {
-                var isFound = false;
-                for (var i = 0; i < componentInfo.transform_rule_entry.length; ++i) {
-                    var entry = componentInfo.transform_rule_entry[i];
+            var transformRuleEntry = $scope.currentUIComponent.getTransformRuleEntry();
+            if (transformRuleEntry) {
+                for (var i = 0; i < transformRuleEntry.length; ++i) {
+                    var entry = transformRuleEntry[i];
                     if (entry.name === result.ruleEntry.name) {
-                        componentInfo.transform_rule_entry[i] = result.ruleEntry;
-                        isFound = true
-                        break;
+                        transformRuleEntry[i] = result.ruleEntry;
+                        return;
                     }
                 }
-                if (!isFound)
-                    componentInfo.transform_rule_entry.push(result.ruleEntry);
+                transformRuleEntry.push(result.ruleEntry);
             }
             console.log("TranformList: ", componentInfo);
         },
         saveToFormatList: function($scope, result, direction) {
-            var formatList, formatEntryHolder, formatName, format;
+            var formatEntry, formatName, format;
+            var saveToComp, UIComponent = $scope.currentUIComponent;
             if (direction === "IN") {
-                if (isInValidTarget($scope))
+                if (this.isInValidTarget($scope) || !result.targetFormat)
                     return;
                 formatName = $scope.outputFormatRegName;
                 format = result.targetFormat;
-                formatList = $scope.currentUIComponent.$to_list[0].$to.configure.component_info.format_list;
+                saveToComp = UIComponent.getTo(0);
             }
             else {
-                if (isInValidSource($scope))
+                if (this.isInValidSource($scope) || !result.sourceFormat)
                     return;
                 formatName = $scope.inputFormatRegName;
                 format = result.sourceFormat;
-                formatList = $scope.currentUIComponent.$from_list[0].$from.configure.component_info.format_list;
+                saveToComp = UIComponent.getFrom(0);
             }
-            if (formatList && formatList.length > 0) {
-                for (var i = 0; i < formatList.length > 0; ++i) {
-                    if (formatList[i].direction === direction) {
-                        formatEntryHolder = formatList[i];
-                        break;
-                    }
-                }
-            }
-            if (!formatEntryHolder) {
-                formatList.push({
-                    direction: direction,
-                    format_entry: [{
-                            direction: direction,
-                            format: [format],
-                            name: formatName
-                        }]});
-            }
-            else if (formatEntryHolder.format_entry) {
-                for (var i = 0; i < formatEntryHolder.format_entry.length; ++i) {
-                    // If found the same reg name, replace it
-                    if (formatName === formatEntryHolder.format_entry[i].name) {
-                        formatEntryHolder.format_entry[i].format = [format];
-                        return;
-                    }
-                }
-                formatEntryHolder.format_entry.push({
+            formatEntry = saveToComp.getFormatEntry(direction);
+            if (!formatEntry) {
+                saveToComp.setFormatEntry(direction, {
                     direction: direction,
                     format: [format],
                     name: formatName
                 });
             }
-            else
-                formatEntryHolder.format_entry = [{
-                        direction: direction,
-                        format: [format],
-                        name: formatName
-                    }];
+            else {
+                for (var i = 0; i < formatEntry.length; ++i) {
+                    // If found the same reg name, replace it
+                    if (formatName === formatEntry[i].name) {
+                        formatEntry[i].format = [format];
+                        return;
+                    }
+                }
+                formatEntry.push({
+                    direction: direction,
+                    format: [format],
+                    name: formatName
+                });
+            }
         },
         duplicateFormat: function(format) {
             if (!format)
                 return;
-            return  {
+            var duplicate = {
                 form: format.form,
                 name: format.name,
-                property: format.property,
                 type: format.type
             };
+            if (format.property)
+                duplicate.property = format.property;
+            return duplicate;
         },
         buildRegistedFormat: function(ruleItem, targetFormats, sourceFormat) {
-            if (!ruleItem || !targetFormats || !sourceFormat)
+            if (!ruleItem || !targetFormats)
                 return;
             var refTargetFormat = this.findRootFormat(targetFormats, ruleItem.format_name);
-            if (ruleItem.script) {
+            if (ruleItem.script && !sourceFormat) {
                 var sourceFormatPaths = this.parseScriptFindSourceFormat(ruleItem.script);
                 LumensLog.log("Source format paths:", sourceFormatPaths);
                 this.buildRegistedSourceFormat(this.rootSourceFormat, sourceFormat, sourceFormatPaths);
@@ -287,9 +268,11 @@ Lumens.services.factory('FormatRegister', function() {
                 childFormat1 = {
                     form: childFormat2.form,
                     name: childFormat2.name,
-                    property: childFormat2.property,
                     type: childFormat2.type
                 };
+                if (childFormat2.property)
+                    childFormat1.property = childFormat2.property;
+
                 if (!registedParentFormat.format)
                     registedParentFormat.format = [childFormat1];
                 else

@@ -108,7 +108,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                             $scope.currentUIComponent = component;
                             var config = component.configure;
                             $scope.$apply(function() {
-                                $scope.componentForm = $compile(config.category_info.html)($scope);
+                                $scope.componentForm = $compile(component.getFormHtml())($scope);
                                 $scope.categoryInfo = config.category_info;
                                 $scope.componentProps = ComponentPropertyList(config);
                                 $scope.currentComponent = config.component_info ? config.component_info : $scope.currentComponent
@@ -122,7 +122,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                         },
                         onAfterComponentAdd: function(component) {
                             LumensLog.log("Added compnoent:", component);
-                            $scope.projectOperator.add(component.configure.component_info, component.configure.category_info.type);
+                            $scope.projectOperator.add(component.getCompData(), component.getType());
                         }
                     });
                     $scope.projectOperator = new Lumens.ProjectOperator($scope.compCagegory, desgin.designPanel, $scope);
@@ -317,8 +317,6 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     LumensLog.log("In TransformListCtrl", $element);
     $scope.ruleEditorService = RuleEditorService.create();
 
-    var componentList = $scope.desgin.designPanel.getComponentList();
-
     function showRuleEditor() {
         Lumens.system.designView.workspaceLayout.hide();
         //TODO show to the transform editing
@@ -341,14 +339,24 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
 
     $scope.onRuleCommand = function(id_btn) {
         if (id_btn === "id_rule_new") {
+            LumensLog.log("New rule");
+            $scope.currentTransformRule = null;
+            $scope.inputFormatRegName = null;
+            $scope.outputFormatRegName = null;
+            $scope.ruleRegName = null;
             showRuleEditor();
         } else if (id_btn === "id_rule_delete") {
         }
     };
 
-    $scope.openTransformEditing = function(rule) {
-        LumensLog.log("Opening rule: ", rule);
-        $scope.currentTransformRule = rule;
+    $scope.openTransformEditing = function(ruleEntry) {
+        LumensLog.log("Opening rule: ", ruleEntry);
+        $scope.currentTransformRule = ruleEntry;
+        $scope.inputFormatRegName = ruleEntry.source_format_name;
+        $scope.outputFormatRegName = ruleEntry.target_format_name;
+        $scope.ruleRegName = ruleEntry.name;
+        $scope.inputSelectedFormatName = $scope.currentUIComponent.getRegisterInputFormat($scope.inputFormatRegName).name;
+        $scope.outputSelectedFormatName = $scope.currentUIComponent.getRegisterOutputFormat($scope.outputFormatRegName).name;
         showRuleEditor();
     };
 
@@ -363,52 +371,20 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     }, function(currentUIComponent) {
         if (!currentUIComponent || !currentUIComponent.configure)
             return;
-        if (currentUIComponent.configure.component_info.transform_rule_entry) {
-            $.each(currentUIComponent.configure.component_info.transform_rule_entry, function() {
-                if ($scope.selectTargetName === "All") {
-                    $scope.transformRuleEntryList.push(this);
-                }
-            });
-        }
-        if (currentUIComponent.$from_list &&
-        currentUIComponent.$from_list.length > 0 &&
-        currentUIComponent.$from_list[0].$from) {
-            $scope.theSourceNameList = [currentUIComponent.$from_list[0].$from.configure.short_desc];
-        }
+        if (currentUIComponent.configure.component_info.transform_rule_entry)
+            $scope.transformRuleEntryList = currentUIComponent.getTransformRuleEntry();
         else
-            $scope.theSourceNameList = [currentUIComponent.configure.short_desc];
-        if (currentUIComponent.$to_list &&
-        currentUIComponent.$to_list.length > 0 &&
-        currentUIComponent.$to_list[0].$to) {
-            $scope.theTargetNameList = [currentUIComponent.$to_list[0].$to.configure.short_desc];
-        }
+            $scope.transformRuleEntryList = [];
+
+        if (currentUIComponent.$from_list &&
+        currentUIComponent.hasFrom())
+            $scope.theSourceNameList = [currentUIComponent.getFrom(0).getConfig().short_desc];
+        else
+            $scope.theSourceNameList = [currentUIComponent.getConfig().short_desc];
+        if (currentUIComponent.hasTo())
+            $scope.theTargetNameList = [currentUIComponent.getTo(0).getConfig().short_desc];
         else
             $scope.theTargetNameList = [];
-    });
-
-    // if the select a target then only list the related rules
-    $scope.$watch(function() {
-        return $scope.selectTargetName;
-    }, function(selectTargetName) {
-        $scope.transformRuleEntryList = [];
-        if ($scope.currentComponent && $scope.currentComponent.transform_rule_entry) {
-            $.each($scope.currentComponent.transform_rule_entry, function() {
-                if (selectTargetName === "All") {
-                    $scope.transformRuleEntryList.push(this);
-                }
-                else {
-                    var targetComponentFormatList = getTargetComponentFormatList(componentList, selectTargetName);
-                    if (targetComponentFormatList) {
-                        if (targetComponentFormatList.length > 0 && targetComponentFormatList[0].direction === "IN") {
-                            var formatINList = targetComponentFormatList[0];
-                            if (formatINList.format_entry && isFormatOf(formatINList.format_entry, this.target_format_name)) {
-                                $scope.transformRuleEntryList.push(this);
-                            }
-                        }
-                    }
-                }
-            });
-        }
     });
 })
 .controller("TransformEditCtrl", function($scope, $element, $compile, ProjectById, FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
@@ -424,15 +400,30 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
     }
     var projectOperator = $scope.projectOperator;
     if ($scope.currentComponent.id === "id-transformator") {
-        function buildTransformRuleEntry(ruleEntry) {
-            return {
-                // TODO
-                transformRuleEntry: ruleEntry,
-                clickCallBack: function(target) {
-                    $scope.currentScriptNode = target;
-                    $scope.ruleEditorService.sync(target.getScript());
+        function buildTransformRuleEntry(ruleRegName, ruleEntry, isNew) {
+            if (isNew) {
+                return {
+                    // TODO
+                    transformRuleEntry: ruleEntry[0],
+                    clickCallBack: function(target) {
+                        $scope.currentScriptNode = target;
+                        $scope.ruleEditorService.sync(target.getScript());
+                    }
+                };
+            } else {
+                for (var i = 0; i < ruleEntry.length; ++i) {
+                    if (ruleEntry[i].name === ruleRegName) {
+                        return {
+                            // TODO
+                            transformRuleEntry: ruleEntry[i],
+                            clickCallBack: function(target) {
+                                $scope.currentScriptNode = target;
+                                $scope.ruleEditorService.sync(target.getScript());
+                            }
+                        };
+                    }
                 }
-            };
+            }
         }
         function buildTransformRuleTree(location_tokens) {
             var rootRuleItem, currentRuleItem;
@@ -451,10 +442,10 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             return {root: rootRuleItem, last: currentRuleItem};
         }
         var sourceComponentName, targetComponentName;
-        if ($scope.currentUIComponent.$from_list && $scope.currentUIComponent.$from_list.length > 0 && $scope.currentUIComponent.$from_list[0].$from)
-            sourceComponentName = $scope.currentUIComponent.$from_list[0].$from.configure.component_info.name;
-        if ($scope.currentUIComponent.$to_list && $scope.currentUIComponent.$to_list.length > 0 && $scope.currentUIComponent.$to_list[0].$to)
-            targetComponentName = $scope.currentUIComponent.$to_list[0].$to.configure.component_info.name;
+        if ($scope.currentUIComponent.hasFrom())
+            sourceComponentName = $scope.currentUIComponent.getFrom(0).getCompData().name;
+        if ($scope.currentUIComponent.hasTo())
+            targetComponentName = $scope.currentUIComponent.getTo(0).getCompData().name;
         LumensLog.log("transform source:" + sourceComponentName + ", target:" + targetComponentName);
         $element.find("div[rule-entity]").droppable({
             greedy: true,
@@ -485,12 +476,13 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 if ($scope.currentComponent.transform_rule_entry) {
                     $scope.currentComponent.transform_rule_entry.concat(transformRuleEntry);
                     $scope.$apply(function() {
-                        $scope.transformRuleEntity = buildTransformRuleEntry(transformRuleEntry[0]);
+                        $scope.transformRuleEntity = buildTransformRuleEntry($scope.ruleRegName, transformRuleEntry, true);
                     });
                 }
             }
         });
-        $scope.transformRuleEntity = buildTransformRuleEntry($scope.currentComponent.transform_rule_entry[0]);
+
+        $scope.transformRuleEntity = buildTransformRuleEntry($scope.ruleRegName, $scope.currentUIComponent.getTransformRuleEntry(), false);
 
         if (sourceComponentName) {
             ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function(result) {
@@ -543,7 +535,10 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                 LumensLog.log("output:", $scope.outputFormatRegName);
                 LumensLog.log("outut format:", $scope.outputSelectedFormatName);
                 if ("left" === side) {
-                    if ($scope.displaySourceFormatList.length > 1 && $scope.inputSelectedFormatName && $scope.inputSelectedFormatName !== "" && $scope.displaySourceFormatList) {
+                    if ($scope.displaySourceFormatList.length > 1 &&
+                    $scope.inputSelectedFormatName &&
+                    $scope.inputSelectedFormatName !== "" &&
+                    $scope.displaySourceFormatList) {
                         var displaySourceFormatList = [];
                         for (var i = 0; i < $scope.displaySourceFormatList.length; ++i) {
                             if ($scope.displaySourceFormatList[i].format[0].name === $scope.inputSelectedFormatName) {
@@ -556,7 +551,10 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
                         $scope.displaySourceFormatList = $scope.sourceFormatList;
                     }
                 } else if ("right" === side) {
-                    if ($scope.displayTargetFormatList.length > 1 && $scope.outputSelectedFormatName && $scope.outputSelectedFormatName !== "" && $scope.displayTargetFormatList) {
+                    if ($scope.displayTargetFormatList.length > 1 &&
+                    $scope.outputSelectedFormatName &&
+                    $scope.outputSelectedFormatName !== "" &&
+                    $scope.displayTargetFormatList) {
                         var displayTargetFormatList = [];
                         for (var i = 0; i < $scope.displayTargetFormatList.length; ++i) {
                             if ($scope.displayTargetFormatList[i].format[0].name === $scope.outputSelectedFormatName) {
@@ -593,13 +591,7 @@ DatasourceCategory, InstrumentCategory, DesignButtons, FormatList) {
             Lumens.system.designView.workspaceLayout.show();
         }
         else if (id_script_btn === "id_rule_fmt_save") {
-            // TODO parsing the rule to get the input registed format
-            // TODO pasring the rule to get the output registed format
-            var registedTransformInfo = FormatRegister.build($scope);
-            // ********
-            // TODO save the rule, input format, output format
-            // ******
-            // TODO show them in the list of transformator's rules
+            FormatRegister.build($scope);
         }
     }
     LumensLog.log("In RuleScriptCtrl");
