@@ -40,7 +40,7 @@ Lumens.Link = Class.$extend({
     }
 });
 
-Lumens.DataComponent = Class.$extend({
+Lumens.Component = Class.$extend({
     __init__: function($parent, config) {
         this.$parent = $parent;
         this.configure = config;
@@ -168,5 +168,114 @@ Lumens.DataComponent = Class.$extend({
     },
     getToLinkList: function() {
         return this.$to_list;
+    }
+});
+
+Lumens.DataComponent = Lumens.Component.$extend({
+    __init: function($parent, config) {
+        this.$super($parent, config);
+    },
+    hasFrom: function() {
+        return this.getFromCount() > 0;
+    },
+    getFromCount: function() {
+        return this.getFromLinkList() ? this.getFromLinkList().length : 0;
+    },
+    getFrom: function(index) {
+        return this.getFromLinkList()[index].getFrom();
+    },
+    hasTo: function() {
+        return this.getToCount() > 0;
+    },
+    getToCount: function() {
+        return this.getToLinkList() ? this.getToLinkList().length : 0;
+    },
+    getTo: function(index) {
+        return this.getToLinkList()[index].getTo();
+    },
+    getFormHtml: function() {
+        return this.getCategory().html;
+    },
+    isDataSource: function() {
+        return this.getCategory().type === "datasource";
+    },
+    getType: function() {
+        return this.getCategory().type;
+    },
+    getCategory: function() {
+        return this.getConfig().category_info;
+    },
+    getCompData: function() {
+        return this.getConfig().component_info;
+    },
+    getFormatEntry: function(direction) {
+        if (!this.isDataSource())
+            return;
+        var formatList = this.getCompData().format_list;
+        if (formatList && formatList.length > 0) {
+            for (var i = 0; i < formatList.length > 0; ++i) {
+                if (formatList[i].direction === direction) {
+                    return formatList[i].format_entry;
+                }
+            }
+        }
+        return null;
+    },
+    setFormatEntry: function(direction, formatEntry) {
+        if (!this.isDataSource())
+            return;
+        var formatList = this.getCompData().format_list;
+        if (formatList && formatList.length > 0) {
+            for (var i = 0; i < formatList.length > 0; ++i) {
+                if (formatList[i].direction === direction) {
+                    formatList[i].format_entry = formatEntry;
+                    return;
+                }
+            }
+            formatList.push({
+                direction: direction,
+                format_entry: [formatEntry]
+            });
+        } else {
+            this.getCompData().format_list = [{
+                    direction: direction,
+                    format_entry: [formatEntry]
+                }];
+        }
+
+    },
+    getTransformRuleEntry: function() {
+        if (this.isDataSource())
+            return null;
+        return  this.getCompData().transform_rule_entry;
+    },
+    setTransformRuleEntry: function(transformRuleEntry) {
+
+    },
+    getRegisterInputFormat: function(regName) {
+        var formatEntry = null;
+        if (this.isDataSource()) {
+            formatEntry = this.getFormatEntry("IN");
+        } else {
+            formatEntry = this.getFrom(0).getFormatEntry("OUT");
+        }
+        if (formatEntry)
+            for (var i = 0; i < formatEntry.length; ++i)
+                if (formatEntry[i].name === regName)
+                    return formatEntry[i].format[0];
+        return null;
+    },
+    getRegisterOutputFormat: function(regName) {
+        var formatEntry = null;
+        if (this.isDataSource()) {
+            formatEntry = this.getFormatEntry("OUT");
+        } else {
+            formatEntry = this.getTo(0).getFormatEntry("IN");
+        }
+        if (formatEntry)
+            for (var i = 0; i < formatEntry.length; ++i)
+                if (formatEntry[i].name === regName)
+                    return formatEntry[i].format[0];
+        return null;
     }
 });

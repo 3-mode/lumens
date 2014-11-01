@@ -30,8 +30,8 @@
                 <tbody>
                     <tr class="lumens-transform-item" style="cursor: pointer;"
                         ng-if="currentComponent && currentComponent.transform_rule_entry"
-                        ng-repeat="rule in transformRuleEntryList" ng-dblclick="openTransformEditing(rule)">
-                        <td>{{rule.name}}</td><td>{{rule.source_format_name}}</td><td>{{rule.target_format_name}}</td>
+                        ng-repeat="ruleEntry in transformRuleEntryList" ng-dblclick="openTransformEditing(ruleEntry)">
+                        <td>{{ruleEntry.name}}</td><td>{{ruleEntry.source_format_name}}</td><td>{{ruleEntry.target_format_name}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -57,8 +57,8 @@
                 <tbody>
                     <tr class="lumens-transform-item" style="cursor: pointer;"
                         ng-if="currentComponent && currentComponent.transform_rule_entry"
-                        ng-repeat="rule in transformRuleEntryList" ng-dblclick="openTransformEditing(rule)">
-                        <td>{{rule.name}}</td><td>{{rule.source_format_name}}</td><td>{{rule.target_format_name}}</td>
+                        ng-repeat="ruleEntry in transformRuleEntryList" ng-dblclick="openTransformEditing(ruleEntry)">
+                        <td>{{ruleEntry.name}}</td><td>{{ruleEntry.source_format_name}}</td><td>{{ruleEntry.target_format_name}}</td>
                     </tr>
                 </tbody>
             </table>
