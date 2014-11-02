@@ -124,8 +124,8 @@ Lumens.Id = function($element) {
     return $element.attr("element-id", 'id$' + id);
 };
 
-Lumens.isMultipleLink = function(type) {
-    if (type === "datasource")
+Lumens.isMultipleLink = function(class_type) {
+    if (class_type === "datasource")
         return true;
     return false;
 };
