@@ -3,15 +3,15 @@
         <![CDATA[test project description demo]]>
     </description>
     <resource-list>
-        <datasource type="type-soap" name="ChinaMobile-WebService-SOAP">
+        <datasource id="10001" type="type-soap" name="ChinaMobile-WebService-SOAP">
             <description>
                 <![CDATA[this is testing demo datasource for web service]]>
             </description>
             <position x="0" y="0"/>
             <property-list>
-                <property name="ProxyAddress" type="String">web-proxy.atl.hp.com</property>
-                <property name="WSDL" type="String">file:/X:/PRODUCT/lumens/lumens-engine/target/test-classes/wsdl/ChinaOpenFundWS.asmx</property>
-                <property name="ProxyPort" type="Integer">8080</property>
+                <property name="WSDL" type="String">file:/X:/PRODUCT/3MODE/lumens/lumens-engine/src/test/resources/wsdl/ChinaOpenFundWS.asmx</property>
+                <!--<property name="ProxyAddress" type="String">web-proxy.atl.hp.com</property>
+                <property name="ProxyPort" type="Integer">8080</property>-->
             </property-list>
             <format-list direction="IN">
                 <format-entry name="getOpenFundString1" direction="IN">
@@ -88,21 +88,21 @@
                 </format-entry>
             </format-list>
             <target-list>
-                <target name="GetOpenFundString2-WS-Transform"/>
+                <target id="10003"/>
             </target-list>
         </datasource>
     </resource-list>
     <instrument-list>
-        <transformator type="type-transformator" name="GetOpenFundString-WS-Transform">
+        <transformator id="10002" type="type-transformator" name="GetOpenFundString-WS-Transform">
             <description>
                 <![CDATA[Test DT 1]]>
             </description>
             <position x="0" y="0"/>
             <target-list>
-                <target name="ChinaMobile-WebService-SOAP"/>
+                <target id="10001"/>
             </target-list>
             <transform-rule-list>
-                <transform-rule-entry name="GetOpenFundString-WS-Transform-ChinaMobile-WebService-SOAP" source-name="GetOpenFundString-WS-Transform" target-name="ChinaMobile-WebService-SOAP" source-format-name="getOpenFundString1" target-format-name="getOpenFundString1">
+                <transform-rule-entry name="GetOpenFundString-WS-Transform-ChinaMobile-WebService-SOAP" source-id="10002" target-id="10001" source-format-name="getOpenFundString1" target-format-name="getOpenFundString1">
                     <transform-rule name="getOpenFundString">
                         <transform-rule-item format-name="getOpenFundString">
                             <transform-rule-item format-name="getOpenFundString">
@@ -119,16 +119,16 @@
                 </transform-rule-entry>
             </transform-rule-list>
         </transformator>
-        <transformator type="type-transformator" name="GetOpenFundString2-WS-Transform">
+        <transformator id="10003" type="type-transformator" name="GetOpenFundString2-WS-Transform">
             <description>
                 <![CDATA[Test DT 2]]>
             </description>
             <position x="0" y="0"/>
             <target-list>
-                <target name="ChinaMobile-WebService-SOAP"/>
+                <target id="10001"/>
             </target-list>
             <transform-rule-list>
-                <transform-rule-entry name="ChinaMobile-WebService-SOAP-ChinaMobile-WebService-SOAP" source-name="ChinaMobile-WebService-SOAP" target-name="ChinaMobile-WebService-SOAP" source-format-name="getOpenFundString1" target-format-name="getOpenFundString2">
+                <transform-rule-entry name="ChinaMobile-WebService-SOAP-ChinaMobile-WebService-SOAP" source-id="10001" target-id="10001" source-format-name="getOpenFundString1" target-format-name="getOpenFundString2">
                     <transform-rule name="getOpenFundString">
                         <transform-rule-item format-name="getOpenFundString">
                             <transform-rule-item format-name="getOpenFundString">

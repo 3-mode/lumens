@@ -59,7 +59,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
     // Rule
     private TransformRuleHandler transformRuleHandler;
     private TransformRuleEntry curRuleEntry;
-    private String curComponentTargetName;
+    private String curComponentTargetId;
     private List<TransformRule> ruleList;
     // Start
     private List<StartEntry> startList;
@@ -83,8 +83,8 @@ public class ProjectHandlerImpl implements ProjectHandler {
         while (it.hasNext()) {
             Entry<String, List<String>> entry = it.next();
             TransformComponent s = tComponentCache.get(entry.getKey());
-            for (String targetName : entry.getValue()) {
-                TransformComponent t = tComponentCache.get(targetName);
+            for (String targetId : entry.getValue()) {
+                TransformComponent t = tComponentCache.get(targetId);
                 if (t != null)
                     s.targetTo(t);
             }
@@ -122,14 +122,15 @@ public class ProjectHandlerImpl implements ProjectHandler {
         if (status == ReadStatus.PROJECT) {
             status = ReadStatus.DATASRC;
             String type = meta.getValue("type");
-            if (type == null || type.isEmpty())
+            String id = meta.getValue("id");
+            if (type == null || type.isEmpty() || id == null || id.isEmpty())
                 throw new SAXException("Component type can not be empty !");
-            tc = new DataSource(type);
+            tc = new DataSource(type, id);
             String name = meta.getValue("name");
             if (name == null || name.isEmpty())
                 throw new SAXException("Data source name can not be empty !");
             tc.setName(name);
-            tComponentCache.put(tc.getName(), tc);
+            tComponentCache.put(tc.getId(), tc);
         } else
             throw new SAXException("Error status \'" + status + "\' to read datasource list!");
     }
@@ -231,14 +232,14 @@ public class ProjectHandlerImpl implements ProjectHandler {
     @Override
     public void handle_target(final Attributes meta) throws SAXException {
         if (tc != null) {
-            String srcName = tc.getName();
-            List<String> currentTargetList = this.targetList.get(srcName);
+            String srcId = tc.getId();
+            List<String> currentTargetList = this.targetList.get(srcId);
             if (currentTargetList == null) {
                 currentTargetList = new ArrayList<>();
-                this.targetList.put(srcName, currentTargetList);
+                this.targetList.put(srcId, currentTargetList);
             }
-            curComponentTargetName = meta.getValue("name");
-            currentTargetList.add(curComponentTargetName);
+            curComponentTargetId = meta.getValue("id");
+            currentTargetList.add(curComponentTargetId);
         }
     }
 
@@ -255,12 +256,14 @@ public class ProjectHandlerImpl implements ProjectHandler {
         if (status == ReadStatus.PROJECT) {
             status = ReadStatus.DATAPSR;
             String type = meta.getValue("type");
-            tc = new DataTransformator();
+            String id = meta.getValue("id");
+            if (id == null || id.isEmpty())
+                throw new SAXException("Error, the property 'id' is empty !");
+            tc = new DataTransformator(id);
             if (type == null || type.isEmpty() || !tc.getComponentType().equals(type))
                 throw new SAXException("Error, the property 'type' is empty !");
-            tc = new DataTransformator();
             tc.setName(meta.getValue("name"));
-            tComponentCache.put(tc.getName(), tc);
+            tComponentCache.put(tc.getId(), tc);
         } else
             throw new SAXException("Error status \'" + status + "\' to read processor list!");
     }
@@ -285,9 +288,9 @@ public class ProjectHandlerImpl implements ProjectHandler {
         if (status == ReadStatus.DATAPSR) {
 
             curRuleEntry = new TransformRuleEntry(meta.getValue("name"),
-                                                  meta.getValue("source-name"),
+                                                  meta.getValue("source-id"),
                                                   meta.getValue("source-format-name"),
-                                                  meta.getValue("target-name"),
+                                                  meta.getValue("target-id"),
                                                   meta.getValue("target-format-name"), null);
         }
     }
@@ -306,7 +309,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
     public void start_transform_rule(final Attributes meta) throws SAXException {
         if (status == ReadStatus.DATAPSR) {
             if (tc.isSingleTarget() && tc instanceof RuleComponent) {
-                TransformComponent tComp = tComponentCache.get(curComponentTargetName);
+                TransformComponent tComp = tComponentCache.get(curComponentTargetId);
                 if (tComp instanceof RegisterFormatComponent) {
                     RegisterFormatComponent rfComp = (RegisterFormatComponent) tComp;
                     FormatEntry fEntry = rfComp.getRegisteredFormatList(Direction.IN).get(curRuleEntry.getTargetFormatName());
@@ -365,6 +368,6 @@ public class ProjectHandlerImpl implements ProjectHandler {
 
     @Override
     public void handle_start_entry(Attributes meta) throws SAXException {
-        startList.add(new StartEntry(meta.getValue("format-name"), tComponentCache.get(meta.getValue("target-name"))));
+        startList.add(new StartEntry(meta.getValue("format-name"), tComponentCache.get(meta.getValue("target-id"))));
     }
 }

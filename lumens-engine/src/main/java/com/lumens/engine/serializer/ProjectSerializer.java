@@ -126,7 +126,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
             Iterator<Entry<String, TransformComponent>> it = targetList.entrySet().iterator();
             while (it.hasNext()) {
                 Entry<String, TransformComponent> entry = it.next();
-                xml.print(nextIndent).print("<target ").print("name=\"").print(entry.getKey()).println("\"/>");
+                xml.print(nextIndent).print("<target ").print("id=\"").print(entry.getKey()).println("\"/>");
             }
         }
         xml.print(indent)
@@ -218,7 +218,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     }
 
     private void writeStartEntryToXml(StringUTF8Writer xml, StartEntry se, String indent) throws Exception {
-        xml.print(indent).print("<start-entry format-name=\"").print(se.getStartFormatName()).print("\" target-name=\"").print(se.getStartComponent().getName()).println("\"/>");
+        xml.print(indent).print("<start-entry format-name=\"").print(se.getStartFormatName()).print("\" target-id=\"").print(se.getStartComponent().getId()).println("\"/>");
     }
 
     private void writeTransformRuleList(StringUTF8Writer xml, List<TransformRuleEntry> transformRuleList, String indent) throws Exception {
@@ -235,8 +235,8 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
 
     private void writeTransformRuleEntry(StringUTF8Writer xml, TransformRuleEntry ruleEntry, String indent) throws Exception {
         xml.print(indent).print("<transform-rule-entry name=\"").print(ruleEntry.getName()).print("\"");
-        xml.print(" source-name=\"").print(ruleEntry.getSourceName()).print("\"");
-        xml.print(" target-name=\"").print(ruleEntry.getTargetName()).print("\"");
+        xml.print(" source-id=\"").print(ruleEntry.getSourceId()).print("\"");
+        xml.print(" target-id=\"").print(ruleEntry.getTargetId()).print("\"");
         xml.print(" source-format-name=\"").print(ruleEntry.getSourceFormatName()).print("\"");
         xml.print(" target-format-name=\"").print(ruleEntry.getTargetFormatName()).println("\">");
         writeRuleToXml(xml, ruleEntry.getRule(), indent + INDENT);
@@ -357,7 +357,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
             while (it.hasNext()) {
                 Entry<String, TransformComponent> entry = it.next();
                 jGenerator.writeStartObject();
-                jGenerator.writeStringField("name", entry.getKey());
+                jGenerator.writeStringField("id", entry.getKey());
                 jGenerator.writeEndObject();
             }
         }
@@ -422,8 +422,8 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     private void writeTransformRuleEntryToJson(JsonGenerator jGenerator, TransformRuleEntry ruleEntry) throws Exception {
         jGenerator.writeStartObject();
         jGenerator.writeStringField("name", ruleEntry.getName());
-        jGenerator.writeStringField("source_name", ruleEntry.getSourceName());
-        jGenerator.writeStringField("target_name", ruleEntry.getTargetName());
+        jGenerator.writeStringField("source_id", ruleEntry.getSourceId());
+        jGenerator.writeStringField("target_id", ruleEntry.getTargetId());
         jGenerator.writeStringField("source_format_name", ruleEntry.getSourceFormatName());
         jGenerator.writeStringField("target_format_name", ruleEntry.getTargetFormatName());
         writeRuleToJson(jGenerator, ruleEntry.getRule());

@@ -34,16 +34,16 @@ public class DataTransformator extends AbstractTransformComponent implements Rul
     private List<TransformRuleEntry> ruleList = new ArrayList<>();
     private Map<String, List<TransformRuleEntry>> ruleFindList = new HashMap<>();
 
-    public DataTransformator() {
-        super("type-transformator", "0");
+    public DataTransformator(String id) {
+        super("type-transformator", id);
         processor = new TransformProcessor();
     }
 
     @Override
     public TransformRule registerRule(FormatEntry srcFormatEntry, FormatEntry destFormatEntry) {
         if (srcFormatEntry == null)
-            return registerRule(new TransformRuleEntry(getName(), destFormatEntry.getName(), destFormatEntry.getDataSourceName(), destFormatEntry.getName(), new TransformRule(destFormatEntry.getFormat())));
-        return registerRule(new TransformRuleEntry(srcFormatEntry.getDataSourceName(), srcFormatEntry.getName(), destFormatEntry.getDataSourceName(), destFormatEntry.getName(), new TransformRule(destFormatEntry.getFormat())));
+            return registerRule(new TransformRuleEntry(getId(), destFormatEntry.getName(), destFormatEntry.getDataSourceId(), destFormatEntry.getName(), new TransformRule(destFormatEntry.getFormat())));
+        return registerRule(new TransformRuleEntry(srcFormatEntry.getDataSourceId(), srcFormatEntry.getName(), destFormatEntry.getDataSourceId(), destFormatEntry.getName(), new TransformRule(destFormatEntry.getFormat())));
     }
 
     @Override

@@ -73,7 +73,7 @@ public class EngineTest extends Assert implements SoapConstants {
         props.put(WSDL, new Value(getClass().getResource("/wsdl/ChinaOpenFundWS.asmx").toString()));
         props.put(PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
         props.put(PROXY_PORT, new Value(8080));
-        DataSource datasource = new DataSource("type-soap");
+        DataSource datasource = new DataSource("type-soap", "20001");
         datasource.setName("ChinaMobile-WebService-SOAP");
         datasource.setPropertyList(props);
         datasource.open();
@@ -106,11 +106,11 @@ public class EngineTest extends Assert implements SoapConstants {
         FormatEntry target2OutEntry = datasource.registerFormat(targetName2, getOpenFundStringResponse, Direction.OUT);
         //******************************************************************************************
         // Create transformation to a data source
-        DataTransformator callGetOpenFundString = new DataTransformator();
+        DataTransformator callGetOpenFundString = new DataTransformator("10001");
         callGetOpenFundString.setName("GetOpenFundString-WS-Transform");
         callGetOpenFundString.setDescription("Test DT 1");
 
-        DataTransformator callGetOpenFundString2 = new DataTransformator();
+        DataTransformator callGetOpenFundString2 = new DataTransformator("10002");
 
         callGetOpenFundString2.setName("GetOpenFundString2-WS-Transform");
         callGetOpenFundString2.setDescription("Test DT 2");
@@ -159,6 +159,19 @@ public class EngineTest extends Assert implements SoapConstants {
     }
 
     @Test
+    public void testReadingProjectFromXml() throws Exception {
+
+        // Read project and write it again
+        TransformProject newProject = new TransformProject();
+        ProjectSerializer projXml = new ProjectSerializer(newProject);
+        projXml.readFromXml(getResourceAsByteArrayInputStream("/xml/project.xml"));
+        List<ResultHandler> handlers = new ArrayList<>();
+        handlers.add(new MyResultHandler());
+        new SingleThreadTransformExecuteJob(newProject, handlers).run();
+        // TODO check project object
+    }
+
+    @Test
     public void testOracleConnectorInEngine() throws Exception {
         HashMap<String, Value> props = new HashMap<>();
         props.put(DatabaseConstants.OJDBC, new Value("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar"));
@@ -166,7 +179,7 @@ public class EngineTest extends Assert implements SoapConstants {
         props.put(DatabaseConstants.USER, new Value("hr"));
         props.put(DatabaseConstants.PASSWORD, new Value("hr"));
         props.put(DatabaseConstants.SESSION_ALTER, new Value("alter session set NLS_DATE_FORMAT='yyyy-mm-dd'"));
-        DataSource datasource = new DataSource("type-oracle-jdbc");
+        DataSource datasource = new DataSource("type-oracle-jdbc", "20002");
         datasource.setName("Database HR");
         datasource.setDescription("this is testing demo datasource for oracle jdbc");
         datasource.setPropertyList(props);
@@ -184,7 +197,7 @@ public class EngineTest extends Assert implements SoapConstants {
         FormatEntry inFormatEntry = datasource.registerFormat("sqlSelect", inputArg, Direction.IN);
         FormatEntry outFormatEntry = datasource.registerFormat("sqlSelect", returnOut, Direction.OUT);
 
-        DataSource ws = new DataSource("type-soap");
+        DataSource ws = new DataSource("type-soap", "20003");
         Map<String, Value> wsProps = new HashMap<>();
         wsProps.put(WSDL, new Value("http://webservice.webxml.com.cn/webservices/DomesticAirline.asmx?wsdl"));
         wsProps.put(PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
@@ -195,7 +208,7 @@ public class EngineTest extends Assert implements SoapConstants {
         ws.setX(500);
         ws.setY(100);
 
-        DataTransformator queryEmployeeTestTableTransformator = new DataTransformator();
+        DataTransformator queryEmployeeTestTableTransformator = new DataTransformator("10003");
         queryEmployeeTestTableTransformator.setName("drive the employee test table query");
         queryEmployeeTestTableTransformator.setDescription("drive the employee test table query");
         queryEmployeeTestTableTransformator.setX(100);

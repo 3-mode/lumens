@@ -58,7 +58,7 @@ public class TransformProject {
         for (DataTransformator dt : transformatorList) {
             // build start point list
             for (TransformRuleEntry tr : dt.getTransformRuleList())
-                if (tr.getSourceName() == null || tr.getSourceName().isEmpty() || tr.getSourceName().equals(dt.getName()))
+                if (tr.getSourceId() == null || tr.getSourceId().isEmpty() || tr.getSourceId().equals(dt.getId()))
                     startList.add(new StartEntry(tr.getSourceFormatName(), dt));
         }
         return startList;

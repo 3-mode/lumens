@@ -80,15 +80,15 @@ public abstract class AbstractTransformComponent implements TransformComponent {
 
     @Override
     public void sourceFrom(TransformComponent source) {
-        if (!sourceList.containsKey(source.getName()))
-            sourceList.put(source.getName(), source);
+        if (!sourceList.containsKey(source.getId()))
+            sourceList.put(source.getId(), source);
     }
 
     @Override
     public void targetTo(TransformComponent target) {
         target.sourceFrom(this);
-        if (!targetList.containsKey(target.getName()))
-            targetList.put(target.getName(), target);
+        if (!targetList.containsKey(target.getId()))
+            targetList.put(target.getId(), target);
     }
 
     @Override

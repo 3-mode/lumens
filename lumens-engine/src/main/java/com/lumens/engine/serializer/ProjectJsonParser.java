@@ -114,7 +114,7 @@ class ProjectJsonParser {
             JsonNode dscJson = datasourceJson.get("description");
             JsonNode posJson = datasourceJson.get("position");
             if (isNotNull(typeJson) && isNotNull(idJson) && isNotNull(nameJson)) {
-                DataSource ds = new DataSource(typeJson.asText());
+                DataSource ds = new DataSource(typeJson.asText(), idJson.asText());
                 ds.setName(nameJson.asText());
                 if (isNotNull(dscJson))
                     ds.setDescription(dscJson.asText());
@@ -123,7 +123,7 @@ class ProjectJsonParser {
                     ds.setY(posJson.get("y").asInt());
                 }
                 project.getDatasourceList().add(ds);
-                tComponentCache.put(ds.getName(), ds);
+                tComponentCache.put(ds.getId(), ds);
                 readDataSourceProperties(ds, datasourceJson);
                 readDataSourceFormatList(ds, datasourceJson);
                 readTransformComponentTargetList(ds, datasourceJson);
@@ -139,8 +139,8 @@ class ProjectJsonParser {
             JsonNode nameJson = transformatorJson.get("name");
             JsonNode dscJson = transformatorJson.get("description");
             JsonNode posJson = transformatorJson.get("position");
-            if (isNotNull(typeJson) && isNotNull(nameJson)) {
-                DataTransformator dt = new DataTransformator();
+            if (isNotNull(typeJson) && isNotNull(idJson) && isNotNull(nameJson)) {
+                DataTransformator dt = new DataTransformator(idJson.asText());
                 if (dt.getComponentType().equals(typeJson.asText())) {
                     dt.setName(nameJson.asText());
                     if (isNotNull(dscJson))
@@ -150,7 +150,7 @@ class ProjectJsonParser {
                         dt.setY(posJson.get("y").asInt());
                     }
                     project.getDataTransformatorList().add(dt);
-                    tComponentCache.put(dt.getName(), dt);
+                    tComponentCache.put(dt.getId(), dt);
                     readTransformComponentTargetList(dt, transformatorJson);
                     readTransformRuleEntry(dt, transformatorJson);
                 } else
@@ -161,13 +161,13 @@ class ProjectJsonParser {
 
     private void readStartEntryFromJson(JsonNode startEntryJson) {
         JsonNode nameJson = startEntryJson.get("name");
-        JsonNode entryNameJson = startEntryJson.get("entry_name");
-        if (isNotNull(nameJson) && isNotNull(entryNameJson)) {
-            TransformComponent tComponent = tComponentCache.get(entryNameJson.asText());
+        JsonNode entryId = startEntryJson.get("entry_id");
+        if (isNotNull(nameJson) && isNotNull(entryId)) {
+            TransformComponent tComponent = tComponentCache.get(entryId.asText());
             if (tComponent != null)
                 project.getStartEntryList().add(new StartEntry(nameJson.asText(), tComponent));
             else
-                throw new RuntimeException("Invalid entry name '" + entryNameJson.asText() + "' !");
+                throw new RuntimeException("Invalid entry id '" + entryId.asText() + "' !");
         }
     }
 
@@ -176,8 +176,8 @@ class ProjectJsonParser {
         while (it.hasNext()) {
             Entry<String, List<String>> entry = it.next();
             TransformComponent s = tComponentCache.get(entry.getKey());
-            for (String targetName : entry.getValue()) {
-                TransformComponent t = tComponentCache.get(targetName);
+            for (String targetId : entry.getValue()) {
+                TransformComponent t = tComponentCache.get(targetId);
                 if (t != null)
                     s.targetTo(t);
             }
@@ -231,14 +231,14 @@ class ProjectJsonParser {
             Iterator<JsonNode> it = curentTargetListJson.getElements();
             while (it.hasNext()) {
                 JsonNode target = it.next();
-                List<String> currentTargetList = targetList.get(tc.getName());
+                List<String> currentTargetList = targetList.get(tc.getId());
                 if (currentTargetList == null) {
                     currentTargetList = new ArrayList<>();
-                    targetList.put(tc.getName(), currentTargetList);
+                    targetList.put(tc.getId(), currentTargetList);
                 }
-                JsonNode nameJson = target.get("name");
-                if (isNotNull(nameJson))
-                    currentTargetList.add(nameJson.asText());
+                JsonNode idJson = target.get("id");
+                if (isNotNull(idJson))
+                    currentTargetList.add(idJson.asText());
                 else
                     throw new RuntimeException("Invalid target !");
             }
@@ -264,8 +264,8 @@ class ProjectJsonParser {
             while (it.hasNext()) {
                 JsonNode transformRuleEntryJson = it.next();
                 JsonNode nameJson = transformRuleEntryJson.get("name");
-                JsonNode srcJson = transformRuleEntryJson.get("source_name");
-                JsonNode tgtJson = transformRuleEntryJson.get("target_name");
+                JsonNode srcJson = transformRuleEntryJson.get("source_id");
+                JsonNode tgtJson = transformRuleEntryJson.get("target_id");
                 JsonNode srcFmtJson = transformRuleEntryJson.get("source_format_name");
                 JsonNode tgtFmtJson = transformRuleEntryJson.get("target_format_name");
                 if (isNotNull(nameJson) && isNotNull(srcJson) && isNotNull(tgtJson) && isNotNull(srcFmtJson) && isNotNull(tgtFmtJson)) {
@@ -280,12 +280,12 @@ class ProjectJsonParser {
         }
     }
 
-    private TransformRule readTransformRuleFromJson(DataTransformator dt, String targetName, String targetFmtName, JsonNode transformRuleJson) {
+    private TransformRule readTransformRuleFromJson(DataTransformator dt, String targetId, String targetFmtName, JsonNode transformRuleJson) {
         if (isNotNull(transformRuleJson)) {
             // get Root transform rule item
             JsonNode transformRuleItemJson = transformRuleJson.get("transform_rule_item");
             if (isNotNull(transformRuleItemJson)) {
-                TransformComponent tComp = tComponentCache.get(targetName);
+                TransformComponent tComp = tComponentCache.get(targetId);
                 if (tComp instanceof RegisterFormatComponent) {
                     RegisterFormatComponent rc = (RegisterFormatComponent) tComp;
                     FormatEntry fEntry = rc.getRegisteredFormatList(Direction.IN).get(targetFmtName);
@@ -321,7 +321,7 @@ class ProjectJsonParser {
                             throw new RuntimeException(ex);
                         }
                     }
-                    JsonNode arrayPath = ti.get("array_iteration_path");
+                    JsonNode arrayPath = ti.get("for_each_path");
                     if (isNotNull(arrayPath)) {
                         ritem.setForEachPath(arrayPath.asText());
                     }

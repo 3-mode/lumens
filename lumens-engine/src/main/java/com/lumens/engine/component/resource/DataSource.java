@@ -38,8 +38,8 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     private Map<String, Format> inFormatList;
     private Map<String, Format> outFormatList;
 
-    public DataSource(String componentType) {
-        super(componentType, "0");
+    public DataSource(String componentType, String id) {
+        super(componentType, id);
         registerOUTFormatList = new HashMap<>();
         registerINFormatList = new HashMap<>();
         // Try to search the OSGI bundle if exist else try to instance it directly
@@ -129,11 +129,11 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     @Override
     public FormatEntry registerFormat(String formatEntryName, Format format, Direction direction) {
         if (direction == Direction.IN) {
-            FormatEntry inFmtEntry = new FormatEntry(this.getName(), formatEntryName, format, Direction.IN);
+            FormatEntry inFmtEntry = new FormatEntry(this.getId(), formatEntryName, format, Direction.IN);
             registerINFormatList.put(formatEntryName, inFmtEntry);
             return inFmtEntry;
         } else {
-            FormatEntry outFmtEntry = new FormatEntry(this.getName(), formatEntryName, format, Direction.OUT);
+            FormatEntry outFmtEntry = new FormatEntry(this.getId(), formatEntryName, format, Direction.OUT);
             registerOUTFormatList.put(formatEntryName, outFmtEntry);
             return outFmtEntry;
         }

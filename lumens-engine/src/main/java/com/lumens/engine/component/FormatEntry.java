@@ -15,21 +15,21 @@ public class FormatEntry {
     private Format format;
     private Direction direction;
     private String name;
-    private String dataSourceName;
+    private String dataSourceId;
 
-    public FormatEntry(String dataSourceName, String name, Format format) {
-        this(dataSourceName, name, format, null);
+    public FormatEntry(String dataSourceId, String name, Format format) {
+        this(dataSourceId, name, format, null);
     }
 
     public FormatEntry(String dataSourceName, String name, Format format, Direction direction) {
-        this.dataSourceName = dataSourceName;
+        this.dataSourceId = dataSourceName;
         this.name = name;
         this.format = format;
         this.direction = direction;
     }
 
-    public String getDataSourceName() {
-        return dataSourceName;
+    public String getDataSourceId() {
+        return dataSourceId;
     }
 
     public String getName() {

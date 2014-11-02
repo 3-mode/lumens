@@ -12,23 +12,23 @@ import com.lumens.processor.transform.TransformRule;
 public class TransformRuleEntry {
 
     private String name;
-    private String sourceName;
-    private String targetName;
+    private String sourceId;
+    private String targetId;
     private String sourceFmtName;
     private String targetFmtName;
     private TransformRule rule;
 
-    public TransformRuleEntry(String name, String sourceName, String sourceFmtName, String targetName, String targetFmtName, TransformRule rule) {
+    public TransformRuleEntry(String name, String sourceId, String sourceFmtName, String targetId, String targetFmtName, TransformRule rule) {
         this.name = name;
-        this.sourceName = sourceName;
-        this.targetName = targetName;
+        this.sourceId = sourceId;
+        this.targetId = targetId;
         this.sourceFmtName = sourceFmtName;
         this.targetFmtName = targetFmtName;
         this.rule = rule;
     }
 
-    public TransformRuleEntry(String sourceName, String sourceFmtName, String targetName, String targetFmtName, TransformRule rule) {
-        this(sourceName + '-' + targetName, sourceName, sourceFmtName, targetName, targetFmtName, rule);
+    public TransformRuleEntry(String sourceId, String sourceFmtName, String targetId, String targetFmtName, TransformRule rule) {
+        this(sourceId + "--->" + targetId, sourceId, sourceFmtName, targetId, targetFmtName, rule);
     }
 
     public String getName() {
@@ -39,16 +39,16 @@ public class TransformRuleEntry {
         this.name = name;
     }
 
-    public String getSourceName() {
-        return this.sourceName;
+    public String getSourceId() {
+        return this.sourceId;
     }
 
     public String getSourceFormatName() {
         return this.sourceFmtName;
     }
 
-    public String getTargetName() {
-        return this.targetName;
+    public String getTargetId() {
+        return this.targetId;
     }
 
     public String getTargetFormatName() {

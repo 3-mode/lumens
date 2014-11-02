@@ -168,12 +168,10 @@ public class ModelTest extends TestCase {
         nameData = personData.getChildByPath("asset[1].vendor.name");
         assertNotNull(nameData);
         Element test = personData.getChildByPath("asset.test");
-        assertEquals("test collection default index", test.getValue().
-        getString());
+        assertEquals("test collection default index", test.getValue().getString());
 
         // test xml
-        ElementSerializer serializer = new ElementSerializer(
-        personData, true);
+        ElementSerializer serializer = new ElementSerializer(personData, true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
         System.out.println(baos.toString());
