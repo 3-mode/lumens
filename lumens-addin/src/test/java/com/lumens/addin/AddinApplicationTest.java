@@ -7,18 +7,17 @@ import com.lumens.connector.Connector;
 import com.lumens.connector.ConnectorFactory;
 import java.io.File;
 import java.util.Arrays;
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class AddinApplicationTest extends TestCase {
 
-    public AddinApplicationTest(String testName) {
-        super(testName);
-    }
-    // TODO add test methods here. The name must begin with 'test'. For example:
+public class AddinApplicationTest {
+
+     // TODO add test methods here. The name must begin with 'test'. For example:
     // public void testHello() {}
 
     public void testAddinEngine() throws Exception {
@@ -36,6 +35,7 @@ public class AddinApplicationTest extends TestCase {
         ae.stop();
     }
 
+    @Test
     public void testAddinActivator() throws Exception {
         AddinEngine ae = new AddinEngine(AddinApplicationTest.class.getClassLoader());
         ae.start();
