@@ -3,7 +3,7 @@
         <![CDATA[test project description demo]]>
     </description>
     <resource-list>
-        <datasource id="id-soap" name="ChinaMobile-WebService-SOAP">
+        <datasource type="type-soap" name="ChinaMobile-WebService-SOAP">
             <description>
                 <![CDATA[this is testing demo datasource for web service]]>
             </description>
@@ -93,7 +93,7 @@
         </datasource>
     </resource-list>
     <instrument-list>
-        <transformator id="id-transformator" name="GetOpenFundString-WS-Transform">
+        <transformator type="type-transformator" name="GetOpenFundString-WS-Transform">
             <description>
                 <![CDATA[Test DT 1]]>
             </description>
@@ -119,7 +119,7 @@
                 </transform-rule-entry>
             </transform-rule-list>
         </transformator>
-        <transformator id="id-transformator" name="GetOpenFundString2-WS-Transform">
+        <transformator type="type-transformator" name="GetOpenFundString2-WS-Transform">
             <description>
                 <![CDATA[Test DT 2]]>
             </description>

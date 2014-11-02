@@ -4,7 +4,8 @@
         "description": "test project description demo",
         "datasource": [
             {
-                "id": "id-soap",
+                "id": "001",
+                "type": "type-soap",
                 "name": "ChinaMobile-WebService-SOAP",
                 "description": "this is testing demo datasource for web service",
                 "position": {
@@ -353,7 +354,8 @@
         ],
         "transformator": [
             {
-                "id": "id-transformator",
+                "id": "002",
+                "type": "type-transformator",
                 "name": "GetOpenFundString-WS-Transform",
                 "description": "Test DT 1",
                 "position": {
@@ -362,7 +364,7 @@
                 },
                 "target": [
                     {
-                        "name": "ChinaMobile-WebService-SOAP"
+                        "name": "001"
                     }
                 ],
                 "transform_rule_entry": [
@@ -393,7 +395,7 @@
                 ]
             },
             {
-                "id": "id-transformator",
+                "type": "type-transformator",
                 "name": "GetOpenFundString2-WS-Transform",
                 "description": "Test DT 2",
                 "position": {

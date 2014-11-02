@@ -433,8 +433,16 @@ svg path {
     -moz-border-radius: 10px;   
 }
 .lumens .data-comp-stauts {
+    top: 3px;
     left:225px;
     position:absolute;
+    cursor: pointer;
+    border-radius:5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;   
+}
+.lumens .data-comp-stauts:hover {
+    background-color: #F5F5F5;
 }
 .lumens .data-comp-icon {
     padding-top: 12px;
@@ -454,6 +462,7 @@ svg path {
     font-size: 16px;
 }
 .lumens .data-comp-shortdsc {
+    padding-top: 2px;
     overflow: hidden;
     white-space: nowrap;  
     text-overflow: ellipsis;  

@@ -14,7 +14,7 @@ public class Activator implements AddinActivator {
     public void start(AddinContext ctx) {
         addinContext = ctx;
         ConnectorFactory factory = new SoapConnectorFactory();
-        addinContext.registerService(factory.getIdentifier(), factory, DescriptorUtils.processDescriptor(Activator.class, "soap", factory.getIdentifier()));
+        addinContext.registerService(factory.getComponentType(), factory, DescriptorUtils.processDescriptor(Activator.class, "soap", factory.getComponentType()));
     }
 
     @Override

@@ -44,7 +44,7 @@ Lumens.Component = Class.$extend({
     __init__: function($parent, config) {
         this.$parent = $parent;
         this.configure = config;
-        this.isMultipleLink = Lumens.isMultipleLink(config.category_info.type);
+        this.isMultipleLink = Lumens.isMultipleLink(config.category_info.class_type);
         var template =
         '<div class="data-comp lumens_boostrap" style="left:50px;top:50px;">' +
         '<div class="data-comp-icon"><img/></div>' +
@@ -102,7 +102,20 @@ Lumens.Component = Class.$extend({
                 return $(this).clone().zIndex(2000).css("opacity", "0.7");
             }
         }).data("data-comp", this);
-
+        this.$elem.find(".data-comp-stauts").dblclick(function() {
+            if (__this.statusCallback) {
+                var statOK = __this.statusCallback(this);
+                var bActive = $(this).attrBoolean("is-active");
+                if (statOK && !bActive) {
+                    $(this).attr("src", "app/css/img/ds/Active.png");
+                    $(this).attr("is-active", true);
+                }
+                else {
+                    $(this).attr("src", "app/css/img/ds/Deactive.png");
+                    $(this).attr("is-active", false);
+                }
+            }
+        });
         if (config.category_info.instance_icon)
             this.$elem.find('.data-comp-icon').find('img').attr('src', 'data:image/png;base64,' + config.category_info.instance_icon);
         else if (config.category_info.instance_icon_url)
@@ -116,6 +129,9 @@ Lumens.Component = Class.$extend({
     },
     setShortDescription: function(shortDesc) {
         this.$elem.find('#id-shortdsc').text(shortDesc);
+    },
+    getId: function() {
+        return this.getCompData().id;
     },
     getConfig: function() {
         return this.configure;
@@ -168,14 +184,10 @@ Lumens.Component = Class.$extend({
     },
     getToLinkList: function() {
         return this.$to_list;
-    }
-});
-
-Lumens.DataComponent = Lumens.Component.$extend({
-    __init: function($parent, config) {
-        this.$super($parent, config);
     },
-    hasFrom: function() {
+    changeStatus: function(callback) {
+        this.statusCallback = callback;
+    }, hasFrom: function() {
         return this.getFromCount() > 0;
     },
     getFromCount: function() {
@@ -197,16 +209,22 @@ Lumens.DataComponent = Lumens.Component.$extend({
         return this.getCategory().html;
     },
     isDataSource: function() {
-        return this.getCategory().type === "datasource";
+        return this.getCategory().class_type === "datasource";
     },
-    getType: function() {
-        return this.getCategory().type;
+    getClassType: function() {
+        return this.getCategory().class_type;
     },
     getCategory: function() {
         return this.getConfig().category_info;
     },
     getCompData: function() {
         return this.getConfig().component_info;
+    }
+});
+
+Lumens.DataComponent = Lumens.Component.$extend({
+    __init: function($parent, config) {
+        this.$super($parent, config);
     },
     getFormatEntry: function(direction) {
         if (!this.isDataSource())
@@ -256,7 +274,7 @@ Lumens.DataComponent = Lumens.Component.$extend({
         var formatEntry = null;
         if (this.isDataSource()) {
             formatEntry = this.getFormatEntry("IN");
-        } else {
+        } else if (this.hasFrom()) {
             formatEntry = this.getFrom(0).getFormatEntry("OUT");
         }
         if (formatEntry)
@@ -269,7 +287,7 @@ Lumens.DataComponent = Lumens.Component.$extend({
         var formatEntry = null;
         if (this.isDataSource()) {
             formatEntry = this.getFormatEntry("OUT");
-        } else {
+        } else if (this.hasTo()) {
             formatEntry = this.getTo(0).getFormatEntry("IN");
         }
         if (formatEntry)

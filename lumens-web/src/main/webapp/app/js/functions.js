@@ -219,7 +219,8 @@ function ComponentPropertyList(config) {
     return componentProps;
 }
 
-function applyProperty(componentProps, currentComponent) {
+function applyProperty(componentProps, currentUIComponent) {
+    var currentComponent = currentUIComponent.getCompData();
     currentComponent.property = [];
     currentComponent.name = componentProps.Name.value;
     currentComponent.description = componentProps.Description.value;

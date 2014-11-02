@@ -13,9 +13,9 @@ import java.util.Map;
  */
 public interface AddinContext {
 
-    public <T> T registerService(String identifier, T service, Map<String, Object> props);
+    public <T> T registerService(String componentType, T service, Map<String, Object> props);
 
-    public ServiceEntity getService(String identifier);
+    public ServiceEntity getService(String componentType);
 
     public Addin installAddIn(URL url);
 

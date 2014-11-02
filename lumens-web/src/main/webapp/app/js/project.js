@@ -40,11 +40,11 @@ Lumens.ProjectOperator = Class.$extend({
             project: this.$scope.project
         };
     },
-    add: function(component, type) {
+    add: function(component, class_type) {
         var project = this.$scope.project;
-        if (type === "datasource")
+        if (class_type === "datasource")
             project.datasource.push(component);
-        else if (type === "transformator")
+        else if (class_type === "transformator")
             project.transformator.push(component)
         else
             console.error("Not supported type", component);
@@ -79,10 +79,10 @@ Lumens.ProjectOperator = Class.$extend({
             console.log("Opened project:", project);
             // ==================== Update angular JS data model ====================
             $.each(project.datasource, function() {
-                compDict[this.name] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.id], this);
+                compDict[this.name] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.type], this);
             });
             $.each(project.transformator, function() {
-                compDict[this.name] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.id], this);
+                compDict[this.name] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.type], this);
             });
             $.each(project.datasource, function() {
                 if (compDict[this.name]) {
@@ -100,6 +100,16 @@ Lumens.ProjectOperator = Class.$extend({
                     }
                 }
             });
+
+            var compList = __this.componentPanel.getComponentList();
+            $.each(compList, function() {
+                if (this.isDataSource()) {
+                    this.changeStatus(function() {
+                        console.log("open or close");
+                        return true;
+                    });
+                }
+            })
         }
     }
 });

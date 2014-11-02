@@ -3,7 +3,6 @@
  */
 package com.lumens.engine.component.instrument;
 
-import com.lumens.LumensException;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.component.AbstractTransformComponent;
 import com.lumens.engine.Instrument;
@@ -36,7 +35,7 @@ public class DataTransformator extends AbstractTransformComponent implements Rul
     private Map<String, List<TransformRuleEntry>> ruleFindList = new HashMap<>();
 
     public DataTransformator() {
-        super("id-transformator");
+        super("type-transformator", "0");
         processor = new TransformProcessor();
     }
 
@@ -145,14 +144,14 @@ public class DataTransformator extends AbstractTransformComponent implements Rul
     @Override
     public void sourceFrom(TransformComponent source) {
         //if (getSourceList().isEmpty())
-            super.sourceFrom(source);
+        super.sourceFrom(source);
         //throw new LumensException("DataTransformator only can link to one source");
     }
 
     @Override
     public void targetTo(TransformComponent target) {
         //if (getTargetList().isEmpty())
-            super.targetTo(target);
+        super.targetTo(target);
         //throw new LumensException("DataTransformator only can link to one target");
     }
 }

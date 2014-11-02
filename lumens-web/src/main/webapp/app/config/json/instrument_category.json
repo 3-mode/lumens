@@ -2,10 +2,11 @@
     "items": [
         {
             "name": "Transformator",
-            "id": "id-transformator",
-            "type": "transformator",
+            "type": "type-transformator",
+            "class_type": "transformator",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png",
+            "html_url": "app/config/html/transf.html",
             "i18n": {
                 "Name": "Name",
                 "Description": "Description"
@@ -13,8 +14,8 @@
         },
         {
             "name": "Router",
-            "id": "id_router",
-            "type": "router",
+            "type": "type-router",
+            "class_type": "router",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png",
             "i18n": {
@@ -24,8 +25,8 @@
         },
         {
             "name": "Spliter",
-            "id": "id_spliter",
-            "type": "spliter",
+            "type": "type-spliter",
+            "class_type": "spliter",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png",
             "i18n": {
@@ -35,8 +36,8 @@
         },
         {
             "name": "Composer ",
-            "id": "id_composer",
-            "type": "composer",
+            "type": "type-composer",
+            "class_type": "composer",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png",
             "i18n": {

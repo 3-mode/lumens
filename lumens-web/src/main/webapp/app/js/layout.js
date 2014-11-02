@@ -222,7 +222,6 @@ Lumens.Panel = Class.$extend({
 Lumens.ComponentPanel = Lumens.Panel.$extend({
     __init__: function(container) {
         this.$super(container);
-        this.componentCounter = 0;
         this.componentList = [];
     },
     configure: function(config) {
@@ -277,13 +276,14 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
         if (component_info)
             return component_info
         component_info = {
-            id: category_info.id,
-            name: "[ to do " + (++this.componentCounter) + " ]",
+            id: $.currentTime(),
+            type: category_info.type,
+            name: "[ " + category_info.name + "_" + (this.getComponentList().length + 1) + " ]",
             description: "",
             target: [],
             position: {x: 0, y: 0}
         };
-        if (category_info.type === "datasource") {
+        if (category_info.class_type === "datasource") {
             component_info.property = [];
             component_info.format_list = [];
         }

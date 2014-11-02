@@ -15,15 +15,17 @@ public abstract class AbstractTransformComponent implements TransformComponent {
 
     private int x;
     private int y;
+    private String id;
     private String name;
     protected boolean isOpen;
-    private String identifier;
+    private String compType;
     private String description;
     private Map<String, TransformComponent> sourceList = new HashMap<>();
     private Map<String, TransformComponent> targetList = new HashMap<>();
 
-    public AbstractTransformComponent(String identifier) {
-        this.identifier = identifier;
+    public AbstractTransformComponent(String compType, String id) {
+        this.compType = compType;
+        this.id = id;
     }
 
     @Override
@@ -67,8 +69,13 @@ public abstract class AbstractTransformComponent implements TransformComponent {
     }
 
     @Override
-    public String getIdentifier() {
-        return identifier;
+    public String getComponentType() {
+        return compType;
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
     }
 
     @Override

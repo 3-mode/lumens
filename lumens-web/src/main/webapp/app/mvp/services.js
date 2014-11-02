@@ -7,7 +7,7 @@
 Lumens.services = angular.module('lumens-services', ['ngResource']);
 // Services
 Lumens.services.factory('DesignNavMenu', function($resource) {
-    return $resource("app/config/desgin_nav_menu.json", {}, {
+    return $resource("app/config/json/desgin_nav_menu.json", {}, {
         get: {method: 'GET', isArray: false}
     });
 });
@@ -56,7 +56,7 @@ Lumens.services.factory('DatasourceCategory', function($resource) {
     });
 });
 Lumens.services.factory('InstrumentCategory', function($resource) {
-    return $resource("app/mock/json/instrument_category.json", {}, {
+    return $resource("app/config/json/instrument_category.json", {}, {
         get: {method: 'GET', isArray: false}
     });
 });
@@ -94,6 +94,23 @@ Lumens.services.factory('FormatByPath', function($resource) {
         getIN: {method: 'GET', params: {direction: 'IN'}, isArray: false},
         getOUT: {method: 'GET', params: {direction: 'OUT'}, isArray: false}
     });
+});
+Lumens.services.factory('jSyncHtml', function() {
+    return {
+        get: function(items) {
+            for (var i = 0; i < items.length; ++i) {
+                if (items[i].html_url) {
+                    $.ajax({
+                        async: false,
+                        url: items[i].html_url,
+                        contentType: "plain/text"
+                    }).done(function(data) {
+                        items[i].html = data;
+                    });
+                }
+            }
+        }
+    };
 });
 Lumens.services.factory('RuleEditorService', function() {
     return {
@@ -135,8 +152,8 @@ Lumens.services.factory('FormatRegister', function() {
             LumensLog.log("Rule entity:", $scope.transformRuleEntity);
             var transformRuleEntry = $scope.transformRuleEntity.transformRuleEntry;
             transformRuleEntry.name = ruleRegName;
-            transformRuleEntry.source_name = this.isInValidSource($scope) === false ? $scope.currentUIComponent.$from_list[0].$from.configure.short_desc : $scope.currentUIComponent.configure.short_desc;
-            transformRuleEntry.target_name = this.isInValidTarget($scope) === false ? $scope.currentUIComponent.$to_list[0].$to.configure.short_desc : "";
+            transformRuleEntry.source_name = this.isInValidSource($scope) ? "" : $scope.currentUIComponent.getFrom(0).getConfig().short_desc;
+            transformRuleEntry.target_name = this.isInValidTarget($scope) ? "" : $scope.currentUIComponent.getTo(0).getConfig().short_desc;
             transformRuleEntry.source_format_name = $scope.inputFormatRegName ? $scope.inputFormatRegName : ($scope.outputFormatRegName ? $scope.outputFormatRegName : "");
             transformRuleEntry.target_format_name = $scope.outputFormatRegName ? $scope.outputFormatRegName : "";
             var selectedSourceFormat = this.findRootFormat($scope.displaySourceFormatList, inSelectedName);

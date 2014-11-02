@@ -1,10 +1,10 @@
 {
-    "id-oracle-jdbc": {
+    "type-oracle-jdbc": {
         "name": "OracleName",
-        "type": "datasource",
+        "class_type": "datasource",
         "item_icon": "img/Oracle24x24.png",
         "instance_icon": "img/Oracle64x64.png",
-        "html": "html/orcl.html",
+        "html_url": "html/orcl.html",
         "i18n": "i18n/orcl.json",
         "property": [
             {

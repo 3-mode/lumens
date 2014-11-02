@@ -121,10 +121,10 @@ public class ProjectHandlerImpl implements ProjectHandler {
     public void start_datasource(final Attributes meta) throws SAXException {
         if (status == ReadStatus.PROJECT) {
             status = ReadStatus.DATASRC;
-            String id = meta.getValue("id");
-            if (id == null || id.isEmpty())
-                throw new SAXException("Identifier can not be empty !");
-            tc = new DataSource(id);
+            String type = meta.getValue("type");
+            if (type == null || type.isEmpty())
+                throw new SAXException("Component type can not be empty !");
+            tc = new DataSource(type);
             String name = meta.getValue("name");
             if (name == null || name.isEmpty())
                 throw new SAXException("Data source name can not be empty !");
@@ -254,10 +254,10 @@ public class ProjectHandlerImpl implements ProjectHandler {
     public void start_transformator(final Attributes meta) throws SAXException {
         if (status == ReadStatus.PROJECT) {
             status = ReadStatus.DATAPSR;
-            String id = meta.getValue("id");
+            String type = meta.getValue("type");
             tc = new DataTransformator();
-            if (id == null || id.isEmpty() || !tc.getIdentifier().equals(id))
-                throw new SAXException("Error, the property 'id' is empty !");
+            if (type == null || type.isEmpty() || !tc.getComponentType().equals(type))
+                throw new SAXException("Error, the property 'type' is empty !");
             tc = new DataTransformator();
             tc.setName(meta.getValue("name"));
             tComponentCache.put(tc.getName(), tc);

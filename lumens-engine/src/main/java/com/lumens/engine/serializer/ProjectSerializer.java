@@ -103,7 +103,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     private void writeDatasourceToXml(StringUTF8Writer xml, DataSource ds, String indent) throws Exception {
         String nextIndent = indent + INDENT;
         xml.print(indent)
-        .print("<datasource id=\"").print(ds.getIdentifier()).print("\" name=\"").print(ds.getName() == null ? "" : ds.getName()).println("\">");
+        .print("<datasource type=\"").print(ds.getComponentType()).print("\" id=\"").print(ds.getId()).print("\" name=\"").print(ds.getName() == null ? "" : ds.getName()).println("\">");
         xml.print(nextIndent)
         .println("<description>")
         .print("<![CDATA[").print(ds.getDescription() == null ? "" : ds.getDescription()).println("]]>").print(nextIndent)
@@ -194,7 +194,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     private void writeDataTransformatorToXml(StringUTF8Writer xml, DataTransformator dt, String indent) throws Exception {
         String nextIndent = indent + INDENT;
         xml.print(indent)
-        .print("<transformator id=\"").print(dt.getIdentifier()).print("\" name=\"").print(dt.getName() == null ? "" : dt.getName()).println("\">").print(nextIndent)
+        .print("<transformator type=\"").print(dt.getComponentType()).print("\" id=\"").print(dt.getId()).print("\" name=\"").print(dt.getName() == null ? "" : dt.getName()).println("\">").print(nextIndent)
         .println("<description>")
         .print("<![CDATA[").print(dt.getDescription() == null ? "" : dt.getDescription()).println("]]>").print(nextIndent)
         .println("</description>");
@@ -261,7 +261,8 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
 
     private void writeDatasourceToJson(JsonGenerator jGenerator, DataSource ds) throws Exception {
         jGenerator.writeStartObject();
-        jGenerator.writeStringField("id", ds.getIdentifier());
+        jGenerator.writeStringField("type", ds.getComponentType());
+        jGenerator.writeStringField("id", ds.getId());
         jGenerator.writeStringField("name", ds.getName() == null ? "" : ds.getName());
         jGenerator.writeStringField("description", ds.getDescription() == null ? "" : ds.getDescription());
         jGenerator.writeObjectFieldStart("position");
@@ -379,7 +380,8 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
 
     private void writeDataTransformatorToJson(JsonGenerator jGenerator, DataTransformator dt) throws Exception {
         jGenerator.writeStartObject();
-        jGenerator.writeStringField("id", dt.getIdentifier());
+        jGenerator.writeStringField("type", dt.getComponentType());
+        jGenerator.writeStringField("id", dt.getId());
         jGenerator.writeStringField("name", dt.getName() == null ? "" : dt.getName());
         jGenerator.writeStringField("description", dt.getDescription() == null ? "" : dt.getDescription());
         jGenerator.writeObjectFieldStart("position");

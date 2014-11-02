@@ -9,7 +9,7 @@ package com.lumens.connector;
  */
 public interface ConnectorFactory {
 
-    public String getIdentifier();
+    public String getComponentType();
 
     public Connector createConnector();
 }

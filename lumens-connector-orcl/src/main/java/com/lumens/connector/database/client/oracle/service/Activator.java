@@ -14,7 +14,7 @@ public class Activator implements AddinActivator {
     public void start(AddinContext context) {
         addinContext = context;
         ConnectorFactory factory = new OracleConnectorFactory();
-        addinContext.registerService(factory.getIdentifier(), factory, DescriptorUtils.processDescriptor(Activator.class, "orcl", factory.getIdentifier()));
+        addinContext.registerService(factory.getComponentType(), factory, DescriptorUtils.processDescriptor(Activator.class, "orcl", factory.getComponentType()));
     }
 
     @Override

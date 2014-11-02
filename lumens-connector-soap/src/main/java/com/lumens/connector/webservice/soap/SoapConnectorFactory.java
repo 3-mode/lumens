@@ -11,7 +11,7 @@ public class SoapConnectorFactory implements ConnectorFactory {
     }
 
     @Override
-    public String getIdentifier() {
-        return "id-soap";
+    public String getComponentType() {
+        return "type-soap";
     }
 }

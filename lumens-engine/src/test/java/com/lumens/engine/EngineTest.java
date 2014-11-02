@@ -73,7 +73,7 @@ public class EngineTest extends Assert implements SoapConstants {
         props.put(WSDL, new Value(getClass().getResource("/wsdl/ChinaOpenFundWS.asmx").toString()));
         props.put(PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
         props.put(PROXY_PORT, new Value(8080));
-        DataSource datasource = new DataSource("id-soap");
+        DataSource datasource = new DataSource("type-soap");
         datasource.setName("ChinaMobile-WebService-SOAP");
         datasource.setPropertyList(props);
         datasource.open();
@@ -162,11 +162,11 @@ public class EngineTest extends Assert implements SoapConstants {
     public void testOracleConnectorInEngine() throws Exception {
         HashMap<String, Value> props = new HashMap<>();
         props.put(DatabaseConstants.OJDBC, new Value("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar"));
-        props.put(DatabaseConstants.CONNECTION_URL, new Value("jdbc:oracle:thin:@localhost:1521:orcl"));
+        props.put(DatabaseConstants.CONNECTION_URL, new Value("jdbc:oracle:thin:@localhost:1521:xe"));
         props.put(DatabaseConstants.USER, new Value("hr"));
         props.put(DatabaseConstants.PASSWORD, new Value("hr"));
         props.put(DatabaseConstants.SESSION_ALTER, new Value("alter session set NLS_DATE_FORMAT='yyyy-mm-dd'"));
-        DataSource datasource = new DataSource("id-oracle-jdbc");
+        DataSource datasource = new DataSource("type-oracle-jdbc");
         datasource.setName("Database HR");
         datasource.setDescription("this is testing demo datasource for oracle jdbc");
         datasource.setPropertyList(props);
@@ -184,7 +184,7 @@ public class EngineTest extends Assert implements SoapConstants {
         FormatEntry inFormatEntry = datasource.registerFormat("sqlSelect", inputArg, Direction.IN);
         FormatEntry outFormatEntry = datasource.registerFormat("sqlSelect", returnOut, Direction.OUT);
 
-        DataSource ws = new DataSource("id-soap");
+        DataSource ws = new DataSource("type-soap");
         Map<String, Value> wsProps = new HashMap<>();
         wsProps.put(WSDL, new Value("http://webservice.webxml.com.cn/webservices/DomesticAirline.asmx?wsdl"));
         wsProps.put(PROXY_ADDR, new Value("web-proxy.atl.hp.com"));

@@ -26,7 +26,7 @@ public interface TransformComponent {
     public void sourceFrom(TransformComponent target);
 
     public boolean hasTarget();
-    
+
     public boolean hasSource();
 
     public boolean isSingleTarget();
@@ -53,5 +53,7 @@ public interface TransformComponent {
 
     public void setDescription(String description);
 
-    public String getIdentifier();
+    public String getComponentType();
+
+    public String getId();
 }

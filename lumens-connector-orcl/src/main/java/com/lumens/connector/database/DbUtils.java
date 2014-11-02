@@ -32,6 +32,7 @@ public class DbUtils {
 
     public static Connection getConnection(Driver driver, String connURL, String user, String password) {
         try {
+            // TODO check null ?
             Properties props = new Properties();
             props.put("user", user);
             props.put("password", password);

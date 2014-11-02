@@ -166,7 +166,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         AddinContext ac = ae.getAddinContext();
         Activator activator = new Activator();
         activator.start(ac);
-        ServiceEntity<ConnectorFactory> se = ac.getService("id-soap");
+        ServiceEntity<ConnectorFactory> se = ac.getService("type-soap");
         System.out.println(Arrays.toString(se.getPropertList().entrySet().toArray()));
     }
 }

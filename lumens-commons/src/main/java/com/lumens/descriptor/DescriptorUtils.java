@@ -20,8 +20,8 @@ import org.codehaus.jackson.JsonNode;
 public class DescriptorUtils {
 
     public static String DESCRIPTOR = "descriptor";
-    public static String TYPE_PROPERTY = "type";
-    public static String ID_PROPERTY = "id";
+    public static String CLASS_TYPE_PROPERTY = "class_type";
+    public static String COMP_TYPE_PROPERTY = "type";
     public static String NAME_PROPERTY = "name";
     public static String CLASS_NAME_PROPERTY = "class_name";
     public static String INSTANCE_ICON_PROPERTY = "instance_icon";
@@ -29,6 +29,7 @@ public class DescriptorUtils {
     public static String PROPS_PROPERTY = "property";
     public static String I18N_PROPERTY = "i18n";
     public static String HTML_PROPERTY = "html";
+    public static String HTML_URL_PROPERTY = "html_url";
 
     private static InputStream getResource(Class clazz, String configRoot, String path) {
         return clazz.getClassLoader().getResourceAsStream(configRoot + "/" + path);
@@ -42,7 +43,7 @@ public class DescriptorUtils {
         }
     }
 
-    public static Map<String, Object> processDescriptor(Class clazz, String configRoot, String resourceID) {
+    public static Map<String, Object> processDescriptor(Class clazz, String configRoot, String compType) {
         Map<String, Object> props = new HashMap<>();
         JsonUtility utility = JsonUtility.createJsonUtility();
         JsonGenerator generator = utility.getGenerator();
@@ -52,10 +53,10 @@ public class DescriptorUtils {
             {
                 // TODO need to check if the property exists
                 descJson = discoverDescriptor(clazz, configRoot);
-                descJson = descJson.get(resourceID);
+                descJson = descJson.get(compType);
                 if (JsonUtility.isNull(descJson))
                     throw new LumensException("Descriptor file is invalid, the resource id is not matched!");
-                generator.writeStringField(ID_PROPERTY, resourceID);
+                generator.writeStringField(COMP_TYPE_PROPERTY, compType);
                 JsonNode i18nJson = null;
                 try (InputStream in = getResource(clazz, configRoot, descJson.get(I18N_PROPERTY).asText())) {
                     i18nJson = JsonUtility.createJson(IOUtils.toString(in));
@@ -63,10 +64,10 @@ public class DescriptorUtils {
                     throw new LumensException(ex);
                 }
                 generator.writeStringField(NAME_PROPERTY, i18nJson.get(descJson.get(NAME_PROPERTY).asText()).asText());
-                generator.writeStringField(TYPE_PROPERTY, descJson.get(TYPE_PROPERTY).asText());
+                generator.writeStringField(CLASS_TYPE_PROPERTY, descJson.get(CLASS_TYPE_PROPERTY).asText());
                 generator.writeObjectField(PROPS_PROPERTY, descJson.get(PROPS_PROPERTY));
                 generator.writeObjectField(I18N_PROPERTY, i18nJson);
-                try (InputStream in = getResource(clazz, configRoot, descJson.get(HTML_PROPERTY).asText())) {
+                try (InputStream in = getResource(clazz, configRoot, descJson.get(HTML_URL_PROPERTY).asText())) {
                     generator.writeStringField(HTML_PROPERTY, IOUtils.toString(in));
                 } catch (IOException ex) {
                     throw new LumensException(ex);

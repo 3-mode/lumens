@@ -1,6 +1,6 @@
 <div ng-controller="DesginCmdCtrl">
     <div class="lumens-button-bar">
-        <a ng-repeat="id_btn in ['id_new', 'id_open', 'id_save', 'id_deploy', 'id_active', 'id_close']" class="lumens-button" ng-click="onCommand(id_btn)">{{i18n[id_btn]}}</a>
+        <a ng-repeat="id_btn in ['id_new', 'id_open', 'id_save', 'id_active', 'id_close']" class="lumens-button" ng-click="onCommand(id_btn)">{{i18n[id_btn]}}</a>
         <a class="lumens-button lumens-button-delete" ng-click="barClick('id_delete')">{{i18n.id_delete}}</a>
     </div>
     <div id="project_dialog" class="lumens-bootstrap lumens-modal-holder"></div>

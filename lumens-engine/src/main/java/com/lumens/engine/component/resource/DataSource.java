@@ -38,17 +38,17 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     private Map<String, Format> inFormatList;
     private Map<String, Format> outFormatList;
 
-    public DataSource(String identifier) {
-        super(identifier);
+    public DataSource(String componentType) {
+        super(componentType, "0");
         registerOUTFormatList = new HashMap<>();
         registerINFormatList = new HashMap<>();
         // Try to search the OSGI bundle if exist else try to instance it directly
         if (EngineContext.getContext() != null) {
-            ConnectorFactory factory = EngineContext.getContext().getConnectorFactory(getIdentifier());
+            ConnectorFactory factory = EngineContext.getContext().getConnectorFactory(getComponentType());
             if (factory != null)
                 connector = factory.createConnector();
             else
-                throw new RuntimeException("The '" + getIdentifier() + "' is not supported");
+                throw new RuntimeException("The '" + getComponentType() + "' is not supported");
         }
     }
 

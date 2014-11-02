@@ -1,37 +1,37 @@
 {
     "items": [
         {
-            "id": "id-rest",
+            "type": "type-rest",
             "name": "RESTful",
-            "type": "datasource",
+            "class_type": "datasource",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png"
         },
         {
-            "id": "id-ldap",
+            "type": "type-ldap",
             "name": "LDAP",
-            "type": "datasource",
+            "class_type": "datasource",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png"
         },
         {
-            "id": "id-mail",
+            "type": "type-mail",
             "name": "Mail",
-            "type": "datasource",
+            "class_type": "datasource",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png"
         },
         {
-            "id": "id-xml",
+            "type": "type-xml",
             "name": "XML",
-            "type": "datasource",
+            "class_type": "datasource",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png"
         },
         {
-            "id": "id-text",
+            "type": "type-text",
             "name": "Text",
-            "type": "datasource",
+            "class_type": "datasource",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png"
         }

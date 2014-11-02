@@ -11,7 +11,7 @@ public class OracleConnectorFactory implements ConnectorFactory {
     }
 
     @Override
-    public String getIdentifier() {
-        return "id-oracle-jdbc";
+    public String getComponentType() {
+        return "type-oracle-jdbc";
     }
 }

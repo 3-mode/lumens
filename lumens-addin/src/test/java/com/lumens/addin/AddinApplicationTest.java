@@ -22,13 +22,13 @@ public class AddinApplicationTest extends TestCase {
     // public void testHello() {}
 
     public void testAddinEngine() throws Exception {
-        AddinEngine ae = new AddinEngine(AddinApplicationTest.class.getClassLoader()).loadSystemClass(new File("../lumens-server/lumens/module/server/lib").toURI().toURL());
+        AddinEngine ae = new AddinEngine(AddinApplicationTest.class.getClassLoader()).loadSystemClass(new File("../dist/lumens/module/server/lib").toURI().toURL());
         ae.start();
         AddinContext ac = ae.getAddinContext();
-        Addin addin = ac.installAddIn(new File("../lumens-server/lumens/addin/orcl").toURI().toURL());
+        Addin addin = ac.installAddIn(new File("../dist/lumens/addin/orcl").toURI().toURL());
         addin.start();
         System.out.println("Loaded addin: " + addin.getName());
-        ServiceEntity<ConnectorFactory> se = addin.getService("id-oracle-jdbc");
+        ServiceEntity<ConnectorFactory> se = addin.getService("type-oracle-jdbc");
         Connector c = se.getService().createConnector();
         assertNotNull(c);
         System.out.println("Created class instance: " + c);

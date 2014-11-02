@@ -118,7 +118,7 @@ public class ConnectorTest extends TestCase implements DatabaseConstants, Oracle
         System.out.println("Generated update SQL: " + sqlUpdate);
     }
 
-    public void testOracleOperation() throws Exception {
+    public void TtestOracleOperation() throws Exception {
         Format employeeFmt = new DataFormat("EMPLOYEES", Form.STRUCT);
         employeeFmt.addChild(CLAUSE, Form.FIELD);
         employeeFmt.addChild(OPERATION, Form.FIELD);
@@ -200,7 +200,7 @@ public class ConnectorTest extends TestCase implements DatabaseConstants, Oracle
         AddinContext ac = ae.getAddinContext();
         Activator activator = new Activator();
         activator.start(ac);
-        ServiceEntity<ConnectorFactory> se = ac.getService("id-oracle-jdbc");
+        ServiceEntity<ConnectorFactory> se = ac.getService("type-oracle-jdbc");
         System.out.println(Arrays.toString(se.getPropertList().entrySet().toArray()));
     }
 }

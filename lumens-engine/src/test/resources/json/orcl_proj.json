@@ -3,7 +3,7 @@
     "description": "It is used to query empolyee test table all records",
     "datasource": [
         {
-            "id": "id_oracle",
+            "type": "type-oracle",
             "name": "Database HR",
             "class_name": "com.lumens.connector.database.client.oracle.OracleConnector",
             "description": "this is testing demo datasource for oracle jdbc",
@@ -508,7 +508,7 @@
     ],
     "transformator": [
         {
-            "id": "id_transformator",
+            "type": "type-transformator",
             "name": "drive the employee test table query",
             "class_name": "com.lumens.engine.component.instrument.DataTransformator",
             "description": "drive the employee test table query",

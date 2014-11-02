@@ -4,14 +4,21 @@
 jQuery.fn.cssInt = function(prop) {
     return parseInt(this.css(prop), 10) || 0;
 };
-
+jQuery.fn.attrBoolean = function(prop) {
+    var bActive = this.attr(prop);
+    return bActive ? bActive === "true" : false;
+}
 jQuery.fn.cssFloat = function(prop) {
     return parseFloat(this.css(prop)) || 0;
 };
-
 jQuery.extend({
     percentToFloat: function(value) {
         return parseFloat(value.substring(0, value.length - 1)) / 100.0;
+    }
+});
+jQuery.extend({
+    currentTime: function() {
+        return new Date().getTime();
     }
 });
 if (typeof String.prototype.format !== 'function') {
