@@ -20,7 +20,7 @@ public class SqlServerConnectorFactory implements ConnectorFactory{
     }
 
     @Override
-    public String getIdentifier() {
-        return "id-sqlserver-jdbc";
+    public String getComponentType() {
+        return "type-sqlserver";
     }   
 }
