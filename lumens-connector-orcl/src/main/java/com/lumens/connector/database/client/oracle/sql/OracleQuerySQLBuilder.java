@@ -20,16 +20,22 @@ public class OracleQuerySQLBuilder extends OracleSQLBuilder {
     @Override
     public String generateSelectSQL(Element input) {
         StringBuilder queryFields = new StringBuilder();
-        String tableName = output.getName();
-        Format fields = output.getChild(FIELDS);
-        if (fields == null) {
-            return null;
-        }
-        for (Format f : fields.getChildren()) {
-            if (queryFields.length() > 0) {
-                queryFields.append(", ");
+        String tableName = null;
+        if (output != null) {
+            tableName = output.getName();
+            Format fields = output.getChild(FIELDS);
+            if (fields == null) {
+                return null;
             }
-            queryFields.append(f.getName());
+            for (Format f : fields.getChildren()) {
+                if (queryFields.length() > 0) {
+                    queryFields.append(", ");
+                }
+                queryFields.append(f.getName());
+            }
+        } else {
+            tableName = input.getFormat().getName();
+            queryFields.append("*");
         }
         StringBuilder querySQL = new StringBuilder();
         querySQL.append("SELECT ").append(queryFields.toString()).append(" FROM ").append(tableName);
