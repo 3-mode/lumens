@@ -11,7 +11,7 @@ import com.lumens.connector.database.DatabaseConstants;
 import com.lumens.model.Element;
 
 public class SqlServerSQLBuilder implements SQLBuilder, DatabaseConstants{
- @Override
+    @Override
     public String generateInsertSQL(Element input) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

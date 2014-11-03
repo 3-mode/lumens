@@ -97,7 +97,7 @@ public class ConnectorTest {
         AddinContext ac = ae.getAddinContext();
         Activator activator = new Activator();
         activator.start(ac);
-        ServiceEntity<ConnectorFactory> se = ac.getService("id-oracle-jdbc");
+        ServiceEntity<ConnectorFactory> se = ac.getService("type-sqlserver");
         System.out.println(Arrays.toString(se.getPropertList().entrySet().toArray()));
     }    
 }

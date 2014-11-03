@@ -20,7 +20,7 @@ public class Activator implements AddinActivator {
     public void start(AddinContext context) {
         addinContext = context;
         ConnectorFactory factory = new SqlServerConnectorFactory();
-        addinContext.registerService(factory.getIdentifier(), factory, DescriptorUtils.processDescriptor(Activator.class, "sqlserver", factory.getIdentifier()));
+        addinContext.registerService(factory.getComponentType(), factory, DescriptorUtils.processDescriptor(Activator.class, "sqlserver", factory.getComponentType()));
     }
 
     @Override
