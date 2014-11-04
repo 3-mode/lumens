@@ -18,7 +18,7 @@ public class ElementFromDbBuilder {
 
     public List<Element> buildElement(Format output, ResultSet ret) throws Exception {
         List<Element> result = new ArrayList<>();
-        if (!ret.isClosed()) {
+        if (output != null && !ret.isClosed()) {
             while (ret.next()) {
                 DataElement data = new DataElement(output);
                 Element fields = data.addChild(OracleConstants.FIELDS);
