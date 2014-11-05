@@ -89,4 +89,11 @@ public class DbUtils {
             IOUtils.closeQuietly(binaryStream);
         }
     }
+
+    public static void rollback(Connection conn) {
+        try {
+            conn.rollback();
+        } catch (SQLException e) {
+        }
+    }
 }

@@ -150,7 +150,9 @@ public class OracleClient extends AbstractClient implements OracleConstants {
         try {
             stat = conn.createStatement();
             stat.execute(SQL);
+            conn.commit();
         } catch (Exception e) {
+            DbUtils.rollback(conn);
             throw new RuntimeException(e);
         } finally {
             DbUtils.releaseStatement(stat);
