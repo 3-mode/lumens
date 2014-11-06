@@ -30,14 +30,6 @@ import static junit.framework.TestCase.assertTrue;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerFactory;
-import org.quartz.impl.StdSchedulerFactory;
-import org.quartz.SimpleScheduleBuilder;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
 
 public class EngineTest extends Assert implements SoapConstants {
 
@@ -275,27 +267,5 @@ public class EngineTest extends Assert implements SoapConstants {
         try (InputStream in = EngineTest.class.getResourceAsStream(url)) {
             return new ByteArrayInputStream(IOUtils.toByteArray(in));
         }
-    }
-
-    public void testScheduler() throws Exception {
-
-        SchedulerFactory sf = new StdSchedulerFactory();
-        Scheduler sched = sf.getScheduler();
-
-        JobDetail job = JobBuilder.newJob(SimpleJob.class)
-        .withIdentity("job1", "group1")
-        .build();
-
-        Trigger trigger = TriggerBuilder.newTrigger()
-        .withIdentity("myTrigger", "group1")
-        .startNow()
-        .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-        .withIntervalInSeconds(40)
-        .repeatForever())
-        .build();
-
-        sched.scheduleJob(job, trigger);
-        sched.start();
-        System.in.read();
     }
 }

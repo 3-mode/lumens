@@ -55,6 +55,7 @@
         <module>assembler</module>
         <module>lumens-addin</module>
         <module>lumens-connector-xml</module>
+        <module>lumens-task</module>
     </modules>
     <dependencies>
         <dependency>
