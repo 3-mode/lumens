@@ -30,6 +30,11 @@ INSERT INTO project (id, name, description, data) VALUES (?,?,?,?)
 <![CDATA[
 UPDATE project set name=?, description=?, data=? WHERE id = ?
 ]]>
+        </sql> 
+        <sql name="DeleteProject">
+<![CDATA[
+DELETE FROM project WHERE id = ?
+]]>
         </sql>
     </database-access-object>
 </database-access-objects>

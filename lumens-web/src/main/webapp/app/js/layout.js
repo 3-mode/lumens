@@ -268,9 +268,8 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
         return component;
     },
     emptyComponent: function() {
-        this.componentCounter = 0;
         this.getElement().empty();
-        componentList = [];
+        this.componentList = [];
     },
     initComponentInfo: function(category_info, component_info) {
         if (component_info)

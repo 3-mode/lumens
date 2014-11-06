@@ -55,14 +55,14 @@ Lumens.ProjectOperator = Class.$extend({
         var componentList = this.componentPanel.getComponentList();
         $.each(componentList, function() {
             var curComp = this;
-            curComp.configure.component_info.position = curComp.getXY();
+            curComp.getCompData().position = curComp.getXY();
             // Reset the target list
-            curComp.configure.component_info.target = [];
+            curComp.getCompData().target = [];
             $.each(this.getToLinkList(), function() {
                 var targetComp = this.getTo();
-                curComp.configure.component_info.target.push({name: targetComp.configure.component_info.name});
+                curComp.getCompData().target.push({id: targetComp.getCompData().id});
             });
-        })
+        });
     },
     setId: function(projectId) {
         this.projectId = projectId;
@@ -79,24 +79,24 @@ Lumens.ProjectOperator = Class.$extend({
             console.log("Opened project:", project);
             // ==================== Update angular JS data model ====================
             $.each(project.datasource, function() {
-                compDict[this.name] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.type], this);
+                compDict[this.id] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.type], this);
             });
             $.each(project.transformator, function() {
-                compDict[this.name] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.type], this);
+                compDict[this.id] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.type], this);
             });
             $.each(project.datasource, function() {
-                if (compDict[this.name]) {
+                if (compDict[this.id]) {
                     for (var i = 0; i < this.target.length; ++i) {
-                        if (compDict[this.target[i].name])
-                            new Lumens.Link().from(compDict[this.name]).to(compDict[this.target[i].name]).draw();
+                        if (compDict[this.target[i].id])
+                            new Lumens.Link().from(compDict[this.id]).to(compDict[this.target[i].id]).draw();
                     }
                 }
             });
             $.each(project.transformator, function() {
-                if (compDict[this.name]) {
+                if (compDict[this.id]) {
                     for (var i = 0; i < this.target.length; ++i) {
-                        if (compDict[this.target[i].name])
-                            new Lumens.Link().from(compDict[this.name]).to(compDict[this.target[i].name]).draw();
+                        if (compDict[this.target[i].id])
+                            new Lumens.Link().from(compDict[this.id]).to(compDict[this.target[i].id]).draw();
                     }
                 }
             });

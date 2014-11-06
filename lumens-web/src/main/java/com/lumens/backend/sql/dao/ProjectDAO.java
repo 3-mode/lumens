@@ -84,6 +84,33 @@ public class ProjectDAO extends BaseDAO {
         return project.id;
     }
 
+    public long delete(final long projectId) {
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus paramTransactionStatus) {
+                try {
+                    jdbcTemplate.execute(new PreparedStatementCreator() {
+                        @Override
+                        public PreparedStatement createPreparedStatement(Connection cnctn) throws SQLException {
+                            return cnctn.prepareStatement(sqlManager.getSQL("ProjectDAO/DeleteProject"));
+                        }
+                    }, new PreparedStatementCallback<Boolean>() {
+                        @Override
+                        public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                            ps.setLong(1, projectId);
+                            return ps.execute();
+                        }
+                    });
+                } catch (Exception e) {
+                    //use this to rollback exception in case of exception
+                    paramTransactionStatus.setRollbackOnly();
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        return projectId;
+    }
+
     public List<Project> getAllShortProject() {
         final List<Project> pList = new ArrayList<>();
         jdbcTemplate.query(sqlManager.getSQL("ProjectDAO/AllShortProject"), new RowCallbackHandler() {

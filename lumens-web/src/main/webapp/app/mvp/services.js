@@ -152,8 +152,8 @@ Lumens.services.factory('FormatRegister', function() {
             LumensLog.log("Rule entity:", $scope.transformRuleEntity);
             var transformRuleEntry = $scope.transformRuleEntity.transformRuleEntry;
             transformRuleEntry.name = ruleRegName;
-            transformRuleEntry.source_name = this.isInValidSource($scope) ? "" : $scope.currentUIComponent.getFrom(0).getConfig().short_desc;
-            transformRuleEntry.target_name = this.isInValidTarget($scope) ? "" : $scope.currentUIComponent.getTo(0).getConfig().short_desc;
+            transformRuleEntry.source_id = this.isInValidSource($scope) ? "" : $scope.currentUIComponent.getFrom(0).getId();
+            transformRuleEntry.target_id = this.isInValidTarget($scope) ? "" : $scope.currentUIComponent.getTo(0).getId();
             transformRuleEntry.source_format_name = $scope.inputFormatRegName ? $scope.inputFormatRegName : ($scope.outputFormatRegName ? $scope.outputFormatRegName : "");
             transformRuleEntry.target_format_name = $scope.outputFormatRegName ? $scope.outputFormatRegName : "";
             var selectedSourceFormat = this.findRootFormat($scope.displaySourceFormatList, inSelectedName);
@@ -200,7 +200,6 @@ Lumens.services.factory('FormatRegister', function() {
                 }
                 transformRuleEntry.push(result.ruleEntry);
             }
-            console.log("TranformList: ", componentInfo);
         },
         saveToFormatList: function($scope, result, direction) {
             var formatEntry, formatName, format;

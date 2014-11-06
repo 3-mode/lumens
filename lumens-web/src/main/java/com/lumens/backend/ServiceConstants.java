@@ -14,6 +14,8 @@ public interface ServiceConstants {
     public String UPDATE = "update";
     public String EXECUTE = "execute";
     public String ACTIVE = "active";
+    public String DEPLOY = "deploy";
+    public String DELETE = "delete";
     public String CONTENT = "content";
     public String ACTION = "action";
     public String CURRENT__EDITING__PROJECT = "Current_Editing_Project";

@@ -20,6 +20,8 @@ import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.Pair;
 import com.lumens.backend.ServerUtils;
 import com.lumens.backend.ServiceConstants;
+import static com.lumens.backend.ServiceConstants.ACTIVE;
+import static com.lumens.backend.ServiceConstants.DELETE;
 import com.lumens.backend.sql.DAOFactory;
 import com.lumens.backend.sql.dao.ProjectDAO;
 import com.lumens.backend.sql.entity.Project;
@@ -65,11 +67,14 @@ public class ProjectService implements ServiceConstants {
                 return createProject(contentJson);
             else if (UPDATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
                 return updateProject(projectID, contentJson);
-            else if (EXECUTE.equalsIgnoreCase(action)) {
-                return executeProjectJob(projectID);
-            } else if (ACTIVE.equalsIgnoreCase(action)) {
+            else if (DELETE.equalsIgnoreCase(action))
+                return deleteProject(projectID, req);
+            else if (DEPLOY.equalsIgnoreCase(action))
+                return deployProject(projectID, req);
+            else if (ACTIVE.equalsIgnoreCase(action))
                 return activeProject(projectID, req);
-            }
+            else if (EXECUTE.equalsIgnoreCase(action))
+                return executeProjectJob(projectID);
         }
         return Response.ok().entity(String.format("{ \"message\": %s }", "Fail")).build();
     }
@@ -127,6 +132,7 @@ public class ProjectService implements ServiceConstants {
         try {
             ByteArrayInputStream bais = new ByteArrayInputStream(contentJson.asText().getBytes(UTF_8));
             TransformProject project = new TransformProject();
+            // Load it first to verify the project
             new ProjectSerializer(project).readFromJson(bais);
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
             long projectId = pDAO.create(new Project(ServerUtils.generateID(), project.getName(), project.getDescription(), contentJson.asText()));
@@ -362,5 +368,36 @@ public class ProjectService implements ServiceConstants {
             }
         }
         return Response.ok().entity("Not implemented").build();
+    }
+
+    private Response deleteProject(long projectID, HttpServletRequest req) {
+        try {
+            ProjectDAO pDAO = DAOFactory.getProjectDAO();
+            pDAO.delete(projectID);
+            JsonUtility utility = JsonUtility.createJsonUtility();
+            JsonGenerator json = utility.getGenerator();
+            json.writeStartObject();
+            json.writeStringField("status", "OK");
+            json.writeObjectFieldStart("result_content");
+            json.writeArrayFieldStart("project");
+            json.writeStartObject();
+            json.writeNumberField("id", projectID);
+            json.writeEndObject();
+            json.writeEndArray();
+            json.writeEndObject();
+            json.writeEndObject();
+            return Response.ok().entity(utility.toUTF8String()).build();
+        } catch (Exception e) {
+            return ServerUtils.getErrorMessageResponse(e);
+        }
+    }
+
+    private Response deployProject(long projectID, HttpServletRequest req) {
+        try {
+            this.getProject(projectID, req);
+            return this.activeProject(projectID, req);
+        } catch (Exception e) {
+            return ServerUtils.getErrorMessageResponse(e);
+        }
     }
 }

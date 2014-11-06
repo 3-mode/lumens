@@ -262,13 +262,30 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                         messageBox.showError(i18n.id_save_proj_err.format(project.name), messageBoxParent);
                 });
             }
-        } else if ("id_active" === id) {
+        }
+        else if ("id_active" === id) {
             ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function(result) {
                 LumensLog.log(result);
             });
         }
-        else
-            LumensLog.log("Clicked:", id);
+        else if ("id_deploy" === id) {
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'deploy'}, function(result) {
+                LumensLog.log(result);
+            });
+        }
+        else if ("id_execute" === id) {
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'execute'}, function(result) {
+                LumensLog.log(result);
+            });
+        }
+        else if ("id_delete" === id) {
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'delete'}, function(result) {
+                if (result.status === "OK")
+                    projectOperator.close();
+                LumensLog.log(result);
+            });
+        }
+        LumensLog.log("Clicked:", id);
     };
 })
 .controller("ProjectListCtrl", function($scope, $element, ProjectList, ProjectById) {
@@ -623,4 +640,5 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         $scope.$parent.ruleRegName = $scope.registeredRuleName;
         $element.modal("hide");
     }
-});
+})
+;
