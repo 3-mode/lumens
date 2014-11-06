@@ -199,9 +199,9 @@ public class EngineTest extends Assert implements SoapConstants {
 
         DataSource ws = new DataSource("type-soap", "20003");
         Map<String, Value> wsProps = new HashMap<>();
-        wsProps.put(WSDL, new Value("http://webservice.webxml.com.cn/webservices/DomesticAirline.asmx?wsdl"));
+        wsProps.put(WSDL, new Value("http://webservice.webxml.com.cn/webservices/DomesticAirline.asmx?wsdl"));/*
         wsProps.put(PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
-        wsProps.put(PROXY_PORT, new Value(8080));
+        wsProps.put(PROXY_PORT, new Value(8080));//*/
         ws.setPropertyList(wsProps);
         ws.setName("Airline query soap");
         ws.setDescription("Airline query soap test");

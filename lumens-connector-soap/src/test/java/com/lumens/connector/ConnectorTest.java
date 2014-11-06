@@ -13,6 +13,7 @@ import com.lumens.model.Value;
 import com.lumens.model.serializer.ElementSerializer;
 import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.Processor;
+import com.lumens.processor.script.JavaScriptContext;
 import com.lumens.processor.transform.TransformProcessor;
 import com.lumens.processor.transform.TransformRule;
 import java.util.Arrays;
@@ -37,6 +38,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
      */
     public ConnectorTest(String testName) {
         super(testName);
+        JavaScriptContext.start();
     }
 
     /**

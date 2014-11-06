@@ -7,6 +7,7 @@ package com.lumens.processor;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
 import com.lumens.model.Type;
+import com.lumens.processor.script.JavaScriptContext;
 import com.lumens.processor.transform.TransformRule;
 import com.lumens.processor.transform.TransformUtils;
 import com.lumens.processor.transform.serializer.TransformRuleSerializer;
@@ -24,6 +25,7 @@ public class TransformRuleTest extends TestCase {
 
     public TransformRuleTest(String testName) {
         super(testName);
+        JavaScriptContext.start();
     }
 
     public void testReadTransformRuleFromXml() throws Exception {

@@ -13,6 +13,7 @@ import com.lumens.model.serializer.ElementSerializer;
 import com.lumens.processor.route.RouteProcessor;
 import com.lumens.processor.route.RouteRule;
 import com.lumens.processor.script.JavaScriptBuilder;
+import com.lumens.processor.script.JavaScriptContext;
 import com.lumens.processor.transform.TransformProcessor;
 import com.lumens.processor.transform.TransformRule;
 import java.io.ByteArrayOutputStream;
@@ -36,6 +37,7 @@ extends TestCase {
      */
     public ProcessorTest(String testName) {
         super(testName);
+        JavaScriptContext.start();
     }
 
     /**

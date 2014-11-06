@@ -4,6 +4,7 @@
 package com.lumens.engine;
 
 import com.lumens.connector.ConnectorFactory;
+import com.lumens.processor.script.JavaScriptContext;
 
 /**
  *
@@ -20,6 +21,7 @@ public class EngineContext {
 
     public static void start(ConnectorFactoryHolder fHolder) {
         instance = new EngineContext(fHolder);
+        JavaScriptContext.start();
     }
 
     public static EngineContext getContext() {
