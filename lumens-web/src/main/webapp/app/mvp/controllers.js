@@ -364,6 +364,8 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
             $scope.currentTransformRule = null;
             $scope.inputFormatRegName = null;
             $scope.outputFormatRegName = null;
+            $scope.inputSelectedFormatName = null;
+            $scope.outputSelectedFormatName = null;
             $scope.ruleRegName = null;
             showRuleEditor();
         } else if (id_btn === "id_rule_delete") {
@@ -511,12 +513,14 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
             FormatList.getIN({project_id: projectOperator.get().projectId, component_name: sourceComponentName}, function(result) {
                 $scope.sourceFormatList = result.content.format_list;
                 $scope.displaySourceFormatList = $scope.sourceFormatList;
+                $scope.onCommand("id_format_reg_filter_btn", "left");
             });
         }
         if (targetComponentName) {
             FormatList.getIN({project_id: projectOperator.get().projectId, component_name: targetComponentName}, function(result) {
                 $scope.targetFormatList = result.content.format_list;
                 $scope.displayTargetFormatList = $scope.targetFormatList;
+                $scope.onCommand("id_format_reg_filter_btn", "right");
             });
         }
 
