@@ -17,7 +17,7 @@ public class JavaScript implements Script {
     private ScriptableObject globalScope;
     private final JavaScriptBuilder builder = new JavaScriptBuilder();
     private final String orignalScriptText;
-    private final String sourceName;
+    private final Scriptable currentScope;
     private Function jsFunction;
 
     public JavaScript(String script) throws Exception {
@@ -25,11 +25,20 @@ public class JavaScript implements Script {
     }
 
     public JavaScript(String sourceName, String scriptText) throws Exception {
-        // TODO refine here, put the context initialization to gloabl place, in
-        // order to load build in function only once
-        this.globalScope = JavaScriptContext.getContext().getGlobalScope();
-        this.sourceName = sourceName;
         this.orignalScriptText = scriptText;
+        this.globalScope = JavaScriptContext.getContext().getGlobalScope();
+        org.mozilla.javascript.Context jsCTX = org.mozilla.javascript.Context.enter();
+        currentScope = jsCTX.initStandardObjects(globalScope);
+        jsFunction = jsCTX.compileFunction(currentScope, builder.build(orignalScriptText), sourceName, 1, null);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            super.finalize();
+        } finally {
+            org.mozilla.javascript.Context.exit();
+        }
     }
 
     @Override
@@ -39,9 +48,9 @@ public class JavaScript implements Script {
                 Object[] args = {
                     ctx
                 };
+                // Enter a new context for current execution thread to invoke the function
                 org.mozilla.javascript.Context jsCTX = org.mozilla.javascript.Context.enter();
                 Scriptable scope = jsCTX.initStandardObjects(globalScope);
-                jsFunction = jsCTX.compileFunction(scope, builder.build(orignalScriptText), sourceName, 1, null);
                 Object result = jsFunction.call(jsCTX, scope, scope, args);
                 if (result instanceof NativeJavaObject) {
                     NativeJavaObject nativeObj = (NativeJavaObject) result;
