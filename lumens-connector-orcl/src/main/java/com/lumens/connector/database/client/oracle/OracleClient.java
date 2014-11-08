@@ -108,7 +108,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
             ret = stat.executeQuery(String.format(TABLECOLUMNS, format.getName()));
             if (!ret.isClosed()) {
                 Format fields = format.getChild(FIELDS);
-                if (fields != null && fields.getChildren() == null || fields.getChildren().size() == 0) {
+                if (fields != null && fields.getChildren() == null || fields.getChildren().isEmpty()) {
                     while (ret.next()) {
                         String columnName = ret.getString(1);
                         String dataType = ret.getString(2);
