@@ -3,37 +3,37 @@
     <database-access-object name="ProjectDAO">
         <sql name="total">
  <![CDATA[
- SELECT count(1) FROM project
+ SELECT count(1) FROM LUNS_PROJECT
  ]]>
         </sql>
         <sql name="AllProject">
 <![CDATA[
-SELECT id, name, description, data FROM project
+SELECT id, name, description, data FROM LUNS_PROJECT
 ]]>
         </sql>
         <sql name="AllShortProject">
 <![CDATA[
-SELECT id, name, description FROM project
+SELECT id, name, description FROM LUNS_PROJECT
 ]]>
         </sql>
         <sql name="FindProject">
 <![CDATA[
-SELECT id, name, description, data FROM project WHERE id = %d
+SELECT id, name, description, data FROM LUNS_PROJECT WHERE id = %d
 ]]>
         </sql>
         <sql name="CreateProject">
 <![CDATA[
-INSERT INTO project (id, name, description, data) VALUES (?,?,?,?)
+INSERT INTO LUNS_PROJECT (id, name, description, data) VALUES (?,?,?,?)
 ]]>
         </sql>
         <sql name="UpdateProject">
 <![CDATA[
-UPDATE project set name=?, description=?, data=? WHERE id = ?
+UPDATE LUNS_PROJECT set name=?, description=?, data=? WHERE id = ?
 ]]>
         </sql> 
         <sql name="DeleteProject">
 <![CDATA[
-DELETE FROM project WHERE id = ?
+DELETE FROM LUNS_PROJECT WHERE id = ?
 ]]>
         </sql>
     </database-access-object>

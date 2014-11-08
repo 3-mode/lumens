@@ -82,7 +82,7 @@ a, a:focus, a:hover {
 .lumens .lumens-gradient{
     width:300px;
     height:150px;
-    /*IE start*/
+    /*IE start
     filter:alpha(opacity=20 finishopacity=10 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#eeeeee,endcolorstr=rgba(187, 187, 187, 0.5),gradientType=0);
     -ms-filter:alpha(opacity=20 finishopacity=10 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#eeeeee,endcolorstr=rgba(187, 187, 187, 0.5),gradientType=0);/*IE8*/	
     /*IE end*/
