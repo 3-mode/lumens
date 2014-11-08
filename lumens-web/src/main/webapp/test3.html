@@ -42,12 +42,15 @@
         <script src="libs/angular/angular.js"></script>
         <script src="libs/angular/angular-route.js"></script>
         <script src="libs/angular/angular-resource.js"></script>
-        <!-- Application Angular Modules -->
-        <script src="app/mvp/controllers.js"></script>
-        <script src="app/mvp/directives.js"></script>
-        <script src="app/mvp/services.js"></script>
         <!-- Application Entry JS -->
         <script src="app/lumens.js"></script>
+        <!-- Application Angular Modules -->
+        <script src="app/mvp/controllers/main_controller.js"></script>
+        <script src="app/mvp/controllers/dashboard_controller.js"></script>
+        <script src="app/mvp/controllers/manage_controller.js"></script>
+        <script src="app/mvp/controllers/designer_controller.js"></script>
+        <script src="app/mvp/directives.js"></script>
+        <script src="app/mvp/services.js"></script>
         <style type="text/css">
         </style>
         <script type="text/javascript">
@@ -56,7 +59,7 @@
                 var i18n = $scope.i18n = Lumens.i18n;
                 $scope.currentProjectId = 1398880523481;
                 // Load format and rule list editing panel
-                TransformEditTemplate.get(function(transformEditTemplate) {
+                TransformEditTemplate.get(function (transformEditTemplate) {
                     $scope.transformEditPanel = new Lumens.ResizableVSplitLayoutExt($("body"))
                     .configure({
                         mode: "vertical",
@@ -64,14 +67,14 @@
                         part1Size: "40%"
                     });
                     $compile(transformEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart1Element());
-                    $(window).resize(function(evt) {
+                    $(window).resize(function (evt) {
                         if (evt.target !== this)
                             return;
                         $scope.transformEditPanel.getElement().trigger("resize");
                         $scope.transformEditPanel.getElement().find(".lumens-format-panel").trigger("resize");
                     });
                     // Load script editing panel
-                    ScriptEditTemplate.get(function(scriptEditTemplate) {
+                    ScriptEditTemplate.get(function (scriptEditTemplate) {
                         $compile(scriptEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart2Element());
                     })
                 });

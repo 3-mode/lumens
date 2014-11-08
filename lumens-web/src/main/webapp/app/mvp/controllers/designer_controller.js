@@ -2,31 +2,7 @@
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
-Lumens.controllers = angular.module("lumens-controllers", ["ngRoute"]);
-Lumens.controllers.controller("MainViewCtrl", function($scope, $route, $http, $compile) {
-    // Set the default page view as dashboard view
-    Lumens.system.rootLayout = new Lumens.RootLayout($('#id-main-view')).configure();
-    Lumens.system.theLayout = new Lumens.SplitLayout(Lumens.system.rootLayout).configure({
-        mode: "vertical",
-        part1Size: 52
-    });
-    Lumens.system.sysHeader = new Lumens.Header(Lumens.system.theLayout.getPart1Element()).setSysTitle("JAMES");
-    Lumens.system.navToolbar = new Lumens.NavToolbar(Lumens.system.sysHeader.getElement()).configure(Lumens.SysToolbar_Config);
-    Lumens.system.theLayout.getPart2Element().append($compile('<div ng-view />')($scope));
-})
-.controller("DashboardViewCtrl", function($scope, $route, $http, $compile) {
-    LumensLog.log("in DashboardViewCtrl");
-    Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
-    if (Lumens.system.designView.workspaceLayout)
-        Lumens.system.designView.workspaceLayout.remove();
-})
-.controller("ManageViewCtrl", function($scope, $route, $http, $compile) {
-    LumensLog.log("in ManageViewCtrl");
-    Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
-    if (Lumens.system.designView.workspaceLayout)
-        Lumens.system.designView.workspaceLayout.remove();
-})
-.controller("DesignViewCtrl", function(
+Lumens.controllers.controller("DesignViewCtrl", function (
 $scope, $route, $http, $compile,
 DesignNavMenu, SuccessTemplate, WarningTemplate, ErrorTemplate, PropFormTemplate, TransformListTemplate,
 DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
@@ -50,10 +26,10 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
     $scope.componentProps = {Name: {value: "to select"}};
     // Load templates
     $scope.messageBox = new Lumens.Message({success: SuccessTemplate, warning: WarningTemplate, error: ErrorTemplate});
-    TransformListTemplate.get(function(templ) {
+    TransformListTemplate.get(function (templ) {
         $scope.transformListTemplate = templ;
     });
-    $scope.onApplyProperty = function(event) {
+    $scope.onApplyProperty = function (event) {
         LumensLog.log("Apply:", event);
         LumensLog.log("Current editing props:", $scope.componentProps);
         LumensLog.log("Current editing component:", $scope.currentComponent);
@@ -63,31 +39,31 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
     };
 
     // Load menu category
-    DesignNavMenu.get(function(menu) {
+    DesignNavMenu.get(function (menu) {
         // Load data source category
-        $.getJSON("app/mock/json/data_source_category.json", function(mock_category) {
-            DatasourceCategory.get(function(data_source_items) {
-                $.each(mock_category.items, function() {
+        $.getJSON("app/mock/json/data_source_category.json", function (mock_category) {
+            DatasourceCategory.get(function (data_source_items) {
+                $.each(mock_category.items, function () {
                     data_source_items.items.push(this);
                 });
                 //Load instrument category
-                InstrumentCategory.get(function(instrument_items) {
+                InstrumentCategory.get(function (instrument_items) {
                     menu.sections[0].items = data_source_items.items;
                     menu.sections[1].items = instrument_items.items;
                     jSyncHtml.get(instrument_items.items);
                     // Create a dictionary to find the correct icon
                     $scope.compCagegory = {};
-                    $.each(data_source_items.items, function() {
+                    $.each(data_source_items.items, function () {
                         $scope.compCagegory[this.type] = this;
                     });
-                    $.each(instrument_items.items, function() {
+                    $.each(instrument_items.items, function () {
                         $scope.compCagegory[this.type] = this;
                     });
                     desgin.barPanel = new Lumens.SplitLayout(Lumens.system.designView.workspaceLayout.getPart2Element()).configure({
                         mode: "vertical",
                         part1Size: 48
                     });
-                    DesignButtons.get(function(design_command_tmpl) {
+                    DesignButtons.get(function (design_command_tmpl) {
                         $compile(design_command_tmpl)($scope).appendTo(desgin.barPanel.getPart1Element());
                     });
 
@@ -101,26 +77,26 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                     desgin.designPanel = new Lumens.ComponentPanel(desgin.designAndInfoPanel.getPart1Element())
                     .configure({
                         panelStyle: {width: "100%", height: "100%"},
-                        onComponentDblclick: function(component) {
+                        onComponentDblclick: function (component) {
                             LumensLog.log("Dblclick:", component);
                             if ($scope.currentUIComponent === component)
                                 return;
                             $scope.currentUIComponent = component;
                             var config = component.configure;
-                            $scope.$apply(function() {
+                            $scope.$apply(function () {
                                 $scope.componentForm = $compile(component.getFormHtml())($scope);
                                 $scope.categoryInfo = config.category_info;
                                 $scope.componentProps = ComponentPropertyList(config);
                                 $scope.currentComponent = config.component_info ? config.component_info : $scope.currentComponent
                             });
                         },
-                        onBeforeComponentAdd: function() {
+                        onBeforeComponentAdd: function () {
                             if ($scope.project)
                                 return true;
                             $scope.messageBox.showWarning(i18n.id_no_project_warning, desgin.designPanel.getElement());
                             return false;
                         },
-                        onAfterComponentAdd: function(component) {
+                        onAfterComponentAdd: function (component) {
                             LumensLog.log("Added compnoent:", component);
                             $scope.projectOperator.add(component.getCompData(), component.getClassType());
                         }
@@ -131,7 +107,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                         container: desgin.leftPanel.getElement(),
                         width: "100%",
                         height: "auto"
-                    }).configure(menu, function(item, data) {
+                    }).configure(menu, function (item, data) {
                         item.find("a").addClass("data-comp-node").draggable({
                             appendTo: $("#id-data-comp-container"),
                             helper: "clone"
@@ -156,21 +132,21 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                                 "Resources",
                                 "Instruments"
                             ],
-                            buildContent: function(itemContent, isExpand, title) {
+                            buildContent: function (itemContent, isExpand, title) {
                                 if (isExpand) {
                                     var itemID = title.attr("id");
                                     if (itemID === "Description") {
-                                        $http.get("app/templates/project_desc_tmpl.html").success(function(project_desc_tmpl) {
+                                        $http.get("app/templates/project_desc_tmpl.html").success(function (project_desc_tmpl) {
                                             itemContent.append($compile(project_desc_tmpl)($scope));
                                         });
                                     }
                                     else if (itemID === "Resources") {
-                                        $http.get("app/templates/resources_tmpl.html").success(function(resources_tmpl) {
+                                        $http.get("app/templates/resources_tmpl.html").success(function (resources_tmpl) {
                                             itemContent.append($compile(resources_tmpl)($scope));
                                         });
                                     }
                                     else if (itemID === "Instruments") {
-                                        $http.get("app/templates/instruments_tmpl.html").success(function(instruments_tmpl) {
+                                        $http.get("app/templates/instruments_tmpl.html").success(function (instruments_tmpl) {
                                             itemContent.append($compile(instruments_tmpl)($scope));
                                         });
                                     }
@@ -186,11 +162,11 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                             titleList: [
                                 $compile('<span data-bind="categoryInfo.name">{{categoryInfo.name}}</span>')($scope)
                             ],
-                            buildContent: function(itemContent, isExpand, title) {
+                            buildContent: function (itemContent, isExpand, title) {
                                 if (isExpand) {
                                     var itemID = title.attr("id");
                                     if (itemID === "ComponentProps") {
-                                        PropFormTemplate.get(function(propFormTmpl) {
+                                        PropFormTemplate.get(function (propFormTmpl) {
                                             itemContent.append($compile(propFormTmpl)($scope));
                                         })
                                     }
@@ -216,20 +192,20 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
     });
     // <******* Design View ------------------------------------------------------------
 })
-.controller("DesginCmdCtrl", function($scope, $element, $compile, ProjectListModal, ProjectCreateModal, ProjectSave, ProjectById) {
+.controller("DesginCmdCtrl", function ($scope, $element, $compile, ProjectListModal, ProjectCreateModal, ProjectSave, ProjectById) {
     // Handle desgin command button event
     LumensLog.log("In DesginCmdCtrl", $element);
     var i18n = $scope.i18n;
     var projectOperator = $scope.projectOperator;
     var messageBoxParent = $scope.desgin.designPanel.getElement();
     var messageBox = $scope.messageBox;
-    $scope.onCommand = function(id) {
+    $scope.onCommand = function (id) {
         if ("id_open" === id) {
             if ($element.find('#projectListModal').length === 0) {
-                ProjectListModal.get(function(project_list_modal_tmpl) {
+                ProjectListModal.get(function (project_list_modal_tmpl) {
                     var projectListDialog = $element.find("#project_dialog");
                     projectListDialog.append($compile(project_list_modal_tmpl)($scope));
-                    $('#projectListModal').on("hidden.bs.modal", function() {
+                    $('#projectListModal').on("hidden.bs.modal", function () {
                         projectListDialog.empty();
                     }).modal({backdrop: "static"});
                 });
@@ -237,10 +213,10 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         }
         else if ("id_new" === id) {
             if ($element.find('#projectCreateModal').length === 0) {
-                ProjectCreateModal.get(function(project_create_modal_tmpl) {
+                ProjectCreateModal.get(function (project_create_modal_tmpl) {
                     var projectCreateDialog = $element.find("#project_dialog");
                     projectCreateDialog.append($compile(project_create_modal_tmpl)($scope));
-                    $('#projectCreateModal').on("hidden.bs.modal", function() {
+                    $('#projectCreateModal').on("hidden.bs.modal", function () {
                         projectCreateDialog.empty();
                     }).modal({backdrop: "static"});
                 });
@@ -251,7 +227,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                 projectOperator.sync();
                 LumensLog.log("Saving project:", projectOperator.get());
                 LumensLog.log("Saveing propery:", $scope.$parent.componentProps);
-                ProjectSave.save(projectOperator.get(), function(response) {
+                ProjectSave.save(projectOperator.get(), function (response) {
                     LumensLog.log("Save project status:", response);
                     if (response.status === "OK") {
                         var project = response.result_content.project[0];
@@ -264,22 +240,22 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
             }
         }
         else if ("id_active" === id) {
-            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function(result) {
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function (result) {
                 LumensLog.log(result);
             });
         }
         else if ("id_deploy" === id) {
-            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'deploy'}, function(result) {
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'deploy'}, function (result) {
                 LumensLog.log(result);
             });
         }
         else if ("id_execute" === id) {
-            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'execute'}, function(result) {
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'execute'}, function (result) {
                 LumensLog.log(result);
             });
         }
         else if ("id_delete" === id) {
-            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'delete'}, function(result) {
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'delete'}, function (result) {
                 if (result.status === "OK")
                     projectOperator.close();
                 LumensLog.log(result);
@@ -288,19 +264,19 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         LumensLog.log("Clicked:", id);
     };
 })
-.controller("ProjectListCtrl", function($scope, $element, ProjectList, ProjectById) {
+.controller("ProjectListCtrl", function ($scope, $element, ProjectList, ProjectById) {
     var i18n = $scope.i18n;
     var projectOperator = $scope.projectOperator;
     var messageBox = $scope.messageBox;
     var projectListContent = $element.find(".modal-body");
-    $scope.selectProject = function(index, event) {
+    $scope.selectProject = function (index, event) {
         $scope.selectIndex = index;
         $scope.currentProjectId = $(event.target).parent().attr("project-id");
     };
-    $scope.openProject = function() {
+    $scope.openProject = function () {
         LumensLog.log("Opening project:", $scope.currentProjectId);
         if ($scope.currentProjectId) {
-            ProjectById.get({project_id: $scope.currentProjectId}, function(projectData) {
+            ProjectById.get({project_id: $scope.currentProjectId}, function (projectData) {
                 if (projectOperator)
                     projectOperator.import(projectData);
             });
@@ -311,20 +287,20 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         }
         $element.modal("hide");
     };
-    ProjectList.get(function(projectsResponse) {
+    ProjectList.get(function (projectsResponse) {
         $scope.projects = projectsResponse.content.project;
         projectListContent.find("#projectLoading").remove();
         projectListContent.children().show();
     });
 })
-.controller("ProjectCreateCtrl", function($scope, $element) {
+.controller("ProjectCreateCtrl", function ($scope, $element) {
     LumensLog.log("In ProjectCreateCtrl", $element);
     var i18n = $scope.$parent.i18n;
     var messageBoxParent = $scope.desgin.designPanel.getElement();
     var projectInfoContent = $element.find(".modal-body");
     var messageBox = $scope.messageBox;
     var projectOperator = $scope.projectOperator;
-    $scope.createProject = function() {
+    $scope.createProject = function () {
         if ($scope.projectName) {
             projectOperator.create($scope.projectName, $scope.projectDescription);
             messageBox.showSuccess(i18n.id_new_project_successfully, messageBoxParent);
@@ -334,14 +310,14 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
             messageBox.showWarning(i18n.id_no_project_name, projectInfoContent);
     };
 })
-.controller("TransformListCtrl", function($scope, $compile, $element, TransformEditTemplate, RuleEditorService) {
+.controller("TransformListCtrl", function ($scope, $compile, $element, TransformEditTemplate, RuleEditorService) {
     LumensLog.log("In TransformListCtrl", $element);
     $scope.ruleEditorService = RuleEditorService.create();
 
     function showRuleEditor() {
         Lumens.system.designView.workspaceLayout.hide();
         //TODO show to the transform editing
-        TransformEditTemplate.get(function(transformEditTemplate) {
+        TransformEditTemplate.get(function (transformEditTemplate) {
             $scope.transformEditPanel = new Lumens.ResizableVSplitLayoutExt(Lumens.system.theLayout.getPart2Element())
             .configure({
                 mode: "vertical",
@@ -349,7 +325,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                 part1Size: "40%"
             });
             var transforEditor = $compile(transformEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart1Element());
-            $(window).resize(function(evt) {
+            $(window).resize(function (evt) {
                 if (evt.target !== this)
                     return;
                 $scope.transformEditPanel.getElement().trigger("resize");
@@ -358,7 +334,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         });
     }
 
-    $scope.onRuleCommand = function(id_btn) {
+    $scope.onRuleCommand = function (id_btn) {
         if (id_btn === "id_rule_new") {
             LumensLog.log("New rule");
             $scope.currentTransformRule = null;
@@ -372,7 +348,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         }
     };
 
-    $scope.openTransformEditing = function(ruleEntry) {
+    $scope.openTransformEditing = function (ruleEntry) {
         LumensLog.log("Opening rule: ", ruleEntry);
         $scope.currentTransformRule = ruleEntry;
         $scope.inputFormatRegName = ruleEntry.source_format_name;
@@ -385,15 +361,15 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         showRuleEditor();
     };
 
-    $scope.backFromTransformEditing = function() {
+    $scope.backFromTransformEditing = function () {
         $scope.transformEditPanel.remove();
         Lumens.system.designView.workspaceLayout.show();
     };
 
     // Init the trnasformation rule list to show all rules
-    $scope.$watch(function() {
+    $scope.$watch(function () {
         return $scope.currentUIComponent;
-    }, function(currentUIComponent) {
+    }, function (currentUIComponent) {
         if (!currentUIComponent || !currentUIComponent.configure)
             return;
         if (currentUIComponent.configure.component_info.transform_rule_entry)
@@ -412,14 +388,14 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
             $scope.theTargetNameList = [];
     });
 })
-.controller("TransformEditCtrl", function($scope, $element, $compile, FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
+.controller("TransformEditCtrl", function ($scope, $element, $compile, FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
     LumensLog.log("In TransformEditCtrl");
     $scope.ruleEditorService.addScope($scope);
     // Load script editing panel
-    ScriptEditTemplate.get(function(scriptEditTemplate) {
+    ScriptEditTemplate.get(function (scriptEditTemplate) {
         $compile(scriptEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart2Element());
     })
-    $scope.setScript = function(script) {
+    $scope.setScript = function (script) {
         if ($scope.currentScriptNode)
             $scope.currentScriptNode.setScript(script);
     }
@@ -430,7 +406,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                 return {
                     // TODO
                     transformRuleEntry: ruleEntry[0],
-                    clickCallBack: function(target) {
+                    clickCallBack: function (target) {
                         $scope.currentScriptNode = target;
                         $scope.ruleEditorService.sync(target.getScript());
                     }
@@ -441,7 +417,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                         return {
                             // TODO
                             transformRuleEntry: ruleEntry[i],
-                            clickCallBack: function(target) {
+                            clickCallBack: function (target) {
                                 $scope.currentScriptNode = target;
                                 $scope.ruleEditorService.sync(target.getScript());
                             }
@@ -452,7 +428,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         }
         function buildTransformRuleTree(location_tokens) {
             var rootRuleItem, currentRuleItem;
-            $.each(location_tokens, function() {
+            $.each(location_tokens, function () {
                 if (!rootRuleItem) {
                     currentRuleItem = rootRuleItem = {
                         "format_name": this.name
@@ -475,7 +451,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         $element.find("div[rule-entity]").droppable({
             greedy: true,
             accept: ".lumens-tree-node",
-            drop: function(event, ui) {
+            drop: function (event, ui) {
                 var data = $.data(ui.draggable.get(0), "tree-node-data");
                 LumensLog.log("Dropped", data);
                 // TODO compare root
@@ -500,7 +476,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                 ];
                 if ($scope.currentComponent.transform_rule_entry) {
                     $scope.currentComponent.transform_rule_entry.concat(transformRuleEntry);
-                    $scope.$apply(function() {
+                    $scope.$apply(function () {
                         $scope.transformRuleEntity = buildTransformRuleEntry($scope.ruleRegName, transformRuleEntry, true);
                     });
                 }
@@ -510,21 +486,21 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         $scope.transformRuleEntity = buildTransformRuleEntry($scope.ruleRegName, $scope.currentUIComponent.getTransformRuleEntry(), false);
 
         if (sourceComponentName) {
-            FormatList.getIN({project_id: projectOperator.get().projectId, component_name: sourceComponentName}, function(result) {
+            FormatList.getIN({project_id: projectOperator.get().projectId, component_name: sourceComponentName}, function (result) {
                 $scope.sourceFormatList = result.content.format_list;
                 $scope.displaySourceFormatList = $scope.sourceFormatList;
                 $scope.onCommand("id_format_reg_filter_btn", "left");
             });
         }
         if (targetComponentName) {
-            FormatList.getIN({project_id: projectOperator.get().projectId, component_name: targetComponentName}, function(result) {
+            FormatList.getIN({project_id: projectOperator.get().projectId, component_name: targetComponentName}, function (result) {
                 $scope.targetFormatList = result.content.format_list;
                 $scope.displayTargetFormatList = $scope.targetFormatList;
                 $scope.onCommand("id_format_reg_filter_btn", "right");
             });
         }
 
-        $scope.onCommand = function(btn_id, side) {
+        $scope.onCommand = function (btn_id, side) {
             LumensLog.log(btn_id, side);
             $scope.selectedSide = side;
             if (side && "id_format_reg_edit_btn" === btn_id) {
@@ -533,19 +509,19 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                 else if ("right" === side)
                     $scope.currentFormatList = $scope.targetFormatList;
 
-                FormatRegistryModal.get(function(format_reg_edit_tmpl) {
+                FormatRegistryModal.get(function (format_reg_edit_tmpl) {
                     var formatRegEditDialog = $element.find("#reg_edit_dialog");
                     formatRegEditDialog.append($compile(format_reg_edit_tmpl)($scope));
-                    $('#formatRegistryModal').on("hidden.bs.modal", function() {
+                    $('#formatRegistryModal').on("hidden.bs.modal", function () {
                         formatRegEditDialog.empty();
                     }).modal({backdrop: "static"});
                 });
             }
             else if ("id_rule_reg_edit_btn" === btn_id) {
-                RuleRegistryModal.get(function(rule_reg_edit_tmpl) {
+                RuleRegistryModal.get(function (rule_reg_edit_tmpl) {
                     var ruleRegEditDialog = $element.find("#reg_edit_dialog");
                     ruleRegEditDialog.append($compile(rule_reg_edit_tmpl)($scope));
-                    $('#ruleRegistryModal').on("hidden.bs.modal", function() {
+                    $('#ruleRegistryModal').on("hidden.bs.modal", function () {
                         ruleRegEditDialog.empty();
                     }).modal({backdrop: "static"});
                 });
@@ -592,14 +568,14 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         }
     }
 })
-.controller("RuleScriptCtrl", function($scope, RuleRegister, FormatRegister) {
+.controller("RuleScriptCtrl", function ($scope, RuleRegister, FormatRegister) {
     $scope.ruleEditorService.addScope($scope);
-    $scope.setScript = function(script) {
+    $scope.setScript = function (script) {
         if (!script)
             script = "";
         $scope.transformRuleScriptEditor.setValue(script);
     };
-    $scope.onCommand = function(id_script_btn) {
+    $scope.onCommand = function (id_script_btn) {
         if (id_script_btn === "id_script_apply") {
             $scope.ruleEditorService.sync($scope.transformRuleScriptEditor.getValue());
         }
@@ -617,7 +593,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
     }
     LumensLog.log("In RuleScriptCtrl");
 })
-.controller("FormatRegistryCtrl", function($scope, $element) {
+.controller("FormatRegistryCtrl", function ($scope, $element) {
     if ($scope.selectedSide === 'left') {
         $scope.registeredFormatName = $scope.inputFormatRegName;
         $scope.selectedFormatName = $scope.inputSelectedFormatName
@@ -627,7 +603,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         $scope.selectedFormatName = $scope.outputSelectedFormatName
     }
 
-    $scope.saveFormatRegistry = function() {
+    $scope.saveFormatRegistry = function () {
         if ($scope.selectedSide === 'left') {
             $scope.$parent.inputFormatRegName = $scope.registeredFormatName;
             $scope.$parent.inputSelectedFormatName = $scope.selectedFormatName;
@@ -639,8 +615,8 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         $element.modal("hide");
     }
 })
-.controller("RuleRegistryCtrl", function($scope, $element) {
-    $scope.saveRuleRegistry = function() {
+.controller("RuleRegistryCtrl", function ($scope, $element) {
+    $scope.saveRuleRegistry = function () {
         $scope.$parent.ruleRegName = $scope.registeredRuleName;
         $element.modal("hide");
     }

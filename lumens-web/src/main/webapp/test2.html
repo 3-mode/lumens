@@ -38,28 +38,31 @@
         <script src="libs/angular/angular.js"></script>
         <script src="libs/angular/angular-route.js"></script>
         <script src="libs/angular/angular-resource.js"></script>
-        <!-- Application Angular Modules -->
-        <script src="app/mvp/controllers.js"></script>
-        <script src="app/mvp/directives.js"></script>
-        <script src="app/mvp/services.js"></script>
         <!-- Application Entry JS -->
         <script src="app/lumens.js"></script>
+        <!-- Application Angular Modules -->
+        <script src="app/mvp/controllers/main_controller.js"></script>
+        <script src="app/mvp/controllers/dashboard_controller.js"></script>
+        <script src="app/mvp/controllers/manage_controller.js"></script>
+        <script src="app/mvp/controllers/designer_controller.js"></script>
+        <script src="app/mvp/directives.js"></script>
+        <script src="app/mvp/services.js"></script>
         <script type="text/javascript">
             var appModule = angular.module('lumensTest', ["lumens-directives", "lumens-services", "lumens-controllers", "ngRoute"]);
             function MainTestCtrl($scope, $http, $compile, $sce, DesignButtons, ProjectListModal) {
                 $scope.i18n = Lumens.i18n;
-                $scope.openProject = function(e) {
+                $scope.openProject = function (e) {
                     console.log("open project");
                 }
-                DesignButtons.get(function(design_command_tmpl) {
+                DesignButtons.get(function (design_command_tmpl) {
                     var buttonBar = $compile(design_command_tmpl)($scope).appendTo($("#id-main-view"));
-                    $scope.barClick = function(id) {
+                    $scope.barClick = function (id) {
                         if ("id_open" === id) {
                             if ($('#projectListModal').length === 0) {
-                                ProjectListModal.get(function(projects_modal_tmpl) {
+                                ProjectListModal.get(function (projects_modal_tmpl) {
                                     var projectListDialog = buttonBar.find("#projectlist_dialog");
                                     projectListDialog.append($compile(projects_modal_tmpl)($scope));
-                                    $('#projectListModal').on("hidden.bs.modal", function() {
+                                    $('#projectListModal').on("hidden.bs.modal", function () {
                                         projectListDialog.empty();
                                     }).modal({backdrop: "static"});
                                 });

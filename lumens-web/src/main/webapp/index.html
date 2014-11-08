@@ -45,12 +45,15 @@
         <script src="libs/angular/angular.js"></script>
         <script src="libs/angular/angular-route.js"></script>
         <script src="libs/angular/angular-resource.js"></script>
-        <!-- Application Angular Modules -->
-        <script src="app/mvp/controllers.js"></script>
-        <script src="app/mvp/directives.js"></script>
-        <script src="app/mvp/services.js"></script>
         <!-- Application Entry JS -->
         <script src="app/lumens.js"></script>
+        <!-- Application Angular Modules -->
+        <script src="app/mvp/controllers/main_controller.js"></script>
+        <script src="app/mvp/controllers/dashboard_controller.js"></script>
+        <script src="app/mvp/controllers/manage_controller.js"></script>
+        <script src="app/mvp/controllers/designer_controller.js"></script>
+        <script src="app/mvp/directives.js"></script>
+        <script src="app/mvp/services.js"></script>
     </head>
     <body ng-app='lumens-app' class='lumens'>
         <div id="id-main-view" ng-controller="MainViewCtrl"></div>

@@ -37,12 +37,15 @@
         <script src="libs/angular/angular.js"></script>
         <script src="libs/angular/angular-route.js"></script>
         <script src="libs/angular/angular-resource.js"></script>
-        <!-- Application Angular Modules -->
-        <script src="app/mvp/controllers.js"></script>
-        <script src="app/mvp/directives.js"></script>
-        <script src="app/mvp/services.js"></script>
         <!-- Application Entry JS -->
         <script src="app/lumens.js"></script>
+        <!-- Application Angular Modules -->
+        <script src="app/mvp/controllers/main_controller.js"></script>
+        <script src="app/mvp/controllers/dashboard_controller.js"></script>
+        <script src="app/mvp/controllers/manage_controller.js"></script>
+        <script src="app/mvp/controllers/designer_controller.js"></script>
+        <script src="app/mvp/directives.js"></script>
+        <script src="app/mvp/services.js"></script>
     </head>
     <body class="lumens" ng-app="lumensTest">
         <div id="id-main-view" ng-controller="MainTestCtrl"></div>
@@ -62,13 +65,13 @@
                 var topPanel = new Lumens.Panel(theLayout.getPart1Element()).configure({
                     panelStyle: {width: "100%", height: "100%", overflow: "auto"}
                 });
-                $http.get("app/mock/json/data_source_category.json").success(function(data_source_category) {
+                $http.get("app/mock/json/data_source_category.json").success(function (data_source_category) {
                     $($compile('<div style="background-color: gray; width: 100px; height: 50px; top: 50px; left: 50px; position: relative; display: block;">Oracle</div>')($scope))
                     .appendTo(topPanel.getElement())
-                    .click(function() {
+                    .click(function () {
                         var currentComponentConfig = $(this).data("item-data");
                         console.log(currentComponentConfig);
-                        $scope.$apply(function() {
+                        $scope.$apply(function () {
                             if ($scope.project) {
                                 $scope.project.name = "test click " + $scope.project.name;
                                 $scope.currentComponent = $scope.project.datasource[0];
@@ -77,7 +80,7 @@
                                 $scope.componentForm = $compile(currentComponentConfig.html)($scope);
                                 $scope.componentProps = {"Description": $scope.currentComponent.description};
                                 if ($scope.currentComponent.property)
-                                    $.each($scope.currentComponent.property, function() {
+                                    $.each($scope.currentComponent.property, function () {
                                         $scope.componentProps[this.name] = this.value;
                                     })
                             }
@@ -86,10 +89,10 @@
 
                     $($compile('<div style="background-color: gray; width: 100px; height: 50px; top: 50px; left: 250px; position: relative; display: block;">SOAP</div>')($scope))
                     .appendTo(topPanel.getElement())
-                    .click(function() {
+                    .click(function () {
                         var currentComponentConfig = $(this).data("item-data");
                         console.log(currentComponentConfig);
-                        $scope.$apply(function() {
+                        $scope.$apply(function () {
                             if ($scope.project) {
                                 $scope.project.name = "test click " + $scope.project.name;
                                 $scope.currentComponent = $scope.project.datasource[1];
@@ -98,7 +101,7 @@
                                 $scope.componentForm = $compile(currentComponentConfig.html)($scope);
                                 $scope.componentProps = {"Description": $scope.currentComponent.description ? $scope.currentComponent.description : ""};
                                 if ($scope.currentComponent.property)
-                                    $.each($scope.currentComponent.property, function() {
+                                    $.each($scope.currentComponent.property, function () {
                                         $scope.componentProps[this.name] = this.value;
                                     })
                             }
@@ -106,7 +109,7 @@
                     }).data("item-data", data_source_category.items[0]);
                 });
 
-                $.get("app/mock/json/get_project.json", function(projectData) {
+                $.get("app/mock/json/get_project.json", function (projectData) {
                     if (projectData.content && projectData.content.project && projectData.content.project.length > 0) {
                         $scope.project = $.parseJSON(projectData.content.project[0].data).project;
                     }
@@ -127,21 +130,21 @@
                             "Resources",
                             "Instruments"
                         ],
-                        buildContent: function(itemContent, isExpand, title) {
+                        buildContent: function (itemContent, isExpand, title) {
                             if (isExpand) {
                                 var itemID = title.attr("id");
                                 if (itemID === "Description") {
-                                    $http.get("app/templates/project_desc_tmpl.html").success(function(project_desc_tmpl) {
+                                    $http.get("app/templates/project_desc_tmpl.html").success(function (project_desc_tmpl) {
                                         itemContent.append($compile(project_desc_tmpl)($scope));
                                     });
                                 }
                                 else if (itemID === "Resources") {
-                                    $http.get("app/templates/resources_tmpl.html").success(function(resources_tmpl) {
+                                    $http.get("app/templates/resources_tmpl.html").success(function (resources_tmpl) {
                                         itemContent.append($compile(resources_tmpl)($scope));
                                     });
                                 }
                                 else if (itemID === "Instruments") {
-                                    $http.get("app/templates/instruments_tmpl.html").success(function(instruments_tmpl) {
+                                    $http.get("app/templates/instruments_tmpl.html").success(function (instruments_tmpl) {
                                         itemContent.append($compile(instruments_tmpl)($scope));
                                     });
                                 }
@@ -165,9 +168,9 @@
                         ]
                     });
                 }
-                $http.get("app/templates/design_command_tmpl.html").success(function(design_command_tmpl) {
+                $http.get("app/templates/design_command_tmpl.html").success(function (design_command_tmpl) {
                     var buttonBar = $(design_command_tmpl).appendTo(tabsContainer.getElement());
-                    buttonBar.find('.lumens-button').click(function() {
+                    buttonBar.find('.lumens-button').click(function () {
                         console.log($scope);
                     })
                     var tabs = new Lumens.TabPanel(tabsContainer.getElement())

@@ -2,6 +2,7 @@
  * Application
  */
 Lumens.$ngApp = angular.module("lumens-app", ["lumens-directives", "lumens-services", "lumens-controllers", "ngRoute"]);
+Lumens.controllers = angular.module("lumens-controllers", ["ngRoute"]);
 Lumens.$ngApp.config(function($routeProvider) {
     window.LumensLog = console && console.log ? console : {
         log: function() {

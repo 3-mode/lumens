@@ -42,29 +42,32 @@
         <script src="libs/angular/angular.js"></script>
         <script src="libs/angular/angular-route.js"></script>
         <script src="libs/angular/angular-resource.js"></script>
-        <!-- Application Angular Modules -->
-        <script src="app/mvp/controllers.js"></script>
-        <script src="app/mvp/directives.js"></script>
-        <script src="app/mvp/services.js"></script>
         <!-- Application Entry JS -->
         <script src="app/lumens.js"></script>
+        <!-- Application Angular Modules -->
+        <script src="app/mvp/controllers/main_controller.js"></script>
+        <script src="app/mvp/controllers/dashboard_controller.js"></script>
+        <script src="app/mvp/controllers/manage_controller.js"></script>
+        <script src="app/mvp/controllers/designer_controller.js"></script>
+        <script src="app/mvp/directives.js"></script>
+        <script src="app/mvp/services.js"></script>
         <script type="text/javascript">
             var appModule = angular.module('LumensQUnit', ["lumens-directives", "lumens-services", "lumens-controllers", "ngRoute"]);
             function MainQUnitCtrl($scope, $http, FormatRegister) {
-                $http.get("app/mock/json/hr_tables.json").success(function(data) {
+                $http.get("app/mock/json/hr_tables.json").success(function (data) {
                     console.log("Mocked data:", data);
                     $scope.displaySourceFormatList = $scope.displayTargetFormatList = data;
                     $scope.inputFormatRegName = "JOBS-Source";
                     $scope.inputSelectedFormatName = "JOBS";
                     $scope.outputFormatRegName = "DEPART-Target"
                     $scope.outputSelectedFormatName = "DEPARTMENTS";
-                    $http.get("app/mock/json/rule_count-depart.json").success(function(rule) {
+                    $http.get("app/mock/json/rule_count-depart.json").success(function (rule) {
                         $scope.transformRuleEntity = rule;
                         FormatRegister.build($scope);
-                        QUnit.test("Register Format testing", function(assert) {
+                        QUnit.test("Register Format testing", function (assert) {
                             assert.ok(1 == "1", "Passed!");
                         });
-                        QUnit.test("Register Format testing 2", function(assert) {
+                        QUnit.test("Register Format testing 2", function (assert) {
                             assert.ok(1 == "1", "Passed!");
                         });
                     })
