@@ -23,8 +23,8 @@ import org.eclipse.jetty.server.session.SessionHandler;
  */
 public class Application {
 
-    private static String OS = System.getProperty("os.name").toLowerCase();
-    private static String WAR_PATH = System.getProperty("lumens.web", "module/web");
+    private static final String OS = System.getProperty("os.name").toLowerCase();
+    private static final String WAR_PATH = System.getProperty("lumens.web", "module/web");
     private static Application application;
 
     public static void main(String[] args) throws Exception {
