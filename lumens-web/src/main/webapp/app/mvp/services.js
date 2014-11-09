@@ -12,7 +12,7 @@ Lumens.services.factory('DesignNavMenu', function($resource) {
     });
 });
 Lumens.services.factory('DesignButtons', function($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/design_command_tmpl.html");
+    return createGetTemplateObject($http, $q, "app/templates/designer/design_command_tmpl.html");
 });
 Lumens.services.factory('ErrorTemplate', function($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/error_tmpl.html");
@@ -27,28 +27,28 @@ Lumens.services.factory('SmallMessageTmplate', function($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/small_message_tmpl.html");
 });
 Lumens.services.factory('PropFormTemplate', function($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/property_form_tmpl.html");
+    return createGetTemplateObject($http, $q, "app/templates/designer/property_form_tmpl.html");
 });
 Lumens.services.factory('TransformListTemplate', function($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/transform_list_tmpl.html");
+    return createGetTemplateObject($http, $q, "app/templates/designer/transform_list_tmpl.html");
 });
 Lumens.services.factory('TransformEditTemplate', function($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/transform_edit_tmpl.html");
+    return createGetTemplateObject($http, $q, "app/templates/designer/transform_edit_tmpl.html");
 });
 Lumens.services.factory('ProjectListModal', function($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/project_list_modal_tmpl.html");
+    return createGetTemplateObject($http, $q, "app/templates/designer/project_list_modal_tmpl.html");
 });
 Lumens.services.factory('ProjectCreateModal', function($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/project_create_modal_tmpl.html");
+    return createGetTemplateObject($http, $q, "app/templates/designer/project_create_modal_tmpl.html");
 });
 Lumens.services.factory('FormatRegistryModal', function($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/format_registry_modal_tmpl.html");
+    return createGetTemplateObject($http, $q, "app/templates/designer/format_registry_modal_tmpl.html");
 });
 Lumens.services.factory('RuleRegistryModal', function($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/rule_registry_modal_tmpl.html");
+    return createGetTemplateObject($http, $q, "app/templates/designer/rule_registry_modal_tmpl.html");
 });
 Lumens.services.factory('ScriptEditTemplate', function($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/script_edit_tmpl.html");
+    return createGetTemplateObject($http, $q, "app/templates/designer/script_edit_tmpl.html");
 });
 Lumens.services.factory('DatasourceCategory', function($resource) {
     return $resource("rest/category/component", {}, {

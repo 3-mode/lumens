@@ -12,4 +12,4 @@ Lumens.controllers.controller("MainViewCtrl", function ($scope, $route, $http, $
     Lumens.system.sysHeader = new Lumens.Header(Lumens.system.theLayout.getPart1Element()).setSysTitle("JAMES");
     Lumens.system.navToolbar = new Lumens.NavToolbar(Lumens.system.sysHeader.getElement()).configure(Lumens.SysToolbar_Config);
     Lumens.system.theLayout.getPart2Element().append($compile('<div ng-view />')($scope));
-})
+});

@@ -6,7 +6,6 @@ Lumens.controllers.controller("DesignViewCtrl", function (
 $scope, $route, $http, $compile,
 DesignNavMenu, SuccessTemplate, WarningTemplate, ErrorTemplate, PropFormTemplate, TransformListTemplate,
 DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
-    // Test services
     // Set the default page view as dashboard view
     var i18n = $scope.i18n = Lumens.i18n;
     var desgin = $scope.desgin = {};
@@ -136,17 +135,17 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                                 if (isExpand) {
                                     var itemID = title.attr("id");
                                     if (itemID === "Description") {
-                                        $http.get("app/templates/project_desc_tmpl.html").success(function (project_desc_tmpl) {
+                                        $http.get("app/templates/designer/project_desc_tmpl.html").success(function (project_desc_tmpl) {
                                             itemContent.append($compile(project_desc_tmpl)($scope));
                                         });
                                     }
                                     else if (itemID === "Resources") {
-                                        $http.get("app/templates/resources_tmpl.html").success(function (resources_tmpl) {
+                                        $http.get("app/templates/designer/resources_tmpl.html").success(function (resources_tmpl) {
                                             itemContent.append($compile(resources_tmpl)($scope));
                                         });
                                     }
                                     else if (itemID === "Instruments") {
-                                        $http.get("app/templates/instruments_tmpl.html").success(function (instruments_tmpl) {
+                                        $http.get("app/templates/designer/instruments_tmpl.html").success(function (instruments_tmpl) {
                                             itemContent.append($compile(instruments_tmpl)($scope));
                                         });
                                     }
