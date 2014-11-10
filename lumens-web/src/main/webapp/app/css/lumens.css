@@ -673,3 +673,8 @@ svg path {
 .lumens .CodeMirror {
     height:100% !important;
 }
+.lumens .lumens-job-list {
+    padding-top: 5px;
+    width: 100%;
+    height: calc(100% - 51px);
+}

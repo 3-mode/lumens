@@ -14,7 +14,7 @@ Lumens.$ngApp.config(function ($routeProvider) {
         controller: "DashboardViewCtrl"
     })
     .when("/id-management-view", {
-        templateUrl: 'app/templates/manage/manage_tmpl.html',
+        templateUrl: "app/templates/manage/manage_tmpl.html",
         controller: "ManageViewCtrl"
     })
     .when("/id-desinger-view", {

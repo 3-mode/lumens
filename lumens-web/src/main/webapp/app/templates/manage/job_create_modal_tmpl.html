@@ -1,0 +1,26 @@
+<div id="jobCreateModal" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">{{i18n['id_job_create_title']}}</h4>
+            </div>
+            <div class="modal-body table-responsive" ng-init="projectDescription = ''">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="inputJobName">{{i18n['id_job_name']}}</label>
+                        <input ng-model="job.Name" type="text" class="form-control" id="inputJobName" placeholder="{{i18n['id_job_name']}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputJobDescription">{{i18n['id_description']}}</label>
+                        <textarea ng-model="job.Description" class="form-control" rows="3" id="inputJobDescription"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{i18n['id_close']}}</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="createJob()">{{i18n['id_create_job']}}</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

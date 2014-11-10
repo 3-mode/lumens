@@ -1,6 +1,6 @@
 Lumens.i18n = {
     // Ctrls label
-    // Project
+    // Project,Task
     id_new: "New",
     id_open: "Open",
     id_deploy: "Deploy",
@@ -9,6 +9,12 @@ Lumens.i18n = {
     id_active: "Active",
     id_close: "Close",
     id_delete: "Delete",
+    id_start: "Start",
+    id_stop: "Stop",
+    id_description: "Description",
+    id_create_job: "Create Job",
+    id_job_name: "Job Name",
+    id_job_create_title: "New Job",
     // Component Config
     id_comp_apply: "Apply",
     // Script Ctrls

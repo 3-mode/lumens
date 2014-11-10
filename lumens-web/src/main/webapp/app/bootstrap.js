@@ -1,28 +1,28 @@
 /* 
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-jQuery.fn.cssInt = function(prop) {
+jQuery.fn.cssInt = function (prop) {
     return parseInt(this.css(prop), 10) || 0;
 };
-jQuery.fn.attrBoolean = function(prop) {
+jQuery.fn.attrBoolean = function (prop) {
     var bActive = this.attr(prop);
     return bActive ? bActive === "true" : false;
 }
-jQuery.fn.cssFloat = function(prop) {
+jQuery.fn.cssFloat = function (prop) {
     return parseFloat(this.css(prop)) || 0;
 };
 jQuery.extend({
-    percentToFloat: function(value) {
+    percentToFloat: function (value) {
         return parseFloat(value.substring(0, value.length - 1)) / 100.0;
     }
 });
 jQuery.extend({
-    currentTime: function() {
+    currentTime: function () {
         return new Date().getTime();
     }
 });
 if (typeof String.prototype.format !== 'function') {
-    String.prototype.format = function() {
+    String.prototype.format = function () {
         var formatted = this;
         for (var arg in arguments) {
             formatted = formatted.replace("{" + arg + "}", arguments[arg]);
@@ -31,12 +31,12 @@ if (typeof String.prototype.format !== 'function') {
     };
 }
 if (typeof String.prototype.endsWith !== 'function') {
-    String.prototype.endsWith = function(suffix) {
+    String.prototype.endsWith = function (suffix) {
         return this.indexOf(suffix, this.length - suffix.length) !== -1;
     };
 }
 
-Raphael.fn.connection = function(obj1, obj2, line) {
+Raphael.fn.connection = function (obj1, obj2, line) {
     if (obj1.line && obj1.from && obj1.to) {
         line = obj1;
         obj1 = line.from;
@@ -94,17 +94,17 @@ Raphael.fn.connection = function(obj1, obj2, line) {
             to: obj2
         };
         var highlightColor = "#0086DB";
-        connection.line.hover(function() {
+        connection.line.hover(function () {
             connection.line.attr({stroke: highlightColor});
             connection.circle.attr({stroke: highlightColor, fill: highlightColor});
-        }, function() {
+        }, function () {
             connection.line.attr({stroke: color});
             connection.circle.attr({stroke: color, fill: color});
         });
-        connection.circle.hover(function() {
+        connection.circle.hover(function () {
             connection.line.attr({stroke: highlightColor});
             connection.circle.attr({stroke: highlightColor, fill: highlightColor});
-        }, function() {
+        }, function () {
             connection.line.attr({stroke: color});
             connection.circle.attr({stroke: color, fill: color});
         });
@@ -115,7 +115,7 @@ Raphael.fn.connection = function(obj1, obj2, line) {
 if (!window.Lumens)
     window.Lumens = {version: 1.0};
 
-Lumens.Id = function($element) {
+Lumens.Id = function ($element) {
     var chars = "0123456789abcdefghiklmnopqrstuvwxyz", string_length = 16, id = '';
     for (var i = 0; i < string_length; i++) {
         var rnum = Math.floor(Math.random() * chars.length);
@@ -124,7 +124,7 @@ Lumens.Id = function($element) {
     return $element.attr("element-id", 'id$' + id);
 };
 
-Lumens.isMultipleLink = function(class_type) {
+Lumens.isMultipleLink = function (class_type) {
     if (class_type === "datasource")
         return true;
     return false;
@@ -152,3 +152,19 @@ Lumens.SysToolbar_Config = {
 Lumens.system = {
     designView: {}
 };
+
+Lumens.system.AngularJSView = 0;
+Lumens.system.NormalView = 1;
+
+Lumens.system.switchTo = function (viewMode) {
+    if (Lumens.system.workspaceLayout) {
+        Lumens.system.workspaceLayout.remove();
+        Lumens.system.workspaceLayout = null;
+    }
+    if (viewMode === Lumens.system.AngularJSView) {
+        $("#theWorkspaceContainer").css("height", "100%");
+    }
+    else if (viewMode === Lumens.system.NormalView) {
+        $("#theWorkspaceContainer").css("height", "0");
+    }
+}

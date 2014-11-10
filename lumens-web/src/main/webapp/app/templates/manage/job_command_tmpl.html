@@ -1,0 +1,7 @@
+<div>
+    <div class="lumens-button-bar">
+        <a class="lumens-button" data-toggle="modal" data-target="#jobCreateModal" ng-click="onCommand('id_new')">{{i18n['id_new']}}</a>
+        <a ng-repeat="id_btn in ['id_save', 'id_start', 'id_stop']" class="lumens-button" ng-click="onCommand(id_btn)">{{i18n[id_btn]}}</a>
+    </div>
+    <div class="lumens-bootstrap" ng-include="job_create_template"></div>
+</div>

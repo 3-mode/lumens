@@ -2,20 +2,22 @@
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
-Lumens.controllers.controller("DesignViewCtrl", function (
+Lumens.controllers
+.controller("DesignViewCtrl", function (
 $scope, $route, $http, $compile,
 DesignNavMenu, SuccessTemplate, WarningTemplate, ErrorTemplate, PropFormTemplate, TransformListTemplate,
 DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
+    Lumens.system.switchTo(Lumens.system.NormalView);
     // Set the default page view as dashboard view
     var i18n = $scope.i18n = Lumens.i18n;
     var desgin = $scope.desgin = {};
     // ******* Design View ------------------------------------------------------------>
     Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
-    Lumens.system.designView.workspaceLayout = new Lumens.SplitLayout(Lumens.system.theLayout.getPart2Element()).configure({
+    Lumens.system.workspaceLayout = new Lumens.SplitLayout(Lumens.system.theLayout.getPart2Element()).configure({
         mode: "horizontal",
         part1Size: 220
     });
-    desgin.leftPanel = new Lumens.Panel(Lumens.system.designView.workspaceLayout.getPart1Element())
+    desgin.leftPanel = new Lumens.Panel(Lumens.system.workspaceLayout.getPart1Element())
     .configure({
         panelClass: ["lumens-menu-container"],
         panelStyle: {width: "100%", height: "100%"}
@@ -58,7 +60,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                     $.each(instrument_items.items, function () {
                         $scope.compCagegory[this.type] = this;
                     });
-                    desgin.barPanel = new Lumens.SplitLayout(Lumens.system.designView.workspaceLayout.getPart2Element()).configure({
+                    desgin.barPanel = new Lumens.SplitLayout(Lumens.system.workspaceLayout.getPart2Element()).configure({
                         mode: "vertical",
                         part1Size: 48
                     });
@@ -314,7 +316,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
     $scope.ruleEditorService = RuleEditorService.create();
 
     function showRuleEditor() {
-        Lumens.system.designView.workspaceLayout.hide();
+        Lumens.system.workspaceLayout.hide();
         //TODO show to the transform editing
         TransformEditTemplate.get(function (transformEditTemplate) {
             $scope.transformEditPanel = new Lumens.ResizableVSplitLayoutExt(Lumens.system.theLayout.getPart2Element())
@@ -362,7 +364,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
 
     $scope.backFromTransformEditing = function () {
         $scope.transformEditPanel.remove();
-        Lumens.system.designView.workspaceLayout.show();
+        Lumens.system.workspaceLayout.show();
     };
 
     // Init the trnasformation rule list to show all rules
@@ -584,7 +586,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
         else if (id_script_btn === "id_script_back") {
             $scope.transformEditPanel.remove();
             $scope.ruleEditorService.destroy();
-            Lumens.system.designView.workspaceLayout.show();
+            Lumens.system.workspaceLayout.show();
         }
         else if (id_script_btn === "id_rule_fmt_save") {
             FormatRegister.build($scope);
