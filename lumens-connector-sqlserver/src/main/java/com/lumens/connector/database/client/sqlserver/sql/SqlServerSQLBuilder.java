@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
 package com.lumens.connector.database.client.sqlserver.sql;
@@ -10,6 +8,10 @@ import com.lumens.connector.database.SQLBuilder;
 import com.lumens.connector.database.DatabaseConstants;
 import com.lumens.model.Element;
 
+/**
+ *
+ * @author Xiaoxin(whiskeyfly@163.com)
+ */
 public class SqlServerSQLBuilder implements SQLBuilder, DatabaseConstants{
     @Override
     public String generateInsertSQL(Element input) {

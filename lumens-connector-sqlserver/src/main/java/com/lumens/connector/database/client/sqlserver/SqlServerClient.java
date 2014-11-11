@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
 package com.lumens.connector.database.client.sqlserver;
@@ -28,6 +26,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *
+ * @author Xiaoxin(whiskeyfly@163.com)
+ */
 public class SqlServerClient extends AbstractClient implements DatabaseConstants{
     public SqlServerClient(String ojdbcURL, String connURL, String user, String password, String sessionAlter) {
         super(ojdbcURL, CONST_CNTR_SQLSERVER_CLASS, connURL, user, password, sessionAlter);

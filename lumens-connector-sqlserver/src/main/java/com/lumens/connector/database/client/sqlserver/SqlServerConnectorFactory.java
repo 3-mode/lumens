@@ -1,16 +1,15 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
 package com.lumens.connector.database.client.sqlserver;
 
 import com.lumens.connector.Connector;
 import com.lumens.connector.ConnectorFactory;
+
 /**
  *
- * @author testing
+ * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class SqlServerConnectorFactory implements ConnectorFactory{
 
