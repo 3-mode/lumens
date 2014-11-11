@@ -13,8 +13,8 @@ import com.lumens.connector.ConnectorFactory;
 public class XmlConnectorFactory implements ConnectorFactory {
 
     @Override
-    public String getIdentifier() {
-        return "id-xml";
+    public String getComponentType() {
+        return "type-xml";
     }
 
     @Override
