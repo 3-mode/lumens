@@ -29,6 +29,7 @@ public class SqlServerConnector implements Connector, DatabaseConstants{
     private String password;
     private boolean fullLoad = true;
     private String sessionAlter;
+    private String databaseName;
     private boolean isOpen;
 
     @Override
@@ -84,6 +85,9 @@ public class SqlServerConnector implements Connector, DatabaseConstants{
         if (propertyList.containsKey(SESSION_ALTER)) {
             sessionAlter = propertyList.get(SESSION_ALTER).getString();
         }
+        if (propertyList.containsKey(DATABASE_NAME)) {
+            databaseName = propertyList.get(DATABASE_NAME).getString();
+        }        
     }
 
     @Override

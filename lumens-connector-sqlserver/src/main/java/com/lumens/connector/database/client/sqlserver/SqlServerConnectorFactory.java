@@ -21,6 +21,6 @@ public class SqlServerConnectorFactory implements ConnectorFactory{
 
     @Override
     public String getComponentType() {
-        return "type-sqlserver";
+        return "type-sqlserver-jdbc";
     }   
 }

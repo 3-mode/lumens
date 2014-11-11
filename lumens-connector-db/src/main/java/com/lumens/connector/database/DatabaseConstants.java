@@ -13,6 +13,7 @@ public interface DatabaseConstants {
     public static final String PASSWORD = "Password";
     public static final String FULL_LOAD = "FullLoad";
     public static final String SESSION_ALTER = "SessionAlter";
+    public static final String DATABASE_NAME = "DatabaseName";
     
     // Connector constant
     public static String CONST_CNTR_SQLSERVER_CLASS = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
@@ -20,9 +21,12 @@ public interface DatabaseConstants {
     public static String CONST_CNTR_SQLSERVER_DESCRIPTION = "description";
     public static String CONST_CNTR_SQLSERVER_DATA_LENGTH = "data_length";
     public static String CONST_CNTR_SQLSERVER_DATA_TYPE = "data_type";
+    
     // SQL Server SQL to query tables information
-    public static String CONST_CNTR_SQLSERVER_TABLENAMES = "select t.name from master..SysDatabases t;";
-    public static String CONST_CNTR_SQLSERVER_TABLECOLUMNS = "select t.'%s' from test..SysObjects t where xtype='u'";
+    public static String CONST_CNTR_SQLSERVER_DATABASENAMES = "select t.name from SysDatabases t;";
+    public static String CONST_CNTR_SQLSERVER_TABLENAMES = "select t.name, t.id, t.xtype from SysObjects t where xtype='u'";  
+    public static String CONST_CNTR_SQLSERVER_TABLECOLUMNS = "select t.name, t.id, t.xtype, t.xusertype, t.length from syscolumns t where id=%d ";
+    
     // SQL Server data types
     public static String CONST_CNTR_SQLSERVER_CHAR = "CHAR";
     public static String CONST_CNTR_SQLSERVER_VARCHAR2 = "VARCHAR2";
@@ -32,6 +36,11 @@ public interface DatabaseConstants {
     public static String CONST_CNTR_SQLSERVER_DATE = "DATE";
     public static String CONST_CNTR_SQLSERVER_NUMBERIC = "NUMBERIC";
     public static String CONST_CNTR_SQLSERVER_BLOB = "BLOB";
+    
+    // table properties
+    public static String CONST_CNTR_SQLSERVER_XTYPE = "XTYPE";
+    public static String CONST_CNTR_SQLSERVER_ID = "ID";
+    
     // Key field words
     public static String CONST_CNTR_SQLSERVER_SELECT = "SELECT";
     public static String CONST_CNTR_SQLSERVER_INSERT = "INSERT";

@@ -72,17 +72,18 @@ public class SqlServerClient extends AbstractClient implements DatabaseConstants
             if (!ret.isClosed()) {
                 while (ret.next()) {
                     String tableName = ret.getString(1);
-                    String description = ret.getString(2);
-                    String type = ret.getString(3);
+                    Long tableId = ret.getLong(2);
+                    String tableXType = ret.getString(3);
                     Format table = new DataFormat(tableName, Form.STRUCT);
-                    tables.put(tableName, table);
+                    table.setProperty(CONST_CNTR_SQLSERVER_ID, new Value(tableId));
+                    table.setProperty(CONST_CNTR_SQLSERVER_XTYPE, new Value(tableXType));
                     table.addChild(CONST_CNTR_SQLSERVER_FIELDS, Form.STRUCT);
+                    
+                    tables.put(tableName, table);                    
                     if (direction == Direction.IN) {
                         table.addChild(CONST_CNTR_SQLSERVER_OPERATION, Form.FIELD, Type.STRING);
                         table.addChild(CONST_CNTR_SQLSERVER_CLAUSE, Form.FIELD, Type.STRING);
                     }
-                    table.setProperty(CONST_CNTR_SQLSERVER_DESCRIPTION, new Value(description));
-                    table.setProperty(CONST_CNTR_SQLSERVER_TYPE, new Value(type));
                     if (fullLoad) {
                         getFormat(table);
                     }
@@ -105,14 +106,14 @@ public class SqlServerClient extends AbstractClient implements DatabaseConstants
         ResultSet ret = null;
         try {
             stat = conn.createStatement();
-            ret = stat.executeQuery(String.format(CONST_CNTR_SQLSERVER_TABLECOLUMNS, format.getName()));
+            ret = stat.executeQuery(String.format(CONST_CNTR_SQLSERVER_TABLECOLUMNS, format.getProperty(CONST_CNTR_SQLSERVER_ID).getLong()));
             if (!ret.isClosed()) {
                 Format fields = format.getChild(CONST_CNTR_SQLSERVER_FIELDS);
                 if (fields != null && fields.getChildren() == null || fields.getChildren().size() == 0) {
                     while (ret.next()) {
                         String columnName = ret.getString(1);
                         String dataType = ret.getString(2);
-                        String dataLength = ret.getString(3);
+                        Long dataLength = ret.getLong(5);
                         Format field = fields.addChild(columnName, Form.FIELD, toType(dataType));
                         field.setProperty(CONST_CNTR_SQLSERVER_DATA_TYPE, new Value(dataType));
                         field.setProperty(CONST_CNTR_SQLSERVER_DATA_LENGTH, new Value(dataLength));
