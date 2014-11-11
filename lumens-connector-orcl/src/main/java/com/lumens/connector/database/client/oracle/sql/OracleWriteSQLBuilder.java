@@ -1,3 +1,6 @@
+/*
+ * Copyright Lumens Team, Inc. All Rights Reserved.
+ */
 package com.lumens.connector.database.client.oracle.sql;
 
 import static com.lumens.connector.database.client.oracle.OracleConstants.FIELDS;

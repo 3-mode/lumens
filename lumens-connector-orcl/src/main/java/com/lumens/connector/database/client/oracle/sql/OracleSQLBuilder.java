@@ -1,3 +1,6 @@
+/*
+ * Copyright Lumens Team, Inc. All Rights Reserved.
+ */
 package com.lumens.connector.database.client.oracle.sql;
 
 import com.lumens.connector.database.SQLBuilder;

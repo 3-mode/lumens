@@ -1,3 +1,6 @@
+/*
+ * Copyright Lumens Team, Inc. All Rights Reserved.
+ */
 package com.lumens.connector.database.client.oracle;
 
 import com.lumens.connector.OperationResult;
@@ -10,7 +13,7 @@ import java.util.List;
  */
 public class OracleOperationResult implements OperationResult {
 
-    private List<Element> result;
+    private final List<Element> result;
 
     public OracleOperationResult(List<Element> result) {
         this.result = result;
