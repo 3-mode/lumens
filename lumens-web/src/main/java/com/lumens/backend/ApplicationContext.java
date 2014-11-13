@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class ApplicationContext {
 
-    public static String LUMENS_BASE = System.getProperty("lumens.base", "X:\\PRODUCT\\3MODE\\lumens\\dist\\lumens\\");
+    public static String LUMENS_BASE = System.getProperty("lumens.base", "C:\\lumens\\dist\\lumens\\");
     private final List<String> resultCache = new ArrayList<>();
     private final String strRealPath;
     private TransformEngine engine;
