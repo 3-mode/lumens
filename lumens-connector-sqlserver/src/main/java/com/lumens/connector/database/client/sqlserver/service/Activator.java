@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
 package com.lumens.connector.database.client.sqlserver.service;
@@ -12,6 +10,10 @@ import com.lumens.addin.AddinContext;
 import com.lumens.connector.ConnectorFactory;
 import com.lumens.descriptor.DescriptorUtils;
 
+/**
+ *
+ * @author Xiaoxin(whiskeyfly@163.com)
+ */
 public class Activator implements AddinActivator {
 
     private AddinContext addinContext;

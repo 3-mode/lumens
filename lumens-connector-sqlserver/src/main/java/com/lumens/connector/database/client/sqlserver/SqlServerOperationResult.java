@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
 package com.lumens.connector.database.client.sqlserver;
@@ -10,6 +8,10 @@ import com.lumens.connector.OperationResult;
 import com.lumens.model.Element;
 import java.util.List;
 
+/**
+ *
+ * @author Xiaoxin(whiskeyfly@163.com)
+ */
 public class SqlServerOperationResult implements OperationResult{
      private List<Element> result;
 

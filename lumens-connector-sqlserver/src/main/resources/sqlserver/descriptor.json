@@ -1,0 +1,36 @@
+{
+    "type-sqlserver-jdbc": {
+        "name": "SqlServerName",
+        "class_type": "datasource",
+        "item_icon": "img/SqlServer24x24.png",
+        "instance_icon": "img/SqlServer64x64.png",
+        "html_url": "html/SqlServer.html",
+        "i18n": "i18n/SqlServer.json",
+        "property": [
+            {
+                "name": "OJDBC",
+                "type": "String"
+            },
+            {
+                "name": "ConnectionURL",
+                "type": "String"
+            },
+            {
+                "name": "User",
+                "type": "String"
+            },
+            {
+                "name": "Password",
+                "type": "String"
+            },
+            {
+                "name": "SessionAlter",
+                "type": "String"
+            },
+            {
+                "name": "FullLoad",
+                "type": "Boolean"
+            }
+        ]
+    }
+}
