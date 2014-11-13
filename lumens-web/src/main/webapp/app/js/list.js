@@ -2,7 +2,7 @@
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 Lumens.List = Class.$extend({
-    __init__: function(container) {
+    __init__: function (container) {
         this.$container = container;
         this.$accordionHolder = $('<div class="lumens-accordion"></div>').appendTo(this.$container);
         this.$container.resize(this.layout);
@@ -19,24 +19,28 @@ Lumens.List = Class.$extend({
         '  <ul class="lumens-accordion-content"><li id="content-holder"></li></ul>' +
         '</div>';
     },
-    remove: function() {
+    remove: function () {
         this.$accordionHolder.unbind();
         this.$accordionHolder.remove();
         this.$container.unbind("resize", this.layout);
     },
-    layout: function(e) {
+    layout: function (e) {
         if (e && e.target !== this)
             return;
         if (this.$accordionHolder)
             this.$accordionHolder.find(".lumens-accordion-content").trigger("resize");
     },
-    doExpandCollapse: function(accordion) {
+    doExpandCollapse: function (accordion) {
         accordion.find("ul").toggle(200);
         accordion.find(".lumens-accordion-icon").toggleClass("icon-expand").toggleClass("icon-collapse");
     },
-    addAccordion: function(config, i) {
+    addAccordion: function (config, i, isAddToHead) {
         var __this = this;
-        var accordion = $(this.sectionHTMLTemplate).appendTo(this.$accordionHolder);
+        var accordion;
+        if (isAddToHead)
+            accordion = $(this.sectionHTMLTemplate).prependTo(this.$accordionHolder);
+        else
+            accordion = $(this.sectionHTMLTemplate).appendTo(this.$accordionHolder);
         if (config.titleList && config.titleList.length > i)
             accordion.find("b").html(config.titleList[i]);
         if (config.contentList && config.contentList.length > i)
@@ -45,8 +49,8 @@ Lumens.List = Class.$extend({
         var accordionTitle = accordion.find(".lumens-accordion-title");
         var form = accordion.find("ul");
         form.toggle(200);
-        accordionTitle.attr("id", config.IdList[i])
-        .click(function() {
+        accordion.attr("id", config.IdList[i])
+        accordionTitle.click(function () {
             __this.doExpandCollapse(accordion);
             // Load data
             if (config.buildContent) {
@@ -54,7 +58,17 @@ Lumens.List = Class.$extend({
             }
         });
     },
-    configure: function(config) {
+    addItem: function (config, pos, isAddToHead) {
+        this.addAccordion(config, 0, isAddToHead);
+        var accordion = this.$accordionHolder.find("#" + config.IdList[0]);
+        if (pos === 0)
+            this.doExpandCollapse(accordion);
+        var contentHolder = accordion.find("#content-holder");
+        if (config.buildContent && contentHolder.children().length === 0)
+            config.buildContent(contentHolder);
+        return this;
+    },
+    configure: function (config) {
         for (var i = 0; i < config.IdList.length; ++i)
             this.addAccordion(config, i);
 
@@ -66,10 +80,10 @@ Lumens.List = Class.$extend({
         }
         return this;
     },
-    buildContent: function(config, accordion) {
+    buildContent: function (config, accordion) {
         var contentHolder = accordion.find("#content-holder");
         if (config.buildContent && contentHolder.children().length === 0)
-            config.buildContent(contentHolder, accordion.find(".icon-expand").length > 0, accordion.find(".lumens-accordion-title"), accordion.find(".lumens-accordion-title").find('b'));
+            config.buildContent(contentHolder, accordion.attr("id"), accordion.find(".icon-expand").length > 0, accordion.find(".lumens-accordion-title"), accordion.find(".lumens-accordion-title").find('b'));
     }
 });
 

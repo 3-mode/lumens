@@ -1,15 +1,17 @@
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-    <div class="panel panel-default" ng-repeat="job in job_list">
-        <div class="panel-heading" role="tab" id="headingOne">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true">
-                    {{job.Name}}
-                </a>
-            </h4>
-        </div>
-        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-            <div class="panel-body">
-                {{job.Description}}
+<div class="lumens-bootstrap">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+        <div class="panel panel-default" ng-repeat="job in job_list">
+            <div class="panel-heading" role="tab" id="{{job.Name}}_heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#{{job.Name}}_collapse" aria-expanded="false">
+                        {{job.name}}
+                    </a>
+                </h4>
+            </div>
+            <div id="{{job.name}}_collapse" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="{{job.name}}_heading">
+                <div class="panel-body">
+                    {{job.description}}
+                </div>
             </div>
         </div>
     </div>

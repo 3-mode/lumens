@@ -91,6 +91,12 @@ a, a:focus, a:hover {
     background:-webkit-gradient(linear, 0 0, 0 bottom, from(#eeeeee), to(rgba(187, 187, 187, 0.5)));  
     background:-o-linear-gradient(top, #eeeeee, rgba(187, 187, 187, 0.5)); 
 }
+.lumens .lumens-gradient-h {
+    background: #eeeeee; /* If the browser not support gradient then use single color background color */
+    background:-moz-linear-gradient(left, #eeeeee, rgba(187, 187, 187, 0.5));  
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#eeeeee), to(rgba(187, 187, 187, 0.5)));  
+    background:-o-linear-gradient(left, #eeeeee, rgba(187, 187, 187, 0.5)); 
+}
 .lumens table {
     border-spacing: 0;
     border-collapse: collapse;

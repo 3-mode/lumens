@@ -13,10 +13,10 @@ import java.util.List;
 public class ApplicationContext {
 
     public static String LUMENS_BASE = System.getProperty("lumens.base", "X:\\PRODUCT\\3MODE\\lumens\\dist\\lumens\\");
+    private final List<String> resultCache = new ArrayList<>();
+    private final String strRealPath;
     private TransformEngine engine;
     private ProjectContext projectContext;
-    private List<String> resultCache = new ArrayList<>();
-    private String strRealPath;
     private static ApplicationContext context;
 
     public static void createInstance(ClassLoader classLoader) {

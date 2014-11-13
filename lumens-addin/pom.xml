@@ -9,7 +9,6 @@
   </parent>
   <groupId>com.lumens</groupId>
   <artifactId>lumens-addin</artifactId>
-  <version>1.0</version>
   <name>lumens-addin</name>
   <url>http://maven.apache.org</url>
   <dependencies>

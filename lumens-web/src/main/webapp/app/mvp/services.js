@@ -6,74 +6,74 @@
 
 Lumens.services = angular.module('lumens-services', ['ngResource']);
 // Services
-Lumens.services.factory('DesignNavMenu', function($resource) {
+Lumens.services.factory('DesignNavMenu', function ($resource) {
     return $resource("app/config/json/desgin_nav_menu.json", {}, {
         get: {method: 'GET', isArray: false}
     });
 });
-Lumens.services.factory('DesignButtons', function($http, $q) {
+Lumens.services.factory('DesignButtons', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/design_command_tmpl.html");
 });
-Lumens.services.factory('ErrorTemplate', function($http, $q) {
+Lumens.services.factory('ErrorTemplate', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/error_tmpl.html");
 });
-Lumens.services.factory('WarningTemplate', function($http, $q) {
+Lumens.services.factory('WarningTemplate', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/warning_tmpl.html");
 });
-Lumens.services.factory('SuccessTemplate', function($http, $q) {
+Lumens.services.factory('SuccessTemplate', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/success_tmpl.html");
 });
-Lumens.services.factory('SmallMessageTmplate', function($http, $q) {
+Lumens.services.factory('SmallMessageTmplate', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/small_message_tmpl.html");
 });
-Lumens.services.factory('PropFormTemplate', function($http, $q) {
+Lumens.services.factory('PropFormTemplate', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/property_form_tmpl.html");
 });
-Lumens.services.factory('TransformListTemplate', function($http, $q) {
+Lumens.services.factory('TransformListTemplate', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/transform_list_tmpl.html");
 });
-Lumens.services.factory('TransformEditTemplate', function($http, $q) {
+Lumens.services.factory('TransformEditTemplate', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/transform_edit_tmpl.html");
 });
-Lumens.services.factory('ProjectListModal', function($http, $q) {
+Lumens.services.factory('ProjectListModal', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/project_list_modal_tmpl.html");
 });
-Lumens.services.factory('ProjectCreateModal', function($http, $q) {
+Lumens.services.factory('ProjectCreateModal', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/project_create_modal_tmpl.html");
 });
-Lumens.services.factory('FormatRegistryModal', function($http, $q) {
+Lumens.services.factory('FormatRegistryModal', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/format_registry_modal_tmpl.html");
 });
-Lumens.services.factory('RuleRegistryModal', function($http, $q) {
+Lumens.services.factory('RuleRegistryModal', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/rule_registry_modal_tmpl.html");
 });
-Lumens.services.factory('ScriptEditTemplate', function($http, $q) {
+Lumens.services.factory('ScriptEditTemplate', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/script_edit_tmpl.html");
 });
-Lumens.services.factory('DatasourceCategory', function($resource) {
+Lumens.services.factory('DatasourceCategory', function ($resource) {
     return $resource("rest/category/component", {}, {
         get: {method: 'GET', isArray: false}
     });
 });
-Lumens.services.factory('InstrumentCategory', function($resource) {
+Lumens.services.factory('InstrumentCategory', function ($resource) {
     return $resource("app/config/json/instrument_category.json", {}, {
         get: {method: 'GET', isArray: false}
     });
 });
-Lumens.services.factory('ProjectList', function($resource) {
+Lumens.services.factory('ProjectList', function ($resource) {
     return $resource("rest/project", {}, {
         get: {method: 'GET', isArray: false}
     });
 });
-Lumens.services.factory('ProjectById', function($resource) {
+Lumens.services.factory('ProjectById', function ($resource) {
     return $resource("rest/project/:project_id", {project_id: '@project_id'}, {
         get: {method: 'GET', isArray: false},
         operate: {method: 'POST', isArray: false}
     });
 });
-Lumens.services.factory('ProjectSave', function($http) {
+Lumens.services.factory('ProjectSave', function ($http) {
     return {
-        save: function(projectJSON, onResponse) {
+        save: function (projectJSON, onResponse) {
             var projectData = {
                 action: projectJSON.projectId ? "update" : "create",
                 content: JSON.stringify({project: projectJSON.project})
@@ -83,28 +83,51 @@ Lumens.services.factory('ProjectSave', function($http) {
         }
     };
 });
-Lumens.services.factory('FormatList', function($resource) {
+Lumens.services.factory('FormatList', function ($resource) {
     return $resource("rest/project/:project_id/format?component_name=:component_name&direction=:direction", {}, {
         getIN: {method: 'GET', params: {direction: 'IN'}, isArray: false},
         getOUT: {method: 'GET', params: {direction: 'OUT'}, isArray: false}
     });
 });
-Lumens.services.factory('FormatByPath', function($resource) {
+Lumens.services.factory('JobList', function ($resource) {
+    return $resource("app/mock/json/job_list.json?pagesize=:pagesize", {}, {
+        get: {method: 'GET', params: {pagesize: '50'}, isArray: false}
+    });
+});
+Lumens.services.factory('JobConfig', function ($resource) {
+    return $resource("app/config/json/job_config.json?pagesize=:pagesize", {});
+});
+Lumens.services.factory('FormatByPath', function ($resource) {
     return $resource("app/mock/json/db_format_list_response.json?component_name=:component_name&format_name=:format_name&format_path=:format_path&direction=:direction", {}, {
         getIN: {method: 'GET', params: {direction: 'IN'}, isArray: false},
         getOUT: {method: 'GET', params: {direction: 'OUT'}, isArray: false}
     });
 });
-Lumens.services.factory('jSyncHtml', function() {
+Lumens.services.factory('SyncGet', function () {
     return {
-        get: function(items) {
+        get: function (url, contentType) {
+            var result;
+            $.ajax({
+                async: false,
+                url: url,
+                contentType: contentType
+            }).done(function (data) {
+                result = data;
+            });
+            return result;
+        }
+    };
+});
+Lumens.services.factory('jSyncHtml', function () {
+    return {
+        get: function (items) {
             for (var i = 0; i < items.length; ++i) {
                 if (items[i].html_url) {
                     $.ajax({
                         async: false,
                         url: items[i].html_url,
                         contentType: "plain/text"
-                    }).done(function(data) {
+                    }).done(function (data) {
                         items[i].html = data;
                     });
                 }
@@ -112,22 +135,22 @@ Lumens.services.factory('jSyncHtml', function() {
         }
     };
 });
-Lumens.services.factory('RuleEditorService', function() {
+Lumens.services.factory('RuleEditorService', function () {
     return {
-        create: function() {
+        create: function () {
             var scopes = [];
             return {
-                addScope: function(scope) {
+                addScope: function (scope) {
                     scopes.push(scope);
                 },
-                destroy: function() {
-                    $.each(scopes, function(i) {
+                destroy: function () {
+                    $.each(scopes, function (i) {
                         scopes[i].$destroy();
                     });
                     scopes = [];
                 },
-                sync: function(script) {
-                    $.each(scopes, function(i) {
+                sync: function (script) {
+                    $.each(scopes, function (i) {
                         scopes[i].setScript(script);
                     });
                 }
@@ -135,17 +158,17 @@ Lumens.services.factory('RuleEditorService', function() {
         }
     }
 });
-Lumens.services.factory('RuleRegister', function() {
+Lumens.services.factory('RuleRegister', function () {
     return {
-        build: function($scope, message) {
+        build: function ($scope, message) {
             LumensLog.log(message, $scope);
         }
     }
 });
-Lumens.services.factory('FormatRegister', function() {
+Lumens.services.factory('FormatRegister', function () {
     return {
         pathEnding: "+-*/ &|!<>\n\r\t^%=;:?,",
-        build: function($scope) {
+        build: function ($scope) {
             var inSelectedName = $scope.inputSelectedFormatName;
             var ruleRegName = $scope.ruleRegName;
             var outSelectedName = $scope.outputSelectedFormatName;
@@ -177,18 +200,18 @@ Lumens.services.factory('FormatRegister', function() {
             this.saveToTransformList($scope, result);
             return result;
         },
-        isInValidSource: function($scope) {
+        isInValidSource: function ($scope) {
             return !$scope.currentUIComponent.$from_list ||
             !$scope.currentUIComponent.$from_list[0] ||
             !$scope.currentUIComponent.$from_list[0].$from.configure.component_info;
         },
-        isInValidTarget: function($scope) {
+        isInValidTarget: function ($scope) {
             return !$scope.currentUIComponent.$to_list ||
             !$scope.currentUIComponent.$to_list[0] ||
             !$scope.currentUIComponent.$to_list[0].$to.configure.component_info;
         },
         // Private memeber functions
-        saveToTransformList: function($scope, result) {
+        saveToTransformList: function ($scope, result) {
             var transformRuleEntry = $scope.currentUIComponent.getTransformRuleEntry();
             if (transformRuleEntry) {
                 for (var i = 0; i < transformRuleEntry.length; ++i) {
@@ -201,7 +224,7 @@ Lumens.services.factory('FormatRegister', function() {
                 transformRuleEntry.push(result.ruleEntry);
             }
         },
-        saveToFormatList: function($scope, result, direction) {
+        saveToFormatList: function ($scope, result, direction) {
             var formatEntry, formatName, format;
             var saveToComp, UIComponent = $scope.currentUIComponent;
             if (direction === "IN") {
@@ -241,7 +264,7 @@ Lumens.services.factory('FormatRegister', function() {
                 });
             }
         },
-        duplicateFormat: function(format) {
+        duplicateFormat: function (format) {
             if (!format)
                 return;
             var duplicate = {
@@ -253,7 +276,7 @@ Lumens.services.factory('FormatRegister', function() {
                 duplicate.property = format.property;
             return duplicate;
         },
-        buildRegistedFormat: function(ruleItem, targetFormats, sourceFormat) {
+        buildRegistedFormat: function (ruleItem, targetFormats, sourceFormat) {
             if (!ruleItem || !targetFormats)
                 return;
             var refTargetFormat = this.findRootFormat(targetFormats, ruleItem.format_name);
@@ -268,7 +291,7 @@ Lumens.services.factory('FormatRegister', function() {
                     this.buildRegistedTargetFormat(this.rootTargetFormat, ruleItems[i], refTargetFormat.format, this.rootSourceFormat, sourceFormat);
             }
         },
-        buildRegistedTargetFormat: function(registedParentFormat, ruleItem, targetFormats, registedSourceParentFormat, sourceFormat) {
+        buildRegistedTargetFormat: function (registedParentFormat, ruleItem, targetFormats, registedSourceParentFormat, sourceFormat) {
             if (!ruleItem || !targetFormats || !registedParentFormat)
                 return false;
             if (ruleItem.script) {
@@ -301,7 +324,7 @@ Lumens.services.factory('FormatRegister', function() {
             }
             return true;
         },
-        buildRegistedSourceFormat: function(registedParentFormat, sourceParentFormat, sourceFormatPaths) {
+        buildRegistedSourceFormat: function (registedParentFormat, sourceParentFormat, sourceFormatPaths) {
             if (registedParentFormat && sourceParentFormat) {
                 // TODO parse the format paths to build required format for source
                 for (var i = 0; i < sourceFormatPaths.length; ++i) {
@@ -311,13 +334,13 @@ Lumens.services.factory('FormatRegister', function() {
                 }
             }
         },
-        buildRegistedSourceChildFormat: function(registedParentFormat, sourceParentFormat, path, tokenIdx) {
+        buildRegistedSourceChildFormat: function (registedParentFormat, sourceParentFormat, path, tokenIdx) {
             for (var i = tokenIdx; i < path.tokenCount(); ++i) {
                 if (!this.buildRegisterSourceChildFormatFromOrignalFormat(registedParentFormat, sourceParentFormat, path, tokenIdx))
                     continue;
             }
         },
-        buildRegisterSourceChildFormatFromOrignalFormat: function(registedParentFormat, sourceParentFormat, path, tokenIdx) {
+        buildRegisterSourceChildFormatFromOrignalFormat: function (registedParentFormat, sourceParentFormat, path, tokenIdx) {
             var childFormat1 = this.findChildFormat(registedParentFormat.format, path.token(tokenIdx));
             var childFormat2 = this.findChildFormat(sourceParentFormat.format, path.token(tokenIdx));
             if (!childFormat2)
@@ -338,7 +361,7 @@ Lumens.services.factory('FormatRegister', function() {
                 this.buildRegistedSourceChildFormat(childFormat1, childFormat2, path, tokenIdx + 1);
             return true;
         },
-        parseScriptFindSourceFormat: function(strScript) {
+        parseScriptFindSourceFormat: function (strScript) {
             // The same algorithm to see lumens-processor module's JavaScriptBuilder.java
             LumensLog.log("Parsing script:", strScript);
             var paths = [];
@@ -373,7 +396,7 @@ Lumens.services.factory('FormatRegister', function() {
             }
             return paths;
         },
-        findRootFormat: function(formatList, formatName) {
+        findRootFormat: function (formatList, formatName) {
             if (formatList) {
                 for (var i = 0; i < formatList.length; ++i)
                     if (formatList[i].format[0].name === formatName)
@@ -381,7 +404,7 @@ Lumens.services.factory('FormatRegister', function() {
             }
             return null;
         },
-        findChildFormat: function(formatList, formatName) {
+        findChildFormat: function (formatList, formatName) {
             if (formatList) {
                 for (var i = 0; i < formatList.length; ++i)
                     if (formatList[i].name === formatName)

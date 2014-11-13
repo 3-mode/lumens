@@ -3,67 +3,54 @@
  */
 
 Lumens.controllers
-.controller("ManageViewCtrl", function ($scope, $route, $http, $compile) {
+.controller("ManageViewCtrl", function ($scope, $route, $compile, JobList, SyncGet) {
     LumensLog.log("in ManageViewCtrl");
     Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
     Lumens.system.switchTo(Lumens.system.AngularJSView);
     $scope.i18n = Lumens.i18n;
+    $scope.manage_side_bar_template = "app/templates/manage/manage_side_bar_tmpl.html";
     $scope.job_bar_template = "app/templates/manage/job_command_tmpl.html";
+    $scope.job_config_template = "app/templates/manage/job_config_tmpl.html";
     $scope.job_create_template = "app/templates/manage/job_create_modal_tmpl.html";
+    $scope.job_function_tool_template = "app/templates/manage/job_function_tool_tmpl.html";
+    $scope.jobListHolder = new Lumens.List($("#jobList"));
+    $scope.job_config = SyncGet.get("app/config/json/job_config.json", "text/json");
     // Job command bar function
     $scope.onCommand = function (id_btn) {
         LumensLog.log("in Job onCommand");
-        $scope.job = {Name: "", Description: ""};
+        $scope.job = {name: "", description: ""};
     };
     // Create job function
     $scope.createJob = function () {
         LumensLog.log("in createJob");
         LumensLog.log("Job", $scope.job);
+        $scope.job.id = $.currentTime();
+        $scope.jobListHolder.addItem({
+            IdList: [
+                $scope.job.id
+            ],
+            titleList: [
+                $scope.job.name + " [" + $scope.job.id + "]"
+            ],
+            buildContent: function (itemContent) {
+                itemContent.append($compile('<div ng-include="job_config_template" />')($scope));
+            }
+        }, 0, true);
     };
-
-    /*
-     $scope.job_list = [
-     {
-     Name: "Test1",
-     Description: "This is a Test1"
-     },
-     {
-     Name: "Test2",
-     Description: "This is a Test2"
-     },
-     {
-     Name: "Test3",
-     Description: "This is a Test3"
-     },
-     {
-     Name: "Test4",
-     Description: "This is a Test4"
-     }
-     ];
-     $scope.jobListHolder = new Lumens.List($("#jobList")).configure({
-     IdList: [
-     $scope.job_list[0].Name,
-     $scope.job_list[1].Name,
-     $scope.job_list[2].Name
-     ],
-     titleList: [
-     $scope.job_list[0].Name,
-     $scope.job_list[1].Name,
-     $scope.job_list[2].Name
-     ],
-     buildContent: function (itemContent, isExpand, title) {
-     if (isExpand) {
-     var itemID = title.attr("id");
-     if (itemID === $scope.job_list[0].Name) {
-     itemContent.append($scope.job_list[0].Description);
-     }
-     else if (itemID === $scope.job_list[1].Name) {
-     itemContent.append($scope.job_list[1].Description);
-     }
-     else if (itemID === $scope.job_list[2].Name) {
-     itemContent.append($scope.job_list[2].Description);
-     }
-     }
-     }
-     }); //*/
+    JobList.get(function (result) {
+        LumensLog.log(result);
+        for (var i = 0; i < result.jobs.length; ++i) {
+            $scope.jobListHolder.addItem({
+                IdList: [
+                    result.jobs[i].id
+                ],
+                titleList: [
+                    result.jobs[i].name + " [" + result.jobs[i].id + "]"
+                ],
+                buildContent: function (itemContent) {
+                    itemContent.append($compile('<div ng-include="job_config_template" />')($scope));
+                }
+            }, i);
+        }
+    });
 });

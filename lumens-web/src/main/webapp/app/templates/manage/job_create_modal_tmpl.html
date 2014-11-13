@@ -5,15 +5,15 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title" id="myModalLabel">{{i18n['id_job_create_title']}}</h4>
             </div>
-            <div class="modal-body table-responsive" ng-init="projectDescription = ''">
+            <div class="modal-body table-responsive" ng-init="job.description = ''">
                 <form role="form">
                     <div class="form-group">
                         <label for="inputJobName">{{i18n['id_job_name']}}</label>
-                        <input ng-model="job.Name" type="text" class="form-control" id="inputJobName" placeholder="{{i18n['id_job_name']}}">
+                        <input ng-model="job.name" type="text" class="form-control" id="inputJobName" placeholder="{{i18n['id_job_name']}}">
                     </div>
                     <div class="form-group">
-                        <label for="inputJobDescription">{{i18n['id_description']}}</label>
-                        <textarea ng-model="job.Description" class="form-control" rows="3" id="inputJobDescription"></textarea>
+                        <label for="inputJobDescription">{{i18n['id_job_description']}}</label>
+                        <textarea ng-model="job.description" class="form-control" rows="3" id="inputJobDescription" placeholder="{{i18n['id_job_desc_placeholder']}}"></textarea>
                     </div>
                 </form>
             </div>

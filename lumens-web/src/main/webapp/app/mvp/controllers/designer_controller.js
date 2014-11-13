@@ -133,20 +133,19 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                                 "Resources",
                                 "Instruments"
                             ],
-                            buildContent: function (itemContent, isExpand, title) {
+                            buildContent: function (itemContent, id, isExpand, title) {
                                 if (isExpand) {
-                                    var itemID = title.attr("id");
-                                    if (itemID === "Description") {
+                                    if (id === "Description") {
                                         $http.get("app/templates/designer/project_desc_tmpl.html").success(function (project_desc_tmpl) {
                                             itemContent.append($compile(project_desc_tmpl)($scope));
                                         });
                                     }
-                                    else if (itemID === "Resources") {
+                                    else if (id === "Resources") {
                                         $http.get("app/templates/designer/resources_tmpl.html").success(function (resources_tmpl) {
                                             itemContent.append($compile(resources_tmpl)($scope));
                                         });
                                     }
-                                    else if (itemID === "Instruments") {
+                                    else if (id === "Instruments") {
                                         $http.get("app/templates/designer/instruments_tmpl.html").success(function (instruments_tmpl) {
                                             itemContent.append($compile(instruments_tmpl)($scope));
                                         });
@@ -163,10 +162,9 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
                             titleList: [
                                 $compile('<span data-bind="categoryInfo.name">{{categoryInfo.name}}</span>')($scope)
                             ],
-                            buildContent: function (itemContent, isExpand, title) {
+                            buildContent: function (itemContent, id, isExpand, title) {
                                 if (isExpand) {
-                                    var itemID = title.attr("id");
-                                    if (itemID === "ComponentProps") {
+                                    if (id === "ComponentProps") {
                                         PropFormTemplate.get(function (propFormTmpl) {
                                             itemContent.append($compile(propFormTmpl)($scope));
                                         })

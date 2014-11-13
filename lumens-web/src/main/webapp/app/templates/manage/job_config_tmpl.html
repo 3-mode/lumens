@@ -1,0 +1,68 @@
+<style type="text/css">
+    input, textarea, select {
+        font-size: 16px;
+        margin-left:3px;
+        width:100%;
+        height:100%;
+    }
+    .must {
+        color: red;
+    }
+    .label-style {
+        width: 100px;
+        height: 30px;
+        text-align: right;
+    }
+    .value-style {
+        width: 250px;
+        height: 30px;
+        border-left:1px solid rgb(163, 163, 163);
+    }
+    .value-style-colspan-3 {
+        height: 30px;
+        border-left: 1px solid rgb(163, 163, 163);
+    }
+    .value-textarea-style-colspan-3 {
+        height: 60px;
+        border-left: 1px solid rgb(163, 163, 163);
+    }
+    .offset_buttons {
+        padding-left: 100px;
+    }
+</style>
+<table>
+    <tbody>
+        <tr>
+            <td class="label-style must">{{i18n['id_job_title']}}</td>
+            <td class="value-style-colspan-3" colspan="3">
+                <input type="text" ng-model="job.title"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-style">{{i18n['id_job_start_time']}}</td>
+            <td class="value-style">
+                <input type="text" ng-model="job.start_time"/>
+            </td>
+            <td class="label-style">{{i18n['id_job_end_time']}}</td>
+            <td class="value-style">
+                <input type="text" ng-model="job.end_time"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-style">{{i18n['id_job_repeat']}}</td>
+            <td class="value-style-colspan-3" colspan="3">
+                <select ng-model="job.repeat_mode">
+                    <option ng-if="job_config && job_config.repeat_modes" ng-repeat='repeat_item in job_config.repeat_modes' value="repeat_item.value">{{i18n[repeat_item.label_id]}}</option>
+                </select>    
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <div class="offset_buttons">
+                    <a class="lumens-button" ng-repeat="id_btn in ['id_save', 'id_start', 'id_stop']" ng-click="onCommand(id_btn)">{{i18n[id_btn]}}</a>
+                    <a class="lumens-button lumens-button-delete" ng-click="onCommand('id_delete')">{{i18n.id_delete}}</a>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

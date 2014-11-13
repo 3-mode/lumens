@@ -1,0 +1,24 @@
+{
+    "repeat_modes": [
+        {
+            "label_id": "id_job_repeat_never",
+            "value": "Never"
+        },
+        {
+            "label_id": "id_job_repeat_daily",
+            "value": "Daily"
+        },
+        {
+            "label_id": "id_job_repeat_weekly",
+            "value": "Weekly"
+        },
+        {
+            "label_id": "id_job_repeat_monthly",
+            "value": "Monthly"
+        },
+        {
+            "label_id": "id_job_repeat_yearly",
+            "value": "Yearly"
+        }
+    ]
+}
