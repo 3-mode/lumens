@@ -5,6 +5,18 @@
             "value": "Never"
         },
         {
+            "label_id": "id_job_repeat_secondly",
+            "value": "Secondly"
+        },
+        {
+            "label_id": "id_job_repeat_minutely",
+            "value": "Minutely"
+        },
+        {
+            "label_id": "id_job_repeat_hourly",
+            "value": "Hourly"
+        },
+        {
             "label_id": "id_job_repeat_daily",
             "value": "Daily"
         },

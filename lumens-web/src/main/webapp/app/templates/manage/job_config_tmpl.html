@@ -30,38 +30,97 @@
         padding-left: 100px;
     }
 </style>
-<table>
+<table ng-controller="JobConfigInitCtrl">
     <tbody>
         <tr>
-            <td class="label-style must">{{i18n['id_job_title']}}</td>
+            <td class="label-style must">{{i18n['id_job_name']}}</td>
             <td class="value-style-colspan-3" colspan="3">
-                <input type="text" ng-model="job.title"/>
-            </td>
-        </tr>
-        <tr>
-            <td class="label-style">{{i18n['id_job_start_time']}}</td>
-            <td class="value-style">
-                <input type="text" ng-model="job.start_time"/>
-            </td>
-            <td class="label-style">{{i18n['id_job_end_time']}}</td>
-            <td class="value-style">
-                <input type="text" ng-model="job.end_time"/>
+                <div class="lumens-bootstrap" style="padding-left: 3px;">
+                    <input type="text" ng-model="job.name" class="form-control"/>
+                </div>
             </td>
         </tr>
         <tr>
             <td class="label-style">{{i18n['id_job_repeat']}}</td>
             <td class="value-style-colspan-3" colspan="3">
-                <select ng-model="job.repeat_mode">
-                    <option ng-if="job_config && job_config.repeat_modes" ng-repeat='repeat_item in job_config.repeat_modes' value="repeat_item.value">{{i18n[repeat_item.label_id]}}</option>
-                </select>    
+                <div class="lumens-bootstrap" style="padding-left: 3px;">
+                    <select ng-model="job.repeat_mode" class="form-control">
+                        <option ng-if="job_config && job_config.repeat_modes" ng-repeat='repeat_item in job_config.repeat_modes' value="repeat_item.value">{{i18n[repeat_item.label_id]}}</option>
+                    </select> 
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-style">{{i18n['id_job_interval_time']}}</td>
+            <td class="value-style-colspan-3" colspan="3">
+                <div class="lumens-bootstrap" style="padding-left: 3px;">
+                    <input type="number" class="form-control" ng-model="job.interval"/>   
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-style">{{i18n['id_job_start_time']}}</td>
+            <td class="value-style">
+                <div class="lumens-bootstrap" style="padding-left: 3px;">
+                    <div id="{{job.id}}" style="width: 100%;" class="input-group date form_time" data-date="" data-date-format="hh:ii" data-link-field="dtp_input_start" data-link-format="hh:ii">
+                        <input ng-model="job.start_time" class="form-control" size="16" type="text">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                        <input type="hidden" id="dtp_input_start" value="" />
+                    </div>
+                </div>
+            </td>
+            <td class="label-style">{{i18n['id_job_end_time']}}</td>
+            <td class="value-style">
+                <div class="lumens-bootstrap" style="padding-left: 3px;">
+                    <div id="{{job.id}}" style="width: 100%;" class="input-group date form_time" data-date="" data-date-format="hh:ii" data-link-field="dtp_input_end" data-link-format="hh:ii">
+                        <input ng-model="job.end_time" class="form-control" size="16" type="text">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                        <input type="hidden" id="dtp_input_end" value="" />
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="label-style">{{i18n['id_job_description']}}</td>
+            <td class="value-textarea-style-colspan-3" colspan="3">
+                <div class="lumens-bootstrap" style="padding-left: 3px;">
+                    <textarea ng-model="job.description" class="form-control" >{{job.description}}</textarea>
+                </div>
             </td>
         </tr>
         <tr>
             <td colspan="4">
-                <div class="offset_buttons">
-                    <a class="lumens-button" ng-repeat="id_btn in ['id_save', 'id_start', 'id_stop']" ng-click="onCommand(id_btn)">{{i18n[id_btn]}}</a>
-                    <a class="lumens-button lumens-button-delete" ng-click="onCommand('id_delete')">{{i18n.id_delete}}</a>
+                <div class="lumens-bootstrap">
+                    <div class="table-responsive" style="padding-top: 10px; padding-left: 30px;">
+                        <!-- <div id='projectLoading'><img src='app/css/img/loading.gif'/></div> -->
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Project ID</th>
+                                    <th>Project Name</th>
+                                    <th>Status</th>
+                                    <th>Operation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="3" data-toggle="modal" data-target="#projectListAddModal" style="cursor: pointer;" ng-click="AddManageProject()">Add ...</td>
+                                    <td>
+                                        <div class="lumens-bootstrap" ng-include="job_add_proj_manage_template"></div>
+                                    </td>
+                                </tr>
+                                <tr ng-repeat="project in job.project_list" project-id="{{project.project_id}}" style="cursor: pointer;" ng-class="{'lumens-h-active':{{$index}} === selectProjIndex}" ng-click="selectProjItem($index)">
+                                    <td>{{project.project_id}}</td><td>{{project.project_name}}</td><td>Health</td><td>Edit | Delete</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <div id="jobCofnig" class="lumens-bootstrap" style="position: relative;"></div>
             </td>
         </tr>
     </tbody>

@@ -3,17 +3,48 @@
         {
             "id": "10001",
             "name": "Integration from Employee to EmployeeTest",
-            "description": "This is a 10001 test"
+            "description": "This is a 10001 test",
+            "repeat_mode": "Never",
+            "project_list": [
+                {
+                    "project_id": "101",
+                    "project_name": "test project 1"
+                },
+                {
+                    "project_id": "102",
+                    "project_name": "test project 3"
+                }
+            ]
         },
         {
             "id": "10002",
             "name": "Import CSV into EmployeeTest",
-            "description": "This is a 10002 test"
+            "description": "This is a 10002 test",
+            "project_list": [
+                {
+                    "project_id": "1011",
+                    "project_name": "test 1 project 1"
+                },
+                {
+                    "project_id": "1012",
+                    "project_name": "test 1 project 3"
+                }
+            ]
         },
         {
             "id": "10003",
             "name": "Integration China Airline SOAP with DB",
-            "description": "This is a 10003 test"
+            "description": "This is a 10003 test",
+            "project_list": [
+                {
+                    "project_id": "1021",
+                    "project_name": "test 2 project 1"
+                },
+                {
+                    "project_id": "1022",
+                    "project_name": "test 2 project 3"
+                }
+            ]
         },
         {
             "id": "10004",

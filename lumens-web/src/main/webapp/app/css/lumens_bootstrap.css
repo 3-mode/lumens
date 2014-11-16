@@ -2466,8 +2466,8 @@
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url('../fonts/glyphicons-halflings-regular.eot');
-  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('../../libs/bootstrap/fonts/glyphicons-halflings-regular.eot');
+  src: url('../../libs/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../../libs/bootstrap/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../../libs/bootstrap/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../../libs/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .lumens-bootstrap .glyphicon {
   position: relative;
@@ -3457,7 +3457,7 @@
 }
 .lumens-bootstrap .input-group-addon,
 .lumens-bootstrap .input-group-btn {
-  width: 1%;
+  /* width: 1%; */
   white-space: nowrap;
   vertical-align: middle;
 }

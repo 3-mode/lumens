@@ -1,18 +1,18 @@
 <div class="lumens-bootstrap">
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-        <div class="panel panel-default" ng-repeat="job in job_list">
-            <div class="panel-heading" role="tab" id="{{job.Name}}_heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#{{job.Name}}_collapse" aria-expanded="false">
-                        {{job.name}}
-                    </a>
-                </h4>
-            </div>
-            <div id="{{job.name}}_collapse" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="{{job.name}}_heading">
-                <div class="panel-body">
-                    {{job.description}}
-                </div>
-            </div>
-        </div>
+    <div class="table-responsive" style="padding-top: 10px; padding-left: 30px; padding-right: 30px;">
+        <!-- <div id='projectLoading'><img src='app/css/img/loading.gif'/></div> -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Job Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="job_item in jobs" job-id="{{job_item.id}}" style="cursor: pointer;" ng-class="{'lumens-h-active':{{$index}} === selectJobIndex}" ng-click="openJobDetail($index, job_item, $event)">
+                    <td>{{job_item.name}}</td><td>{{job_item.description}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

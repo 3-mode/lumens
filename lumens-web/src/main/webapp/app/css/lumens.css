@@ -591,7 +591,7 @@ svg path {
 .lumens .lumens-button-bar {
     height: 46px;
     display: block;
-    color:white !important;
+    /* color:white !important; */
     width: 100%;
     border-bottom: 1px solid rgb(184, 184, 184);
     border-radius: 12px;
@@ -679,8 +679,14 @@ svg path {
 .lumens .CodeMirror {
     height:100% !important;
 }
-.lumens .lumens-job-list {
-    padding-top: 5px;
+.lumens .lumens-scroll-panel {
     width: 100%;
-    height: calc(100% - 51px);
+    height: 100%;
+    overflow: auto; 
+    position: relative;
+}
+.lumens .lumens-input-panel {
+    width: 100%;
+    height: 100%;
+    display: inline;
 }

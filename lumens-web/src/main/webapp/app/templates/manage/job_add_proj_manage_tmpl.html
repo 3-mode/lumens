@@ -1,0 +1,30 @@
+<div id="projectListAddModal" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog modal-lg-ex">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Project Catalog</h4>
+            </div>
+            <div class="modal-body table-responsive">
+                <div id='projectLoading'><img src='app/css/img/loading.gif' ng-if="!projects || projects.length <= 0"/></div>
+                <table class="table"  ng-if="projects && projects.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="project in projects" project-id="{{project.id}}" style="cursor: pointer;" ng-class="{'lumens-h-active':{{$index}} === selectAddedProjIndex}" ng-click="selectAddedProject($index, $event)" ng-dblclick="addProjectToManage()">
+                            <td>{{project.name}}</td><td>{{project.description}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addProject()">Add Project</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
