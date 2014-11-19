@@ -18,6 +18,7 @@ import com.lumens.connector.Connector;
 import com.lumens.connector.ConnectorFactory;
 import com.lumens.connector.OperationResult;
 import com.lumens.connector.database.DatabaseConstants;
+import com.lumens.processor.script.JavaScriptContext;
 import static com.lumens.connector.database.DatabaseConstants.CONNECTION_URL;
 import static com.lumens.connector.database.DatabaseConstants.FULL_LOAD;
 import static com.lumens.connector.database.DatabaseConstants.OJDBC;
@@ -63,6 +64,10 @@ public class ConnectorTest {
     private final String PASSWORD_Val = "hr";
     private final String TABLE_NAM = "employee";
      
+    public ConnectorTest(){
+        JavaScriptContext.start();
+    }
+    
     @Before
     public void testSqlServerConnection() {
         StringBuilder alterSession = new StringBuilder();
@@ -168,7 +173,7 @@ public class ConnectorTest {
     }
 
     @Test
-    public void testSqlServerOperation() throws Exception {
+    public void testSqlServerOperation() throws Exception {        
         Format employeeFmt = new DataFormat("employees", Form.STRUCT);
         employeeFmt.addChild(CONST_CNTR_SQLSERVER_CLAUSE, Form.FIELD);
         employeeFmt.addChild(CONST_CNTR_SQLSERVER_OPERATION, Form.FIELD);
