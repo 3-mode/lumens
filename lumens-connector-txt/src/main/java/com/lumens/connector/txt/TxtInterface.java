@@ -18,5 +18,4 @@ import java.io.OutputStream;
 public interface TxtInterface {
     public void read(InputStream ins);    
     public void write(OutputStream ous);
-    public boolean validate(String xsdFileName);
 }

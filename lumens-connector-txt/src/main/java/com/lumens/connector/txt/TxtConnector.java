@@ -25,28 +25,35 @@ public class TxtConnector implements Connector{
     private Map<String, Format> formatListIn;
     private Map<String, Format> formatListOut;
     private FormatBuilder formatBuilder;
-    private Map<String, Format> xmlFmt;
-    private TxtClient xml;
+    private Map<String, Format> txtFmt;
+    private TxtClient txtCnt;
     private Direction direction;
     Map<String, Value> propList;
         
-    // xml properties 
-    //private String version;
-    //private String encoding;
-    //private String xmlpath;    
+    // properties 
+    private String encoding;
+    private String path;  
+    private String linedelimiter;  
+    private String filedelimiter; 
+    private String escapechar; 
     
     @Override
     public void setPropertyList(Map<String, Value> props){
         propList = props;
-        /*if (props.containsKey(XmlConstants.VERSION))        
-            version = props.get(XmlConstants.VERSION).getString();
+        if (props.containsKey(TxtConstants.ENCODING))        
+            encoding = props.get(TxtConstants.ENCODING).getString();
         
-        if (props.containsKey(XmlConstants.ENCODING))
-            encoding = props.get(XmlConstants.ENCODING).getString();
+        if (props.containsKey(TxtConstants.PATH))
+            path = props.get(TxtConstants.PATH).getString();
 
-        if (props.containsKey(XmlConstants.XMLPATH))
-            xmlpath = props.get(XmlConstants.XMLPATH).getString();        
-                */
+        if (props.containsKey(TxtConstants.LINEDELIMITER))
+            linedelimiter = props.get(TxtConstants.LINEDELIMITER).getString();        
+
+        if (props.containsKey(TxtConstants.FILEDELIMITER))
+            filedelimiter = props.get(TxtConstants.FILEDELIMITER).getString(); 
+        
+        if (props.containsKey(TxtConstants.ESCAPECHAR))
+            escapechar = props.get(TxtConstants.ESCAPECHAR).getString();         
     }
         
     @Override
@@ -57,8 +64,8 @@ public class TxtConnector implements Connector{
     // To craete specific client in type of DOM or SAX 
     @Override
     public void open(){
-        if ( xml == null) {
-            xml = TxtClientFactory.createTXTClient(this);
+        if ( txtCnt == null) {
+            txtCnt = new TxtClient(this);
             if (direction == direction.IN)
             {
                 
@@ -82,12 +89,12 @@ public class TxtConnector implements Connector{
 
     @Override
     public Map<String, Format> getFormatList(Direction direction){
-        return xml.getFormatList(direction);
+        return txtCnt.getFormatList(direction);
 
     }
 
     @Override
     public Format getFormat(Format format, String path, Direction direction){
-        return xml.getFormat(format, path, direction);
+        return txtCnt.getFormat(format, path, direction);
     }     
 }

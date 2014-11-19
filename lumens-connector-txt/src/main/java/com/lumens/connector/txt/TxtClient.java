@@ -6,6 +6,7 @@
 
 package com.lumens.connector.txt;
 
+import com.lumens.connector.Connector;
 import com.lumens.connector.Direction;
 import com.lumens.model.Format;
 import java.io.InputStream;
@@ -16,18 +17,31 @@ import java.util.Map;
  *
  * @author whiskey
  */
-public abstract class TxtClient implements TxtInterface{
+public class TxtClient implements TxtInterface{
     protected TxtConnector xmlCntr;     
     
-    abstract public void init();
-           
-    abstract public void read(InputStream ins);    
+    public TxtClient(TxtConnector cnt){
+        xmlCntr = cnt;
+    }
     
-    abstract public void write(OutputStream ous);
-    
-    abstract public boolean validate(String xsdFileName);
+    public void init()
+    {
         
-    abstract public Map<String, Format> getFormatList(Direction direction); 
+    }
+           
+    public void read(InputStream ins){
+        
+    }            
     
-    abstract public Format getFormat(Format format, String path, Direction direction);
+    public void write(OutputStream ous){
+        
+    }
+        
+    public Map<String, Format> getFormatList(Direction direction){
+        return null;
+    }
+    
+    public Format getFormat(Format format, String path, Direction direction){
+        return null;
+    }
 }
