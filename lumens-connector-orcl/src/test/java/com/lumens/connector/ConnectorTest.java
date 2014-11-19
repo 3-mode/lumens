@@ -31,7 +31,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import static junit.framework.TestCase.assertTrue;
-import junit.framework.TestSuite;
 import org.junit.Test;
 
 /**
