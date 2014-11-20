@@ -10,7 +10,7 @@ import com.lumens.connector.ConnectorFactory;
  *
  * @author whiskey
  */
-public class TxtConnectorFactory implements ConnectorFactory {
+public class TextConnectorFactory implements ConnectorFactory {
 
     @Override
     public String getComponentType() {
@@ -19,6 +19,6 @@ public class TxtConnectorFactory implements ConnectorFactory {
 
     @Override
     public Connector createConnector() {
-        return new TxtConnector();
+        return new TextConnector();
     }
 }

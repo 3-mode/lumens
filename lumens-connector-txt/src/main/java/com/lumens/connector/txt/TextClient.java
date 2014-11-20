@@ -17,10 +17,10 @@ import java.util.Map;
  *
  * @author whiskey
  */
-public class TxtClient implements TxtInterface{
-    protected TxtConnector xmlCntr;     
+public class TextClient {
+    protected TextConnector xmlCntr;     
     
-    public TxtClient(TxtConnector cnt){
+    public TextClient(TextConnector cnt){
         xmlCntr = cnt;
     }
     

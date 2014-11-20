@@ -12,7 +12,7 @@ import com.lumens.model.Format;
  *
  * @author whiskey
  */
-public class TxtOperation implements Operation {
+public class TextOperation implements Operation {
 
     @Override
     public void begin() {

@@ -7,7 +7,7 @@ package com.lumens.connector.txt;
  *
  * @author whiskey
  */
-public interface TxtConstants {
+public interface TextConstants {
     public static final String ENCODING = "encoding";
     public static final String PATH = "path";
     public static final String LINEDELIMITER = "linedelimiter";
