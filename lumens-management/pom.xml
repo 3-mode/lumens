@@ -31,14 +31,14 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${copyto.module.dir}/manage/jni/sigar</outputDirectory>
+                            <outputDirectory>${copyto.module.dir}/manage/jni</outputDirectory>
                             <resources>          
                                 <resource>
                                     <directory>src/main/resources/sigar_jni</directory>
                                     <includes>
                                         <include>*</include>
                                     </includes>
-                                    <filtering>true</filtering>
+                                    <filtering>false</filtering>
                                 </resource>
                             </resources>
                         </configuration>
