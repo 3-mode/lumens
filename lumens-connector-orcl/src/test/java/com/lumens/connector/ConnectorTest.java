@@ -30,30 +30,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import static junit.framework.TestCase.assertTrue;
+import org.junit.Test;
 
 /**
  * Unit test for simple App.
  */
-public class ConnectorTest extends TestCase implements DatabaseConstants, OracleConstants {
+public class ConnectorTest implements DatabaseConstants, OracleConstants {
 
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public ConnectorTest(String testName) {
-        super(testName);
+    public ConnectorTest() {
         JavaScriptContext.start();
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite() {
-        return new TestSuite(ConnectorTest.class);
+    @Test
+    public void testEmpty() {
+
     }
 
     public void testOracleConnector() throws Exception {
@@ -71,8 +62,9 @@ public class ConnectorTest extends TestCase implements DatabaseConstants, Oracle
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 baos.write("[".getBytes());
                 for (Format format : cntr.getFormatList(null).values()) {
-                    if (baos.size() >= "[".getBytes().length)
+                    if (baos.size() >= "[".getBytes().length) {
                         baos.write(",".getBytes());
+                    }
                     FormatSerializer writer = new FormatSerializer(format);
                     writer.writeToJson(baos);
                 }
