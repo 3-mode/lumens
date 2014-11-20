@@ -4,6 +4,8 @@
 package com.lumens.backend;
 
 import com.lumens.io.JsonUtility;
+import java.io.File;
+import java.nio.file.Paths;
 import javax.ws.rs.core.Response;
 import org.codehaus.jackson.JsonGenerator;
 
@@ -11,6 +13,10 @@ public class ServerUtils {
 
     public static long generateID() {
         return System.currentTimeMillis();
+    }
+
+    public static String getNormalizedPath(String path) {
+        return Paths.get(new File(path).toURI()).normalize().toFile().getAbsolutePath();
     }
 
     public static Response getErrorMessageResponse(String error) {
