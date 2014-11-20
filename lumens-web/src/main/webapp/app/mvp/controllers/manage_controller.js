@@ -109,9 +109,9 @@ Lumens.controllers
     Morris.Donut({
         element: 'serverMonitorHolder',
         data: [
-            {label: "Download Sales", value: 12},
-            {label: "In-Store Sales", value: 30},
-            {label: "Mail-Order Sales", value: 20}
+            {label: "User CPU", value: 12},
+            {label: "System CPU", value: 30},
+            {label: "Idle CPU", value: 20}
         ]
     });
 });
