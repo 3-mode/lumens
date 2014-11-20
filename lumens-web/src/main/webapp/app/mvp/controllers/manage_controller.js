@@ -3,7 +3,7 @@
  */
 
 Lumens.controllers
-.controller("ManageViewCtrl", function ($scope, $route, $compile, JobList, SyncGet, ProjectList) {
+.controller("ManageViewCtrl", function ($scope, $route, SyncGet, ManageNavMenu) {
     LumensLog.log("in ManageViewCtrl");
     Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
     Lumens.system.switchTo(Lumens.system.AngularJSView);
@@ -18,6 +18,28 @@ Lumens.controllers
     $scope.jobListHolder = new Lumens.List($("#jobList"));
     $scope.job_config = SyncGet.get("app/config/json/job_config.json", "text/json");
     $scope.job = {};
+    ManageNavMenu.get(function (menu) {
+        var manageMavMenu = $("#manageNavMenu");
+        $(window).resize(function (e) {
+            if (e && e.target !== this)
+                return;
+            manageMavMenu.trigger("resize");
+        })
+        $scope.navMenu = new Lumens.NavMenu({
+            container: manageMavMenu,
+            width: "100%",
+            height: "auto",
+            item_selected: true
+        }).configure(menu)
+        .onItemClick(function (evt) {
+            LumensLog.log(evt);
+            $scope.$apply(function () {
+                $scope.manageSelection = evt.module_id;
+            })
+        });
+    })
+})
+.controller("JobManagementCtrl", function ($scope, $compile, JobList, ProjectList) {
     var jobManagementHolder = $("#jobManagementHolder");
     $(window).resize(function (e) {
         if (e && e.target !== this)
@@ -81,5 +103,15 @@ Lumens.controllers
         maxView: 1,
         forceParse: 0,
         pickerPosition: "bottom-left"
+    });
+})
+.controller("ServerMonitorCtrl", function ($scope) {
+    Morris.Donut({
+        element: 'serverMonitorHolder',
+        data: [
+            {label: "Download Sales", value: 12},
+            {label: "In-Store Sales", value: 30},
+            {label: "Mail-Order Sales", value: 20}
+        ]
     });
 });

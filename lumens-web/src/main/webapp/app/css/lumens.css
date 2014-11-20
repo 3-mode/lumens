@@ -690,3 +690,13 @@ svg path {
     height: 100%;
     display: inline;
 }
+.lumens .lumens-h-button {
+    height: 40px;
+    width: 100%;
+    border-bottom: 1px solid rgb(190, 190, 190);
+    cursor: pointer;
+}
+.lumens .lumens-h-button-text-pos {
+    padding-top: 12px;
+    padding-left: 15px;
+}

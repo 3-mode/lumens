@@ -1,0 +1,20 @@
+{
+    "event_type": "NavMenu_Management",
+    "sections": [
+        {
+            "name": "Management",
+            "items": [
+                {
+                    "id": "job-management",
+                    "name": "Job Management",
+                    "item_icon_url": "app/css/img/Transform24x24.png"
+                },
+                {
+                    "id": "server-monitor",
+                    "name": "Server Monitor",
+                    "item_icon_url": "app/css/img/Transform24x24.png"
+                }
+            ]
+        }
+    ]
+}

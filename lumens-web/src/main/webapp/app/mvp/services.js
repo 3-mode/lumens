@@ -103,6 +103,12 @@ Lumens.services.factory('FormatByPath', function ($resource) {
         getOUT: {method: 'GET', params: {direction: 'OUT'}, isArray: false}
     });
 });
+Lumens.services.factory('ManageNavMenu', function ($resource) {
+    return $resource("app/config/json/manage_nav_menu.json", {}, {
+        get: {method: 'GET', isArray: false}
+    });
+});
+
 Lumens.services.factory('SyncGet', function () {
     return {
         get: function (url, contentType) {
