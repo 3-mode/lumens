@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class AddinEngine implements Addin {
 
-    private AddinContext addinContext;
-    private AddinURLClassLoader engineClassLoader;
+    private final AddinContext addinContext;
+    private final AddinURLClassLoader engineClassLoader;
     private List<AddinURLClassLoader> classLoaderList = new ArrayList<>();
     
     public AddinEngine(ClassLoader parentClassLoader) {

@@ -36,9 +36,9 @@ public class AddinDefaultContext implements AddinContext {
 
     protected static class AddinImpl implements Addin {
 
-        private AddinContext addinContext;
-        private String parentPath;
-        private AddinURLClassLoader urlClassLoader;
+        private final AddinContext addinContext;
+        private final String parentPath;
+        private final AddinURLClassLoader urlClassLoader;
         private Manifest manifest;
         private String addinName;
 
