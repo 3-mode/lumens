@@ -4,6 +4,9 @@
 package com.lumens.backend;
 
 import com.lumens.engine.TransformEngine;
+import com.lumens.management.server.monitor.OSResourcesMonitor;
+import com.lumens.management.server.monitor.ServerManagementFactory;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +20,13 @@ public class ApplicationContext {
     private final String strRealPath;
     private TransformEngine engine;
     private ProjectContext projectContext;
+    private OSResourcesMonitor osResourcesMonitor;
     private static ApplicationContext context;
 
     public static void createInstance(ClassLoader classLoader) {
         // TODO
         System.out.println("Lumens Base: " + LUMENS_BASE);
-        context = new ApplicationContext(classLoader, LUMENS_BASE);
+        context = new ApplicationContext(LUMENS_BASE, classLoader);
         context.start();
     }
 
@@ -30,10 +34,10 @@ public class ApplicationContext {
         return context;
     }
 
-    public ApplicationContext(ClassLoader classLoader, String realPath) {
+    public ApplicationContext(String realPath, ClassLoader classLoader) {
+        strRealPath = realPath;
         engine = new TransformEngine(classLoader);
         projectContext = new ProjectContext();
-        strRealPath = realPath;
     }
 
     public ProjectContext getProjectContext() {
@@ -54,14 +58,18 @@ public class ApplicationContext {
         return this.engine;
     }
 
+    public OSResourcesMonitor getOSResourcesMonitor() {
+        return this.osResourcesMonitor;
+    }
+
     public String getRealPath() {
         return strRealPath;
     }
 
     public synchronized void cacheResultString(String result) {
-        if (resultCache.size() < 20)
+        if (resultCache.size() < 20) {
             resultCache.add(result);
-        else if (resultCache.size() >= 20) {
+        } else if (resultCache.size() >= 20) {
             resultCache.set(resultCache.size() % 20, result);
         }
     }
@@ -72,7 +80,8 @@ public class ApplicationContext {
     }
 
     public void start() {
-        engine.start(getRealPath() + "/addin");
+        engine.start(ServerUtils.getNormalizedPath(getRealPath() + "/addin"));
+        osResourcesMonitor = ServerManagementFactory.createOSResourcesMonitor(ServerUtils.getNormalizedPath(getRealPath() + "/module/manage/jni"));
     }
 
     public void stop() {

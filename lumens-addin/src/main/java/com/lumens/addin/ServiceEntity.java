@@ -8,11 +8,12 @@ import java.util.Map;
 /**
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
+ * @param <T>
  */
 public class ServiceEntity<T> {
 
-    private T service;
-    private Map<String, Object> props;
+    private final T service;
+    private final Map<String, Object> props;
 
     public ServiceEntity(T service, Map<String, Object> props) {
         this.service = service;

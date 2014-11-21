@@ -1,5 +1,10 @@
-<div ng-include="manage_side_bar_template" style="width: 252px; height: 100%; float: left; display: block; background-color: #E4E4E4;"></div>
-<div style="width: calc(100% - 252px); height: 100%; float: left; display: block; ">
-    <div ng-include="job_bar_template"></div>
-    <div id="jobManagementHolder" style="width: 100%; height: calc(100% - 47px);"></div>
+<div id="manageNavMenu" class="lumens-menu-container" style="float: left; overflow-y: auto; overflow-x: hidden; width: 220px; height: 100%; float: left; display: block;"></div>
+<div ng-switch on="manageSelection" style="width: calc(100% - 221px); height: 100%;  float: left; display: block;">
+    <div class="animate-switch" ng-switch-when="server-monitor" style="width: 100%; height: 100%; float: left; display: block;" ng-controller="ServerMonitorCtrl">
+        <div id="serverMonitorHolder" style="width: 100%; height: calc(100% - 47px);"></div>
+    </div>
+    <div class="animate-switch" style="width: 100%; height: 100%; float: left; display: block;" ng-controller="JobManagementCtrl">
+        <div ng-include="job_bar_template"></div>
+        <div id="jobManagementHolder" style="width: 100%; height: calc(100% - 47px);"></div>
+    </div>    
 </div>
