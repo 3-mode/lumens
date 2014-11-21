@@ -1,4 +1,6 @@
-
+/*
+ * Copyright Lumens Team, Inc. All Rights Reserved.
+ */
 package com.lumens.connector.txt;
 
 import java.io.File;
@@ -20,15 +22,19 @@ import com.lumens.model.Value;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ * @author Xiaoxin(whiskeyfly@163.com)
+ */
+
 public class TextConnector implements Connector{
     private boolean isOpen = false;
     private Map<String, Format> formatListIn;
     private Map<String, Format> formatListOut;
-    private FormatBuilder formatBuilder;
-    private Map<String, Format> txtFmt;
-    private TextClient txtCnt;
+    private FormatFromXmlSchemaBuilder formatBuilder;
+    private TextClient textClient;
     private Direction direction;
-    Map<String, Value> propList;
+    Map<String, Value> propList;    
         
     // properties 
     private String encoding;
@@ -64,8 +70,8 @@ public class TextConnector implements Connector{
     // To craete specific client in type of DOM or SAX 
     @Override
     public void open(){
-        if ( txtCnt == null) {
-            txtCnt = new TextClient(this);
+        if ( textClient == null) {
+            textClient = new TextClient(this);
             if (direction == direction.IN)
             {
                 
@@ -89,12 +95,12 @@ public class TextConnector implements Connector{
 
     @Override
     public Map<String, Format> getFormatList(Direction direction){
-        return txtCnt.getFormatList(direction);
+        return formatBuilder.getFormatList(direction);
 
     }
 
     @Override
     public Format getFormat(Format format, String path, Direction direction){
-        return txtCnt.getFormat(format, path, direction);
+        return formatBuilder.getFormat(format, path, direction);
     }     
 }

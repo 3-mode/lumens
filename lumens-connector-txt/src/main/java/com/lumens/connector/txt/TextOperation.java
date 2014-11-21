@@ -10,7 +10,7 @@ import com.lumens.model.Format;
 
 /**
  *
- * @author whiskey
+ * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class TextOperation implements Operation {
 

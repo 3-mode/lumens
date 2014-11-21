@@ -1,10 +1,14 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
 package com.lumens.connector.txt;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 import com.lumens.connector.Connector;
 import com.lumens.connector.Direction;
@@ -15,7 +19,7 @@ import java.util.Map;
 
 /**
  *
- * @author whiskey
+ * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class TextClient {
     protected TextConnector xmlCntr;     
@@ -29,8 +33,8 @@ public class TextClient {
         
     }
            
-    public void read(InputStream ins){
-        
+    public void read(InputStream ins, String encoding){        
+
     }            
     
     public void write(OutputStream ous){

@@ -8,7 +8,7 @@ import com.lumens.connector.ConnectorFactory;
 
 /**
  *
- * @author whiskey
+ * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class TextConnectorFactory implements ConnectorFactory {
 

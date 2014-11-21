@@ -37,12 +37,10 @@ public class ConnectorTest
                 while((lineTxt = bufReader.readLine()) != null ){
                     System.out.println(lineTxt);                    
                 }
-            }
-            
+            }            
         }catch (Exception e) {
             System.out.println("Error on reading file content.");
             e.printStackTrace();
-
         }
     }    
     
