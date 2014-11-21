@@ -106,22 +106,28 @@ Lumens.controllers
     });
 })
 .controller("ServerMonitorCtrl", function ($scope, CpuPerc, CpuCount) {
-    $('#timer').timer({
-        duration: '2s',
-        callback: function () {
-            CpuPerc.get(function (cpu_perc) {
-                var donut =
-                Morris.Donut({
-                    element: 'serverMonitorHolder',
-                    data: [
-                        {label: "System CPU", value: cpu_perc.cpu_perc_list[0].sys},
-                        {label: "Idle CPU", value: cpu_perc.cpu_perc_list[0].idle},
-                        {label: "User CPU", value: cpu_perc.cpu_perc_list[0].user}
-                    ]
+    CpuCount.get(function (result) {
+        $scope.cpuCount = []
+        for (var i = 0; i < result.cpu_count; ++i)
+            $scope.cpuCount.push(i);
+        $('#timer').timer({
+            duration: '2s',
+            callback: function () {
+                CpuPerc.get(function (cpu_perc) {
+                    for (var i = 0; i < result.cpu_count; ++i) {
+                        Morris.Donut({
+                            element: 'cpuInfo_' + i,
+                            data: [
+                                {label: "System CPU", value: cpu_perc.cpu_perc_list[i].sys},
+                                {label: "Idle CPU", value: cpu_perc.cpu_perc_list[i].idle},
+                                {label: "User CPU", value: cpu_perc.cpu_perc_list[i].user}
+                            ]
+                        });
+                    }
                 });
-            })
-        },
-        repeat: true //repeatedly calls the callback you specify
-    });
+            },
+            repeat: true //repeatedly calls the callback you specify
+        });
+    })
 
 });
