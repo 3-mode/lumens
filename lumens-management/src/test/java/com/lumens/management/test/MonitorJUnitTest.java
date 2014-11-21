@@ -26,11 +26,10 @@ public class MonitorJUnitTest {
     @Test
     public void testSigarFeatures() throws Exception {
         String JNI_Path = ClassLoader.getSystemResource(".").getPath() + "../../src/main/resources/sigar_jni";
-        System.out.println(JNI_Path);
         JNI_Path = Paths.get(new File(JNI_Path).toURI()).normalize().toFile().getAbsolutePath();
         System.out.println(JNI_Path);
 
-        OSResourcesMonitor os = ServerManagementFactory.createOSResourcesMonitor(JNI_Path);
+        OSResourcesMonitor os = ServerManagementFactory.get().createOSResourcesMonitor(JNI_Path);
         os.getCpuCount();
         int cpuCount = os.getCpuCount();
         Cpu[] cpus = os.gatherCpuPerc();

@@ -20,8 +20,8 @@ import java.util.jar.Manifest;
  */
 public class AddinDefaultContext implements AddinContext {
 
-    private Map<String, ServiceEntity> services = new HashMap<>();
-    private final List<Addin> addinList = new ArrayList<>();
+    private Map<String, ServiceEntity> services;
+    private List<Addin> addinList;
     private final AddinEngine addinEngine;
 
     @Override
@@ -91,7 +91,6 @@ public class AddinDefaultContext implements AddinContext {
 
         @Override
         public void stop() {
-            // TODO
         }
 
         private static void loadDependencyJarFile(String path, Manifest mf, AddinURLClassLoader acl) throws Exception {
@@ -115,6 +114,8 @@ public class AddinDefaultContext implements AddinContext {
     }
 
     public AddinDefaultContext(AddinEngine engine) {
+        this.services = new HashMap<>();
+        this.addinList = new ArrayList<>();
         this.addinEngine = engine;
     }
 
@@ -123,6 +124,10 @@ public class AddinDefaultContext implements AddinContext {
         // TODO check ID, Name, ICON
         services.put(identifier, new ServiceEntity<>(service, props));
         return service;
+    }
+
+    @Override
+    public void unRegisterService(String componentType) {
     }
 
     @Override
@@ -162,5 +167,6 @@ public class AddinDefaultContext implements AddinContext {
     @Override
     public void stop() {
         services = new HashMap<>();
+        addinList = new ArrayList<>();
     }
 }

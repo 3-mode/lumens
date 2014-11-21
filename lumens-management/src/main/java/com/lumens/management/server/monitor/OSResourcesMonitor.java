@@ -9,6 +9,8 @@ package com.lumens.management.server.monitor;
  */
 public interface OSResourcesMonitor {
 
+    public String RESOURCES_SERVICE = "resources-monitor";
+
     public int getCpuCount();
 
     public Cpu[] gatherCpuPerc();

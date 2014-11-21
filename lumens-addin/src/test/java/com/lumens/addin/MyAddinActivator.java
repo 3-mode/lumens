@@ -5,7 +5,6 @@ package com.lumens.addin;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.ImageIcon;
 
 /**
  *

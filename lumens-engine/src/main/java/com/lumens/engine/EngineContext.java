@@ -13,7 +13,7 @@ import com.lumens.processor.script.JavaScriptContext;
 public class EngineContext {
 
     private static EngineContext instance;
-    private ConnectorFactoryHolder fHolder;
+    private final ConnectorFactoryHolder fHolder;
 
     private EngineContext(ConnectorFactoryHolder fHolder) {
         this.fHolder = fHolder;
@@ -28,9 +28,9 @@ public class EngineContext {
         return instance;
     }
 
-    public ConnectorFactory getConnectorFactory(String className) {
+    public ConnectorFactory getConnectorFactory(String componentType) {
         if (fHolder != null)
-            return fHolder.getFactory(className);
+            return fHolder.getFactory(componentType);
         return null;
     }
 }

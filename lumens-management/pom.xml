@@ -8,6 +8,10 @@
     </parent>
     <artifactId>lumens-management</artifactId>
     <packaging>jar</packaging>
+    <properties>
+        <connector.app.dir>${copyto.addin.dir}/orcl</connector.app.dir>
+        <connector.lib.dir>${copyto.addin.dir}/orcl/lib</connector.lib.dir>
+    </properties>
     <build>
         <resources>
             <resource>
@@ -19,6 +23,19 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Addin-Name>Lumens Management</Addin-Name>
+                            <Addin-Activator>com.lumens.management.service.Activator</Addin-Activator>
+                            <Addin-Classpath>lib,3rdparty</Addin-Classpath>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.6</version>
@@ -52,6 +69,11 @@
             <groupId>org.fusesource</groupId>
             <artifactId>sigar</artifactId>
             <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-addin</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

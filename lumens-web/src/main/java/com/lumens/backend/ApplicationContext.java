@@ -6,7 +6,6 @@ package com.lumens.backend;
 import com.lumens.engine.TransformEngine;
 import com.lumens.management.server.monitor.OSResourcesMonitor;
 import com.lumens.management.server.monitor.ServerManagementFactory;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
  */
 public class ApplicationContext {
 
-    public static String LUMENS_BASE = System.getProperty("lumens.base", "C:\\lumens\\dist\\lumens\\");
+    public static String LUMENS_BASE = System.getProperty("lumens.base", "../dist/lumens");
     private final List<String> resultCache = new ArrayList<>();
     private final String strRealPath;
     private TransformEngine engine;
@@ -81,7 +80,7 @@ public class ApplicationContext {
 
     public void start() {
         engine.start(ServerUtils.getNormalizedPath(getRealPath() + "/addin"));
-        osResourcesMonitor = ServerManagementFactory.createOSResourcesMonitor(ServerUtils.getNormalizedPath(getRealPath() + "/module/manage/jni"));
+        osResourcesMonitor = ServerManagementFactory.get().createOSResourcesMonitor(ServerUtils.getNormalizedPath(getRealPath() + "/module/manage/jni"));
     }
 
     public void stop() {
