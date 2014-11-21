@@ -21,8 +21,8 @@ import java.util.jar.Manifest;
 public class AddinDefaultContext implements AddinContext {
 
     private Map<String, ServiceEntity> services = new HashMap<>();
-    private List<Addin> addinList = new ArrayList<>();
-    private AddinEngine addinEngine;
+    private final List<Addin> addinList = new ArrayList<>();
+    private final AddinEngine addinEngine;
 
     @Override
     public List<Addin> getAddins() {
@@ -101,8 +101,9 @@ public class AddinDefaultContext implements AddinContext {
                 String[] classPaths = classPathDefine.split(",");
                 for (String classPath : classPaths) {
                     File dependencyClassPathFile = new File(path + '/' + classPath);
-                    if (dependencyClassPathFile.exists())
+                    if (dependencyClassPathFile.exists()) {
                         acl.addJarLocationOrPathLoactionURL(dependencyClassPathFile.toURI().toURL());
+                    }
                 }
             }
         }
@@ -133,8 +134,9 @@ public class AddinDefaultContext implements AddinContext {
     public Addin installAddIn(URL url) {
         try {
             File path = new File(url.toURI());
-            if (!path.exists())
+            if (!path.exists()) {
                 throw new LumensException(String.format("Path '%s' can not be found !", url.toString()));
+            }
             Addin addin = new AddinImpl(this, path.getAbsolutePath(), addinEngine.newDefaultAddinClassLoader());
             addinList.add(addin);
             return addin;
@@ -149,9 +151,11 @@ public class AddinDefaultContext implements AddinContext {
 
     @Override
     public Addin getAddin(String name) {
-        for (Addin addin : addinList)
-            if (addin.getName().equals(name))
+        for (Addin addin : addinList) {
+            if (addin.getName().equals(name)) {
                 return addin;
+            }
+        }
         return null;
     }
 
