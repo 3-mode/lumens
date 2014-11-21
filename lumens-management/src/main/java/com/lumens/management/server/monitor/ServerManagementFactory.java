@@ -15,8 +15,7 @@ public class ServerManagementFactory {
         return new ServerManagementFactory();
     }
 
-    public OSResourcesMonitor createOSResourcesMonitor(String jniPath) {
-        System.setProperty("java.library.path", jniPath);
+    public OSResourcesMonitor createOSResourcesMonitor() {
         return new ServerOSResourcesMonitor();
     }
 }

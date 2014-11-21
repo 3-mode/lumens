@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.Sigar;
+import org.hyperic.sigar.SigarLoader;
 import org.junit.Test;
 
 /**
@@ -27,9 +28,8 @@ public class MonitorJUnitTest {
     public void testSigarFeatures() throws Exception {
         String JNI_Path = ClassLoader.getSystemResource(".").getPath() + "../../src/main/resources/sigar_jni";
         JNI_Path = Paths.get(new File(JNI_Path).toURI()).normalize().toFile().getAbsolutePath();
-        System.out.println(JNI_Path);
-
-        OSResourcesMonitor os = ServerManagementFactory.get().createOSResourcesMonitor(JNI_Path);
+        System.setProperty("java.library.path", JNI_Path);
+        OSResourcesMonitor os = ServerManagementFactory.get().createOSResourcesMonitor();
         os.getCpuCount();
         int cpuCount = os.getCpuCount();
         Cpu[] cpus = os.gatherCpuPerc();

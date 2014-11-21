@@ -20,6 +20,7 @@ public class Activator implements AddinActivator {
     @Override
     public void start(AddinContext context) {
         addinContext = context;
+        ServerManagementFactory.get().createOSResourcesMonitor();
         addinContext.registerService(OSResourcesMonitor.RESOURCES_SERVICE, ServerManagementFactory.get(), Collections.EMPTY_MAP);
     }
 

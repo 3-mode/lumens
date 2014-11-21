@@ -7,6 +7,7 @@ import com.lumens.management.server.monitor.Cpu;
 import com.lumens.management.server.monitor.OSResourcesMonitor;
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.Sigar;
+import org.hyperic.sigar.SigarLoader;
 
 /**
  *
