@@ -1,4 +1,6 @@
-
+/*
+ * Copyright Lumens Team, Inc. All Rights Reserved.
+ */
 package com.lumens.connector.txt;
 
 import java.io.File;
@@ -20,15 +22,19 @@ import com.lumens.model.Value;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TxtConnector implements Connector{
+/**
+ *
+ * @author Xiaoxin(whiskeyfly@163.com)
+ */
+
+public class TextConnector implements Connector{
     private boolean isOpen = false;
     private Map<String, Format> formatListIn;
     private Map<String, Format> formatListOut;
-    private FormatBuilder formatBuilder;
-    private Map<String, Format> txtFmt;
-    private TxtClient txtCnt;
+    private FormatFromXmlSchemaBuilder formatBuilder;
+    private TextClient textClient;
     private Direction direction;
-    Map<String, Value> propList;
+    Map<String, Value> propList;    
         
     // properties 
     private String encoding;
@@ -40,20 +46,20 @@ public class TxtConnector implements Connector{
     @Override
     public void setPropertyList(Map<String, Value> props){
         propList = props;
-        if (props.containsKey(TxtConstants.ENCODING))        
-            encoding = props.get(TxtConstants.ENCODING).getString();
+        if (props.containsKey(TextConstants.ENCODING))        
+            encoding = props.get(TextConstants.ENCODING).getString();
         
-        if (props.containsKey(TxtConstants.PATH))
-            path = props.get(TxtConstants.PATH).getString();
+        if (props.containsKey(TextConstants.PATH))
+            path = props.get(TextConstants.PATH).getString();
 
-        if (props.containsKey(TxtConstants.LINEDELIMITER))
-            linedelimiter = props.get(TxtConstants.LINEDELIMITER).getString();        
+        if (props.containsKey(TextConstants.LINEDELIMITER))
+            linedelimiter = props.get(TextConstants.LINEDELIMITER).getString();        
 
-        if (props.containsKey(TxtConstants.FILEDELIMITER))
-            filedelimiter = props.get(TxtConstants.FILEDELIMITER).getString(); 
+        if (props.containsKey(TextConstants.FILEDELIMITER))
+            filedelimiter = props.get(TextConstants.FILEDELIMITER).getString(); 
         
-        if (props.containsKey(TxtConstants.ESCAPECHAR))
-            escapechar = props.get(TxtConstants.ESCAPECHAR).getString();         
+        if (props.containsKey(TextConstants.ESCAPECHAR))
+            escapechar = props.get(TextConstants.ESCAPECHAR).getString();         
     }
         
     @Override
@@ -64,8 +70,8 @@ public class TxtConnector implements Connector{
     // To craete specific client in type of DOM or SAX 
     @Override
     public void open(){
-        if ( txtCnt == null) {
-            txtCnt = new TxtClient(this);
+        if ( textClient == null) {
+            textClient = new TextClient(this);
             if (direction == direction.IN)
             {
                 
@@ -84,17 +90,17 @@ public class TxtConnector implements Connector{
 
     @Override
     public Operation getOperation(){
-        return new TxtOperation();
+        return new TextOperation();
     }
 
     @Override
     public Map<String, Format> getFormatList(Direction direction){
-        return txtCnt.getFormatList(direction);
+        return formatBuilder.getFormatList(direction);
 
     }
 
     @Override
     public Format getFormat(Format format, String path, Direction direction){
-        return txtCnt.getFormat(format, path, direction);
+        return formatBuilder.getFormat(format, path, direction);
     }     
 }
