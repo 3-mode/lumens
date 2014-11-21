@@ -13,7 +13,7 @@ import com.lumens.connector.ConnectorFactory;
  */
 public class DefaultConnectorFactoryHolder implements ConnectorFactoryHolder {
 
-    private AddinContext addinContext;
+    private final AddinContext addinContext;
 
     public DefaultConnectorFactoryHolder(AddinContext ac) {
         addinContext = ac;
