@@ -16,13 +16,13 @@ import javax.ws.rs.core.Response;
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
 @Path("/server_resources")
-public class ServerResourceMonitorService {
+public class ServerResourceService {
     @GET
     @Produces("application/json")
     @Path("/cpu_count")
     public Response listCpuCount() {
         OSResourcesMonitor osMonitor = ApplicationContext.get().getOSResourcesMonitor();
-        return Response.ok().entity(String.format("{ 'cpu_count' : %d }", osMonitor.getCpuCount())).build();
+        return Response.ok().entity(String.format("{ \"cpu_count\" : \"%d\" }", osMonitor.getCpuCount())).build();
     }
 
     @GET
@@ -37,12 +37,12 @@ public class ServerResourceMonitorService {
             if (sb.length() > 0) {
                 sb.append(",");
             }
-            sb.append(String.format("{ 'sys'  : %d,", cpus[i].getSys()));
-            sb.append(String.format("  'user' : %d,", cpus[i].getUser()));
-            sb.append(String.format("  'idle' : %d  }", cpus[i].getIdle()));
+            sb.append(String.format("{ \"sys\"  : \"%d\",", cpus[i].getSys()));
+            sb.append(String.format("  \"user\" : \"%d\",", cpus[i].getUser()));
+            sb.append(String.format("  \"idle\" : \"%d\"  }", cpus[i].getIdle()));
         }
         return Response.ok().entity(String.format("{ "
-                                                  + "'cpu_perc_list' : [ %s ]"
+                                                  + "\"cpu_perc_list\" : [ %s ]"
                                                   + "}", sb.toString())).build();
     }
 

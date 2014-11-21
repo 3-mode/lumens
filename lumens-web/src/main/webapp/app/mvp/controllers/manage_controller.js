@@ -105,13 +105,23 @@ Lumens.controllers
         pickerPosition: "bottom-left"
     });
 })
-.controller("ServerMonitorCtrl", function ($scope) {
-    Morris.Donut({
-        element: 'serverMonitorHolder',
-        data: [
-            {label: "User CPU", value: 12},
-            {label: "System CPU", value: 30},
-            {label: "Idle CPU", value: 20}
-        ]
+.controller("ServerMonitorCtrl", function ($scope, CpuPerc, CpuCount) {
+    $('#timer').timer({
+        duration: '2s',
+        callback: function () {
+            CpuPerc.get(function (cpu_perc) {
+                var donut =
+                Morris.Donut({
+                    element: 'serverMonitorHolder',
+                    data: [
+                        {label: "System CPU", value: cpu_perc.cpu_perc_list[0].sys},
+                        {label: "Idle CPU", value: cpu_perc.cpu_perc_list[0].idle},
+                        {label: "User CPU", value: cpu_perc.cpu_perc_list[0].user}
+                    ]
+                });
+            })
+        },
+        repeat: true //repeatedly calls the callback you specify
     });
+
 });
