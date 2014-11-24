@@ -33,7 +33,6 @@ public class ApplicationAddinManager {
             for (File addinItemFile : addinPathFile.listFiles()) {
                 ac.installAddIn(addinItemFile.toURI().toURL()).start();
             }
-            EngineContext.start(new DefaultConnectorFactoryHolder(ac));
         } catch (MalformedURLException ex) {
             throw new LumensException(ex);
         }
