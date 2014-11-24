@@ -110,23 +110,50 @@ Lumens.controllers
         $scope.cpuCount = []
         for (var i = 0; i < result.cpu_count; ++i)
             $scope.cpuCount.push(i);
-        $('#timer').timer({
-            duration: '2s',
-            callback: function () {
-                CpuPerc.get(function (cpu_perc) {
-                    for (var i = 0; i < result.cpu_count; ++i) {
-                        Morris.Donut({
-                            element: 'cpuInfo_' + i,
-                            data: [
-                                {label: "System CPU", value: cpu_perc.cpu_perc_list[i].sys},
-                                {label: "Idle CPU", value: cpu_perc.cpu_perc_list[i].idle},
-                                {label: "User CPU", value: cpu_perc.cpu_perc_list[i].user}
-                            ]
-                        });
+        var plotList = [];
+        //plot1.series[1].data = newdata;
+        //plot1.replot(false);
+        CpuPerc.get(function (cpu_perc) {
+            for (var i = 0; i < result.cpu_count; ++i) {
+                var data = [
+                    ['System CPU', cpu_perc.cpu_perc_list[i].sys],
+                    ['Idle CPU', cpu_perc.cpu_perc_list[i].idle],
+                    ['User CPU', cpu_perc.cpu_perc_list[i].user]
+                ];
+                var plot = $.jqplot('cpuInfo_' + i, [data], {
+                    seriesDefaults: {
+                        // make this a donut chart.
+                        renderer: $.jqplot.DonutRenderer,
+                        rendererOptions: {
+                            // Donut's can be cut into slices like pies.
+                            sliceMargin: 3,
+                            // Pies and donuts can start at any arbitrary angle.
+                            startAngle: -90,
+                            showDataLabels: true,
+                            // By default, data labels show the percentage of the donut/pie.
+                            // You can show the data 'value' or data 'label' instead.
+                            dataLabels: 'value'
+                        }
                     }
                 });
-            },
-            repeat: true //repeatedly calls the callback you specify
+                plotList.push(plot);
+            }
+
+            $('#timer').timer({
+                duration: '2s',
+                repeat: true, //repeatedly calls the callback you specify
+                callback: function () {
+                    CpuPerc.get(function (cpu_perc) {
+                        for (var i = 0; i < result.cpu_count; ++i) {
+                            plotList[i].series[0].data = [
+                                ['System CPU', cpu_perc.cpu_perc_list[i].sys],
+                                ['Idle CPU', cpu_perc.cpu_perc_list[i].idle],
+                                ['User CPU', cpu_perc.cpu_perc_list[i].user]];
+                            plotList[i].redraw();
+                        }
+                    });
+                }
+            });
         });
     })
 

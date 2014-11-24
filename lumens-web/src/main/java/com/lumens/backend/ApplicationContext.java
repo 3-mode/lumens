@@ -15,15 +15,19 @@ import java.util.List;
 public class ApplicationContext {
 
     public static String LUMENS_BASE = System.getProperty("lumens.base", "../dist/lumens");
+    public static String LUMENS_ADDIN = "/addin";
+    public static String LUMENS_JNI = "/module/manage/jni";
+    public static String LUMENS_RES = "/module/manage/resources";
     private final List<String> resultCache = new ArrayList<>();
     private final String strRealPath;
+    private final ApplicationAddinManager addins;
     private TransformEngine engine;
     private ProjectContext projectContext;
     private OSResourcesMonitor osResourcesMonitor;
     private static ApplicationContext context;
 
     public static void createInstance(ClassLoader classLoader) {
-        // TODO
+        // TODO log
         System.out.println("Lumens Base: " + LUMENS_BASE);
         context = new ApplicationContext(LUMENS_BASE, classLoader);
         context.start();
@@ -34,9 +38,12 @@ public class ApplicationContext {
     }
 
     public ApplicationContext(String realPath, ClassLoader classLoader) {
+        System.out.println("Application Context is initializing ...");
         strRealPath = realPath;
         engine = new TransformEngine(classLoader);
+        addins = new ApplicationAddinManager(classLoader);
         projectContext = new ProjectContext();
+        System.out.println("Application Context completed initializing .");
     }
 
     public ProjectContext getProjectContext() {
@@ -79,10 +86,20 @@ public class ApplicationContext {
     }
 
     public void start() {
-        engine.start(ServerUtils.getNormalizedPath(getRealPath() + "/addin"));
-        osResourcesMonitor = ServerManagementFactory.get().createOSResourcesMonitor(ServerUtils.getNormalizedPath(getRealPath() + "/module/manage/jni"));
+
+        // Initialize the JNI path when starting
+        System.setProperty("java.library.path", ServerUtils.getNormalizedPath(getRealPath() + LUMENS_JNI));
+
+        // Load the addin connectors
+        engine.start(ServerUtils.getNormalizedPath(getRealPath() + LUMENS_ADDIN));
+        // Load the manage service
+        addins.start(ServerUtils.getNormalizedPath(getRealPath() + LUMENS_RES));
+
+        ServerManagementFactory factory = (ServerManagementFactory) addins.getAddinEngine().getService(OSResourcesMonitor.RESOURCES_SERVICE).getService();
+        osResourcesMonitor = factory.createOSResourcesMonitor();
     }
 
     public void stop() {
     }
+
 }
