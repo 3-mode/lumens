@@ -700,3 +700,6 @@ svg path {
     padding-top: 12px;
     padding-left: 15px;
 }
+.jqplot-table-legend {
+    font-size: 20px;
+}

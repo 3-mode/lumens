@@ -111,14 +111,12 @@ Lumens.controllers
         for (var i = 0; i < result.cpu_count; ++i)
             $scope.cpuCount.push(i);
         var plotList = [];
-        //plot1.series[1].data = newdata;
-        //plot1.replot(false);
         CpuPerc.get(function (cpu_perc) {
             for (var i = 0; i < result.cpu_count; ++i) {
                 var data = [
-                    ['System CPU', cpu_perc.cpu_perc_list[i].sys],
-                    ['Idle CPU', cpu_perc.cpu_perc_list[i].idle],
-                    ['User CPU', cpu_perc.cpu_perc_list[i].user]
+                    ['Idle', cpu_perc.cpu_perc_list[i].idle],
+                    ['System', cpu_perc.cpu_perc_list[i].sys],
+                    ['User', cpu_perc.cpu_perc_list[i].user]
                 ];
                 var plot = $.jqplot('cpuInfo_' + i, [data], {
                     seriesDefaults: {
@@ -126,7 +124,7 @@ Lumens.controllers
                         renderer: $.jqplot.DonutRenderer,
                         rendererOptions: {
                             // Donut's can be cut into slices like pies.
-                            sliceMargin: 3,
+                            sliceMargin: 6,
                             // Pies and donuts can start at any arbitrary angle.
                             startAngle: -90,
                             showDataLabels: true,
@@ -134,7 +132,8 @@ Lumens.controllers
                             // You can show the data 'value' or data 'label' instead.
                             dataLabels: 'value'
                         }
-                    }
+                    },
+                    legend: {show: true, location: 'e', xoffset: 25, yoffset: 25, border: 'none'}
                 });
                 plotList.push(plot);
             }
@@ -146,9 +145,9 @@ Lumens.controllers
                     CpuPerc.get(function (cpu_perc) {
                         for (var i = 0; i < result.cpu_count; ++i) {
                             plotList[i].series[0].data = [
-                                ['System CPU', cpu_perc.cpu_perc_list[i].sys],
-                                ['Idle CPU', cpu_perc.cpu_perc_list[i].idle],
-                                ['User CPU', cpu_perc.cpu_perc_list[i].user]];
+                                ['Idle', cpu_perc.cpu_perc_list[i].idle],
+                                ['System', cpu_perc.cpu_perc_list[i].sys],
+                                ['User', cpu_perc.cpu_perc_list[i].user]];
                             plotList[i].redraw();
                         }
                     });
