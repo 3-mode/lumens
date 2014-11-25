@@ -20,8 +20,8 @@ public class DefaultConnectorFactoryHolder implements ConnectorFactoryHolder {
     }
 
     @Override
-    public ConnectorFactory getFactory(String className) {
-        ServiceEntity<ConnectorFactory> se = addinContext.getService(className);
+    public ConnectorFactory getFactory(String componentType) {
+        ServiceEntity<ConnectorFactory> se = addinContext.getService(componentType);
         return se != null ? se.getService() : null;
     }
 }

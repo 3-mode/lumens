@@ -11,7 +11,11 @@ public interface OSResourcesMonitor {
 
     public String RESOURCES_SERVICE = "resources-monitor";
 
+    public int getCpuUsage();
+
     public int getCpuCount();
 
     public Cpu[] gatherCpuPerc();
+
+    public Memory getMemPerc();
 }

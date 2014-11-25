@@ -5,6 +5,7 @@ package com.lumens.backend.service;
 
 import com.lumens.backend.ApplicationContext;
 import com.lumens.management.server.monitor.Cpu;
+import com.lumens.management.server.monitor.Memory;
 import com.lumens.management.server.monitor.OSResourcesMonitor;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -37,12 +38,26 @@ public class ServerResourceService {
             if (sb.length() > 0) {
                 sb.append(",");
             }
-            sb.append(String.format("{ \"sys\"  : %d,", cpus[i].getSys()));
+            sb.append(String.format("{ \"combined\"  : %d,", cpus[i].getCombined()));
+            sb.append(String.format("  \"sys\" : %d,", cpus[i].getSys()));
             sb.append(String.format("  \"user\" : %d,", cpus[i].getUser()));
             sb.append(String.format("  \"idle\" : %d  }", cpus[i].getIdle()));
         }
+        return Response.ok().entity(String.format("{ \"cpu_usage\": %d, \"cpu_perc_list\" : [ %s ] }", osMonitor.getCpuUsage(), sb.toString())).build();
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("/mem_perc")
+    public Response getMemPerc() {
+        OSResourcesMonitor osMonitor = ApplicationContext.get().getOSResourcesMonitor();
+        Memory mem = osMonitor.getMemPerc();
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("{ \"used\"  : %d,", mem.getUsedMem()));
+        sb.append(String.format("  \"free\" : %d,", mem.getFreeMem()));
+        sb.append(String.format("  \"ram\" : %d  }", mem.getRAM()));
         return Response.ok().entity(String.format("{ "
-                                                  + "\"cpu_perc_list\" : [ %s ]"
+                                                  + "\"memory\" : %s"
                                                   + "}", sb.toString())).build();
     }
 

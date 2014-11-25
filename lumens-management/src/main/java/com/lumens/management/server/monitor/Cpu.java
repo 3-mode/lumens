@@ -11,6 +11,14 @@ public class Cpu {
     private final int sys;
     private final int user;
     private final int idle;
+    private final int combined;
+
+    public Cpu(double combined, double sys, double user, double idle) {
+        this.combined = (int) Math.rint(100 * combined);
+        this.sys = (int) Math.rint(100 * sys);
+        this.user = (int) Math.rint(100 * user);
+        this.idle = (int) Math.rint(100 * idle);
+    }
 
     public int getSys() {
         return sys;
@@ -24,9 +32,7 @@ public class Cpu {
         return idle;
     }
 
-    public Cpu(double sys, double user, double idle) {
-        this.sys = (int) Math.rint(100 * sys);
-        this.user = (int) Math.rint(100 * user);
-        this.idle = (int) Math.rint(100 * idle);
+    public int getCombined() {
+        return combined;
     }
 }

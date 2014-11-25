@@ -123,6 +123,11 @@ Lumens.services.factory('CpuCount', function ($resource) {
         get: {method: 'GET', isArray: false}
     });
 });
+Lumens.services.factory('MemPerc', function ($resource) {
+    return $resource("rest/server_resources/mem_perc", {}, {
+        get: {method: 'GET', isArray: false}
+    });
+});
 Lumens.services.factory('SyncGet', function () {
     return {
         get: function (url, contentType) {

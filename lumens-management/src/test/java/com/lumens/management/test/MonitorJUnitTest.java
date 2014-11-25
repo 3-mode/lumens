@@ -4,15 +4,11 @@
 package com.lumens.management.test;
 
 import com.lumens.management.server.monitor.Cpu;
+import com.lumens.management.server.monitor.Memory;
 import com.lumens.management.server.monitor.OSResourcesMonitor;
 import com.lumens.management.server.monitor.ServerManagementFactory;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import org.hyperic.sigar.CpuPerc;
-import org.hyperic.sigar.Sigar;
-import org.hyperic.sigar.SigarLoader;
 import org.junit.Test;
 
 /**
@@ -30,7 +26,7 @@ public class MonitorJUnitTest {
         JNI_Path = Paths.get(new File(JNI_Path).toURI()).normalize().toFile().getAbsolutePath();
         System.setProperty("java.library.path", JNI_Path);
         OSResourcesMonitor os = ServerManagementFactory.get().createOSResourcesMonitor();
-        os.getCpuCount();
+        System.out.println(os.getCpuUsage());
         int cpuCount = os.getCpuCount();
         Cpu[] cpus = os.gatherCpuPerc();
         StringBuilder sb = new StringBuilder();
@@ -38,10 +34,20 @@ public class MonitorJUnitTest {
             if (sb.length() > 0) {
                 sb.append(",");
             }
-            sb.append(String.format("{ 'sys'  : %d,", cpus[i].getSys()));
-            sb.append(String.format("  'user' : %d,", cpus[i].getUser()));
-            sb.append(String.format("  'idle' : %d  }", cpus[i].getIdle()));
+            sb.append(String.format("{ \"combined\"  : %d,", cpus[i].getCombined()));
+            sb.append(String.format("  \"sys\" : %d,", cpus[i].getSys()));
+            sb.append(String.format("  \"user\" : %d,", cpus[i].getUser()));
+            sb.append(String.format("  \"idle\" : %d  }", cpus[i].getIdle()));
         }
         System.out.println(sb.toString());
+
+        Memory mem = os.getMemPerc();
+        sb = new StringBuilder();
+        sb.append(String.format("{ \"used\"  : %d,", mem.getUsedMem()));
+        sb.append(String.format("  \"free\" : %d,", mem.getFreeMem()));
+        sb.append(String.format("  \"ram\" : %f  }", mem.getRAM()/1024.0));
+        System.out.println(String.format("{ "
+                                         + "\"memory\" : %s "
+                                         + "}", sb.toString()));
     }
 }
