@@ -12,7 +12,7 @@ import org.apache.axiom.soap.SOAPEnvelope;
  */
 public class SoapOperation implements Operation {
 
-    private SoapClient client;
+    private final SoapClient client;
 
     public SoapOperation(SoapClient client) {
         this.client = client;

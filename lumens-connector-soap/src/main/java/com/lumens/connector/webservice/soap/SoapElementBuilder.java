@@ -19,7 +19,7 @@ import org.apache.axiom.soap.SOAPEnvelope;
  *
  * @author shaofeng wang
  */
-public class ElementFromSoapBuilder implements SoapConstants {
+public class SoapElementBuilder implements SoapConstants {
 
     public Element buildElement(Format format, SOAPEnvelope envelope) {
         // TODO need to handle binary attachment

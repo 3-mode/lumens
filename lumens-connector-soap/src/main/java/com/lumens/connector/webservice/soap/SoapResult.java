@@ -4,7 +4,6 @@
 package com.lumens.connector.webservice.soap;
 
 import com.lumens.connector.OperationResult;
-import com.lumens.connector.webservice.soap.ElementFromSoapBuilder;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import java.util.ArrayList;
@@ -17,9 +16,9 @@ import org.apache.axiom.soap.SOAPEnvelope;
  */
 public class SoapResult implements OperationResult {
 
-    private ElementFromSoapBuilder elementBuilder = new ElementFromSoapBuilder();
-    private SOAPEnvelope envelope;
-    private Format resultFormat;
+    private final SoapElementBuilder elementBuilder = new SoapElementBuilder();
+    private final SOAPEnvelope envelope;
+    private final Format resultFormat;
 
     SoapResult(Format resultFormat, SOAPEnvelope envelope) {
         this.resultFormat = resultFormat;
