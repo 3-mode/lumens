@@ -58,8 +58,8 @@ public class MonitorJUnitTest {
                 sb.append(",");
             }
             sb.append("{ \"name\": \"").append(disk.getDevName()).append("\",");
-            sb.append("\"total\": ").append(disk.getTotal()/1024).append(",");
-            sb.append("\"use_perc\": ").append(disk.getUsePercent()).append(" }");
+            sb.append("  \"total\": ").append(disk.getTotal()/1024).append(",");
+            sb.append("  \"use_perc\": ").append(disk.getUsePercent()).append(" }");
         }
         System.out.println(String.format("{ "
                                          + "\"disk_list\" : [%s] "
