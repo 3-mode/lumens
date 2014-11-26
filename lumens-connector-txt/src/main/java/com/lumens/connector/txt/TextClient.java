@@ -29,8 +29,7 @@ public class TextClient {
     }
     
     public void init()
-    {
-        
+    {        
     }
            
     public void read(InputStream ins, String encoding){        
@@ -39,13 +38,5 @@ public class TextClient {
     
     public void write(OutputStream ous){
         
-    }
-        
-    public Map<String, Format> getFormatList(Direction direction){
-        return null;
-    }
-    
-    public Format getFormat(Format format, String path, Direction direction){
-        return null;
-    }
+    }      
 }
