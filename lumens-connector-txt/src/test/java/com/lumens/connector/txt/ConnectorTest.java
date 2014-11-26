@@ -4,6 +4,7 @@
 
 package com.lumens.connector.txt;
 
+import com.lumens.connector.Direction;
 import com.lumens.processor.script.JavaScriptContext;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -25,6 +26,7 @@ import org.junit.Test;
 public class ConnectorTest 
 {
     private String path = "C:\\demo\\in\\incsv.csv";
+    private String schemaPath = "C:\\demo\\in\\incsv_schema.xml";
     
     @Test
     public void testConnection() {
@@ -37,7 +39,7 @@ public class ConnectorTest
                 while((lineTxt = bufReader.readLine()) != null ){
                     System.out.println(lineTxt);                    
                 }
-            }            
+            }     
         }catch (Exception e) {
             System.out.println("Error on reading file content.");
             e.printStackTrace();
@@ -47,5 +49,15 @@ public class ConnectorTest
     @Test
     public void testConnectorRead(){
         
+    }
+    
+    @Test
+    public void testSchema(){
+        File schema = new File(schemaPath);
+        if( schema.isFile() && schema.exists() ){
+            FormatFromXmlSchemaBuilder xsdReader = new FormatFromXmlSchemaBuilder(schemaPath);
+            xsdReader.initalize();
+            xsdReader.getFormatList(Direction.IN);
+        }       
     }
 }

@@ -29,11 +29,8 @@ import java.util.Map;
 
 public class TextConnector implements Connector{
     private boolean isOpen = false;
-    private Map<String, Format> formatListIn;
-    private Map<String, Format> formatListOut;
-    private FormatFromXmlSchemaBuilder formatBuilder;
+    private FormatBuilder formatBuilder;
     private TextClient textClient;
-    private Direction direction;
     Map<String, Value> propList;    
         
     // properties 
@@ -72,19 +69,20 @@ public class TextConnector implements Connector{
     public void open(){
         if ( textClient == null) {
             textClient = new TextClient(this);
-            if (direction == direction.IN)
-            {
-                
-            }else
-            {
-                //TODO: Open for write
+            formatBuilder = new FormatFromXmlSchemaBuilder(path);
+            try{
+                formatBuilder.initalize();
                 isOpen = true;
+            }catch(RuntimeException ex){
+                throw ex;
             }
         }        
     }
 
     @Override
     public void close(){
+        textClient = null;
+        formatBuilder = null;
         isOpen = false;
     }
 
@@ -96,7 +94,6 @@ public class TextConnector implements Connector{
     @Override
     public Map<String, Format> getFormatList(Direction direction){
         return formatBuilder.getFormatList(direction);
-
     }
 
     @Override
