@@ -14,6 +14,8 @@ import java.util.Map;
 public interface AddinContext {
 
     public <T> T registerService(String componentType, T service, Map<String, Object> props);
+    
+    public void unRegisterService(String componentType);
 
     public ServiceEntity getService(String componentType);
 

@@ -13,15 +13,15 @@ import com.lumens.connector.ConnectorFactory;
  */
 public class DefaultConnectorFactoryHolder implements ConnectorFactoryHolder {
 
-    private AddinContext addinContext;
+    private final AddinContext addinContext;
 
     public DefaultConnectorFactoryHolder(AddinContext ac) {
         addinContext = ac;
     }
 
     @Override
-    public ConnectorFactory getFactory(String className) {
-        ServiceEntity<ConnectorFactory> se = addinContext.getService(className);
+    public ConnectorFactory getFactory(String componentType) {
+        ServiceEntity<ConnectorFactory> se = addinContext.getService(componentType);
         return se != null ? se.getService() : null;
     }
 }

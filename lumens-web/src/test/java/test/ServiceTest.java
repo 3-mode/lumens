@@ -35,7 +35,7 @@ public class ServiceTest {
 
     @Test
     public void testProject() throws Exception {
-        if (false) {
+        if (true) {
             ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
             Project project = pDAO.getProject(1415415434544L);

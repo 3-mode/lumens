@@ -11,5 +11,5 @@ import com.lumens.connector.ConnectorFactory;
  */
 public interface ConnectorFactoryHolder {
 
-    public ConnectorFactory getFactory(String className);
+    public ConnectorFactory getFactory(String componentType);
 }

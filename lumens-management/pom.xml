@@ -53,5 +53,10 @@
             <artifactId>sigar</artifactId>
             <version>1.6.4</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-addin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

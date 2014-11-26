@@ -6,7 +6,6 @@ package com.lumens.backend;
 import com.lumens.engine.TransformEngine;
 import com.lumens.management.server.monitor.OSResourcesMonitor;
 import com.lumens.management.server.monitor.ServerManagementFactory;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,9 @@ import java.util.List;
  */
 public class ApplicationContext {
 
-    public static String LUMENS_BASE = System.getProperty("lumens.base", "C:\\lumens\\dist\\lumens\\");
+    public static String LUMENS_BASE = System.getProperty("lumens.base", "../dist/lumens");
+    public static String LUMENS_ADDIN = "/addin";
+    public static String LUMENS_JNI = "/module/manage/jni";
     private final List<String> resultCache = new ArrayList<>();
     private final String strRealPath;
     private TransformEngine engine;
@@ -24,7 +25,7 @@ public class ApplicationContext {
     private static ApplicationContext context;
 
     public static void createInstance(ClassLoader classLoader) {
-        // TODO
+        // TODO log
         System.out.println("Lumens Base: " + LUMENS_BASE);
         context = new ApplicationContext(LUMENS_BASE, classLoader);
         context.start();
@@ -35,9 +36,11 @@ public class ApplicationContext {
     }
 
     public ApplicationContext(String realPath, ClassLoader classLoader) {
+        System.out.println("Application Context is initializing ...");
         strRealPath = realPath;
         engine = new TransformEngine(classLoader);
         projectContext = new ProjectContext();
+        System.out.println("Application Context completed initializing .");
     }
 
     public ProjectContext getProjectContext() {
@@ -80,10 +83,16 @@ public class ApplicationContext {
     }
 
     public void start() {
-        engine.start(ServerUtils.getNormalizedPath(getRealPath() + "/addin"));
-        osResourcesMonitor = ServerManagementFactory.createOSResourcesMonitor(ServerUtils.getNormalizedPath(getRealPath() + "/module/manage/jni"));
+
+        // Initialize the JNI path when starting
+        System.setProperty("java.library.path", ServerUtils.getNormalizedPath(getRealPath() + LUMENS_JNI));
+        // Load the addin connectors
+        engine.start(ServerUtils.getNormalizedPath(getRealPath() + LUMENS_ADDIN));
+        // Load the manage service
+        osResourcesMonitor = ServerManagementFactory.get().createOSResourcesMonitor();
     }
 
     public void stop() {
     }
+
 }

@@ -105,13 +105,130 @@ Lumens.controllers
         pickerPosition: "bottom-left"
     });
 })
-.controller("ServerMonitorCtrl", function ($scope) {
-    Morris.Donut({
-        element: 'serverMonitorHolder',
-        data: [
-            {label: "User CPU", value: 12},
-            {label: "System CPU", value: 30},
-            {label: "Idle CPU", value: 20}
-        ]
+.controller("ServerMonitorCtrl", function ($scope, CpuPerc, CpuCount, MemPerc) {
+
+    // Line charts of CPU
+    function getRedrawData(historyData) {
+        var data = [];
+        for (var i = 0; i < historyData.length; ++i)
+            data.push([i + 1, historyData[i]]);
+        return data;
+    }
+
+    function putInfoIntoCache(history, value) {
+        for (var i = 0; i < (history.length - 1); ++i)
+            history[i] = history[i + 1];
+        history[i] = value;
+    }
+
+    CpuCount.get(function (result) {
+        $scope.cpuCount = result.cpu_count
+        $scope.cpuCountArray = [];
+        for (var i = 0; i < result.cpu_count; ++i)
+            $scope.cpuCountArray.push(i);
+        CpuPerc.get(function (cpu_perc) {
+            var cpuTotalHistory = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, cpu_perc.cpu_usage];
+            var cpuTotalPolt = $.jqplot('cpuInfoTotal', [cpuTotalHistory], {
+                title: 'CPU Total Usage ( ' + cpu_perc.cpu_usage + '% )',
+                stackSeries: true,
+                showMarker: false,
+                grid: {
+                    backgroundColor: 'rgba(57, 57, 57, 1.0)'
+                },
+                axes: {
+                    xaxis: {
+                        renderer: $.jqplot.CategoryAxisRenderer,
+                        ticks: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
+                        min: 0,
+                        max: 50
+                    },
+                    yaxis: {
+                        min: 0,
+                        max: 100,
+                        tickInterval: 20
+                    }
+                }
+            });
+            var cpuPlotList = [];
+            var cpuHistoryList = [];
+            for (var i = 0; i < result.cpu_count; ++i) {
+                var cpuHistory = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, cpu_perc.cpu_perc_list[i].combined];
+                var cpuPolt = $.jqplot('cpuInfo_' + i, [cpuHistory], {
+                    stackSeries: true,
+                    showMarker: false,
+                    axes: {
+                        xaxis: {
+                            renderer: $.jqplot.CategoryAxisRenderer,
+                            ticks: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
+                            min: 0,
+                            max: 50
+                        },
+                        yaxis: {
+                            min: 0,
+                            max: 100,
+                            tickInterval: 20
+                        }
+                    }
+                });
+                cpuHistoryList.push(cpuHistory);
+                cpuPlotList.push(cpuPolt);
+            }
+            if ($scope.cpuTimer)
+                clearTimeout($scope.cpuTimer);
+            $scope.$parent.cpuTimer = setInterval(function () {
+                CpuPerc.get(function (cpu_perc) {
+                    putInfoIntoCache(cpuTotalHistory, cpu_perc.cpu_usage);
+                    cpuTotalPolt.series[0].data = getRedrawData(cpuTotalHistory);
+                    cpuTotalPolt.title.text = 'CPU Total Usage ( ' + cpu_perc.cpu_usage + '% )';
+                    cpuTotalPolt.replot();
+                    for (var i = 0; i < cpuPlotList.length; ++i) {
+                        putInfoIntoCache(cpuHistoryList[i], cpu_perc.cpu_perc_list[i].combined);
+                        cpuPlotList[i].series[0].data = getRedrawData(cpuHistoryList[i]);
+                        cpuPlotList[i].redraw();
+                    }
+                });
+            }, 5000);
+        });
     });
+
+    MemPerc.get(function (memInfo) {
+        // { "memory" : { "used"  : 40,  "free" : 60,  "ram" : 12224  }}
+        $scope.RAM = Math.round((memInfo.memory.ram / 1024.00) * 100) / 100;
+        var memTotalHistory = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, memInfo.memory.used];
+        var titleTextTempl = 'Memory Total Usage ( ';
+        var memUsed = Math.round((memInfo.memory.ram * memInfo.memory.used / 100.0 / 1024) * 100) / 100;
+        var memTotalPolt = $.jqplot('memInfo', [memTotalHistory], {
+            title: titleTextTempl + memInfo.memory.used + '% --- ' + memUsed + 'G )',
+            stackSeries: true,
+            showMarker: false,
+            grid: {
+                backgroundColor: 'rgba(57, 57, 57, 1.0)'
+            },
+            axes: {
+                xaxis: {
+                    renderer: $.jqplot.CategoryAxisRenderer,
+                    ticks: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
+                    min: 0,
+                    max: 50
+                },
+                yaxis: {
+                    min: 0,
+                    max: 100,
+                    tickInterval: 20
+                }
+            }
+        });
+        if ($scope.memTimer)
+            clearTimeout($scope.memTimer);
+        $scope.$parent.memTimer = setInterval(function () {
+            MemPerc.get(function (memInfo) {
+                putInfoIntoCache(memTotalHistory, memInfo.memory.used);
+                memTotalPolt.series[0].data = getRedrawData(memTotalHistory);
+                memUsed = Math.round((memInfo.memory.ram * memInfo.memory.used / 100.0 / 1024) * 100) / 100;
+                memTotalPolt.title.text = titleTextTempl + memInfo.memory.used + '% --- ' + memUsed + 'G )';
+                memTotalPolt.replot();
+            });
+        }, 5000);
+    });
+
 });

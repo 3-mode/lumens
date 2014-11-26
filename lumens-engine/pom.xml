@@ -12,8 +12,18 @@
     <groupId>com.lumens</groupId>
     <artifactId>lumens-engine</artifactId>
     <packaging>jar</packaging>
-
     <name>lumens-engine</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>

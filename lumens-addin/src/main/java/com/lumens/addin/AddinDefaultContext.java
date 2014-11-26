@@ -20,9 +20,9 @@ import java.util.jar.Manifest;
  */
 public class AddinDefaultContext implements AddinContext {
 
-    private Map<String, ServiceEntity> services = new HashMap<>();
-    private List<Addin> addinList = new ArrayList<>();
-    private AddinEngine addinEngine;
+    private Map<String, ServiceEntity> services;
+    private List<Addin> addinList;
+    private final AddinEngine addinEngine;
 
     @Override
     public List<Addin> getAddins() {
@@ -36,9 +36,9 @@ public class AddinDefaultContext implements AddinContext {
 
     protected static class AddinImpl implements Addin {
 
-        private AddinContext addinContext;
-        private String parentPath;
-        private AddinURLClassLoader urlClassLoader;
+        private final AddinContext addinContext;
+        private final String parentPath;
+        private final AddinURLClassLoader urlClassLoader;
         private Manifest manifest;
         private String addinName;
 
@@ -91,7 +91,6 @@ public class AddinDefaultContext implements AddinContext {
 
         @Override
         public void stop() {
-            // TODO
         }
 
         private static void loadDependencyJarFile(String path, Manifest mf, AddinURLClassLoader acl) throws Exception {
@@ -101,8 +100,9 @@ public class AddinDefaultContext implements AddinContext {
                 String[] classPaths = classPathDefine.split(",");
                 for (String classPath : classPaths) {
                     File dependencyClassPathFile = new File(path + '/' + classPath);
-                    if (dependencyClassPathFile.exists())
+                    if (dependencyClassPathFile.exists()) {
                         acl.addJarLocationOrPathLoactionURL(dependencyClassPathFile.toURI().toURL());
+                    }
                 }
             }
         }
@@ -114,6 +114,8 @@ public class AddinDefaultContext implements AddinContext {
     }
 
     public AddinDefaultContext(AddinEngine engine) {
+        this.services = new HashMap<>();
+        this.addinList = new ArrayList<>();
         this.addinEngine = engine;
     }
 
@@ -125,6 +127,10 @@ public class AddinDefaultContext implements AddinContext {
     }
 
     @Override
+    public void unRegisterService(String componentType) {
+    }
+
+    @Override
     public ServiceEntity getService(String identifier) {
         return services.get(identifier);
     }
@@ -133,8 +139,9 @@ public class AddinDefaultContext implements AddinContext {
     public Addin installAddIn(URL url) {
         try {
             File path = new File(url.toURI());
-            if (!path.exists())
+            if (!path.exists()) {
                 throw new LumensException(String.format("Path '%s' can not be found !", url.toString()));
+            }
             Addin addin = new AddinImpl(this, path.getAbsolutePath(), addinEngine.newDefaultAddinClassLoader());
             addinList.add(addin);
             return addin;
@@ -149,14 +156,17 @@ public class AddinDefaultContext implements AddinContext {
 
     @Override
     public Addin getAddin(String name) {
-        for (Addin addin : addinList)
-            if (addin.getName().equals(name))
+        for (Addin addin : addinList) {
+            if (addin.getName().equals(name)) {
                 return addin;
+            }
+        }
         return null;
     }
 
     @Override
     public void stop() {
         services = new HashMap<>();
+        addinList = new ArrayList<>();
     }
 }

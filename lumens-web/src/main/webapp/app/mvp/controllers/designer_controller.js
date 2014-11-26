@@ -196,7 +196,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
     LumensLog.log("In DesginCmdCtrl", $element);
     var i18n = $scope.i18n;
     var projectOperator = $scope.projectOperator;
-    var messageBoxParent = $scope.desgin.designPanel.getElement();
+    var messageBoxParent = $("#id-main-view");
     var messageBox = $scope.messageBox;
     $scope.onCommand = function (id) {
         if ("id_open" === id) {
