@@ -4,6 +4,7 @@
 package com.lumens.management.test;
 
 import com.lumens.management.server.monitor.Cpu;
+import com.lumens.management.server.monitor.Disk;
 import com.lumens.management.server.monitor.Memory;
 import com.lumens.management.server.monitor.OSResourcesMonitor;
 import com.lumens.management.server.monitor.ServerManagementFactory;
@@ -45,9 +46,23 @@ public class MonitorJUnitTest {
         sb = new StringBuilder();
         sb.append(String.format("{ \"used\"  : %d,", mem.getUsedMem()));
         sb.append(String.format("  \"free\" : %d,", mem.getFreeMem()));
-        sb.append(String.format("  \"ram\" : %f  }", mem.getRAM()/1024.0));
+        sb.append(String.format("  \"ram\" : %f  }", mem.getRAM() / 1024.0));
         System.out.println(String.format("{ "
                                          + "\"memory\" : %s "
+                                         + "}", sb.toString()));
+
+        Disk[] diskList = os.getDiskList();
+        sb = new StringBuilder();
+        for (Disk disk : diskList) {
+            if (sb.length() > 0) {
+                sb.append(",");
+            }
+            sb.append("{ \"name\": \"").append(disk.getDevName()).append("\",");
+            sb.append("\"total\": ").append(disk.getTotal()/1024).append(",");
+            sb.append("\"use_perc\": ").append(disk.getUsePercent()).append(" }");
+        }
+        System.out.println(String.format("{ "
+                                         + "\"disk_list\" : [%s] "
                                          + "}", sb.toString()));
     }
 }

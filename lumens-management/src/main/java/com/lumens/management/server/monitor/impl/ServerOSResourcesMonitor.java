@@ -4,9 +4,13 @@
 package com.lumens.management.server.monitor.impl;
 
 import com.lumens.management.server.monitor.Cpu;
+import com.lumens.management.server.monitor.Disk;
 import com.lumens.management.server.monitor.Memory;
 import com.lumens.management.server.monitor.OSResourcesMonitor;
+import java.util.ArrayList;
 import org.hyperic.sigar.CpuPerc;
+import org.hyperic.sigar.FileSystem;
+import org.hyperic.sigar.FileSystemUsage;
 import org.hyperic.sigar.Mem;
 import org.hyperic.sigar.Sigar;
 
@@ -61,6 +65,26 @@ public class ServerOSResourcesMonitor implements OSResourcesMonitor {
     public int getCpuUsage() {
         try {
             return (int) Math.rint(100 * sigarAPI.getCpuPerc().getCombined());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Disk[] getDiskList() {
+        try {
+            FileSystem[] fs = this.sigarAPI.getFileSystemList();
+            ArrayList<Disk> disks = new ArrayList(fs.length);
+            int index = 0;
+            for (FileSystem f : fs) {
+                if (f.getType() != FileSystem.TYPE_LOCAL_DISK) {
+                    continue;
+                }
+                FileSystemUsage fusage = this.sigarAPI.getFileSystemUsage(f.getDevName());
+                disks.add(new Disk(f.getDevName(), fusage.getTotal(), fusage.getUsePercent()));
+
+            }
+            return disks.toArray(new Disk[disks.size()]);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
