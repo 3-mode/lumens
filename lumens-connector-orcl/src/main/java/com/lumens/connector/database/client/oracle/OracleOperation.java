@@ -16,9 +16,9 @@ import org.apache.logging.log4j.LogManager;
 
 public class OracleOperation implements Operation, OracleConstants {
 
-    private static Logger log = LogManager.getLogger(OracleOperation.class);
-    private OracleClient client;
-    private ElementFromDbBuilder elementBuilder;
+    private static final Logger log = LogManager.getLogger(OracleOperation.class);
+    private final OracleClient client;
+    private final ElementFromDbBuilder elementBuilder;
 
     public OracleOperation(OracleClient client) {
         this.client = client;
@@ -29,8 +29,9 @@ public class OracleOperation implements Operation, OracleConstants {
     public OperationResult execute(Element input, Format output) throws Exception {
         if (input != null) {
             Element oper = input.getChild(OPERATION);
-            if (oper == null || oper.getValue() == null)
+            if (oper == null || oper.getValue() == null) {
                 throw new Exception("'operation' is mandatory");
+            }
             String operation = oper.getValue().getString();
             if (SELECT.equalsIgnoreCase(operation)) {
                 OracleQuerySQLBuilder sql = new OracleQuerySQLBuilder(output);
