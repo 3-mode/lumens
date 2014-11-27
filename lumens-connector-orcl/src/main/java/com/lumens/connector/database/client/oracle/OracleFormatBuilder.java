@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author shaofeng.wang@outlook.com
  */
-public class ElementFromDbBuilder {
+public class OracleFormatBuilder {
 
     public List<Element> buildElement(Format output, ResultSet ret) throws Exception {
         List<Element> result = new ArrayList<>();

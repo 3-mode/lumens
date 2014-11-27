@@ -709,6 +709,11 @@ svg path {
     width: 250px;
     height:150px;
 }
+.lumens .lumens-disk-chart {
+    float: left;
+    width: 300px;
+    height:250px;
+}
 .jqplot-table-legend {
     font-size: 20px;
 }

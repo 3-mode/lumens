@@ -18,11 +18,11 @@ public class OracleOperation implements Operation, OracleConstants {
 
     private static final Logger log = LogManager.getLogger(OracleOperation.class);
     private final OracleClient client;
-    private final ElementFromDbBuilder elementBuilder;
+    private final OracleFormatBuilder elementBuilder;
 
     public OracleOperation(OracleClient client) {
         this.client = client;
-        this.elementBuilder = new ElementFromDbBuilder();
+        this.elementBuilder = new OracleFormatBuilder();
     }
 
     @Override

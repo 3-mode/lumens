@@ -75,7 +75,6 @@ public class ServerOSResourcesMonitor implements OSResourcesMonitor {
         try {
             FileSystem[] fs = this.sigarAPI.getFileSystemList();
             ArrayList<Disk> disks = new ArrayList(fs.length);
-            int index = 0;
             for (FileSystem f : fs) {
                 if (f.getType() != FileSystem.TYPE_LOCAL_DISK) {
                     continue;

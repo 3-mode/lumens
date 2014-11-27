@@ -159,7 +159,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
         }
     }
 
-    public List<Element> executeQuery(String SQL, ElementFromDbBuilder elementBuilder, Format output) {
+    public List<Element> executeQuery(String SQL, OracleFormatBuilder elementBuilder, Format output) {
         Statement stat = null;
         ResultSet ret = null;
         try {

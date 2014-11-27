@@ -128,6 +128,11 @@ Lumens.services.factory('MemPerc', function ($resource) {
         get: {method: 'GET', isArray: false}
     });
 });
+Lumens.services.factory('Disk', function ($resource) {
+    return $resource("rest/server_resources/disk", {}, {
+        get: {method: 'GET', isArray: false}
+    });
+});
 Lumens.services.factory('SyncGet', function () {
     return {
         get: function (url, contentType) {

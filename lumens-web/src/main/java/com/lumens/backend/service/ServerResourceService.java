@@ -5,6 +5,7 @@ package com.lumens.backend.service;
 
 import com.lumens.backend.ApplicationContext;
 import com.lumens.management.server.monitor.Cpu;
+import com.lumens.management.server.monitor.Disk;
 import com.lumens.management.server.monitor.Memory;
 import com.lumens.management.server.monitor.OSResourcesMonitor;
 import javax.ws.rs.GET;
@@ -58,6 +59,26 @@ public class ServerResourceService {
         sb.append(String.format("  \"ram\" : %d  }", mem.getRAM()));
         return Response.ok().entity(String.format("{ "
                                                   + "\"memory\" : %s"
+                                                  + "}", sb.toString())).build();
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("/disk")
+    public Response getDiskInfo() {
+        OSResourcesMonitor osMonitor = ApplicationContext.get().getOSResourcesMonitor();
+        Disk[] diskList = osMonitor.getDiskList();
+        StringBuilder sb = new StringBuilder();
+        for (Disk disk : diskList) {
+            if (sb.length() > 0) {
+                sb.append(",");
+            }
+            sb.append("{ \"name\": \"").append(disk.getDevName()).append("\",");
+            sb.append("  \"total\": ").append(disk.getTotal() / 1024).append(",");
+            sb.append("  \"use_perc\": ").append(disk.getUsePercent()).append(" }");
+        }
+        return Response.ok().entity(String.format("{ "
+                                                  + "\"disk_list\" : [%s] "
                                                   + "}", sb.toString())).build();
     }
 

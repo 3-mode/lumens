@@ -29,7 +29,7 @@ import org.apache.axis2.wsdl.WSDLConstants;
  */
 public class SoapClient implements SoapConstants {
 
-    private FormatFromWsdlBuilder formatBuilder;
+    private SoapFormatBuilder formatBuilder;
     private SoapMessageBuilder soapBuilder;
     private Authenticator basicAuth;
     private ServiceClient client;
@@ -41,7 +41,7 @@ public class SoapClient implements SoapConstants {
 
     public void open() {
         // TODO need to handle SSL
-        formatBuilder = new FormatFromWsdlBuilder(connector.getWsdlURL());
+        formatBuilder = new SoapFormatBuilder(connector.getWsdlURL());
         soapBuilder = new SoapMessageBuilder();
         try {
             client = new ServiceClient();

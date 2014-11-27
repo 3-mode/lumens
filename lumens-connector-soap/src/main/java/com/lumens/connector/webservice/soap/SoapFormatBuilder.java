@@ -78,9 +78,9 @@ import org.xml.sax.InputSource;
  *
  * @author shaofeng wang
  */
-public class FormatFromWsdlBuilder implements FormatBuilder, SoapConstants, XMLEntityResolver {
+public class SoapFormatBuilder implements FormatBuilder, SoapConstants, XMLEntityResolver {
 
-    private String wsdlURL;
+    private final String wsdlURL;
     private Definition definition;
     private XSModelHolder xsModel;
     private Map<String, Element> schemaCache;
@@ -120,7 +120,7 @@ public class FormatFromWsdlBuilder implements FormatBuilder, SoapConstants, XMLE
 
     private class XSModelHolder {
 
-        private List<XSModel> models = new ArrayList<>();
+        private final List<XSModel> models = new ArrayList<>();
 
         public void addModel(XSModel model) {
             models.add(model);
@@ -137,7 +137,7 @@ public class FormatFromWsdlBuilder implements FormatBuilder, SoapConstants, XMLE
         }
     }
 
-    public FormatFromWsdlBuilder(String wsdlURL) {
+    public SoapFormatBuilder(String wsdlURL) {
         this.wsdlURL = wsdlURL;
     }
 
