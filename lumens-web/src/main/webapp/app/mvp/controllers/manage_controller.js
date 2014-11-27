@@ -105,7 +105,7 @@ Lumens.controllers
         pickerPosition: "bottom-left"
     });
 })
-.controller("ServerMonitorCtrl", function ($scope, CpuPerc, CpuCount, MemPerc) {
+.controller("ServerMonitorCtrl", function ($scope, CpuPerc, CpuCount, MemPerc, Disk) {
 
     // Line charts of CPU
     function getRedrawData(historyData) {
@@ -120,7 +120,7 @@ Lumens.controllers
             history[i] = history[i + 1];
         history[i] = value;
     }
-
+    // { "combined"  : 6,  "sys" : 3,  "user" : 3,  "idle" : 94  },{ "combined"  : 0,  "sys" : 0,  "user" : 0,  "idle" : 100  },{ "combined"  : 3,  "sys" : 0,  "user" : 3,  "idle" : 97  },{ "combined"  : 0,  "sys" : 0,  "user" : 0,  "idle" : 100  },{ "combined"  : 28,  "sys" : 16,  "user" : 12,  "idle" : 72  },{ "combined"  : 3,  "sys" : 3,  "user" : 0,  "idle" : 97  },{ "combined"  : 9,  "sys" : 3,  "user" : 6,  "idle" : 91  },{ "combined"  : 0,  "sys" : 0,  "user" : 0,  "idle" : 100  }
     CpuCount.get(function (result) {
         $scope.cpuCount = result.cpu_count
         $scope.cpuCountArray = [];
@@ -190,7 +190,7 @@ Lumens.controllers
             }, 5000);
         });
     });
-
+    //{ "memory" : { "used"  : 40,  "free" : 60,  "ram" : 11.932617  } }
     MemPerc.get(function (memInfo) {
         // { "memory" : { "used"  : 40,  "free" : 60,  "ram" : 12224  }}
         $scope.RAM = Math.round((memInfo.memory.ram / 1024.00) * 100) / 100;
@@ -229,6 +229,42 @@ Lumens.controllers
                 memTotalPolt.replot();
             });
         }, 5000);
+    });
+
+    //{ "disk_list" : [{ "name": "B:\",  "total": 465,  "use_perc": 0.72 },{ "name": "C:\",  "total": 465,  "use_perc": 0.72 },{ "name": "R:\",  "total": 465,  "use_perc": 0.72 },{ "name": "X:\",  "total": 465,  "use_perc": 0.72 }] }
+    Disk.get(function (diskInfo) {
+        $scope.diskCountArray = [];
+        for (var i in diskInfo.disk_list)
+            $scope.diskCountArray.push(i);
+        Disk.get(function (diskInfo) {
+            var diskPlotList = [];
+            for (var i = 0; i < diskInfo.disk_list.length; ++i) {
+                var data = [
+                    ['Used', diskInfo.disk_list[i].use_perc],
+                    ['Free', 100 - diskInfo.disk_list[i].use_perc]
+                ];
+                var diskPlot = $.jqplot('diskInfo_' + i, [data], {
+                    title: '( ' + diskInfo.disk_list[i].name + ' ) Usage ( ' + diskInfo.disk_list[i].use_perc + '% )',
+                    seriesDefaults: {
+                        // make this a donut chart.
+                        renderer: $.jqplot.DonutRenderer,
+                        rendererOptions: {
+                            // Donut's can be cut into slices like pies.
+                            sliceMargin: 6,
+                            // Pies and donuts can start at any arbitrary angle.
+                            startAngle: -90,
+                            showDataLabels: true,
+                            // By default, data labels show the percentage of the donut/pie.
+                            // You can show the data 'value' or data 'label' instead.
+                            dataLabels: 'value'
+                        }
+                    },
+                    grid: {borderColor: '#999999', borderWidth: 1, shadow: false, shadowColor: 'transparent'},
+                    legend: {show: true, location: 'e', xoffset: 25, yoffset: 25, border: 'none'}
+                });
+                diskPlotList.push(diskPlot);
+            }
+        });
     });
 
 });
