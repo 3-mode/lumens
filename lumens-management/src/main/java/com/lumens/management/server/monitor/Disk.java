@@ -13,7 +13,7 @@ public class Disk {
     private final double usePercent;
 
     public Disk(String devName, long total, double usePercent) {
-        this.devName = devName;
+        this.devName = devName.replace("\\", "\\\\"); // If there is \ then replace it as \\
         this.total = total/1024; // M
         this.usePercent = usePercent;
     }
