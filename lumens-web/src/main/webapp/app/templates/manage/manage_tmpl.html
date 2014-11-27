@@ -1,7 +1,7 @@
 <div id="manageNavMenu" class="lumens-menu-container" style="float: left; overflow-y: auto; overflow-x: hidden; width: 220px; height: 100%; float: left; display: block;"></div>
-<div ng-switch on="manageSelection" class="lumens-bootstrap" style="width: calc(100% - 221px); height: 100%;  float: left; display: block;">
+<div ng-switch on="manageSelection"  style="width: calc(100% - 221px); height: 100%;  float: left; display: block;">
     <div class="animate-switch" ng-switch-when="server-monitor" style="width: 100%; height: 100%; float: left; display: block;" ng-controller="ServerMonitorCtrl">
-        <div id="serverMonitorHolder" style="width: 100%; height: calc(100% - 47px); overflow-y: auto;">
+        <div id="serverMonitorHolder" class="lumens-bootstrap" style="width: 100%; height: calc(100% - 47px); overflow-y: auto;">
             <div style="display: inline-block; margin: 20px;">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -40,6 +40,7 @@
     </div>
     <div class="animate-switch" style="width: 100%; height: 100%; float: left; display: block;" ng-controller="JobManagementCtrl">
         <div ng-include="job_bar_template"></div>
+        <!-- TODO need to remove or hide the job panel -->
         <div id="jobManagementHolder" style="width: 100%; height: calc(100% - 47px);"></div>
-    </div>    
+    </div>
 </div>
