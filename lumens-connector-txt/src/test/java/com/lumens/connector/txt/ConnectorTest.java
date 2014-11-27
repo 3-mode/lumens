@@ -25,8 +25,8 @@ import org.junit.Test;
  */
 public class ConnectorTest 
 {
-    private String path = "C:\\demo\\in\\incsv.csv";
-    private String schemaPath = "C:\\demo\\in\\incsv_schema.xml";
+    private String path = getClass().getResource("/delimited/incsv.csv").getFile();
+    private String schemaPath = getClass().getResource("/delimited/incsv_schema.xml").getFile();
     
     @Test
     public void testConnection() {
@@ -55,7 +55,7 @@ public class ConnectorTest
     public void testSchema(){
         File schema = new File(schemaPath);
         if( schema.isFile() && schema.exists() ){
-            FormatFromXmlSchemaBuilder xsdReader = new FormatFromXmlSchemaBuilder(schemaPath);
+            TextFormatBuilder xsdReader = new TextFormatBuilder(schemaPath);
             xsdReader.initalize();
             xsdReader.getFormatList(Direction.IN);
         }       

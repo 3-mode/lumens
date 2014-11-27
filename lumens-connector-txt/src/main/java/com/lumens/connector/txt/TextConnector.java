@@ -69,7 +69,7 @@ public class TextConnector implements Connector{
     public void open(){
         if ( textClient == null) {
             textClient = new TextClient(this);
-            formatBuilder = new FormatFromXmlSchemaBuilder(path);
+            formatBuilder = new TextFormatBuilder(path);
             try{
                 formatBuilder.initalize();
                 isOpen = true;

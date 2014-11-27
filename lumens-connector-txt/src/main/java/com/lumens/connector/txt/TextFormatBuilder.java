@@ -31,13 +31,13 @@ import java.util.Iterator;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class FormatFromXmlSchemaBuilder implements FormatBuilder{
+public class TextFormatBuilder implements FormatBuilder{
     private String xmlSchemaPath;    
     private SAXReader schemaReader; 
     private Element schemaRoot;
     private String encoding;
     
-    public FormatFromXmlSchemaBuilder(String schemaPath){
+    public TextFormatBuilder(String schemaPath){
         xmlSchemaPath = schemaPath;
         schemaRoot = null;
     }
@@ -61,7 +61,7 @@ public class FormatFromXmlSchemaBuilder implements FormatBuilder{
     public Map<String, Format> getFormatList(Direction direction){
         Map<String, Format> fmtList = new HashMap<>();
         String rootName = schemaRoot.getName();
-        if( rootName.toLowerCase() == "format" ){            
+        if( rootName.equalsIgnoreCase( "format") ){            
             Format rootFmt =  new DataFormat(rootName, Format.Form.STRUCT);
             fmtList.put(rootName, rootFmt);
             rootFmt.addChild(TextConstants.FIELDS, Form.STRUCT);
@@ -74,7 +74,7 @@ public class FormatFromXmlSchemaBuilder implements FormatBuilder{
 
     @Override
     public Format getFormat(Format format, String path, Direction direction){
-        if( format.getName().toLowerCase() == "format" ){
+        if( format.getName().equalsIgnoreCase("format") ){
             Iterator itor = schemaRoot.elementIterator();
             Format fields = format.getChild(TextConstants.FIELDS);
             while( itor.hasNext() ){
