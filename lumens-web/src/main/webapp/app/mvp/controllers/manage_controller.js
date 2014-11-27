@@ -244,7 +244,7 @@ Lumens.controllers
                     ['Free', 100 - diskInfo.disk_list[i].use_perc]
                 ];
                 var diskPlot = $.jqplot('diskInfo_' + i, [data], {
-                    title: '( ' + diskInfo.disk_list[i].name + ' ) Usage ( ' + diskInfo.disk_list[i].use_perc + '% )',
+                    title: '( ' + diskInfo.disk_list[i].name + ' --- ' + diskInfo.disk_list[i].total + 'G ) Usage ( ' + diskInfo.disk_list[i].use_perc + '% )',
                     seriesDefaults: {
                         // make this a donut chart.
                         renderer: $.jqplot.DonutRenderer,
