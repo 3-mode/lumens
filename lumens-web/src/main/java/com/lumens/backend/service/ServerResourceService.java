@@ -57,9 +57,7 @@ public class ServerResourceService {
         sb.append(String.format("{ \"used\"  : %d,", mem.getUsedMem()));
         sb.append(String.format("  \"free\" : %d,", mem.getFreeMem()));
         sb.append(String.format("  \"ram\" : %d  }", mem.getRAM()));
-        return Response.ok().entity(String.format("{ "
-                                                  + "\"memory\" : %s"
-                                                  + "}", sb.toString())).build();
+        return Response.ok().entity(String.format("{ \"memory\" : %s }", sb.toString())).build();
     }
 
     @GET
@@ -77,9 +75,7 @@ public class ServerResourceService {
             sb.append("  \"total\": ").append(disk.getTotal() / 1024).append(",");
             sb.append("  \"use_perc\": ").append(disk.getUsePercent()).append(" }");
         }
-        return Response.ok().entity(String.format("{ "
-                                                  + "\"disk_list\" : [%s] "
-                                                  + "}", sb.toString())).build();
+        return Response.ok().entity(String.format("{ \"disk_list\" : [%s] }", sb.toString())).build();
     }
 
 }
