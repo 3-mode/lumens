@@ -13,7 +13,7 @@ html, body {
     overflow: hidden;
 }
 body {
-    /*background-color: rgb(240, 240, 240);*/
+    background-color: rgb(240, 240, 240);
 }
 a, a:focus, a:hover {
     color:inherit;
@@ -699,6 +699,32 @@ svg path {
 .lumens .lumens-h-button-text-pos {
     padding-top: 12px;
     padding-left: 15px;
+}
+.lumens .lumens-control {
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    /* height: 100% !important; */
+    font-size: 16px !important;
+}
+.lumens .lumens-must {
+    color: red;
+}
+.lumens .lumens-label-style {
+    width: 100px;
+    height: 40px;
+    text-align: right;
+}
+.lumens .lumens-value-style {
+    width: 250px;
+    height: 40px;
+}
+.lumens .lumens-value-style-colspan-3 {
+    height: 40px;
+}
+.lumens .lumens-value-textarea-style-colspan-3 {
+    height: 80px;
 }
 .lumens .lumens-cpu-total {
     width: 100%;
