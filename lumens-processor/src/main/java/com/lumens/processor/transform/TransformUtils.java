@@ -13,12 +13,10 @@ import com.lumens.processor.ProcessorUtils;
 public class TransformUtils extends ProcessorUtils {
 
     public static boolean checkTransformParameters(Object... args) {
-        if (args == null || args.length < 1)
+        if (args == null || args.length < 1) {
             return false;
-        if (!(args[0] instanceof TransformRule)
-            || (args.length == 2 && (args[1] != null && !(args[1] instanceof Element))))
-            return false;
-
-        return true;
+        }
+        return !(!(args[0] instanceof TransformRule)
+                 || (args.length == 2 && (args[1] != null && !(args[1] instanceof Element))));
     }
 }
