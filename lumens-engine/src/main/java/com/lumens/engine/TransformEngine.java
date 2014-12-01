@@ -9,8 +9,6 @@ import com.lumens.addin.AddinEngine;
 import com.lumens.engine.run.ExecuteJob;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -24,7 +22,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TransformEngine {
 
     private AddinEngine addinEngine;
-    private List<ExecuteJob> jobList = new ArrayList<>();
     private ThreadPoolExecutor threadPoolExecutor;
     private ClassLoader addinClassLoader;
     private static AtomicInteger threadCounter = new AtomicInteger(1);
@@ -67,8 +64,9 @@ public class TransformEngine {
             AddinContext ac = addinEngine.getAddinContext();
             System.out.println("Addin path: " + addinPath);
             File addinPathFile = new File(addinPath);
-            for (File addinItemFile : addinPathFile.listFiles())
+            for (File addinItemFile : addinPathFile.listFiles()) {
                 ac.installAddIn(addinItemFile.toURI().toURL()).start();
+            }
             EngineContext.start(new DefaultConnectorFactoryHolder(ac));
         } catch (MalformedURLException ex) {
             throw new LumensException(ex);

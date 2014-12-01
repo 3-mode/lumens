@@ -41,7 +41,7 @@ import org.xml.sax.InputSource;
 public class ProjectSerializer implements XmlSerializer, JsonSerializer {
 
     private final static String INDENT = "  ";
-    private TransformProject project;
+    private final TransformProject project;
 
     public ProjectSerializer(TransformProject project) {
         this.project = project;

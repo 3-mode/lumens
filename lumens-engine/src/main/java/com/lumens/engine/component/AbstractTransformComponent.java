@@ -15,13 +15,13 @@ public abstract class AbstractTransformComponent implements TransformComponent {
 
     private int x;
     private int y;
-    private String id;
     private String name;
     protected boolean isOpen;
-    private String compType;
     private String description;
-    private Map<String, TransformComponent> sourceList = new HashMap<>();
-    private Map<String, TransformComponent> targetList = new HashMap<>();
+    private final String id;
+    private final String compType;
+    private final Map<String, TransformComponent> sourceList = new HashMap<>();
+    private final Map<String, TransformComponent> targetList = new HashMap<>();
 
     public AbstractTransformComponent(String compType, String id) {
         this.compType = compType;

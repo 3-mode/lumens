@@ -18,10 +18,10 @@ import org.xml.sax.*;
  */
 public class ProjectParser implements ContentHandler {
 
-    private ProjectHandler handler;
-    private Stack context;
-    private StringBuffer buffer;
-    private EntityResolver resolver;
+    private final ProjectHandler handler;
+    private final Stack context;
+    private final StringBuffer buffer;
+    private final EntityResolver resolver;
 
     /**
      *
