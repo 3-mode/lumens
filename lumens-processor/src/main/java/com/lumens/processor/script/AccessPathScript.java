@@ -9,7 +9,6 @@ import com.lumens.model.Path;
 import com.lumens.model.Type;
 import com.lumens.processor.Context;
 import com.lumens.processor.Script;
-import com.lumens.processor.transform.ForeachMapperContext;
 
 // TODO need to refine the package path, if it is correct to put the class into
 // transform package

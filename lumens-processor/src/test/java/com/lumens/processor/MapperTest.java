@@ -8,10 +8,13 @@ import com.lumens.model.DataFormat;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Type;
+import com.lumens.model.serializer.ElementSerializer;
+import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.script.JavaScriptContext;
 import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
+import java.io.InputStream;
 import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 import org.junit.Test;
@@ -28,41 +31,25 @@ public class MapperTest {
 
     @Test
     public void testElementMapping() throws Exception {
+
         // Build person format
-        Format person = new DataFormat("Person", Format.Form.STRUCT);
-        person.addChild("name", Format.Form.FIELD, Type.STRING);
-        Format personAsset = person.addChild("Asset", Format.Form.ARRAYOFSTRUCT);
-        personAsset.addChild("name", Format.Form.FIELD, Type.STRING);
-        personAsset.addChild("price", Format.Form.FIELD, Type.FLOAT);
-        Format personAssetPart = personAsset.addChild("Part", Format.Form.ARRAYOFSTRUCT);
-        personAssetPart.addChild("name", Format.Form.FIELD, Type.STRING);
-        personAssetPart.addChild("description", Format.Form.FIELD, Type.STRING);
-        Format name = personAsset.addChild("Vendor", Format.Form.STRUCT).addChild("name", Format.Form.FIELD, Type.STRING);
-        assertEquals("Person.Asset.Vendor.name", name.getFullPath().toString());
+        Format root = new DataFormat("Root");
+        try (InputStream in = MapperTest.class.getResourceAsStream("/xml/Person_Format.xml")) {
+            FormatSerializer xmlSerializer = new FormatSerializer(root);
+            xmlSerializer.readFromXml(in);
+        }
+        Format person = root.getChild("Person");
+        person.setParent(null);
+        assertEquals("Person.Asset.Vendor.name", person.getChildByPath("Asset.Vendor.name").getFullPath().toString());
 
         // Fill person data
         Element personData = new DataElement(person);
-        Element nameData = personData.addChild("name");
-        nameData.setValue("James wang");
-        assertEquals("James wang", nameData.getValue().getString());
-        Element assetData = personData.addChild("Asset");
-        // personAsset item 1
-        Element assetDataItem = assetData.addArrayItem();
-        assetDataItem.addChild("name").setValue("Mac air book");
-        assetDataItem.addChild("price").setValue(12000.05f);
-        assetDataItem.addChild("Vendor").addChild("name").setValue("Apple");
-        Element assetItemPart = assetDataItem.addChild("Part");
-        assetItemPart.addArrayItem().addChild("name").setValue("Mac mouse");
-        assetItemPart.addArrayItem().addChild("name").setValue("Mac keyboard");
-        assetItemPart.addArrayItem().addChild("name").setValue("Mac voice box");
-        // personAsset item 2
-        assetDataItem = assetData.addArrayItem();
-        assetDataItem.addChild("name").setValue("HP computer");
-        assetDataItem.addChild("price").setValue(15000.05f);
-        assetDataItem.addChild("Vendor").addChild("name").setValue("HP");
-        assetItemPart = assetDataItem.addChild("Part");
-        assetItemPart.addArrayItem().addChild("name").setValue("HP mouse");
-        assetItemPart.addArrayItem().addChild("name").setValue("HP keyboard");
+        try (InputStream in = MapperTest.class.getResourceAsStream("/xml/Person_Element.xml")) {
+            ElementSerializer xmlSerializer = new ElementSerializer(personData, true);
+            xmlSerializer.readFromXml(in);
+        }
+
+        buildPersonData(personData);
 
         Element assetFind = personData.getChildByPath("Asset");
         assertEquals(2, assetFind.getChildren().size());
@@ -103,7 +90,7 @@ public class MapperTest {
         resultList = (List<Element>) mapper.execute(rule, personData);
         System.out.println("Cost: " + (System.currentTimeMillis() - start));
 
-        assertEquals("James wang", resultList.get(0).getChild("name").getValue().getString());
+        //assertEquals("James wang", resultList.get(0).getChild("name").getValue().getString());
         assertEquals(1, resultList.size());
         List<Element> assetItems = resultList.get(0).getChildByPath("asset").getChildren();
         assertEquals(2, assetItems.size());
@@ -125,5 +112,56 @@ public class MapperTest {
         assertEquals(2, parts.size());
         assertEquals("PART_1_0", parts.get(0).getChild("id").getValue().getString());
         assertEquals("PART_1_1", parts.get(1).getChild("id").getValue().getString());
+
+        // Test the root list mapping
+        Format departRoot = new DataFormat("Root");
+        try (InputStream in = MapperTest.class.getResourceAsStream("/xml/Department_Format.xml")) {
+            FormatSerializer xmlSerializer = new FormatSerializer(departRoot);
+            xmlSerializer.readFromXml(in);
+        }
+        Format department = departRoot.getChild("Department");
+        department.setParent(null);
+        Element departmentData = new DataElement(department);
+
+        Element personElem = departmentData.addChild("Person");
+        buildPersonData(personElem.addArrayItem());
+        buildPersonData(personElem.addArrayItem());
+        // Configure For each to iterate the array source elements
+        TransformRule rule_For_ListResult = new TransformRule(wareHouse);
+        rule_For_ListResult.getRuleItem("WareHouse").setTransformForeach(new TransformForeach("Department.Person", "Asset", "index"));
+        rule_For_ListResult.getRuleItem("WareHouse.name").setScript("@Department.Person[index].name");
+        rule_For_ListResult.getRuleItem("WareHouse.asset").setTransformForeach(new TransformForeach("Department.Person.Asset", "Asset", "indexAsset"));
+        rule_For_ListResult.getRuleItem("WareHouse.asset.id").setScript("'ASSET_' + index + '_' + indexAsset");
+        rule_For_ListResult.getRuleItem("WareHouse.asset.name").setScript("@Department.Person[index].Asset[indexAsset].name");
+        rule_For_ListResult.getRuleItem("WareHouse.asset.price").setScript("@Department.Person[index].Asset[indexAsset].price");
+        rule_For_ListResult.getRuleItem("WareHouse.asset.vendor.name").setScript("@Department.Person[index].Asset[indexAsset].Vendor.name");//*/
+
+        TransformMapper listMapper = new TransformMapper();
+        resultList = (List<Element>) listMapper.execute(rule_For_ListResult, departmentData);
+    }
+
+    private void buildPersonData(Element personData) {
+        Element nameData = personData.addChild("name");
+        long mills = System.currentTimeMillis();
+        nameData.setValue("James wang_" + mills);
+        assertEquals("James wang_" + mills, nameData.getValue().getString());
+        Element assetData = personData.addChild("Asset");
+        // personAsset item 1
+        Element assetDataItem = assetData.addArrayItem();
+        assetDataItem.addChild("name").setValue("Mac air book");
+        assetDataItem.addChild("price").setValue(12000.05f);
+        assetDataItem.addChild("Vendor").addChild("name").setValue("Apple");
+        Element assetItemPart = assetDataItem.addChild("Part");
+        assetItemPart.addArrayItem().addChild("name").setValue("Mac mouse");
+        assetItemPart.addArrayItem().addChild("name").setValue("Mac keyboard");
+        assetItemPart.addArrayItem().addChild("name").setValue("Mac voice box");
+        // personAsset item 2
+        assetDataItem = assetData.addArrayItem();
+        assetDataItem.addChild("name").setValue("HP computer");
+        assetDataItem.addChild("price").setValue(15000.05f);
+        assetDataItem.addChild("Vendor").addChild("name").setValue("HP");
+        assetItemPart = assetDataItem.addChild("Part");
+        assetItemPart.addArrayItem().addChild("name").setValue("HP mouse");
+        assetItemPart.addArrayItem().addChild("name").setValue("HP keyboard");
     }
 }

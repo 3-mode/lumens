@@ -36,7 +36,7 @@ public class TransformRule implements Rule {
         if (!fmtPath.isEmpty()) {
             PathToken token = null;
             TransformRuleItem parent = root;
-            TransformRuleItem child = null;
+            TransformRuleItem child = parent;
             Iterator<PathToken> it = fmtPath.removeLeft(1).iterator();
             while (it.hasNext()) {
                 token = it.next();

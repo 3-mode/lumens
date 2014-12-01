@@ -23,6 +23,13 @@ public class ForeachMapperContext extends MapperContext {
         this.sourceElement = sourceElement;
     }
 
+    public ForeachMapperContext(TransformRuleItem rootRuleItem, Element rootSrcElement, TransformForeach foreach, int currentIndex, Element sourceElement) {
+        super(rootRuleItem, rootSrcElement);
+        this.foreach = foreach;
+        this.currentIndex = currentIndex;
+        this.sourceElement = sourceElement;
+    }
+
     public TransformForeach getForeach() {
         return foreach;
     }

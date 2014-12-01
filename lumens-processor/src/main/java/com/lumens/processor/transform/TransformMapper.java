@@ -28,15 +28,25 @@ public class TransformMapper extends AbstractProcessor {
             Element rootSourceElement = input;
             List<Element> results = new ArrayList<>();
             TransformRuleItem rootRuleItem = transformRule.getRootRuleItem();
-            TransformForeach foreach = rootRuleItem.getTransformForeach();
+            TransformForeach rootForeach = rootRuleItem.getTransformForeach();
             // Handle root element for each to generate output element list
-            if (foreach != null && foreach.hasSourcePath()) {
-                // The source path format should be "RootName.Child1_name.Child2_name...." or "RootName.Array_Child1_name[0].Child2_name...."
-                Path foreachSourcePath = new AccessPath(foreach.getSourcePath());
+            if (rootForeach != null && rootForeach.hasSourcePath()) {
+                Path foreachSourcePath = new AccessPath(rootForeach.getSourcePath());
                 if (!rootSourceElement.getFormat().getName().equals(foreachSourcePath.token(0).toString()))
-                    throw new RuntimeException(String.format("The for each source path '%s' is not valid!", foreach.getSourcePath()));
-                //String shortSourcePath = foreach.getShortSourcePath();
+                    throw new RuntimeException(String.format("The for each source path '%s' is not valid!", rootForeach.getSourcePath()));
 
+                // Need to do for each on array element to create all array items.
+                Element forEachSrcElement = rootSourceElement.getChildByPath(foreachSourcePath.removeLeft(1));
+                if (forEachSrcElement == null && !forEachSrcElement.hasChildren())
+                    return null;
+                List<Element> forEachArray = forEachSrcElement.getChildren();
+                for (int index = rootForeach.getIndexValue(); index < forEachArray.size(); ++index) {
+                    Element sourceElement = forEachArray.get(index);
+                    ForeachMapperContext foreachCtx = new ForeachMapperContext(rootRuleItem, rootSourceElement, rootForeach, index, sourceElement);
+                    Element result = processTransformItem(foreachCtx);
+                    if (result != null)
+                        results.add(result);
+                }
             } else {
                 MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
                 Element result = processTransformItem(ctx);
@@ -54,15 +64,13 @@ public class TransformMapper extends AbstractProcessor {
         currentResultElement = executeTransformRule(ctx, currentResultElement);
         List<TransformRuleItem> children = currentRuleItem.getChildren();
         if (children != null && !children.isEmpty()) {
-            // TODO Need to support for-each
+            // TODO Need to support multiple for-each on one format
             // If the element is array type, then need to add array item first and set the attribute in it.
             if (currentResultElement.isArray()) {
                 TransformForeach currentForeach = currentRuleItem.getTransformForeach();
                 if (currentForeach != null && currentForeach.hasSourcePath()) {
                     // Need to do for each on array element to create all array items.
-                    // TODO
                     Path foreachSourcePath = new AccessPath(currentForeach.getSourcePath());
-                    // TODO need to calculate the path index here if the parent level contains an for each array
                     Element foreachSourceElement = ScriptUtils.getStartElement(ctx);
                     Element forEachSrcElement = foreachSourceElement.getChildByPath(foreachSourcePath.removeLeft(foreachSourceElement.getLevel() + 1));
                     if (forEachSrcElement == null && !forEachSrcElement.hasChildren())
