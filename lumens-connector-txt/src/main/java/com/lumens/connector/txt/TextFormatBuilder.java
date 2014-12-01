@@ -9,21 +9,12 @@ import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
 import com.lumens.model.Format.Form;
 import com.lumens.model.Value;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Map;
 
-import org.dom4j.io.SAXReader;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
-import org.dom4j.io.SAXValidator;
-import org.dom4j.DocumentException;
-import org.dom4j.util.XMLErrorHandler;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -80,7 +71,7 @@ public class TextFormatBuilder implements FormatBuilder{
             while( itor.hasNext() ){
                 Element column = (Element)itor.next();
                 String elemName = column.getName();
-                if( elemName.toLowerCase() == "field" ){                    
+                if( elemName.equalsIgnoreCase("field") ){                    
                     Iterator attrItor = column.attributeIterator();
                     Format field = null;
                     while( attrItor.hasNext() ){
@@ -88,11 +79,11 @@ public class TextFormatBuilder implements FormatBuilder{
                         String name = attr.getName();   
                         String value = attr.getValue();                        
                         
-                        if( name.toLowerCase() == "name" && !value.isEmpty() ){
+                        if( name.equalsIgnoreCase("name") && !value.isEmpty() ){
                             field = new DataFormat(value, Form.FIELD); 
                             fields.addChild(field);
                         }                        
-                        if( field != null &&  name.toLowerCase() != "name"){   
+                        if( field != null &&  !name.equalsIgnoreCase("name")){   
                             field.setProperty(name, new Value(value));
                         }          
                     }

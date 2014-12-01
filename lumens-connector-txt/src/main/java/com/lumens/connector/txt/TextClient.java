@@ -4,36 +4,55 @@
 
 package com.lumens.connector.txt;
 
-import java.io.BufferedInputStream;
+import java.io.FileReader;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.io.FileInputStream;
+import java.io.File;
 
-import com.lumens.connector.Connector;
-import com.lumens.connector.Direction;
 import com.lumens.model.Format;
-import java.io.InputStream;
+import com.lumens.model.Element;
 import java.io.OutputStream;
-import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class TextClient {
-    protected TextConnector xmlCntr;     
+public class TextClient {    
+    String filepath; 
+    BufferedReader reader;
+    boolean bInit = false;
     
-    public TextClient(TextConnector cnt){
-        xmlCntr = cnt;
+    public TextClient(String path){
+        filepath = path;
     }
     
     public void init()
-    {        
+    {                
+            File file = new File(filepath);
+            if( file.isFile() && file.exists() ){                
+                bInit = true;
+            }
     }
            
-    public void read(InputStream ins, String encoding){        
+    public List<Element> read(Format fmt){      
+        List<Element> result = new ArrayList();
+        String encoding = fmt.getProperty(TextConstants.ENCODING).toString();
 
+        try{           
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(filepath), encoding));
+            String line;
+            while((line = reader.readLine())!=null){
+                Element elem = TextElementBuilder.buildElement(fmt, line);
+                result.add(elem);
+            }
+        }catch (Exception ex) {            
+            throw new RuntimeException(ex);
+        }
+
+        return result;
     }            
     
     public void write(OutputStream ous){

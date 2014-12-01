@@ -3,23 +3,12 @@
  */
 package com.lumens.connector.txt;
 
-import java.io.File;
-import java.io.FileNotFoundException;  
-import java.io.FileOutputStream;  
-import java.io.FileInputStream;  
-import java.io.IOException;  
-import java.io.IOException;  
-import java.io.InputStream;  
-import java.io.OutputStream;  
-
 import com.lumens.connector.Connector;
 import com.lumens.connector.FormatBuilder;
 import com.lumens.connector.Operation;
 import com.lumens.connector.Direction;
-import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -68,7 +57,7 @@ public class TextConnector implements Connector{
     @Override
     public void open(){
         if ( textClient == null) {
-            textClient = new TextClient(this);
+            textClient = new TextClient(path);
             formatBuilder = new TextFormatBuilder(path);
             try{
                 formatBuilder.initalize();
