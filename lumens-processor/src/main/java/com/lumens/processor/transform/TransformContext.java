@@ -7,6 +7,7 @@ import com.lumens.model.Element;
 import com.lumens.processor.Context;
 import java.util.HashMap;
 import java.util.Map;
+import org.mozilla.javascript.Scriptable;
 
 /**
  *
@@ -22,7 +23,13 @@ public class TransformContext implements Context {
 
     public TransformContext(Element input, Element result) {
         this.input = input;
+        this.elementSearchEntry = input;
         this.result = result;
+    }
+
+    @Override
+    public Element getRootSourceElement() {
+        return elementSearchEntry;
     }
 
     public Element getInputElement() {
@@ -64,8 +71,16 @@ public class TransformContext implements Context {
         this.elementSearchEntry = elementSearchEntry;
     }
 
+    public void setCurrentShortSourcePath(String shortSoourcePath) {
+    }
+
     @Override
-    public Element getAccessPathEntry() {
-        return elementSearchEntry;
+    public Context getParent() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void declareVariables(Scriptable scope) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
