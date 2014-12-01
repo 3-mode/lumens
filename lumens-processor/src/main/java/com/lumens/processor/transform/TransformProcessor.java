@@ -100,7 +100,7 @@ public class TransformProcessor extends AbstractProcessor {
     }
 
     private List<Element> buildForEachElementList(TransformContext ctx, TransformRuleItem ruleItem) {
-        Element elementSearchEntry = ctx.getAccessPathEntry();
+        Element elementSearchEntry = ctx.getRootSourceElement();
         String strForEachPath = ruleItem.getForEachPath();
         Path forEachPath = new AccessPath(strForEachPath);
 
@@ -127,7 +127,7 @@ public class TransformProcessor extends AbstractProcessor {
                 item = item.getChild(pathToken);
                 if (item != null && item.isStruct())
                     childItems.add(item);
-                else if (item != null && item.isArray() && item.getChildren().size() > 0)
+                else if (item != null && item.isArray() && item.hasChildren())
                     childItems.addAll(item.getChildren());
             } else if (item.isField())
                 throw new RuntimeException("Wrong path is used for array-to-array or array to struct transform rule");
