@@ -7,13 +7,20 @@ import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class TextOperation implements Operation {
-
+    private TextClient client;
+        
+    TextOperation(TextClient cli){
+        client = cli;        
+    }
+    
     @Override
     public void begin() {
     }
@@ -23,8 +30,9 @@ public class TextOperation implements Operation {
     }
 
     @Override
-    public OperationResult execute(Element input, Format output) throws Exception {
-        return null;
+    public OperationResult execute(Element elem, Format fmt) throws Exception {
+        List<Element> result = new ArrayList();
+        return new TextOperationResult(result);
     }
 
     @Override
