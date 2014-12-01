@@ -18,12 +18,12 @@ import java.util.List;
  */
 public class TransformRuleItem {
 
+    private final Format format;
     private TransformRuleItem parent;
     private List<TransformRuleItem> children;
     private Script script;
     private String orignalScriptText;
     private String forEachPath;
-    private Format format;
 
     TransformRuleItem(Format format) {
         this.format = format;
@@ -32,10 +32,11 @@ public class TransformRuleItem {
     public void setScript(String scriptText) throws Exception {
         orignalScriptText = scriptText;
         String trimedScriptText = scriptText.trim();
-        if (TransformUtils.isPathFormat(trimedScriptText))
+        if (TransformUtils.isPathFormat(trimedScriptText)) {
             this.script = new AccessPathScript(TransformUtils.getAccessPath(trimedScriptText));
-        else
+        } else {
             this.script = new JavaScript(format.getFullPath().toString(), trimedScriptText);
+        }
     }
 
     public Script getScript() {
@@ -53,22 +54,26 @@ public class TransformRuleItem {
 
         TransformRuleItem item = parent;
         while (item != null) {
-            if (item.forEachPath != null && item.forEachPath.equalsIgnoreCase(forEachPath))
+            if (item.forEachPath != null && item.forEachPath.equalsIgnoreCase(forEachPath)) {
                 throw new IllegalArgumentException("iteration path \"" + forEachPath + "\" already is configured in its parent element");
+            }
             item = item.parent;
         }
         ArrayDeque<TransformRuleItem> items = new ArrayDeque<>();
         List<TransformRuleItem> currentChildren = getChildren();
-        if (currentChildren != null && !currentChildren.isEmpty())
+        if (currentChildren != null && !currentChildren.isEmpty()) {
             items.addAll(currentChildren);
+        }
 
         while (!items.isEmpty()) {
             item = items.removeFirst();
-            if (item.forEachPath != null && item.forEachPath.equalsIgnoreCase(forEachPath))
+            if (item.forEachPath != null && item.forEachPath.equalsIgnoreCase(forEachPath)) {
                 throw new IllegalArgumentException("For each path \"" + forEachPath + "\" already is configured in its child element");
+            }
             currentChildren = item.getChildren();
-            if (currentChildren != null && !currentChildren.isEmpty())
+            if (currentChildren != null && !currentChildren.isEmpty()) {
                 items.addAll(currentChildren);
+            }
         }
 
         this.forEachPath = forEachPath;
@@ -88,19 +93,23 @@ public class TransformRuleItem {
 
     public TransformRuleItem getChild(String name) {
         if (children != null) {
-            for (TransformRuleItem item : children)
-                if (item.format.getName().equalsIgnoreCase(name))
+            for (TransformRuleItem item : children) {
+                if (item.format.getName().equalsIgnoreCase(name)) {
                     return item;
+                }
+            }
         }
         return null;
     }
 
     public TransformRuleItem addChild(String name) {
-        if (children == null)
+        if (children == null) {
             children = new ArrayList<>();
+        }
         Format child = format.getChild(name);
-        if (child == null)
+        if (child == null) {
             throw new IllegalArgumentException("The child format \"" + name + "\" does not exist");
+        }
         TransformRuleItem item = new TransformRuleItem(child);
         item.parent = this;
         children.add(item);

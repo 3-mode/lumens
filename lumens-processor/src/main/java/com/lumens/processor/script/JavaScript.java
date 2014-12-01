@@ -6,7 +6,6 @@ package com.lumens.processor.script;
 import com.lumens.processor.Context;
 import com.lumens.processor.Script;
 import com.lumens.processor.transform.TransformContext;
-import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;

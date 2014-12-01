@@ -14,7 +14,7 @@ import com.lumens.processor.Script;
 // transform package
 public class AccessPathScript implements Script {
 
-    private Path path;
+    private final Path path;
 
     public AccessPathScript(String script) {
         path = new AccessPath(script);

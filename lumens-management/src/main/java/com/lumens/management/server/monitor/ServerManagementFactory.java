@@ -3,7 +3,9 @@
  */
 package com.lumens.management.server.monitor;
 
+import com.lumens.management.server.monitor.jni.NavtiveLibraryScope;
 import com.lumens.management.server.monitor.impl.ServerOSResourcesMonitor;
+import org.hyperic.sigar.SigarLoader;
 
 /**
  *
@@ -16,6 +18,7 @@ public class ServerManagementFactory {
     }
 
     public OSResourcesMonitor createOSResourcesMonitor() {
+        NavtiveLibraryScope.removeAll(SigarLoader.class.getClassLoader());
         return new ServerOSResourcesMonitor();
     }
 }

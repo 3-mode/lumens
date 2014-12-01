@@ -16,8 +16,8 @@ import java.util.Iterator;
  */
 public class TransformRule implements Rule {
 
-    private Format dstFmt;
-    private TransformRuleItem root;
+    private final Format dstFmt;
+    private final TransformRuleItem root;
 
     public TransformRule(Format dest) {
         this.dstFmt = dest;
@@ -38,8 +38,9 @@ public class TransformRule implements Rule {
             while (it.hasNext()) {
                 token = it.next();
                 child = parent.getChild(token.toString());
-                if (child == null)
+                if (child == null) {
                     child = parent.addChild(token.toString());
+                }
                 parent = child;
             }
             return child;

@@ -14,10 +14,10 @@ import java.util.Map;
  */
 public class TransformContext implements Context {
 
-    private Map<String, Element> arrayIterationMap = new HashMap<>();
+    private final Map<String, Element> arrayIterationMap = new HashMap<>();
+    private final Element input;
+    private final Element result;
     private Element elementSearchEntry;
-    private Element input;
-    private Element result;
     private Element current;
 
     public TransformContext(Element input, Element result) {
@@ -51,8 +51,9 @@ public class TransformContext implements Context {
         while (parent != null) {
             if (parent.isArrayItem() || parent.getParent() == null) {
                 arrayIterationElement = arrayIterationMap.get(parent.toString());
-                if (arrayIterationElement != null)
+                if (arrayIterationElement != null) {
                     return arrayIterationElement;
+                }
             }
             parent = parent.getParent();
         }
