@@ -37,6 +37,8 @@ public interface Element {
     public Element getChildByPath(Path path);
 
     public List<Element> getChildren();
+    
+    public boolean hasChildren();
 
     public Format getFormat();
 

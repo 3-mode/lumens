@@ -3,6 +3,8 @@
  */
 package com.lumens.model;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  *
  * @author shaofeng wang
@@ -11,6 +13,7 @@ public class PathToken {
 
     private String token;
     private int index;
+    private String indexExpression;
 
     public PathToken(String token) {
         this.token = token;
@@ -18,11 +21,23 @@ public class PathToken {
     }
 
     public boolean isIndexed() {
-        return index != -1;
+        return indexExpression != null && !indexExpression.isEmpty();
+    }
+
+    public boolean isIndexExpression() {
+        return index < 0 && indexExpression != null && !indexExpression.isEmpty();
+    }
+
+    public String indexExpression() {
+        return this.indexExpression;
     }
 
     public int index() {
         return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     @Override
@@ -40,7 +55,9 @@ public class PathToken {
             index = -1;
             return;
         }
-        index = Integer.parseInt(token.substring(i + 1, token.length() - 1));
+        indexExpression = token.substring(i + 1, token.length() - 1);
+        if (StringUtils.isNumeric(indexExpression))
+            index = Integer.parseInt(indexExpression);
         this.token = token.substring(0, i);
     }
 }
