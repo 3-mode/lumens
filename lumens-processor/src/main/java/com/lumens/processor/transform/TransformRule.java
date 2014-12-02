@@ -30,11 +30,14 @@ public class TransformRule implements Rule {
 
     public TransformRuleItem getRuleItem(String path) {
         Path fmtPath = new AccessPath(path);
+        if (!root.getFormat().getName().equals(fmtPath.token(0).toString()))
+            throw new RuntimeException(String.format("Root format name '%s' doesn't match with root '%s' from path",
+                                                     root.getFormat().getName(), fmtPath.token(0).toString()));
         if (!fmtPath.isEmpty()) {
             PathToken token = null;
             TransformRuleItem parent = root;
-            TransformRuleItem child = null;
-            Iterator<PathToken> it = fmtPath.iterator();
+            TransformRuleItem child = parent;
+            Iterator<PathToken> it = fmtPath.removeLeft(1).iterator();
             while (it.hasNext()) {
                 token = it.next();
                 child = parent.getChild(token.toString());

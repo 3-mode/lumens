@@ -36,6 +36,11 @@ public class AccessPath implements Path {
     }
 
     @Override
+    public PathToken token(int index) {
+        return tokens.get(index);
+    }
+
+    @Override
     public Iterator<PathToken> iterator() {
         return tokens.iterator();
     }

@@ -52,7 +52,6 @@ public class JavaScriptBuilder {
                 bQuote = !bQuote;
             if (bQuote || c != '@') {
                 builder.append(c);
-                continue;
             } else if (c == '@') { // find all @a.b.c format line in this line
                 i++;
                 if (i < line.length()) {

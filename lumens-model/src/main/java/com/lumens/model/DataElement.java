@@ -140,21 +140,27 @@ public class DataElement implements Element {
     public Element getChildByPath(Path path) {
         Element child = this;
         PathToken token = null;
-        List<Element> items = null;
         Iterator<PathToken> it = path.iterator();
         while (it.hasNext()) {
             token = it.next();
             child = child.getChild(token.toString());
-            if (child != null && (token.isIndexed() || child.isArray() && (it.hasNext() || child.getChildren() != null))) {
-                items = child.getChildren();
-                if (items == null) {
-                    throw new IllegalArgumentException("Error path \"" + path.toString() + "\"");
-                }
-                child = items.get(token.isIndexed() ? token.index() : 0);
+
+            if (child == null)
+                throw new IllegalArgumentException(String.format("Error path '%s'", path.toString()));
+
+            if (token.isIndexed() && child.isArray()) {
+                if (!child.hasChildren())
+                    throw new IllegalArgumentException(String.format("Error path '%s', token '%s' is not found", path.toString(), token.toString()));
+                child = child.getChildren().get(token.index());
             }
         }
 
         return child;
+    }
+
+    @Override
+    public boolean hasChildren() {
+        return !getChildren().isEmpty();
     }
 
     @Override

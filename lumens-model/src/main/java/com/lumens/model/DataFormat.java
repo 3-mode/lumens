@@ -166,10 +166,12 @@ public class DataFormat implements Format {
 
     @Override
     public Path getFullPath() {
+        // The path includes root node name also. example: "Employee.Address.city"
+        // The "Employee" is the root node name
         Path fullPath = new AccessPath((String) null);
         if (parent != null) {
             Format format = this;
-            while (format.getParent() != null) {
+            while (format != null) {
                 fullPath.addLeft(format.getName());
                 format = format.getParent();
             }

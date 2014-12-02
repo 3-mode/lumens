@@ -15,7 +15,7 @@ import com.lumens.engine.run.LastResultHandler;
 import com.lumens.engine.run.ResultHandler;
 import com.lumens.model.Element;
 import com.lumens.processor.Processor;
-import com.lumens.processor.transform.TransformProcessor;
+import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,13 +30,13 @@ import java.util.Map;
 public class DataTransformator extends AbstractTransformComponent implements RuleComponent, Instrument {
 
     private String name;
-    private Processor processor;
-    private List<TransformRuleEntry> ruleList = new ArrayList<>();
-    private Map<String, List<TransformRuleEntry>> ruleFindList = new HashMap<>();
+    private final Processor processor;
+    private final List<TransformRuleEntry> ruleList = new ArrayList<>();
+    private final Map<String, List<TransformRuleEntry>> ruleFindList = new HashMap<>();
 
     public DataTransformator(String id) {
         super("type-transformator", id);
-        processor = new TransformProcessor();
+        processor = new TransformMapper();
     }
 
     @Override

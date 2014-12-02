@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element-list>
+    <element name="Person" form="Struct" type="None">
+        <element name="name" form="Field" type="String">James wang</element>
+        <element name="Asset" form="ArrayOfStruct" type="None">
+            <element name="Asset" form="ArrayOfStruct" type="None">
+                <element name="name" form="Field" type="String">Mac air book</element>
+                <element name="price" form="Field" type="Float">12000.05</element>
+                <element name="Vendor" form="Struct" type="None">
+                    <element name="name" form="Field" type="String">Apple</element>
+                </element>
+                <element name="Part" form="ArrayOfStruct" type="None">
+                    <element name="Part" form="ArrayOfStruct" type="None">
+                        <element name="name" form="Field" type="String">Mac mouse</element>
+                        <element name="description" form="Field" type="String">test description Mac mouse</element>
+                    </element>
+                    <element name="Part" form="ArrayOfStruct" type="None">
+                        <element name="name" form="Field" type="String">Mac keyboard</element>
+                        <element name="description" form="Field" type="String">test description Mac keyboard</element>
+                    </element>
+                    <element name="Part" form="ArrayOfStruct" type="None">
+                        <element name="name" form="Field" type="String">Mac voice box</element>
+                        <element name="description" form="Field" type="String">test description Mac voice box</element>
+                    </element>
+                </element>
+            </element>
+            <element name="Asset" form="ArrayOfStruct" type="None">
+                <element name="name" form="Field" type="String">HP computer</element>
+                <element name="price" form="Field" type="Float">15000.05</element>
+                <element name="Vendor" form="Struct" type="None">
+                    <element name="name" form="Field" type="String">HP</element>
+                </element>
+                <element name="Part" form="ArrayOfStruct" type="None">
+                    <element name="Part" form="ArrayOfStruct" type="None">
+                        <element name="name" form="Field" type="String">HP mouse</element>
+                        <element name="description" form="Field" type="String">test description HP mouse</element>
+                    </element>
+                    <element name="Part" form="ArrayOfStruct" type="None">
+                        <element name="name" form="Field" type="String">HP keyboard</element>
+                        <element name="description" form="Field" type="String">test description HP keyboard</element>
+                    </element>
+                </element>
+            </element>
+        </element>
+    </element>
+</element-list>

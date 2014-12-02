@@ -11,10 +11,10 @@ import org.xml.sax.*;
  */
 public class FormatParser implements ContentHandler {
 
-    private FormatHandler handler;
-    private Stack context;
-    private StringBuffer buffer;
-    private EntityResolver resolver;
+    private final FormatHandler handler;
+    private final Stack context;
+    private final StringBuffer buffer;
+    private final EntityResolver resolver;
 
     /**
      *

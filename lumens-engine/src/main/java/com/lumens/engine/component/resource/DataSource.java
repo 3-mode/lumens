@@ -31,9 +31,9 @@ import java.util.Map;
  */
 public class DataSource extends AbstractTransformComponent implements RegisterFormatComponent, Resource {
 
+    private final Map<String, FormatEntry> registerOUTFormatList;
+    private final Map<String, FormatEntry> registerINFormatList;
     private Connector connector;
-    private Map<String, FormatEntry> registerOUTFormatList;
-    private Map<String, FormatEntry> registerINFormatList;
     private Map<String, Value> propertyList = new HashMap<>();
     private Map<String, Format> inFormatList;
     private Map<String, Format> outFormatList;
@@ -101,11 +101,13 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             if (input instanceof List) {
                 List<Element> inputDataList = (List<Element>) input;
                 for (Element data : inputDataList) {
+                    // TODO
                     OperationResult opRet = operation.execute(data, targetFormat);
                     if (opRet != null && opRet.getResult() != null)
                         result.addAll(opRet.getResult());
                 }
             } else if (input instanceof Element) {
+                // TODO
                 OperationResult opRet = operation.execute((Element) input, targetFormat);
                 if (opRet != null && opRet.getResult() != null)
                     result.addAll(opRet.getResult());

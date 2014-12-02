@@ -43,7 +43,7 @@ public class ModelTest extends TestCase {
         asset.addChild("name", Form.FIELD, Type.STRING);
         asset.addChild("price", Form.FIELD, Type.FLOAT);
         assertEquals(Type.STRING, person.getChild("asset").getChild("name").
-        getType());
+                     getType());
 
         Element personData = new DataElement(person);
         Element nameData = personData.addChild("name");
@@ -53,7 +53,7 @@ public class ModelTest extends TestCase {
         assetData.addChild("name").setValue("Mac air book");
         assetData.addChild("price").setValue(12000.05f);
         assertEquals(12000.05f, personData.getChild("asset").getChild("price").
-        getValue().getFloat());
+                     getValue().getFloat());
     }
 
     public void testCollection() {
@@ -78,7 +78,7 @@ public class ModelTest extends TestCase {
         assetDataItem.addChild("price").setValue(12000.05f);
         assetDataItem.addChild("vendor").addChild("name").setValue("Apple");
         assertEquals(12000.05f, personData.getChild("asset").getChildren().
-        get(0).getChild("price").getValue().getFloat());
+                     get(0).getChild("price").getValue().getFloat());
     }
 
     public void testClone() {
@@ -94,8 +94,7 @@ public class ModelTest extends TestCase {
 
         Format clonedRoot = root.recursiveClone();
         assertEquals("name", clonedRoot.getChildByPath("Person.name").getName());
-        assertEquals("name", clonedRoot.getChildByPath(
-        "Person.asset.vendor.name").getName());
+        assertEquals("name", clonedRoot.getChildByPath("Person.asset.vendor.name").getName());
     }
 
     public void testElementPath() {
@@ -140,7 +139,7 @@ public class ModelTest extends TestCase {
         asset.addChild("price", Form.FIELD, Type.FLOAT);
         Format name = asset.addChild("vendor", Form.STRUCT).
         addChild("name", Form.FIELD, Type.STRING);
-        assertEquals("Person.asset.vendor.name", name.getFullPath().toString());
+        assertEquals("root.Person.asset.vendor.name", name.getFullPath().toString());
         assertEquals(name, root.getChildByPath("Person.asset.vendor.name"));
 
         // Fill data
@@ -161,13 +160,14 @@ public class ModelTest extends TestCase {
 
         // if asset is array and asset is not the last path token, the default array item is 0
         // if asset is the last token, return the array element
-        nameData = personData.getChildByPath("asset.vendor.name");
-        assertNotNull(nameData);
+        assetData = personData.getChildByPath("asset");
+        assertNotNull(assetData);
+        assertEquals(2, assetData.getChildren().size());
         nameData = personData.getChildByPath("asset[0].vendor.name");
         assertNotNull(nameData);
         nameData = personData.getChildByPath("asset[1].vendor.name");
         assertNotNull(nameData);
-        Element test = personData.getChildByPath("asset.test");
+        Element test = personData.getChildByPath("asset[0].test[0]");
         assertEquals("test collection default index", test.getValue().getString());
 
         // test xml

@@ -4,6 +4,7 @@
 package com.lumens.processor.transform;
 
 import com.lumens.model.Format;
+import com.lumens.processor.ProcessorUtils;
 import com.lumens.processor.Script;
 import com.lumens.processor.script.AccessPathScript;
 import com.lumens.processor.script.JavaScript;
@@ -20,6 +21,7 @@ public class TransformRuleItem {
 
     private final Format format;
     private TransformRuleItem parent;
+    private TransformForeach foreach;
     private List<TransformRuleItem> children;
     private Script script;
     private String orignalScriptText;
@@ -32,8 +34,8 @@ public class TransformRuleItem {
     public void setScript(String scriptText) throws Exception {
         orignalScriptText = scriptText;
         String trimedScriptText = scriptText.trim();
-        if (TransformUtils.isPathFormat(trimedScriptText)) {
-            this.script = new AccessPathScript(TransformUtils.getAccessPath(trimedScriptText));
+        if (ProcessorUtils.isPathFormat(trimedScriptText)) {
+            this.script = new AccessPathScript(ProcessorUtils.getAccessPath(trimedScriptText));
         } else {
             this.script = new JavaScript(format.getFullPath().toString(), trimedScriptText);
         }
@@ -83,6 +85,14 @@ public class TransformRuleItem {
         return forEachPath;
     }
 
+    public void setTransformForeach(TransformForeach foreach) {
+        this.foreach = foreach;
+    }
+
+    public TransformForeach getTransformForeach() {
+        return this.foreach;
+    }
+
     public TransformRuleItem getParent() {
         return parent;
     }
@@ -120,7 +130,7 @@ public class TransformRuleItem {
         return format;
     }
 
-    List<TransformRuleItem> getChildren() {
+    public List<TransformRuleItem> getChildren() {
         return children;
     }
 }

@@ -15,8 +15,8 @@ import java.util.Map;
  */
 public class TransformExecutor implements Executor {
 
-    private TransformComponent tComponent;
-    private ExecuteContext executeContext;
+    private final TransformComponent tComponent;
+    private final ExecuteContext executeContext;
 
     public TransformExecutor(TransformComponent tComponent, ExecuteContext executeContext) {
         this.tComponent = tComponent;

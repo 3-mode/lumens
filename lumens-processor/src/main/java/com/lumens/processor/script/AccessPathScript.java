@@ -22,13 +22,12 @@ public class AccessPathScript implements Script {
 
     @Override
     public Object execute(Context ctx) {
-        Element searchEntry = ctx.getAccessPathEntry();
-        Path currentPath;
-        if (searchEntry.getLevel() > 0)
-            currentPath = path.right(path.tokenCount() - searchEntry.getLevel());
-        else
-            currentPath = path;
-        Element find = searchEntry.getChildByPath(currentPath);
+        Element rootSrcElement = ScriptUtils.getStartElement(ctx);
+        Path fullPath = rootSrcElement.getFormat().getFullPath();
+        if (!path.toString().startsWith(fullPath.toString()))
+            throw new RuntimeException(String.format("Wrong path '%s'", path));
+        Path currentPath = path.removeLeft(rootSrcElement.getLevel() + 1);
+        Element find = rootSrcElement.getChildByPath(currentPath);
         if (find.getFormat().getType() != Type.NONE && find.getValue() != null)
             return find.getValue().get();
 
