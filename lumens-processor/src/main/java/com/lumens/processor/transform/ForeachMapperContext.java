@@ -13,7 +13,7 @@ import org.mozilla.javascript.Scriptable;
 public class ForeachMapperContext extends MapperContext {
     private final TransformForeach foreach;
     private final Element sourceElement;
-    private final int currentIndex;
+    private int currentIndex;
 
     public ForeachMapperContext(MapperContext ctx, TransformForeach foreach, int currentIndex, Element sourceElement) {
         super(ctx.getRootRuleItem(), ctx.getRootSourceElement());
@@ -40,6 +40,10 @@ public class ForeachMapperContext extends MapperContext {
 
     public int getCurrentIndex() {
         return this.currentIndex;
+    }
+
+    public void setCurrentIndex(int index) {
+        this.currentIndex = index;
     }
 
     @Override

@@ -10,7 +10,6 @@ import com.lumens.model.Format;
 import com.lumens.model.Type;
 import com.lumens.model.serializer.ElementSerializer;
 import com.lumens.model.serializer.FormatSerializer;
-import com.lumens.processor.script.JavaScriptContext;
 import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
@@ -24,10 +23,6 @@ import org.junit.Test;
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
 public class MapperTest {
-
-    public MapperTest() {
-        JavaScriptContext.start();
-    }
 
     @Test
     public void testElementMapping() throws Exception {
@@ -71,15 +66,16 @@ public class MapperTest {
         // Build transform mapping rule
         TransformRule rule = new TransformRule(wareHouse);
 
+        //******* Test the array mapping when the parent and the current for each are configured.
         // Configure For each to iterate the array source elements
         rule.getRuleItem("WareHouse.name").setScript("@Person.name");
-        rule.getRuleItem("WareHouse.asset").setTransformForeach(new TransformForeach("Person.Asset", "Asset", "index"));
+        rule.getRuleItem("WareHouse.asset").addTransformForeach(new TransformForeach("Person.Asset", "Asset", "index"));
         rule.getRuleItem("WareHouse.asset.id").setScript("'ASSET_' + index");
         rule.getRuleItem("WareHouse.asset.name").setScript("@Person.Asset[index].name");
         rule.getRuleItem("WareHouse.asset.price").setScript("@Person.Asset[index].price");
         rule.getRuleItem("WareHouse.asset.vendor.name").setScript("@Person.Asset[index].Vendor.name");
 
-        rule.getRuleItem("WareHouse.asset.part").setTransformForeach(new TransformForeach("Person.Asset.Part", "Part", "partIndex"));
+        rule.getRuleItem("WareHouse.asset.part").addTransformForeach(new TransformForeach("Person.Asset.Part", "Part", "partIndex"));
         rule.getRuleItem("WareHouse.asset.part.id").setScript("'PART_' + index + '_' + partIndex");
         rule.getRuleItem("WareHouse.asset.part.name").setScript("@Person.Asset[index].Part[partIndex].name");
         //rule.getRuleItem("WareHouse.asset.part.name").setScript("@Asset.Part[partIndex].name");
@@ -113,7 +109,7 @@ public class MapperTest {
         assertEquals("PART_1_0", parts.get(0).getChild("id").getValue().getString());
         assertEquals("PART_1_1", parts.get(1).getChild("id").getValue().getString());
 
-        // Test the root list mapping
+        //******* Test the root has a for each configruation to create root element result list
         Format departRoot = new DataFormat("Root");
         try (InputStream in = MapperTest.class.getResourceAsStream("/xml/Department_Format.xml")) {
             FormatSerializer xmlSerializer = new FormatSerializer(departRoot);
@@ -128,16 +124,31 @@ public class MapperTest {
         buildPersonData(personElem.addArrayItem());
         // Configure For each to iterate the array source elements
         TransformRule rule_For_ListResult = new TransformRule(wareHouse);
-        rule_For_ListResult.getRuleItem("WareHouse").setTransformForeach(new TransformForeach("Department.Person", "Asset", "index"));
+        rule_For_ListResult.getRuleItem("WareHouse").addTransformForeach(new TransformForeach("Department.Person", "Asset", "index"));
         rule_For_ListResult.getRuleItem("WareHouse.name").setScript("@Department.Person[index].name");
-        rule_For_ListResult.getRuleItem("WareHouse.asset").setTransformForeach(new TransformForeach("Department.Person.Asset", "Asset", "indexAsset"));
+        rule_For_ListResult.getRuleItem("WareHouse.asset").addTransformForeach(new TransformForeach("Department.Person.Asset", "Asset", "indexAsset"));
         rule_For_ListResult.getRuleItem("WareHouse.asset.id").setScript("'ASSET_' + index + '_' + indexAsset");
         rule_For_ListResult.getRuleItem("WareHouse.asset.name").setScript("@Department.Person[index].Asset[indexAsset].name");
         rule_For_ListResult.getRuleItem("WareHouse.asset.price").setScript("@Department.Person[index].Asset[indexAsset].price");
-        rule_For_ListResult.getRuleItem("WareHouse.asset.vendor.name").setScript("@Department.Person[index].Asset[indexAsset].Vendor.name");//*/
+        rule_For_ListResult.getRuleItem("WareHouse.asset.vendor.name").setScript("@Department.Person[index].Asset[indexAsset].Vendor.name");
 
-        TransformMapper listMapper = new TransformMapper();
-        resultList = (List<Element>) listMapper.execute(rule_For_ListResult, departmentData);
+        resultList = (List<Element>) mapper.execute(rule_For_ListResult, departmentData);
+
+        assertEquals(2, resultList.size());
+
+        //******* TODO Testing when a parent array without for each configuration and the current array has for each configuration
+        //******* TODO on an array element conifgure for each list
+        TransformRule rule_For_ForeachListResult = new TransformRule(wareHouse);
+        rule_For_ForeachListResult.getRuleItem("WareHouse.name").setScript("@Department.Person[0].name");
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset").addTransformForeach(new TransformForeach("Department.Person", "Asset", "index"));
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset").addTransformForeach(new TransformForeach("Department.Person.Asset", "Asset", "indexAsset"));
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset.id").setScript("var id = 'ASSET_' + index + '_' + indexAsset; \n logInfo(id); \n return id;");
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset.name").setScript("@Department.Person[index].Asset[indexAsset].name");
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset.price").setScript("@Department.Person[index].Asset[indexAsset].price");
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset.vendor.name").setScript("@Department.Person[index].Asset[indexAsset].Vendor.name");
+        start = System.currentTimeMillis();
+        resultList = (List<Element>) mapper.execute(rule_For_ForeachListResult, departmentData);
+        System.out.println("Cost: " + (System.currentTimeMillis() - start));
     }
 
     private void buildPersonData(Element personData) {

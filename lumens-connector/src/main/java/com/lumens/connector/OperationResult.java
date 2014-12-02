@@ -12,5 +12,7 @@ import java.util.List;
  */
 public interface OperationResult {
 
+    public boolean isLastChunk();
+
     public List<Element> getResult();
 }

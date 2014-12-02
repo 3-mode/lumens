@@ -22,7 +22,7 @@ import com.lumens.model.Value;
 import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.Processor;
 import com.lumens.processor.script.JavaScriptContext;
-import com.lumens.processor.transform.TransformProcessor;
+import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -39,7 +39,6 @@ import org.junit.Test;
 public class ConnectorTest implements DatabaseConstants, OracleConstants {
 
     public ConnectorTest() {
-        JavaScriptContext.start();
     }
 
     @Test
@@ -173,10 +172,10 @@ public class ConnectorTest implements DatabaseConstants, OracleConstants {
         rule.getRuleItem("fields.MANAGER_ID").setScript("@fields.MANAGER_ID");
         rule.getRuleItem("fields.DEPARTMENT_ID").setScript("@fields.DEPARTMENT_ID");
 
-        Processor transformProcessor = new TransformProcessor();
+        Processor transformMappter = new TransformMapper();
         List<Element> employeeTest = new ArrayList<>();
         for (Element e : result.getResult()) {
-            List<Element> resultList = (List<Element>) transformProcessor.execute(rule, e);
+            List<Element> resultList = (List<Element>) transformMappter.execute(rule, e);
             employeeTest.addAll(resultList);
         }
         assertTrue(employeeTest.size() == result.getResult().size());
