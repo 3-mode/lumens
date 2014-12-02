@@ -6,8 +6,11 @@ package com.lumens.connector.txt;
 
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.File;
 
 import com.lumens.model.Format;
@@ -23,26 +26,19 @@ import java.util.ArrayList;
 public class TextClient {    
     String filepath; 
     BufferedReader reader;
+    BufferedWriter writer;
     boolean bInit = false;
     
-    public TextClient(String path){
-        filepath = path;
-    }
-    
-    public void init()
-    {                
-            File file = new File(filepath);
-            if( file.isFile() && file.exists() ){                
-                bInit = true;
-            }
-    }
+    public TextClient(){       
+    }    
            
     public List<Element> read(Format fmt){      
         List<Element> result = new ArrayList();
         String encoding = fmt.getProperty(TextConstants.ENCODING).toString();
+        String path = fmt.getProperty(TextConstants.PATH).toString();
 
         try{           
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(filepath), encoding));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), encoding));
             String line;
             while((line = reader.readLine())!=null){
                 Element elem = TextElementBuilder.buildElement(fmt, line);
@@ -55,7 +51,27 @@ public class TextClient {
         return result;
     }            
     
-    public void write(OutputStream ous){
-        
+    public void write(Element elem){
+        try{
+            Format fmt = elem.getFormat();
+            String encoding = fmt.getProperty(TextConstants.ENCODING).toString();
+            String path = fmt.getProperty(TextConstants.PATH).toString();
+            writer  = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), encoding ));
+            Element fields;
+            if( fmt.getChild(TextConstants.FIELDS) != null ){
+                fields = elem.getChild(TextConstants.FIELDS);
+            }
+            else{
+               fields = elem;
+            }
+            
+            for( Element child: fields.getChildren()){
+            }
+            
+            writer.flush();
+            writer.close();
+        }catch( Exception ex){
+            throw new RuntimeException(ex);
+        }
     }      
 }

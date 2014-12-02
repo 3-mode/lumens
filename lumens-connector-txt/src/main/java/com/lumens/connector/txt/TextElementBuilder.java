@@ -23,11 +23,14 @@ public class TextElementBuilder implements TextConstants{
        
         String delimiter = fmt.getProperty(TextConstants.FILEDELIMITER).toString();
         String[] values = line.split(delimiter);
-        Element elem = new DataElement(fmt);        
+        Element elem = new DataElement(fmt);   
+        Element fields = elem;
+        if( fmt.getChild(TextConstants.FIELDS) != null )
+            fields = elem.addChild(TextConstants.FIELDS);
         List<Format> children = fmt.getChildren();
         int index = 0;
         for(Format child: children){
-            elem.addChild(child.getName()).setValue(getValue(child, values[index++]));
+            fields.addChild(child.getName()).setValue(getValue(child, values[index++]));
         }
        
         return elem;        

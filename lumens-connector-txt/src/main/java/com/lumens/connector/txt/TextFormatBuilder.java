@@ -55,9 +55,9 @@ public class TextFormatBuilder implements FormatBuilder{
         if( rootName.equalsIgnoreCase( "format") ){            
             Format rootFmt =  new DataFormat(rootName, Format.Form.STRUCT);
             fmtList.put(rootName, rootFmt);
-            rootFmt.addChild(TextConstants.FIELDS, Form.STRUCT);
             rootFmt.setProperty(TextConstants.ENCODING, new Value(encoding));
-            getFormat(rootFmt, null, direction);            
+            Format fields = rootFmt.addChild(TextConstants.FIELDS, Form.STRUCT);            
+            getFormat(fields, null, direction);            
         }
         
         return fmtList;
