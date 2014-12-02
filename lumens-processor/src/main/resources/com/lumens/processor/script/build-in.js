@@ -9,6 +9,7 @@ function getElementValue(ctx, path) {
 }
 
 function logInfo(message) {
+    // TODO need log4j here
     System.out.println(message);
 }
 
