@@ -33,11 +33,11 @@ import org.xml.sax.InputSource;
  */
 public class FormatSerializer implements XmlSerializer, JsonSerializer {
 
-    private Format format;
-    private boolean useIndent;
-    private boolean careProperties;
-    private String INDENT_OFFSET = "  ";
+    private final Format format;
+    private final boolean careProperties;
+    private final String INDENT_OFFSET = "  ";
     private String INDENT = "";
+    private boolean useIndent;
 
     public FormatSerializer(Format format, boolean careProps, boolean indent) {
         this.format = format;

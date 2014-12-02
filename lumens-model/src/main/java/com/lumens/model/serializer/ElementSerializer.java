@@ -22,8 +22,8 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class ElementSerializer implements XmlSerializer {
 
-    private Element element;
-    private boolean useIndent;
+    private final Element element;
+    private final boolean useIndent;
     private String INDENT = "  ";
 
     public ElementSerializer(Element element, boolean indent) {
@@ -73,7 +73,7 @@ public class ElementSerializer implements XmlSerializer {
             if (element.isField() || element.getChildren() == null)
                 out.println("</element>");
             else
-                out.print(indent.toString()).println("</element>");
+                out.print(indent).println("</element>");
         } else {
             out.println("/>");
         }
