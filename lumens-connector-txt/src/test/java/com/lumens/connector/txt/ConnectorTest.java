@@ -5,18 +5,11 @@
 package com.lumens.connector.txt;
 
 import com.lumens.connector.Direction;
-import com.lumens.processor.script.JavaScriptContext;
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-import java.io.Reader;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
