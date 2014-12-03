@@ -24,7 +24,6 @@ public class TransformRuleTest extends TestCase {
 
     public TransformRuleTest(String testName) {
         super(testName);
-        JavaScriptContext.start();
     }
 
     public void testReadTransformRuleFromXml() throws Exception {

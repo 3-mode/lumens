@@ -148,10 +148,12 @@ public class DataElement implements Element {
             if (child == null)
                 throw new IllegalArgumentException(String.format("Error path '%s'", path.toString()));
 
-            if (token.isIndexed() && child.isArray()) {
+            if (child.isArray()) {
                 if (!child.hasChildren())
-                    throw new IllegalArgumentException(String.format("Error path '%s', token '%s' is not found", path.toString(), token.toString()));
-                child = child.getChildren().get(token.index());
+                    return null;
+
+                if (token.index() >= 0)
+                    child = child.getChildren().get(token.index());
             }
         }
 

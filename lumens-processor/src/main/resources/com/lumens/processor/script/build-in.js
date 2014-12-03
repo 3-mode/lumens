@@ -1,10 +1,16 @@
 var ScriptUtils = com.lumens.processor.script.ScriptUtils;
 var SimpleDateFormat = java.text.SimpleDateFormat;
 var Calendar = java.util.Calendar;
+var System = java.lang.System;
 
 /*Get the value by the current path*/
 function getElementValue(ctx, path) {
     return ScriptUtils.getElement(ctx, path);
+}
+
+function logInfo(message) {
+    // TODO need log4j here
+    System.out.println(message);
 }
 
 /*Get the current date*/

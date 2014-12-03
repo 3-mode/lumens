@@ -21,7 +21,7 @@ public class TransformRuleItem {
 
     private final Format format;
     private TransformRuleItem parent;
-    private TransformForeach foreach;
+    private final List<TransformForeach> foreachs = new ArrayList<>();
     private List<TransformRuleItem> children;
     private Script script;
     private String orignalScriptText;
@@ -32,8 +32,8 @@ public class TransformRuleItem {
     }
 
     public void setScript(String scriptText) throws Exception {
-        orignalScriptText = scriptText;
-        String trimedScriptText = scriptText.trim();
+        orignalScriptText = scriptText == null ? "" : scriptText;
+        String trimedScriptText = orignalScriptText.trim();
         if (ProcessorUtils.isPathFormat(trimedScriptText)) {
             this.script = new AccessPathScript(ProcessorUtils.getAccessPath(trimedScriptText));
         } else {
@@ -85,12 +85,21 @@ public class TransformRuleItem {
         return forEachPath;
     }
 
-    public void setTransformForeach(TransformForeach foreach) {
-        this.foreach = foreach;
+    public void addTransformForeach(TransformForeach foreach) {
+        this.foreachs.add(foreach);
     }
 
-    public TransformForeach getTransformForeach() {
-        return this.foreach;
+    public void removeTransformForeach(String path) {
+        Iterator<TransformForeach> it = foreachs.iterator();
+        while (it.hasNext()) {
+            TransformForeach foreach = it.next();
+            if (foreach.hasSourcePath() && foreach.getSourcePath().equals(path))
+                it.remove();
+        }
+    }
+
+    public List<TransformForeach> getTransformForeach() {
+        return this.foreachs;
     }
 
     public TransformRuleItem getParent() {

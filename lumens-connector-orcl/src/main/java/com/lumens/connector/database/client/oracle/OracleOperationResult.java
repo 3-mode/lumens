@@ -23,4 +23,10 @@ public class OracleOperationResult implements OperationResult {
     public List<Element> getResult() {
         return result;
     }
+
+    @Override
+    public boolean isLastChunk() {
+        // TODO
+        return true;
+    }
 }
