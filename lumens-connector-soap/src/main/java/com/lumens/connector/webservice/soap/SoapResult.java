@@ -35,4 +35,9 @@ public class SoapResult implements OperationResult {
         }
         return null;
     }
+
+    @Override
+    public boolean isLastChunk() {
+        return true;
+    }
 }
