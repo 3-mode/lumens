@@ -21,31 +21,11 @@ public class TextConnector implements Connector{
     private FormatBuilder formatBuilder;
     private TextClient textClient;
     Map<String, Value> propList;    
-        
-    // properties 
-    private String encoding;
-    private String path;  
-    private String linedelimiter;  
-    private String filedelimiter; 
-    private String escapechar; 
-    
+           
     @Override
     public void setPropertyList(Map<String, Value> props){
         propList = props;
-        if (props.containsKey(TextConstants.ENCODING))        
-            encoding = props.get(TextConstants.ENCODING).getString();
-        
-        if (props.containsKey(TextConstants.PATH))
-            path = props.get(TextConstants.PATH).getString();
-
-        if (props.containsKey(TextConstants.LINEDELIMITER))
-            linedelimiter = props.get(TextConstants.LINEDELIMITER).getString();        
-
-        if (props.containsKey(TextConstants.FILEDELIMITER))
-            filedelimiter = props.get(TextConstants.FILEDELIMITER).getString(); 
-        
-        if (props.containsKey(TextConstants.ESCAPECHAR))
-            escapechar = props.get(TextConstants.ESCAPECHAR).getString();         
+        // TODO:validate props     
     }
         
     @Override
@@ -57,8 +37,8 @@ public class TextConnector implements Connector{
     @Override
     public void open(){
         if ( textClient == null) {
-            textClient = new TextClient(path);
-            formatBuilder = new TextFormatBuilder(path);
+            textClient = new TextClient();
+            formatBuilder = new TextFormatBuilder(propList);
             try{
                 formatBuilder.initalize();
                 isOpen = true;
@@ -77,7 +57,7 @@ public class TextConnector implements Connector{
 
     @Override
     public Operation getOperation(){
-        return new TextOperation();
+        return new TextOperation(textClient);
     }
 
     @Override

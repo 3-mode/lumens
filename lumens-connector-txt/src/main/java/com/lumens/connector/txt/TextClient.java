@@ -56,17 +56,28 @@ public class TextClient {
             Format fmt = elem.getFormat();
             String encoding = fmt.getProperty(TextConstants.ENCODING).toString();
             String path = fmt.getProperty(TextConstants.PATH).toString();
+            String delimiter = fmt.getProperty(TextConstants.FILEDELIMITER).toString();
+            String linedelimter = fmt.getProperty(TextConstants.LINEDELIMITER).toString();
             writer  = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), encoding ));
-            Element fields;
-            if( fmt.getChild(TextConstants.FIELDS) != null ){
-                fields = elem.getChild(TextConstants.FIELDS);
-            }
-            else{
-               fields = elem;
-            }
+            for(Element child: elem.getChildren()){
+                Element fields;
+                if( fmt.getChild(TextConstants.FIELDS) != null ){
+                    fields = child.getChild(TextConstants.FIELDS);
+                }
+                else{
+                    fields = child;
+                }
             
-            for( Element child: fields.getChildren()){
-            }
+                String line = "";
+                for( Element field: fields.getChildren()){
+                    line = delimiter + field.getValue().toString();
+                }  
+                writer.write(line);
+                if( linedelimter.isEmpty() )                    
+                    writer.newLine();
+                else
+                    writer.write(linedelimter);
+              }
             
             writer.flush();
             writer.close();

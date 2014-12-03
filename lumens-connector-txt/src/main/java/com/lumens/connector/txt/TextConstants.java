@@ -10,6 +10,7 @@ package com.lumens.connector.txt;
 public interface TextConstants {
     public static final String ENCODING = "encoding";
     public static final String PATH = "path";
+    public static final String SCHEMAPATH = "schemapath";
     public static final String LINEDELIMITER = "linedelimiter";
     public static final String FILEDELIMITER = "filedelimiter";
     public static final String ESCAPECHAR = "escapechar";
