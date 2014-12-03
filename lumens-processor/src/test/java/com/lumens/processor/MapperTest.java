@@ -140,7 +140,7 @@ public class MapperTest {
         //******* TODO on an array element conifgure for each list
         TransformRule rule_For_ForeachListResult = new TransformRule(wareHouse);
         rule_For_ForeachListResult.getRuleItem("WareHouse.name").setScript("@Department.Person[0].name");
-        rule_For_ForeachListResult.getRuleItem("WareHouse.asset").addTransformForeach(new TransformForeach("Department.Person", "Asset", "index"));
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset").addTransformForeach(new TransformForeach("Department.Person", "Person", "index"));
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset").addTransformForeach(new TransformForeach("Department.Person.Asset", "Asset", "indexAsset"));
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset.id").setScript("var id = 'ASSET_' + index + '_' + indexAsset; \n logInfo(id); \n return id;");
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset.name").setScript("@Department.Person[index].Asset[indexAsset].name");
@@ -149,6 +149,23 @@ public class MapperTest {
         start = System.currentTimeMillis();
         resultList = (List<Element>) mapper.execute(rule_For_ForeachListResult, departmentData);
         System.out.println("Cost: " + (System.currentTimeMillis() - start));
+
+        // Test multiple for each on root element
+        rule_For_ForeachListResult = new TransformRule(wareHouse);
+        rule_For_ForeachListResult.getRuleItem("WareHouse").addTransformForeach(new TransformForeach("Department.Person", "Person", "index"));
+        rule_For_ForeachListResult.getRuleItem("WareHouse").addTransformForeach(new TransformForeach("Department.Person.Asset", "Asset", "indexAsset"));
+        rule_For_ForeachListResult.getRuleItem("WareHouse.name").setScript("@Department.Person[0].name");
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset.id").setScript("var id = 'ASSET_' + index + '_' + indexAsset; \n logInfo(id); \n return id;");
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset.name").setScript("@Department.Person[0].Asset[0].name");
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset.price").setScript("@Department.Person[0].Asset[0].price");
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset.vendor.name").setScript("@Department.Person[0].Asset[0].Vendor.name");
+        start = System.currentTimeMillis();
+        resultList = (List<Element>) mapper.execute(rule_For_ForeachListResult, departmentData);
+        System.out.println("Cost: " + (System.currentTimeMillis() - start));
+        assertEquals(4, resultList.size());
+        assertEquals(departmentData.getChildByPath("Person[0].Asset[0].name").getValue().getString(),
+                     resultList.get(0).getChildByPath("asset[0].name").getValue().getString());
+        assertEquals("ASSET_1_1", resultList.get(3).getChildByPath("asset[0].id").getValue().getString());
     }
 
     private void buildPersonData(Element personData) {

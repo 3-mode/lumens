@@ -10,7 +10,7 @@ import org.apache.commons.codec.binary.Base64;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class Value {
+public final class Value {
 
     protected Object value;
     protected Type type;
@@ -266,7 +266,7 @@ public class Value {
     public boolean isNull() {
         return value == null;
     }
-    
+
     private Object parseString(String value) {
         if (isBoolean()) {
             return Boolean.parseBoolean(value);

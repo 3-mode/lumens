@@ -220,10 +220,10 @@ public class DataElement implements Element {
 
     @Override
     public void setValue(Object value) {
-        if (value instanceof Value) {
+        if (value instanceof Value)
             this.value = (Value) value;
-        }
-        this.value = new Value(format.getType(), value);
+        else
+            this.value = new Value(format.getType(), value);
     }
 
     @Override

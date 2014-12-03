@@ -5,7 +5,6 @@ package com.lumens.processor.transform;
 
 import com.lumens.model.Element;
 import com.lumens.processor.Context;
-import com.lumens.processor.transform.TransformRuleItem;
 import org.mozilla.javascript.Scriptable;
 
 /**
@@ -14,20 +13,20 @@ import org.mozilla.javascript.Scriptable;
  */
 public class MapperContext implements Context {
     private final TransformRuleItem rootRuleItem;
-    private final Element rootSrcElement;
+    private final Element rootSourceElement;
     private TransformRuleItem currentRuleItem;
     protected MapperContext parent;
 
     public MapperContext(MapperContext parent, TransformRuleItem currentRuleItem) {
         this.parent = parent;
         this.rootRuleItem = parent.getRootRuleItem();
-        this.rootSrcElement = parent.getRootSourceElement();
+        this.rootSourceElement = parent.getRootSourceElement();
         this.currentRuleItem = currentRuleItem;
     }
 
     public MapperContext(TransformRuleItem rootRuleItem, Element rootSrcElement) {
         this.rootRuleItem = rootRuleItem;
-        this.rootSrcElement = rootSrcElement;
+        this.rootSourceElement = rootSrcElement;
     }
 
     @Override
@@ -41,7 +40,7 @@ public class MapperContext implements Context {
 
     @Override
     public Element getRootSourceElement() {
-        return this.rootSrcElement;
+        return this.rootSourceElement;
     }
 
     public TransformRuleItem getCurrentRuleItem() {
@@ -53,5 +52,4 @@ public class MapperContext implements Context {
         if (getParent() != null)
             getParent().declareVariables(scope);
     }
-
 }

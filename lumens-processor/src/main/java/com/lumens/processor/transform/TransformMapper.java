@@ -28,29 +28,12 @@ public class TransformMapper extends AbstractProcessor {
             Element rootSourceElement = input;
             List<Element> results = new ArrayList<>();
             TransformRuleItem rootRuleItem = transformRule.getRootRuleItem();
-            List<TransformForeach> rootForeachs = rootRuleItem.getTransformForeach();
-            // ********************************************************************************
-            if (!rootForeachs.isEmpty()) {
-                TransformForeach rootForeach = rootForeachs.get(0);
-                // Handle root element for each to generate output element list
-                if (rootForeach != null && rootForeach.hasSourcePath()) {
-                    Path foreachSourcePath = new AccessPath(rootForeach.getSourcePath());
-                    if (!rootSourceElement.getFormat().getName().equals(foreachSourcePath.token(0).toString()))
-                        throw new RuntimeException(String.format("The for each source path '%s' is not valid!", rootForeach.getSourcePath()));
-
-                    // Need to do for each on array element to create all array items.
-                    Element forEachSrcElement = rootSourceElement.getChildByPath(foreachSourcePath.removeLeft(1));
-                    if (!forEachSrcElement.hasChildren())
-                        return null;
-                    List<Element> forEachArray = forEachSrcElement.getChildren();
-                    for (int index = rootForeach.getIndexValue(); index < forEachArray.size(); ++index) {
-                        Element sourceElement = forEachArray.get(index);
-                        ForeachMapperContext foreachCtx = new ForeachMapperContext(rootRuleItem, rootSourceElement, rootForeach, index, sourceElement);
-                        Element result = processTransformItem(foreachCtx);
-                        if (result != null)
-                            results.add(result);
-                    }
-                }
+            List<TransformForeach> rootForeachList = rootRuleItem.getTransformForeach();
+            if (!rootForeachList.isEmpty()) {
+                int foreachLevelDepth = rootForeachList.size() - 1;
+                checkForeachDepthCount(foreachLevelDepth);
+                MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
+                processRootForeachList(ctx, results, rootForeachList, 0, foreachLevelDepth);
             } else {
                 MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
                 Element result = processTransformItem(ctx);
@@ -60,6 +43,53 @@ public class TransformMapper extends AbstractProcessor {
             return results;
         }
         throw new RuntimeException("Unsupported input data !");
+    }
+
+    private void processRootForeachList(MapperContext ctx, List<Element> results, List<TransformForeach> rootForeachList, int foreachLevel, int foreachLevelDepth) {
+        TransformRuleItem rootRuleItem = ctx.getCurrentRuleItem();
+        TransformForeach rootForeach = rootForeachList.get(foreachLevel);
+        if (rootForeach != null && rootForeach.hasSourcePath()) {
+            Path foreachSourcePath = new AccessPath(rootForeach.getSourcePath());
+            Element foreachSourceElement = ScriptUtils.getStartElement(ctx);
+            // Need to do for each on array element to create all array items.
+            Element forEachSrcElement = foreachSourceElement.getChildByPath(foreachSourcePath.removeLeft(foreachSourceElement.getLevel() + 1));
+            if (!forEachSrcElement.hasChildren())
+                return;
+            List<Element> forEachArray = forEachSrcElement.getChildren();
+            for (int index = rootForeach.getIndexValue(); index < forEachArray.size(); ++index) {
+                Element sourceElement = forEachArray.get(index);
+                ForeachMapperContext foreachCtx = new ForeachMapperContext(ctx, rootForeach, index, sourceElement);
+                if (foreachLevel < foreachLevelDepth) {
+                    processRootForeachList(foreachCtx, results, rootForeachList, foreachLevel + 1, foreachLevelDepth);
+                } else if (foreachLevel == foreachLevelDepth) {
+                    Element result = processTransformItem(foreachCtx);
+                    if (result != null)
+                        results.add(result);
+                }
+            }
+        }
+    }
+
+    private void processForeachList(MapperContext ctx, Element parentResultElement, List<TransformRuleItem> ruleItems,
+                                    List<TransformForeach> foreachList, int foreachLevel, int foreachLevelDepth) {
+        TransformForeach currentForeach = foreachList.get(foreachLevel);
+        Path foreachSourcePath = new AccessPath(currentForeach.getSourcePath());
+        Element foreachSourceElement = ScriptUtils.getStartElement(ctx);
+        Element forEachSrcElement = foreachSourceElement.getChildByPath(foreachSourcePath.removeLeft(foreachSourceElement.getLevel() + 1));
+        if (!forEachSrcElement.hasChildren())
+            return;
+        List<Element> forEachArray = forEachSrcElement.getChildren();
+        for (int index = currentForeach.getIndexValue(); index < forEachArray.size(); ++index) {
+            // Need to do for each on array element to create all array items.
+            Element sourceElement = forEachArray.get(index);
+            ForeachMapperContext foreachCtx = new ForeachMapperContext(ctx, currentForeach, index, sourceElement);
+            if (foreachLevel < foreachLevelDepth) {
+                processForeachList(foreachCtx, parentResultElement, ruleItems, foreachList, foreachLevel + 1, foreachLevelDepth);
+            } else if (foreachLevel == foreachLevelDepth) {
+                // Execute the children script, don't execute array item script that already processed by array.
+                processChildRuleItem(foreachCtx, parentResultElement.addArrayItem(), ruleItems);
+            }
+        }
     }
 
     private Element processTransformItem(MapperContext ctx) {
@@ -74,10 +104,8 @@ public class TransformMapper extends AbstractProcessor {
                 List<TransformForeach> foreachList = currentRuleItem.getTransformForeach();
                 if (!foreachList.isEmpty()) {
                     int foreachLevelDepth = foreachList.size() - 1;
-                    if (foreachLevelDepth > 5)
-                        throw new RuntimeException(String.format("Too many for each loop configurations level '%d'", foreachLevelDepth));
-                    int foreachLevel = 0;
-                    processForeachList(ctx, currentResultElement, childRuleItems, foreachList, foreachLevel, foreachLevelDepth);
+                    checkForeachDepthCount(foreachLevelDepth);
+                    processForeachList(ctx, currentResultElement, childRuleItems, foreachList, 0, foreachLevelDepth);
                 } else {
                     // By default only add one array item
                     currentResultElement = currentResultElement.addArrayItem();
@@ -90,30 +118,6 @@ public class TransformMapper extends AbstractProcessor {
             }
         }
         return currentResultElement;
-    }
-
-    private void processForeachList(MapperContext ctx, Element parentResultElement,
-                                    List<TransformRuleItem> ruleItems, List<TransformForeach> foreachList,
-                                    int foreachLevel, int foreachTotalLevel) {
-        // ***********************************************************************************
-        TransformForeach currentForeach = foreachList.get(foreachLevel);
-        Path foreachSourcePath = new AccessPath(currentForeach.getSourcePath());
-        Element foreachSourceElement = ScriptUtils.getStartElement(ctx);
-        Element forEachSrcElement = foreachSourceElement.getChildByPath(foreachSourcePath.removeLeft(foreachSourceElement.getLevel() + 1));
-        if (!forEachSrcElement.hasChildren())
-            return;
-        List<Element> forEachArray = forEachSrcElement.getChildren();
-        for (int index = currentForeach.getIndexValue(); index < forEachArray.size(); ++index) {
-            // Need to do for each on array element to create all array items.
-            Element sourceElement = forEachArray.get(index);
-            ForeachMapperContext foreachCtx = new ForeachMapperContext(ctx, currentForeach, index, sourceElement);
-            if (foreachLevel < foreachTotalLevel) {
-                processForeachList(foreachCtx, parentResultElement, ruleItems, foreachList, foreachLevel + 1, foreachTotalLevel);
-            } else if (foreachLevel == foreachTotalLevel) {
-                // Execute the children script, don't execute array item script that already processed by array.
-                processChildRuleItem(foreachCtx, parentResultElement.addArrayItem(), ruleItems);
-            }
-        }
     }
 
     private void processChildRuleItem(MapperContext parentCtx, Element parentResult, List<TransformRuleItem> children) {
@@ -132,5 +136,10 @@ public class TransformMapper extends AbstractProcessor {
                 result.setValue(value);
         }
         return result;
+    }
+
+    private void checkForeachDepthCount(int foreachLevelDepth) {
+        if (foreachLevelDepth > 5)
+            throw new RuntimeException(String.format("Too many for each loop configurations level '%d'", foreachLevelDepth));
     }
 }

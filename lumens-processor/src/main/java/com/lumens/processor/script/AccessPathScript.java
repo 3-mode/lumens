@@ -22,12 +22,21 @@ public class AccessPathScript implements Script {
 
     @Override
     public Object execute(Context ctx) {
-        Element rootSrcElement = ScriptUtils.getStartElement(ctx);
-        Path fullPath = rootSrcElement.getFormat().getFullPath();
-        if (!path.toString().startsWith(fullPath.toString()))
-            throw new RuntimeException(String.format("Wrong path '%s'", path));
-        Path currentPath = path.removeLeft(rootSrcElement.getLevel() + 1);
-        Element find = rootSrcElement.getChildByPath(currentPath);
+        Element srcElement = null;
+        Element startSrcElement = ScriptUtils.getStartElement(ctx);
+        Path startfullPath = startSrcElement.getFormat().getFullPath();
+        if (path.toString().startsWith(startfullPath.toString())) {
+            srcElement = startSrcElement;
+        } else {
+            Element rootSrcElement = ctx.getRootSourceElement();
+            Path rootFullPath = rootSrcElement.getFormat().getFullPath();
+            if (path.toString().startsWith(rootFullPath.toString()))
+                srcElement = rootSrcElement;
+            else
+                throw new RuntimeException(String.format("Wrong path '%s'", path));
+        }
+        Path currentPath = path.removeLeft(srcElement.getLevel() + 1);
+        Element find = srcElement.getChildByPath(currentPath);
         if (find.getFormat().getType() != Type.NONE && find.getValue() != null)
             return find.getValue().get();
 
