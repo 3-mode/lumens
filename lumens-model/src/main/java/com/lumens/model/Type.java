@@ -20,7 +20,7 @@ public enum Type {
     STRING("String"),
     BINARY("Binary"),
     DATE("Date");
-    private String name;
+    private final String name;
 
     private Type(String name) {
         this.name = name;
