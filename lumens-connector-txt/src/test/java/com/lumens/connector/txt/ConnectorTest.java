@@ -5,10 +5,14 @@
 package com.lumens.connector.txt;
 
 import com.lumens.connector.Direction;
+import com.lumens.model.Format;
+import com.lumens.model.Value;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -45,12 +49,34 @@ public class ConnectorTest
     }
     
     @Test
-    public void testSchema(){
+    public void testSchemaRead(){
         File schema = new File(schemaPath);
+        Map<String, Value> propList = new HashMap<>();
+        propList.put(TextConstants.ENCODING, new Value("UTF-8"));
+        propList.put(TextConstants.ESCAPECHAR, new Value("\\"));
+        propList.put(TextConstants.FILEDELIMITER, new Value(","));
+        propList.put(TextConstants.SCHEMAPATH, new Value(schemaPath));
+        propList.put(TextConstants.MAXLINE, new Value(1000));
+        propList.put(TextConstants.ENCODING, new Value("UTF-8"));
         if( schema.isFile() && schema.exists() ){
-            TextFormatBuilder xsdReader = new TextFormatBuilder(schemaPath);
+            TextFormatBuilder xsdReader = new TextFormatBuilder(propList);
             xsdReader.initalize();
-            xsdReader.getFormatList(Direction.IN);
+            Map<String, Format> formats = xsdReader.getFormatList(Direction.IN);
         }       
+    }
+    
+    @Test
+    public void testClientRead(){    
+        
+    }
+    
+    @Test
+    public void testClientWrite(){    
+        
+    }
+    
+    @Test
+    public void testElementBuilder(){
+        
     }
 }

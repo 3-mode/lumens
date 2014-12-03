@@ -27,9 +27,12 @@ public class TextFormatBuilder implements FormatBuilder{
     private SAXReader schemaReader; 
     private Element schemaRoot;
     private String encoding;
+    Map<String, Value> propList;
     
-    public TextFormatBuilder(String schemaPath){
-        xmlSchemaPath = schemaPath;
+    public TextFormatBuilder(Map<String, Value> props){
+        if( props.containsKey(TextConstants.SCHEMAPATH))
+            xmlSchemaPath = props.get(TextConstants.SCHEMAPATH).toString();
+        propList = props;
         schemaRoot = null;
     }
     
@@ -37,13 +40,13 @@ public class TextFormatBuilder implements FormatBuilder{
     public void initalize(){        
         try{
            File file = new File(xmlSchemaPath);
-            if( file.isFile() && file.exists() ){
-                schemaReader = new SAXReader();
-                Document doc = schemaReader.read(xmlSchemaPath);
-                schemaRoot = doc.getRootElement(); 
-                encoding = doc.getXMLEncoding();                  
-            }           
-        }catch (Exception ex) {            
+           if( file.isFile() && file.exists() ){
+               schemaReader = new SAXReader();
+               Document doc = schemaReader.read(xmlSchemaPath);
+               schemaRoot = doc.getRootElement(); 
+               encoding = doc.getXMLEncoding();                 
+           }           
+        }catch (Exception ex) {  
             throw new RuntimeException(ex);
         }
      }
@@ -56,6 +59,10 @@ public class TextFormatBuilder implements FormatBuilder{
             Format rootFmt =  new DataFormat(rootName, Format.Form.STRUCT);
             fmtList.put(rootName, rootFmt);
             rootFmt.setProperty(TextConstants.ENCODING, new Value(encoding));
+            if (propList.containsKey(TextConstants.LINEDELIMITER))
+                rootFmt.setProperty(TextConstants.LINEDELIMITER, new Value(propList.get(TextConstants.LINEDELIMITER).getString()));
+            if (propList.containsKey(TextConstants.FILEDELIMITER))
+                rootFmt.setProperty(TextConstants.FILEDELIMITER, new Value(propList.get(TextConstants.FILEDELIMITER).getString()));            
             Format fields = rootFmt.addChild(TextConstants.FIELDS, Form.STRUCT);            
             getFormat(fields, null, direction);            
         }
