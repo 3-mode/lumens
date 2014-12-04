@@ -19,7 +19,7 @@ public interface Format {
         STRUCT("Struct"),
         ARRAYOFFIELD("ArrayOfField"),
         ARRAYOFSTRUCT("ArrayOfStruct");
-        private String name;
+        private final String name;
 
         private Form(String name) {
             this.name = name;
