@@ -44,7 +44,7 @@ import com.lumens.model.Type;
 import com.lumens.model.Value;
 import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.Processor;
-import com.lumens.processor.transform.TransformProcessor;
+import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -64,8 +64,7 @@ public class ConnectorTest {
     private final String PASSWORD_Val = "hr";
     private final String TABLE_NAM = "employee";
      
-    public ConnectorTest(){
-        JavaScriptContext.start();
+    public ConnectorTest(){        
     }
     
     @Before
@@ -222,20 +221,20 @@ public class ConnectorTest {
 
         System.out.println("Got recoreds: " + result.getResult().size());
         TransformRule rule = new TransformRule(employeeFmtTest);
-        rule.getRuleItem("operation").setScript("'INSERT'");
-        rule.getRuleItem("fields.EMPLOYEE_ID").setScript("@fields.EMPLOYEE_ID");
-        rule.getRuleItem("fields.FIRST_NAME").setScript("return @fields.FIRST_NAME + '-test'");
-        rule.getRuleItem("fields.LAST_NAME").setScript("return (@fields.LAST_NAME + '-' + dateToString(now(), 'yyyy-MM-dd HH:mm:ss SSS').substr(11))");
-        rule.getRuleItem("fields.EMAIL").setScript("@fields.EMAIL");
-        rule.getRuleItem("fields.PHONE_NUMBER").setScript("@fields.PHONE_NUMBER");
-        rule.getRuleItem("fields.HIRE_DATE").setScript("return dateToString(@fields.HIRE_DATE, 'yyyy-MM-dd')");
-        rule.getRuleItem("fields.JOB_ID").setScript("@fields.JOB_ID");
-        rule.getRuleItem("fields.SALARY").setScript("@fields.SALARY");
-        rule.getRuleItem("fields.COMMISSION_PCT").setScript("@fields.COMMISSION_PCT");
-        rule.getRuleItem("fields.MANAGER_ID").setScript("@fields.MANAGER_ID");
-        rule.getRuleItem("fields.DEPARTMENT_ID").setScript("@fields.DEPARTMENT_ID");
+        rule.getRuleItem("EMPLOYEES_TEST.operation").setScript("'INSERT'");
+        rule.getRuleItem("EMPLOYEES_TEST.fields.EMPLOYEE_ID").setScript("@fields.EMPLOYEE_ID");
+        rule.getRuleItem("EMPLOYEES_TEST.fields.FIRST_NAME").setScript("return @fields.FIRST_NAME + '-test'");
+        rule.getRuleItem("EMPLOYEES_TEST.fields.LAST_NAME").setScript("return (@fields.LAST_NAME + '-' + dateToString(now(), 'yyyy-MM-dd HH:mm:ss SSS').substr(11))");
+        rule.getRuleItem("EMPLOYEES_TEST.fields.EMAIL").setScript("@fields.EMAIL");
+        rule.getRuleItem("EMPLOYEES_TEST.fields.PHONE_NUMBER").setScript("@fields.PHONE_NUMBER");
+        rule.getRuleItem("EMPLOYEES_TEST.fields.HIRE_DATE").setScript("return dateToString(@fields.HIRE_DATE, 'yyyy-MM-dd')");
+        rule.getRuleItem("EMPLOYEES_TEST.fields.JOB_ID").setScript("@fields.JOB_ID");
+        rule.getRuleItem("EMPLOYEES_TEST.fields.SALARY").setScript("@fields.SALARY");
+        rule.getRuleItem("EMPLOYEES_TEST.fields.COMMISSION_PCT").setScript("@fields.COMMISSION_PCT");
+        rule.getRuleItem("EMPLOYEES_TEST.fields.MANAGER_ID").setScript("@fields.MANAGER_ID");
+        rule.getRuleItem("EMPLOYEES_TEST.fields.DEPARTMENT_ID").setScript("@fields.DEPARTMENT_ID");
 
-        Processor transformProcessor = new TransformProcessor();
+        Processor transformProcessor = new TransformMapper();
         List<Element> employeeTest = new ArrayList<>();
         for (Element e : result.getResult()) {
             List<Element> resultList = (List<Element>) transformProcessor.execute(rule, e);

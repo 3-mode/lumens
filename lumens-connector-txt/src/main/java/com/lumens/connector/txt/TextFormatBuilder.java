@@ -7,6 +7,7 @@ import com.lumens.connector.Direction;
 import com.lumens.connector.FormatBuilder;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
+import com.lumens.model.Type;
 import com.lumens.model.Format.Form;
 import com.lumens.model.Value;
 import java.util.Map;
@@ -81,18 +82,32 @@ public class TextFormatBuilder implements FormatBuilder{
                 if( elemName.equalsIgnoreCase("field") ){                    
                     Iterator attrItor = column.attributeIterator();
                     Format field = null;
+                    
+                    //Note that to be simply coding, the name in schema MUST be the first property
                     while( attrItor.hasNext() ){
                         Attribute attr = (Attribute) attrItor.next();
                         String name = attr.getName();   
-                        String value = attr.getValue();                        
-                        
-                        if( name.equalsIgnoreCase("name") && !value.isEmpty() ){
-                            field = new DataFormat(value, Form.FIELD); 
+                        String value = attr.getValue();    
+                                            
+                        // create field element
+                        if( name != null && name.equalsIgnoreCase("name") && !value.isEmpty() ){
+                            field = new DataFormat(name, Form.FIELD);   // set type later
                             fields.addChild(field);
-                        }                        
-                        if( field != null &&  !name.equalsIgnoreCase("name")){   
+                        }else if( name != null && name.equalsIgnoreCase("key") && !value.isEmpty() ){                                                      
+                            field.setType(Type.parseString(value));                           
+                        }else if( name != null && name.equalsIgnoreCase("type") && !value.isEmpty() ){                                                      
+                            field.setProperty(name, new Value(Type.parseString(value)));                           
+                        }else if( name != null && name.equalsIgnoreCase("nullable") && !value.isEmpty() ){                                                      
+                            field.setProperty(name, new Value(Type.parseString(value)) );                          
+                        }else if( name != null && name.equalsIgnoreCase("pattern") && !value.isEmpty() ){    
                             field.setProperty(name, new Value(value));
-                        }          
+                        }else if( name != null && name.equalsIgnoreCase("length") && !value.isEmpty() ){    
+                            field.setProperty(name, new Value(Type.parseString(value)));
+                        }else if( name != null && name.equalsIgnoreCase("comment") && !value.isEmpty() ){    
+                            field.setProperty(name, new Value(value));
+                        }else if( name != null && name.equalsIgnoreCase("precision") && !value.isEmpty() ){    
+                            field.setProperty(name, new Value(Integer.parseInt(value)));
+                        }     
                     }
                 }                    
             }     
