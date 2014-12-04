@@ -22,4 +22,10 @@ public class TextOperationResult implements OperationResult{
     public List<Element> getResult() {
         return result;
     }        
+
+    @Override
+    public boolean isLastChunk() {
+        // TODO
+        return true;
+    }    
 }
