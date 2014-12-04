@@ -20,9 +20,9 @@ public class DataElement implements Element {
     protected List<Element> arrayItems;
     protected Format format;
     private Element parent;
-    private int level = 0;
-    private boolean isArrayItem;
     private Value value;
+    private boolean isArrayItem;
+    private int level = 0;
 
     public DataElement(Format format) {
         super();
@@ -117,7 +117,7 @@ public class DataElement implements Element {
 
     @Override
     public void setParent(Element parent) {
-        this.level = parent.isArray() ? parent.getLevel() : parent.getLevel() + 1;
+        this.level = parent == null ? 0 : (parent.isArray() ? parent.getLevel() : (parent.getLevel() + 1));
         this.parent = parent;
     }
 
@@ -162,7 +162,7 @@ public class DataElement implements Element {
 
     @Override
     public boolean hasChildren() {
-        return !getChildren().isEmpty();
+        return getChildren() != null && !getChildren().isEmpty();
     }
 
     @Override

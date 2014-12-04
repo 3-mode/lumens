@@ -15,13 +15,14 @@ import java.util.Map;
  */
 public class DataFormat implements Format {
 
+    private Type type = Type.NONE;
+    private Form form = Form.NONE;
+
     protected Map<String, Value> propertyList;
     protected Map<String, Format> childMap;
     protected List<Format> childList;
-    private String name;
-    private Type type = Type.NONE;
-    private Form form = Form.NONE;
     private Format parent;
+    private String name;
 
     public DataFormat() {
     }
@@ -41,25 +42,24 @@ public class DataFormat implements Format {
         this.type = type;
     }
 
-    @Override
-    public Format clone() {
-        DataFormat cloned = new DataFormat(getName(), getForm(), getType());
+    protected Format copy() {
+        DataFormat copied = new DataFormat(getName(), getForm(), getType());
         if (propertyList != null) {
-            cloned.propertyList = new HashMap<>(propertyList);
+            copied.propertyList = new HashMap<>(propertyList);
         }
-        return cloned;
+        return copied;
     }
 
     @Override
-    public Format recursiveClone() {
-        Format cloned = clone();
+    public Format depthCopy() {
+        Format copied = copy();
         if (childList != null) {
             for (Format child : childList) {
-                cloned.addChild(child.recursiveClone());
+                copied.addChild(child.depthCopy());
             }
         }
 
-        return cloned;
+        return copied;
     }
 
     @Override
@@ -95,7 +95,7 @@ public class DataFormat implements Format {
     @Override
     public void setProperty(String name, Value value) {
         if (propertyList == null) {
-            propertyList = new HashMap<String, Value>();
+            propertyList = new HashMap<>();
         }
         propertyList.put(name, value);
     }

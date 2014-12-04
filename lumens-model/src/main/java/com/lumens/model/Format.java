@@ -83,7 +83,5 @@ public interface Format {
 
     public boolean isArrayOfStruct();
 
-    public Format clone();
-
-    public Format recursiveClone();
+    public Format depthCopy();
 }
