@@ -122,7 +122,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         Format getOpenFundStringResp = services.get("getOpenFundString");
         connector.getFormat(getOpenFundStringResp, "getOpenFundStringResponse.getOpenFundStringResult.string.string", Direction.OUT);
         Operation op = connector.getOperation();
-        OperationResult opResult = op.execute(result.get(0), getOpenFundStringResp);
+        OperationResult opResult = op.execute(result, getOpenFundStringResp);
         List<Element> response = opResult.getResult();
         new ElementSerializer(response.get(0), true).writeToXml(System.out);
         new FormatSerializer(getOpenFundString).writeToXml(System.out);
