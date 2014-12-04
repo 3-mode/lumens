@@ -62,6 +62,8 @@ public class MapperTest {
         assetPart.addChild("id", Format.Form.FIELD, Type.STRING);
         assetPart.addChild("name", Format.Form.FIELD, Type.STRING);
         assetPart.addChild("description", Format.Form.FIELD, Type.STRING);
+        FormatSerializer wareHourseWriter = new FormatSerializer(wareHouse);
+        wareHourseWriter.writeToXml(System.out);
 
         // Build transform mapping rule
         TransformRule rule = new TransformRule(wareHouse);
@@ -108,6 +110,29 @@ public class MapperTest {
         assertEquals(2, parts.size());
         assertEquals("PART_1_0", parts.get(0).getChild("id").getValue().getString());
         assertEquals("PART_1_1", parts.get(1).getChild("id").getValue().getString());
+
+        // Test ArrayOfField
+        Format finalRoot = new DataFormat("Root");
+        try (InputStream in = MapperTest.class.getResourceAsStream("/xml/Final_Format.xml")) {
+            FormatSerializer xmlSerializer = new FormatSerializer(finalRoot);
+            xmlSerializer.readFromXml(in);
+        }
+        Format finalFmt = finalRoot.getChild("Final");
+        finalFmt.setParent(null);
+        TransformRule rule_Final = new TransformRule(finalFmt);
+        rule_Final.getRuleItem("Final.name").setScript("@WareHouse.name");
+        rule_Final.getRuleItem("Final.value").addTransformForeach(new TransformForeach("WareHouse.asset", "Asset", "index"));
+        rule_Final.getRuleItem("Final.value").setScript("@WareHouse.asset[index].id");
+        rule_Final.getRuleItem("Final.Vendor.value").addTransformForeach(new TransformForeach("WareHouse.asset", "Asset", "index"));
+        rule_Final.getRuleItem("Final.Vendor.value").setScript("@WareHouse.asset[index].id");
+        resultList = (List<Element>) mapper.execute(rule_Final, resultList.get(0));
+        assertEquals(1, resultList.size());
+        assertEquals(2, resultList.get(0).getChildByPath("value").getChildren().size());
+        assertEquals("ASSET_0", resultList.get(0).getChildByPath("value[0]").getValue().getString());
+        assertEquals("ASSET_1", resultList.get(0).getChildByPath("value[1]").getValue().getString());
+        assertEquals(2, resultList.get(0).getChildByPath("Vendor.value").getChildren().size());
+        assertEquals("ASSET_0", resultList.get(0).getChildByPath("Vendor.value[0]").getValue().getString());
+        assertEquals("ASSET_1", resultList.get(0).getChildByPath("Vendor.value[1]").getValue().getString());
 
         //******* Test the root has a for each configruation to create root element result list
         Format departRoot = new DataFormat("Root");

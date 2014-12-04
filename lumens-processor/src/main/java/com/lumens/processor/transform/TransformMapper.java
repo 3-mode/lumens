@@ -13,6 +13,7 @@ import com.lumens.processor.Rule;
 import com.lumens.processor.Script;
 import com.lumens.processor.script.ScriptUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,6 +21,8 @@ import java.util.List;
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
 public class TransformMapper extends AbstractProcessor {
+
+    private final boolean ignoreScriptOnArray = true;
 
     @Override
     public Object execute(Rule rule, Element input) {
@@ -36,7 +39,7 @@ public class TransformMapper extends AbstractProcessor {
                 processRootForeachList(ctx, results, rootForeachList, 0, foreachLevelDepth);
             } else {
                 MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
-                Element result = processTransformItem(ctx);
+                Element result = processTransformItem(null, ctx);
                 if (result != null)
                     results.add(result);
             }
@@ -45,8 +48,8 @@ public class TransformMapper extends AbstractProcessor {
         throw new RuntimeException("Unsupported input data !");
     }
 
-    private void processRootForeachList(MapperContext ctx, List<Element> results, List<TransformForeach> rootForeachList, int foreachLevel, int foreachLevelDepth) {
-        TransformRuleItem rootRuleItem = ctx.getCurrentRuleItem();
+    private void processRootForeachList(MapperContext ctx, List<Element> results, List<TransformForeach> rootForeachList,
+                                        int foreachLevel, int foreachLevelDepth) {
         TransformForeach rootForeach = rootForeachList.get(foreachLevel);
         if (rootForeach != null && rootForeach.hasSourcePath()) {
             Path foreachSourcePath = new AccessPath(rootForeach.getSourcePath());
@@ -62,7 +65,7 @@ public class TransformMapper extends AbstractProcessor {
                 if (foreachLevel < foreachLevelDepth) {
                     processRootForeachList(foreachCtx, results, rootForeachList, foreachLevel + 1, foreachLevelDepth);
                 } else if (foreachLevel == foreachLevelDepth) {
-                    Element result = processTransformItem(foreachCtx);
+                    Element result = processTransformItem(null, foreachCtx);
                     if (result != null)
                         results.add(result);
                 }
@@ -87,16 +90,24 @@ public class TransformMapper extends AbstractProcessor {
                 processForeachList(foreachCtx, parentResultElement, ruleItems, foreachList, foreachLevel + 1, foreachLevelDepth);
             } else if (foreachLevel == foreachLevelDepth) {
                 // Execute the children script, don't execute array item script that already processed by array.
-                processChildRuleItem(foreachCtx, parentResultElement.addArrayItem(), ruleItems);
+                if (parentResultElement.isArrayOfField())
+                    executeTransformRule(new MapperContext(foreachCtx, ruleItems.get(0)), parentResultElement.addArrayItem());
+                else
+                    processChildRuleItem(foreachCtx, parentResultElement.addArrayItem(), ruleItems);
             }
         }
     }
 
-    private Element processTransformItem(MapperContext ctx) {
+    private Element processTransformItem(Element parentElement, MapperContext ctx) {
         TransformRuleItem currentRuleItem = ctx.getCurrentRuleItem();
-        Element currentResultElement = new DataElement(currentRuleItem.getFormat());
+        Element currentResultElement = parentElement == null
+                                       ? new DataElement(currentRuleItem.getFormat())
+                                       : parentElement.newChild(currentRuleItem.getFormat());
         currentResultElement = executeTransformRule(ctx, currentResultElement);
         List<TransformRuleItem> childRuleItems = currentRuleItem.getChildren();
+        if (currentResultElement.isArrayOfField() && currentResultElement.isArray())
+            childRuleItems = Arrays.asList(currentRuleItem);
+
         if (childRuleItems != null && !childRuleItems.isEmpty()) {
             // If the element is array type, then need to add array item first and set the attribute in it.
             // If the element is not array, then for each configuration is not correct from business point and data model point
@@ -122,17 +133,22 @@ public class TransformMapper extends AbstractProcessor {
 
     private void processChildRuleItem(MapperContext parentCtx, Element parentResult, List<TransformRuleItem> children) {
         for (TransformRuleItem child : children) {
-            Element childResult = processTransformItem(new MapperContext(parentCtx, child));
+            Element childResult = processTransformItem(parentResult, new MapperContext(parentCtx, child));
             if (childResult != null)
                 parentResult.addChild(childResult);
         }
     }
 
     private Element executeTransformRule(MapperContext ctx, Element result) {
+        if (ignoreScriptOnArray && result.isArray())
+            return result;
         Script script = ctx.getCurrentRuleItem().getScript();
         if (script != null) {
             Object value = script.execute(ctx);
-            if (value != null && result.getFormat().getType() != Type.NONE)
+            // If the type is not NONE but the result must be not array and 
+            if (value != null
+                && (result.getFormat().getType() != Type.NONE
+                    && (!result.isArray() || result.isArrayItem())))
                 result.setValue(value);
         }
         return result;
