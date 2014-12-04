@@ -1,13 +1,9 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-
 package com.lumens.connector.sqlserver;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -17,16 +13,8 @@ import com.lumens.addin.ServiceEntity;
 import com.lumens.connector.Connector;
 import com.lumens.connector.ConnectorFactory;
 import com.lumens.connector.OperationResult;
-import com.lumens.connector.database.DatabaseConstants;
-import com.lumens.processor.script.JavaScriptContext;
-import static com.lumens.connector.database.DatabaseConstants.CONNECTION_URL;
-import static com.lumens.connector.database.DatabaseConstants.FULL_LOAD;
-import static com.lumens.connector.database.DatabaseConstants.OJDBC;
-import static com.lumens.connector.database.DatabaseConstants.PASSWORD;
-import static com.lumens.connector.database.DatabaseConstants.USER;
 import static com.lumens.connector.database.DatabaseConstants.CONST_CNTR_SQLSERVER_CLAUSE;
 import static com.lumens.connector.database.DatabaseConstants.CONST_CNTR_SQLSERVER_OPERATION;
-import static com.lumens.connector.database.DatabaseConstants.CONST_CNTR_SQLSERVER_FIELDS;
 import com.lumens.connector.database.client.sqlserver.SqlServerClient;
 import com.lumens.connector.database.client.sqlserver.SqlServerConnectorFactory;
 import com.lumens.connector.database.DatabaseConstants;
@@ -63,40 +51,39 @@ public class ConnectorTest {
     private final String USER_Val = "hr";
     private final String PASSWORD_Val = "hr";
     private final String TABLE_NAM = "employee";
-     
-    public ConnectorTest(){        
+
+    public ConnectorTest() {
     }
-    
+
     @Before
     public void testSqlServerConnection() {
         StringBuilder alterSession = new StringBuilder();
-        SqlServerClient client = new SqlServerClient(OJDBC_VAL, 
-                                                     CONNECTION_URL_Val, 
-                                                     USER_Val, PASSWORD_Val, 
+        SqlServerClient client = new SqlServerClient(OJDBC_VAL,
+                                                     CONNECTION_URL_Val,
+                                                     USER_Val, PASSWORD_Val,
                                                      alterSession.toString());
-        try{
-            client.open();            
-        } catch (Exception e) {     
-             throw new RuntimeException(e);
-        }
-        finally {
+        try {
+            client.open();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
             client.close();
         }
     }
-    
+
     @Test
     public void testSqlServerConnector() throws Exception {
         Connector cntr = new SqlServerConnectorFactory().createConnector();
         HashMap<String, Value> props = new HashMap();
         props.put(DatabaseConstants.OJDBC, new Value(OJDBC_VAL));
         props.put(DatabaseConstants.CONNECTION_URL, new Value(CONNECTION_URL_Val));
-        props.put(DatabaseConstants.USER, new Value(USER_Val));        
+        props.put(DatabaseConstants.USER, new Value(USER_Val));
         props.put(DatabaseConstants.PASSWORD, new Value(PASSWORD_Val));
         props.put(DatabaseConstants.FULL_LOAD, new Value(true));
         props.put(DatabaseConstants.SESSION_ALTER, new Value(""));
         cntr.setPropertyList(props);
-        
-        try{
+
+        try {
             cntr.open();
             FileOutputStream fos = new FileOutputStream("d:/sqlserver.tables.json");
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -110,32 +97,31 @@ public class ConnectorTest {
             baos.write("]".getBytes());
             //String xmlContent = baos.toString("UTF-8");
             //System.out.println(xmlContent);
-            fos.write(baos.toByteArray());            
-        } catch (Exception e) {     
-             throw new RuntimeException(e);
+            fos.write(baos.toByteArray());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
             cntr.close();
         }
     }
 
     @Test
-    public void testSqlServerSQL(){
+    public void testSqlServerSQL() {
         StringBuilder alterSession = new StringBuilder();
-        SqlServerClient client = new SqlServerClient(OJDBC_VAL, 
-                                                     CONNECTION_URL_Val, 
-                                                     USER_Val, PASSWORD_Val, 
+        SqlServerClient client = new SqlServerClient(OJDBC_VAL,
+                                                     CONNECTION_URL_Val,
+                                                     USER_Val, PASSWORD_Val,
                                                      alterSession.toString());
-        try{
-            client.open();   
+        try {
+            client.open();
             client.execute("select * from employee");
-        } catch (Exception e) {     
-             throw new RuntimeException(e);
-        }
-        finally {
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
             client.close();
         }
     }
-    
+
     @Test
     public void testSqlServerSQLBuilder() {
         // Test select SQL generating
@@ -172,7 +158,7 @@ public class ConnectorTest {
     }
 
     @Test
-    public void testSqlServerOperation() throws Exception {        
+    public void testSqlServerOperation() throws Exception {
         Format employeeFmt = new DataFormat("employees", Form.STRUCT);
         employeeFmt.addChild(CONST_CNTR_SQLSERVER_CLAUSE, Form.FIELD);
         employeeFmt.addChild(CONST_CNTR_SQLSERVER_OPERATION, Form.FIELD);
@@ -206,9 +192,9 @@ public class ConnectorTest {
         fields_test.addChild(new DataFormat("DEPARTMENT_ID", Form.FIELD, Type.INTEGER));
 
         StringBuilder alterSession = new StringBuilder();
-        SqlServerClient client = new SqlServerClient(OJDBC_VAL, 
-                                                     CONNECTION_URL_Val, 
-                                                     USER_Val, PASSWORD_Val, 
+        SqlServerClient client = new SqlServerClient(OJDBC_VAL,
+                                                     CONNECTION_URL_Val,
+                                                     USER_Val, PASSWORD_Val,
                                                      alterSession.toString());
         client.open();
 
@@ -216,7 +202,7 @@ public class ConnectorTest {
         oo.begin();
         Element select = new DataElement(employeeFmt);
         select.addChild(CONST_CNTR_SQLSERVER_OPERATION).setValue("select");
-        OperationResult result = oo.execute(select, employeeFmt);
+        OperationResult result = oo.execute(Arrays.asList(select), employeeFmt);
         oo.end();
 
         System.out.println("Got recoreds: " + result.getResult().size());
@@ -236,19 +222,14 @@ public class ConnectorTest {
 
         Processor transformProcessor = new TransformMapper();
         List<Element> employeeTest = new ArrayList<>();
-        for (Element e : result.getResult()) {
-            List<Element> resultList = (List<Element>) transformProcessor.execute(rule, e);
-            employeeTest.addAll(resultList);
-        }
+        List<Element> resultList = (List<Element>) transformProcessor.execute(rule, result.getResult());
+        employeeTest.addAll(resultList);
         assertTrue(employeeTest.size() == result.getResult().size());
-        for (Element e : employeeTest) {
-            oo.execute(e, null);
-        }
+        oo.execute(employeeTest, null);
 
         // Ending
-        client.close();       
+        client.close();
     }
-    
 
     @Test
     public void testAddin() throws Exception {
@@ -259,5 +240,5 @@ public class ConnectorTest {
         activator.start(ac);
         ServiceEntity<ConnectorFactory> se = ac.getService("type-sqlserver-jdbc");
         System.out.println(Arrays.toString(se.getPropertList().entrySet().toArray()));
-    }    
+    }
 }

@@ -3,11 +3,14 @@
  */
 package com.lumens.engine;
 
+import com.lumens.connector.Direction;
+import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.component.instrument.DataTransformator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -60,6 +63,13 @@ public class TransformProject {
             for (TransformRuleEntry tr : dt.getTransformRuleList())
                 if (tr.getSourceId() == null || tr.getSourceId().isEmpty() || tr.getSourceId().equals(dt.getId()))
                     startList.add(new StartEntry(tr.getSourceFormatName(), dt));
+        }
+        for (DataSource ds : this.datasourceList) {
+            Map<String, FormatEntry> inFmtList = ds.getRegisteredFormatList(Direction.IN);
+            for (FormatEntry entry : ds.getRegisteredFormatList(Direction.OUT).values()) {
+                if (!inFmtList.containsKey(entry.getName()))
+                    startList.add(new StartEntry(entry.getName(), ds));
+            }
         }
         return startList;
     }

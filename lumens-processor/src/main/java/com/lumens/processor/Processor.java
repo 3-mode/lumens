@@ -4,6 +4,7 @@
 package com.lumens.processor;
 
 import com.lumens.model.Element;
+import java.util.List;
 
 public interface Processor {
 
@@ -11,5 +12,5 @@ public interface Processor {
 
     public String getName();
 
-    public Object execute(Rule rule, Element input);
+    public Object execute(Rule rule, List<Element> input);
 }

@@ -83,22 +83,12 @@ public class DataTransformator extends AbstractTransformComponent implements Rul
         String targetFmtName = context.getTargetFormatName();
         List<TransformRuleEntry> rules = ruleFindList.get(targetFmtName);
         List<ExecuteContext> exList = new ArrayList<>();
-        Object input = context.getInput();
+        List<Element> input = context.getInput();
         for (TransformRuleEntry rule : rules) {
             List<Element> results = new ArrayList<>();
-            if (input != null && input instanceof List) {
-                List<Element> inputs = (List<Element>) input;
-                for (Element data : inputs) {
-                    List<Element> result = (List<Element>) processor.execute(rule.getRule(), data);
-                    if (!result.isEmpty())
-                        results.addAll(result);
-                }
-            } else if (input == null || input instanceof Element) {
-                Element data = input == null ? null : (Element) input;
-                List<Element> result = (List<Element>) processor.execute(rule.getRule(), data);
-                if (!result.isEmpty())
-                    results.addAll(result);
-            }
+            List<Element> result = (List<Element>) processor.execute(rule.getRule(), input);
+            if (!result.isEmpty())
+                results.addAll(result);
             for (ResultHandler handler : context.getResultHandlers())
                 if (!(handler instanceof LastResultHandler))
                     handler.process(this, targetFmtName, results);

@@ -9,5 +9,6 @@ package com.lumens.engine.connector;
  */
 public enum Mock {
     PERSON,
-    WAREHOUSE
+    WAREHOUSE,
+    FINAL
 }

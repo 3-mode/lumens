@@ -5,6 +5,7 @@ package com.lumens.engine;
 
 import com.lumens.engine.run.ExecuteContext;
 import com.lumens.engine.run.ResultHandler;
+import com.lumens.model.Element;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public class TransformExecuteContext implements ExecuteContext {
 
-    private Object input;
+    private List<Element> input;
     private String targetFmtName;
     private List<ResultHandler> handlers;
 
@@ -26,14 +27,14 @@ public class TransformExecuteContext implements ExecuteContext {
         this(null, targetFmtName, handlers);
     }
 
-    public TransformExecuteContext(Object input, String targetFmtName, List<ResultHandler> handlers) {
+    public TransformExecuteContext(List<Element> input, String targetFmtName, List<ResultHandler> handlers) {
         this.input = input;
         this.targetFmtName = targetFmtName;
         this.handlers = handlers;
     }
 
     @Override
-    public Object getInput() {
+    public List<Element> getInput() {
         return input;
     }
 

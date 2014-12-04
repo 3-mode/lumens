@@ -3,6 +3,7 @@
  */
 package com.lumens.engine.run;
 
+import com.lumens.model.Element;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ public interface ExecuteContext {
 
     public String getTargetFormatName();
 
-    public Object getInput();
+    public List<Element> getInput();
 
     public List<ResultHandler> getResultHandlers();
 }

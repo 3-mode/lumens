@@ -21,7 +21,6 @@ import com.lumens.model.Type;
 import com.lumens.model.Value;
 import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.Processor;
-import com.lumens.processor.script.JavaScriptContext;
 import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
 import java.io.ByteArrayOutputStream;
@@ -154,7 +153,7 @@ public class ConnectorTest implements DatabaseConstants, OracleConstants {
         oo.begin();
         Element select = new DataElement(employeeFmt);
         select.addChild(OPERATION).setValue("select");
-        OperationResult result = oo.execute(select, employeeFmt);
+        OperationResult result = oo.execute(Arrays.asList(select), employeeFmt);
         oo.end();
 
         System.out.println("Got recoreds: " + result.getResult().size());
@@ -174,14 +173,10 @@ public class ConnectorTest implements DatabaseConstants, OracleConstants {
 
         Processor transformMappter = new TransformMapper();
         List<Element> employeeTest = new ArrayList<>();
-        for (Element e : result.getResult()) {
-            List<Element> resultList = (List<Element>) transformMappter.execute(rule, e);
-            employeeTest.addAll(resultList);
-        }
+        List<Element> resultList = (List<Element>) transformMappter.execute(rule, result.getResult());
+        employeeTest.addAll(resultList);
         assertTrue(employeeTest.size() == result.getResult().size());
-        for (Element e : employeeTest) {
-            oo.execute(e, null);
-        }
+        oo.execute(employeeTest, null);
 
         // Ending
         client.close();

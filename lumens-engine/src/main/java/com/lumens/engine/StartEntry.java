@@ -9,8 +9,8 @@ package com.lumens.engine;
  */
 public class StartEntry {
 
-    private TransformComponent tComponent;
-    private String startFormatName;
+    private final TransformComponent tComponent;
+    private final String startFormatName;
 
     public StartEntry(String formatName, TransformComponent component) {
         this.startFormatName = formatName;

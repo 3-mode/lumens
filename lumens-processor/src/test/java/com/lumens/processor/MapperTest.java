@@ -14,6 +14,7 @@ import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 import org.junit.Test;
@@ -85,7 +86,7 @@ public class MapperTest {
         List<Element> resultList = null;
         long start = System.currentTimeMillis();
         TransformMapper mapper = new TransformMapper();
-        resultList = (List<Element>) mapper.execute(rule, personData);
+        resultList = (List<Element>) mapper.execute(rule, Arrays.asList(personData));
         System.out.println("Cost: " + (System.currentTimeMillis() - start));
 
         //assertEquals("James wang", resultList.get(0).getChild("name").getValue().getString());
@@ -125,7 +126,7 @@ public class MapperTest {
         rule_Final.getRuleItem("Final.value").setScript("@WareHouse.asset[index].id");
         rule_Final.getRuleItem("Final.Vendor.value").addTransformForeach(new TransformForeach("WareHouse.asset", "Asset", "index"));
         rule_Final.getRuleItem("Final.Vendor.value").setScript("@WareHouse.asset[index].id");
-        resultList = (List<Element>) mapper.execute(rule_Final, resultList.get(0));
+        resultList = (List<Element>) mapper.execute(rule_Final, resultList);
         assertEquals(1, resultList.size());
         assertEquals(2, resultList.get(0).getChildByPath("value").getChildren().size());
         assertEquals("ASSET_0", resultList.get(0).getChildByPath("value[0]").getValue().getString());
@@ -157,7 +158,7 @@ public class MapperTest {
         rule_For_ListResult.getRuleItem("WareHouse.asset.price").setScript("@Department.Person[index].Asset[indexAsset].price");
         rule_For_ListResult.getRuleItem("WareHouse.asset.vendor.name").setScript("@Department.Person[index].Asset[indexAsset].Vendor.name");
 
-        resultList = (List<Element>) mapper.execute(rule_For_ListResult, departmentData);
+        resultList = (List<Element>) mapper.execute(rule_For_ListResult, Arrays.asList(departmentData));
 
         assertEquals(2, resultList.size());
 
@@ -172,7 +173,7 @@ public class MapperTest {
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset.price").setScript("@Department.Person[index].Asset[indexAsset].price");
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset.vendor.name").setScript("@Department.Person[index].Asset[indexAsset].Vendor.name");
         start = System.currentTimeMillis();
-        resultList = (List<Element>) mapper.execute(rule_For_ForeachListResult, departmentData);
+        resultList = (List<Element>) mapper.execute(rule_For_ForeachListResult, Arrays.asList(departmentData));
         System.out.println("Cost: " + (System.currentTimeMillis() - start));
 
         // Test multiple for each on root element
@@ -185,7 +186,7 @@ public class MapperTest {
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset.price").setScript("@Department.Person[0].Asset[0].price");
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset.vendor.name").setScript("@Department.Person[0].Asset[0].Vendor.name");
         start = System.currentTimeMillis();
-        resultList = (List<Element>) mapper.execute(rule_For_ForeachListResult, departmentData);
+        resultList = (List<Element>) mapper.execute(rule_For_ForeachListResult, Arrays.asList(departmentData));
         System.out.println("Cost: " + (System.currentTimeMillis() - start));
         assertEquals(4, resultList.size());
         assertEquals(departmentData.getChildByPath("Person[0].Asset[0].name").getValue().getString(),

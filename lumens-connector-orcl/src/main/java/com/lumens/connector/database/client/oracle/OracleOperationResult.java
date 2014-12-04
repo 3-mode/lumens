@@ -14,6 +14,7 @@ import java.util.List;
 public class OracleOperationResult implements OperationResult {
 
     private final List<Element> result;
+    private boolean isEof;
 
     public OracleOperationResult(List<Element> result) {
         this.result = result;
@@ -21,12 +22,13 @@ public class OracleOperationResult implements OperationResult {
 
     @Override
     public List<Element> getResult() {
+        isEof = true;
         return result;
     }
 
     @Override
     public boolean isLastChunk() {
         // TODO
-        return true;
+        return isEof;
     }
 }

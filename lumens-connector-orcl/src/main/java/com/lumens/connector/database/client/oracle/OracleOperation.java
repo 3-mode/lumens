@@ -11,6 +11,7 @@ import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 
@@ -26,29 +27,34 @@ public class OracleOperation implements Operation, OracleConstants {
     }
 
     @Override
-    public OperationResult execute(Element input, Format output) throws Exception {
-        if (input != null) {
-            Element oper = input.getChild(OPERATION);
-            if (oper == null || oper.getValue() == null) {
-                throw new Exception("'operation' is mandatory");
+    public OperationResult execute(List<Element> input, Format output) throws Exception {
+        if (input != null && !input.isEmpty()) {
+            List<Element> results = new ArrayList<>();
+            for (Element elem : input) {
+                Element oper = elem.getChild(OPERATION);
+                if (oper == null || oper.getValue() == null) {
+                    throw new Exception("'operation' is mandatory");
+                }
+                String operation = oper.getValue().getString();
+                if (SELECT.equalsIgnoreCase(operation)) {
+                    OracleQuerySQLBuilder sql = new OracleQuerySQLBuilder(output);
+                    String SQL = sql.generateSelectSQL(elem);
+                    List<Element> result = client.executeQuery(SQL, elementBuilder, output);
+                    if (result != null && !result.isEmpty())
+                        results.addAll(result);
+                } else if (INSERT.equalsIgnoreCase(operation)) {
+                    OracleWriteSQLBuilder sql = new OracleWriteSQLBuilder();
+                    String SQL = sql.generateInsertSQL(elem);
+                    client.execute(SQL);
+                    return null;
+                } else if (UPDATE.equalsIgnoreCase(operation)) {
+                    OracleWriteSQLBuilder sql = new OracleWriteSQLBuilder();
+                    String SQL = sql.generateUpdateSQL(elem);
+                    client.execute(SQL);
+                    return null;
+                }
             }
-            String operation = oper.getValue().getString();
-            if (SELECT.equalsIgnoreCase(operation)) {
-                OracleQuerySQLBuilder sql = new OracleQuerySQLBuilder(output);
-                String SQL = sql.generateSelectSQL(input);
-                List<Element> result = client.executeQuery(SQL, elementBuilder, output);
-                return new OracleOperationResult(result);
-            } else if (INSERT.equalsIgnoreCase(operation)) {
-                OracleWriteSQLBuilder sql = new OracleWriteSQLBuilder();
-                String SQL = sql.generateInsertSQL(input);
-                client.execute(SQL);
-                return null;
-            } else if (UPDATE.equalsIgnoreCase(operation)) {
-                OracleWriteSQLBuilder sql = new OracleWriteSQLBuilder();
-                String SQL = sql.generateUpdateSQL(input);
-                client.execute(SQL);
-                return null;
-            }
+            return new OracleOperationResult(results);
         }
         throw new UnsupportedOperationException("Not supported yet.");
     }

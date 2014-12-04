@@ -4,6 +4,7 @@ import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
+import java.util.List;
 import org.apache.axiom.soap.SOAPEnvelope;
 
 /**
@@ -19,9 +20,12 @@ public class SoapOperation implements Operation {
     }
 
     @Override
-    public OperationResult execute(Element input, Format output) throws Exception {
-        SOAPEnvelope envelope = client.execute(input);
-        return new SoapResult(output, envelope);
+    public OperationResult execute(List<Element> input, Format output) throws Exception {
+        if (!input.isEmpty()) {
+            SOAPEnvelope envelope = client.execute(input.get(0));
+            return new SoapResult(output, envelope);
+        }
+        return null;
     }
 
     @Override

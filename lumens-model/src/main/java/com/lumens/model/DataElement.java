@@ -25,7 +25,6 @@ public class DataElement implements Element {
     private int level = 0;
 
     public DataElement(Format format) {
-        super();
         this.format = format;
     }
 

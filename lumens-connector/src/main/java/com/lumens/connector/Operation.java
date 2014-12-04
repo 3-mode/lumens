@@ -6,6 +6,7 @@ package com.lumens.connector;
 
 import com.lumens.model.Element;
 import com.lumens.model.Format;
+import java.util.List;
 
 /**
  *
@@ -17,7 +18,7 @@ public interface Operation {
 
     public void end();
 
-    public OperationResult execute(Element input, Format output) throws Exception;
+    public OperationResult execute(List<Element> input, Format output) throws Exception;
 
     public void commit();
 }

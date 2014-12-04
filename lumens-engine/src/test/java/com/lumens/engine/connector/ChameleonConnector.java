@@ -57,9 +57,9 @@ public class ChameleonConnector implements Connector {
             }
 
             @Override
-            public OperationResult execute(Element input, Format output) throws Exception {
+            public OperationResult execute(List<Element> input, Format output) throws Exception {
 
-                final Element element = input;
+                final List<Element> inputList = input;
                 final Format format = output;
 
                 return new OperationResult() {
@@ -85,7 +85,7 @@ public class ChameleonConnector implements Connector {
                             resultList.add(personData);
                         } else if (Mock.WAREHOUSE == typeName) {
                             // the same data for warehouse input and output
-                            resultList.add(element);
+                            resultList.addAll(inputList);
                         }
                         return resultList;
                     }
@@ -127,8 +127,8 @@ public class ChameleonConnector implements Connector {
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
         Map<String, Format> formatList = new HashMap<>();
+        Format root = new DataFormat("Root");
         if (Mock.PERSON == typeName) {
-            Format root = new DataFormat("Root");
             try (InputStream in = ChameleonConnector.class.getResourceAsStream("/xml/Person_Format.xml")) {
                 FormatSerializer xmlSerializer = new FormatSerializer(root);
                 xmlSerializer.readFromXml(in);
@@ -138,7 +138,6 @@ public class ChameleonConnector implements Connector {
             person.setParent(null);
             formatList.put(person.getName(), person);
         } else if (Mock.WAREHOUSE == typeName) {
-            Format root = new DataFormat("Root");
             try (InputStream in = ChameleonConnector.class.getResourceAsStream("/xml/Warehouse_Format.xml")) {
                 FormatSerializer xmlSerializer = new FormatSerializer(root);
                 xmlSerializer.readFromXml(in);
@@ -147,6 +146,15 @@ public class ChameleonConnector implements Connector {
             Format wareHouse = root.getChild("WareHouse");
             wareHouse.setParent(null);
             formatList.put(wareHouse.getName(), wareHouse);
+        } else if (Mock.FINAL == typeName) {
+            try (InputStream in = ChameleonConnector.class.getResourceAsStream("/xml/Final_Format.xml")) {
+                FormatSerializer xmlSerializer = new FormatSerializer(root);
+                xmlSerializer.readFromXml(in);
+            } catch (Exception ex) {
+            }
+            Format finalFmt = root.getChild("Final");
+            finalFmt.setParent(null);
+            formatList.put(finalFmt.getName(), finalFmt);
         }
         return formatList;
     }

@@ -88,8 +88,8 @@ public class EngineTest extends Assert implements SoapConstants {
         // Register format
         String targetName = getOpenFundStringRequest.getName() + (nameCounter++);
         // The code is used to create a format copy for registered request
-        getOpenFundStringRequest = getOpenFundStringRequest.recursiveClone();
-        getOpenFundStringResponse = getOpenFundStringResponse.recursiveClone();
+        getOpenFundStringRequest = getOpenFundStringRequest.depthCopy();
+        getOpenFundStringResponse = getOpenFundStringResponse.depthCopy();
         FormatEntry targetInEntry = datasource.registerFormat(targetName, getOpenFundStringRequest, Direction.IN);
         FormatEntry targetOutEntry = datasource.registerFormat(targetName, getOpenFundStringResponse, Direction.OUT);
         String targetName2 = getOpenFundStringRequest.getName() + (nameCounter++);
@@ -183,8 +183,8 @@ public class EngineTest extends Assert implements SoapConstants {
         connector.getFormat(inputArg, "operation", Direction.IN);
         Map<String, Format> produces = datasource.getFormatList(Direction.OUT);
         Format returnOut = connector.getFormat(produces.get("EMPLOYEES_TEST"), "fields", Direction.OUT);
-        inputArg = inputArg.recursiveClone();
-        returnOut = returnOut.recursiveClone();
+        inputArg = inputArg.depthCopy();
+        returnOut = returnOut.depthCopy();
         FormatEntry inFormatEntry = datasource.registerFormat("sqlSelect", inputArg, Direction.IN);
         FormatEntry outFormatEntry = datasource.registerFormat("sqlSelect", returnOut, Direction.OUT);
 

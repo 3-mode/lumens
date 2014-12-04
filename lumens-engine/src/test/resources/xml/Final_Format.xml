@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<format-list>
+    <format name="Final" form="Struct" type="None" >
+        <format name="name" form="Field" type="String" />
+        <format name="value" form="ArrayOfField" type="String" />
+    </format>
+</format-list>

@@ -25,23 +25,24 @@ public class TransformMapper extends AbstractProcessor {
     private final boolean ignoreScriptOnArray = true;
 
     @Override
-    public Object execute(Rule rule, Element input) {
+    public Object execute(Rule rule, List<Element> input) {
         if (rule instanceof TransformRule) {
             TransformRule transformRule = (TransformRule) rule;
-            Element rootSourceElement = input;
             List<Element> results = new ArrayList<>();
-            TransformRuleItem rootRuleItem = transformRule.getRootRuleItem();
-            List<TransformForeach> rootForeachList = rootRuleItem.getTransformForeach();
-            if (!rootForeachList.isEmpty()) {
-                int foreachLevelDepth = rootForeachList.size() - 1;
-                checkForeachDepthCount(foreachLevelDepth);
-                MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
-                processRootForeachList(ctx, results, rootForeachList, 0, foreachLevelDepth);
-            } else {
-                MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
-                Element result = processTransformItem(null, ctx);
-                if (result != null)
-                    results.add(result);
+            for (Element rootSourceElement : input) {
+                TransformRuleItem rootRuleItem = transformRule.getRootRuleItem();
+                List<TransformForeach> rootForeachList = rootRuleItem.getTransformForeach();
+                if (!rootForeachList.isEmpty()) {
+                    int foreachLevelDepth = rootForeachList.size() - 1;
+                    checkForeachDepthCount(foreachLevelDepth);
+                    MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
+                    processRootForeachList(ctx, results, rootForeachList, 0, foreachLevelDepth);
+                } else {
+                    MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
+                    Element result = processTransformItem(null, ctx);
+                    if (result != null)
+                        results.add(result);
+                }
             }
             return results;
         }

@@ -21,6 +21,8 @@ import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,20 +99,12 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             Format targetFormat = entry != null ? entry.getFormat() : null;
             List<Element> result = new ArrayList<>();
             Object input = context.getInput();
+            List<Element> inputDataList = input instanceof List ? (List<Element>) input : Collections.EMPTY_LIST;
             Operation operation = connector.getOperation();
-            if (input instanceof List) {
-                List<Element> inputDataList = (List<Element>) input;
-                for (Element data : inputDataList) {
-                    // TODO Support chunk
-                    OperationResult opRet = operation.execute(data, targetFormat);
-                    if (opRet != null && opRet.getResult() != null)
-                        result.addAll(opRet.getResult());
-                }
-            } else if (input instanceof Element) {
-                // TODO Support chunk
-                OperationResult opRet = operation.execute((Element) input, targetFormat);
-                if (opRet != null && opRet.getResult() != null)
-                    result.addAll(opRet.getResult());
+            // TODO Support chunk
+            OperationResult opRet = operation.execute(inputDataList, targetFormat);
+            while (opRet != null && !opRet.isLastChunk()) {
+                result.addAll(opRet.getResult());
             }
             for (ResultHandler handler : context.getResultHandlers())
                 if (!(handler instanceof LastResultHandler))

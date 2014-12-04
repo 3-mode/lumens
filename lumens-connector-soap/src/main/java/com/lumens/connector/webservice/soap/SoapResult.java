@@ -19,6 +19,7 @@ public class SoapResult implements OperationResult {
     private final SoapElementBuilder elementBuilder = new SoapElementBuilder();
     private final SOAPEnvelope envelope;
     private final Format resultFormat;
+    private boolean isEof;
 
     SoapResult(Format resultFormat, SOAPEnvelope envelope) {
         this.resultFormat = resultFormat;
@@ -27,6 +28,7 @@ public class SoapResult implements OperationResult {
 
     @Override
     public List<Element> getResult() {
+        isEof = true;
         Element result = elementBuilder.buildElement(resultFormat, envelope);
         if (result != null) {
             List<Element> results = new ArrayList<>(1);
@@ -38,6 +40,6 @@ public class SoapResult implements OperationResult {
 
     @Override
     public boolean isLastChunk() {
-        return true;
+        return isEof;
     }
 }
