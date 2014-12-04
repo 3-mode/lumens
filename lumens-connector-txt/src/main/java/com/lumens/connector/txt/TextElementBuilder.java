@@ -30,30 +30,9 @@ public class TextElementBuilder implements TextConstants{
         List<Format> children = fmt.getChildren();
         int index = 0;
         for(Format child: children){
-            fields.addChild(child.getName()).setValue(getValue(child, values[index++]));
+            fields.addChild(child.getName()).setValue(new Value(child.getType(), values[index++]));
         }
        
         return elem;        
-     }
-    
-    private static Value getValue(Format fmt, String value) throws Exception {
-        switch (fmt.getType()) {
-            case BOOLEAN:
-                return new Value(Boolean.parseBoolean(value));
-            case BYTE:
-            case SHORT:
-            case INTEGER:
-            case LONG:
-                return new Value(Long.parseLong(value));
-            case FLOAT:
-            case DOUBLE:
-                return new Value(Double.parseDouble(value));
-            case STRING:
-                return new Value(value);
-            case DATE:                
-                return new Value(new Date(value));
-            default:
-                throw new Exception("Not support data type");
-        }
-    }
+     }   
 }
