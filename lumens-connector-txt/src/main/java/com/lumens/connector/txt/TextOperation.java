@@ -30,8 +30,11 @@ public class TextOperation implements Operation {
     }
 
     @Override
-    public OperationResult execute(Element elem, Format fmt) throws Exception {
+    public OperationResult execute(List<Element> elem, Format fmt) throws Exception {
         List<Element> result = new ArrayList();
+        if( elem != null ){
+            
+        }
         return new TextOperationResult(result);
     }
 
