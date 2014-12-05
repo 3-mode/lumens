@@ -7,6 +7,7 @@ import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
+import java.util.List;
 
 /**
  *
@@ -23,7 +24,7 @@ public class XmlOperation implements Operation {
     }
 
     @Override
-    public OperationResult execute(Element input, Format output) throws Exception {
+    public OperationResult execute(List<Element> input, Format output) throws Exception {
         return null;
     }
 
