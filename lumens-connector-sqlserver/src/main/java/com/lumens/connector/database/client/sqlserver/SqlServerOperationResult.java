@@ -13,20 +13,21 @@ import java.util.List;
  */
 public class SqlServerOperationResult implements OperationResult {
     private final List<Element> result;
-    private boolean isEof;
+    private boolean hasResultData;
 
     public SqlServerOperationResult(List<Element> result) {
         this.result = result;
+        this.hasResultData = !result.isEmpty();
     }
 
     @Override
     public List<Element> getResult() {
-        isEof = true;
+        hasResultData = false;
         return result;
     }
 
     @Override
-    public boolean isLastChunk() {
-        return isEof;
+    public boolean hasResult() {
+        return hasResultData;
     }
 }

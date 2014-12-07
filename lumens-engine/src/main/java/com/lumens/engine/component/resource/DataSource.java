@@ -21,8 +21,6 @@ import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,12 +96,11 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             FormatEntry entry = registerOUTFormatList.get(targetFmtName);
             Format targetFormat = entry != null ? entry.getFormat() : null;
             List<Element> result = new ArrayList<>();
-            Object input = context.getInput();
-            List<Element> inputDataList = input instanceof List ? (List<Element>) input : Collections.EMPTY_LIST;
+            List<Element> inputDataList = context.getInput();
             Operation operation = connector.getOperation();
             // TODO Support chunk
             OperationResult opRet = operation.execute(inputDataList, targetFormat);
-            while (opRet != null && !opRet.isLastChunk()) {
+            while (opRet != null && opRet.hasResult()) {
                 result.addAll(opRet.getResult());
             }
             for (ResultHandler handler : context.getResultHandlers())

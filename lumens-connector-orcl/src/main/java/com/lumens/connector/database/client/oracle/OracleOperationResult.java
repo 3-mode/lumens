@@ -14,21 +14,21 @@ import java.util.List;
 public class OracleOperationResult implements OperationResult {
 
     private final List<Element> result;
-    private boolean isEof;
+    private boolean hasResultData;
 
     public OracleOperationResult(List<Element> result) {
         this.result = result;
+        this.hasResultData = !result.isEmpty();
     }
 
     @Override
     public List<Element> getResult() {
-        isEof = true;
+        this.hasResultData = false;
         return result;
     }
 
     @Override
-    public boolean isLastChunk() {
-        // TODO
-        return isEof;
+    public boolean hasResult() {
+        return hasResultData;
     }
 }

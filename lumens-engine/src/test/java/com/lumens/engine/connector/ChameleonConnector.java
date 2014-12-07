@@ -66,12 +66,13 @@ public class ChameleonConnector implements Connector {
                     private int chunkSize = 5;
 
                     @Override
-                    public boolean isLastChunk() {
-                        return --chunkSize == 0;
+                    public boolean hasResult() {
+                        return chunkSize == 0;
                     }
 
                     @Override
                     public List<Element> getResult() {
+                        --chunkSize;
                         List<Element> resultList = new ArrayList<>();
                         if (Mock.PERSON == typeName) {
                             DataElement personData = new DataElement(format);

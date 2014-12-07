@@ -42,7 +42,7 @@ public class TransformExecutor implements Executor {
             for (ExecuteContext ctx : exList) {
                 for (ResultHandler handler : executeContext.getResultHandlers()) {
                     if (handler instanceof LastResultHandler)
-                        handler.process(tComponent, ctx.getTargetFormatName(), (List<Element>) ctx.getInput());
+                        handler.process(tComponent, ctx.getTargetFormatName(), ctx.getInput());
                     // TODO need log system
                     System.out.println(String.format("No target component to process '%s'", ctx.getTargetFormatName()));
                 }
