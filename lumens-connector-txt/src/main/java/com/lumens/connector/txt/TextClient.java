@@ -61,8 +61,8 @@ public class TextClient {
             writer  = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path,append), encoding ));
             for(Element child: elem.getChildren()){
                 Element fields;
-                if( elem.getChild(TextConstants.FIELDS) != null ){
-                    fields = child.getChild(TextConstants.FIELDS);
+                if( elem.getChild(TextConstants.FORMAT_FIELDS) != null ){
+                    fields = child.getChild(TextConstants.FORMAT_FIELDS);
                 }
                 else{
                     fields = child;

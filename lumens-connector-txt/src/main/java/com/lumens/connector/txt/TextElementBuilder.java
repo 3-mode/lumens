@@ -25,8 +25,8 @@ public class TextElementBuilder implements TextConstants{
         String[] values = line.split(delimiter);
         Element elem = new DataElement(fmt);   
         Element fields = elem;
-        if( fmt.getChild(TextConstants.FIELDS) != null )
-            fields = elem.addChild(TextConstants.FIELDS);
+        if( fmt.getChild(TextConstants.FORMAT_FIELDS) != null )
+            fields = elem.addChild(TextConstants.FORMAT_FIELDS);
         List<Format> children = fmt.getChildren();
         int index = 0;
         for(Format child: children){
