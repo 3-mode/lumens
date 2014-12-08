@@ -12,12 +12,12 @@ import java.util.List;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class SqlServerOperationResult implements OperationResult {
-    private final List<Element> result;
     private boolean hasResultData;
+    private final List<Element> result;
 
     public SqlServerOperationResult(List<Element> result) {
+        this.hasResultData = (result != null && !result.isEmpty());
         this.result = result;
-        this.hasResultData = !result.isEmpty();
     }
 
     @Override
