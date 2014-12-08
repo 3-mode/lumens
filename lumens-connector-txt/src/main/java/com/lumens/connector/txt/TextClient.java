@@ -32,17 +32,18 @@ public class TextClient {
     public TextClient(){       
     }    
            
-    public List<Element> read(Format fmt){      
+    public List<Element> read(Element elem){      
         List<Element> result = new ArrayList();
-        String encoding = fmt.getProperty(TextConstants.ENCODING).toString();
-        String path = fmt.getProperty(TextConstants.PATH).toString();
+        Format fmt = elem.getFormat();
+        String encoding = elem.getChild(TextConstants.ENCODING).toString();
+        String path = elem.getChild(TextConstants.PATH).toString();
 
         try{           
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), encoding));
             String line;
             while((line = reader.readLine())!=null){
-                Element elem = TextElementBuilder.buildElement(fmt, line);
-                result.add(elem);
+                Element build = TextElementBuilder.buildElement(fmt, line);
+                result.add(build);
             }
         }catch (Exception ex) {            
             throw new RuntimeException(ex);
@@ -52,16 +53,15 @@ public class TextClient {
     }            
     
     public void write(Element elem){
-        try{
-            Format fmt = elem.getFormat();
-            String encoding = fmt.getProperty(TextConstants.ENCODING).toString();
-            String path = fmt.getProperty(TextConstants.PATH).toString();
-            String delimiter = fmt.getProperty(TextConstants.FILEDELIMITER).toString();
-            String linedelimter = fmt.getProperty(TextConstants.LINEDELIMITER).toString();
+        try{            
+            String encoding = elem.getChild(TextConstants.ENCODING).toString();
+            String path = elem.getChild(TextConstants.PATH).toString();
+            String delimiter = elem.getChild(TextConstants.FILEDELIMITER).toString();
+            String linedelimter = elem.getChild(TextConstants.LINEDELIMITER).toString();
             writer  = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), encoding ));
             for(Element child: elem.getChildren()){
                 Element fields;
-                if( fmt.getChild(TextConstants.FIELDS) != null ){
+                if( elem.getChild(TextConstants.FIELDS) != null ){
                     fields = child.getChild(TextConstants.FIELDS);
                 }
                 else{
