@@ -16,4 +16,8 @@ public interface TextConstants {
     public static final String ESCAPECHAR = "escapechar";
     public static final String MAXLINE = "maxline";    
     public static final String FIELDS = "fields";
+    public static final String OPERATION = "operation";
+    public static final String OPERATION_READ = "read";
+    public static final String OPERATION_APPEND = "append";
+    public static final String OPERATION_OVERWRITE = "overwrite";
 }
