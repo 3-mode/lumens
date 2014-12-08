@@ -52,13 +52,13 @@ public class TextClient {
         return result;
     }            
     
-    public void write(Element elem){
+    public void write(Element elem, boolean append){
         try{            
             String encoding = elem.getChild(TextConstants.ENCODING).toString();
             String path = elem.getChild(TextConstants.PATH).toString();
             String delimiter = elem.getChild(TextConstants.FILEDELIMITER).toString();
             String linedelimter = elem.getChild(TextConstants.LINEDELIMITER).toString();
-            writer  = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), encoding ));
+            writer  = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path,append), encoding ));
             for(Element child: elem.getChildren()){
                 Element fields;
                 if( elem.getChild(TextConstants.FIELDS) != null ){
