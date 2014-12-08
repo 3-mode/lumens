@@ -28,4 +28,5 @@ public interface TextConstants {
     public static final String FORMAT_LENGTH = "length";
     public static final String FORMAT_COMMENT = "comment";
     public static final String FORMAT_PRECISION = "precision";
+    public static final String FORMAT_FORMAT = "format";
 }
