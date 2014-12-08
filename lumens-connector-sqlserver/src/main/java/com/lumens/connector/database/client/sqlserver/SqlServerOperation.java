@@ -49,16 +49,12 @@ public class SqlServerOperation implements Operation, DatabaseConstants {
                 } else if (CONST_CNTR_SQLSERVER_INSERT.equalsIgnoreCase(operation)) {
                     SqlServerWriteSQLBuilder sql = new SqlServerWriteSQLBuilder();
                     String SQL = sql.generateInsertSQL(input);
-                    client.execute(SQL);
-                    return null;
+                    client.execute(SQL);                    
                 } else if (CONST_CNTR_SQLSERVER_UPDATE.equalsIgnoreCase(operation)) {
                     SqlServerWriteSQLBuilder sql = new SqlServerWriteSQLBuilder();
                     String SQL = sql.generateUpdateSQL(input);
-                    client.execute(SQL);
-                    return null;
-                } else {
-                    return null;
-                }
+                    client.execute(SQL);                    
+                } 
             }
             return new SqlServerOperationResult(results);
         }

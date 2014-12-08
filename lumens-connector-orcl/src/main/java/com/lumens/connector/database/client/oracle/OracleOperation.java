@@ -45,13 +45,11 @@ public class OracleOperation implements Operation, OracleConstants {
                 } else if (INSERT.equalsIgnoreCase(operation)) {
                     OracleWriteSQLBuilder sql = new OracleWriteSQLBuilder();
                     String SQL = sql.generateInsertSQL(elem);
-                    client.execute(SQL);
-                    return null;
+                    client.execute(SQL);                    
                 } else if (UPDATE.equalsIgnoreCase(operation)) {
                     OracleWriteSQLBuilder sql = new OracleWriteSQLBuilder();
                     String SQL = sql.generateUpdateSQL(elem);
-                    client.execute(SQL);
-                    return null;
+                    client.execute(SQL);                    
                 }
             }
             return new OracleOperationResult(results);
