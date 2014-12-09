@@ -56,7 +56,7 @@ public class TextFormatBuilder implements FormatBuilder{
     public Map<String, Format> getFormatList(Direction direction){
         Map<String, Format> fmtList = new HashMap<>();
         String rootName = schemaRoot.getName();
-        if( rootName.equalsIgnoreCase( "format") ){            
+        if( rootName.equalsIgnoreCase( TextConstants.FORMAT_FORMAT) ){            
             Format rootFmt =  new DataFormat(rootName, Format.Form.STRUCT);
             fmtList.put(rootName, rootFmt);
             rootFmt.setProperty(TextConstants.ENCODING, new Value(encoding));
