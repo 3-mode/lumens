@@ -8,7 +8,7 @@ import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.resource.DataSource;
-import com.lumens.engine.component.instrument.DataTransformator;
+import com.lumens.engine.component.instrument.DataTransformer;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.RegisterFormatComponent;
 import com.lumens.engine.component.TransformRuleEntry;
@@ -140,7 +140,7 @@ class ProjectJsonParser {
             JsonNode dscJson = transformatorJson.get("description");
             JsonNode posJson = transformatorJson.get("position");
             if (isNotNull(typeJson) && isNotNull(idJson) && isNotNull(nameJson)) {
-                DataTransformator dt = new DataTransformator(idJson.asText());
+                DataTransformer dt = new DataTransformer(idJson.asText());
                 if (dt.getComponentType().equals(typeJson.asText())) {
                     dt.setName(nameJson.asText());
                     if (isNotNull(dscJson))
@@ -257,7 +257,7 @@ class ProjectJsonParser {
         }
     }
 
-    private void readTransformRuleEntry(DataTransformator dt, JsonNode transformatorJson) {
+    private void readTransformRuleEntry(DataTransformer dt, JsonNode transformatorJson) {
         JsonNode transformRuleEntryListJson = transformatorJson.get("transform_rule_entry");
         if (isNotNull(transformRuleEntryListJson) && transformRuleEntryListJson.isArray()) {
             Iterator<JsonNode> it = transformRuleEntryListJson.getElements();
@@ -280,7 +280,7 @@ class ProjectJsonParser {
         }
     }
 
-    private TransformRule readTransformRuleFromJson(DataTransformator dt, String targetId, String targetFmtName, JsonNode transformRuleJson) {
+    private TransformRule readTransformRuleFromJson(DataTransformer dt, String targetId, String targetFmtName, JsonNode transformRuleJson) {
         if (isNotNull(transformRuleJson)) {
             // get Root transform rule item
             JsonNode transformRuleItemJson = transformRuleJson.get("transform_rule_item");

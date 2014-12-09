@@ -61,13 +61,16 @@ public class ChameleonConnector implements Connector {
 
                 final List<Element> inputList = input;
                 final Format format = output;
+                if(input!= null && !input.isEmpty()) {
+                    System.out.println(input.get(0).getFormat().getName() + " size: " + input.size());
+                }
 
                 return new OperationResult() {
-                    private int chunkSize = 5;
+                    private int chunkSize = 10;
 
                     @Override
                     public boolean hasResult() {
-                        return chunkSize == 0;
+                        return chunkSize > 0;
                     }
 
                     @Override

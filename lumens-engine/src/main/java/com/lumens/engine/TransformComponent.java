@@ -3,7 +3,6 @@
  */
 package com.lumens.engine;
 
-import com.lumens.engine.run.ExecuteContext;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +42,7 @@ public interface TransformComponent {
 
     public List<ExecuteContext> execute(ExecuteContext context);
 
-    public boolean accept(ExecuteContext ctx);
+    public boolean accept(String name);
 
     public String getName();
 

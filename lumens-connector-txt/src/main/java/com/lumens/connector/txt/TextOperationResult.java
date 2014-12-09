@@ -16,8 +16,8 @@ public class TextOperationResult implements OperationResult {
     private boolean hasResultData;
 
     public TextOperationResult(List<Element> result) {
+        this.hasResultData = result != null && !result.isEmpty();
         this.result = result;
-        this.hasResultData = !result.isEmpty();
     }
 
     @Override

@@ -17,8 +17,8 @@ public class OracleOperationResult implements OperationResult {
     private boolean hasResultData;
 
     public OracleOperationResult(List<Element> result) {
+        this.hasResultData = (result != null && !result.isEmpty());
         this.result = result;
-        this.hasResultData = !result.isEmpty();
     }
 
     @Override

@@ -45,9 +45,7 @@ public class TextOperation implements Operation {
                     client.write(elem, true);
                 }if(TextConstants.OPERATION_OVERWRITE.equalsIgnoreCase(operation)){
                     client.write(elem, false);
-                }else{
-                    return null;
-                }                    
+                }                  
             }            
         }
         return new TextOperationResult(result);

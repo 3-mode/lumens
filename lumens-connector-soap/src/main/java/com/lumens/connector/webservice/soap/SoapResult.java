@@ -23,8 +23,8 @@ public class SoapResult implements OperationResult {
 
     SoapResult(Format resultFormat, SOAPEnvelope envelope) {
         this.resultFormat = resultFormat;
+        this.hasResultData = (envelope != null);
         this.envelope = envelope;
-        this.hasResultData = envelope != null;
     }
 
     @Override

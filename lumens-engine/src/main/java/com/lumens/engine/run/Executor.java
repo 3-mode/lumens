@@ -3,6 +3,7 @@
  */
 package com.lumens.engine.run;
 
+import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.TransformComponent;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public interface Executor {
 
-    public List<Executor> execute();
+    public List<ExecuteContext> execute();
 
     public TransformComponent getTransformComponent();
 }

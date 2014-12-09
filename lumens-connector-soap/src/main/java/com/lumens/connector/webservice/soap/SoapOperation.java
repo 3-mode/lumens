@@ -21,11 +21,11 @@ public class SoapOperation implements Operation {
 
     @Override
     public OperationResult execute(List<Element> input, Format output) throws Exception {
-        if (!input.isEmpty()) {
-            SOAPEnvelope envelope = client.execute(input.get(0));
-            return new SoapResult(output, envelope);
-        }
-        return null;
+        // TODO need to handle chunk
+        SOAPEnvelope envelope = null;
+        if (!input.isEmpty())
+            envelope = client.execute(input.get(0));
+        return new SoapResult(output, envelope);
     }
 
     @Override
