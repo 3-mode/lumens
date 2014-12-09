@@ -50,22 +50,12 @@ public class DataContext implements ExecuteContext {
     }
 
     @Override
-    public void addChildContext(ExecuteContext child) {
-        this.children.add(child);
-    }
-
-    @Override
-    public void removeChildContext(ExecuteContext child) {
-        this.children.remove(child);
-    }
-
-    @Override
-    public List<ExecuteContext> getChildrenContext() {
-        return children;
-    }
-
-    @Override
     public ExecuteContext getParentContext() {
         return parentCtx;
+    }
+
+    @Override
+    public DataContext getParentDataContext() {
+        return this;
     }
 }

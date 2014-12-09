@@ -8,15 +8,21 @@ import com.lumens.connector.ConnectorFactory;
 import com.lumens.connector.Direction;
 import com.lumens.engine.ConnectorFactoryHolder;
 import com.lumens.engine.EngineContext;
+import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.instrument.DataTransformer;
 import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.connector.ChameleonConnector;
 import com.lumens.engine.connector.Mock;
+import com.lumens.engine.run.DataSourceResultHandler;
+import com.lumens.engine.run.ResultHandler;
 import com.lumens.engine.run.SingleThreadTransformExecuteJob;
+import com.lumens.model.Element;
 import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformRule;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -119,7 +125,7 @@ public class TransferEngineTest {
         TransformRule rule_warehouse_final = final_transformator.registerRule(w22, f31);
         rule_warehouse_final.getRuleItem("Final.name").setScript("@WareHouse.name");
         rule_warehouse_final.getRuleItem("Final.value").addTransformForeach(new TransformForeach("WareHouse.asset", "Asset", "index"));
-        rule_warehouse_final.getRuleItem("Final.value").setScript("var id = @WareHouse.asset[index].id; \n logInfo('assetId of final:' + index + '-' + id); \n return id;");
+        rule_warehouse_final.getRuleItem("Final.value").setScript("var id = @WareHouse.asset[index].id; \n //logInfo('assetId of final:' + index + '-' + id); \n return id;");
 
         //**********************************************************************
         TransformProject project = new TransformProject();
@@ -130,9 +136,18 @@ public class TransferEngineTest {
         project.getDataTransformatorList().add(final_transformator);
 
         long start = System.currentTimeMillis();
-        new SingleThreadTransformExecuteJob(project).run();
+        ResultHandler log = new DataSourceResultHandler() {
+
+            @Override
+            public void process(TransformComponent src, String resultName, List<Element> results) {
+                System.out.println(String.format("### %s size is '%d'", resultName, results.size()));
+            }
+        };
+        new SingleThreadTransformExecuteJob(project, Arrays.asList(log)).run();
         //**********************************************************************
         assertTrue(true);
+
+        System.out.println("Final size: " + ChameleonConnector.countFinal);
         System.out.println("Cost: " + (System.currentTimeMillis() - start));
     }
 }

@@ -26,6 +26,7 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class ChameleonConnector implements Connector {
     private final Mock typeName;
+    public static int countFinal = 0;
 
     public ChameleonConnector(Mock typeName) {
         this.typeName = typeName;
@@ -61,12 +62,13 @@ public class ChameleonConnector implements Connector {
 
                 final List<Element> inputList = input;
                 final Format format = output;
-                if(input!= null && !input.isEmpty()) {
-                    System.out.println(input.get(0).getFormat().getName() + " size: " + input.size());
+                if (input != null && !input.isEmpty()) {
+                    if (output == null)
+                        countFinal += inputList.size();
                 }
 
                 return new OperationResult() {
-                    private int chunkSize = 10;
+                    private int chunkSize = 5;
 
                     @Override
                     public boolean hasResult() {
@@ -87,7 +89,7 @@ public class ChameleonConnector implements Connector {
                             personData = new DataElement(format);
                             buildPersonData(personData);
                             resultList.add(personData);
-                        } else if (Mock.WAREHOUSE == typeName) {
+                        } else if (Mock.WAREHOUSE == typeName || Mock.FINAL == typeName) {
                             // the same data for warehouse input and output
                             resultList.addAll(inputList);
                         }
