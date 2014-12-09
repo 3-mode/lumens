@@ -93,7 +93,6 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     @Override
     public List<ExecuteContext> execute(ExecuteContext context) {
         try {
-            // TODO Support chunk
             String targetFmtName = context.getTargetFormatName();
             FormatEntry entry = registerOUTFormatList.get(targetFmtName);
             List<ExecuteContext> exList = new ArrayList<>();
