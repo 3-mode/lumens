@@ -10,7 +10,7 @@ import com.lumens.engine.TransformComponent;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.RuleComponent;
 import com.lumens.engine.component.TransformRuleEntry;
-import com.lumens.engine.run.ExecuteContext;
+import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.run.LastResultHandler;
 import com.lumens.engine.run.ResultHandler;
 import com.lumens.model.Element;
@@ -27,14 +27,14 @@ import java.util.Map;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class DataTransformator extends AbstractTransformComponent implements RuleComponent, Instrument {
+public class DataTransformer extends AbstractTransformComponent implements RuleComponent, Instrument {
 
     private String name;
     private final Processor processor;
     private final List<TransformRuleEntry> ruleList = new ArrayList<>();
     private final Map<String, List<TransformRuleEntry>> ruleFindList = new HashMap<>();
 
-    public DataTransformator(String id) {
+    public DataTransformer(String id) {
         super("type-transformator", id);
         processor = new TransformMapper();
     }
@@ -80,19 +80,27 @@ public class DataTransformator extends AbstractTransformComponent implements Rul
 
     @Override
     public List<ExecuteContext> execute(ExecuteContext context) {
+        List<ExecuteContext> exList = new ArrayList<>();
         String targetFmtName = context.getTargetFormatName();
         List<TransformRuleEntry> rules = ruleFindList.get(targetFmtName);
-        List<ExecuteContext> exList = new ArrayList<>();
         List<Element> input = context.getInput();
         for (TransformRuleEntry rule : rules) {
             List<Element> results = new ArrayList<>();
             List<Element> result = (List<Element>) processor.execute(rule.getRule(), input);
             if (!result.isEmpty())
                 results.addAll(result);
+
+            if (!results.isEmpty() && this.hasTarget()) {
+                for (TransformComponent target : this.getTargetList().values())
+                    if (!result.isEmpty() && target.accept(rule.getTargetFormatName())) {
+                        TransformExecuteContext nextCtx = new TransformExecuteContext(context, results, target, rule.getTargetFormatName(), context.getResultHandlers());
+                        context.addChildContext(nextCtx);
+                        exList.add(nextCtx);
+                    }
+            }
             for (ResultHandler handler : context.getResultHandlers())
                 if (!(handler instanceof LastResultHandler))
                     handler.process(this, targetFmtName, results);
-            exList.add(new TransformExecuteContext(results, rule.getTargetFormatName(), context.getResultHandlers()));
         }
         return exList;
     }
@@ -118,8 +126,8 @@ public class DataTransformator extends AbstractTransformComponent implements Rul
     }
 
     @Override
-    public boolean accept(ExecuteContext ctx) {
-        return ruleFindList.containsKey(ctx.getTargetFormatName());
+    public boolean accept(String name) {
+        return ruleFindList.containsKey(name);
     }
 
     @Override
@@ -135,13 +143,13 @@ public class DataTransformator extends AbstractTransformComponent implements Rul
     public void sourceFrom(TransformComponent source) {
         //if (getSourceList().isEmpty())
         super.sourceFrom(source);
-        //throw new LumensException("DataTransformator only can link to one source");
+        //throw new LumensException("DataTransformer only can link to one source");
     }
 
     @Override
     public void targetTo(TransformComponent target) {
         //if (getTargetList().isEmpty())
         super.targetTo(target);
-        //throw new LumensException("DataTransformator only can link to one target");
+        //throw new LumensException("DataTransformer only can link to one target");
     }
 }

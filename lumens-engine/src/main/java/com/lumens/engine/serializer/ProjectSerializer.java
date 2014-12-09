@@ -8,7 +8,7 @@ import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.resource.DataSource;
-import com.lumens.engine.component.instrument.DataTransformator;
+import com.lumens.engine.component.instrument.DataTransformer;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.serializer.parser.ProjectHandlerImpl;
@@ -178,12 +178,12 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         formatXml.writeToXml(xml.getOutStream());
     }
 
-    private void writeDataTransformatorListToXml(StringUTF8Writer xml, List<DataTransformator> dataTransformatorList, String indent) throws Exception {
+    private void writeDataTransformatorListToXml(StringUTF8Writer xml, List<DataTransformer> dataTransformatorList, String indent) throws Exception {
         xml.print(indent)
         .println("<instrument-list>");
         if (dataTransformatorList != null && !dataTransformatorList.isEmpty()) {
             String nextIndent = indent + INDENT;
-            for (DataTransformator dt : dataTransformatorList) {
+            for (DataTransformer dt : dataTransformatorList) {
                 writeDataTransformatorToXml(xml, dt, nextIndent);
             }
         }
@@ -191,7 +191,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         .println("</instrument-list>");
     }
 
-    private void writeDataTransformatorToXml(StringUTF8Writer xml, DataTransformator dt, String indent) throws Exception {
+    private void writeDataTransformatorToXml(StringUTF8Writer xml, DataTransformer dt, String indent) throws Exception {
         String nextIndent = indent + INDENT;
         xml.print(indent)
         .print("<transformator type=\"").print(dt.getComponentType()).print("\" id=\"").print(dt.getId()).print("\" name=\"").print(dt.getName() == null ? "" : dt.getName()).println("\">").print(nextIndent)
@@ -369,16 +369,16 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         formatWriter.writeToJson(jGenerator);
     }
 
-    private void writeDataTransformatorListToJson(JsonGenerator jGenerator, List<DataTransformator> dataTransformatorList) throws Exception {
+    private void writeDataTransformatorListToJson(JsonGenerator jGenerator, List<DataTransformer> dataTransformatorList) throws Exception {
         jGenerator.writeArrayFieldStart("transformator");
         if (dataTransformatorList != null && !dataTransformatorList.isEmpty()) {
-            for (DataTransformator dt : dataTransformatorList)
+            for (DataTransformer dt : dataTransformatorList)
                 writeDataTransformatorToJson(jGenerator, dt);
         }
         jGenerator.writeEndArray();
     }
 
-    private void writeDataTransformatorToJson(JsonGenerator jGenerator, DataTransformator dt) throws Exception {
+    private void writeDataTransformatorToJson(JsonGenerator jGenerator, DataTransformer dt) throws Exception {
         jGenerator.writeStartObject();
         jGenerator.writeStringField("type", dt.getComponentType());
         jGenerator.writeStringField("id", dt.getId());

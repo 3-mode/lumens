@@ -10,7 +10,7 @@ import com.lumens.engine.ConnectorFactoryHolder;
 import com.lumens.engine.EngineContext;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.FormatEntry;
-import com.lumens.engine.component.instrument.DataTransformator;
+import com.lumens.engine.component.instrument.DataTransformer;
 import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.connector.ChameleonConnector;
 import com.lumens.engine.connector.Mock;
@@ -92,8 +92,8 @@ public class TransferEngineTest {
         FormatEntry w22 = warehouseDs.registerFormat("PutWareHouse", warehouseDs.getFormatList(Direction.OUT).get("WareHouse"), Direction.OUT);
         FormatEntry f31 = finalDs.registerFormat("LogFinal", finalDs.getFormatList(Direction.IN).get("Final"), Direction.IN);
 
-        DataTransformator person_warehouse_transformator = new DataTransformator(Long.toHexString(System.currentTimeMillis()));
-        DataTransformator final_transformator = new DataTransformator(Long.toHexString(System.currentTimeMillis()));
+        DataTransformer person_warehouse_transformator = new DataTransformer(Long.toHexString(System.currentTimeMillis()));
+        DataTransformer final_transformator = new DataTransformer(Long.toHexString(System.currentTimeMillis()));
 
         // Person --> transformator
         personDs.getTargetList().put(person_warehouse_transformator.getId(), person_warehouse_transformator);
@@ -119,7 +119,7 @@ public class TransferEngineTest {
         TransformRule rule_warehouse_final = final_transformator.registerRule(w22, f31);
         rule_warehouse_final.getRuleItem("Final.name").setScript("@WareHouse.name");
         rule_warehouse_final.getRuleItem("Final.value").addTransformForeach(new TransformForeach("WareHouse.asset", "Asset", "index"));
-        rule_warehouse_final.getRuleItem("Final.value").setScript("@WareHouse.asset[index].id");
+        rule_warehouse_final.getRuleItem("Final.value").setScript("var id = @WareHouse.asset[index].id; \n logInfo('assetId of final:' + index + '-' + id); \n return id;");
 
         //**********************************************************************
         TransformProject project = new TransformProject();

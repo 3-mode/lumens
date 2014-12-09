@@ -8,7 +8,7 @@ import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.resource.DataSource;
-import com.lumens.engine.component.instrument.DataTransformator;
+import com.lumens.engine.component.instrument.DataTransformer;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.RegisterFormatComponent;
 import com.lumens.engine.component.RuleComponent;
@@ -259,7 +259,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
             String id = meta.getValue("id");
             if (id == null || id.isEmpty())
                 throw new SAXException("Error, the property 'id' is empty !");
-            tc = new DataTransformator(id);
+            tc = new DataTransformer(id);
             if (type == null || type.isEmpty() || !tc.getComponentType().equals(type))
                 throw new SAXException("Error, the property 'type' is empty !");
             tc.setName(meta.getValue("name"));
@@ -271,7 +271,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
     @Override
     public void end_transformator() throws SAXException {
         if (status == ReadStatus.DATAPSR)
-            project.getDataTransformatorList().add((DataTransformator) tc);
+            project.getDataTransformatorList().add((DataTransformer) tc);
         status = ReadStatus.PROJECT;
     }
 

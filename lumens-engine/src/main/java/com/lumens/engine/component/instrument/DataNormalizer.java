@@ -7,5 +7,5 @@ package com.lumens.engine.component.instrument;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class DataNormalizator {
+public class DataNormalizer {
 }

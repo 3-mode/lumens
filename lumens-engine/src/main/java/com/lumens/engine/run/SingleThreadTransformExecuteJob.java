@@ -3,7 +3,9 @@
  */
 package com.lumens.engine.run;
 
+import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.StartEntry;
+import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.TransformProject;
 import java.util.ArrayList;
@@ -42,11 +44,13 @@ public class SingleThreadTransformExecuteJob implements ExecuteJob, Runnable {
             List<StartEntry> startList = project.getStartEntryList();
             for (StartEntry entry : startList) {
                 SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
-                executorStack.push(new TransformExecutor(entry.getStartComponent(), new TransformExecuteContext(entry.getStartFormatName(), handlers)));
+                executorStack.push(new TransformExecuteContext(entry.getStartComponent(), entry.getStartFormatName(), handlers));
                 while (!executorStack.isEmpty()) {
-                    Executor executor = executorStack.pop();
-                    List<Executor> tExList = executor.execute();
-                    executorStack.push(tExList);
+                    ExecuteContext exectueCtx = executorStack.pop();
+                    TransformComponent exeComponent = exectueCtx.getTargetComponent();
+                    List<ExecuteContext> exList = exeComponent.execute(exectueCtx);
+                    if (!exList.isEmpty())
+                        executorStack.push(exList);
                 }
             }
             project.close();

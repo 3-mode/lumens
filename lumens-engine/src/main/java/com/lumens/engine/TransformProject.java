@@ -7,7 +7,7 @@ import com.lumens.connector.Direction;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.component.resource.DataSource;
-import com.lumens.engine.component.instrument.DataTransformator;
+import com.lumens.engine.component.instrument.DataTransformer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class TransformProject {
 
     private List<DataSource> datasourceList = new ArrayList<>();
-    private List<DataTransformator> transformatorList = new ArrayList<>();
+    private List<DataTransformer> transformatorList = new ArrayList<>();
     private String name;
     private String description;
     private boolean isOpen;
@@ -40,11 +40,11 @@ public class TransformProject {
         this.datasourceList = datasourceList;
     }
 
-    public void setTransformatorList(List<DataTransformator> transformatorList) {
+    public void setTransformatorList(List<DataTransformer> transformatorList) {
         this.transformatorList = transformatorList;
     }
 
-    public List<DataTransformator> getDataTransformatorList() {
+    public List<DataTransformer> getDataTransformatorList() {
         return transformatorList;
     }
 
@@ -58,7 +58,7 @@ public class TransformProject {
 
     public List<StartEntry> getStartEntryList() {
         List<StartEntry> startList = new ArrayList<>();
-        for (DataTransformator dt : transformatorList) {
+        for (DataTransformer dt : transformatorList) {
             // build start point list
             for (TransformRuleEntry tr : dt.getTransformRuleList())
                 if (tr.getSourceId() == null || tr.getSourceId().isEmpty() || tr.getSourceId().equals(dt.getId()))
@@ -82,7 +82,7 @@ public class TransformProject {
         try {
             for (DataSource ds : datasourceList)
                 ds.open();
-            for (DataTransformator dt : transformatorList)
+            for (DataTransformer dt : transformatorList)
                 dt.open();
             isOpen = true;
         } catch (Exception ex) {
@@ -94,7 +94,7 @@ public class TransformProject {
         if (isOpen()) {
             for (DataSource ds : datasourceList)
                 ds.close();
-            for (DataTransformator dt : transformatorList)
+            for (DataTransformer dt : transformatorList)
                 dt.close();
         }
         isOpen = false;
