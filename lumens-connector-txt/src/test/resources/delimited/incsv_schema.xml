@@ -3,8 +3,10 @@
   <fields>
     <field name="number" key="true" type="Integer" nullable="false" pattern="" length="16" precision="-1" comment=""/>
 
-    <field name="text" key="false" type="String" nullable="true" pattern="" length="255" precision="-1" comment=""/>
+    <field name="text" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>
 	
-    <field name="date" key="false" type="Date" nullable="true" pattern="dd-MM-yyyy" length="16" precision="-1" comment=""/>
+    <field name="date" key="false" type="Date" nullable="false" pattern="dd-MM-yyyy" length="16" precision="" comment=""/>
+
+	<field name="available" key="false" type="Boolean" nullable="false" pattern="" length="" precision="" comment=""/>
   </fields>
 </format>
