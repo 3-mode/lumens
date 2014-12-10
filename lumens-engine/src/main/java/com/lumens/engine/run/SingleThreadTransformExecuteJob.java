@@ -10,6 +10,7 @@ import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.TransformProject;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -21,6 +22,13 @@ public class SingleThreadTransformExecuteJob implements ExecuteJob, Runnable {
     private TransformProject project;
     private Thread currentThread;
     private List<ResultHandler> handlers;
+
+    class SingleThreadExecuteStack extends LinkedList<ExecuteContext> {
+
+        public void push(List<ExecuteContext> executorList) {
+            super.addAll(0, executorList);
+        }
+    }
 
     public SingleThreadTransformExecuteJob(TransformProject project, List<ResultHandler> handlers) {
         this.project = project;
