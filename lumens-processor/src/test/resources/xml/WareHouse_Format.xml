@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<format-list>
+    <format name="WareHouse" form="Struct" type="None" >
+        <format name="name" form="Field" type="String" />
+        <format name="asset" form="ArrayOfStruct" type="None" >
+            <format name="id" form="Field" type="String" />
+            <format name="name" form="Field" type="String" />
+            <format name="price" form="Field" type="Float" />
+            <format name="vendor" form="Struct" type="None" >
+                <format name="name" form="Field" type="String" />
+            </format>
+            <format name="part" form="ArrayOfStruct" type="None" >
+                <format name="id" form="Field" type="String" />
+                <format name="name" form="Field" type="String" />
+                <format name="description" form="Field" type="String" />
+            </format>
+        </format>
+    </format>
+</format-list>

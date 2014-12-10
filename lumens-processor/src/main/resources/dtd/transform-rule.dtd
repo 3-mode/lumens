@@ -24,16 +24,16 @@
 
 <!--- Put your DTDDoc comment here. -->
 <!ELEMENT transform-rule (transform-rule-item)*>
-<!ATTLIST transform-rule
-    name CDATA #IMPLIED
-  >
+<!ATTLIST transform-rule name CDATA #IMPLIED>
 
 <!--- Put your DTDDoc comment here. -->
-<!ELEMENT transform-rule-item (script|transform-rule-item)*>
-<!ATTLIST transform-rule-item
-    array-iteration-path CDATA #IMPLIED
-    format-name CDATA #IMPLIED
-  >
+<!ELEMENT transform-rule-item (script|for-each|transform-rule-item)*>
+<!ATTLIST transform-rule-item format-name CDATA #IMPLIED>
 
 <!--- Put your DTDDoc comment here. -->
 <!ELEMENT script (#PCDATA)>
+<!ELEMENT for-each (#PCDATA)>
+<!ATTLIST for-each source-path CDATA #IMPLIED>
+<!ATTLIST for-each short-source-path CDATA #IMPLIED>
+<!ATTLIST for-each index-name CDATA #IMPLIED>
+<!ATTLIST for-each index-value CDATA #IMPLIED>

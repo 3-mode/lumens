@@ -15,7 +15,6 @@ import com.lumens.processor.transform.serializer.parser.TransformRuleParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Iterator;
 import java.util.List;
 import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonGenerator;
@@ -32,7 +31,7 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
     private TransformRule outputRule;
     private Format ruleFormat;
     private List<TransformRule> unSerializeRuleList;
-    private String INDENT_OFFSET = "  ";
+    private final static String INDENT_OFFSET = "  ";
     private String INDENT = "";
 
     public TransformRuleSerializer(TransformRule outputRule) {
@@ -78,11 +77,20 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
         Format format = ruleItem.getFormat();
         if (format != null)
             xml.print(" format-name=\"").print(format.getName()).print("\"");
-        String forEachPath = ruleItem.getForEachPath();
-        if (forEachPath != null)
-            xml.print(" for-each-path=\"").print(forEachPath).print("\"");
         xml.println(">");
         String nextIndent = indent + INDENT_OFFSET;
+
+        // Serialize the foreach list
+        for (TransformForeach foreach : ruleItem.getTransformForeach()) {
+            if (foreach.hasSourcePath()) {
+                // TODO write for each
+                xml.print(nextIndent).println(
+                String.format("<for-each source-path=\"%s\" short-source-path=\"%s\" index-name=\"%s\" index-value=\"%s\" />",
+                              foreach.getSourcePath(), foreach.getShortSourcePath(), foreach.getIndexName(), foreach.getIndexValue()
+                              ));
+            }
+        }
+
         String script = ruleItem.getScriptString();
         if (script != null) {
             xml.print(nextIndent).println("<script>");
@@ -91,10 +99,10 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
             xml.println("]]>");
             xml.print(nextIndent).println("</script>");
         }
-        Iterator<TransformRuleItem> it = ruleItem.iterator();
-        if (it != null)
-            while (it.hasNext())
-                writeTransformRuleItemToXml(xml, it.next(), nextIndent);
+        if (ruleItem.hasChildren()) {
+            for (TransformRuleItem child : ruleItem.getChildren())
+                writeTransformRuleItemToXml(xml, child, nextIndent);
+        }
         xml.print(indent).println("</transform-rule-item>");
     }
 
@@ -103,6 +111,7 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
         ObjectMapper om = new ObjectMapper();
         JsonGenerator jGenerator = om.getJsonFactory().createJsonGenerator(out, JsonEncoding.UTF8);
         writeTransformRuleToJson(jGenerator, outputRule, true);
+        jGenerator.flush();
     }
 
     public void writeToJson(JsonGenerator jGenerator) throws Exception {
@@ -128,29 +137,31 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
         if (isRoot)
             jGenerator.writeObjectFieldStart("transform_rule_item");
         else {
-            jGenerator.writeArrayFieldStart("transform_rule_item");
             jGenerator.writeStartObject();
         }
+        //********* Starting **********************
+        // Name
         Format format = ruleItem.getFormat();
         if (format != null)
             jGenerator.writeStringField("format_name", format.getName());
-
+        // For each
         List<TransformForeach> foreachList = ruleItem.getTransformForeach();
         if (foreachList != null && !foreachList.isEmpty())
             writeTransformForeachToJson(jGenerator, foreachList, false);
+        // Script
         String script = ruleItem.getScriptString();
         if (script != null)
             jGenerator.writeStringField("script", script);
-        Iterator<TransformRuleItem> it = ruleItem.iterator();
-        if (it != null)
-            while (it.hasNext())
-                writeTransformRuleItemToJson(jGenerator, it.next(), false);
-        if (isRoot)
-            jGenerator.writeEndObject();
-        else {
-            jGenerator.writeEndObject();
+
+        // Serialize child transform rules
+        if (ruleItem.hasChildren()) {
+            jGenerator.writeArrayFieldStart("transform_rule_item");
+            for (TransformRuleItem child : ruleItem.getChildren())
+                writeTransformRuleItemToJson(jGenerator, child, false);
             jGenerator.writeEndArray();
         }
+        //********* Ending ***********************
+        jGenerator.writeEndObject();
     }
 
     private void writeTransformForeachToJson(JsonGenerator jGenerator, List<TransformForeach> foreachList, boolean b) throws IOException {

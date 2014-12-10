@@ -4,6 +4,7 @@
 package com.lumens.processor.transform.serializer.parser;
 
 import com.lumens.model.Format;
+import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformRule;
 import com.lumens.processor.transform.TransformRuleItem;
 import java.util.LinkedList;
@@ -17,11 +18,11 @@ import org.xml.sax.SAXException;
  */
 public class TransformRuleHandlerImpl implements TransformRuleHandler {
 
-    private Format format;
-    private LinkedList<TransformRuleItem> ruleItemStack = new LinkedList<>();
+    private final Format format;
+    private final LinkedList<TransformRuleItem> ruleItemStack = new LinkedList<>();
     private TransformRule rule;
     private TransformRuleItem currentRuleItem;
-    private List<TransformRule> ruleList;
+    private final List<TransformRule> ruleList;
 
     public TransformRuleHandlerImpl(Format format, List<TransformRule> ruleList) {
         this.format = format;
@@ -60,9 +61,6 @@ public class TransformRuleHandlerImpl implements TransformRuleHandler {
             if (name != null) {
                 TransformRuleItem child = currentRuleItem.addChild(name);
                 if (child != null) {
-                    String forEachPath = meta.getValue("for-each-path");
-                    if (forEachPath != null)
-                        child.setForEachPath(forEachPath);
                     ruleItemStack.add(currentRuleItem);
                     currentRuleItem = child;
                 }
@@ -81,6 +79,20 @@ public class TransformRuleHandlerImpl implements TransformRuleHandler {
         if (currentRuleItem != null && data != null) {
             try {
                 currentRuleItem.setScript(data.trim());
+            } catch (Exception ex) {
+                throw new SAXException(ex);
+            }
+        }
+    }
+
+    @Override
+    public void handle_for_each(String data, Attributes meta) throws SAXException {
+        if (currentRuleItem != null) {
+            try {
+                currentRuleItem.addTransformForeach(new TransformForeach(meta.getValue("source-path"),
+                                                                         meta.getValue("short-source-path"),
+                                                                         meta.getValue("index-name"),
+                                                                         Integer.parseInt(meta.getValue("index-value"))));
             } catch (Exception ex) {
                 throw new SAXException(ex);
             }

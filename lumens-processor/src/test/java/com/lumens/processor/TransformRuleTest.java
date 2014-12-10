@@ -7,9 +7,12 @@ package com.lumens.processor;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
 import com.lumens.model.Type;
+import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.script.JavaScriptContext;
+import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformRule;
 import com.lumens.processor.transform.serializer.TransformRuleSerializer;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,30 +30,52 @@ public class TransformRuleTest extends TestCase {
     }
 
     public void testReadTransformRuleFromXml() throws Exception {
-        InputStream in = null;
-        try {
-            // a.@b.c.@d.e.f --> a1.@a2.a3.@a4.a5 (@b-@a2, @d-@a4)
-            // a.@b.c.@d.e.f --> a1.@a2.a3.@a4.a5 (@b-@a2)
-            // a.@b.c.@d.e.f --> a1.@a2.a3.@a4.a5 (@d-@a4)
-            // a.@b.c.@d.e.f --> a1.@a2.a3.@a4.a5 (@b-@a4) (wrong logic, what will happen ?)
-            // a.@b.c.@d.e.f --> a1.@a2.a3.@a4.a5 (none)
-            Format a = new DataFormat("a", Format.Form.STRUCT);
-            a.addChild("b", Format.Form.ARRAYOFSTRUCT).addChild("c", Format.Form.STRUCT).addChild("d", Format.Form.ARRAYOFSTRUCT).addChild("e", Format.Form.STRUCT).addChild("f", Format.Form.FIELD, Type.STRING);
-            Format a1 = new DataFormat("a1", Format.Form.STRUCT);
-            Format a3 = a1.addChild("a2", Format.Form.ARRAYOFSTRUCT).addChild("a3", Format.Form.STRUCT);
-            a3.addChild("a4", Format.Form.ARRAYOFSTRUCT).addChild("a5", Format.Form.FIELD, Type.STRING);
-            a3.addChild("aa4", Format.Form.ARRAYOFSTRUCT).addChild("aa5", Format.Form.FIELD, Type.STRING);
-
-            List<TransformRule> ruleList = new ArrayList<>();
-            in = TransformRuleTest.class.getResourceAsStream("/xml/transform-rule.xml");
-            TransformRuleSerializer unSerialXml = new TransformRuleSerializer(a1, ruleList);
-            unSerialXml.readFromXml(in);
-            TransformRuleSerializer xml = new TransformRuleSerializer(ruleList.get(0));
-            System.out.println("Print the rule structure after read it from a xml : ");
-            xml.writeToXml(System.out);
-        } finally {
-            in.close();
+        Format root = new DataFormat("Root");
+        try (InputStream in = TransformRuleTest.class.getResourceAsStream("/xml/WareHouse_Format.xml")) {
+            FormatSerializer xmlSerializer = new FormatSerializer(root);
+            xmlSerializer.readFromXml(in);
         }
+        Format warehouse = root.getChild("WareHouse");
+        warehouse.setParent(null);
+
+        TransformRule rule = new TransformRule(warehouse);
+        //******* Test the array mapping when the parent and the current for each are configured.
+        // Configure For each to iterate the array source elements
+        rule.getRuleItem("WareHouse.name").setScript("@Person.name");
+        rule.getRuleItem("WareHouse.asset").addTransformForeach(new TransformForeach("Person.Asset", "Asset", "index"));
+        rule.getRuleItem("WareHouse.asset.id").setScript("'ASSET_' + index");
+        rule.getRuleItem("WareHouse.asset.name").setScript("@Person.Asset[index].name");
+        rule.getRuleItem("WareHouse.asset.price").setScript("@Person.Asset[index].price");
+        rule.getRuleItem("WareHouse.asset.vendor.name").setScript("@Person.Asset[index].Vendor.name");
+
+        rule.getRuleItem("WareHouse.asset.part").addTransformForeach(new TransformForeach("Person.Asset", "Asset", "index2"));
+        rule.getRuleItem("WareHouse.asset.part").addTransformForeach(new TransformForeach("Person.Asset.Part", "Part", "partIndex"));
+        rule.getRuleItem("WareHouse.asset.part.id").setScript("'PART_' + index2 + '_' + partIndex");
+        rule.getRuleItem("WareHouse.asset.part.name").setScript("@Person.Asset[index2].Part[partIndex].name");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        TransformRuleSerializer ruleSerial = new TransformRuleSerializer(rule);
+        ruleSerial.writeToJson(baos);
+        System.out.println("**********Json project*****************************************");
+        System.out.println(baos.toString());
+        baos.reset();
+        System.out.println("**********Xml project*****************************************");
+        ruleSerial.writeToXml(baos);
+        String backupXml = baos.toString();
+        System.out.println(backupXml);
+
+        List<TransformRule> unserializeRuleList = new ArrayList<>();
+        TransformRuleSerializer ruleSerialRead = new TransformRuleSerializer(warehouse, unserializeRuleList);
+        try (InputStream in = TransformRuleTest.class.getResourceAsStream("/xml/WarehouseTransformRule.xml")) {
+            ruleSerialRead.readFromXml(in);
+        }
+        TransformRuleSerializer outputAgain = new TransformRuleSerializer(unserializeRuleList.get(0));
+        baos.reset();
+        System.out.println("**********Xml project 2*****************************************");
+        ruleSerial.writeToXml(baos);
+        String backupXml2 = baos.toString();
+        System.out.println(backupXml2);
+        assertEquals(backupXml, backupXml2);
     }
 
     @Test
