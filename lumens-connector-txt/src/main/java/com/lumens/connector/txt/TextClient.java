@@ -62,7 +62,6 @@ public class TextClient {
                 } else {
                     fields = child;
                 }
-
                 String line = "";
                 for (Element field : fields.getChildren()) {
                     line = delimiter + field.getValue().toString();
@@ -73,7 +72,6 @@ public class TextClient {
                 else
                     writer.write(linedelimter);
             }
-
             writer.flush();
             writer.close();
         } catch (Exception ex) {
