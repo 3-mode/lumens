@@ -67,10 +67,10 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         JsonGenerator jGenerator = om.getJsonFactory().createJsonGenerator(out, JsonEncoding.UTF8);
         jGenerator.writeStartObject();
         jGenerator.writeObjectFieldStart("project");
-        jGenerator.writeStringField("name", project.getName());
-        jGenerator.writeStringField("description", project.getDescription());
+        jGenerator.writeStringField("name", project.getName() == null ? "" : project.getName());
+        jGenerator.writeStringField("description", project.getDescription() == null ? "" : project.getDescription());
         writeDatasourceListToJson(jGenerator, project.getDatasourceList());
-        writeDataTransformatorListToJson(jGenerator, project.getDataTransformatorList());
+        writeDataTransformerListToJson(jGenerator, project.getDataTransformatorList());
         writeStartEntryListToJson(jGenerator, project.getStartEntryList());
         jGenerator.writeEndObject();
         jGenerator.writeEndObject();
@@ -86,7 +86,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         .print("<![CDATA[").print(project.getDescription()).println("]]>").print(INDENT)
         .println("</description>");
         writeDatasourceListToXml(xml, project.getDatasourceList(), INDENT);
-        writeDataTransformatorListToXml(xml, project.getDataTransformatorList(), INDENT);
+        writeDataTransformerListToXml(xml, project.getDataTransformatorList(), INDENT);
         writeStartEntryListToXml(xml, project.getStartEntryList(), INDENT);
         xml.println("</project>");
     }
@@ -178,30 +178,30 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         formatXml.writeToXml(xml.getOutStream());
     }
 
-    private void writeDataTransformatorListToXml(StringUTF8Writer xml, List<DataTransformer> dataTransformatorList, String indent) throws Exception {
+    private void writeDataTransformerListToXml(StringUTF8Writer xml, List<DataTransformer> dataTransformerList, String indent) throws Exception {
         xml.print(indent)
         .println("<instrument-list>");
-        if (dataTransformatorList != null && !dataTransformatorList.isEmpty()) {
+        if (dataTransformerList != null && !dataTransformerList.isEmpty()) {
             String nextIndent = indent + INDENT;
-            for (DataTransformer dt : dataTransformatorList) {
-                writeDataTransformatorToXml(xml, dt, nextIndent);
+            for (DataTransformer dt : dataTransformerList) {
+                writeDataTransformerToXml(xml, dt, nextIndent);
             }
         }
         xml.print(indent)
         .println("</instrument-list>");
     }
 
-    private void writeDataTransformatorToXml(StringUTF8Writer xml, DataTransformer dt, String indent) throws Exception {
+    private void writeDataTransformerToXml(StringUTF8Writer xml, DataTransformer dt, String indent) throws Exception {
         String nextIndent = indent + INDENT;
         xml.print(indent)
-        .print("<transformator type=\"").print(dt.getComponentType()).print("\" id=\"").print(dt.getId()).print("\" name=\"").print(dt.getName() == null ? "" : dt.getName()).println("\">").print(nextIndent)
+        .print("<transformer type=\"").print(dt.getComponentType()).print("\" id=\"").print(dt.getId()).print("\" name=\"").print(dt.getName() == null ? "" : dt.getName()).println("\">").print(nextIndent)
         .println("<description>")
         .print("<![CDATA[").print(dt.getDescription() == null ? "" : dt.getDescription()).println("]]>").print(nextIndent)
         .println("</description>");
         xml.print(nextIndent).print("<position x=\"").print(Integer.toString(dt.getX())).print("\" y=\"").print(Integer.toString(dt.getY())).println("\"/>");
         writeTargetListToXml(xml, dt.getTargetList(), nextIndent);
         writeTransformRuleList(xml, dt.getTransformRuleList(), nextIndent);
-        xml.print(indent).println("</transformator>");
+        xml.print(indent).println("</transformer>");
     }
 
     private void writeStartEntryListToXml(StringUTF8Writer xml, List<StartEntry> startEntryList, String indent) throws Exception {
@@ -369,16 +369,16 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         formatWriter.writeToJson(jGenerator);
     }
 
-    private void writeDataTransformatorListToJson(JsonGenerator jGenerator, List<DataTransformer> dataTransformatorList) throws Exception {
-        jGenerator.writeArrayFieldStart("transformator");
-        if (dataTransformatorList != null && !dataTransformatorList.isEmpty()) {
-            for (DataTransformer dt : dataTransformatorList)
-                writeDataTransformatorToJson(jGenerator, dt);
+    private void writeDataTransformerListToJson(JsonGenerator jGenerator, List<DataTransformer> dataTransformerList) throws Exception {
+        jGenerator.writeArrayFieldStart("transformer");
+        if (dataTransformerList != null && !dataTransformerList.isEmpty()) {
+            for (DataTransformer dt : dataTransformerList)
+                writeDataTransformerToJson(jGenerator, dt);
         }
         jGenerator.writeEndArray();
     }
 
-    private void writeDataTransformatorToJson(JsonGenerator jGenerator, DataTransformer dt) throws Exception {
+    private void writeDataTransformerToJson(JsonGenerator jGenerator, DataTransformer dt) throws Exception {
         jGenerator.writeStartObject();
         jGenerator.writeStringField("type", dt.getComponentType());
         jGenerator.writeStringField("id", dt.getId());
@@ -406,7 +406,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     private void writeStartEntryToJson(JsonGenerator jGenerator, StartEntry se) throws Exception {
         jGenerator.writeStartObject();
         jGenerator.writeStringField("format_name", se.getStartFormatName());
-        jGenerator.writeStringField("target_name", se.getStartComponent().getName());
+        jGenerator.writeStringField("target_id", se.getStartComponent().getId());
         jGenerator.writeEndObject();
     }
 

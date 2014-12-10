@@ -1,0 +1,594 @@
+{
+    "project": {
+        "name": "",
+        "description": "",
+        "datasource": [
+            {
+                "type": "PERSON",
+                "id": "1418204871170",
+                "name": "",
+                "description": "",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "property": [],
+                "format_list": [
+                    {
+                        "direction": "OUT",
+                        "format_entry": [
+                            {
+                                "name": "GetPerson1",
+                                "direction": "OUT",
+                                "format": {
+                                    "name": "Person",
+                                    "form": "Struct",
+                                    "type": "None",
+                                    "format": [
+                                        {
+                                            "name": "name",
+                                            "form": "Field",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "Asset",
+                                            "form": "ArrayOfStruct",
+                                            "type": "None",
+                                            "format": [
+                                                {
+                                                    "name": "name",
+                                                    "form": "Field",
+                                                    "type": "String"
+                                                },
+                                                {
+                                                    "name": "price",
+                                                    "form": "Field",
+                                                    "type": "Float"
+                                                },
+                                                {
+                                                    "name": "Part",
+                                                    "form": "ArrayOfStruct",
+                                                    "type": "None",
+                                                    "format": [
+                                                        {
+                                                            "name": "name",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        },
+                                                        {
+                                                            "name": "description",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "name": "Vendor",
+                                                    "form": "Struct",
+                                                    "type": "None",
+                                                    "format": [
+                                                        {
+                                                            "name": "name",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        },
+                                                        {
+                                                            "name": "address",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "GetPerson0",
+                                "direction": "OUT",
+                                "format": {
+                                    "name": "Person",
+                                    "form": "Struct",
+                                    "type": "None",
+                                    "format": [
+                                        {
+                                            "name": "name",
+                                            "form": "Field",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "Asset",
+                                            "form": "ArrayOfStruct",
+                                            "type": "None",
+                                            "format": [
+                                                {
+                                                    "name": "name",
+                                                    "form": "Field",
+                                                    "type": "String"
+                                                },
+                                                {
+                                                    "name": "price",
+                                                    "form": "Field",
+                                                    "type": "Float"
+                                                },
+                                                {
+                                                    "name": "Part",
+                                                    "form": "ArrayOfStruct",
+                                                    "type": "None",
+                                                    "format": [
+                                                        {
+                                                            "name": "name",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        },
+                                                        {
+                                                            "name": "description",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "name": "Vendor",
+                                                    "form": "Struct",
+                                                    "type": "None",
+                                                    "format": [
+                                                        {
+                                                            "name": "name",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        },
+                                                        {
+                                                            "name": "address",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "target": [{
+                        "id": "1418204871339"
+                    }]
+            },
+            {
+                "type": "WAREHOUSE",
+                "id": "1418204871173",
+                "name": "",
+                "description": "",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "property": [],
+                "format_list": [
+                    {
+                        "direction": "IN",
+                        "format_entry": [
+                            {
+                                "name": "PutWareHouse",
+                                "direction": "IN",
+                                "format": {
+                                    "name": "WareHouse",
+                                    "form": "Struct",
+                                    "type": "None",
+                                    "format": [
+                                        {
+                                            "name": "name",
+                                            "form": "Field",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "asset",
+                                            "form": "ArrayOfStruct",
+                                            "type": "None",
+                                            "format": [
+                                                {
+                                                    "name": "id",
+                                                    "form": "Field",
+                                                    "type": "String"
+                                                },
+                                                {
+                                                    "name": "name",
+                                                    "form": "Field",
+                                                    "type": "String"
+                                                },
+                                                {
+                                                    "name": "price",
+                                                    "form": "Field",
+                                                    "type": "Float"
+                                                },
+                                                {
+                                                    "name": "vendor",
+                                                    "form": "Struct",
+                                                    "type": "None",
+                                                    "format": [
+                                                        {
+                                                            "name": "name",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "name": "part",
+                                                    "form": "ArrayOfStruct",
+                                                    "type": "None",
+                                                    "format": [
+                                                        {
+                                                            "name": "id",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        },
+                                                        {
+                                                            "name": "name",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        },
+                                                        {
+                                                            "name": "description",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "direction": "OUT",
+                        "format_entry": [
+                            {
+                                "name": "PutWareHouse",
+                                "direction": "OUT",
+                                "format": {
+                                    "name": "WareHouse",
+                                    "form": "Struct",
+                                    "type": "None",
+                                    "format": [
+                                        {
+                                            "name": "name",
+                                            "form": "Field",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "asset",
+                                            "form": "ArrayOfStruct",
+                                            "type": "None",
+                                            "format": [
+                                                {
+                                                    "name": "id",
+                                                    "form": "Field",
+                                                    "type": "String"
+                                                },
+                                                {
+                                                    "name": "name",
+                                                    "form": "Field",
+                                                    "type": "String"
+                                                },
+                                                {
+                                                    "name": "price",
+                                                    "form": "Field",
+                                                    "type": "Float"
+                                                },
+                                                {
+                                                    "name": "vendor",
+                                                    "form": "Struct",
+                                                    "type": "None",
+                                                    "format": [
+                                                        {
+                                                            "name": "name",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "name": "part",
+                                                    "form": "ArrayOfStruct",
+                                                    "type": "None",
+                                                    "format": [
+                                                        {
+                                                            "name": "id",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        },
+                                                        {
+                                                            "name": "name",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        },
+                                                        {
+                                                            "name": "description",
+                                                            "form": "Field",
+                                                            "type": "String"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "target": [{
+                        "id": "1418204871341"
+                    }]
+            },
+            {
+                "type": "FINAL",
+                "id": "1418204871174",
+                "name": "",
+                "description": "",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "property": [],
+                "format_list": [
+                    {
+                        "direction": "IN",
+                        "format_entry": [
+                            {
+                                "name": "LogFinal",
+                                "direction": "IN",
+                                "format": {
+                                    "name": "Final",
+                                    "form": "Struct",
+                                    "type": "None",
+                                    "format": [
+                                        {
+                                            "name": "name",
+                                            "form": "Field",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "name": "value",
+                                            "form": "ArrayOfField",
+                                            "type": "String"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "target": []
+            }
+        ],
+        "transformer": [
+            {
+                "type": "type-transformator",
+                "id": "1418204871339",
+                "name": "",
+                "description": "",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "target": [{
+                        "id": "1418204871173"
+                    }],
+                "transform_rule_entry": [
+                    {
+                        "name": "1418204871170:GetPerson0--->1418204871173:PutWareHouse",
+                        "source_id": "1418204871170",
+                        "target_id": "1418204871173",
+                        "source_format_name": "GetPerson0",
+                        "target_format_name": "PutWareHouse",
+                        "transform_rule": {
+                            "name": "WareHouse",
+                            "transform_rule_item": {
+                                "format_name": "WareHouse",
+                                "transform_rule_item": [
+                                    {
+                                        "format_name": "name",
+                                        "script": "@Person.name"
+                                    },
+                                    {
+                                        "format_name": "asset",
+                                        "for_each": [
+                                            {
+                                                "source_path": "Person.Asset",
+                                                "short_source_path": "Asset",
+                                                "index_name": "index",
+                                                "index_value": "0"
+                                            }
+                                        ],
+                                        "transform_rule_item": [
+                                            {
+                                                "format_name": "id",
+                                                "script": "'ASSET_' + index"
+                                            },
+                                            {
+                                                "format_name": "name",
+                                                "script": "@Person.Asset[index].name"
+                                            },
+                                            {
+                                                "format_name": "price",
+                                                "script": "@Person.Asset[index].price"
+                                            },
+                                            {
+                                                "format_name": "vendor",
+                                                "transform_rule_item": [
+                                                    {
+                                                        "format_name": "name",
+                                                        "script": "@Person.Asset[index].Vendor.name"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "format_name": "part",
+                                                "for_each": [
+                                                    {
+                                                        "source_path": "Person.Asset.Part",
+                                                        "short_source_path": "Part",
+                                                        "index_name": "partIndex",
+                                                        "index_value": "0"
+                                                    }
+                                                ],
+                                                "transform_rule_item": [
+                                                    {
+                                                        "format_name": "id",
+                                                        "script": "'PART_' + index + '_' + partIndex"
+                                                    },
+                                                    {
+                                                        "format_name": "name",
+                                                        "script": "@Person.Asset[index].Part[partIndex].name"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "1418204871170:GetPerson1--->1418204871173:PutWareHouse",
+                        "source_id": "1418204871170",
+                        "target_id": "1418204871173",
+                        "source_format_name": "GetPerson1",
+                        "target_format_name": "PutWareHouse",
+                        "transform_rule": {
+                            "name": "WareHouse",
+                            "transform_rule_item": {
+                                "format_name": "WareHouse",
+                                "transform_rule_item": [
+                                    {
+                                        "format_name": "name",
+                                        "script": "@Person.name"
+                                    },
+                                    {
+                                        "format_name": "asset",
+                                        "for_each": [
+                                            {
+                                                "source_path": "Person.Asset",
+                                                "short_source_path": "Asset",
+                                                "index_name": "index",
+                                                "index_value": "0"
+                                            }
+                                        ],
+                                        "transform_rule_item": [
+                                            {
+                                                "format_name": "id",
+                                                "script": "'ASSET_' + index"
+                                            },
+                                            {
+                                                "format_name": "name",
+                                                "script": "@Person.Asset[index].name"
+                                            },
+                                            {
+                                                "format_name": "price",
+                                                "script": "@Person.Asset[index].price"
+                                            },
+                                            {
+                                                "format_name": "vendor",
+                                                "transform_rule_item": [
+                                                    {
+                                                        "format_name": "name",
+                                                        "script": "@Person.Asset[index].Vendor.name"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "format_name": "part",
+                                                "for_each": [
+                                                    {
+                                                        "source_path": "Person.Asset.Part",
+                                                        "short_source_path": "Part",
+                                                        "index_name": "partIndex",
+                                                        "index_value": "0"
+                                                    }
+                                                ],
+                                                "transform_rule_item": [
+                                                    {
+                                                        "format_name": "id",
+                                                        "script": "'PART_' + index + '_' + partIndex"
+                                                    },
+                                                    {
+                                                        "format_name": "name",
+                                                        "script": "@Person.Asset[index].Part[partIndex].name"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "type-transformator",
+                "id": "1418204871341",
+                "name": "",
+                "description": "",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "target": [{
+                        "id": "1418204871174"
+                    }],
+                "transform_rule_entry": [
+                    {
+                        "name": "1418204871173:PutWareHouse--->1418204871174:LogFinal",
+                        "source_id": "1418204871173",
+                        "target_id": "1418204871174",
+                        "source_format_name": "PutWareHouse",
+                        "target_format_name": "LogFinal",
+                        "transform_rule": {
+                            "name": "Final",
+                            "transform_rule_item": {
+                                "format_name": "Final",
+                                "transform_rule_item": [
+                                    {
+                                        "format_name": "name",
+                                        "script": "@WareHouse.name"
+                                    },
+                                    {
+                                        "format_name": "value",
+                                        "for_each": [
+                                            {
+                                                "source_path": "WareHouse.asset",
+                                                "short_source_path": "Asset",
+                                                "index_name": "index",
+                                                "index_value": "0"
+                                            }
+                                        ],
+                                        "script": "var id = @WareHouse.asset[index].id; \n //logInfo('assetId of final:' + index + '-' + id); \n return id;"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }
+        ],
+        "start_entry": [
+            {
+                "format_name": "GetPerson1",
+                "target_id": "1418204871170"
+            },
+            {
+                "format_name": "GetPerson0",
+                "target_id": "1418204871170"
+            }
+        ]
+    }
+}

@@ -17,6 +17,7 @@ import com.lumens.model.Format;
 import com.lumens.model.Type;
 import com.lumens.model.Value;
 import com.lumens.model.serializer.FormatSerializer;
+import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformRule;
 import com.lumens.processor.transform.TransformRuleItem;
 import java.io.InputStream;
@@ -34,17 +35,17 @@ import org.codehaus.jackson.node.NullNode;
  *
  * It is used to parse JSON of project
  */
-class ProjectJsonParser {
+public class ProjectJsonParser {
 
     public static final String PROJECT = "project";
     public static final String NAME = "name";
     public static final String DESCRIPTION = "description";
     public static final String STARTENTRY_LIST = "start_entry";
     public static final String DATASOURCE_LIST = "datasource";
-    public static final String TRANSFORMATOR_LIST = "transformator";
-    private TransformProject project;
-    private Map<String, TransformComponent> tComponentCache = new HashMap<>();
-    private Map<String, List<String>> targetList = new HashMap<>();
+    public static final String TRANSFORMER_LIST = "transformer";
+    private final TransformProject project;
+    private final Map<String, TransformComponent> tComponentCache = new HashMap<>();
+    private final Map<String, List<String>> targetList = new HashMap<>();
 
     public ProjectJsonParser(TransformProject project) {
         this.project = project;
@@ -74,7 +75,7 @@ class ProjectJsonParser {
                 project.setDescription(descJson.asText());
                 // Read list
                 readProjectDataSourceListFromJson(projectJson.get(DATASOURCE_LIST));
-                readProjectInstrumentListFromJson(projectJson.get(TRANSFORMATOR_LIST));
+                readProjectInstrumentListFromJson(projectJson.get(TRANSFORMER_LIST));
                 readProjectStartEntryFromJson(projectJson.get(STARTENTRY_LIST));
                 handleTargetList();
             } else
@@ -90,9 +91,9 @@ class ProjectJsonParser {
         }
     }
 
-    private void readProjectInstrumentListFromJson(JsonNode transformatorJson) {
-        if (isNotNull(transformatorJson) && transformatorJson.isArray()) {
-            Iterator<JsonNode> it = transformatorJson.getElements();
+    private void readProjectInstrumentListFromJson(JsonNode transformerJson) {
+        if (isNotNull(transformerJson) && transformerJson.isArray()) {
+            Iterator<JsonNode> it = transformerJson.getElements();
             while (it.hasNext())
                 readProcessorFromJson(it.next());
         }
@@ -132,13 +133,13 @@ class ProjectJsonParser {
         }
     }
 
-    private void readProcessorFromJson(JsonNode transformatorJson) {
-        if (isNotNull(transformatorJson)) {
-            JsonNode idJson = transformatorJson.get("id");
-            JsonNode typeJson = transformatorJson.get("type");
-            JsonNode nameJson = transformatorJson.get("name");
-            JsonNode dscJson = transformatorJson.get("description");
-            JsonNode posJson = transformatorJson.get("position");
+    private void readProcessorFromJson(JsonNode transformerJson) {
+        if (isNotNull(transformerJson)) {
+            JsonNode idJson = transformerJson.get("id");
+            JsonNode typeJson = transformerJson.get("type");
+            JsonNode nameJson = transformerJson.get("name");
+            JsonNode dscJson = transformerJson.get("description");
+            JsonNode posJson = transformerJson.get("position");
             if (isNotNull(typeJson) && isNotNull(idJson) && isNotNull(nameJson)) {
                 DataTransformer dt = new DataTransformer(idJson.asText());
                 if (dt.getComponentType().equals(typeJson.asText())) {
@@ -151,8 +152,8 @@ class ProjectJsonParser {
                     }
                     project.getDataTransformatorList().add(dt);
                     tComponentCache.put(dt.getId(), dt);
-                    readTransformComponentTargetList(dt, transformatorJson);
-                    readTransformRuleEntry(dt, transformatorJson);
+                    readTransformComponentTargetList(dt, transformerJson);
+                    readTransformRuleEntry(dt, transformerJson);
                 } else
                     throw new RuntimeException("Processor name or class name is invalid !");
             }
@@ -160,14 +161,14 @@ class ProjectJsonParser {
     }
 
     private void readStartEntryFromJson(JsonNode startEntryJson) {
-        JsonNode nameJson = startEntryJson.get("name");
-        JsonNode entryId = startEntryJson.get("entry_id");
-        if (isNotNull(nameJson) && isNotNull(entryId)) {
-            TransformComponent tComponent = tComponentCache.get(entryId.asText());
+        JsonNode nameJson = startEntryJson.get("format_name");
+        JsonNode targetId = startEntryJson.get("target_id");
+        if (isNotNull(nameJson) && isNotNull(targetId)) {
+            TransformComponent tComponent = tComponentCache.get(targetId.asText());
             if (tComponent != null)
                 project.getStartEntryList().add(new StartEntry(nameJson.asText(), tComponent));
             else
-                throw new RuntimeException("Invalid entry id '" + entryId.asText() + "' !");
+                throw new RuntimeException("Invalid target component id '" + targetId.asText() + "' !");
         }
     }
 
@@ -249,16 +250,19 @@ class ProjectJsonParser {
         try {
             Format format = new DataFormat("Root");
             JsonNode formatJson = formatEntryJson.get("format");
-            if (isNotNull(formatJson) && formatJson.isArray() && formatJson.size() > 0)
-                new FormatSerializer(format).readFromJson(formatJson.get(0));
-            return format.getChildren() != null && format.getChildren().size() > 0 ? format.getChildren().get(0) : null;
+            if (isNotNull(formatJson))
+                new FormatSerializer(format).readFromJson(formatJson);
+            Format newFormat = format.getChildren() != null && format.getChildren().size() > 0 ? format.getChildren().get(0) : null;
+            if (newFormat != null)
+                newFormat.setParent(null);
+            return newFormat;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    private void readTransformRuleEntry(DataTransformer dt, JsonNode transformatorJson) {
-        JsonNode transformRuleEntryListJson = transformatorJson.get("transform_rule_entry");
+    private void readTransformRuleEntry(DataTransformer dt, JsonNode transformerJson) {
+        JsonNode transformRuleEntryListJson = transformerJson.get("transform_rule_entry");
         if (isNotNull(transformRuleEntryListJson) && transformRuleEntryListJson.isArray()) {
             Iterator<JsonNode> it = transformRuleEntryListJson.getElements();
             while (it.hasNext()) {
@@ -283,18 +287,15 @@ class ProjectJsonParser {
     private TransformRule readTransformRuleFromJson(DataTransformer dt, String targetId, String targetFmtName, JsonNode transformRuleJson) {
         if (isNotNull(transformRuleJson)) {
             // get Root transform rule item
-            JsonNode transformRuleItemJson = transformRuleJson.get("transform_rule_item");
-            if (isNotNull(transformRuleItemJson)) {
-                TransformComponent tComp = tComponentCache.get(targetId);
-                if (tComp instanceof RegisterFormatComponent) {
-                    RegisterFormatComponent rc = (RegisterFormatComponent) tComp;
-                    FormatEntry fEntry = rc.getRegisteredFormatList(Direction.IN).get(targetFmtName);
-                    if (fEntry != null) {
-                        Format format = fEntry.getFormat();
-                        TransformRule rule = new TransformRule(format);
-                        readTransformRuleItemFromJson(rule, transformRuleItemJson, null);
-                        return rule;
-                    }
+            TransformComponent tComp = tComponentCache.get(targetId);
+            if (tComp instanceof RegisterFormatComponent) {
+                RegisterFormatComponent rc = (RegisterFormatComponent) tComp;
+                FormatEntry fEntry = rc.getRegisteredFormatList(Direction.IN).get(targetFmtName);
+                if (fEntry != null) {
+                    Format format = fEntry.getFormat();
+                    TransformRule rule = new TransformRule(format);
+                    readTransformRuleItemFromJson(rule, transformRuleJson.get("transform_rule_item"), format.getName());
+                    return rule;
                 }
             }
         }
@@ -321,13 +322,29 @@ class ProjectJsonParser {
                             throw new RuntimeException(ex);
                         }
                     }
-                    JsonNode arrayPath = ti.get("for_each_path");
-                    if (isNotNull(arrayPath)) {
-                        ritem.setForEachPath(arrayPath.asText());
+                    JsonNode foreachArray = ti.get("for_each");
+                    if (isNotNull(foreachArray) && foreachArray.isArray()) {
+                        readTransformForeachList(ritem, foreachArray);
                     }
                     readTransformRuleItemFromJson(rule, ti, formatName);
                 }
             }
+        }
+    }
+
+    private void readTransformForeachList(TransformRuleItem ritem, JsonNode foreachArray) {
+        Iterator<JsonNode> foreachIt = foreachArray.getElements();
+        while (foreachIt.hasNext()) {
+            JsonNode foreachNode = foreachIt.next();
+            JsonNode value = foreachNode.get("source_path");
+            String sourcePath = isNotNull(value) ? value.asText().trim() : "";
+            value = foreachNode.get("short_source_path");
+            String shortSourcePath = isNotNull(value) ? value.asText().trim() : "";
+            value = foreachNode.get("index_name");
+            String indexName = isNotNull(value) ? value.asText().trim() : "";
+            value = foreachNode.get("index_value");
+            String indexValue = isNotNull(value) ? value.asText().trim() : "";
+            ritem.addTransformForeach(new TransformForeach(sourcePath, shortSourcePath, indexName, Integer.parseInt(indexValue)));
         }
     }
 }

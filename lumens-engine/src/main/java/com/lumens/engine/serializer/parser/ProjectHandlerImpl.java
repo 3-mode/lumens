@@ -46,9 +46,9 @@ public class ProjectHandlerImpl implements ProjectHandler {
     }
     // Project
     private ReadStatus status = ReadStatus.NONE;
-    private TransformProject project;
-    private Map<String, TransformComponent> tComponentCache = new HashMap<>();
-    private Map<String, List<String>> targetList = new HashMap<>();
+    private final TransformProject project;
+    private final Map<String, TransformComponent> tComponentCache = new HashMap<>();
+    private final Map<String, List<String>> targetList = new HashMap<>();
     private TransformComponent tc;
     // Format
     private FormatHandler formatHandler;

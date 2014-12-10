@@ -28,7 +28,7 @@ public class TransformRuleEntry {
     }
 
     public TransformRuleEntry(String sourceId, String sourceFmtName, String targetId, String targetFmtName, TransformRule rule) {
-        this(sourceId + "--->" + targetId, sourceId, sourceFmtName, targetId, targetFmtName, rule);
+        this(String.format("%s:%s--->%s:%s", sourceId, sourceFmtName, targetId, targetFmtName), sourceId, sourceFmtName, targetId, targetFmtName, rule);
     }
 
     public String getName() {

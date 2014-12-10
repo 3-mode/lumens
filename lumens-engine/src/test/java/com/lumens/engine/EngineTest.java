@@ -262,7 +262,7 @@ public class EngineTest extends Assert implements SoapConstants {
         return newProject;
     }
 
-    public InputStream getResourceAsByteArrayInputStream(String url) throws IOException {
+    public static InputStream getResourceAsByteArrayInputStream(String url) throws IOException {
         try (InputStream in = EngineTest.class.getResourceAsStream(url)) {
             return new ByteArrayInputStream(IOUtils.toByteArray(in));
         }
