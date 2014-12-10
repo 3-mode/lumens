@@ -31,7 +31,7 @@ public class TextClient {
     }
 
     public List<Element> read(Element elem) {
-        // TODO test git adasdflkajsd;klaj;sdf
+        // TODO test hello world 2121212
         List<Element> result = new ArrayList();
         Format fmt = elem.getFormat();
         String encoding = elem.getChild(TextConstants.ENCODING).getValue().toString();
