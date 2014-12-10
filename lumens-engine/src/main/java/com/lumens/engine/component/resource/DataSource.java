@@ -16,7 +16,7 @@ import com.lumens.engine.component.RegisterFormatComponent;
 import com.lumens.engine.Resource;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.ExecuteContext;
-import com.lumens.engine.run.LastResultHandler;
+import com.lumens.engine.run.DataSourceResultHandler;
 import com.lumens.engine.run.ResultHandler;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
@@ -95,40 +95,49 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
         try {
             String targetFmtName = context.getTargetFormatName();
             FormatEntry entry = registerOUTFormatList.get(targetFmtName);
-            Format targetFormat = entry != null ? entry.getFormat() : null;
-            DataContext dataCtx = null;
-            List<Element> inputDataList = context.getInput();
-            Operation operation = connector.getOperation();
-
-            // TODO Support chunk
             List<ExecuteContext> exList = new ArrayList<>();
             List<Element> result = new ArrayList<>();
-            OperationResult opRet = operation.execute(inputDataList, targetFormat);
-            if (opRet != null && opRet.hasResult()) {
+            DataContext dataCtx = null;
+            OperationResult opRet = null;
+            if (context instanceof DataContext) {
+                if (this != context.getTargetComponent())
+                    throw new RuntimeException(String.format("Fatal logical error with target component '%s'", context.getTargetComponent().getName()));
+                opRet = ((DataContext) context).getResult();
+                context = context.getParentContext();
+            } else {
+                Format targetFormat = entry != null ? entry.getFormat() : null;
+                List<Element> inputDataList = context.getInput();
+                Operation operation = connector.getOperation();
+                opRet = operation.execute(inputDataList, targetFormat);
+            }
 
-                if (opRet.hasResult())
-                    result.addAll(opRet.getResult());
-                if (opRet.hasResult())
+            if (opRet != null && opRet.hasResult()) {
+                result.addAll(opRet.getResult());
+                if (opRet.hasResult()) {
+                    // Cache the next chunk of current data source
                     dataCtx = new DataContext(context, opRet);
+                } else {
+                    // If dataCtx is null then need to return to parent node not return to sibling 
+                    // because datasource can be link to multiple destination
+                    dataCtx = context.getParentDataContext();
+                }
 
                 if (!result.isEmpty() && this.hasTarget()) {
                     for (TransformComponent target : this.getTargetList().values()) {
-                        if (!result.isEmpty() && entry != null && target.accept(entry.getName())) {
-                            TransformExecuteContext nextCtx = new TransformExecuteContext(dataCtx, result, target, entry.getName(), context.getResultHandlers());
-                            if (dataCtx != null)
-                                dataCtx.addChildContext(nextCtx);
-                            exList.add(nextCtx);
-                        }
+                        if (!result.isEmpty() && entry != null && target.accept(entry.getName()))
+                            exList.add(new TransformExecuteContext(dataCtx, result, target, entry.getName(), context.getResultHandlers()));
                     }
                 }
             }
 
             if (exList.isEmpty()) {
-                // TODO return to parent context to handle next chunk
+                // If dataCtx is not null, continue to handle current data source return data chunks
+                if (dataCtx != null)
+                    exList.add(dataCtx);
             }
 
             for (ResultHandler handler : context.getResultHandlers())
-                if (!(handler instanceof LastResultHandler))
+                if (handler instanceof DataSourceResultHandler)
                     handler.process(this, targetFmtName, result);
 
             return exList;

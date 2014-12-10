@@ -3,6 +3,7 @@
  */
 package com.lumens.engine;
 
+import com.lumens.engine.component.resource.DataContext;
 import com.lumens.engine.run.ResultHandler;
 import com.lumens.model.Element;
 import java.util.ArrayList;
@@ -63,22 +64,15 @@ public class TransformExecuteContext implements ExecuteContext {
     }
 
     @Override
-    public void addChildContext(ExecuteContext child) {
-        this.children.add(child);
-    }
-
-    @Override
-    public void removeChildContext(ExecuteContext child) {
-        this.children.remove(child);
-    }
-
-    @Override
-    public List<ExecuteContext> getChildrenContext() {
-        return children;
-    }
-
-    @Override
     public ExecuteContext getParentContext() {
         return parentCtx;
+    }
+
+    @Override
+    public DataContext getParentDataContext() {
+        ExecuteContext parent = this;
+        while (parent != null && !(parent instanceof DataContext))
+            parent = parent.getParentContext();
+        return parent != null && parent instanceof DataContext ? (DataContext) parent : null;
     }
 }

@@ -13,6 +13,7 @@ import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.run.LastResultHandler;
 import com.lumens.engine.run.ResultHandler;
+import com.lumens.engine.run.TransformerResultHandler;
 import com.lumens.model.Element;
 import com.lumens.processor.Processor;
 import com.lumens.processor.transform.TransformMapper;
@@ -92,14 +93,11 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
 
             if (!results.isEmpty() && this.hasTarget()) {
                 for (TransformComponent target : this.getTargetList().values())
-                    if (!result.isEmpty() && target.accept(rule.getTargetFormatName())) {
-                        TransformExecuteContext nextCtx = new TransformExecuteContext(context, results, target, rule.getTargetFormatName(), context.getResultHandlers());
-                        context.addChildContext(nextCtx);
-                        exList.add(nextCtx);
-                    }
+                    if (!result.isEmpty() && target.accept(rule.getTargetFormatName()))
+                        exList.add(new TransformExecuteContext(context, results, target, rule.getTargetFormatName(), context.getResultHandlers()));
             }
             for (ResultHandler handler : context.getResultHandlers())
-                if (!(handler instanceof LastResultHandler))
+                if (handler instanceof TransformerResultHandler)
                     handler.process(this, targetFmtName, results);
         }
         return exList;

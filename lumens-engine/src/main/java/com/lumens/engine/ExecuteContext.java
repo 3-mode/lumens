@@ -3,6 +3,7 @@
  */
 package com.lumens.engine;
 
+import com.lumens.engine.component.resource.DataContext;
 import com.lumens.engine.run.ResultHandler;
 import com.lumens.model.Element;
 import java.util.List;
@@ -21,11 +22,7 @@ public interface ExecuteContext {
 
     public TransformComponent getTargetComponent();
 
-    public void addChildContext(ExecuteContext child);
-
-    public void removeChildContext(ExecuteContext child);
-
-    public List<ExecuteContext> getChildrenContext();
-
     public ExecuteContext getParentContext();
+
+    public DataContext getParentDataContext();
 }
