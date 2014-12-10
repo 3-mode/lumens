@@ -7,6 +7,7 @@ import com.lumens.io.JsonSerializer;
 import com.lumens.io.StringUTF8Writer;
 import com.lumens.io.XmlSerializer;
 import com.lumens.model.Format;
+import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformRule;
 import com.lumens.processor.transform.TransformRuleItem;
 import com.lumens.processor.transform.serializer.parser.TransformRuleHandlerImpl;
@@ -134,9 +135,9 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
         if (format != null)
             jGenerator.writeStringField("format_name", format.getName());
 
-        String forEachPath = ruleItem.getForEachPath();
-        if (forEachPath != null)
-            jGenerator.writeStringField("for_each_path", forEachPath);
+        List<TransformForeach> foreachList = ruleItem.getTransformForeach();
+        if (foreachList != null && !foreachList.isEmpty())
+            writeTransformForeachToJson(jGenerator, foreachList, false);
         String script = ruleItem.getScriptString();
         if (script != null)
             jGenerator.writeStringField("script", script);
@@ -150,6 +151,19 @@ public class TransformRuleSerializer implements XmlSerializer, JsonSerializer {
             jGenerator.writeEndObject();
             jGenerator.writeEndArray();
         }
+    }
+
+    private void writeTransformForeachToJson(JsonGenerator jGenerator, List<TransformForeach> foreachList, boolean b) throws IOException {
+        jGenerator.writeArrayFieldStart("for_each");
+        for (TransformForeach foreach : foreachList) {
+            jGenerator.writeStartObject();
+            jGenerator.writeStringField("source_path", foreach.getSourcePath());
+            jGenerator.writeStringField("short_source_path", foreach.getShortSourcePath());
+            jGenerator.writeStringField("index_name", foreach.getIndexName());
+            jGenerator.writeStringField("index_value", Integer.toString(foreach.getIndexValue()));
+            jGenerator.writeEndObject();
+        }
+        jGenerator.writeEndArray();
     }
 
     @Override
