@@ -64,22 +64,34 @@ public class TextFormatBuilder implements FormatBuilder{
                 rootFmt.setProperty(TextConstants.LINEDELIMITER, new Value(propList.get(TextConstants.LINEDELIMITER).getString()));
             if (propList.containsKey(TextConstants.FILEDELIMITER))
                 rootFmt.setProperty(TextConstants.FILEDELIMITER, new Value(propList.get(TextConstants.FILEDELIMITER).getString()));            
-            Format fields = rootFmt.addChild(TextConstants.FORMAT_FIELDS, Form.STRUCT);            
-            getFormat(fields, null, direction);            
+                      
+            getFormat(rootFmt, null, direction);            
         }
         
         return fmtList;
     }
 
     @Override
-    public Format getFormat(Format format, String path, Direction direction){
+    public Format getFormat(Format format, String path, Direction direction) {
         if( format.getName().equalsIgnoreCase(TextConstants.FORMAT_FORMAT)){
             Iterator itor = schemaRoot.elementIterator();
-            Format fields = format.getChild(TextConstants.FORMAT_FIELDS);
+            Element elemFields = (Element)itor.next();        
+            
+            // Deal with fields node
+            Format fields;
+            if( elemFields.getName().equalsIgnoreCase(TextConstants.FORMAT_FIELDS) ){ 
+                fields = format.addChild(TextConstants.FORMAT_FIELDS, Form.STRUCT);
+            }else
+            {
+                return null;
+            }
+            
+            itor = elemFields.elementIterator();
             while( itor.hasNext() ){
                 Element column = (Element)itor.next();
                 String elemName = column.getName();
-                if( elemName.equalsIgnoreCase(TextConstants.FORMAT_FIELDS) ){                    
+                if( elemName.equalsIgnoreCase(TextConstants.FORMAT_FIELD) ){    
+                    format.addChild(TextConstants.FORMAT_FIELD, Form.STRUCT);  
                     Iterator attrItor = column.attributeIterator();
                     Format field = null;
                     

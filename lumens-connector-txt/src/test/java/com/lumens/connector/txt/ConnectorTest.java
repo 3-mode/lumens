@@ -95,8 +95,8 @@ public class ConnectorTest
             elem.addChild(TextConstants.ENCODING).setValue(new Value("UTF-8"));
             List<Element> input = new ArrayList();
             input.add(elem);
-            //OperationResult result = oper.execute(input, fmt);            
-            //assertTrue("Fail to executre element", result.hasResult());
+            OperationResult result = oper.execute(input, fmt);            
+            assertTrue("Fail to executre element", result.hasResult());
         }catch(Exception ex){
             assertFalse("Fail to execute element", true);
         }
