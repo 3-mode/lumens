@@ -24,10 +24,12 @@ public class TextElementBuilder implements TextConstants{
         String delimiter = fmt.getProperty(TextConstants.FILEDELIMITER).toString();
         String[] values = line.split(delimiter);
         Element elem = new DataElement(fmt);   
-        Element fields = elem;
-        if( fmt.getChild(TextConstants.FORMAT_FIELDS) != null )
-            fields = elem.addChild(TextConstants.FORMAT_FIELDS);
-        List<Format> children = fmt.getChildren();
+        Element fields;        
+        if( fmt.getChild(TextConstants.FORMAT_FIELDS) == null )
+            throw new Exception("Missing fields");
+        
+        fields = elem.addChild(TextConstants.FORMAT_FIELDS);
+        List<Format> children = fmt.getChild(TextConstants.FORMAT_FIELDS).getChildren();
         int index = 0;
         for(Format child: children){
             fields.addChild(child.getName()).setValue(new Value(child.getType(), values[index++]));

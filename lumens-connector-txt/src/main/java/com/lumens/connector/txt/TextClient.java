@@ -36,7 +36,7 @@ public class TextClient {
         List<Element> result = new ArrayList();
         Format fmt = elem.getFormat();
         String encoding = elem.getChild(TextConstants.ENCODING).getValue().toString();
-        String path = elem.getChild(TextConstants.PATH).getValue().toString();
+        String path = elem.getChild(TextConstants.PATH).getValue().toString();        
 
         try{           
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), encoding));
