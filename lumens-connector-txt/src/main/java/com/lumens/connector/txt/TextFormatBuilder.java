@@ -76,24 +76,22 @@ public class TextFormatBuilder implements FormatBuilder {
     public Format getFormat(Format format, String path, Direction direction) {
         if (format.getName().equalsIgnoreCase(TextConstants.FORMAT_FORMAT)) {
             Iterator itor = schemaRoot.elementIterator();
-            Element elemFields = (Element) itor.next();
-
-            // Deal with fields node
-            Format fields;
-            if (elemFields.getName().equalsIgnoreCase(TextConstants.FORMAT_FIELDS)) {
-                fields = format.addChild(TextConstants.FORMAT_FIELDS, Form.STRUCT);
-            } else {
-                return null;
-            }
-
-            itor = elemFields.elementIterator();
-            while (itor.hasNext()) {
-                Element column = (Element) itor.next();
-                String elemName = column.getName();
-                if (elemName.equalsIgnoreCase(TextConstants.FORMAT_FIELD)) {
-                    format.addChild(TextConstants.FORMAT_FIELD, Form.STRUCT);
-                    Iterator attrItor = column.attributeIterator();
+            Element fieldsNode = (Element)itor.next();        
+            
+            // Deal with fields node                      
+            if( !fieldsNode.getName().equalsIgnoreCase(TextConstants.FORMAT_FIELDS) )
+                return null; 
+            
+            // Format.Fields  
+            Format fieldsFmt = format.addChild(TextConstants.FORMAT_FIELDS, Form.STRUCT);
+                        
+            Iterator fieldItor = fieldsNode.elementIterator();
+            while( fieldItor.hasNext() ){
+                Element columnNode = (Element)fieldItor.next();
+                String node = columnNode.getName();
+                if( node.equalsIgnoreCase(TextConstants.FORMAT_FIELD) ){   
                     Format field = null;
+                    Iterator attrItor = columnNode.attributeIterator();     
 
                     //Note that to be simply coding, the name in schema MUST be the first property
                     while (attrItor.hasNext()) {
@@ -102,20 +100,20 @@ public class TextFormatBuilder implements FormatBuilder {
                         String value = attr.getValue();
 
                         // create field element
-                        if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_NAME) && !value.isEmpty()) {
-                            field = new DataFormat(name, Form.FIELD);   // set type later
-                            fields.addChild(field);
-                        } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_KEY) && !value.isEmpty()) {
-                            field.setType(Type.parseString(value));
-                        } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_TYPE) && !value.isEmpty()) {
-                            field.setProperty(name, new Value(Type.parseString(value)));
-                        } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_NULLABLE) && !value.isEmpty()) {
-                            field.setProperty(name, new Value(Type.parseString(value)));
-                        } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_PATTERN) && !value.isEmpty()) {
+                        if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_NAME) && !value.isEmpty() ){
+                            field = new DataFormat(value, Form.FIELD);   // set type later
+                            fieldsFmt.addChild(field);
+                        }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_KEY) && !value.isEmpty() ){                                                      
+                            field.setProperty(name, new Value(value));                           
+                        }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_TYPE) && !value.isEmpty() ){                                                      
+                            field.setType(Type.parseString(value));                           
+                        }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_NULLABLE) && !value.isEmpty() ){                                                      
+                            field.setProperty(name, new Value(value) );                          
+                        }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_PATTERN) && !value.isEmpty() ){    
                             field.setProperty(name, new Value(value));
-                        } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_LENGTH) && !value.isEmpty()) {
-                            field.setProperty(name, new Value(Type.parseString(value)));
-                        } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_COMMENT) && !value.isEmpty()) {
+                        }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_LENGTH) && !value.isEmpty() ){    
+                            field.setProperty(name, new Value(Integer.parseInt(value)));
+                        }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_COMMENT) && !value.isEmpty() ){    
                             field.setProperty(name, new Value(value));
                         } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_PRECISION) && !value.isEmpty()) {
                             field.setProperty(name, new Value(Integer.parseInt(value)));

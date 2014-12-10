@@ -28,7 +28,7 @@ public class TextElementBuilder implements TextConstants{
         if( fmt.getChild(TextConstants.FORMAT_FIELDS) == null )
             throw new Exception("Missing fields");
         
-        fields = elem.addChild(TextConstants.FORMAT_FIELDS);
+        fields = elem.addChild(TextConstants.FORMAT_FIELDS);        
         List<Format> children = fmt.getChild(TextConstants.FORMAT_FIELDS).getChildren();
         int index = 0;
         for(Format child: children){
