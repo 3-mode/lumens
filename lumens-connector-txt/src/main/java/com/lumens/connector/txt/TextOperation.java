@@ -15,12 +15,12 @@ import java.util.List;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class TextOperation implements Operation {
-    private TextClient client;
-        
-    TextOperation(TextClient cli){
-        client = cli;        
+    private final TextClient client;
+
+    TextOperation(TextClient cli) {
+        client = cli;
     }
-    
+
     @Override
     public void begin() {
     }
@@ -32,21 +32,22 @@ public class TextOperation implements Operation {
     @Override
     public OperationResult execute(List<Element> elementList, Format fmt) throws Exception {
         List<Element> result = new ArrayList<>();
-        if( elementList != null && !elementList.isEmpty() ){
-            for(Element elem: elementList){
-                Element oper = elem.getChild(TextConstants.OPERATION);                
-                if( oper == null && oper.getValue() == null)
+        if (elementList != null && !elementList.isEmpty()) {
+            for (Element elem : elementList) {
+                Element oper = elem.getChild(TextConstants.OPERATION);
+                if (oper == null && oper.getValue() == null)
                     throw new Exception("'operation' is mandatory");
-                
+
                 String operation = oper.getValue().toString();
-                if( TextConstants.OPERATION_READ.equalsIgnoreCase(operation)){
+                if (TextConstants.OPERATION_READ.equalsIgnoreCase(operation)) {
                     result.addAll(client.read(elem));
-                }else if (TextConstants.OPERATION_APPEND.equalsIgnoreCase(operation)){
+                } else if (TextConstants.OPERATION_APPEND.equalsIgnoreCase(operation)) {
                     client.write(elem, true);
-                }if(TextConstants.OPERATION_OVERWRITE.equalsIgnoreCase(operation)){
+                }
+                if (TextConstants.OPERATION_OVERWRITE.equalsIgnoreCase(operation)) {
                     client.write(elem, false);
-                }                  
-            }            
+                }
+            }
         }
         return new TextOperationResult(result);
     }
