@@ -9,7 +9,7 @@ import com.lumens.connector.webservice.soap.SoapConstants;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.component.instrument.DataTransformer;
-import com.lumens.engine.run.ResultHandler;
+import com.lumens.engine.handler.ResultHandler;
 import com.lumens.engine.run.SingleThreadTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.model.Element;
