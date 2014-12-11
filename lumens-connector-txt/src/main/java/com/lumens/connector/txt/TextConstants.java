@@ -6,7 +6,8 @@ package com.lumens.connector.txt;
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
- */
+ */    
+
 public interface TextConstants {
     public static final String ENCODING = "encoding";
     public static final String PATH = "path";
