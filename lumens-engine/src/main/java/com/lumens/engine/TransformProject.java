@@ -19,7 +19,7 @@ import java.util.Map;
 public class TransformProject {
 
     private List<DataSource> datasourceList = new ArrayList<>();
-    private List<DataTransformer> transformatorList = new ArrayList<>();
+    private List<DataTransformer> transformerList = new ArrayList<>();
     private String name;
     private String description;
     private boolean isOpen;
@@ -40,12 +40,12 @@ public class TransformProject {
         this.datasourceList = datasourceList;
     }
 
-    public void setTransformatorList(List<DataTransformer> transformatorList) {
-        this.transformatorList = transformatorList;
+    public void setTransformatorList(List<DataTransformer> transformerList) {
+        this.transformerList = transformerList;
     }
 
-    public List<DataTransformer> getDataTransformatorList() {
-        return transformatorList;
+    public List<DataTransformer> getDataTransformerList() {
+        return transformerList;
     }
 
     public String getDescription() {
@@ -58,7 +58,7 @@ public class TransformProject {
 
     public List<StartEntry> getStartEntryList() {
         List<StartEntry> startList = new ArrayList<>();
-        for (DataTransformer dt : transformatorList) {
+        for (DataTransformer dt : transformerList) {
             // build start point list
             for (TransformRuleEntry tr : dt.getTransformRuleList())
                 if (tr.getSourceId() == null || tr.getSourceId().isEmpty() || tr.getSourceId().equals(dt.getId()))
@@ -82,7 +82,7 @@ public class TransformProject {
         try {
             for (DataSource ds : datasourceList)
                 ds.open();
-            for (DataTransformer dt : transformatorList)
+            for (DataTransformer dt : transformerList)
                 dt.open();
             isOpen = true;
         } catch (Exception ex) {
@@ -94,7 +94,7 @@ public class TransformProject {
         if (isOpen()) {
             for (DataSource ds : datasourceList)
                 ds.close();
-            for (DataTransformer dt : transformatorList)
+            for (DataTransformer dt : transformerList)
                 dt.close();
         }
         isOpen = false;

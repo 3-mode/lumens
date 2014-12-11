@@ -255,13 +255,13 @@ public interface ProjectHandler {
      *
      * @param meta attributes
      */
-    public void start_transformator(final Attributes meta) throws SAXException;
+    public void start_transformer(final Attributes meta) throws SAXException;
 
     /**
      *
      * A container element end event handling method.
      */
-    public void end_transformator() throws SAXException;
+    public void end_transformer() throws SAXException;
 
     /**
      *

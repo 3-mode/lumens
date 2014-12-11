@@ -150,7 +150,7 @@ public class ProjectJsonParser {
                         dt.setX(posJson.get("x").asInt());
                         dt.setY(posJson.get("y").asInt());
                     }
-                    project.getDataTransformatorList().add(dt);
+                    project.getDataTransformerList().add(dt);
                     tComponentCache.put(dt.getId(), dt);
                     readTransformComponentTargetList(dt, transformerJson);
                     readTransformRuleEntry(dt, transformerJson);

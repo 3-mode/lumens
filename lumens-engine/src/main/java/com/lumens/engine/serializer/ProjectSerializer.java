@@ -70,7 +70,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         jGenerator.writeStringField("name", project.getName() == null ? "" : project.getName());
         jGenerator.writeStringField("description", project.getDescription() == null ? "" : project.getDescription());
         writeDatasourceListToJson(jGenerator, project.getDatasourceList());
-        writeDataTransformerListToJson(jGenerator, project.getDataTransformatorList());
+        writeDataTransformerListToJson(jGenerator, project.getDataTransformerList());
         writeStartEntryListToJson(jGenerator, project.getStartEntryList());
         jGenerator.writeEndObject();
         jGenerator.writeEndObject();
@@ -86,7 +86,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
         .print("<![CDATA[").print(project.getDescription()).println("]]>").print(INDENT)
         .println("</description>");
         writeDatasourceListToXml(xml, project.getDatasourceList(), INDENT);
-        writeDataTransformerListToXml(xml, project.getDataTransformatorList(), INDENT);
+        writeDataTransformerListToXml(xml, project.getDataTransformerList(), INDENT);
         writeStartEntryListToXml(xml, project.getStartEntryList(), INDENT);
         xml.println("</project>");
     }

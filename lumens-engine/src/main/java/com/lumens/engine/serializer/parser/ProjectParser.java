@@ -119,8 +119,8 @@ public class ProjectParser implements ContentHandler {
             case "target":
                 handler.handle_target(attrs);
                 break;
-            case "transformator":
-                handler.start_transformator(attrs);
+            case "transformer":
+                handler.start_transformer(attrs);
                 break;
             case "datasource":
                 handler.start_datasource(attrs);
@@ -177,7 +177,7 @@ public class ProjectParser implements ContentHandler {
                 handler.end_resource_list();
                 break;
             case "transformator":
-                handler.end_transformator();
+                handler.end_transformer();
                 break;
             case "datasource":
                 handler.end_datasource();

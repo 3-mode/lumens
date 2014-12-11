@@ -124,7 +124,7 @@ public class EngineTest extends Assert implements SoapConstants {
         project.setName("The demo project");
         project.setDescription("test project description demo");
         List<DataSource> dsList = project.getDatasourceList();
-        List<DataTransformer> dtList = project.getDataTransformatorList();
+        List<DataTransformer> dtList = project.getDataTransformerList();
         dsList.add(datasource);
         dtList.add(callGetOpenFundString);
         dtList.add(callGetOpenFundString2);
@@ -135,7 +135,7 @@ public class EngineTest extends Assert implements SoapConstants {
         new ProjectSerializer(projectReaded)
         .readFromJson(getResourceAsByteArrayInputStream("/json/project.json"));
         assertTrue(projectReaded.getDatasourceList().size() == 1);
-        assertTrue(projectReaded.getDataTransformatorList().size() == 2);
+        assertTrue(projectReaded.getDataTransformerList().size() == 2);
 
         //**********************************************************************
         // Execute all start rules to drive the ws connector
@@ -213,7 +213,7 @@ public class EngineTest extends Assert implements SoapConstants {
         project.setName("demo oracle project");
         project.setDescription("It is used to query empolyee test table all records");
         List<DataSource> dsList = project.getDatasourceList();
-        List<DataTransformer> dtList = project.getDataTransformatorList();
+        List<DataTransformer> dtList = project.getDataTransformerList();
         dsList.add(datasource);
         dsList.add(ws);
         dtList.add(queryEmployeeTestTableTransformator);

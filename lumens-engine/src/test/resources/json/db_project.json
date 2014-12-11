@@ -1,0 +1,717 @@
+{
+    "project": {
+        "name": "DEMO",
+        "description": "This is a demo for oracle database transform",
+        "datasource": [
+            {
+                "id": 1415415407248,
+                "type": "type-oracle-jdbc",
+                "name": "Employee Oracle XE",
+                "description": "",
+                "target": [{
+                        "id": 1415415412544
+                    }],
+                "position": {
+                    "x": 372,
+                    "y": 185
+                },
+                "property": [
+                    {
+                        "name": "OJDBC",
+                        "type": "String",
+                        "value": "file:///C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server\\jdbc\\lib\\ojdbc6.jar"
+                    },
+                    {
+                        "name": "ConnectionURL",
+                        "type": "String",
+                        "value": "jdbc:oracle:thin:@localhost:1521:xe"
+                    },
+                    {
+                        "name": "User",
+                        "type": "String",
+                        "value": "hr"
+                    },
+                    {
+                        "name": "Password",
+                        "type": "String",
+                        "value": "hr"
+                    },
+                    {
+                        "name": "SessionAlter",
+                        "type": "String",
+                        "value": "alter session set NLS_DATE_FORMAT='yyyy-mm-dd hh:mi:ss'"
+                    },
+                    {
+                        "name": "FullLoad",
+                        "type": "Boolean"
+                    }
+                ],
+                "format_list": [
+                    {
+                        "direction": "IN",
+                        "format_entry": [
+                            {
+                                "direction": "IN",
+                                "format": {
+                                    "form": "Struct",
+                                    "name": "EMPLOYEES",
+                                    "type": "None",
+                                    "property": [
+                                        {
+                                            "name": "description",
+                                            "type": "String",
+                                            "value": "employees table. Contains 107 rows. References with departments,\njobs, job_history tables. Contains a self reference."
+                                        },
+                                        {
+                                            "name": "type",
+                                            "type": "String",
+                                            "value": "TABLE"
+                                        }
+                                    ],
+                                    "format": [
+                                        {
+                                            "form": "Field",
+                                            "name": "operation",
+                                            "type": "String"
+                                        },
+                                        {
+                                            "form": "Field",
+                                            "name": "clause",
+                                            "type": "String"
+                                        }
+                                    ]
+                                },
+                                "name": "Get Employee List"
+                            }
+                        ]
+                    },
+                    {
+                        "direction": "OUT",
+                        "format_entry": [
+                            {
+                                "direction": "OUT",
+                                "format": {
+                                    "form": "Struct",
+                                    "name": "EMPLOYEES",
+                                    "type": "None",
+                                    "property": [
+                                        {
+                                            "name": "description",
+                                            "type": "String",
+                                            "value": "employees table. Contains 107 rows. References with departments,\njobs, job_history tables. Contains a self reference."
+                                        },
+                                        {
+                                            "name": "type",
+                                            "type": "String",
+                                            "value": "TABLE"
+                                        }
+                                    ],
+                                    "format": [
+                                        {
+                                            "form": "Struct",
+                                            "name": "fields",
+                                            "type": "None",
+                                            "format": [
+                                                {
+                                                    "form": "Field",
+                                                    "name": "EMPLOYEE_ID",
+                                                    "type": "Integer",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "NUMBER"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "22"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "FIRST_NAME",
+                                                    "type": "String",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "VARCHAR2"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "200"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "LAST_NAME",
+                                                    "type": "String",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "VARCHAR2"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "25"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "EMAIL",
+                                                    "type": "String",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "VARCHAR2"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "25"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "PHONE_NUMBER",
+                                                    "type": "String",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "VARCHAR2"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "20"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "HIRE_DATE",
+                                                    "type": "Date",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "DATE"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "7"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "JOB_ID",
+                                                    "type": "String",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "VARCHAR2"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "10"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "SALARY",
+                                                    "type": "Integer",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "NUMBER"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "22"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "COMMISSION_PCT",
+                                                    "type": "Integer",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "NUMBER"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "22"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "MANAGER_ID",
+                                                    "type": "Integer",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "NUMBER"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "22"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "DEPARTMENT_ID",
+                                                    "type": "Integer",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "NUMBER"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "22"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "name": "Get Employee List"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": 1415415410512,
+                "type": "type-oracle-jdbc",
+                "name": "Employee_Test Oracle XE",
+                "description": "",
+                "target": [],
+                "position": {
+                    "x": 1141,
+                    "y": 168
+                },
+                "property": [
+                    {
+                        "name": "OJDBC",
+                        "type": "String",
+                        "value": "file:///C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server\\jdbc\\lib\\ojdbc6.jar"
+                    },
+                    {
+                        "name": "ConnectionURL",
+                        "type": "String",
+                        "value": "jdbc:oracle:thin:@localhost:1521:xe"
+                    },
+                    {
+                        "name": "User",
+                        "type": "String",
+                        "value": "hr"
+                    },
+                    {
+                        "name": "Password",
+                        "type": "String",
+                        "value": "hr"
+                    },
+                    {
+                        "name": "SessionAlter",
+                        "type": "String",
+                        "value": "alter session set NLS_DATE_FORMAT='yyyy-mm-dd hh:mi:ss'"
+                    },
+                    {
+                        "name": "FullLoad",
+                        "type": "Boolean"
+                    }
+                ],
+                "format_list": [
+                    {
+                        "direction": "IN",
+                        "format_entry": [
+                            {
+                                "direction": "IN",
+                                "format": {
+                                    "form": "Struct",
+                                    "name": "EMPLOYEES_TEST",
+                                    "type": "None",
+                                    "property": [
+                                        {
+                                            "name": "description",
+                                            "type": "String",
+                                            "value": ""
+                                        },
+                                        {
+                                            "name": "type",
+                                            "type": "String",
+                                            "value": "TABLE"
+                                        }
+                                    ],
+                                    "format": [
+                                        {
+                                            "form": "Struct",
+                                            "name": "fields",
+                                            "type": "None",
+                                            "format": [
+                                                {
+                                                    "form": "Field",
+                                                    "name": "EMPLOYEE_ID",
+                                                    "type": "Integer",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "NUMBER"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "22"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "FIRST_NAME",
+                                                    "type": "String",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "VARCHAR2"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "200"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "LAST_NAME",
+                                                    "type": "String",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "VARCHAR2"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "25"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "EMAIL",
+                                                    "type": "String",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "VARCHAR2"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "25"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "PHONE_NUMBER",
+                                                    "type": "String",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "VARCHAR2"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "20"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "HIRE_DATE",
+                                                    "type": "Date",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "DATE"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "7"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "JOB_ID",
+                                                    "type": "String",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "VARCHAR2"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "10"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "SALARY",
+                                                    "type": "Integer",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "NUMBER"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "22"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "COMMISSION_PCT",
+                                                    "type": "Integer",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "NUMBER"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "22"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "MANAGER_ID",
+                                                    "type": "Integer",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "NUMBER"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "22"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "form": "Field",
+                                                    "name": "DEPARTMENT_ID",
+                                                    "type": "Integer",
+                                                    "property": [
+                                                        {
+                                                            "name": "data_type",
+                                                            "type": "String",
+                                                            "value": "NUMBER"
+                                                        },
+                                                        {
+                                                            "name": "data_length",
+                                                            "type": "String",
+                                                            "value": "22"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "form": "Field",
+                                            "name": "operation",
+                                            "type": "String"
+                                        }
+                                    ]
+                                },
+                                "name": "Insert Employee_test"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "transformer": [
+            {
+                "id": 1415415412544,
+                "type": "type-transformator",
+                "name": "Insert Employee_test",
+                "description": "",
+                "target": [{
+                        "id": 1415415410512
+                    }],
+                "position": {
+                    "x": 740,
+                    "y": 15
+                },
+                "transform_rule_entry": [
+                    {
+                        "name": "Build Insert into Employee_test",
+                        "source_name": "",
+                        "target_name": "",
+                        "transform_rule": {
+                            "name": "EMPLOYEES_TEST",
+                            "transform_rule_item": {
+                                "format_name": "EMPLOYEES_TEST",
+                                "transform_rule_item": [
+                                    {
+                                        "format_name": "fields",
+                                        "transform_rule_item": [
+                                            {
+                                                "format_name": "EMPLOYEE_ID",
+                                                "script": "Math.round(Math.random() * 100000)"
+                                            },
+                                            {
+                                                "format_name": "FIRST_NAME",
+                                                "script": "@EMPLOYEES.fields.FIRST_NAME + new Date().toString()"
+                                            },
+                                            {
+                                                "format_name": "LAST_NAME",
+                                                "script": "@EMPLOYEES.fields.LAST_NAME"
+                                            },
+                                            {
+                                                "format_name": "EMAIL",
+                                                "script": "@EMPLOYEES.fields.EMAIL"
+                                            },
+                                            {
+                                                "format_name": "PHONE_NUMBER",
+                                                "script": "@EMPLOYEES.fields.PHONE_NUMBER"
+                                            },
+                                            {
+                                                "format_name": "HIRE_DATE",
+                                                "script": "return dateToString(new Date(), 'yyyy-MM-dd hh:mm:ss')"
+                                            },
+                                            {
+                                                "format_name": "JOB_ID",
+                                                "script": "@EMPLOYEES.fields.JOB_ID"
+                                            },
+                                            {
+                                                "format_name": "SALARY",
+                                                "script": "@EMPLOYEES.fields.SALARY"
+                                            },
+                                            {
+                                                "format_name": "COMMISSION_PCT",
+                                                "script": "@EMPLOYEES.fields.COMMISSION_PCT"
+                                            },
+                                            {
+                                                "format_name": "MANAGER_ID",
+                                                "script": "@EMPLOYEES.fields.MANAGER_ID"
+                                            },
+                                            {
+                                                "format_name": "DEPARTMENT_ID",
+                                                "script": "@EMPLOYEES.fields.DEPARTMENT_ID"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "format_name": "operation",
+                                        "script": "\"INSERT\""
+                                    }
+                                ]
+                            }
+                        },
+                        "source_id": 1415415407248,
+                        "target_id": 1415415410512,
+                        "source_format_name": "Get Employee List",
+                        "target_format_name": "Insert Employee_test",
+                        "$$hashKey": "03I"
+                    }
+                ],
+                "property": []
+            },
+            {
+                "id": 1415415418504,
+                "type": "type-transformator",
+                "name": "Query Orginal Employee",
+                "description": "",
+                "target": [{
+                        "id": 1415415407248
+                    }],
+                "position": {
+                    "x": 25,
+                    "y": 32
+                },
+                "transform_rule_entry": [
+                    {
+                        "name": "Build Employee Query",
+                        "source_name": "",
+                        "target_name": "",
+                        "transform_rule": {
+                            "name": "EMPLOYEES",
+                            "transform_rule_item": {
+                                "format_name": "EMPLOYEES",
+                                "transform_rule_item": [
+                                    {
+                                        "format_name": "operation",
+                                        "script": "\"SELECT\""
+                                    },
+                                    {
+                                        "format_name": "clause",
+                                        "script": "\"WHERE EMPLOYEE_ID = 100\""
+                                    }
+                                ]
+                            }
+                        },
+                        "source_id": "",
+                        "target_id": 1415415407248,
+                        "source_format_name": "Get Employee List",
+                        "target_format_name": "Get Employee List",
+                        "$$hashKey": "01X"
+                    }
+                ],
+                "property": []
+            }
+        ],
+        "start_entry": []
+    }
+}
