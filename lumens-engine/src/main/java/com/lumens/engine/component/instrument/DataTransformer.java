@@ -35,7 +35,7 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
     private final Map<String, List<TransformRuleEntry>> ruleFindList = new HashMap<>();
 
     public DataTransformer(String id) {
-        super("type-transformator", id);
+        super("type-transformer", id);
         processor = new TransformMapper();
     }
 

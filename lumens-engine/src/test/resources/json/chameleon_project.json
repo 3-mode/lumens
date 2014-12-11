@@ -371,7 +371,7 @@
         ],
         "transformer": [
             {
-                "type": "type-transformator",
+                "type": "type-transformer",
                 "id": "1418204871339",
                 "name": "",
                 "description": "",
@@ -534,7 +534,7 @@
                 ]
             },
             {
-                "type": "type-transformator",
+                "type": "type-transformer",
                 "id": "1418204871341",
                 "name": "",
                 "description": "",

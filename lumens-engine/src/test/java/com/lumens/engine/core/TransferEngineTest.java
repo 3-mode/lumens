@@ -25,6 +25,7 @@ import com.lumens.model.Element;
 import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformRule;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
@@ -158,8 +159,8 @@ public class TransferEngineTest {
         project.getDatasourceList().add(personDs);
         project.getDatasourceList().add(warehouseDs);
         project.getDatasourceList().add(finalDs);
-        project.getDataTransformatorList().add(person_warehouse_transformator);
-        project.getDataTransformatorList().add(final_transformator);
+        project.getDataTransformerList().add(person_warehouse_transformator);
+        project.getDataTransformerList().add(final_transformator);
 
         long start = System.currentTimeMillis();
         ResultHandler log = new DataSourceResultHandler() {
@@ -188,5 +189,12 @@ public class TransferEngineTest {
         new SingleThreadTransformExecuteJob(projectRead, Arrays.asList(log)).run();
         assertTrue(ChameleonConnector.countFinal == 151);
         System.out.println("Run readed project completed");
+    }
+
+    public void testLoadDBProject() throws Exception {
+        TransformProject projectRead = new TransformProject();
+        ProjectJsonParser preader = new ProjectJsonParser(projectRead);
+        preader.parse(EngineTest.getResourceAsByteArrayInputStream("/json/db_project.json"));
+        System.out.println("Project Loaded");
     }
 }

@@ -252,7 +252,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
     }
 
     @Override
-    public void start_transformator(final Attributes meta) throws SAXException {
+    public void start_transformer(final Attributes meta) throws SAXException {
         if (status == ReadStatus.PROJECT) {
             status = ReadStatus.DATAPSR;
             String type = meta.getValue("type");
@@ -269,9 +269,9 @@ public class ProjectHandlerImpl implements ProjectHandler {
     }
 
     @Override
-    public void end_transformator() throws SAXException {
+    public void end_transformer() throws SAXException {
         if (status == ReadStatus.DATAPSR)
-            project.getDataTransformatorList().add((DataTransformer) tc);
+            project.getDataTransformerList().add((DataTransformer) tc);
         status = ReadStatus.PROJECT;
     }
 
