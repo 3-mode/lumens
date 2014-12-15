@@ -53,7 +53,9 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         connector.setPropertyList(props);
         connector.open();
         Map<String, Format> consumes = connector.getFormatList(Direction.IN);
-        Format searchService = connector.getFormat(consumes.get("Search"), "Search.Search.assetSearchCriteria.Filter.Expression.ExpressionField", Direction.IN);
+        Format searchService = connector.getFormat(consumes.get("Search"), "Search.assetSearchCriteria.Filter.Expression.ExpressionField", Direction.IN);
+        Format filter = searchService.getChildByPath("Search.assetSearchCriteria.Filter");
+        assertEquals(filter.getName(), "Filter");
         Map<String, Format> produces = connector.getFormatList(Direction.OUT);
         Format SearchResultDisplayName = connector.getFormat(produces.get("Search"), "Search.SearchResponse.SearchResult.Asset.DisplayName", Direction.OUT);
         TransformRule rule = new TransformRule(searchService);

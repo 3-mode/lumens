@@ -162,9 +162,6 @@ public class SoapFormatBuilder implements FormatBuilder, SoapConstants, XMLEntit
     public Format getFormat(Format format, String path, Direction direction) {
         int soapMessageType = direction == Direction.IN ? SOAPMESSAGE_IN : SOAPMESSAGE_OUT;
         Path accessPath = new AccessPath(path);
-        if (!format.getName().equals(accessPath.token(0).toString()))
-            throw new RuntimeException(String.format("Wrong path '%s'", path));
-        accessPath = accessPath.removeLeft(1);
         int count = accessPath.tokenCount();
         Format child = format.getChildByPath(accessPath);
         if (child == null || path.endsWith(child.getName())) {
