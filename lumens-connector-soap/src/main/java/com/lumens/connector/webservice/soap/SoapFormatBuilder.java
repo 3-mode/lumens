@@ -160,10 +160,7 @@ public class SoapFormatBuilder implements FormatBuilder, SoapConstants, XMLEntit
 
     @Override
     public Format getFormat(Format format, String path, Direction direction) {
-        int soapMessageType = SOAPMESSAGE_IN;
-        if (direction == Direction.OUT) {
-            soapMessageType = SOAPMESSAGE_OUT;
-        }
+        int soapMessageType = direction == Direction.IN ? SOAPMESSAGE_IN : SOAPMESSAGE_OUT;
         Path accessPath = new AccessPath(path);
         int count = accessPath.tokenCount();
         Format child = format.getChildByPath(accessPath);
@@ -445,7 +442,7 @@ public class SoapFormatBuilder implements FormatBuilder, SoapConstants, XMLEntit
             XMLInputSource xmlInputSource = new XMLInputSource(is.getPublicId(),
                                                                is.getSystemId(),
                                                                xmlri.
-            getBaseSystemId());
+                                                               getBaseSystemId());
             if (is.getCharacterStream() != null) {
                 xmlInputSource.setCharacterStream(is.getCharacterStream());
             }
@@ -492,7 +489,7 @@ public class SoapFormatBuilder implements FormatBuilder, SoapConstants, XMLEntit
                     Format attr = format.addChild(attrName, Form.FIELD, type);
                     attr.setProperty(SOAPATTRIBUTE, new Value(true));
                     attr.setProperty(TARGETNAMESPACE, new Value(attrDecl.
-                    getNamespace()));
+                                     getNamespace()));
                 }
             }
         }

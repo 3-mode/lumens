@@ -51,11 +51,11 @@ public class TransformRuleItem {
         this.foreachList.add(foreach);
     }
 
-    public void removeTransformForeach(String path) {
+    public void removeTransformForeach(String fullPath) {
         Iterator<TransformForeach> it = foreachList.iterator();
         while (it.hasNext()) {
             TransformForeach foreach = it.next();
-            if (foreach.hasSourcePath() && foreach.getSourcePath().equals(path))
+            if (foreach.hasSourcePath() && foreach.getSourcePath().equals(fullPath))
                 it.remove();
         }
     }

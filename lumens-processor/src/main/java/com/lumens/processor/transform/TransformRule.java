@@ -28,8 +28,8 @@ public class TransformRule implements Rule {
         return root;
     }
 
-    public TransformRuleItem getRuleItem(String path) {
-        Path fmtPath = new AccessPath(path);
+    public TransformRuleItem getRuleItem(String fullPath) {
+        Path fmtPath = new AccessPath(fullPath);
         if (!root.getFormat().getName().equals(fmtPath.token(0).toString()))
             throw new RuntimeException(String.format("Root format name '%s' doesn't match with root '%s' from path",
                                                      root.getFormat().getName(), fmtPath.token(0).toString()));

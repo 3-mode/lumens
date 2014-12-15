@@ -54,12 +54,14 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         connector.open();
         Map<String, Format> consumes = connector.getFormatList(Direction.IN);
         Format searchService = connector.getFormat(consumes.get("Search"), "Search.assetSearchCriteria.Filter.Expression.ExpressionField", Direction.IN);
+        Format filter = searchService.getChildByPath("Search.assetSearchCriteria.Filter");
+        assertEquals(filter.getName(), "Filter");
         Map<String, Format> produces = connector.getFormatList(Direction.OUT);
-        Format SearchResultDisplayName = connector.getFormat(produces.get("Search"), "SearchResponse.SearchResult.Asset.DisplayName", Direction.OUT);
+        Format SearchResultDisplayName = connector.getFormat(produces.get("Search"), "Search.SearchResponse.SearchResult.Asset.DisplayName", Direction.OUT);
         TransformRule rule = new TransformRule(searchService);
-        rule.getRuleItem("Search.assetSearchCriteria.Filter.Expression.ExpressionField").setScript("\"displayName\"");
-        rule.getRuleItem("Search.assetSearchCriteria.Filter.Expression.ExpressionOperator").setScript("\"EqualTo\"");
-        rule.getRuleItem("Search.assetSearchCriteria.Filter.Expression.ExpressionValue").setScript("\"sparta\\\\am01\"");
+        rule.getRuleItem("Search.Search.assetSearchCriteria.Filter.Expression.ExpressionField").setScript("\"displayName\"");
+        rule.getRuleItem("Search.Search.assetSearchCriteria.Filter.Expression.ExpressionOperator").setScript("\"EqualTo\"");
+        rule.getRuleItem("Search.Search.assetSearchCriteria.Filter.Expression.ExpressionValue").setScript("\"sparta\\\\am01\"");
         Processor transformProcessor = new TransformMapper();
         List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
         new ElementSerializer(result.get(0), true).writeToXml(System.out);
