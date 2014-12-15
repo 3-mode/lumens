@@ -28,20 +28,27 @@ public class TransformMapper extends AbstractProcessor {
     public Object execute(Rule rule, List<Element> input) {
         if (rule instanceof TransformRule) {
             TransformRule transformRule = (TransformRule) rule;
+            TransformRuleItem rootRuleItem = transformRule.getRootRuleItem();
             List<Element> results = new ArrayList<>();
-            for (Element rootSourceElement : input) {
-                TransformRuleItem rootRuleItem = transformRule.getRootRuleItem();
-                List<TransformForeach> rootForeachList = rootRuleItem.getTransformForeach();
-                if (!rootForeachList.isEmpty()) {
-                    int foreachLevelDepth = rootForeachList.size() - 1;
-                    checkForeachDepthCount(foreachLevelDepth);
-                    MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
-                    processRootForeachList(ctx, results, rootForeachList, 0, foreachLevelDepth);
-                } else {
-                    MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
-                    Element result = processTransformItem(null, ctx);
-                    if (result != null)
-                        results.add(result);
+            if (input == null) {
+                MapperContext ctx = new MapperContext(rootRuleItem, null);
+                Element result = processTransformItem(null, ctx);
+                if (result != null)
+                    results.add(result);
+            } else {
+                for (Element rootSourceElement : input) {
+                    List<TransformForeach> rootForeachList = rootRuleItem.getTransformForeach();
+                    if (!rootForeachList.isEmpty()) {
+                        int foreachLevelDepth = rootForeachList.size() - 1;
+                        checkForeachDepthCount(foreachLevelDepth);
+                        MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
+                        processRootForeachList(ctx, results, rootForeachList, 0, foreachLevelDepth);
+                    } else {
+                        MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
+                        Element result = processTransformItem(null, ctx);
+                        if (result != null)
+                            results.add(result);
+                    }
                 }
             }
             return results;
