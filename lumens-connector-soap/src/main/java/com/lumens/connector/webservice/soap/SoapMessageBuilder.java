@@ -47,7 +47,7 @@ public class SoapMessageBuilder implements SoapConstants {
             for (Element message : children) {
                 Format messageFmt = message.getFormat();
                 Integer isMessage = messageFmt.getProperty(SOAPMESSAGE).getInt();
-                if (isMessage != null && isMessage.intValue() == SOAPMESSAGE_IN) {
+                if (isMessage != null && isMessage == SOAPMESSAGE_IN) {
                     SOAPEnvelope envelope = soapFactory.createSOAPEnvelope();
                     SOAPBody body = soapFactory.createSOAPBody(envelope);
                     String targetNamespace = messageFmt.getProperty(TARGETNAMESPACE).getString();
