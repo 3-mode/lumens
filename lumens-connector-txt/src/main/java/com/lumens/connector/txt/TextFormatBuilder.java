@@ -61,11 +61,14 @@ public class TextFormatBuilder implements FormatBuilder {
             Format rootFmt = new DataFormat(rootName, Format.Form.STRUCT);
             fmtList.put(rootName, rootFmt);
             rootFmt.setProperty(TextConstants.ENCODING, new Value(encoding));
-            if (propList.containsKey(TextConstants.LINEDELIMITER))
-                rootFmt.setProperty(TextConstants.LINEDELIMITER, new Value(propList.get(TextConstants.LINEDELIMITER).getString()));
-            if (propList.containsKey(TextConstants.FILEDELIMITER))
-                rootFmt.setProperty(TextConstants.FILEDELIMITER, new Value(propList.get(TextConstants.FILEDELIMITER).getString()));
-
+            rootFmt.addChild(TextConstants.LINEDELIMITER, Form.FIELD);          
+            rootFmt.addChild(TextConstants.FILEDELIMITER, Form.FIELD);
+            rootFmt.addChild(TextConstants.ESCAPECHAR, Form.FIELD);
+            rootFmt.addChild(TextConstants.SCHEMAPATH, Form.FIELD);
+            rootFmt.addChild(TextConstants.MAXLINE, Form.FIELD);
+            rootFmt.addChild(TextConstants.OPERATION, Form.FIELD);     
+            rootFmt.addChild(TextConstants.PATH, Form.FIELD);     
+            rootFmt.addChild(TextConstants.ENCODING, Form.FIELD);                
             getFormat(rootFmt, null, direction);
         }
 

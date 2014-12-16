@@ -36,7 +36,7 @@ public class TextConnector implements Connector {
     @Override
     public void open() {
         if (textClient == null) {
-            textClient = new TextClient();
+            textClient = new TextClient(propList);
             formatBuilder = new TextFormatBuilder(propList);
             try {
                 formatBuilder.initalize();

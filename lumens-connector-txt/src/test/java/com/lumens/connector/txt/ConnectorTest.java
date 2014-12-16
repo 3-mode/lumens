@@ -33,15 +33,16 @@ import static org.junit.Assert.assertFalse;
  */
 public class ConnectorTest 
 {
-    private String path = getClass().getResource("/delimited/incsv.csv").getFile();
+    private String path2read = getClass().getResource("/delimited/incsv.csv").getFile();
+    private String path2write = getClass().getResource("/delimited").getPath() + "/outcsv.csv";
     private String schemaPath = getClass().getResource("/delimited/incsv_schema.xml").getFile();
     
     @Before
     public void testConnection() {
         try{
-            File file = new File(path);
+            File file = new File(path2read);
             if( file.isFile() && file.exists() ){
-                InputStreamReader reader = new InputStreamReader(new FileInputStream(path), "UTF-8");
+                InputStreamReader reader = new InputStreamReader(new FileInputStream(path2read), "UTF-8");
                 BufferedReader bufReader = new BufferedReader(reader);
                 String lineTxt = null;
                 while((lineTxt = bufReader.readLine()) != null ){
@@ -66,6 +67,7 @@ public class ConnectorTest
         props.put(TextConstants.SCHEMAPATH, new Value(schemaPath));
         props.put(TextConstants.MAXLINE, new Value(1000));
         props.put(TextConstants.ENCODING, new Value("UTF-8"));
+        props.put(TextConstants.LINEDELIMITER, new Value("\n"));        
         txt.setPropertyList(props);
         txt.open();
         
@@ -86,17 +88,28 @@ public class ConnectorTest
                 assertFalse("Fail to get format", true);
             }
         
-            fmt.addChild(TextConstants.OPERATION, Form.FIELD);            
-            fmt.addChild(TextConstants.PATH, Form.FIELD);
-            fmt.addChild(TextConstants.ENCODING, Form.FIELD);
-            Element elem = new DataElement(fmt);
-            elem.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));            
-            elem.addChild(TextConstants.PATH).setValue(new Value(path));
-            elem.addChild(TextConstants.ENCODING).setValue(new Value("UTF-8"));
+            // Element read
+            Element elemRead = new DataElement(fmt);
+            elemRead.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));            
+            elemRead.addChild(TextConstants.PATH).setValue(new Value(path2read));
             List<Element> input = new ArrayList();
-            input.add(elem);
+            input.add(elemRead);
             OperationResult result = oper.execute(input, fmt);            
-            assertTrue("Fail to executre element", result.hasResult());
+            assertTrue("Fail to executre element read", result.hasResult());
+            
+            // Element overwrite
+            Element elemWrite = new DataElement(fmt);
+            Element fields = elemWrite.addChild(TextConstants.FORMAT_FIELDS); 
+            
+            elemWrite.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_OVERWRITE));                        
+            elemWrite.addChild(TextConstants.PATH).setValue(new Value(path2write));
+            elemWrite.addChild(TextConstants.ENCODING).setValue(new Value("UTF-8"));
+            elemWrite.addChild(TextConstants.FILEDELIMITER).setValue(new Value(","));
+            elemWrite.addChild(TextConstants.LINEDELIMITER).setValue(new Value("\n"));
+            List<Element> output = new ArrayList();
+            output.add(elemWrite);
+            result = oper.execute(output, fmt);            
+            assertTrue("Fail to executre element write", result.hasResult());
         }catch(Exception ex){
             assertFalse("Fail to execute element", true);
         }
