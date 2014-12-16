@@ -17,11 +17,10 @@ import java.util.List;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class TextElementBuilder implements TextConstants{
-    public static Element buildElement(Format fmt, String line) throws Exception {
+    public static Element buildElement(Format fmt, String line, String delimiter) throws Exception {
         if( fmt == null || fmt.getChildren() == null || line == null )
             return null;
-       
-        String delimiter = fmt.getProperty(TextConstants.FILEDELIMITER).toString();
+               
         String[] values = line.split(delimiter);
         Element elem = new DataElement(fmt);   
         Element fields;        
