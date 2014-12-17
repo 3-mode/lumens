@@ -2,11 +2,9 @@
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
-Lumens.controllers
-.controller("DesignViewCtrl", function (
-$scope, $route, $http, $compile,
+Lumens.controllers.controller("DesignViewCtrl", function ($scope, $route, $http, $compile,
 DesignNavMenu, SuccessTemplate, WarningTemplate, ErrorTemplate, PropFormTemplate, TransformListTemplate,
-DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
+DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
     Lumens.system.switchTo(Lumens.system.NormalView);
     // Set the default page view as dashboard view
     var i18n = $scope.i18n = Lumens.i18n;
@@ -399,7 +397,8 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
             $scope.currentScriptNode.setScript(script);
     }
     var projectOperator = $scope.projectOperator;
-    if ($scope.currentComponent.type === "type-transformator") {
+    if ($scope.currentComponent.type === "type-transformer") {
+
         function buildTransformRuleEntry(ruleRegName, ruleEntry, isNew) {
             if (isNew) {
                 return {
@@ -441,12 +440,12 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
             });
             return {root: rootRuleItem, last: currentRuleItem};
         }
-        var sourceComponentName, targetComponentName;
+        var sourceComponentID, targetComponentID;
         if ($scope.currentUIComponent.hasFrom())
-            sourceComponentName = $scope.currentUIComponent.getFrom(0).getCompData().name;
+            sourceComponentID = $scope.currentUIComponent.getFrom(0).getId();
         if ($scope.currentUIComponent.hasTo())
-            targetComponentName = $scope.currentUIComponent.getTo(0).getCompData().name;
-        LumensLog.log("transform source:" + sourceComponentName + ", target:" + targetComponentName);
+            targetComponentID = $scope.currentUIComponent.getTo(0).getId();
+        LumensLog.log("transform source:" + sourceComponentID + ", target:" + targetComponentID);
         $element.find("div[rule-entity]").droppable({
             greedy: true,
             accept: ".lumens-tree-node",
@@ -484,16 +483,20 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, FormatList) {
 
         $scope.transformRuleEntity = buildTransformRuleEntry($scope.ruleRegName, $scope.currentUIComponent.getTransformRuleEntry(), false);
 
-        if (sourceComponentName) {
-            FormatList.getIN({project_id: projectOperator.get().projectId, component_name: sourceComponentName}, function (result) {
-                $scope.sourceFormatList = result.content.format_list;
+        if (sourceComponentID) {
+            FormatList.getOUT({project_id: projectOperator.get().projectId, component_id: sourceComponentID}, function (result) {
+                $scope.sourceFormatList = {
+                    project_id: projectOperator.get().projectId, component_id: targetComponentID, direction: 'OUT', format_entity: result.content.format_entity
+                };
                 $scope.displaySourceFormatList = $scope.sourceFormatList;
                 $scope.onCommand("id_format_reg_filter_btn", "left");
             });
         }
-        if (targetComponentName) {
-            FormatList.getIN({project_id: projectOperator.get().projectId, component_name: targetComponentName}, function (result) {
-                $scope.targetFormatList = result.content.format_list;
+        if (targetComponentID) {
+            FormatList.getIN({project_id: projectOperator.get().projectId, component_id: targetComponentID}, function (result) {
+                $scope.targetFormatList = {
+                    project_id: projectOperator.get().projectId, component_id: targetComponentID, direction: 'IN', format_entity: result.content.format_entity
+                };
                 $scope.displayTargetFormatList = $scope.targetFormatList;
                 $scope.onCommand("id_format_reg_filter_btn", "right");
             });

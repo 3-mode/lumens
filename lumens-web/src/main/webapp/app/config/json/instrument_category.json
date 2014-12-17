@@ -1,12 +1,23 @@
 {
     "items": [
         {
-            "name": "Transformator",
-            "type": "type-transformator",
-            "class_type": "transformator",
+            "name": "transformer",
+            "type": "type-transformer",
+            "class_type": "transformer",
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png",
             "html_url": "app/config/html/transf.html",
+            "i18n": {
+                "Name": "Name",
+                "Description": "Description"
+            }
+        },
+        {
+            "name": "Bus",
+            "type": "type-bus",
+            "class_type": "bus",
+            "item_icon_url": "app/css/img/Transform24x24.png",
+            "instance_icon_url": "app/css/img/Transform64x64.png",
             "i18n": {
                 "Name": "Name",
                 "Description": "Description"

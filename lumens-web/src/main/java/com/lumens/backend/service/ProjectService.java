@@ -8,8 +8,8 @@ import com.lumens.connector.Direction;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.resource.DataSource;
-import com.lumens.engine.run.LastResultHandler;
-import com.lumens.engine.run.ResultHandler;
+import com.lumens.engine.handler.LastResultHandler;
+import com.lumens.engine.handler.ResultHandler;
 import com.lumens.engine.run.SingleThreadTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.io.JsonUtility;
@@ -294,12 +294,12 @@ public class ProjectService implements ServiceConstants {
     @Path("{projectID}/format")
     @Produces("application/json")
     public Response getFormatFromComponent(@PathParam("projectID") long projectID,
-                                           @QueryParam("component_name") String componentName,
+                                           @QueryParam("component_id") String componentId,
                                            @QueryParam("format_name") String formatName,
                                            @QueryParam("format_path") String formatPath,
                                            @QueryParam("direction") String direction,
                                            @Context HttpServletRequest req) {
-        if (componentName != null && direction != null) {
+        if (componentId != null && direction != null) {
             Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
             if (attr != null) {
                 Pair<Long, TransformProject> pair = (Pair<Long, TransformProject>) attr;
@@ -309,65 +309,55 @@ public class ProjectService implements ServiceConstants {
                 // To find the datasource format
                 // TODO handle the uncode componentName
                 try {
-                    if (formatName != null) {
-
-                        for (DataSource ds : project.getDatasourceList()) {
-                            if (ds.getName().equals(componentName)) {
-                                Direction direct = Direction.valueOf(direction);
-                                Map<String, Format> formats = ds.getFormatList(direct);
-                                Format requestedFormat = ds.getConnector().getFormat(formats.get(formatName), formatPath, direct);
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                new FormatSerializer(requestedFormat).writeToJson(baos);
-                                JsonUtility utility = JsonUtility.createJsonUtility();
-                                JsonGenerator json = utility.getGenerator();
-                                json.writeStartObject();
-                                json.writeStringField("status", "OK");
-                                json.writeObjectFieldStart("content");
-                                json.writeArrayFieldStart("format_list");
-                                json.writeRaw(baos.toString(UTF_8));
-                                json.writeEndArray();
-                                json.writeEndObject();
-                                json.writeEndObject();
-                                return Response.ok().entity(utility.toUTF8String()).build();
-                            }
+                    DataSource requiredDs = null;
+                    for (DataSource ds : project.getDatasourceList()) {
+                        if (ds.getId().equals(componentId)) {
+                            requiredDs = ds;
+                            break;
                         }
-
-                    } else if (formatName == null) {
-                        for (DataSource ds : project.getDatasourceList()) {
-                            if (ds.getName().equals(componentName)) {
-                                Map<String, Format> formats = ds.getFormatList(Direction.valueOf(direction));
-                                Iterator<Map.Entry<String, Format>> it = formats.entrySet().iterator();
-                                JsonUtility utility = JsonUtility.createJsonUtility();
-                                JsonGenerator json = utility.getGenerator();
-                                json.writeStartObject();
-                                json.writeStringField("status", "OK");
-                                json.writeObjectFieldStart("content");
-                                // TODO json format
-                                json.writeArrayFieldStart("format_list");
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                boolean isFirst = true;
-                                while (it.hasNext()) {
-                                    baos.reset();
-                                    Format format = ((Map.Entry<String, Format>) it.next()).getValue();
-                                    new FormatSerializer(format).writeToJson(baos);
-                                    if (!isFirst)
-                                        json.writeRaw(',');
-                                    json.writeRaw(baos.toString(UTF_8));
-                                    isFirst = false;
-                                }
-                                json.writeEndArray();
-                                json.writeEndObject();
-                                json.writeEndObject();
-                                return Response.ok().entity(utility.toUTF8String()).build();
-                            }
+                    }
+                    Direction direct = Direction.valueOf(direction);
+                    JsonUtility utility = JsonUtility.createJsonUtility();
+                    JsonGenerator json = utility.getGenerator();
+                    Map<String, Format> formats = requiredDs.getFormatList(direct);
+                    if (formatName == null) {
+                        json.writeStartObject();
+                        json.writeStringField("status", "OK");
+                        json.writeObjectFieldStart("content");
+                        // return format entity list
+                        json.writeArrayFieldStart("format_entity");
+                        for (Format format : formats.values()) {
+                            json.writeStartObject();
+                            new FormatSerializer(format).writeToJson(json);
+                            json.writeEndObject();
                         }
+                        json.writeEndArray();
+                        json.writeEndObject();
+                        json.writeEndObject();
+                        return Response.ok().entity(utility.toUTF8String()).build();
+                    } else if (formatPath != null) {
+                        json.writeStartObject();
+                        json.writeStringField("status", "OK");
+                        json.writeObjectFieldStart("content");
+                        json.writeArrayFieldStart("format_entity");
+                        Format requestedFormat = requiredDs.getConnector().getFormat(formats.get(formatName), formatPath, direct);
+                        requestedFormat = requestedFormat.getChildByPath(formatPath);
+                        {
+                            json.writeStartObject();
+                            new FormatSerializer(requestedFormat).writeToJson(json);
+                            json.writeEndObject();
+                        }
+                        json.writeEndArray();
+                        json.writeEndObject();
+                        json.writeEndObject();
+                        return Response.ok().entity(utility.toUTF8String()).build();
                     }
                 } catch (Exception ex) {
                     return ServerUtils.getErrorMessageResponse(ex);
                 }
             }
         }
-        return Response.ok().entity("Not implemented").build();
+        return Response.status(Response.Status.BAD_REQUEST).entity("Not implemented").build();
     }
 
     private Response deleteProject(long projectID, HttpServletRequest req) {

@@ -26,7 +26,7 @@ Lumens.ProjectOperator = Class.$extend({
             name: name,
             description: description,
             datasource: [],
-            transformator: [],
+            transformer: [],
             start_entry: []
         };
         this.$scope.componentForm = undefined;
@@ -44,8 +44,8 @@ Lumens.ProjectOperator = Class.$extend({
         var project = this.$scope.project;
         if (class_type === "datasource")
             project.datasource.push(component);
-        else if (class_type === "transformator")
-            project.transformator.push(component)
+        else if (class_type === "transformer")
+            project.transformer.push(component)
         else
             console.error("Not supported type", component);
     },
@@ -81,7 +81,7 @@ Lumens.ProjectOperator = Class.$extend({
             $.each(project.datasource, function() {
                 compDict[this.id] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.type], this);
             });
-            $.each(project.transformator, function() {
+            $.each(project.transformer, function() {
                 compDict[this.id] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.type], this);
             });
             $.each(project.datasource, function() {
@@ -92,7 +92,7 @@ Lumens.ProjectOperator = Class.$extend({
                     }
                 }
             });
-            $.each(project.transformator, function() {
+            $.each(project.transformer, function() {
                 if (compDict[this.id]) {
                     for (var i = 0; i < this.target.length; ++i) {
                         if (compDict[this.target[i].id])

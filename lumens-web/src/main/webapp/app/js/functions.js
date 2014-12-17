@@ -3,9 +3,9 @@
  */
 function createGetTemplateObject($http, $q, url) {
     return {
-        get: function(onResponse) {
+        get: function (onResponse) {
             var deferred = $q.defer();
-            $http.get(url).then(function(response) {
+            $http.get(url).then(function (response) {
                 deferred.resolve(response.data);
                 if (onResponse)
                     onResponse(response.data);
@@ -18,26 +18,27 @@ function createGetTemplateObject($http, $q, url) {
 function buildDataFormatList($parent, formatList) {
     if (formatList) {
         var formatTree = new Lumens.Tree($parent).configure({
-            handler: function(parentNode) {
+            handler: function (parentNode) {
                 var entryList = [];
-                $.each(formatList, function() {
+                $.each(formatList, function () {
                     console.log("entry name:", this.format);
-                    $.each(this.format, function() {
+                    for (var i in this.format) {
+                        var itemFormat = this.format[i];
                         entryList.push({
-                            label: this.type === "None" ? this.name : this.name + "&nbsp;&nbsp;[" + this.type + "]",
-                            name: this.name,
-                            nodeType: this.form === "Field" ? "file" : "folder",
-                            data: this
+                            label: itemFormat.type === "None" ? itemFormat.name : itemFormat.name + "&nbsp;&nbsp;[" + itemFormat.type + "]",
+                            name: itemFormat.name,
+                            nodeType: itemFormat.form === "Field" ? "file" : "folder",
+                            data: itemFormat
                         });
-                    });
+                    }
                 });
                 parentNode.addEntryList(entryList);
             },
-            dblclick: function(current, parent) {
+            dblclick: function (current, parent) {
                 if (current.hasContent() || !current.isFolder())
                     return;
                 var nodeList = [];
-                $.each(current.data.format, function(i) {
+                $.each(current.data.format, function (i) {
                     console.log("format:", this);
                     nodeList[i] = {
                         label: this.type === "None" ? this.name : this.name + "&nbsp;&nbsp;[" + this.type + "]",
@@ -58,10 +59,10 @@ function buildDataFormatList($parent, formatList) {
 
 function getAppendTransformRuleItems(first, second) {
     var temp = [];
-    $.each(second, function() {
+    $.each(second, function () {
         var second_item = this;
         var isDuplicated = false;
-        $.each(first, function() {
+        $.each(first, function () {
             if (second_item.format_name === this.format_name) {
                 isDuplicated = true;
                 return false;
@@ -77,7 +78,7 @@ function buildTransformRuleItemStructure(parentRuleItem, formats) {
     if (!formats || !formats.length)
         return;
     parentRuleItem.transform_rule_item = [];
-    $.each(formats, function() {
+    $.each(formats, function () {
         var transformRuleItem = {
             format_name: this.name
         };
@@ -118,7 +119,7 @@ function buildTransformRuleItemPathStructure(parentNode, path, index, childTrans
             entryData.push(childTransformRuleItem);
     }
     var nodeList = [];
-    $.each(entryData, function() {
+    $.each(entryData, function () {
         nodeList.push({
             label: this.format_name,
             name: this.format_name,
@@ -132,7 +133,7 @@ function buildTransformRuleItemPathStructure(parentNode, path, index, childTrans
 function buildTransformRuleTree($parent, ruleEntity) {
     if (ruleEntity && ruleEntity.transformRuleEntry) {
         var transformRuleTree = new Lumens.Tree($parent).configure({
-            handler: function(parentNode) {
+            handler: function (parentNode) {
                 var transformRuleItem = ruleEntity.transformRuleEntry.transform_rule.transform_rule_item;
                 var entryList = [];
                 entryList.push({
@@ -143,7 +144,7 @@ function buildTransformRuleTree($parent, ruleEntity) {
                 });
                 parentNode.addEntryList(entryList);
             },
-            drop: function(data, current, parent) {
+            drop: function (data, current, parent) {
                 console.log("Dropped 2", data);
                 // TODO
                 var Root = current.getRoot();
@@ -167,13 +168,13 @@ function buildTransformRuleTree($parent, ruleEntity) {
                 }
                 buildTransformRuleItemPathStructure(current, path, i, transformRuleItem);
             },
-            click: function(current, parent) {
+            click: function (current, parent) {
                 if (ruleEntity.clickCallBack)
                     ruleEntity.clickCallBack(current);
                 if (current.hasContent() || !current.isFolder())
                     return;
                 var nodeList = [];
-                $.each(current.data.transform_rule_item, function() {
+                $.each(current.data.transform_rule_item, function () {
                     console.log("transform_rule_item:", this);
                     nodeList.push({
                         label: this.format_name,
@@ -202,14 +203,14 @@ function ComponentPropertyList(config) {
     if (!category.property)
         return componentProps;
 
-    $.each(category.property, function() {
+    $.each(category.property, function () {
         var category_property = this;
         componentProps[category_property.name] = {
             label: category.i18n[category_property.name],
             name: category_property.name,
             type: category_property.type
         }
-        $.each(compinfo.property, function() {
+        $.each(compinfo.property, function () {
             if (this.name === category_property.name) {
                 componentProps[category_property.name].value = this.value;
                 return false;
@@ -242,7 +243,7 @@ function buildTransformationList($parent, component) {
     if (transformationList) {
         var IdTitleList = [];
         var contentList = [];
-        $.each(transformationList, function() {
+        $.each(transformationList, function () {
             IdTitleList.push(this.name);
             contentList.push($('<div style="padding-left:30px;"><b>' + this.source_name + "--->" + this.target_name + '</b></div>'));
         });

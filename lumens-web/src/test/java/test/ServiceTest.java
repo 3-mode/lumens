@@ -9,8 +9,8 @@ import com.lumens.backend.sql.dao.ProjectDAO;
 import com.lumens.backend.sql.entity.Project;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
-import com.lumens.engine.run.LastResultHandler;
-import com.lumens.engine.run.ResultHandler;
+import com.lumens.engine.handler.ResultHandler;
+import com.lumens.engine.handler.TransformerResultHandler;
 import com.lumens.engine.run.SingleThreadTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.model.Element;
@@ -34,16 +34,16 @@ public class ServiceTest {
     //
 
     @Test
-    public void testProject() throws Exception {
+    public void testDBProject() throws Exception {
         if (true) {
             ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
             Project project = pDAO.getProject(1415415434544L);
             TransformProject projectInstance = new TransformProject();
             new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
-            //assertEquals(3, projectInstance.getDataTransformatorList().size());
+            //assertEquals(3, projectInstance.getDataTransformerList().size());
             //assertEquals(4, projectInstance.getDatasourceList().size());
-            class MyResultHandler implements LastResultHandler {
+            class MyResultHandler implements TransformerResultHandler {
 
                 @Override
                 public void process(TransformComponent src, String resultName, List<Element> results) {

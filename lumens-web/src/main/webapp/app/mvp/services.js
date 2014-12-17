@@ -84,7 +84,8 @@ Lumens.services.factory('ProjectSave', function ($http) {
     };
 });
 Lumens.services.factory('FormatList', function ($resource) {
-    return $resource("rest/project/:project_id/format?component_name=:component_name&direction=:direction", {}, {
+    return $resource("rest/project/:project_id/format?component_id=:component_id&direction=:direction", {}, {
+        get: {method: 'GET', isArray: false},
         getIN: {method: 'GET', params: {direction: 'IN'}, isArray: false},
         getOUT: {method: 'GET', params: {direction: 'OUT'}, isArray: false}
     });
@@ -98,9 +99,8 @@ Lumens.services.factory('JobConfig', function ($resource) {
     return $resource("app/config/json/job_config.json?pagesize=:pagesize", {});
 });
 Lumens.services.factory('FormatByPath', function ($resource) {
-    return $resource("app/mock/json/db_format_list_response.json?component_name=:component_name&format_name=:format_name&format_path=:format_path&direction=:direction", {}, {
-        getIN: {method: 'GET', params: {direction: 'IN'}, isArray: false},
-        getOUT: {method: 'GET', params: {direction: 'OUT'}, isArray: false}
+    return $resource("rest/project/:project_id/format?component_id=:component_id&format_name=:format_name&format_path=:format_path&direction=:direction", {}, {
+        get: {method: 'GET', isArray: false}
     });
 });
 Lumens.services.factory('ManageNavMenu', function ($resource) {
@@ -195,6 +195,88 @@ Lumens.services.factory('RuleRegister', function () {
         }
     }
 });
+Lumens.services.factory('FormatBuilder', ['$rootScope', 'FormatByPath', function ($rootScope, FormatByPath) {
+        console.log($rootScope);
+        return {
+            isField: function (form) {
+                return form === "Field";
+            },
+            build: function ($element, formatList) {
+                console.log("Format List: ", formatList);
+                if (formatList) {
+                    var __this = this;
+                    var formatEntityList = formatList.format_entity;
+                    var projectId = formatList.project_id;
+                    var componentId = formatList.component_id;
+                    var direction = formatList.direction;
+                    var formatTree = new Lumens.Tree($element).configure({
+                        handler: function (parentNode) {
+                            var entryList = [];
+                            for (var index in formatEntityList) {
+                                var format = formatEntityList[index].format;
+                                entryList.push({
+                                    label: format.type === "None" ? format.name : format.name + "&nbsp;&nbsp;[" + format.type + "]",
+                                    name: format.name,
+                                    nodeType: __this.isField(format.form) ? "file" : "folder",
+                                    data: format
+                                });
+                            }
+                            parentNode.addEntryList(entryList);
+                        },
+                        dblclick: function (current, parent) {
+                            console.log("location:", current.getLocationPath());
+                            if (current.hasContent() || !current.isFolder())
+                                return;
+                            var currentFormat = current.data;
+                            if (currentFormat.format) {
+                                var nodeList = [];
+                                for (var i in currentFormat.format) {
+                                    var formatItem = currentFormat.format[i];
+                                    nodeList[i] = {
+                                        label: formatItem.type === "None" ? formatItem.name : formatItem.name + "&nbsp;&nbsp;[" + formatItem.type + "]",
+                                        name: formatItem.name,
+                                        nodeType: __this.isField(formatItem.form) ? "file" : "folder",
+                                        data: formatItem
+                                    };
+                                }
+                                current.addChildList(nodeList);
+                            } else if (!__this.isField(currentFormat)) {
+                                var pathTokens = current.getLocationPath();
+                                var formatPath = "";
+                                for (var i = 1; i < pathTokens.length; ++i) {
+                                    if (formatPath.length > 0)
+                                        formatPath += '.';
+                                    formatPath += pathTokens[i].name;
+                                }
+
+                                FormatByPath.get({project_id: projectId, component_id: componentId, format_name: pathTokens[0].name, format_path: formatPath, direction: direction}, function (result) {
+                                    console.log("Children: ", result);
+                                    var nodeList = [];
+                                    currentFormat.format = result.content.format_entity[0].format.format;
+                                    for (var i in currentFormat.format) {
+                                        var formatItem = currentFormat.format[i];
+                                        nodeList[i] = {
+                                            label: formatItem.type === "None" ? formatItem.name : formatItem.name + "&nbsp;&nbsp;[" + formatItem.type + "]",
+                                            name: formatItem.name,
+                                            nodeType: __this.isField(formatItem.form) ? "file" : "folder",
+                                            data: formatItem
+                                        };
+                                    }
+                                    current.addChildList(nodeList);
+                                    current.toggleContent();
+                                });
+                            }
+                        },
+                        draggable: true
+                    });
+
+                    return formatTree;
+                }
+                return null;
+            }
+        };
+    }]
+);
 Lumens.services.factory('FormatRegister', function () {
     return {
         pathEnding: "+-*/ &|!<>\n\r\t^%=;:?,",
