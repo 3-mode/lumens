@@ -22,18 +22,14 @@ public class TextElementBuilder implements TextConstants{
             return null;
                
         String[] values = line.split(delimiter);
-        Element elem = new DataElement(fmt);   
-        Element fields;        
-        if( fmt.getChild(TextConstants.FORMAT_FIELDS) == null )
-            throw new Exception("Missing fields");
-        
-        fields = elem.addChild(TextConstants.FORMAT_FIELDS);        
-        List<Format> children = fmt.getChild(TextConstants.FORMAT_FIELDS).getChildren();
+        Element fields = new DataElement(fmt);   
+             
+        List<Format> children = fmt.getChildren();
         int index = 0;
         for(Format child: children){
             fields.addChild(child.getName()).setValue(new Value(child.getType(), values[index++]));
         }
        
-        return elem;        
+        return fields;        
      }   
 }

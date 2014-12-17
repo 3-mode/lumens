@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.txt;
 
+import com.lumens.model.DataElement;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -35,7 +36,7 @@ public class TextClient {
     }
 
     public List<Element> read(Element elem) {
-        List<Element> result = new ArrayList();
+        List<Element> result = new ArrayList();        
         String encoding = elem.getChild(TextConstants.ENCODING) == null ? 
                 propList.get(TextConstants.ENCODING).toString()         : 
                 elem.getChild(TextConstants.ENCODING).getValue().toString();
@@ -50,7 +51,9 @@ public class TextClient {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), encoding));
             String line;
             while ((line = reader.readLine()) != null) {
-                Element build = TextElementBuilder.buildElement(elem.getFormat(), line, delimiter);
+                Element data = new DataElement(elem.getFormat());
+                Element fields = data.addChild(TextConstants.FORMAT_FIELDS);
+                Element build = TextElementBuilder.buildElement(fields.getFormat(), line, delimiter);
                 result.add(build);
             }
         } catch (Exception ex) {
@@ -74,18 +77,37 @@ public class TextClient {
             String linedelimter = elem.getChild(TextConstants.LINEDELIMITER) == null ? 
                     propList.get(TextConstants.LINEDELIMITER).toString()     :
                     elem.getChild(TextConstants.LINEDELIMITER).getValue().toString();
+            boolean formatAsTitle = elem.getChild(TextConstants.OPTION_FORMAT_ASTITLE) == null ?  
+                    propList.get(TextConstants.OPTION_FORMAT_ASTITLE).getBoolean()     :
+                    elem.getChild(TextConstants.OPTION_FORMAT_ASTITLE).getValue().getBoolean();
+            
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), encoding));
-            for (Element child : elem.getChildren()) {
-                Element fields;
-                if (elem.getChild(TextConstants.FORMAT_FIELDS) != null) {
-                    fields = child.getChild(TextConstants.FORMAT_FIELDS);
-                } else {
-                    fields = child;
+            
+            for (Element fields : elem.getChildren()){                
+                if (!fields.getFormat().getName().equalsIgnoreCase(TextConstants.FORMAT_FIELDS) ) {
+                    continue;
                 }
+                
                 String line = "";
+                String title = "";
                 for (Element field : fields.getChildren()) {
-                    line = delimiter + field.getValue().toString();
+                    if (formatAsTitle)
+                        title += field.getFormat().getName();
+                    if (formatAsTitle && !title.isEmpty())
+                        title += delimiter;
+                    if( !line.isEmpty() )
+                        line += delimiter;
+                    line += field.getValue().toString();
                 }
+                if (formatAsTitle){
+                    writer.write(title);
+                    if (linedelimter.isEmpty())
+                        writer.newLine();
+                    else
+                        writer.write(linedelimter);
+                    formatAsTitle = false;
+                }
+                    
                 writer.write(line);
                 if (linedelimter.isEmpty())
                     writer.newLine();

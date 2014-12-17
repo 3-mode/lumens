@@ -35,7 +35,7 @@ public class TextOperation implements Operation {
         if (elementList != null && !elementList.isEmpty()) {
             for (Element elem : elementList) {
                 Element oper = elem.getChild(TextConstants.OPERATION);
-                if (oper == null && oper.getValue() == null)
+                if (oper == null || oper.getValue() == null)
                     throw new Exception("'operation' is mandatory");
 
                 String operation = oper.getValue().toString();

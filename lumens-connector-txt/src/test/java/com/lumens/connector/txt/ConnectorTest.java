@@ -67,7 +67,8 @@ public class ConnectorTest
         props.put(TextConstants.SCHEMAPATH, new Value(schemaPath));
         props.put(TextConstants.MAXLINE, new Value(1000));
         props.put(TextConstants.ENCODING, new Value("UTF-8"));
-        props.put(TextConstants.LINEDELIMITER, new Value("\n"));        
+        props.put(TextConstants.LINEDELIMITER, new Value("\n")); 
+        props.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));
         txt.setPropertyList(props);
         txt.open();
         
@@ -100,14 +101,28 @@ public class ConnectorTest
             // Element overwrite
             Element elemWrite = new DataElement(fmt);
             Element fields = elemWrite.addChild(TextConstants.FORMAT_FIELDS); 
-            
+            fields.addChild("number").setValue(new Value("100"));
+            fields.addChild("text").setValue(new Value("text100"));
+            fields.addChild("date").setValue(new Value("2014-12-12"));
+            fields.addChild("available").setValue(new Value(true));
+
             elemWrite.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_OVERWRITE));                        
             elemWrite.addChild(TextConstants.PATH).setValue(new Value(path2write));
             elemWrite.addChild(TextConstants.ENCODING).setValue(new Value("UTF-8"));
             elemWrite.addChild(TextConstants.FILEDELIMITER).setValue(new Value(","));
             elemWrite.addChild(TextConstants.LINEDELIMITER).setValue(new Value("\n"));
-            List<Element> output = new ArrayList();
+            //List<Element> resultList = result.getResult();
+            //for ( Element elem: resultList ){
+            //    elem.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_OVERWRITE));                        
+            //    elem.addChild(TextConstants.PATH).setValue(new Value(path2write));
+            //    elem.addChild(TextConstants.ENCODING).setValue(new Value("UTF-8"));
+            //    elem.addChild(TextConstants.FILEDELIMITER).setValue(new Value(","));
+            //    elem.addChild(TextConstants.LINEDELIMITER).setValue(new Value("\n"));               
+            //}
+            
+            List<Element> output = new ArrayList();            
             output.add(elemWrite);
+            //output.addAll(resultList);
             result = oper.execute(output, fmt);            
             assertTrue("Fail to executre element write", result.hasResult());
         }catch(Exception ex){
