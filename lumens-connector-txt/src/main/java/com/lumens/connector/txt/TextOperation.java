@@ -34,13 +34,16 @@ public class TextOperation implements Operation {
         List<Element> result = new ArrayList<>();
         if (elementList != null && !elementList.isEmpty()) {
             for (Element elem : elementList) {
-                Element oper = elem.getChild(TextConstants.OPERATION);
+                Element params = elem.getChild(TextConstants.FORMAT_PARAMS);
+                if ( params == null )
+                    break;                
+                Element oper = params.getChild(TextConstants.OPERATION);
                 if (oper == null || oper.getValue() == null)
                     throw new Exception("'operation' is mandatory");
 
                 String operation = oper.getValue().toString();
                 if (TextConstants.OPERATION_READ.equalsIgnoreCase(operation)) {
-                    result.addAll(client.read(elem));
+                    result.addAll(client.read(elem, fmt));
                 } else if (TextConstants.OPERATION_APPEND.equalsIgnoreCase(operation)) {
                     client.write(elem, true);
                 }

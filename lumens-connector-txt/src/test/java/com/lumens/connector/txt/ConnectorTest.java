@@ -91,8 +91,9 @@ public class ConnectorTest
         
             // Element read
             Element elemRead = new DataElement(fmt);
-            elemRead.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));            
-            elemRead.addChild(TextConstants.PATH).setValue(new Value(path2read));
+            Element paramsR = elemRead.addChild(TextConstants.FORMAT_PARAMS);            
+            paramsR.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));            
+            paramsR.addChild(TextConstants.PATH).setValue(new Value(path2read));
             List<Element> input = new ArrayList();
             input.add(elemRead);
             OperationResult result = oper.execute(input, fmt);            
@@ -100,25 +101,17 @@ public class ConnectorTest
             
             // Element overwrite
             Element elemWrite = new DataElement(fmt);
-            Element fields = elemWrite.addChild(TextConstants.FORMAT_FIELDS); 
-            fields.addChild("number").setValue(new Value("100"));
-            fields.addChild("text").setValue(new Value("text100"));
-            fields.addChild("date").setValue(new Value("2014-12-12"));
-            fields.addChild("available").setValue(new Value(true));
-
-            elemWrite.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_OVERWRITE));                        
-            elemWrite.addChild(TextConstants.PATH).setValue(new Value(path2write));
-            elemWrite.addChild(TextConstants.ENCODING).setValue(new Value("UTF-8"));
-            elemWrite.addChild(TextConstants.FILEDELIMITER).setValue(new Value(","));
-            elemWrite.addChild(TextConstants.LINEDELIMITER).setValue(new Value("\n"));
-            //List<Element> resultList = result.getResult();
-            //for ( Element elem: resultList ){
-            //    elem.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_OVERWRITE));                        
-            //    elem.addChild(TextConstants.PATH).setValue(new Value(path2write));
-            //    elem.addChild(TextConstants.ENCODING).setValue(new Value("UTF-8"));
-            //    elem.addChild(TextConstants.FILEDELIMITER).setValue(new Value(","));
-            //    elem.addChild(TextConstants.LINEDELIMITER).setValue(new Value("\n"));               
-            //}
+            Element paramsW = elemWrite.addChild(TextConstants.FORMAT_PARAMS); 
+            paramsW.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_OVERWRITE));                        
+            paramsW.addChild(TextConstants.PATH).setValue(new Value(path2write));
+            paramsW.addChild(TextConstants.ENCODING).setValue(new Value("UTF-8"));
+            paramsW.addChild(TextConstants.FILEDELIMITER).setValue(new Value(","));
+            paramsW.addChild(TextConstants.LINEDELIMITER).setValue(new Value("\n"));
+            
+            elemWrite.addChild("number").setValue(new Value("100"));
+            elemWrite.addChild("text").setValue(new Value("text100"));
+            elemWrite.addChild("date").setValue(new Value("2014-12-12"));
+            elemWrite.addChild("available").setValue(new Value(true));            
             
             List<Element> output = new ArrayList();            
             output.add(elemWrite);

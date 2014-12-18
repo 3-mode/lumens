@@ -61,14 +61,7 @@ public class TextFormatBuilder implements FormatBuilder {
             Format rootFmt = new DataFormat(rootName, Format.Form.STRUCT);
             fmtList.put(rootName, rootFmt);
             rootFmt.setProperty(TextConstants.ENCODING, new Value(encoding));
-            rootFmt.addChild(TextConstants.LINEDELIMITER, Form.FIELD);          
-            rootFmt.addChild(TextConstants.FILEDELIMITER, Form.FIELD);
-            rootFmt.addChild(TextConstants.ESCAPECHAR, Form.FIELD);
-            rootFmt.addChild(TextConstants.SCHEMAPATH, Form.FIELD);
-            rootFmt.addChild(TextConstants.MAXLINE, Form.FIELD);
-            rootFmt.addChild(TextConstants.OPERATION, Form.FIELD);     
-            rootFmt.addChild(TextConstants.PATH, Form.FIELD);     
-            rootFmt.addChild(TextConstants.ENCODING, Form.FIELD);                
+           
             getFormat(rootFmt, null, direction);
         }
 
@@ -78,19 +71,13 @@ public class TextFormatBuilder implements FormatBuilder {
     @Override
     public Format getFormat(Format format, String path, Direction direction) {
         if (format.getName().equalsIgnoreCase(TextConstants.FORMAT_FORMAT)) {
-            Iterator itor = schemaRoot.elementIterator();
-            Element fieldsNode = (Element)itor.next();        
-            
-            // Deal with fields node                      
-            if( !fieldsNode.getName().equalsIgnoreCase(TextConstants.FORMAT_FIELDS) )
-                return null; 
-            
-            // Format.Fields  
-            Format fieldsFmt = format.addChild(TextConstants.FORMAT_FIELDS, Form.STRUCT);
-                        
-            Iterator fieldItor = fieldsNode.elementIterator();
-            while( fieldItor.hasNext() ){
-                Element columnNode = (Element)fieldItor.next();
+            Iterator fieldItor = schemaRoot.elementIterator();
+   
+            Iterator p = fieldItor;
+            Format fmt = format;
+            int level = 0;
+            while( p.hasNext() ){
+                Element columnNode = (Element)p.next();
                 String node = columnNode.getName();
                 if( node.equalsIgnoreCase(TextConstants.FORMAT_FIELD) ){   
                     Format field = null;
@@ -105,7 +92,7 @@ public class TextFormatBuilder implements FormatBuilder {
                         // create field element
                         if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_NAME) && !value.isEmpty() ){
                             field = new DataFormat(value, Form.FIELD);   // set type later
-                            fieldsFmt.addChild(field);
+                            fmt.addChild(field);
                         }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_KEY) && !value.isEmpty() ){                                                      
                             field.setProperty(name, new Value(value));                           
                         }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_TYPE) && !value.isEmpty() ){                                                      
@@ -122,6 +109,19 @@ public class TextFormatBuilder implements FormatBuilder {
                             field.setProperty(name, new Value(Integer.parseInt(value)));
                         }
                     }
+                }else if ( node.equalsIgnoreCase(TextConstants.FORMAT_PARAMS) ){
+                    Iterator paramItor = columnNode.elementIterator();
+                    if( paramItor.hasNext() ){
+                        p = paramItor;
+                        fmt = fmt.addChild(TextConstants.FORMAT_PARAMS, Form.STRUCT, Type.STRING);
+                        level++;
+                    }
+                }
+                
+                if( !p.hasNext() && level > 0){
+                    p = fieldItor;
+                    fmt = fmt.getParent();
+                    level--;
                 }
             }
         }

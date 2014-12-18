@@ -35,25 +35,25 @@ public class TextClient {
         propList = props;
     }
 
-    public List<Element> read(Element elem) {
+    public List<Element> read(Element elem, Format fmt) {
         List<Element> result = new ArrayList();        
-        String encoding = elem.getChild(TextConstants.ENCODING) == null ? 
+        Element param = elem.getChild(TextConstants.FORMAT_PARAMS);
+        String encoding = param.getChild(TextConstants.ENCODING) == null ? 
                 propList.get(TextConstants.ENCODING).toString()         : 
-                elem.getChild(TextConstants.ENCODING).getValue().toString();
-        String path = elem.getChild(TextConstants.PATH) == null ? 
+                param.getChild(TextConstants.ENCODING).getValue().toString();
+        
+        String path = param.getChild(TextConstants.PATH) == null ? 
                 propList.get(TextConstants.PATH).toString()     : 
-                elem.getChild(TextConstants.PATH).getValue().toString();
-        String delimiter = elem.getChild(TextConstants.FILEDELIMITER) == null ?  
+                param.getChild(TextConstants.PATH).getValue().toString();
+        String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null ?  
                 propList.get(TextConstants.FILEDELIMITER).toString()          : 
-                elem.getChild(TextConstants.FILEDELIMITER).getValue().toString();
+                param.getChild(TextConstants.FILEDELIMITER).getValue().toString();
 
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), encoding));
             String line;
             while ((line = reader.readLine()) != null) {
-                Element data = new DataElement(elem.getFormat());
-                Element fields = data.addChild(TextConstants.FORMAT_FIELDS);
-                Element build = TextElementBuilder.buildElement(fields.getFormat(), line, delimiter);
+                Element build = TextElementBuilder.buildElement(fmt, line, delimiter);                
                 result.add(build);
             }
         } catch (Exception ex) {
@@ -84,7 +84,7 @@ public class TextClient {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), encoding));
             
             for (Element fields : elem.getChildren()){                
-                if (!fields.getFormat().getName().equalsIgnoreCase(TextConstants.FORMAT_FIELDS) ) {
+                if (!fields.getFormat().getName().equalsIgnoreCase(TextConstants.FORMAT_PARAMS) ) {
                     continue;
                 }
                 

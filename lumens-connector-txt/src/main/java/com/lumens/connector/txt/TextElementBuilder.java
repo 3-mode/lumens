@@ -22,14 +22,15 @@ public class TextElementBuilder implements TextConstants{
             return null;
                
         String[] values = line.split(delimiter);
-        Element fields = new DataElement(fmt);   
+        Element elem = new DataElement(fmt);   
              
         List<Format> children = fmt.getChildren();
         int index = 0;
         for(Format child: children){
-            fields.addChild(child.getName()).setValue(new Value(child.getType(), values[index++]));
+            if(!child.getName().equalsIgnoreCase(TextConstants.FORMAT_PARAMS))
+                elem.addChild(child.getName()).setValue(new Value(child.getType(), values[index++]));
         }
        
-        return fields;        
+        return elem;        
      }   
 }
