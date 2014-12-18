@@ -64,56 +64,60 @@ public class TextClient {
     }
 
     public void write(Element elem, boolean append) {
+        Element param = elem.getChild(TextConstants.FORMAT_PARAMS);        
+        String encoding = param.getChild(TextConstants.ENCODING) == null
+                ? propList.get(TextConstants.ENCODING).toString()
+                : param.getChild(TextConstants.ENCODING).getValue().toString();
+        String path = param.getChild(TextConstants.PATH) == null
+                ? propList.get(TextConstants.PATH).toString()
+                : param.getChild(TextConstants.PATH).getValue().toString();
+        String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null
+                ? propList.get(TextConstants.FILEDELIMITER).toString()
+                : param.getChild(TextConstants.FILEDELIMITER).getValue().toString();
+        String linedelimter = param.getChild(TextConstants.LINEDELIMITER) == null
+                ? propList.get(TextConstants.LINEDELIMITER).toString()
+                : param.getChild(TextConstants.LINEDELIMITER).getValue().toString();
+        boolean formatAsTitle = param.getChild(TextConstants.OPTION_FORMAT_ASTITLE) == null
+                ? propList.get(TextConstants.OPTION_FORMAT_ASTITLE).getBoolean()
+                : param.getChild(TextConstants.OPTION_FORMAT_ASTITLE).getValue().getBoolean();
+        
         try {
-            String encoding = elem.getChild(TextConstants.ENCODING) == null ? 
-                    propList.get(TextConstants.ENCODING).toString()     :
-                    elem.getChild(TextConstants.ENCODING).getValue().toString();
-            String path = elem.getChild(TextConstants.PATH) == null ? 
-                    propList.get(TextConstants.PATH).toString()     :
-                    elem.getChild(TextConstants.PATH).getValue().toString();
-            String delimiter = elem.getChild(TextConstants.FILEDELIMITER) == null ? 
-                    propList.get(TextConstants.FILEDELIMITER).toString()     :
-                    elem.getChild(TextConstants.FILEDELIMITER).getValue().toString();
-            String linedelimter = elem.getChild(TextConstants.LINEDELIMITER) == null ? 
-                    propList.get(TextConstants.LINEDELIMITER).toString()     :
-                    elem.getChild(TextConstants.LINEDELIMITER).getValue().toString();
-            boolean formatAsTitle = elem.getChild(TextConstants.OPTION_FORMAT_ASTITLE) == null ?  
-                    propList.get(TextConstants.OPTION_FORMAT_ASTITLE).getBoolean()     :
-                    elem.getChild(TextConstants.OPTION_FORMAT_ASTITLE).getValue().getBoolean();
-            
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), encoding));
             
-            for (Element fields : elem.getChildren()){                
-                if (!fields.getFormat().getName().equalsIgnoreCase(TextConstants.FORMAT_PARAMS) ) {
+            String line = "";
+            String title = "";
+            for (Element field : elem.getChildren()) {
+                if (field.getFormat().getName().equalsIgnoreCase(TextConstants.FORMAT_PARAMS)){
                     continue;
                 }
-                
-                String line = "";
-                String title = "";
-                for (Element field : fields.getChildren()) {
-                    if (formatAsTitle)
-                        title += field.getFormat().getName();
-                    if (formatAsTitle && !title.isEmpty())
-                        title += delimiter;
-                    if( !line.isEmpty() )
-                        line += delimiter;
-                    line += field.getValue().toString();
-                }
-                if (formatAsTitle){
-                    writer.write(title);
-                    if (linedelimter.isEmpty())
-                        writer.newLine();
-                    else
-                        writer.write(linedelimter);
-                    formatAsTitle = false;
-                }
                     
+                if (formatAsTitle) {
+                    title += field.getFormat().getName();
+                }
+                if (formatAsTitle && !title.isEmpty()) {
+                    title += delimiter;
+                }
+                if (!line.isEmpty()) {
+                    line += delimiter;
+                }
+                line += field.getValue().toString();
+            }
+            if (formatAsTitle) {
+                writer.write(title);
+                if (linedelimter.isEmpty()) {
+                    writer.newLine();
+                } else {
+                    writer.write(linedelimter);
+                }
+                formatAsTitle = false;
+            }
+
                 writer.write(line);
                 if (linedelimter.isEmpty())
                     writer.newLine();
                 else
                     writer.write(linedelimter);
-            }
+            
             writer.flush();
             writer.close();
         } catch (Exception ex) {

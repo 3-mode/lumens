@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<format>
-    <params>
-        <field name="operation" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>
-        <field name="path" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
-        <field name="encoding" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
-        <field name="filedelimiter" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
-		<field name="linedelimiter" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
-        <field name="escapechar" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
-		<field name="schemapath" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
-        <field name="maxline" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>					
-	</params>
-	
+<format name="TextMessage">	
     <field name="number" key="true" type="Integer" nullable="false" pattern="" length="16" precision="-1" comment=""/>
-
-    <field name="text" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>
-	
+    <field name="text" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
     <field name="date" key="false" type="Date" nullable="false" pattern="dd-MM-yyyy" length="16" precision="" comment=""/>
-
-	<field name="available" key="false" type="Boolean" nullable="false" pattern="" length="" precision="" comment=""/>
+    <field name="available" key="false" type="Boolean" nullable="false" pattern="" length="" precision="" comment=""/>
 </format>

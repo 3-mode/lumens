@@ -32,8 +32,8 @@ public class TextFormatBuilder implements FormatBuilder {
     Map<String, Value> propList;
 
     public TextFormatBuilder(Map<String, Value> props) {
-        if (props.containsKey(TextConstants.SCHEMAPATH))
-            xmlSchemaPath = props.get(TextConstants.SCHEMAPATH).toString();
+        if (props.containsKey(TextConstants.SCHEMA_PATH))
+            xmlSchemaPath = props.get(TextConstants.SCHEMA_PATH).toString();
         propList = props;
         schemaRoot = null;
     }
@@ -55,13 +55,27 @@ public class TextFormatBuilder implements FormatBuilder {
 
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
-        Map<String, Format> fmtList = new HashMap<>();
+        Map<String, Format> fmtList = new HashMap<>();        
         String rootName = schemaRoot.getName();
+        Attribute nameAttribute = schemaRoot.attribute(TextConstants.FORMAT_NAME);
+        String formatName = nameAttribute == null ? rootName : nameAttribute.getValue();        
+        
         if (rootName.equalsIgnoreCase(TextConstants.FORMAT_FORMAT)) {
-            Format rootFmt = new DataFormat(rootName, Format.Form.STRUCT);
-            fmtList.put(rootName, rootFmt);
-            rootFmt.setProperty(TextConstants.ENCODING, new Value(encoding));
+            Format rootFmt = new DataFormat(formatName, Form.STRUCT);
+            fmtList.put(formatName, rootFmt);
+            
+            // This encoding is for schema file itself rather than processing encoding
+            rootFmt.setProperty(TextConstants.SCHEMA_ENCODING, new Value(encoding));
            
+            Format params = rootFmt.addChild(TextConstants.FORMAT_PARAMS, Form.STRUCT);
+            params.addChild(TextConstants.ENCODING, Form.FIELD, Type.STRING);
+            params.addChild(TextConstants.PATH, Form.FIELD, Type.STRING);
+            params.addChild(TextConstants.LINEDELIMITER, Form.FIELD, Type.STRING);
+            params.addChild(TextConstants.FILEDELIMITER, Form.FIELD, Type.STRING);
+            params.addChild(TextConstants.ESCAPECHAR, Form.FIELD, Type.STRING);
+            params.addChild(TextConstants.MAXLINE, Form.FIELD, Type.STRING);
+            params.addChild(TextConstants.OPERATION, Form.FIELD, Type.STRING);
+            
             getFormat(rootFmt, null, direction);
         }
 
@@ -69,62 +83,43 @@ public class TextFormatBuilder implements FormatBuilder {
     }
 
     @Override
-    public Format getFormat(Format format, String path, Direction direction) {
-        if (format.getName().equalsIgnoreCase(TextConstants.FORMAT_FORMAT)) {
-            Iterator fieldItor = schemaRoot.elementIterator();
-   
-            Iterator p = fieldItor;
-            Format fmt = format;
-            int level = 0;
-            while( p.hasNext() ){
-                Element columnNode = (Element)p.next();
-                String node = columnNode.getName();
-                if( node.equalsIgnoreCase(TextConstants.FORMAT_FIELD) ){   
-                    Format field = null;
-                    Iterator attrItor = columnNode.attributeIterator();     
+    public Format getFormat(Format format, String path, Direction direction) {        
+        Iterator fieldItor = schemaRoot.elementIterator();
+        while (fieldItor.hasNext()) {
+            Element columnNode = (Element) fieldItor.next();
+            String node = columnNode.getName();
+            if (node.equalsIgnoreCase(TextConstants.FORMAT_FIELD)) {
+                Format field = null;
+                Iterator attrItor = columnNode.attributeIterator();
 
-                    //Note that to be simply coding, the name in schema MUST be the first property
-                    while (attrItor.hasNext()) {
-                        Attribute attr = (Attribute) attrItor.next();
-                        String name = attr.getName();
-                        String value = attr.getValue();
+                //Note that to be simply coding, the name in schema MUST be the first property
+                while (attrItor.hasNext()) {
+                    Attribute attr = (Attribute) attrItor.next();
+                    String name = attr.getName();
+                    String value = attr.getValue();
 
-                        // create field element
-                        if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_NAME) && !value.isEmpty() ){
-                            field = new DataFormat(value, Form.FIELD);   // set type later
-                            fmt.addChild(field);
-                        }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_KEY) && !value.isEmpty() ){                                                      
-                            field.setProperty(name, new Value(value));                           
-                        }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_TYPE) && !value.isEmpty() ){                                                      
-                            field.setType(Type.parseString(value));                           
-                        }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_NULLABLE) && !value.isEmpty() ){                                                      
-                            field.setProperty(name, new Value(value) );                          
-                        }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_PATTERN) && !value.isEmpty() ){    
-                            field.setProperty(name, new Value(value));
-                        }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_LENGTH) && !value.isEmpty() ){    
-                            field.setProperty(name, new Value(Integer.parseInt(value)));
-                        }else if( name != null && name.equalsIgnoreCase(TextConstants.FORMAT_COMMENT) && !value.isEmpty() ){    
-                            field.setProperty(name, new Value(value));
-                        } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_PRECISION) && !value.isEmpty()) {
-                            field.setProperty(name, new Value(Integer.parseInt(value)));
-                        }
+                    // create field element
+                    if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_NAME) && !value.isEmpty()) {
+                        field = new DataFormat(value, Form.FIELD);   // set type later
+                        format.addChild(field);
+                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_KEY) && !value.isEmpty()) {
+                        field.setProperty(name, new Value(value));
+                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_TYPE) && !value.isEmpty()) {
+                        field.setType(Type.parseString(value));
+                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_NULLABLE) && !value.isEmpty()) {
+                        field.setProperty(name, new Value(value));
+                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_PATTERN) && !value.isEmpty()) {
+                        field.setProperty(name, new Value(value));
+                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_LENGTH) && !value.isEmpty()) {
+                        field.setProperty(name, new Value(Integer.parseInt(value)));
+                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_COMMENT) && !value.isEmpty()) {
+                        field.setProperty(name, new Value(value));
+                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_PRECISION) && !value.isEmpty()) {
+                        field.setProperty(name, new Value(Integer.parseInt(value)));
                     }
-                }else if ( node.equalsIgnoreCase(TextConstants.FORMAT_PARAMS) ){
-                    Iterator paramItor = columnNode.elementIterator();
-                    if( paramItor.hasNext() ){
-                        p = paramItor;
-                        fmt = fmt.addChild(TextConstants.FORMAT_PARAMS, Form.STRUCT, Type.STRING);
-                        level++;
-                    }
-                }
-                
-                if( !p.hasNext() && level > 0){
-                    p = fieldItor;
-                    fmt = fmt.getParent();
-                    level--;
                 }
             }
-        }
+        }        
 
         return format;
     }
