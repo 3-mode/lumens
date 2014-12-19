@@ -40,22 +40,30 @@ public class TextClient {
         Element param = elem.getChild(TextConstants.FORMAT_PARAMS);
         String encoding = param.getChild(TextConstants.ENCODING) == null ? 
                 propList.get(TextConstants.ENCODING).toString()         : 
-                param.getChild(TextConstants.ENCODING).getValue().toString();
-        
+                param.getChild(TextConstants.ENCODING).getValue().toString();        
         String path = param.getChild(TextConstants.PATH) == null ? 
                 propList.get(TextConstants.PATH).toString()     : 
                 param.getChild(TextConstants.PATH).getValue().toString();
         String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null ?  
                 propList.get(TextConstants.FILEDELIMITER).toString()          : 
                 param.getChild(TextConstants.FILEDELIMITER).getValue().toString();
+        String escape = param.getChild(TextConstants.ESCAPECHAR) == null ? 
+                propList.get(TextConstants.ESCAPECHAR).toString()         : 
+                param.getChild(TextConstants.ESCAPECHAR).getValue().toString();
         boolean ignoreEmptyLine = param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE) == null ?
                 propList.get(TextConstants.OPTION_IGNORE_EMPTYLINE).getBoolean():
                 param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE).getValue().getBoolean();
-
+        
+        int maxLine = param.getChild(TextConstants.OPTION_MAXLINE) == null ?
+                propList.get(TextConstants.OPTION_MAXLINE).getInt():
+                param.getChild(TextConstants.OPTION_MAXLINE).getValue().getInt();
+        
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), encoding));
             String line;
             while ((line = reader.readLine()) != null) {
+                if (maxLine > 0 && --maxLine <= 0)
+                    break;
                 if (line.isEmpty() && ignoreEmptyLine)
                     continue;
                 Element build = TextElementBuilder.buildElement(fmt, line, delimiter);                
@@ -85,6 +93,10 @@ public class TextClient {
         boolean formatAsTitle = param.getChild(TextConstants.OPTION_FORMAT_ASTITLE) == null
                 ? propList.get(TextConstants.OPTION_FORMAT_ASTITLE).getBoolean()
                 : param.getChild(TextConstants.OPTION_FORMAT_ASTITLE).getValue().getBoolean();
+
+        int maxline = param.getChild(TextConstants.OPTION_MAXLINE) == null ?
+                propList.get(TextConstants.OPTION_MAXLINE).getInt():
+                param.getChild(TextConstants.OPTION_MAXLINE).getValue().getInt();
         
         try {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), encoding));
@@ -118,11 +130,12 @@ public class TextClient {
                 formatAsTitle = false;
             }
 
-                writer.write(line);
-                if (linedelimter.isEmpty())
-                    writer.newLine();
-                else
-                    writer.write(linedelimter);
+            writer.write(line);
+            if (linedelimter.isEmpty()) {
+                writer.newLine();
+            } else {
+                writer.write(linedelimter);
+            }
             
             writer.flush();
             writer.close();

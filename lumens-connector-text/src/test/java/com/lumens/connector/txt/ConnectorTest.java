@@ -65,10 +65,11 @@ public class ConnectorTest {
         propsR.put(TextConstants.ESCAPECHAR, new Value("\\"));
         propsR.put(TextConstants.FILEDELIMITER, new Value(","));
         propsR.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
-        propsR.put(TextConstants.MAXLINE, new Value(1000));
+        propsR.put(TextConstants.OPTION_MAXLINE, new Value(1000));
         propsR.put(TextConstants.ENCODING, new Value("UTF-8"));
         propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));        
         propsR.put(TextConstants.OPTION_IGNORE_EMPTYLINE, new Value(true));
+        propsR.put(TextConstants.OPTION_MAXLINE, new Value(9));
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
@@ -113,7 +114,7 @@ public class ConnectorTest {
         propsW.put(TextConstants.FILEDELIMITER, new Value("|"));
         propsW.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
         propsW.put(TextConstants.PATH, new Value(path2write));
-        propsW.put(TextConstants.MAXLINE, new Value(1000));
+        propsW.put(TextConstants.OPTION_MAXLINE, new Value(1000));
         propsW.put(TextConstants.ENCODING, new Value("UTF-8"));
         propsW.put(TextConstants.LINEDELIMITER, new Value("\r\n"));
         propsW.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));        
@@ -130,7 +131,7 @@ public class ConnectorTest {
         Operation operW = cntrW.getOperation();
         assertTrue("fail to open destination text connector", cntrW.isOpen());
         try {
-            Format fmtW = fmtListR.get("TextMessage");
+            Format fmtW = fmtListW.get("TextMessage");
             if (fmtW == null) {
                 assertFalse("Fail to get destination format", true);
             }            
@@ -195,7 +196,7 @@ public class ConnectorTest {
         propList.put(TextConstants.ESCAPECHAR, new Value("\\"));
         propList.put(TextConstants.FILEDELIMITER, new Value(","));
         propList.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
-        propList.put(TextConstants.MAXLINE, new Value(1000));
+        propList.put(TextConstants.OPTION_MAXLINE, new Value(1000));
         propList.put(TextConstants.ENCODING, new Value("UTF-8"));
         if (schema.isFile() && schema.exists()) {
             TextFormatBuilder xsdReader = new TextFormatBuilder(propList);

@@ -18,7 +18,7 @@ public interface TextConstants {
     public static final String LINEDELIMITER = "LineDelimiter";
     public static final String FILEDELIMITER = "FiledDelimiter";
     public static final String ESCAPECHAR = "EscapeChar";
-    public static final String MAXLINE = "MaxLine";
+    public static final String OPTION_MAXLINE = "MaxLine";
         
     // connector operation    
     public static final String OPERATION = "Operation";
