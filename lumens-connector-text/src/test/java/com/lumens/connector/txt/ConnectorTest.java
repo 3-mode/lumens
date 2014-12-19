@@ -113,8 +113,7 @@ public class ConnectorTest {
         propsW.put(TextConstants.ESCAPECHAR, new Value("\\"));
         propsW.put(TextConstants.FILEDELIMITER, new Value("|"));
         propsW.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
-        propsW.put(TextConstants.PATH, new Value(path2write));
-        propsW.put(TextConstants.OPTION_MAXLINE, new Value(1000));
+        propsW.put(TextConstants.PATH, new Value(path2write));        
         propsW.put(TextConstants.ENCODING, new Value("UTF-8"));
         propsW.put(TextConstants.LINEDELIMITER, new Value("\r\n"));
         propsW.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));        
