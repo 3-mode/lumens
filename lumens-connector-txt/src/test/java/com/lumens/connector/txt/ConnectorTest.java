@@ -82,6 +82,7 @@ public class ConnectorTest {
         Operation operR = cntrR.getOperation();
         assertTrue("fail to open source text connector", cntrR.isOpen());
 
+        OperationResult resultR = null;
         operR.begin();
         try {
             Format fmtR = fmtListR.get("TextMessage");
@@ -96,8 +97,8 @@ public class ConnectorTest {
             paramsR.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));
             paramsR.addChild(TextConstants.PATH).setValue(new Value(path2read));
 
-            OperationResult result = operR.execute(Arrays.asList(elemRead), fmtR);
-            assertTrue("Fail to executre source element read", result.hasResult());
+            resultR = operR.execute(Arrays.asList(elemRead), fmtR);
+            assertTrue("Fail to executre source element read", resultR.hasResult());
             operR.commit();
             operR.end();
         } catch (Exception ex) {
@@ -111,9 +112,10 @@ public class ConnectorTest {
         propsW.put(TextConstants.ESCAPECHAR, new Value("\\"));
         propsW.put(TextConstants.FILEDELIMITER, new Value("|"));
         propsW.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
+        propsW.put(TextConstants.PATH, new Value(path2write));
         propsW.put(TextConstants.MAXLINE, new Value(1000));
         propsW.put(TextConstants.ENCODING, new Value("UTF-8"));
-        propsW.put(TextConstants.LINEDELIMITER, new Value("\n"));
+        propsW.put(TextConstants.LINEDELIMITER, new Value("\r\n"));
         propsW.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));
         cntrW.setPropertyList(propsW);
         cntrW.open();
@@ -139,8 +141,8 @@ public class ConnectorTest {
             paramsW.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_OVERWRITE));
             paramsW.addChild(TextConstants.PATH).setValue(new Value(path2write));
             paramsW.addChild(TextConstants.ENCODING).setValue(new Value("UTF-8"));
-            paramsW.addChild(TextConstants.FILEDELIMITER).setValue(new Value(","));
-            paramsW.addChild(TextConstants.LINEDELIMITER).setValue(new Value("\n"));
+            paramsW.addChild(TextConstants.FILEDELIMITER).setValue(new Value("|"));
+            paramsW.addChild(TextConstants.LINEDELIMITER).setValue(new Value("\r\n"));
 
             elemWrite.addChild("number").setValue(new Value("100"));
             elemWrite.addChild("text").setValue(new Value("text100"));
@@ -149,9 +151,7 @@ public class ConnectorTest {
 
             List<Element> output = new ArrayList();
             output.add(elemWrite);
-            //output.addAll(result.getResult());
-            OperationResult result = operR.execute(output, fmtW);
-            //assertTrue("Fail to executre element write", result.hasResult());
+            OperationResult result = operR.execute(output, fmtW);            
         } catch (Exception ex) {
             assertFalse("Fail to execute element", true);
         }
