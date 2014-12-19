@@ -66,7 +66,7 @@ public class TextClient {
                     break;
                 if (line.isEmpty() && ignoreEmptyLine)
                     continue;
-                Element build = TextElementBuilder.buildElement(fmt, line, delimiter);                
+                Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape);                
                 result.add(build);
             }
         } catch (Exception ex) {
