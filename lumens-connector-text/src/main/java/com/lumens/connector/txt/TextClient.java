@@ -93,10 +93,6 @@ public class TextClient {
         boolean formatAsTitle = param.getChild(TextConstants.OPTION_FORMAT_ASTITLE) == null
                 ? propList.get(TextConstants.OPTION_FORMAT_ASTITLE).getBoolean()
                 : param.getChild(TextConstants.OPTION_FORMAT_ASTITLE).getValue().getBoolean();
-
-        int maxline = param.getChild(TextConstants.OPTION_MAXLINE) == null ?
-                propList.get(TextConstants.OPTION_MAXLINE).getInt():
-                param.getChild(TextConstants.OPTION_MAXLINE).getValue().getInt();
         
         try {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), encoding));
