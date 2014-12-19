@@ -48,11 +48,16 @@ public class TextClient {
         String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null ?  
                 propList.get(TextConstants.FILEDELIMITER).toString()          : 
                 param.getChild(TextConstants.FILEDELIMITER).getValue().toString();
+        boolean ignoreEmptyLine = param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE) == null ?
+                propList.get(TextConstants.OPTION_IGNORE_EMPTYLINE).getBoolean():
+                param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE).getValue().getBoolean();
 
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), encoding));
             String line;
             while ((line = reader.readLine()) != null) {
+                if (line.isEmpty() && ignoreEmptyLine)
+                    continue;
                 Element build = TextElementBuilder.buildElement(fmt, line, delimiter);                
                 result.add(build);
             }
@@ -91,12 +96,13 @@ public class TextClient {
                     continue;
                 }
                     
+                if (formatAsTitle && !title.isEmpty()) {
+                    title += delimiter;
+                }                
                 if (formatAsTitle) {
                     title += field.getFormat().getName();
                 }
-                if (formatAsTitle && !title.isEmpty()) {
-                    title += delimiter;
-                }
+
                 if (!line.isEmpty()) {
                     line += delimiter;
                 }

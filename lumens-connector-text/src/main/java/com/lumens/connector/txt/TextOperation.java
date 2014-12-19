@@ -42,12 +42,12 @@ public class TextOperation implements Operation {
                     throw new Exception("'operation' is mandatory");
 
                 String operation = oper.getValue().toString();
-                if (TextConstants.OPERATION_READ.equalsIgnoreCase(operation)) {
+                if (TextConstants.OPERATION_READ.equals(operation)) {
                     result.addAll(client.read(elem, fmt));
-                } else if (TextConstants.OPERATION_APPEND.equalsIgnoreCase(operation)) {
+                } else if (TextConstants.OPERATION_APPEND.equals(operation)) {
                     client.write(elem, true);
                 }
-                if (TextConstants.OPERATION_OVERWRITE.equalsIgnoreCase(operation)) {
+                if (TextConstants.OPERATION_OVERWRITE.equals(operation)) {
                     client.write(elem, false);
                 }
             }

@@ -67,8 +67,8 @@ public class ConnectorTest {
         propsR.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
         propsR.put(TextConstants.MAXLINE, new Value(1000));
         propsR.put(TextConstants.ENCODING, new Value("UTF-8"));
-        propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));
-        propsR.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));
+        propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));        
+        propsR.put(TextConstants.OPTION_IGNORE_EMPTYLINE, new Value(true));
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
@@ -116,7 +116,7 @@ public class ConnectorTest {
         propsW.put(TextConstants.MAXLINE, new Value(1000));
         propsW.put(TextConstants.ENCODING, new Value("UTF-8"));
         propsW.put(TextConstants.LINEDELIMITER, new Value("\r\n"));
-        propsW.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));
+        propsW.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));        
         cntrW.setPropertyList(propsW);
         cntrW.open();
 
@@ -128,13 +128,13 @@ public class ConnectorTest {
 
         // test operation
         Operation operW = cntrW.getOperation();
-        assertTrue("fail to open destination text connector", cntrR.isOpen());
+        assertTrue("fail to open destination text connector", cntrW.isOpen());
         try {
             Format fmtW = fmtListR.get("TextMessage");
             if (fmtW == null) {
-                assertFalse("Fail to get source format", true);
+                assertFalse("Fail to get destination format", true);
             }            
-            operR.begin();
+            operW.begin();
             Element elemWrite = new DataElement(fmtW);
             Element paramsW = elemWrite.addChild(TextConstants.FORMAT_PARAMS);
             paramsW.setValue(new Value(TextConstants.FORMAT_MESSAGE));
@@ -151,12 +151,40 @@ public class ConnectorTest {
 
             List<Element> output = new ArrayList();
             output.add(elemWrite);
-            OperationResult result = operR.execute(output, fmtW);            
+            OperationResult result = operW.execute(output, fmtW);
+            operW.commit();   
+            
+            operW.begin();
+            Format fmtA = fmtListR.get("TextMessage");
+            if (fmtA == null) {
+                assertFalse("Fail to get destination format", true);
+            }                
+            Element elemAppend = new DataElement(fmtA);
+            Element paramsA = elemAppend.addChild(TextConstants.FORMAT_PARAMS);
+            paramsA.setValue(new Value(TextConstants.FORMAT_MESSAGE));
+            paramsA.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_APPEND));
+            paramsA.addChild(TextConstants.PATH).setValue(new Value(path2write));
+            paramsA.addChild(TextConstants.ENCODING).setValue(new Value("UTF-8"));
+            paramsA.addChild(TextConstants.FILEDELIMITER).setValue(new Value("***"));
+            paramsA.addChild(TextConstants.LINEDELIMITER).setValue(new Value("\r\n"));
+
+            elemAppend.addChild("number").setValue(new Value("99"));
+            elemAppend.addChild("text").setValue(new Value("append"));
+            elemAppend.addChild("date").setValue(new Value("2014-12-25"));
+            elemAppend.addChild("available").setValue(new Value(false));
+
+            List<Element> outputA = new ArrayList();
+            outputA.add(elemAppend);
+            OperationResult resultA = operW.execute(outputA, fmtW);
+            operW.commit();   
+            
+            operW.end();                     
         } catch (Exception ex) {
             assertFalse("Fail to execute element", true);
         }
 
         cntrR.close();
+        cntrW.close();
     }
 
     @Test
@@ -174,15 +202,5 @@ public class ConnectorTest {
             xsdReader.initalize();
             Map<String, Format> formats = xsdReader.getFormatList(Direction.IN);
         }
-    }
-
-    @Test
-    public void testClient() {
-
-    }
-
-    @Test
-    public void testElementBuilder() {
-
     }
 }

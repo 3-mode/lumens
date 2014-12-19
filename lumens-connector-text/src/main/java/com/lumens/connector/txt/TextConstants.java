@@ -28,6 +28,7 @@ public interface TextConstants {
 
     // connector options
     public static final String OPTION_FORMAT_ASTITLE = "FormatAsTitle";    
+    public static final String OPTION_IGNORE_EMPTYLINE = "IgnoreEmptyLine";   
     
     // end use seen options
     public static final String FORMAT_PARAMS = "TextParams";   
