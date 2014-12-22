@@ -19,7 +19,7 @@ public interface TextConstants {
     public static final String FILEDELIMITER = "FiledDelimiter";
     public static final String ESCAPECHAR = "EscapeChar";
     public static final String OPTION_MAXLINE = "MaxLine";
-    public static final String FILE_FILTER = "FileFilter";
+    public static final String FILE_EXTENSION = "FileFilter";
         
     // connector operation    
     public static final String OPERATION = "Operation";
