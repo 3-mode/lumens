@@ -35,7 +35,7 @@ public class ConnectorTest {
 
     private String path2read = getClass().getResource("/delimited/incsv.csv").getFile();
     private String folder2read = getClass().getResource("/delimited/").getFile();
-    private String path2write = getClass().getResource("/delimited").getPath() + "/outcsv.csv";
+    private String path2write = getClass().getResource("/delimited").getPath() + "/outcsv.txt";
     private String schemaPath = getClass().getResource("/delimited/incsv_schema.xml").getFile();
 
     @Before
@@ -72,7 +72,8 @@ public class ConnectorTest {
         propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));        
         propsR.put(TextConstants.OPTION_IGNORE_EMPTYLINE, new Value(true));
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(9));
-        propsR.put(TextConstants.FILE_FILTER, new Value("*.csv"));
+        propsR.put(TextConstants.FILE_EXTENSION, new Value("csv"));
+        propsR.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));  
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
@@ -113,8 +114,8 @@ public class ConnectorTest {
             paramsMultiR.setValue(new Value(TextConstants.FORMAT_MESSAGE));
             paramsMultiR.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));
             paramsMultiR.addChild(TextConstants.PATH).setValue(new Value(folder2read));
-            //resultR = operR.execute(Arrays.asList(elemMultiRead), fmtR);
-            //assertTrue("Fail to executre source element read", resultR.hasResult());            
+            resultR = operR.execute(Arrays.asList(elemMultiRead), fmtR);
+            assertTrue("Fail to executre source element read: multi files read", resultR.hasResult());            
             operR.commit();
             
             operR.end();
