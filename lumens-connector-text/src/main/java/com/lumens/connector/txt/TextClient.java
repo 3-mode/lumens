@@ -3,7 +3,6 @@
  */
 package com.lumens.connector.txt;
 
-import com.lumens.model.DataElement;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -45,9 +44,9 @@ public class TextClient {
         String path = param.getChild(TextConstants.PATH) == null ? 
                 propList.get(TextConstants.PATH).toString()     : 
                 param.getChild(TextConstants.PATH).getValue().toString();
-        String filter = param.getChild(TextConstants.FILE_FILTER) == null ? 
-                propList.get(TextConstants.FILE_FILTER).toString()     : 
-                param.getChild(TextConstants.FILE_FILTER).getValue().toString();        
+        String filter = param.getChild(TextConstants.FILE_EXTENSION) == null ? 
+                propList.get(TextConstants.FILE_EXTENSION).toString()     : 
+                param.getChild(TextConstants.FILE_EXTENSION).getValue().toString();        
         String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null ?  
                 propList.get(TextConstants.FILEDELIMITER).toString()          : 
                 param.getChild(TextConstants.FILEDELIMITER).getValue().toString();
@@ -57,7 +56,9 @@ public class TextClient {
         boolean ignoreEmptyLine = param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE) == null ?
                 propList.get(TextConstants.OPTION_IGNORE_EMPTYLINE).getBoolean():
                 param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE).getValue().getBoolean();
-        
+        boolean formatAsTitle = param.getChild(TextConstants.OPTION_FORMAT_ASTITLE) == null
+                ? propList.get(TextConstants.OPTION_FORMAT_ASTITLE).getBoolean()
+                : param.getChild(TextConstants.OPTION_FORMAT_ASTITLE).getValue().getBoolean();        
         int maxLine = param.getChild(TextConstants.OPTION_MAXLINE) == null ?
                 propList.get(TextConstants.OPTION_MAXLINE).getInt():
                 param.getChild(TextConstants.OPTION_MAXLINE).getValue().getInt();
@@ -77,7 +78,7 @@ public class TextClient {
                         files.add(f);                   
                 }                
             }
-                
+            
             for( File file: files){
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
                 String line;
@@ -88,6 +89,12 @@ public class TextClient {
                     if (line.isEmpty() && ignoreEmptyLine) {
                         continue;
                     }
+                    
+                    // TODO: deal with title while reading 
+                    if (formatAsTitle){
+                        
+                    }
+                    
                     Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape);
                     result.add(build);
                 }
