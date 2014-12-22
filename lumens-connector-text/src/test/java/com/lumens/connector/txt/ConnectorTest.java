@@ -113,8 +113,8 @@ public class ConnectorTest {
             paramsMultiR.setValue(new Value(TextConstants.FORMAT_MESSAGE));
             paramsMultiR.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));
             paramsMultiR.addChild(TextConstants.PATH).setValue(new Value(folder2read));
-            resultR = operR.execute(Arrays.asList(elemMultiRead), fmtR);
-            assertTrue("Fail to executre source element read", resultR.hasResult());            
+            //resultR = operR.execute(Arrays.asList(elemMultiRead), fmtR);
+            //assertTrue("Fail to executre source element read", resultR.hasResult());            
             operR.commit();
             
             operR.end();
