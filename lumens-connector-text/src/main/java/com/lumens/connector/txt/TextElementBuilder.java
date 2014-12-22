@@ -6,11 +6,7 @@ package com.lumens.connector.txt;
 import com.lumens.model.DataElement;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
-import com.lumens.model.Type;
 import com.lumens.model.Value;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 /**
  *

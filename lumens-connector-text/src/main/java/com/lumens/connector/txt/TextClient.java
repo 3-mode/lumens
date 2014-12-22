@@ -11,13 +11,14 @@ import java.io.OutputStreamWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import com.lumens.io.LocalFileNameFilter;
 import com.lumens.model.Format;
 import com.lumens.model.Element;
 import com.lumens.model.Value;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-
+import java.io.File;
 
 
 /**
@@ -44,6 +45,9 @@ public class TextClient {
         String path = param.getChild(TextConstants.PATH) == null ? 
                 propList.get(TextConstants.PATH).toString()     : 
                 param.getChild(TextConstants.PATH).getValue().toString();
+        String filter = param.getChild(TextConstants.FILE_FILTER) == null ? 
+                propList.get(TextConstants.FILE_FILTER).toString()     : 
+                param.getChild(TextConstants.FILE_FILTER).getValue().toString();        
         String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null ?  
                 propList.get(TextConstants.FILEDELIMITER).toString()          : 
                 param.getChild(TextConstants.FILEDELIMITER).getValue().toString();
@@ -59,15 +63,34 @@ public class TextClient {
                 param.getChild(TextConstants.OPTION_MAXLINE).getValue().getInt();
         
         try {
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), encoding));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (maxLine > 0 && --maxLine <= 0)
-                    break;
-                if (line.isEmpty() && ignoreEmptyLine)
-                    continue;
-                Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape);                
-                result.add(build);
+            // Add file list
+            List<File> files = new ArrayList();
+            File fileOrDir = new File(path);
+            if (!fileOrDir.exists()){
+                throw new RuntimeException("Path not exist!");
+            }
+            if (fileOrDir.isFile()){
+                files.add(new File(path));
+            }else if (fileOrDir.isDirectory()){                
+                for(File f : fileOrDir.listFiles(new LocalFileNameFilter(filter))){                       
+                    if (f.isFile()) 
+                        files.add(f);                   
+                }                
+            }
+                
+            for( File file: files){
+                reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (maxLine > 0 && --maxLine <= 0) {
+                        break;
+                    }
+                    if (line.isEmpty() && ignoreEmptyLine) {
+                        continue;
+                    }
+                    Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape);
+                    result.add(build);
+                }
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);

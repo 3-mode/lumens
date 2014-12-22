@@ -58,6 +58,7 @@ public class ConnectorTest {
 
     @Test
     public void testConnector() {
+                   
         ConnectorFactory cntr = new TextConnectorFactory();
         TextConnector cntrR = (TextConnector) cntr.createConnector();
 
@@ -70,6 +71,7 @@ public class ConnectorTest {
         propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));        
         propsR.put(TextConstants.OPTION_IGNORE_EMPTYLINE, new Value(true));
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(9));
+        propsR.put(TextConstants.FILE_FILTER, new Value("*.csv"));
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
@@ -177,6 +179,8 @@ public class ConnectorTest {
             outputA.add(elemAppend);
             OperationResult resultA = operW.execute(outputA, fmtW);
             operW.commit();   
+            
+
             
             operW.end();                     
         } catch (Exception ex) {
