@@ -68,6 +68,7 @@
         <module>lumens-task</module>
         <module>lumens-connector-db</module>
         <module>lumens-connector-sqlserver</module>
+        <module>lumens-connector-text</module>
         <module>lumens-management</module>
     </modules>
     <dependencies>

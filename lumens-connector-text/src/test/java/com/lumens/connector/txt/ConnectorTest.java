@@ -34,7 +34,8 @@ import static org.junit.Assert.assertFalse;
 public class ConnectorTest {
 
     private String path2read = getClass().getResource("/delimited/incsv.csv").getFile();
-    private String path2write = getClass().getResource("/delimited").getPath() + "/outcsv.csv";
+    private String folder2read = getClass().getResource("/delimited/").getFile();
+    private String path2write = getClass().getResource("/delimited").getPath() + "/outcsv.txt";
     private String schemaPath = getClass().getResource("/delimited/incsv_schema.xml").getFile();
 
     @Before
@@ -58,6 +59,7 @@ public class ConnectorTest {
 
     @Test
     public void testConnector() {
+                   
         ConnectorFactory cntr = new TextConnectorFactory();
         TextConnector cntrR = (TextConnector) cntr.createConnector();
 
@@ -70,6 +72,8 @@ public class ConnectorTest {
         propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));        
         propsR.put(TextConstants.OPTION_IGNORE_EMPTYLINE, new Value(true));
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(9));
+        propsR.put(TextConstants.FILE_EXTENSION, new Value("csv"));
+        propsR.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));  
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
@@ -84,26 +88,39 @@ public class ConnectorTest {
         assertTrue("fail to open source text connector", cntrR.isOpen());
 
         OperationResult resultR = null;
-        operR.begin();
+        
         try {
             Format fmtR = fmtListR.get("TextMessage");
             if (fmtR == null) {
                 assertFalse("Fail to get source format", true);
             }
 
-            // Element read
+            // Element read            
             Element elemRead = new DataElement(fmtR);
             Element paramsR = elemRead.addChild(TextConstants.FORMAT_PARAMS);
             paramsR.setValue(new Value(TextConstants.FORMAT_MESSAGE));
             paramsR.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));
             paramsR.addChild(TextConstants.PATH).setValue(new Value(path2read));
 
+            operR.begin();
             resultR = operR.execute(Arrays.asList(elemRead), fmtR);
             assertTrue("Fail to executre source element read", resultR.hasResult());
             operR.commit();
+            
+            // Read a folder
+            operR.begin();
+            Element elemMultiRead = new DataElement(fmtR);
+            Element paramsMultiR = elemMultiRead.addChild(TextConstants.FORMAT_PARAMS);
+            paramsMultiR.setValue(new Value(TextConstants.FORMAT_MESSAGE));
+            paramsMultiR.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));
+            paramsMultiR.addChild(TextConstants.PATH).setValue(new Value(folder2read));
+            resultR = operR.execute(Arrays.asList(elemMultiRead), fmtR);
+            assertTrue("Fail to executre source element read: multi files read", resultR.hasResult());            
+            operR.commit();
+            
             operR.end();
         } catch (Exception ex) {
-            assertFalse("Fail to execute source connector read", true);
+            assertFalse("Fail to execute source connector read: multi files read", true);
         }
         
         // Element overwrite
@@ -177,6 +194,8 @@ public class ConnectorTest {
             outputA.add(elemAppend);
             OperationResult resultA = operW.execute(outputA, fmtW);
             operW.commit();   
+            
+
             
             operW.end();                     
         } catch (Exception ex) {

@@ -8,7 +8,11 @@
 /lumens-connector-orcl/target/
 /lumens-connector-ws/target/
 /lumens-connector-soap/target/
+/lumens-connector-text/target/
+/lumens-connector-sqlserver/target/
 /target/
 /assembler/target/
 /lumens-addin/target/
 /lumens-commons/target/
+/lumens-model/target/
+/lumens-processor/target/
