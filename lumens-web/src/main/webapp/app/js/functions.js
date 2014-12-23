@@ -15,48 +15,6 @@ function createGetTemplateObject($http, $q, url) {
     };
 }
 
-function buildDataFormatList($parent, formatList) {
-    if (formatList) {
-        var formatTree = new Lumens.Tree($parent).configure({
-            handler: function (parentNode) {
-                var entryList = [];
-                $.each(formatList, function () {
-                    console.log("entry name:", this.format);
-                    for (var i in this.format) {
-                        var itemFormat = this.format[i];
-                        entryList.push({
-                            label: itemFormat.type === "None" ? itemFormat.name : itemFormat.name + "&nbsp;&nbsp;[" + itemFormat.type + "]",
-                            name: itemFormat.name,
-                            nodeType: itemFormat.form === "Field" ? "file" : "folder",
-                            data: itemFormat
-                        });
-                    }
-                });
-                parentNode.addEntryList(entryList);
-            },
-            dblclick: function (current, parent) {
-                if (current.hasContent() || !current.isFolder())
-                    return;
-                var nodeList = [];
-                $.each(current.data.format, function (i) {
-                    console.log("format:", this);
-                    nodeList[i] = {
-                        label: this.type === "None" ? this.name : this.name + "&nbsp;&nbsp;[" + this.type + "]",
-                        name: this.name,
-                        nodeType: this.form === "Field" ? "file" : "folder",
-                        data: this
-                    };
-                });
-                current.addChildList(nodeList);
-            },
-            draggable: true
-        });
-
-        return formatTree;
-    }
-    return null;
-}
-
 function getAppendTransformRuleItems(first, second) {
     var temp = [];
     $.each(second, function () {
@@ -200,6 +158,7 @@ function ComponentPropertyList(config) {
         "Description": {label: category.i18n.Description, value: (compinfo && compinfo.description) ? compinfo.description : "", type: "String"},
         "Name": {label: category.i18n.Name, value: (compinfo && compinfo.name) ? compinfo.name : "", type: "String"}
     };
+
     if (!category.property)
         return componentProps;
 
@@ -210,13 +169,15 @@ function ComponentPropertyList(config) {
             name: category_property.name,
             type: category_property.type
         }
-        $.each(compinfo.property, function () {
-            if (this.name === category_property.name) {
-                componentProps[category_property.name].value = this.value;
-                return false;
+
+        for (var i in compinfo.property) {
+            var prop = compinfo.property[i];
+            if (prop.name === category_property.name) {
+                componentProps[category_property.name].value = prop.value;
+                break;
             }
-        })
-    })
+        }
+    });
     return componentProps;
 }
 
@@ -256,14 +217,14 @@ function buildTransformationList($parent, component) {
 }
 
 function isFormatOf(formatEntryList, formatName) {
-    for (var i = 0; i < formatEntryList.length; ++i)
+    for (var i in formatEntryList)
         if (formatEntryList[i].name === formatName)
             return true;
     return false;
 }
 
 function getTargetComponentFormatList(componentList, selectTargetName) {
-    for (var i = 0; i < componentList.length; ++i)
+    for (var i in componentList)
         if (componentList[i].configure.short_desc === selectTargetName)
             return componentList[i].configure.component_info.format_list;
     return undefined;

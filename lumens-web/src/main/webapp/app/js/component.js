@@ -6,20 +6,20 @@
  * Connector implementation, logic and drawing
  */
 Lumens.Link = Class.$extend({
-    __init__: function() {
+    __init__: function () {
         this.$paper = Raphael("id-data-comp-container", 1, 1);
     },
-    from: function(component) {
+    from: function (component) {
         this.$from = component;
         component.to(this);
         return this;
     },
-    to: function(component) {
+    to: function (component) {
         this.$to = component;
         component.from(this);
         return this;
     },
-    draw: function() {
+    draw: function () {
         var bb0 = this.$from.getBBox();
         var bb1 = this.$to.getBBox();
         var min = {"x": bb0.x < bb1.x ? bb0.x : bb1.x, "y": bb0.y < bb1.y ? bb0.y : bb1.y};
@@ -32,16 +32,16 @@ Lumens.Link = Class.$extend({
             this.$connection = this.$paper.connection(this.$from, this.$to, "#CCCCCC");
         return this;
     },
-    getTo: function() {
+    getTo: function () {
         return this.$to;
     },
-    getFrom: function() {
+    getFrom: function () {
         return this.$from;
     }
 });
 
 Lumens.Component = Class.$extend({
-    __init__: function($parent, config) {
+    __init__: function ($parent, config) {
         this.$parent = $parent;
         this.configure = config;
         this.isMultipleLink = Lumens.isMultipleLink(config.category_info.class_type);
@@ -58,7 +58,7 @@ Lumens.Component = Class.$extend({
         .draggable({
             cursor: "move",
             stack: ".data-comp",
-            drag: function() {
+            drag: function () {
                 if (__this.$to_list)
                     for (var i = 0; i < __this.$to_list.length; ++i)
                         __this.$to_list[i].draw();
@@ -69,7 +69,7 @@ Lumens.Component = Class.$extend({
         })
         .droppable({
             accept: ".data-comp-icon",
-            drop: function(event, ui) {
+            drop: function (event, ui) {
                 event.preventDefault();
                 if (ui.draggable[0] === $(this).find(".data-comp-icon")[0])
                     return;
@@ -92,17 +92,17 @@ Lumens.Component = Class.$extend({
             }
         });
         this.$elem.find(".data-comp-icon")
-        .on("dblclick", function() {
+        .on("dblclick", function () {
             if (__this.configure.onComponentDblclick)
                 __this.configure.onComponentDblclick(__this);
         })
         .draggable({
             appendTo: $("#id-data-comp-container"),
-            helper: function() {
+            helper: function () {
                 return $(this).clone().zIndex(2000).css("opacity", "0.7");
             }
         }).data("data-comp", this);
-        this.$elem.find(".data-comp-stauts").dblclick(function() {
+        this.$elem.find(".data-comp-stauts").dblclick(function () {
             if (__this.statusCallback) {
                 var statOK = __this.statusCallback(this);
                 var bActive = $(this).attrBoolean("is-active");
@@ -127,22 +127,22 @@ Lumens.Component = Class.$extend({
         this.$to_list = [];
         this.$from_list = [];
     },
-    setShortDescription: function(shortDesc) {
+    setShortDescription: function (shortDesc) {
         this.$elem.find('#id-shortdsc').text(shortDesc);
     },
-    getId: function() {
+    getId: function () {
         return this.getCompData().id;
     },
-    getConfig: function() {
+    getConfig: function () {
         return this.configure;
     },
-    getXY: function() {
+    getXY: function () {
         return {
             "x": this.$elem.cssInt("left"),
             "y": this.$elem.cssInt("top")
         };
     },
-    getBBox: function() {
+    getBBox: function () {
         var xy = this.getXY();
         return {
             "x": xy.x,
@@ -153,13 +153,13 @@ Lumens.Component = Class.$extend({
             "height": 90
         }
     },
-    to: function(link) {
+    to: function (link) {
         this.$to_list.push(link);
     },
-    from: function(link) {
+    from: function (link) {
         this.$from_list.push(link);
     },
-    removeFromLink: function(link) {
+    removeFromLink: function (link) {
         var length = this.$from_list.length;
         while (length > 0) {
             if (this.$from_list[--length] === link)
@@ -169,7 +169,7 @@ Lumens.Component = Class.$extend({
             this.$from_list.splice(length, 1);
         return this;
     },
-    removeToLink: function(link) {
+    removeToLink: function (link) {
         var length = this.$to_list.length;
         while (length > 0) {
             if (this.$to_list[--length] === link)
@@ -179,54 +179,54 @@ Lumens.Component = Class.$extend({
             this.$to_list.splice(length, 1);
         return this;
     },
-    getFromLinkList: function() {
+    getFromLinkList: function () {
         return this.$from_list;
     },
-    getToLinkList: function() {
+    getToLinkList: function () {
         return this.$to_list;
     },
-    changeStatus: function(callback) {
+    changeStatus: function (callback) {
         this.statusCallback = callback;
-    }, hasFrom: function() {
+    }, hasFrom: function () {
         return this.getFromCount() > 0;
     },
-    getFromCount: function() {
+    getFromCount: function () {
         return this.getFromLinkList() ? this.getFromLinkList().length : 0;
     },
-    getFrom: function(index) {
+    getFrom: function (index) {
         return this.getFromLinkList()[index].getFrom();
     },
-    hasTo: function() {
+    hasTo: function () {
         return this.getToCount() > 0;
     },
-    getToCount: function() {
+    getToCount: function () {
         return this.getToLinkList() ? this.getToLinkList().length : 0;
     },
-    getTo: function(index) {
+    getTo: function (index) {
         return this.getToLinkList()[index].getTo();
     },
-    getFormHtml: function() {
+    getFormHtml: function () {
         return this.getCategory().html;
     },
-    isDataSource: function() {
+    isDataSource: function () {
         return this.getCategory().class_type === "datasource";
     },
-    getClassType: function() {
+    getClassType: function () {
         return this.getCategory().class_type;
     },
-    getCategory: function() {
+    getCategory: function () {
         return this.getConfig().category_info;
     },
-    getCompData: function() {
+    getCompData: function () {
         return this.getConfig().component_info;
     }
 });
 
 Lumens.DataComponent = Lumens.Component.$extend({
-    __init: function($parent, config) {
+    __init: function ($parent, config) {
         this.$super($parent, config);
     },
-    getFormatEntry: function(direction) {
+    getFormatEntry: function (direction) {
         if (!this.isDataSource())
             return;
         var formatList = this.getCompData().format_list;
@@ -239,7 +239,7 @@ Lumens.DataComponent = Lumens.Component.$extend({
         }
         return null;
     },
-    setFormatEntry: function(direction, formatEntry) {
+    setFormatEntry: function (direction, formatEntry) {
         if (!this.isDataSource())
             return;
         var formatList = this.getCompData().format_list;
@@ -262,15 +262,20 @@ Lumens.DataComponent = Lumens.Component.$extend({
         }
 
     },
-    getTransformRuleEntry: function() {
+    getTransformRuleEntry: function () {
         if (this.isDataSource())
             return null;
         return  this.getCompData().transform_rule_entry;
     },
-    setTransformRuleEntry: function(transformRuleEntry) {
-
+    setTransformRuleEntry: function (transformRuleEntry) {
+        if (this.isDataSource())
+            return;
+        if (this.getCompData().transform_rule_entry)
+            this.getCompData().transform_rule_entry.push(transformRuleEntry);
+        else
+            this.getCompData().transform_rule_entry = [transformRuleEntry];
     },
-    getRegisterInputFormat: function(regName) {
+    getRegisterInputFormat: function (regName) {
         var formatEntry = null;
         if (this.isDataSource()) {
             formatEntry = this.getFormatEntry("IN");
@@ -283,7 +288,7 @@ Lumens.DataComponent = Lumens.Component.$extend({
                     return formatEntry[i].format[0];
         return null;
     },
-    getRegisterOutputFormat: function(regName) {
+    getRegisterOutputFormat: function (regName) {
         var formatEntry = null;
         if (this.isDataSource()) {
             formatEntry = this.getFormatEntry("OUT");

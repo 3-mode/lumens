@@ -59,17 +59,36 @@ Lumens.directives.directive("formatList", ['FormatBuilder', function (FormatBuil
             }
         };
     }]);
-Lumens.directives.directive("ruleEntity", function () {
+Lumens.directives.directive("ruleEntry", function (RuleBuilder) {
     return {
         restrict: 'A',
         link: function ($scope, element, attr) {
+            element.droppable({
+                greedy: true,
+                accept: ".lumens-tree-node",
+                drop: function (event, ui) {
+                    var data = $.data(ui.draggable.get(0), "tree-node-data");
+                    LumensLog.log("Dropped", data);
+                    // TODO compare root
+                    // TODO append to exist correctly
+                    if (element.children().length > 0) {
+                        // TODO try to append to the rule tree
+
+                        // TODO if the root name doesn't match, renew the rule tree
+                    } else {
+                        // TODO create a new rule tree
+                        RuleBuilder.buildFromData($scope, element, data.location);
+                    }
+                }
+            });
+
             $scope.$watch(function () {
-                return $scope[attr.ruleEntity];
-            }, function (ruleEntity) {
+                return $scope[attr.ruleEntry];
+            }, function (ruleEntry) {
                 element.empty();
-                if (ruleEntity) {
-                    console.log("Rule list:", ruleEntity);
-                    buildTransformRuleTree(element, ruleEntity);
+                if (ruleEntry) {
+                    console.log("Rule list:", ruleEntry);
+                    RuleBuilder.buildFromRuleEntity($scope, element, ruleEntry);
                 }
             });
         }

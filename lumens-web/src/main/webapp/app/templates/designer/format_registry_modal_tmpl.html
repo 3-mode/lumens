@@ -14,7 +14,7 @@
                     <div class="form-group">
                         <label for="selectFormatList">Format List</label>
                         <select class="form-control input-lg" ng-model="selectedFormatName">
-                            <option ng-repeat='formatItem in currentFormatList'>{{formatItem.format[0].name}}</option>
+                            <option ng-repeat='formatItem in currentFormatList'>{{formatItem.format.name}}</option>
                         </select>
                     </div>
                 </form>

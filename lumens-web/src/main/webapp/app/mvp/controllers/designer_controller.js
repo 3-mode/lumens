@@ -4,7 +4,7 @@
 
 Lumens.controllers.controller("DesignViewCtrl", function ($scope, $route, $http, $compile,
 DesignNavMenu, SuccessTemplate, WarningTemplate, ErrorTemplate, PropFormTemplate, TransformListTemplate,
-DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
+DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
     Lumens.system.switchTo(Lumens.system.NormalView);
     // Set the default page view as dashboard view
     var i18n = $scope.i18n = Lumens.i18n;
@@ -40,154 +40,162 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
     // Load menu category
     DesignNavMenu.get(function (menu) {
         // Load data source category
-        $.getJSON("app/mock/json/data_source_category.json", function (mock_category) {
-            DatasourceCategory.get(function (data_source_items) {
-                $.each(mock_category.items, function () {
-                    data_source_items.items.push(this);
+        DatasourceCategory.get(function (data_source_items) {
+            //Load instrument category
+            InstrumentCategory.get(function (instrument_items) {
+                menu.sections[0].items = data_source_items.items;
+                menu.sections[1].items = instrument_items.items;
+                jSyncHtml.get(instrument_items.items);
+                // Create a dictionary to find the correct icon
+                $scope.compCagegory = {};
+                $.each(data_source_items.items, function () {
+                    $scope.compCagegory[this.type] = this;
                 });
-                //Load instrument category
-                InstrumentCategory.get(function (instrument_items) {
-                    menu.sections[0].items = data_source_items.items;
-                    menu.sections[1].items = instrument_items.items;
-                    jSyncHtml.get(instrument_items.items);
-                    // Create a dictionary to find the correct icon
-                    $scope.compCagegory = {};
-                    $.each(data_source_items.items, function () {
-                        $scope.compCagegory[this.type] = this;
-                    });
-                    $.each(instrument_items.items, function () {
-                        $scope.compCagegory[this.type] = this;
-                    });
-                    desgin.barPanel = new Lumens.SplitLayout(Lumens.system.workspaceLayout.getPart2Element()).configure({
-                        mode: "vertical",
-                        part1Size: 48
-                    });
-                    DesignButtons.get(function (design_command_tmpl) {
-                        $compile(design_command_tmpl)($scope).appendTo(desgin.barPanel.getPart1Element());
-                    });
+                $.each(instrument_items.items, function () {
+                    $scope.compCagegory[this.type] = this;
+                });
+                desgin.barPanel = new Lumens.SplitLayout(Lumens.system.workspaceLayout.getPart2Element()).configure({
+                    mode: "vertical",
+                    part1Size: 48
+                });
+                DesignButtons.get(function (design_command_tmpl) {
+                    $compile(design_command_tmpl)($scope).appendTo(desgin.barPanel.getPart1Element());
+                });
 
-                    desgin.designAndInfoPanel = new Lumens.ResizableVSplitLayoutExt(desgin.barPanel.getPart2Element())
-                    .configure({
-                        mode: "vertical",
-                        useRatio: true,
-                        part1Size: "40%"
-                    });
-                    // Create desgin workspace panel
-                    desgin.designPanel = new Lumens.ComponentPanel(desgin.designAndInfoPanel.getPart1Element())
-                    .configure({
-                        panelStyle: {width: "100%", height: "100%"},
-                        onComponentDblclick: function (component) {
-                            LumensLog.log("Dblclick:", component);
-                            if ($scope.currentUIComponent === component)
-                                return;
-                            $scope.currentUIComponent = component;
-                            var config = component.configure;
-                            $scope.$apply(function () {
-                                $scope.componentForm = $compile(component.getFormHtml())($scope);
-                                $scope.categoryInfo = config.category_info;
-                                $scope.componentProps = ComponentPropertyList(config);
-                                $scope.currentComponent = config.component_info ? config.component_info : $scope.currentComponent
-                            });
-                        },
-                        onBeforeComponentAdd: function () {
-                            if ($scope.project)
-                                return true;
-                            $scope.messageBox.showWarning(i18n.id_no_project_warning, desgin.designPanel.getElement());
-                            return false;
-                        },
-                        onAfterComponentAdd: function (component) {
-                            LumensLog.log("Added compnoent:", component);
-                            $scope.projectOperator.add(component.getCompData(), component.getClassType());
+                desgin.designAndInfoPanel = new Lumens.ResizableVSplitLayoutExt(desgin.barPanel.getPart2Element())
+                .configure({
+                    mode: "vertical",
+                    useRatio: true,
+                    part1Size: "40%"
+                });
+                // Create desgin workspace panel
+                desgin.designPanel = new Lumens.ComponentPanel(desgin.designAndInfoPanel.getPart1Element())
+                .configure({
+                    panelStyle: {width: "100%", height: "100%"},
+                    onComponentDblclick: function (component) {
+                        LumensLog.log("Dblclick:", component);
+                        if ($scope.currentUIComponent === component)
+                            return;
+                        $scope.currentUIComponent = component;
+                        var config = component.configure;
+                        $scope.$apply(function () {
+                            $scope.componentForm = $compile(component.getFormHtml())($scope);
+                            $scope.categoryInfo = config.category_info;
+                            $scope.componentProps = ComponentPropertyList(config);
+                            $scope.currentComponent = config.component_info ? config.component_info : $scope.currentComponent
+                        });
+                    },
+                    onBeforeComponentAdd: function () {
+                        if ($scope.project)
+                            return true;
+                        $scope.messageBox.showWarning(i18n.id_no_project_warning, desgin.designPanel.getElement());
+                        return false;
+                    },
+                    onAfterComponentAdd: function (component) {
+                        LumensLog.log("Added compnoent:", component);
+                        $scope.projectOperator.add(component.getCompData(), component.getClassType());
+                    }
+                });
+                $scope.projectOperator = new Lumens.ProjectOperator($scope.compCagegory, desgin.designPanel, $scope);
+                // Create left menu
+                desgin.navMenu = new Lumens.NavMenu({
+                    container: desgin.leftPanel.getElement(),
+                    width: "100%",
+                    height: "auto"
+                }).configure(menu, function (item, data) {
+                    item.find("a").addClass("data-comp-node").draggable({
+                        appendTo: $("#id-data-comp-container"),
+                        helper: "clone"
+                    }).data("item-data", data);
+                });
+
+                // Create info form panel
+                desgin.designAndInfoPanel.getTitleElement().append($compile('<b>Name: {{project.name}}</b>')($scope));
+                desgin.tabsContainer = new Lumens.Panel(desgin.designAndInfoPanel.getPart2Element())
+                .configure({
+                    panelStyle: {"height": "100%", "width": "100%", "position": "relative", "overflow-y": "scroll", "overflow-x": "auto"}
+                });
+                function tabSummary($tabContent) {
+                    desgin.tabs.projSummaryList = new Lumens.List($tabContent).configure({
+                        IdList: [
+                            "Description",
+                            "Resources",
+                            "Instruments"
+                        ],
+                        titleList: [
+                            "Description",
+                            "Resources",
+                            "Instruments"
+                        ],
+                        buildContent: function (itemContent, id, isExpand, title) {
+                            if (isExpand) {
+                                if (id === "Description") {
+                                    $http.get("app/templates/designer/project_desc_tmpl.html").success(function (project_desc_tmpl) {
+                                        itemContent.append($compile(project_desc_tmpl)($scope));
+                                    });
+                                }
+                                else if (id === "Resources") {
+                                    $http.get("app/templates/designer/resources_tmpl.html").success(function (resources_tmpl) {
+                                        itemContent.append($compile(resources_tmpl)($scope));
+                                    });
+                                }
+                                else if (id === "Instruments") {
+                                    $http.get("app/templates/designer/instruments_tmpl.html").success(function (instruments_tmpl) {
+                                        itemContent.append($compile(instruments_tmpl)($scope));
+                                    });
+                                }
+                            }
                         }
                     });
-                    $scope.projectOperator = new Lumens.ProjectOperator($scope.compCagegory, desgin.designPanel, $scope);
-                    // Create left menu
-                    desgin.navMenu = new Lumens.NavMenu({
-                        container: desgin.leftPanel.getElement(),
-                        width: "100%",
-                        height: "auto"
-                    }).configure(menu, function (item, data) {
-                        item.find("a").addClass("data-comp-node").draggable({
-                            appendTo: $("#id-data-comp-container"),
-                            helper: "clone"
-                        }).data("item-data", data);
-                    });
-
-                    // Create info form panel
-                    desgin.designAndInfoPanel.getTitleElement().append($compile('<b>Name: {{project.name}}</b>')($scope));
-                    desgin.tabsContainer = new Lumens.Panel(desgin.designAndInfoPanel.getPart2Element())
-                    .configure({
-                        panelStyle: {"height": "100%", "width": "100%", "position": "relative", "overflow-y": "scroll", "overflow-x": "auto"}
-                    });
-                    function tabSummary($tabContent) {
-                        desgin.tabs.projSummaryList = new Lumens.List($tabContent).configure({
-                            IdList: [
-                                "Description",
-                                "Resources",
-                                "Instruments"
-                            ],
-                            titleList: [
-                                "Description",
-                                "Resources",
-                                "Instruments"
-                            ],
-                            buildContent: function (itemContent, id, isExpand, title) {
-                                if (isExpand) {
-                                    if (id === "Description") {
-                                        $http.get("app/templates/designer/project_desc_tmpl.html").success(function (project_desc_tmpl) {
-                                            itemContent.append($compile(project_desc_tmpl)($scope));
-                                        });
-                                    }
-                                    else if (id === "Resources") {
-                                        $http.get("app/templates/designer/resources_tmpl.html").success(function (resources_tmpl) {
-                                            itemContent.append($compile(resources_tmpl)($scope));
-                                        });
-                                    }
-                                    else if (id === "Instruments") {
-                                        $http.get("app/templates/designer/instruments_tmpl.html").success(function (instruments_tmpl) {
-                                            itemContent.append($compile(instruments_tmpl)($scope));
-                                        });
-                                    }
+                }
+                function tabConfiguration($tabContent) {
+                    desgin.tabs.compPropsList = new Lumens.List($tabContent).configure({
+                        IdList: [
+                            "ComponentProps"
+                        ],
+                        titleList: [
+                            $compile('<span data-bind="categoryInfo.name">{{categoryInfo.name}}</span>')($scope)
+                        ],
+                        buildContent: function (itemContent, id, isExpand, title) {
+                            if (isExpand) {
+                                if (id === "ComponentProps") {
+                                    PropFormTemplate.get(function (propFormTmpl) {
+                                        itemContent.append($compile(propFormTmpl)($scope));
+                                    })
                                 }
                             }
-                        });
-                    }
-                    function tabConfiguration($tabContent) {
-                        desgin.tabs.compPropsList = new Lumens.List($tabContent).configure({
-                            IdList: [
-                                "ComponentProps"
-                            ],
-                            titleList: [
-                                $compile('<span data-bind="categoryInfo.name">{{categoryInfo.name}}</span>')($scope)
-                            ],
-                            buildContent: function (itemContent, id, isExpand, title) {
-                                if (isExpand) {
-                                    if (id === "ComponentProps") {
-                                        PropFormTemplate.get(function (propFormTmpl) {
-                                            itemContent.append($compile(propFormTmpl)($scope));
-                                        })
-                                    }
-                                }
-                            }
-                        });
-                    }
-                    function tabTransformationList($tabContent) {
-                        $tabContent.append($compile($scope.transformListTemplate)($scope));
-
-                    }
-                    desgin.tabs = new Lumens.TabPanel(desgin.tabsContainer.getElement());
-                    desgin.tabs.configure({
-                        tab: [
-                            {id: "id-project-info", label: "Project Summary", content: tabSummary},
-                            {id: "id-component-selected-props", label: "Component Properties", content: tabConfiguration},
-                            {id: "id-component-transformation-list", label: "Transformations", content: tabTransformationList}
-                        ]
+                        }
                     });
-                })
-            });
+                }
+                function tabTransformationList($tabContent) {
+                    $tabContent.append($compile($scope.transformListTemplate)($scope));
+
+                }
+                desgin.tabs = new Lumens.TabPanel(desgin.tabsContainer.getElement());
+                desgin.tabs.configure({
+                    tab: [
+                        {id: "id-project-info", label: "Project Summary", content: tabSummary},
+                        {id: "id-component-selected-props", label: "Component Properties", content: tabConfiguration},
+                        {id: "id-component-transformation-list", label: "Transformations", content: tabTransformationList}
+                    ]
+                });
+            })
         });
     });
     // <******* Design View ------------------------------------------------------------
+    // Try to load the project on local when refresh the currrent view if already there is a project is opened.
+    if (sessionStorage.local_project_storage) {
+        var local_project_storage = angular.fromJson(sessionStorage.local_project_storage);
+        ProjectById.get({project_id: local_project_storage.id}, function (projectData) {
+            if ($scope.projectOperator)
+                $scope.projectOperator.import(projectData);
+            if (local_project_storage.is_active)
+                ProjectById.operate({project_id: local_project_storage.id}, {action: 'active'}, function (result) {
+                    LumensLog.log(result);
+                });
+        });
+    }
+
 })
 .controller("DesginCmdCtrl", function ($scope, $element, $compile, ProjectListModal, ProjectCreateModal, ProjectSave, ProjectById) {
     // Handle desgin command button event
@@ -239,6 +247,10 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
         else if ("id_active" === id) {
             ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function (result) {
                 LumensLog.log(result);
+                sessionStorage.local_project_storage = angular.toJson({
+                    id: projectOperator.get().projectId,
+                    is_active: true
+                });
             });
         }
         else if ("id_deploy" === id) {
@@ -276,6 +288,9 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
             ProjectById.get({project_id: $scope.currentProjectId}, function (projectData) {
                 if (projectOperator)
                     projectOperator.import(projectData);
+                sessionStorage.local_project_storage = angular.toJson({
+                    id: projectOperator.get().projectId
+                });
             });
         }
         else {
@@ -309,7 +324,6 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
 })
 .controller("TransformListCtrl", function ($scope, $compile, $element, TransformEditTemplate, RuleEditorService) {
     LumensLog.log("In TransformListCtrl", $element);
-    $scope.ruleEditorService = RuleEditorService.create();
 
     function showRuleEditor() {
         Lumens.system.workspaceLayout.hide();
@@ -334,7 +348,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
     $scope.onRuleCommand = function (id_btn) {
         if (id_btn === "id_rule_new") {
             LumensLog.log("New rule");
-            $scope.currentTransformRule = null;
+            $scope.currentRuleEntry = null;
             $scope.inputFormatRegName = null;
             $scope.outputFormatRegName = null;
             $scope.inputSelectedFormatName = null;
@@ -347,7 +361,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
 
     $scope.openTransformEditing = function (ruleEntry) {
         LumensLog.log("Opening rule: ", ruleEntry);
-        $scope.currentTransformRule = ruleEntry;
+        $scope.currentRuleEntry = ruleEntry;
         $scope.inputFormatRegName = ruleEntry.source_format_name;
         $scope.outputFormatRegName = ruleEntry.target_format_name;
         $scope.ruleRegName = ruleEntry.name;
@@ -379,15 +393,16 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
             $scope.theSourceNameList = [currentUIComponent.getFrom(0).getConfig().short_desc];
         else
             $scope.theSourceNameList = [currentUIComponent.getConfig().short_desc];
+
         if (currentUIComponent.hasTo())
             $scope.theTargetNameList = [currentUIComponent.getTo(0).getConfig().short_desc];
         else
             $scope.theTargetNameList = [];
     });
 })
-.controller("TransformEditCtrl", function ($scope, $element, $compile, FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
+.controller("TransformEditCtrl", function ($scope, $element, $compile,
+FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, RuleBuilder) {
     LumensLog.log("In TransformEditCtrl");
-    $scope.ruleEditorService.addScope($scope);
     // Load script editing panel
     ScriptEditTemplate.get(function (scriptEditTemplate) {
         $compile(scriptEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart2Element());
@@ -398,90 +413,18 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
     }
     var projectOperator = $scope.projectOperator;
     if ($scope.currentComponent.type === "type-transformer") {
-
-        function buildTransformRuleEntry(ruleRegName, ruleEntry, isNew) {
-            if (isNew) {
-                return {
-                    // TODO
-                    transformRuleEntry: ruleEntry[0],
-                    clickCallBack: function (target) {
-                        $scope.currentScriptNode = target;
-                        $scope.ruleEditorService.sync(target.getScript());
-                    }
-                };
-            } else {
-                for (var i = 0; i < ruleEntry.length; ++i) {
-                    if (ruleEntry[i].name === ruleRegName) {
-                        return {
-                            // TODO
-                            transformRuleEntry: ruleEntry[i],
-                            clickCallBack: function (target) {
-                                $scope.currentScriptNode = target;
-                                $scope.ruleEditorService.sync(target.getScript());
-                            }
-                        };
-                    }
-                }
-            }
-        }
-        function buildTransformRuleTree(location_tokens) {
-            var rootRuleItem, currentRuleItem;
-            $.each(location_tokens, function () {
-                if (!rootRuleItem) {
-                    currentRuleItem = rootRuleItem = {
-                        "format_name": this.name
-                    };
-                } else {
-                    currentRuleItem.transform_rule_item = [{
-                            "format_name": this.name
-                        }];
-                    currentRuleItem = currentRuleItem.transform_rule_item[0];
-                }
-            });
-            return {root: rootRuleItem, last: currentRuleItem};
-        }
         var sourceComponentID, targetComponentID;
         if ($scope.currentUIComponent.hasFrom())
             sourceComponentID = $scope.currentUIComponent.getFrom(0).getId();
         if ($scope.currentUIComponent.hasTo())
             targetComponentID = $scope.currentUIComponent.getTo(0).getId();
-        LumensLog.log("transform source:" + sourceComponentID + ", target:" + targetComponentID);
-        $element.find("div[rule-entity]").droppable({
-            greedy: true,
-            accept: ".lumens-tree-node",
-            drop: function (event, ui) {
-                var data = $.data(ui.draggable.get(0), "tree-node-data");
-                LumensLog.log("Dropped", data);
-                // TODO compare root
-                // TODO append to exist correctly
-                var tree = buildTransformRuleTree(data.location);
-                tree.last.transform_rule_item = [{
-                        "format_name": data.child.name
-                    }];
-                if (data.child.name !== tree.last.format_name)
-                    tree.last = tree.last.transform_rule_item[0];
-                buildTransformRuleItemStructure(tree.last, data.child.format);
-                var transformRuleEntry = [
-                    {
-                        "name": "Transform-Rule-Define",
-                        "source_name": "",
-                        "target_name": "",
-                        "transform_rule": {
-                            "name": tree.root.format_name,
-                            "transform_rule_item": tree.root
-                        }
-                    }
-                ];
-                if ($scope.currentComponent.transform_rule_entry) {
-                    $scope.currentComponent.transform_rule_entry.concat(transformRuleEntry);
-                    $scope.$apply(function () {
-                        $scope.transformRuleEntity = buildTransformRuleEntry($scope.ruleRegName, transformRuleEntry, true);
-                    });
-                }
-            }
-        });
 
-        $scope.transformRuleEntity = buildTransformRuleEntry($scope.ruleRegName, $scope.currentUIComponent.getTransformRuleEntry(), false);
+        // TODO build transform rule tree if there is existing one
+        $scope.$on("NewRule", function (evt, ruleEntry) {
+            $scope.$apply(function () {
+                $scope.currentRuleEntry = ruleEntry;
+            });
+        });
 
         if (sourceComponentID) {
             FormatList.getOUT({project_id: projectOperator.get().projectId, component_id: sourceComponentID}, function (result) {
@@ -507,9 +450,9 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
             $scope.selectedSide = side;
             if (side && "id_format_reg_edit_btn" === btn_id) {
                 if ("left" === side)
-                    $scope.currentFormatList = $scope.sourceFormatList;
+                    $scope.currentFormatList = $scope.sourceFormatList.format_entity;
                 else if ("right" === side)
-                    $scope.currentFormatList = $scope.targetFormatList;
+                    $scope.currentFormatList = $scope.targetFormatList.format_entity;
 
                 FormatRegistryModal.get(function (format_reg_edit_tmpl) {
                     var formatRegEditDialog = $element.find("#reg_edit_dialog");
@@ -533,32 +476,42 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
                 LumensLog.log("input format:", $scope.inputSelectedFormatName);
                 LumensLog.log("output:", $scope.outputFormatRegName);
                 LumensLog.log("outut format:", $scope.outputSelectedFormatName);
-                if ("left" === side) {
-                    if ($scope.displaySourceFormatList.length > 1 &&
+                if ("left" === side && $scope.displaySourceFormatList) {
+                    var formatEntity = $scope.displaySourceFormatList.format_entity;
+                    if (formatEntity.length > 1 &&
                     $scope.inputSelectedFormatName &&
-                    $scope.inputSelectedFormatName !== "" &&
-                    $scope.displaySourceFormatList) {
-                        var displaySourceFormatList = [];
-                        for (var i = 0; i < $scope.displaySourceFormatList.length; ++i) {
-                            if ($scope.displaySourceFormatList[i].format[0].name === $scope.inputSelectedFormatName) {
-                                displaySourceFormatList.push($scope.displaySourceFormatList[i]);
-                                $scope.displaySourceFormatList = displaySourceFormatList;
+                    $scope.inputSelectedFormatName !== "") {
+                        var displaySourceFormatEntityList = [];
+                        for (var i = 0; i < formatEntity.length; ++i) {
+                            if (formatEntity[i].format.name === $scope.inputSelectedFormatName) {
+                                displaySourceFormatEntityList.push(formatEntity[i]);
+                                $scope.displaySourceFormatList = {
+                                    project_id: $scope.displaySourceFormatList.project_id,
+                                    component_id: $scope.displaySourceFormatList.component_id,
+                                    direction: $scope.displaySourceFormatList.direction,
+                                    format_entity: displaySourceFormatEntityList
+                                };
                                 break;
                             }
                         }
                     } else {
                         $scope.displaySourceFormatList = $scope.sourceFormatList;
                     }
-                } else if ("right" === side) {
-                    if ($scope.displayTargetFormatList.length > 1 &&
+                } else if ("right" === side && $scope.displayTargetFormatList) {
+                    var formatEntity = $scope.displayTargetFormatList.format_entity;
+                    if (formatEntity.length > 1 &&
                     $scope.outputSelectedFormatName &&
-                    $scope.outputSelectedFormatName !== "" &&
-                    $scope.displayTargetFormatList) {
-                        var displayTargetFormatList = [];
-                        for (var i = 0; i < $scope.displayTargetFormatList.length; ++i) {
-                            if ($scope.displayTargetFormatList[i].format[0].name === $scope.outputSelectedFormatName) {
-                                displayTargetFormatList.push($scope.displayTargetFormatList[i]);
-                                $scope.displayTargetFormatList = displayTargetFormatList;
+                    $scope.outputSelectedFormatName !== "") {
+                        var displayTargetFormatEntityList = [];
+                        for (var i = 0; i < formatEntity.length; ++i) {
+                            if (formatEntity[i].format.name === $scope.outputSelectedFormatName) {
+                                displayTargetFormatEntityList.push(formatEntity[i]);
+                                $scope.displayTargetFormatList = {
+                                    project_id: $scope.displayTargetFormatList.project_id,
+                                    component_id: $scope.displayTargetFormatList.component_id,
+                                    direction: $scope.displayTargetFormatList.direction,
+                                    format_entity: displayTargetFormatEntityList
+                                };
                                 break;
                             }
                         }
@@ -570,23 +523,21 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons) {
         }
     }
 })
-.controller("RuleScriptCtrl", function ($scope, RuleRegister, FormatRegister) {
-    $scope.ruleEditorService.addScope($scope);
-    $scope.setScript = function (script) {
-        if (!script)
-            script = "";
+.controller("RuleScriptCtrl", function ($scope, FormatRegister) {
+    $scope.$on("ClickRuleItem", function (evt, currentRuleItem) {
+        $scope.currentSelectRuleItem = currentRuleItem;
+        var script = currentRuleItem.getScript() ? currentRuleItem.getScript() : "";
         $scope.transformRuleScriptEditor.setValue(script);
-    };
+    });
     $scope.onCommand = function (id_script_btn) {
         if (id_script_btn === "id_script_apply") {
-            $scope.ruleEditorService.sync($scope.transformRuleScriptEditor.getValue());
+            $scope.currentSelectRuleItem.setScript($scope.transformRuleScriptEditor.getValue());
         }
         else if (id_script_btn === "id_script_validate") {
             LumensLog.log("Validate transform_rule_entity:", $scope.transformRuleEntity.transformRuleEntry);
         }
         else if (id_script_btn === "id_script_back") {
             $scope.transformEditPanel.remove();
-            $scope.ruleEditorService.destroy();
             Lumens.system.workspaceLayout.show();
         }
         else if (id_script_btn === "id_rule_fmt_save") {

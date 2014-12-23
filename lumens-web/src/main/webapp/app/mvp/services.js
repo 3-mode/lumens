@@ -165,38 +165,7 @@ Lumens.services.factory('jSyncHtml', function () {
         }
     };
 });
-Lumens.services.factory('RuleEditorService', function () {
-    return {
-        create: function () {
-            var scopes = [];
-            return {
-                addScope: function (scope) {
-                    scopes.push(scope);
-                },
-                destroy: function () {
-                    $.each(scopes, function (i) {
-                        scopes[i].$destroy();
-                    });
-                    scopes = [];
-                },
-                sync: function (script) {
-                    $.each(scopes, function (i) {
-                        scopes[i].setScript(script);
-                    });
-                }
-            }
-        }
-    }
-});
-Lumens.services.factory('RuleRegister', function () {
-    return {
-        build: function ($scope, message) {
-            LumensLog.log(message, $scope);
-        }
-    }
-});
-Lumens.services.factory('FormatBuilder', ['$rootScope', 'FormatByPath', function ($rootScope, FormatByPath) {
-        console.log($rootScope);
+Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath) {
         return {
             isField: function (form) {
                 return form === "Field";
@@ -263,6 +232,7 @@ Lumens.services.factory('FormatBuilder', ['$rootScope', 'FormatByPath', function
                                         };
                                     }
                                     current.addChildList(nodeList);
+                                    // Expand the child node
                                     current.toggleContent();
                                 });
                             }
@@ -271,6 +241,98 @@ Lumens.services.factory('FormatBuilder', ['$rootScope', 'FormatByPath', function
                     });
 
                     return formatTree;
+                }
+                return null;
+            }
+        };
+    }]
+);
+Lumens.services.factory('RuleBuilder', ['$rootScope', function ($rootScope, FormatByPath) {
+        return {
+            buildFromData: function ($scope, parent, location) {
+                console.log("Location", location);
+                // Build rule and root rule item
+                var transformRule = {
+                    name: location[0].name,
+                    transform_rule_item: {
+                        format_name: location[0].name,
+                        transform_rule_item: []
+                    }
+                };
+                var currentRuleItem = transformRule.transform_rule_item.transform_rule_item;
+                var i = 1;
+                while (i < location.length) {
+                    currentRuleItem.push({
+                        format_name: location[i].name
+                    });
+                    if (i < location.length - 1) {
+                        currentRuleItem[0].transform_rule_item = [];
+                        currentRuleItem = currentRuleItem[0].transform_rule_item;
+                    }
+                    ++i;
+                }
+                $scope.$broadcast("NewRule", {transform_rule: transformRule});
+            },
+            buildFromRuleEntity: function ($scope, parent, ruleEntry) {
+                if (ruleEntry) {
+                    var transformRuleTree = new Lumens.Tree(parent).configure({
+                        handler: function (parentNode) {
+                            var transformRuleItem = ruleEntry.transform_rule.transform_rule_item;
+                            var entryList = [];
+                            entryList.push({
+                                label: transformRuleItem.format_name,
+                                name: transformRuleItem.format_name,
+                                nodeType: transformRuleItem.transform_rule_item && transformRuleItem.transform_rule_item.length > 0 ? "folder" : "file",
+                                data: transformRuleItem
+                            });
+                            parentNode.addEntryList(entryList);
+                        },
+                        drop: function (data, current, parent) {
+                            console.log("Dropped 2", data);
+                            // TODO
+                            var Root = current.getRoot();
+                            var path = data.location;
+                            if (Root.name !== path[0].name) {
+                                alert("Root node name '" + Root.name + "' does not match with '" + path[0].name + "'");
+                                return;
+                            }
+                            // Build children transform rule items from child list which is dropped
+                            var transformRuleItem = {
+                                format_name: data.child.name
+                            };
+                            buildTransformRuleItemStructure(transformRuleItem, data.child.format);
+
+                            current = Root;
+                            for (var i = 1; i < path.length; ++i) {
+                                var next = current.children.map[path[i].name];
+                                if (!next)
+                                    break;
+                                current = next;
+                            }
+                            buildTransformRuleItemPathStructure(current, path, i, transformRuleItem);
+                        },
+                        click: function (current, parent) {
+                            $scope.$broadcast("ClickRuleItem", current);
+
+                            if (current.hasContent() || !current.isFolder())
+                                return;
+
+                            var nodeList = [];
+                            $.each(current.data.transform_rule_item, function () {
+                                console.log("transform_rule_item:", this);
+                                nodeList.push({
+                                    label: this.format_name,
+                                    name: this.format_name,
+                                    nodeType: this.transform_rule_item && this.transform_rule_item.length > 0 ? "folder" : "file",
+                                    data: this
+                                });
+                            });
+                            current.addChildList(nodeList);
+                        },
+                        droppable: true
+                    });
+
+                    return transformRuleTree;
                 }
                 return null;
             }
