@@ -283,9 +283,9 @@ Lumens.DataComponent = Lumens.Component.$extend({
             formatEntry = this.getFrom(0).getFormatEntry("OUT");
         }
         if (formatEntry)
-            for (var i = 0; i < formatEntry.length; ++i)
+            for (var i in formatEntry)
                 if (formatEntry[i].name === regName)
-                    return formatEntry[i].format[0];
+                    return formatEntry[i].format;
         return null;
     },
     getRegisterOutputFormat: function (regName) {
@@ -296,9 +296,9 @@ Lumens.DataComponent = Lumens.Component.$extend({
             formatEntry = this.getTo(0).getFormatEntry("IN");
         }
         if (formatEntry)
-            for (var i = 0; i < formatEntry.length; ++i)
+            for (var i in formatEntry)
                 if (formatEntry[i].name === regName)
-                    return formatEntry[i].format[0];
+                    return formatEntry[i].format;
         return null;
     }
 });

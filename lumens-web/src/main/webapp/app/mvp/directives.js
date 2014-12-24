@@ -71,18 +71,18 @@ Lumens.directives.directive("ruleTree", function (RuleBuilder) {
                 drop: function (event, ui) {
                     var node = $.data(ui.draggable.get(0), "tree-node-data");
                     LumensLog.log("Dropped", node);
-                    // TODO compare root
-                    // TODO append to exist correctly
                     if (element.children().length > 0) {
-                        // TODO try to append to the rule tree
-                        console.log("Mapping editing, rule should be appended to existing rule tree:", $scope[attr.ruleData]);
                         RuleBuilder.appendFromData($scope, element, node);
-                        //$scope.$broadcast("NewRule", null);
-                        // TODO if the root name doesn't match, renew the rule tree
                     } else {
                         RuleBuilder.buildFromData($scope, element, node);
                     }
                 }
+            });
+            $scope.$on("RuleChanged", function (evt, data) {
+                $scope.$apply(function () {
+                    console.log("In RuleChanged apply", data);
+                    $scope.ruleData = data;
+                });
             });
             $scope.$watch(attr.ruleData, function (ruleData) {
                 RuleBuilder.buildTreeFromRuleEntry($scope, element, ruleData);

@@ -340,18 +340,18 @@ Lumens.services.factory('RuleBuilder', function () {
             var entryList = parentNode.getEntryList ? parentNode.getEntryList() : parentNode.getChildList();
             var ruleItemNode = entryList.map[ruleItem.format_name];
             if (ruleItem.transform_rule_item) {
-                var ruleItemChilren = ruleItem.transform_rule_item;
+                var ruleItemChildren = ruleItem.transform_rule_item;
                 var nodeList = [];
-                for (var i in ruleItemChilren) {
-                    var format = this.getChildFormat(formatEntry.format, ruleItemChilren[i].format_name);
+                for (var i in ruleItemChildren) {
+                    var format = this.getChildFormat(formatEntry.format, ruleItemChildren[i].format_name);
                     if (format)
-                        nodeList.push(this.buildItemNode(format));
+                        nodeList.push(this.buildItemNode(format, ruleItemChildren[i]));
                 }
                 ruleItemNode.addChildList(nodeList);
                 ruleItemNode.expandContent();
-                for (var i in ruleItemChilren) {
-                    var format = this.getChildFormat(formatEntry.format, ruleItemChilren[i].format_name);
-                    this.buildRuleItemChildren(ruleItemNode, ruleItemChilren[i], format);
+                for (var i in ruleItemChildren) {
+                    var format = this.getChildFormat(formatEntry.format, ruleItemChildren[i].format_name);
+                    this.buildRuleItemChildren(ruleItemNode, ruleItemChildren[i], format);
                 }
             }
         },
@@ -374,13 +374,16 @@ Lumens.services.factory('RuleBuilder', function () {
                 throw ("Not found '" + pathString + "'");
             return ruleItem;
         },
-        buildItemNode: function (format) {
-            return {
+        buildItemNode: function (format, ruleItem) {
+            var node = {
                 label: format.name,
                 name: format.name,
                 nodeType: format.form === "Field" ? "file" : "folder",
                 data: format
             };
+            if (ruleItem && ruleItem.script)
+                node.script = ruleItem.script;
+            return node;
         },
         getChildFormat: function (formatList, formatName) {
             for (var i in formatList)
@@ -401,7 +404,7 @@ Lumens.services.factory('RuleBuilder', function () {
         }
     };
 });
-Lumens.services.factory('FormatRegister', function () {
+Lumens.services.factory('RuleWithFormatRegister', function () {
     return {
         pathEnding: "+-*/ &|!<>\n\r\t^%=;:?,",
         build: function ($scope) {

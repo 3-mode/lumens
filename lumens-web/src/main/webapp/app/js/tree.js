@@ -11,6 +11,7 @@ Lumens.TreeNode = Class.$extend({
         this.label = node.label;
         this.name = node.name;
         this.data = node.data;
+        this.script = node.script;
         this.clickHandler = parent.clickHandler;
         this.dblclickHandler = parent.dblclickHandler;
         this.dropHandler = parent.dropHandler;
@@ -32,8 +33,8 @@ Lumens.TreeNode = Class.$extend({
         }
         //-------------------------------------------------
         this.$fHeader.find('.lumens-tree-node-name').html(this.label);
-        if (this.data.script)
-            this.$fHeader.find('.lumens-tree-node-script').html(this.data.script);
+        if (this.script)
+            this.$fHeader.find('.lumens-tree-node-script').html(this.script);
         if (this.draggable)
             this.$fHeader.find(".lumens-tree-node").draggable({
                 appendTo: "body",
@@ -83,11 +84,11 @@ Lumens.TreeNode = Class.$extend({
         return node;
     },
     getScript: function () {
-        return this.data.script;
+        return this.script;
     },
     setScript: function (script) {
-        this.data.script = script;
-        this.$fHeader.find('.lumens-tree-node-script').html(this.data.script);
+        this.script = script;
+        this.$fHeader.find('.lumens-tree-node-script').html(this.script);
     },
     getElement: function () {
         return this.$fContent ? this.$fContent : this.$folder;

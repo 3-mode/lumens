@@ -365,10 +365,11 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
         $scope.inputFormatRegName = ruleEntry.source_format_name;
         $scope.outputFormatRegName = ruleEntry.target_format_name;
         $scope.ruleRegName = ruleEntry.name;
-        var inFormat = $scope.currentUIComponent.getRegisterInputFormat($scope.inputFormatRegName);
+        var inFormat = $scope.currentUIComponent.getFrom(0).getRegisterOutputFormat($scope.inputFormatRegName);
         $scope.inputSelectedFormatName = inFormat ? inFormat.name : null;
-        var outFormat = $scope.currentUIComponent.getRegisterOutputFormat($scope.outputFormatRegName);
+        var outFormat = $scope.currentUIComponent.getTo(0).getRegisterInputFormat($scope.outputFormatRegName);
         $scope.outputSelectedFormatName = outFormat ? outFormat.name : null;
+        $scope.ruleData = {rule_entry: ruleEntry, format_entry: outFormat};
         showRuleEditor();
     };
 
@@ -419,18 +420,13 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, RuleBuil
         if ($scope.currentUIComponent.hasTo())
             targetComponentID = $scope.currentUIComponent.getTo(0).getId();
 
-        // TODO build transform rule tree if there is existing one
-        $scope.$on("RuleChanged", function (evt, data) {
-            $scope.$apply(function () {
-                console.log("In RuleChanged apply", data);
-                $scope.ruleData = data;
-            });
-        });
-
         if (sourceComponentID) {
             FormatList.getOUT({project_id: projectOperator.get().projectId, component_id: sourceComponentID}, function (result) {
                 $scope.sourceFormatList = {
-                    project_id: projectOperator.get().projectId, component_id: targetComponentID, direction: 'OUT', format_entity: result.content.format_entity
+                    project_id: projectOperator.get().projectId,
+                    component_id: targetComponentID,
+                    direction: 'OUT',
+                    format_entity: result.content.format_entity
                 };
                 $scope.displaySourceFormatList = $scope.sourceFormatList;
                 $scope.onCommand("id_format_reg_filter_btn", "left");
@@ -439,7 +435,10 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, RuleBuil
         if (targetComponentID) {
             FormatList.getIN({project_id: projectOperator.get().projectId, component_id: targetComponentID}, function (result) {
                 $scope.targetFormatList = {
-                    project_id: projectOperator.get().projectId, component_id: targetComponentID, direction: 'IN', format_entity: result.content.format_entity
+                    project_id: projectOperator.get().projectId,
+                    component_id: targetComponentID,
+                    direction: 'IN',
+                    format_entity: result.content.format_entity
                 };
                 $scope.displayTargetFormatList = $scope.targetFormatList;
                 $scope.onCommand("id_format_reg_filter_btn", "right");
@@ -524,7 +523,7 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, RuleBuil
         }
     }
 })
-.controller("RuleScriptCtrl", function ($scope, FormatRegister) {
+.controller("RuleScriptCtrl", function ($scope, RuleWithFormatRegister) {
     $scope.$on("ClickRuleItem", function (evt, currentRuleItem) {
         $scope.currentSelectRuleItem = currentRuleItem;
         var script = currentRuleItem.getScript() ? currentRuleItem.getScript() : "";
@@ -542,7 +541,7 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, RuleBuil
             Lumens.system.workspaceLayout.show();
         }
         else if (id_script_btn === "id_rule_fmt_save") {
-            FormatRegister.build($scope);
+            RuleWithFormatRegister.build($scope);
         }
     }
     LumensLog.log("In RuleScriptCtrl");
