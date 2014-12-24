@@ -27,22 +27,18 @@ public class TextElementBuilder implements TextConstants{
         }else{
             int len = line.length();
             int index = 0;
-            int last = -1;
-            while (index++ < len){
-                char ch = line.charAt(index);
-                if (!quote.isEmpty() && ch == quote.charAt(0)){
-                    last = index;  // first quote char found
-                }
-                
-                // Finding the second quote char
-                if ( index > last  && ch == quote.charAt(0)){
-                    if (quote.equals(escape) && index < len - 2 ){
-                        
-                    }
-                }
-                
+            int first = 0;
+            while (index++ < len - 1){
+                char current = line.charAt(index);
+                char next = line.charAt(index+1);
+                char quoteChar = quote.charAt(0);
+                if (current == quoteChar && next != quoteChar ){
+                    // Deal with first 
+                }                
                 // Deal with delimiter
             }
+            // Add last string
+            values.add(line.substring(first, index));
         }
         
         
