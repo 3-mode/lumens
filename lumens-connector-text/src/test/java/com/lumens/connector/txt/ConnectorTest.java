@@ -64,7 +64,8 @@ public class ConnectorTest {
         TextConnector cntrR = (TextConnector) cntr.createConnector();
 
         Map<String, Value> propsR = new HashMap<>();
-        propsR.put(TextConstants.ESCAPECHAR, new Value("\\"));
+        propsR.put(TextConstants.ESCAPE_CHAR, new Value("\\"));
+        propsR.put(TextConstants.QUOTE_CHAR, new Value(""));
         propsR.put(TextConstants.FILEDELIMITER, new Value(","));
         propsR.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(1000));
@@ -127,7 +128,7 @@ public class ConnectorTest {
         TextConnector cntrW = (TextConnector) cntr.createConnector();
 
         Map<String, Value> propsW = new HashMap<>();
-        propsW.put(TextConstants.ESCAPECHAR, new Value("\\"));
+        propsW.put(TextConstants.ESCAPE_CHAR, new Value("\\"));
         propsW.put(TextConstants.FILEDELIMITER, new Value("|"));
         propsW.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
         propsW.put(TextConstants.PATH, new Value(path2write));        
@@ -211,7 +212,7 @@ public class ConnectorTest {
         File schema = new File(schemaPath);
         Map<String, Value> propList = new HashMap<>();
         propList.put(TextConstants.ENCODING, new Value("UTF-8"));
-        propList.put(TextConstants.ESCAPECHAR, new Value("\\"));
+        propList.put(TextConstants.ESCAPE_CHAR, new Value("\\"));
         propList.put(TextConstants.FILEDELIMITER, new Value(","));
         propList.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
         propList.put(TextConstants.OPTION_MAXLINE, new Value(1000));

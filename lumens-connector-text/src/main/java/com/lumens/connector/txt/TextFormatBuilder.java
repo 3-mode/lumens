@@ -72,7 +72,7 @@ public class TextFormatBuilder implements FormatBuilder {
             params.addChild(TextConstants.PATH, Form.FIELD, Type.STRING);
             params.addChild(TextConstants.LINEDELIMITER, Form.FIELD, Type.STRING);
             params.addChild(TextConstants.FILEDELIMITER, Form.FIELD, Type.STRING);
-            params.addChild(TextConstants.ESCAPECHAR, Form.FIELD, Type.STRING);
+            params.addChild(TextConstants.ESCAPE_CHAR, Form.FIELD, Type.STRING);
             params.addChild(TextConstants.OPTION_MAXLINE, Form.FIELD, Type.STRING);
             params.addChild(TextConstants.OPERATION, Form.FIELD, Type.STRING);
             
