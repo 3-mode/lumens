@@ -66,6 +66,10 @@ public class TextClient {
                 propList.get(TextConstants.OPTION_MAXLINE).getInt():
                 param.getChild(TextConstants.OPTION_MAXLINE).getValue().getInt();
         
+        if (delimiter.equals(escape)){
+            throw new RuntimeException("Delimiter should not be equal to escape char.");
+        }
+        
         try {
             // Add file list
             List<File> files = new ArrayList();
