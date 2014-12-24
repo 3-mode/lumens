@@ -46,20 +46,20 @@ Lumens.directives.directive("dynamicTransformationList", function () {
         }
     };
 });
-Lumens.directives.directive("formatList", ['FormatBuilder', function (FormatBuilder) {
-        return {
-            restrict: 'A',
-            link: function ($scope, element, attr) {
-                $scope.$watch(function () {
-                    return $scope[attr.formatList];
-                }, function (formatList) {
-                    element.empty();
-                    FormatBuilder.build(element, formatList);
-                });
-            }
-        };
-    }]);
-Lumens.directives.directive("ruleTree", function (RuleBuilder) {
+Lumens.directives.directive("formatList", function (FormatBuilder) {
+    return {
+        restrict: 'A',
+        link: function ($scope, element, attr) {
+            $scope.$watch(function () {
+                return $scope[attr.formatList];
+            }, function (formatList) {
+                element.empty();
+                FormatBuilder.build(element, formatList);
+            });
+        }
+    };
+});
+Lumens.directives.directive("ruleTree", function (RuleTreeBuilder) {
     return {
         restrict: 'E',
         replace: true,
@@ -72,9 +72,9 @@ Lumens.directives.directive("ruleTree", function (RuleBuilder) {
                     var node = $.data(ui.draggable.get(0), "tree-node-data");
                     LumensLog.log("Dropped", node);
                     if (element.children().length > 0) {
-                        RuleBuilder.appendFromData($scope, element, node);
+                        RuleTreeBuilder.appendFromData($scope, element, node);
                     } else {
-                        RuleBuilder.buildFromData($scope, element, node);
+                        RuleTreeBuilder.buildFromData($scope, element, node);
                     }
                 }
             });
@@ -85,7 +85,7 @@ Lumens.directives.directive("ruleTree", function (RuleBuilder) {
                 });
             });
             $scope.$watch(attr.ruleData, function (ruleData) {
-                RuleBuilder.buildTreeFromRuleEntry($scope, element, ruleData);
+                RuleTreeBuilder.buildTreeFromRuleEntry($scope, element, ruleData);
             });
         }
     };

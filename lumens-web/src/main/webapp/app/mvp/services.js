@@ -253,7 +253,7 @@ Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath
         };
     }]
 );
-Lumens.services.factory('RuleBuilder', function () {
+Lumens.services.factory('RuleTreeBuilder', function () {
     return {
         appendFromData: function ($scope, parent, node) {
             console.log("appendFromData::node", node);

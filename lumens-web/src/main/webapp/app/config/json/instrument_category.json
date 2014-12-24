@@ -1,7 +1,7 @@
 {
     "items": [
         {
-            "name": "transformer",
+            "name": "Transformer",
             "type": "type-transformer",
             "class_type": "transformer",
             "item_icon_url": "app/css/img/Transform24x24.png",

@@ -365,9 +365,9 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
         $scope.inputFormatRegName = ruleEntry.source_format_name;
         $scope.outputFormatRegName = ruleEntry.target_format_name;
         $scope.ruleRegName = ruleEntry.name;
-        var inFormat = $scope.currentUIComponent.getFrom(0).getRegisterOutputFormat($scope.inputFormatRegName);
+        var inFormat = $scope.currentUIComponent.hasFrom() ? $scope.currentUIComponent.getFrom(0).getRegisterOutputFormat($scope.inputFormatRegName) : null;
         $scope.inputSelectedFormatName = inFormat ? inFormat.name : null;
-        var outFormat = $scope.currentUIComponent.getTo(0).getRegisterInputFormat($scope.outputFormatRegName);
+        var outFormat = $scope.currentUIComponent.hasTo() ? $scope.currentUIComponent.getTo(0).getRegisterInputFormat($scope.outputFormatRegName) : null;
         $scope.outputSelectedFormatName = outFormat ? outFormat.name : null;
         $scope.ruleData = {rule_entry: ruleEntry, format_entry: outFormat};
         showRuleEditor();
@@ -402,7 +402,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
     });
 })
 .controller("TransformEditCtrl", function ($scope, $element, $compile,
-FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, RuleBuilder) {
+FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
     LumensLog.log("In TransformEditCtrl");
     // Load script editing panel
     ScriptEditTemplate.get(function (scriptEditTemplate) {
