@@ -57,6 +57,23 @@ public class ConnectorTest {
         }
     }
 
+    @Before
+    public void testRFC4180(){       
+        String TEXTDATA  = "[\\x20-\\x21]|[\\x23-\\x2B]|[\\x2D-\\x7E]";
+        String escape = String.format("\"(?:[%s|,|\\r|\\n|\"{2}])*\"", TEXTDATA);
+        String nonescape = String.format("[%s]*", TEXTDATA);
+        
+        String non_escape_string = "   !#$%&abCDE*";
+        String escape_string1 = "\"abc,\"";
+        String escape_string2 = "abc\"";
+        boolean match = non_escape_string.matches(nonescape);
+        assertTrue("match false",match);        
+        match = escape_string1.matches(escape);        
+        //assertTrue("match false",match);
+        match = escape_string2.matches(escape);
+        //assertTrue("match false",match);
+    }
+    
     @Test
     public void testConnector() {
                    
@@ -206,7 +223,7 @@ public class ConnectorTest {
         cntrR.close();
         cntrW.close();
     }
-
+   
     @Test
     public void testSchema() {
         File schema = new File(schemaPath);
