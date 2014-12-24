@@ -10,14 +10,17 @@ import java.io.FilenameFilter;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class LocalFileNameFilter implements FilenameFilter{
-    private String extension;
+    private String regex;
     
-    public LocalFileNameFilter(String ext){
-        extension = ext;
+    public LocalFileNameFilter(String filter){
+        regex = filter.replaceAll("\\*", ".*");
     }
     
-    public boolean accept(File dir, String name){         
-         String[] arrExt = name.split("\\.");
-         return arrExt[1].equalsIgnoreCase(extension);         
+    public boolean accept(File dir, String name){     
+         File fileOrDir = new File(dir + File.separator + name);
+         if (!fileOrDir.isFile())
+             return false;
+         
+         return name.matches(regex);        
      }
 }

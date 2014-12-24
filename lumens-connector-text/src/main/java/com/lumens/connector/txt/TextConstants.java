@@ -17,19 +17,23 @@ public interface TextConstants {
     public static final String PATH = "Path";    
     public static final String LINEDELIMITER = "LineDelimiter";
     public static final String FILEDELIMITER = "FiledDelimiter";
-    public static final String ESCAPECHAR = "EscapeChar";
+    public static final String ESCAPE_CHAR = "EscapeChar";    
+    public static final String QUOTE_CHAR = "EscapeChar";
+    public static final String FILE_EXTENSION = "FileExtension";
+    public static final String FILE_FILTER = "FileFilter";
+    
+     // connector options
     public static final String OPTION_MAXLINE = "MaxLine";
-    public static final String FILE_EXTENSION = "FileFilter";
-        
+    public static final String OPTION_FORMAT_ASTITLE = "FormatAsTitle";    
+    public static final String OPTION_IGNORE_EMPTYLINE = "IgnoreEmptyLine"; 
+    
     // connector operation    
     public static final String OPERATION = "Operation";
     public static final String OPERATION_READ = "Read";
     public static final String OPERATION_APPEND = "Append";
     public static final String OPERATION_OVERWRITE = "OverWrite";
 
-    // connector options
-    public static final String OPTION_FORMAT_ASTITLE = "FormatAsTitle";    
-    public static final String OPTION_IGNORE_EMPTYLINE = "IgnoreEmptyLine";   
+  
     
     // end use seen options
     public static final String FORMAT_PARAMS = "TextParams";   

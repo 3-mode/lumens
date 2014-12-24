@@ -44,15 +44,18 @@ public class TextClient {
         String path = param.getChild(TextConstants.PATH) == null ? 
                 propList.get(TextConstants.PATH).toString()     : 
                 param.getChild(TextConstants.PATH).getValue().toString();
-        String filter = param.getChild(TextConstants.FILE_EXTENSION) == null ? 
-                propList.get(TextConstants.FILE_EXTENSION).toString()     : 
-                param.getChild(TextConstants.FILE_EXTENSION).getValue().toString();        
+        String filter = param.getChild(TextConstants.FILE_FILTER) == null ? 
+                propList.get(TextConstants.FILE_FILTER).toString()     : 
+                param.getChild(TextConstants.FILE_FILTER).getValue().toString();        
         String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null ?  
                 propList.get(TextConstants.FILEDELIMITER).toString()          : 
                 param.getChild(TextConstants.FILEDELIMITER).getValue().toString();
-        String escape = param.getChild(TextConstants.ESCAPECHAR) == null ? 
-                propList.get(TextConstants.ESCAPECHAR).toString()         : 
-                param.getChild(TextConstants.ESCAPECHAR).getValue().toString();
+        String escape = param.getChild(TextConstants.ESCAPE_CHAR) == null ? 
+                propList.get(TextConstants.ESCAPE_CHAR).toString()         : 
+                param.getChild(TextConstants.ESCAPE_CHAR).getValue().toString();
+        String quote = param.getChild(TextConstants.QUOTE_CHAR) == null ? 
+                propList.get(TextConstants.QUOTE_CHAR).toString()         : 
+                param.getChild(TextConstants.QUOTE_CHAR).getValue().toString();        
         boolean ignoreEmptyLine = param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE) == null ?
                 propList.get(TextConstants.OPTION_IGNORE_EMPTYLINE).getBoolean():
                 param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE).getValue().getBoolean();
@@ -62,6 +65,10 @@ public class TextClient {
         int maxLine = param.getChild(TextConstants.OPTION_MAXLINE) == null ?
                 propList.get(TextConstants.OPTION_MAXLINE).getInt():
                 param.getChild(TextConstants.OPTION_MAXLINE).getValue().getInt();
+        
+        if (delimiter.equals(escape)){
+            throw new RuntimeException("Delimiter should not be equal to escape char.");
+        }
         
         try {
             // Add file list
@@ -95,12 +102,17 @@ public class TextClient {
                         
                     }
                     
-                    Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape);
+                    Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote);
                     result.add(build);
                 }
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
+        }finally{
+            try{
+                reader.close();
+            }catch (Exception ex) {                
+            }
         }
 
         return result;

@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -33,10 +35,10 @@ import static org.junit.Assert.assertFalse;
  */
 public class ConnectorTest {
 
-    private String path2read = getClass().getResource("/delimited/incsv.csv").getFile();
-    private String folder2read = getClass().getResource("/delimited/").getFile();
-    private String path2write = getClass().getResource("/delimited").getPath() + "/outcsv.txt";
-    private String schemaPath = getClass().getResource("/delimited/incsv_schema.xml").getFile();
+    private final String path2read = getClass().getResource("/delimited/incsv.csv").getFile();
+    private final String folder2read = getClass().getResource("/delimited/").getFile();
+    private final String path2write = getClass().getResource("/delimited").getPath() + "/outcsv.txt";
+    private final String schemaPath = getClass().getResource("/delimited/incsv_schema.xml").getFile();
 
     @Before
     public void testConnection() {
@@ -58,13 +60,75 @@ public class ConnectorTest {
     }
 
     @Test
+    public void testRFC4180(){       
+        String TEXTDATA  = "[\\x20-\\x21]|[\\x23-\\x2B]|[\\x2D-\\x7E]";
+        String escape = String.format("\"[%s|,|\\r|\\n|\"{2}]*\"", TEXTDATA);
+        String nonescape = String.format("[%s]*", TEXTDATA);
+        String field = String.format("[%s|%s]*", escape, nonescape);
+        String record = String.format("(?:%s,%s)*", field, field);
+        String delimiter = String.format("[^%s]", field);
+        
+        String non_escape_string = "   !#$%&abCDE*";
+        
+        String escape_string1 = "\"abc,\"";
+        String escape_string2 = "\"abc,\"\"\"\"";
+        String escape_string3 = "\"abc,\"\"";
+        String escape_string4 = "\"abc,\"\"\\r\\n\"";
+        String escape_invalid_string1 = "abc\"";
+        
+        String record_string1 = "\"abc,\",\"abc,\",\"abc,\"";
+        String record_string2 = "\"abc,\",   !#$%&abCDE*,\"abc,\"";
+        String record_string3 = "\"abc,\",   !#$%&abCDE*,\"abc,\", \\r\\n";
+                
+        // sub string test
+        Pattern p = Pattern.compile(nonescape);
+        Matcher m = p.matcher(record_string2);
+        String sub = null;
+        if (m.find())
+            sub = m.group();
+        
+        boolean match = true;
+        
+        // Fields test
+        match = escape_string1.matches(field);  
+        match &= escape_string2.matches(field);
+        match &= escape_string3.matches(field);
+        match &= escape_string4.matches(field);
+        match &= non_escape_string.matches(field);
+        assertTrue("field test fail",match); 
+        
+        // Record test
+        match = record_string1.matches(record);  
+        match &= record_string2.matches(record);
+        match &= record_string3.matches(record);
+        assertTrue("record test fail",match); 
+
+        
+        // Non escape test
+        match = non_escape_string.matches(nonescape);
+        assertTrue("non escape test fail",match);   
+        
+        // Escape test
+        match = escape_string1.matches(escape);        
+        match &= escape_string2.matches(escape);     
+        match &= escape_string3.matches(escape);
+        match &= escape_string4.matches(escape);
+        assertTrue("escape test fail",match);
+        
+        // Invalid test
+        match &= escape_invalid_string1.matches(escape);
+        assertFalse("invalid test fail",match);        
+    }
+    
+    @Test
     public void testConnector() {
                    
         ConnectorFactory cntr = new TextConnectorFactory();
         TextConnector cntrR = (TextConnector) cntr.createConnector();
 
         Map<String, Value> propsR = new HashMap<>();
-        propsR.put(TextConstants.ESCAPECHAR, new Value("\\"));
+        propsR.put(TextConstants.ESCAPE_CHAR, new Value("\\"));
+        propsR.put(TextConstants.QUOTE_CHAR, new Value(""));
         propsR.put(TextConstants.FILEDELIMITER, new Value(","));
         propsR.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(1000));
@@ -73,6 +137,7 @@ public class ConnectorTest {
         propsR.put(TextConstants.OPTION_IGNORE_EMPTYLINE, new Value(true));
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(9));
         propsR.put(TextConstants.FILE_EXTENSION, new Value("csv"));
+        propsR.put(TextConstants.FILE_FILTER, new Value("*.csv"));
         propsR.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));  
         cntrR.setPropertyList(propsR);
         cntrR.open();
@@ -127,7 +192,7 @@ public class ConnectorTest {
         TextConnector cntrW = (TextConnector) cntr.createConnector();
 
         Map<String, Value> propsW = new HashMap<>();
-        propsW.put(TextConstants.ESCAPECHAR, new Value("\\"));
+        propsW.put(TextConstants.ESCAPE_CHAR, new Value("\\"));
         propsW.put(TextConstants.FILEDELIMITER, new Value("|"));
         propsW.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
         propsW.put(TextConstants.PATH, new Value(path2write));        
@@ -205,13 +270,13 @@ public class ConnectorTest {
         cntrR.close();
         cntrW.close();
     }
-
+   
     @Test
     public void testSchema() {
         File schema = new File(schemaPath);
         Map<String, Value> propList = new HashMap<>();
         propList.put(TextConstants.ENCODING, new Value("UTF-8"));
-        propList.put(TextConstants.ESCAPECHAR, new Value("\\"));
+        propList.put(TextConstants.ESCAPE_CHAR, new Value("\\"));
         propList.put(TextConstants.FILEDELIMITER, new Value(","));
         propList.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
         propList.put(TextConstants.OPTION_MAXLINE, new Value(1000));
