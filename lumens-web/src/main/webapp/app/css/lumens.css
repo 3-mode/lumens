@@ -537,16 +537,19 @@ svg path {
     padding-left: 20px;
 }
 .lumens .lumens-icon-folder-node:before {
-    min-width: 16px;
-    font-size: 16px;
+    font-size: 20px;
     margin-right: 2px;
-    content: "\e60d";
+    content: "\e611";
 }
 .lumens .lumens-icon-file-node:before {
-    min-width: 16px;
-    font-size: 16px;
+    font-size: 20px;
     margin-right: 2px;
     content: "\e622";
+}
+.lumens .lumens-icon-folderset-node:before {
+    font-size: 20px;
+    margin-right: 2px;
+    content: "\e60d";
 }
 .lumens .lumens-icon-folder-open:before {
     min-width: 24px;

@@ -170,6 +170,9 @@ Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath
             isField: function (form) {
                 return form === "Field";
             },
+            isArray: function (form) {
+                return form === "ArrayOfStruct" || form === "ArrayOfField";
+            },
             getPath: function (pathTokens) {
                 var formatPath = "";
                 for (var i = 1; i < pathTokens.length; ++i) {
@@ -195,7 +198,7 @@ Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath
                                 entryList.push({
                                     label: format.type === "None" ? format.name : format.name + "&nbsp;&nbsp;[" + format.type + "]",
                                     name: format.name,
-                                    nodeType: __this.isField(format.form) ? "file" : "folder",
+                                    nodeType: __this.isField(format.form) ? "file" : (__this.isArray(format.form) ? "folderset" : "folder"),
                                     data: format
                                 });
                             }
@@ -212,7 +215,7 @@ Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath
                                     nodeList[i] = {
                                         label: formatItem.type === "None" ? formatItem.name : formatItem.name + "&nbsp;&nbsp;[" + formatItem.type + "]",
                                         name: formatItem.name,
-                                        nodeType: __this.isField(formatItem.form) ? "file" : "folder",
+                                        nodeType: __this.isField(formatItem.form) ? "file" : (__this.isArray(formatItem.form) ? "folderset" : "folder"),
                                         data: formatItem
                                     };
                                 }
@@ -234,7 +237,7 @@ Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath
                                         nodeList[i] = {
                                             label: formatItem.type === "None" ? formatItem.name : formatItem.name + "&nbsp;&nbsp;[" + formatItem.type + "]",
                                             name: formatItem.name,
-                                            nodeType: __this.isField(formatItem.form) ? "file" : "folder",
+                                            nodeType: __this.isField(formatItem.form) ? "file" : (__this.isArray(formatItem.form) ? "folderset" : "folder"),
                                             data: formatItem
                                         };
                                     }
@@ -253,157 +256,157 @@ Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath
         };
     }]
 );
-Lumens.services.factory('RuleTreeBuilder', function () {
-    return {
-        appendFromData: function ($scope, parent, node) {
-            console.log("appendFromData::node", node);
-            var i = 0, path = node.getPath();
-            var entryList = this.transformRuleTree.getEntryList();
-            var entryNode = entryList.map[path[i].name];
-            this.checkRuleWithFormat(entryNode.getName(), path[i].name);
-            while (++i < path.length) {
-                var child = entryNode.getChildList().map[path[i].name];
-                if (!child) {
-                    entryNode.addChildList([this.buildItemNode(path[i])]);
-                    child = entryNode.getChildList().map[path[i].name];
-                    entryNode.expandContent();
-                }
-                entryNode = child;
-            }
-        },
-        buildFromData: function ($scope, parent, node) {
-            var path = node.getPath();
-            console.log("Path", path);
-            // Build rule and root rule item
-            var i = 0;
-            var rootRuleItem = {
-                format_name: path[i].name,
-                transform_rule_item: []
-            };
-            var transformRule = {
-                name: path[i].name,
-                transform_rule_item: rootRuleItem
-            };
-            var currentRuleItem = rootRuleItem.transform_rule_item;
-            while (++i < path.length) {
-                currentRuleItem[0] = {format_name: path[i].name};
-                if (i < path.length - 1) {
-                    currentRuleItem[0].transform_rule_item = [];
-                    currentRuleItem = currentRuleItem[0].transform_rule_item;
-                }
-            }
-            $scope.$broadcast("RuleChanged", {rule_entry: {transform_rule: transformRule}, format_entry: node.getRoot().data});
-        },
-        buildTreeFromRuleEntry: function ($scope, parent, ruleData) {
-            console.log("Rule list:", ruleData);
-            var __this = this;
-            if (!ruleData)
-                return null;
-            // TODO if parent has children, the ruleEntry should be append to
-            // TODO else new rule tree, need to buid rule tree following the format defintion
-            if (ruleData.rule_entry && ruleData.format_entry) {
-                var ruleEntry = ruleData.rule_entry;
-                var formatEntry = ruleData.format_entry;
-                if (parent.children().length === 0) {
-                    this.transformRuleTree = new Lumens.Tree(parent).configure({
-                        handler: function (parentNode) {
-                            var rootRuleItem = __this.getRootRuleItem(ruleEntry);
-                            __this.checkRuleWithFormat(rootRuleItem.format_name, formatEntry.name);
-                            var entryList = __this.buildRootRuleItem(rootRuleItem, formatEntry);
-                            parentNode.addEntryList(entryList);
-                            __this.buildRuleItemChildren(parentNode, rootRuleItem, formatEntry);
-                        },
-                        click: function (current, parent) {
-                            $scope.$broadcast("ClickRuleItem", current);
-                        },
-                        drop: function (data, current, parent) {
-                        },
-                        droppable: true
-                    });
-                    return this.transformRuleTree;
-                } else if (parent.children().length > 0) {
-                    // TODO find the parent node for the drag object and append it to the parent node
-                    console.log("appended");
-                }
-            }
-            return null;
-        },
-        buildRootRuleItem: function (rootRuleItem, formatEntry) {
-            return [{
-                    label: rootRuleItem.format_name,
-                    name: rootRuleItem.format_name,
-                    nodeType: formatEntry.form === "Field" ? "file" : "folder",
-                    data: formatEntry
-                }];
-        },
-        buildRuleItemChildren: function (parentNode, ruleItem, formatEntry) {
-            var entryList = parentNode.getEntryList ? parentNode.getEntryList() : parentNode.getChildList();
-            var ruleItemNode = entryList.map[ruleItem.format_name];
-            if (ruleItem.transform_rule_item) {
-                var ruleItemChildren = ruleItem.transform_rule_item;
-                var nodeList = [];
-                for (var i in ruleItemChildren) {
-                    var format = this.getChildFormat(formatEntry.format, ruleItemChildren[i].format_name);
-                    if (format)
-                        nodeList.push(this.buildItemNode(format, ruleItemChildren[i]));
-                }
-                ruleItemNode.addChildList(nodeList);
-                ruleItemNode.expandContent();
-                for (var i in ruleItemChildren) {
-                    var format = this.getChildFormat(formatEntry.format, ruleItemChildren[i].format_name);
-                    this.buildRuleItemChildren(ruleItemNode, ruleItemChildren[i], format);
-                }
-            }
-        },
-        getRootRuleItem: function (ruleEntry) {
-            return ruleEntry.transform_rule.transform_rule_item;
-        },
-        getRuleItemByPath: function (path) {
-            var i = 0, length = path.length - 1;
-            var ruleItem = this.getRootRuleItem();
-            var pathString = path[i].name;
-            while (++i < length && ruleItem && ruleItem.transform_rule_item) {
-                pathString += "." + path[i].name;
-                for (var j in ruleItem.transform_rule_item)
-                    if (ruleItem.transform_rule_item[j].format_name === path[i].name) {
-                        ruleItem = ruleItem.transform_rule_item[j];
-                        break;
+Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBuilder) {
+        return {
+            appendFromData: function ($scope, parent, node) {
+                console.log("appendFromData::node", node);
+                var i = 0, path = node.getPath();
+                var entryList = this.transformRuleTree.getEntryList();
+                var entryNode = entryList.map[path[i].name];
+                this.checkRuleWithFormat(entryNode.getName(), path[i].name);
+                while (++i < path.length) {
+                    var child = entryNode.getChildList().map[path[i].name];
+                    if (!child) {
+                        entryNode.addChildList([this.buildItemNode(path[i])]);
+                        child = entryNode.getChildList().map[path[i].name];
+                        entryNode.expandContent();
                     }
-            }
-            if (!ruleItem)
-                throw ("Not found '" + pathString + "'");
-            return ruleItem;
-        },
-        buildItemNode: function (format, ruleItem) {
-            var node = {
-                label: format.name,
-                name: format.name,
-                nodeType: format.form === "Field" ? "file" : "folder",
-                data: format
-            };
-            if (ruleItem && ruleItem.script)
-                node.script = ruleItem.script;
-            return node;
-        },
-        getChildFormat: function (formatList, formatName) {
-            for (var i in formatList)
-                if (formatList[i].name === formatName)
-                    return formatList[i];
-        },
-        hasRuleItem: function (ruleItem, name) {
-            if (!ruleItem || !ruleItem.transform_rule_item)
+                    entryNode = child;
+                }
+            },
+            buildFromData: function ($scope, parent, node) {
+                var path = node.getPath();
+                console.log("Path", path);
+                // Build rule and root rule item
+                var i = 0;
+                var rootRuleItem = {
+                    format_name: path[i].name,
+                    transform_rule_item: []
+                };
+                var transformRule = {
+                    name: path[i].name,
+                    transform_rule_item: rootRuleItem
+                };
+                var currentRuleItem = rootRuleItem.transform_rule_item;
+                while (++i < path.length) {
+                    currentRuleItem[0] = {format_name: path[i].name};
+                    if (i < path.length - 1) {
+                        currentRuleItem[0].transform_rule_item = [];
+                        currentRuleItem = currentRuleItem[0].transform_rule_item;
+                    }
+                }
+                $scope.$broadcast("RuleChanged", {rule_entry: {transform_rule: transformRule}, format_entry: node.getRoot().data});
+            },
+            buildTreeFromRuleEntry: function ($scope, parent, ruleData) {
+                console.log("Rule list:", ruleData);
+                var __this = this;
+                if (!ruleData)
+                    return null;
+                // TODO if parent has children, the ruleEntry should be append to
+                // TODO else new rule tree, need to buid rule tree following the format defintion
+                if (ruleData.rule_entry && ruleData.format_entry) {
+                    var ruleEntry = ruleData.rule_entry;
+                    var formatEntry = ruleData.format_entry;
+                    if (parent.children().length === 0) {
+                        this.transformRuleTree = new Lumens.Tree(parent).configure({
+                            handler: function (parentNode) {
+                                var rootRuleItem = __this.getRootRuleItem(ruleEntry);
+                                __this.checkRuleWithFormat(rootRuleItem.format_name, formatEntry.name);
+                                var entryList = __this.buildRootRuleItem(rootRuleItem, formatEntry);
+                                parentNode.addEntryList(entryList);
+                                __this.buildRuleItemChildren(parentNode, rootRuleItem, formatEntry);
+                            },
+                            click: function (current, parent) {
+                                $scope.$broadcast("ClickRuleItem", current);
+                            },
+                            drop: function (data, current, parent) {
+                            },
+                            droppable: true
+                        });
+                        return this.transformRuleTree;
+                    } else if (parent.children().length > 0) {
+                        // TODO find the parent node for the drag object and append it to the parent node
+                        console.log("appended");
+                    }
+                }
+                return null;
+            },
+            buildRootRuleItem: function (rootRuleItem, formatEntry) {
+                return [{
+                        label: rootRuleItem.format_name,
+                        name: rootRuleItem.format_name,
+                        nodeType: FormatBuilder.isField(formatEntry.form) ? "file" : "folder",
+                        data: formatEntry
+                    }];
+            },
+            buildRuleItemChildren: function (parentNode, ruleItem, formatEntry) {
+                var entryList = parentNode.getEntryList ? parentNode.getEntryList() : parentNode.getChildList();
+                var ruleItemNode = entryList.map[ruleItem.format_name];
+                if (ruleItem.transform_rule_item) {
+                    var ruleItemChildren = ruleItem.transform_rule_item;
+                    var nodeList = [];
+                    for (var i in ruleItemChildren) {
+                        var format = this.getChildFormat(formatEntry.format, ruleItemChildren[i].format_name);
+                        if (format)
+                            nodeList.push(this.buildItemNode(format, ruleItemChildren[i]));
+                    }
+                    ruleItemNode.addChildList(nodeList);
+                    ruleItemNode.expandContent();
+                    for (var i in ruleItemChildren) {
+                        var format = this.getChildFormat(formatEntry.format, ruleItemChildren[i].format_name);
+                        this.buildRuleItemChildren(ruleItemNode, ruleItemChildren[i], format);
+                    }
+                }
+            },
+            getRootRuleItem: function (ruleEntry) {
+                return ruleEntry.transform_rule.transform_rule_item;
+            },
+            getRuleItemByPath: function (path) {
+                var i = 0, length = path.length - 1;
+                var ruleItem = this.getRootRuleItem();
+                var pathString = path[i].name;
+                while (++i < length && ruleItem && ruleItem.transform_rule_item) {
+                    pathString += "." + path[i].name;
+                    for (var j in ruleItem.transform_rule_item)
+                        if (ruleItem.transform_rule_item[j].format_name === path[i].name) {
+                            ruleItem = ruleItem.transform_rule_item[j];
+                            break;
+                        }
+                }
+                if (!ruleItem)
+                    throw ("Not found '" + pathString + "'");
+                return ruleItem;
+            },
+            buildItemNode: function (format, ruleItem) {
+                var node = {
+                    label: format.name,
+                    name: format.name,
+                    nodeType: FormatBuilder.isField(format.form) ? "file" : (FormatBuilder.isArray(format.form) ? "folderset" : "folder"),
+                };
+                if (ruleItem && ruleItem.script)
+                    node.script = ruleItem.script;
+                return node;
+            },
+            getChildFormat: function (formatList, formatName) {
+                for (var i in formatList)
+                    if (formatList[i].name === formatName)
+                        return formatList[i];
+            },
+            hasRuleItem: function (ruleItem, name) {
+                if (!ruleItem || !ruleItem.transform_rule_item)
+                    return false;
+                for (var i in ruleItem.transform_rule_item)
+                    if (ruleItem.transform_rule_item[i].format_name === name)
+                        return true;
                 return false;
-            for (var i in ruleItem.transform_rule_item)
-                if (ruleItem.transform_rule_item[i].format_name === name)
-                    return true;
-            return false;
-        },
-        checkRuleWithFormat: function (ruleItemName, formatName) {
-            if (ruleItemName !== formatName)
-                throw ("Not match with '" + ruleItemName + "' and '" + formatName + "'");
-        }
-    };
-});
+            },
+            checkRuleWithFormat: function (ruleItemName, formatName) {
+                if (ruleItemName !== formatName)
+                    throw ("Not match with '" + ruleItemName + "' and '" + formatName + "'");
+            }
+        };
+    }]
+);
 Lumens.services.factory('RuleWithFormatRegister', function () {
     return {
         pathEnding: "+-*/ &|!<>\n\r\t^%=;:?,",
