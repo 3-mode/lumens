@@ -50,9 +50,12 @@ public class TextClient {
         String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null ?  
                 propList.get(TextConstants.FILEDELIMITER).toString()          : 
                 param.getChild(TextConstants.FILEDELIMITER).getValue().toString();
-        String escape = param.getChild(TextConstants.ESCAPECHAR) == null ? 
-                propList.get(TextConstants.ESCAPECHAR).toString()         : 
-                param.getChild(TextConstants.ESCAPECHAR).getValue().toString();
+        String escape = param.getChild(TextConstants.ESCAPE_CHAR) == null ? 
+                propList.get(TextConstants.ESCAPE_CHAR).toString()         : 
+                param.getChild(TextConstants.ESCAPE_CHAR).getValue().toString();
+        String quote = param.getChild(TextConstants.QUOTE_CHAR) == null ? 
+                propList.get(TextConstants.QUOTE_CHAR).toString()         : 
+                param.getChild(TextConstants.QUOTE_CHAR).getValue().toString();        
         boolean ignoreEmptyLine = param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE) == null ?
                 propList.get(TextConstants.OPTION_IGNORE_EMPTYLINE).getBoolean():
                 param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE).getValue().getBoolean();
@@ -95,12 +98,17 @@ public class TextClient {
                         
                     }
                     
-                    Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape);
+                    Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote);
                     result.add(build);
                 }
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
+        }finally{
+            try{
+                reader.close();
+            }catch (Exception ex) {                
+            }
         }
 
         return result;
