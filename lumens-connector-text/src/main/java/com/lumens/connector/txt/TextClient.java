@@ -44,9 +44,9 @@ public class TextClient {
         String path = param.getChild(TextConstants.PATH) == null ? 
                 propList.get(TextConstants.PATH).toString()     : 
                 param.getChild(TextConstants.PATH).getValue().toString();
-        String filter = param.getChild(TextConstants.FILE_EXTENSION) == null ? 
-                propList.get(TextConstants.FILE_EXTENSION).toString()     : 
-                param.getChild(TextConstants.FILE_EXTENSION).getValue().toString();        
+        String filter = param.getChild(TextConstants.FILE_FILTER) == null ? 
+                propList.get(TextConstants.FILE_FILTER).toString()     : 
+                param.getChild(TextConstants.FILE_FILTER).getValue().toString();        
         String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null ?  
                 propList.get(TextConstants.FILEDELIMITER).toString()          : 
                 param.getChild(TextConstants.FILEDELIMITER).getValue().toString();

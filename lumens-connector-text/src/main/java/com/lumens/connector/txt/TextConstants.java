@@ -20,6 +20,7 @@ public interface TextConstants {
     public static final String ESCAPE_CHAR = "EscapeChar";    
     public static final String QUOTE_CHAR = "EscapeChar";
     public static final String FILE_EXTENSION = "FileExtension";
+    public static final String FILE_FILTER = "FileFilter";
     
      // connector options
     public static final String OPTION_MAXLINE = "MaxLine";
