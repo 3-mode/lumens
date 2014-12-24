@@ -59,37 +59,33 @@ Lumens.directives.directive("formatList", ['FormatBuilder', function (FormatBuil
             }
         };
     }]);
-Lumens.directives.directive("ruleEntry", function (RuleBuilder) {
+Lumens.directives.directive("ruleTree", function (RuleBuilder) {
     return {
-        restrict: 'A',
+        restrict: 'E',
+        replace: true,
+        template: "<div></div>",
         link: function ($scope, element, attr) {
             element.droppable({
                 greedy: true,
                 accept: ".lumens-tree-node",
                 drop: function (event, ui) {
-                    var data = $.data(ui.draggable.get(0), "tree-node-data");
-                    LumensLog.log("Dropped", data);
+                    var node = $.data(ui.draggable.get(0), "tree-node-data");
+                    LumensLog.log("Dropped", node);
                     // TODO compare root
                     // TODO append to exist correctly
                     if (element.children().length > 0) {
                         // TODO try to append to the rule tree
-
+                        console.log("Mapping editing, rule should be appended to existing rule tree:", $scope[attr.ruleData]);
+                        RuleBuilder.appendFromData($scope, element, node);
+                        //$scope.$broadcast("NewRule", null);
                         // TODO if the root name doesn't match, renew the rule tree
                     } else {
-                        // TODO create a new rule tree
-                        RuleBuilder.buildFromData($scope, element, data.location);
+                        RuleBuilder.buildFromData($scope, element, node);
                     }
                 }
             });
-
-            $scope.$watch(function () {
-                return $scope[attr.ruleEntry];
-            }, function (ruleEntry) {
-                element.empty();
-                if (ruleEntry) {
-                    console.log("Rule list:", ruleEntry);
-                    RuleBuilder.buildFromRuleEntity($scope, element, ruleEntry);
-                }
+            $scope.$watch(attr.ruleData, function (ruleData) {
+                RuleBuilder.buildTreeFromRuleEntry($scope, element, ruleData);
             });
         }
     };

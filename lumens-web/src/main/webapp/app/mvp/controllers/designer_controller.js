@@ -322,7 +322,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
             messageBox.showWarning(i18n.id_no_project_name, projectInfoContent);
     };
 })
-.controller("TransformListCtrl", function ($scope, $compile, $element, TransformEditTemplate, RuleEditorService) {
+.controller("TransformListCtrl", function ($scope, $compile, $element, TransformEditTemplate) {
     LumensLog.log("In TransformListCtrl", $element);
 
     function showRuleEditor() {
@@ -420,9 +420,10 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, RuleBuil
             targetComponentID = $scope.currentUIComponent.getTo(0).getId();
 
         // TODO build transform rule tree if there is existing one
-        $scope.$on("NewRule", function (evt, ruleEntry) {
+        $scope.$on("RuleChanged", function (evt, data) {
             $scope.$apply(function () {
-                $scope.currentRuleEntry = ruleEntry;
+                console.log("In RuleChanged apply", data);
+                $scope.ruleData = data;
             });
         });
 
@@ -534,7 +535,7 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, RuleBuil
             $scope.currentSelectRuleItem.setScript($scope.transformRuleScriptEditor.getValue());
         }
         else if (id_script_btn === "id_script_validate") {
-            LumensLog.log("Validate transform_rule_entity:", $scope.transformRuleEntity.transformRuleEntry);
+            LumensLog.log("Validate transform_rule_entry:", $scope.currentRuleEntry);
         }
         else if (id_script_btn === "id_script_back") {
             $scope.transformEditPanel.remove();
