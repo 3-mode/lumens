@@ -65,11 +65,24 @@
     </head>
     <body class="lumens" ng-app="lumensTest">
         <div id="id-main-view" ng-controller="MainTestCtrl">
-            <div format-list="displayTargetFormatList" class="lumens-format-panel" style="float:left;width:500px;;height:700px;"></div>
+            <div style="float:top;width:1001px;;height:200px;">
+                <div class="lumens-format-panel-border" style="float:left;width:500px;;height:200px;">
+                    <rule-tree rule-data="ruleData" class="lumens-format-panel" style="width:100%;height:100%;"/>
+                </div>
+                <div format-list="displayTargetFormatList" class="lumens-format-panel" style="float:left;width:500px;;height:200px;"></div>
+            </div>
+            <div style="float:top;width:300px;;height:100px;">
+                <textarea ng-model="ruleScript" class="form-control" rows="3" id="inputProjectDescription" style="width:300px;;height:100px;"></textarea>
+            </div>
+            <a class="lumens-button" ng-click="onCommand()">Save</a>
         </div>
         <script type="text/javascript">
             Lumens.appModule = angular.module('lumensTest', ["lumens-directives", "lumens-services"]);
-            function MainTestCtrl($scope, $http, $compile, $sce, ProjectById, FormatList) {
+            function MainTestCtrl($scope, $http, $compile, $sce, ProjectById, FormatList, RuleTreeBuilder) {
+                window.LumensLog = console && console.log ? console : {
+                    log: function () {
+                    }
+                };
                 $scope.projectID = '1415415434544';
                 ProjectById.get({project_id: $scope.projectID}, function (projectData) {
                     $scope.project = $.parseJSON(projectData.content.project[0].data).project;
@@ -82,6 +95,23 @@
                         });
                     });
                 });
+                $scope.$on("ClickRuleItem", function (evt, currentRuleItem) {
+                    $scope.currentSelectRuleItem = currentRuleItem;
+                    if ($scope.currentSelectRuleItem) {
+                        var script = currentRuleItem.getScript() ? currentRuleItem.getScript() : "";
+                        $scope.$apply(function () {
+                            $scope.ruleScript = script;
+                        });
+                    }
+                });
+                $scope.$watch("ruleScript", function (ruleScript) {
+                    if ($scope.currentSelectRuleItem)
+                        $scope.currentSelectRuleItem.setScript(ruleScript);
+                });
+
+                $scope.onCommand = function () {
+                    console.log("Final rule save: ", RuleTreeBuilder.buildTransformRuleTree());
+                }
             }
         </script>
     </body>
