@@ -12,6 +12,7 @@ import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Format.Form;
 import com.lumens.model.Value;
+import com.lumens.tool.RFC4180Parser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -60,64 +61,89 @@ public class ConnectorTest {
     }
 
     @Test
-    public void testRFC4180(){       
-        String TEXTDATA  = "[\\x20-\\x21]|[\\x23-\\x2B]|[\\x2D-\\x7E]";
-        String escape = String.format("\"[%s|,|\\r|\\n|\"{2}]*\"", TEXTDATA);
-        String nonescape = String.format("[%s]*", TEXTDATA);
-        String field = String.format("[%s|%s]*", escape, nonescape);
-        String record = String.format("(?:%s,%s)*", field, field);
-        String delimiter = String.format("[^%s]", field);
+    public void testRFC4180(){                       
+        String escape = RFC4180Parser.GetEscapePattern();        
+        String nonescape = RFC4180Parser.GetNonEscapePattern();
         
-        String non_escape_string = "   !#$%&abCDE*";
+        // "([\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"|(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+
+        String field = String.format("%s|%s", escape, nonescape);
+        String record = String.format("(?:%s,%s)*", field, field);       
         
+        String non_escape_string = "-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3";
+        
+        // Normal: "abc,"
         String escape_string1 = "\"abc,\"";
+        // Missing last ":"abc,""""
         String escape_string2 = "\"abc,\"\"\"\"";
+        // Missing first ":"abc,""
         String escape_string3 = "\"abc,\"\"";
+        // with CRLF: "abc,""\r\n"
         String escape_string4 = "\"abc,\"\"\\r\\n\"";
+        
+        // "abc,","abc","abc,""","ab""""c,""";
+        String escape_string5 = "\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\"";
         String escape_invalid_string1 = "abc\"";
+        
+        // abc, cde,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3                           
+        String field_string = "abc, cde,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3";
+        // comma in head: ,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3
+        String field_string1 = ",\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3";
+        // comma at last: "abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3,
+        String field_string2 = "\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3,";
+        // comma and space in head: ,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3
+        String field_string3 = " ,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3";
         
         String record_string1 = "\"abc,\",\"abc,\",\"abc,\"";
         String record_string2 = "\"abc,\",   !#$%&abCDE*,\"abc,\"";
         String record_string3 = "\"abc,\",   !#$%&abCDE*,\"abc,\", \\r\\n";
                 
         // sub string test
-        Pattern p = Pattern.compile(nonescape);
-        Matcher m = p.matcher(record_string2);
+        Pattern p = Pattern.compile(field);
+        Matcher m = p.matcher(field_string);
         String sub = null;
-        if (m.find())
+        List<String> list = new ArrayList();
+        while (m.find()){
             sub = m.group();
+            int len = sub.length();
+            list.add(sub);
+        }
+        assertTrue("field test fail: size not be equal", list.size() == 9);
         
         boolean match = true;
         
         // Fields test
         match = escape_string1.matches(field);  
-        match &= escape_string2.matches(field);
-        match &= escape_string3.matches(field);
-        match &= escape_string4.matches(field);
-        match &= non_escape_string.matches(field);
-        assertTrue("field test fail",match); 
+        assertTrue("field test fail",match);
+        match = escape_string2.matches(field);
+        assertFalse("field test fail",match);
+        match = escape_string3.matches(field);
+        assertFalse("field test fail",match);
+        match = escape_string4.matches(field);
+        
+        
+        match = non_escape_string.matches(field);
+       // assertTrue("field test fail",match); 
         
         // Record test
         match = record_string1.matches(record);  
         match &= record_string2.matches(record);
         match &= record_string3.matches(record);
-        assertTrue("record test fail",match); 
+        //assertTrue("record test fail",match); 
 
-        
         // Non escape test
         match = non_escape_string.matches(nonescape);
-        assertTrue("non escape test fail",match);   
+        //assertTrue("non escape test fail",match);   
         
         // Escape test
         match = escape_string1.matches(escape);        
         match &= escape_string2.matches(escape);     
         match &= escape_string3.matches(escape);
         match &= escape_string4.matches(escape);
-        assertTrue("escape test fail",match);
+        //assertTrue("escape test fail",match);
         
         // Invalid test
         match &= escape_invalid_string1.matches(escape);
-        assertFalse("invalid test fail",match);        
+        //assertFalse("invalid test fail",match);        
     }
     
     @Test
