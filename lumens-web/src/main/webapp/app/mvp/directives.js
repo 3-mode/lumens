@@ -70,12 +70,10 @@ Lumens.directives.directive("ruleTree", function (RuleTreeBuilder) {
                 accept: ".lumens-tree-node",
                 drop: function (event, ui) {
                     var node = $.data(ui.draggable.get(0), "tree-node-data");
-                    LumensLog.log("Dropped", node);
-                    if (element.children().length > 0) {
+                    if (element.children().length > 0)
                         RuleTreeBuilder.appendFromData($scope, element, node);
-                    } else {
+                    else
                         RuleTreeBuilder.buildFromData($scope, element, node);
-                    }
                 }
             });
             $scope.$on("RuleChanged", function (evt, data) {

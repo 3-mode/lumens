@@ -258,6 +258,41 @@ Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath
 );
 Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBuilder) {
         return {
+            buildTransformRuleTree: function () {
+                if (!this.transformRuleTree)
+                    throw "No transform rule is configured";
+                var entryList = this.transformRuleTree.getEntryList();
+                var childKeys = Object.keys(entryList.map);
+                if (childKeys.length > 1)
+                    throw "Wrong transform rule configruation it must equal 1";
+                var rootRuleItemNode = entryList.map[childKeys[0]];
+                var rootRuleItem = {format_name: rootRuleItemNode.data.name};
+                // Build child item rules
+                var transform_rule_item = this.buildTransformRuleTreeChildren(rootRuleItemNode.getChildList());
+                if (transform_rule_item.length > 0)
+                    rootRuleItem.transform_rule_item = transform_rule_item;
+                console.log("Root rule node: ", rootRuleItemNode);
+                console.log("Root rule item: ", rootRuleItem);
+                return {
+                    name: rootRuleItemNode.data.name,
+                    transform_rule_item: rootRuleItem
+                };
+            },
+            buildTransformRuleTreeChildren: function (entryList) {
+                var ruleItemList = [];
+                var entryListKeys = Object.keys(entryList.map);
+                for (var i in entryListKeys) {
+                    var entry = entryList.map[entryListKeys[i]];
+                    var currentRuleItem = {format_name: entry.data.name};
+                    if (entry.script)
+                        currentRuleItem.script = entry.script;
+                    var transform_rule_item = this.buildTransformRuleTreeChildren(entry.getChildList());
+                    if (transform_rule_item.length > 0)
+                        currentRuleItem.transform_rule_item = transform_rule_item;
+                    ruleItemList.push(currentRuleItem);
+                }
+                return ruleItemList;
+            },
             appendFromData: function ($scope, parent, node) {
                 console.log("appendFromData::node", node);
                 var i = 0, path = node.getPath();
@@ -269,8 +304,8 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
                     if (!child) {
                         entryNode.addChildList([this.buildItemNode(path[i])]);
                         child = entryNode.getChildList().map[path[i].name];
-                        entryNode.expandContent();
                     }
+                    entryNode.expandContent();
                     entryNode = child;
                 }
             },
@@ -319,8 +354,6 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
                             click: function (current, parent) {
                                 $scope.$broadcast("ClickRuleItem", current);
                             },
-                            drop: function (data, current, parent) {
-                            },
                             droppable: true
                         });
                         return this.transformRuleTree;
@@ -350,7 +383,8 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
                         if (format)
                             nodeList.push(this.buildItemNode(format, ruleItemChildren[i]));
                     }
-                    ruleItemNode.addChildList(nodeList);
+                    if (nodeList.length)
+                        ruleItemNode.addChildList(nodeList);
                     ruleItemNode.expandContent();
                     for (var i in ruleItemChildren) {
                         var format = this.getChildFormat(formatEntry.format, ruleItemChildren[i].format_name);
@@ -382,6 +416,7 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
                     label: format.name,
                     name: format.name,
                     nodeType: FormatBuilder.isField(format.form) ? "file" : (FormatBuilder.isArray(format.form) ? "folderset" : "folder"),
+                    data: format
                 };
                 if (ruleItem && ruleItem.script)
                     node.script = ruleItem.script;
