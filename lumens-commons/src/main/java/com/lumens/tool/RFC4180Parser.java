@@ -1,0 +1,57 @@
+/*
+ * Copyright Lumens Team, Inc. All Rights Reserved.
+ */
+
+package com.lumens.tool;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author Xiaoxin(whiskeyfly@163.com)
+ */
+// Refer to RFC4180 code: http://tools.ietf.org/html/rfc4180#page-2 
+public class RFC4180Parser {
+    // [\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]
+    private final static String TEXTDATA  = "[\\x20-\\x21]|[\\x23-\\x2B]|[\\x2D-\\x7E]";       
+    // "([\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"
+    private final static String ESCAPE = String.format("\"(%s+|,|\\r|\\n|\"\")+\"", TEXTDATA);
+    // (?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+
+    private final static String NON_ESCAPE = String.format("(?:%s)+", TEXTDATA);
+    // "([\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"|(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+
+    private final static String FIELD = String.format("%s|%s", ESCAPE, NON_ESCAPE);
+    
+    public RFC4180Parser(){
+        
+    }
+    
+    public String GetTextdataPattern(){
+        return TEXTDATA;
+    }
+    
+    public String GetEscapePattern(){
+        return ESCAPE;
+    }
+    
+    public String GetNonEscapePattern(){
+        return NON_ESCAPE;
+    }
+    
+    public static String GetFieldPattern(){
+        return FIELD;
+    }
+    
+    public List<String> ParserField(String field){        
+        Pattern p = Pattern.compile(FIELD);
+        Matcher m = p.matcher(field);
+        
+        List<String> list = new ArrayList();
+        while (m.find()){                    
+            list.add(m.group());
+        }
+        
+        return list;
+    }
+}
