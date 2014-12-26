@@ -164,6 +164,10 @@ Lumens.Tree = Class.$extend({
         this.children = {size: 0, map: {}};
         this.levelNumber = -1;
     },
+    remove: function () {
+        this.$parentContainer.unbind();
+        this.$parentContainer.remove();
+    },
     getElement: function () {
         return this.$tree;
     },

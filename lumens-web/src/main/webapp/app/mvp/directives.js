@@ -83,6 +83,7 @@ Lumens.directives.directive("ruleTree", function (RuleTreeBuilder) {
                 });
             });
             $scope.$watch(attr.ruleData, function (ruleData) {
+                RuleTreeBuilder.clear();
                 RuleTreeBuilder.buildTreeFromRuleEntry($scope, element, ruleData);
             });
         }
