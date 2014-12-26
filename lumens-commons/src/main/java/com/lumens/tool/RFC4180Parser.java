@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 /**
  *
@@ -17,7 +18,7 @@ public class RFC4180Parser {
     // [\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]
     private final static String TEXTDATA  = "[\\x20-\\x21]|[\\x23-\\x2B]|[\\x2D-\\x7E]";       
     // "([\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"
-    private final static String ESCAPE = String.format("\"(%s+|,|\\r|\\n|\"\")+\"", TEXTDATA);
+    private final static String ESCAPE = String.format("\"(?:%s+|,|\\r|\\n|\"\")+\"", TEXTDATA);
     // (?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+
     private final static String NON_ESCAPE = String.format("(?:%s)+", TEXTDATA);
     // "([\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"|(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+
@@ -39,8 +40,9 @@ public class RFC4180Parser {
         return FIELD;
     }
     
-    public static List<String> ParserField(String field){        
-        Pattern p = Pattern.compile(FIELD);
+    // PatternSyntaxException throw if Pattern parse error
+    public static List<String> ParserField(String pattern, String field) throws PatternSyntaxException{        
+        Pattern p = Pattern.compile(field);
         Matcher m = p.matcher(field);
         
         List<String> list = new ArrayList();
@@ -49,5 +51,9 @@ public class RFC4180Parser {
         }
         
         return list;
+    }    
+    
+    public static List<String> ParserField(String field){   
+        return ParserField(FIELD, field);
     }
 }
