@@ -7,11 +7,6 @@ Lumens.TreeNode = Class.$extend({
         var __this = this;
         this.children = {size: 0, map: {}};
         this.$parent = parent;
-        this.nodeType = node.nodeType;
-        this.label = node.label;
-        this.name = node.name;
-        this.data = node.data;
-        this.script = node.script;
         this.clickHandler = parent.clickHandler;
         this.dblclickHandler = parent.dblclickHandler;
         this.dropHandler = parent.dropHandler;
@@ -20,6 +15,12 @@ Lumens.TreeNode = Class.$extend({
         this.indexNumber = parent.children.size;
         this.draggable = parent.draggable;
         this.droppable = parent.droppable;
+        // ******* Begin Init the all attributes of node to this ********************
+        var nodeKeys = Object.keys(node);
+        for (var i in nodeKeys)
+            this[nodeKeys[i]] = node[nodeKeys[i]];
+        // ******* End Init the all attributes of node to this **********************
+
         this.$folder = $('<div class="lumens-tree-folder" style="display: block;"></div>').appendTo(this.$container).attr('id', '(' + this.levelNumber + ',' + this.indexNumber + ')');
         if (classes)
             this.$folder.addClass(classes);
@@ -188,7 +189,7 @@ Lumens.Tree = Class.$extend({
             this.draggable = config.draggable;
             this.droppable = config.droppable;
             if (config.classes)
-                this.$tree.addClass(classes);
+                this.$tree.addClass(config.classes);
             if (config.click)
                 this.clickHandler = config.click;
             if (config.dblclick)
