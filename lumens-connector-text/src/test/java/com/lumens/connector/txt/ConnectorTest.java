@@ -116,8 +116,8 @@ public class ConnectorTest {
         TextConnector cntrR = (TextConnector) cntr.createConnector();
 
         Map<String, Value> propsR = new HashMap<>();
-        propsR.put(TextConstants.ESCAPE_CHAR, new Value("\\"));
-        propsR.put(TextConstants.QUOTE_CHAR, new Value(""));
+        propsR.put(TextConstants.ESCAPE_CHAR, new Value("\""));
+        propsR.put(TextConstants.QUOTE_CHAR, new Value("\""));
         propsR.put(TextConstants.FILEDELIMITER, new Value(","));
         propsR.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(1000));
