@@ -7,9 +7,12 @@ import com.lumens.model.DataElement;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
+import com.lumens.tool.RFC4180Parser;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.*;
+
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
@@ -25,22 +28,14 @@ public class TextElementBuilder implements TextConstants{
         if (!bEscape){            
             values.addAll(Arrays.asList(line.split(delimiter)));
         }else{
-            int len = line.length();
-            int index = 0;
-            int first = 0;
-            while (index++ < len - 1){
-                char current = line.charAt(index);
-                char next = line.charAt(index+1);
-                char quoteChar = quote.charAt(0);
-                if (current == quoteChar && next != quoteChar ){
-                    // Deal with first 
-                }                
-                // Deal with delimiter
-            }
-            // Add last string
-            values.add(line.substring(first, index));
-        }
-        
+            // TODO: support specific escape char quote char. Need to build customize pattern
+            String pattern = RFC4180Parser.GetFieldPattern();
+            try{
+                values.addAll(RFC4180Parser.ParserField(line));
+            }catch(PatternSyntaxException ex){
+                throw ex;
+            }          
+        }        
         
         Element elem = new DataElement(fmt);   
              
