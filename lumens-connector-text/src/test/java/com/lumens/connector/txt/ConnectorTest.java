@@ -10,7 +10,6 @@ import com.lumens.connector.OperationResult;
 import com.lumens.model.DataElement;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
-import com.lumens.model.Format.Form;
 import com.lumens.model.Value;
 import com.lumens.tool.RFC4180Parser;
 import java.io.BufferedReader;
@@ -65,85 +64,49 @@ public class ConnectorTest {
         String escape = RFC4180Parser.GetEscapePattern();        
         String nonescape = RFC4180Parser.GetNonEscapePattern();
         
-        // "([\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"|(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+
+        // "(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"|(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+
         String field = String.format("%s|%s", escape, nonescape);
         String record = String.format("(?:%s,%s)*", field, field);       
         
         String non_escape_string = "-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3";
-        
-        // Normal: "abc,"
-        String escape_string1 = "\"abc,\"";
-        // Missing last ":"abc,""""
-        String escape_string2 = "\"abc,\"\"\"\"";
-        // Missing first ":"abc,""
-        String escape_string3 = "\"abc,\"\"";
-        // with CRLF: "abc,""\r\n"
-        String escape_string4 = "\"abc,\"\"\\r\\n\"";
-        
-        // "abc,","abc","abc,""","ab""""c,""";
-        String escape_string5 = "\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\"";
-        String escape_invalid_string1 = "abc\"";
-        
+               
         // abc, cde,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3                           
-        String field_string = "abc, cde,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3";
-        // comma in head: ,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3
-        String field_string1 = ",\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3";
-        // comma at last: "abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3,
-        String field_string2 = "\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3,";
-        // comma and space in head: ,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3
-        String field_string3 = " ,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3";
-        
-        String record_string1 = "\"abc,\",\"abc,\",\"abc,\"";
-        String record_string2 = "\"abc,\",   !#$%&abCDE*,\"abc,\"";
-        String record_string3 = "\"abc,\",   !#$%&abCDE*,\"abc,\", \\r\\n";
-                
-        // sub string test
-        Pattern p = Pattern.compile(field);
-        Matcher m = p.matcher(field_string);
-        String sub = null;
-        List<String> list = new ArrayList();
-        while (m.find()){
-            sub = m.group();
-            int len = sub.length();
-            list.add(sub);
-        }
-        assertTrue("field test fail: size not be equal", list.size() == 9);
-        
-        boolean match = true;
-        
-        // Fields test
-        match = escape_string1.matches(field);  
-        assertTrue("field test fail",match);
-        match = escape_string2.matches(field);
-        assertFalse("field test fail",match);
-        match = escape_string3.matches(field);
-        assertFalse("field test fail",match);
-        match = escape_string4.matches(field);
-        
-        
-        match = non_escape_string.matches(field);
-       // assertTrue("field test fail",match); 
-        
-        // Record test
-        match = record_string1.matches(record);  
-        match &= record_string2.matches(record);
-        match &= record_string3.matches(record);
-        //assertTrue("record test fail",match); 
+        String field_string0 = "abc, cde,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3";
+        // comma in head: ,abc, cde,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3 
+        String field_string1 = ",abc, cde,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3" ;
+        // comma at last: abc, cde,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3,
+        String field_string2 = "abc, cde,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3.";
+        // comma and space in head:  ,abc, cde,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3 
+        String field_string3 = " , cde,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3 ";
 
+        String[] fields = {field_string0, field_string1, field_string2, field_string3};
+        
+        // Field test
+        for (String field_string: fields){
+            Pattern p = Pattern.compile(field);
+            Matcher m = p.matcher(field_string);
+            String sub = null;
+            List<String> list = new ArrayList();
+            while (m.find()) {
+                sub = m.group();                
+                list.add(sub);
+            }
+            assertTrue("field test fail: size not be equal", list.size() == 9);
+        }
+                
+        String escape_string1 = "\"abc,\"";             // Normal: "abc,"        
+        String escape_string2 = "\"abc,\"\"\"\"";      // Missing last ":"abc,""""        
+        String escape_string3 = "\"abc,\"\"";           // Missing first ":"abc,""        
+        String escape_string4 = "\"abc,\"\"\\r\\n\"";  // with CRLF: "abc,""\r\n"        
+        
+        // Escape test         
+        assertTrue("escape test fail",escape_string1.matches(escape));        
+        assertFalse("escape test fail",escape_string2.matches(escape));        
+        assertFalse("escape test fail",escape_string3.matches(escape));      
+        assertTrue("escape test fail",escape_string4.matches(escape));        
         // Non escape test
-        match = non_escape_string.matches(nonescape);
-        //assertTrue("non escape test fail",match);   
-        
-        // Escape test
-        match = escape_string1.matches(escape);        
-        match &= escape_string2.matches(escape);     
-        match &= escape_string3.matches(escape);
-        match &= escape_string4.matches(escape);
-        //assertTrue("escape test fail",match);
-        
-        // Invalid test
-        match &= escape_invalid_string1.matches(escape);
-        //assertFalse("invalid test fail",match);        
+        assertFalse("non escape test fail",non_escape_string.matches(escape));        
+
     }
     
     @Test
