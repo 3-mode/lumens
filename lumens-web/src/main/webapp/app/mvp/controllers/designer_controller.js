@@ -351,9 +351,10 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
             $scope.currentRuleEntry = null;
             $scope.inputFormatRegName = null;
             $scope.outputFormatRegName = null;
+            $scope.ruleRegName = null;
             $scope.inputSelectedFormatName = null;
             $scope.outputSelectedFormatName = null;
-            $scope.ruleRegName = null;
+            $scope.ruleData = null;
             showRuleEditor();
         } else if (id_btn === "id_rule_delete") {
         }
@@ -558,10 +559,12 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
 
     $scope.saveFormatRegistry = function () {
         if ($scope.selectedSide === 'left') {
+            $scope.$parent.backupInputFormatRegName = $scope.inputFormatRegName
             $scope.$parent.inputFormatRegName = $scope.registeredFormatName;
             $scope.$parent.inputSelectedFormatName = $scope.selectedFormatName;
         }
         else if ($scope.selectedSide === 'right') {
+            $scope.$parent.backupOutputFormatRegName = $scope.outputFormatRegName
             $scope.$parent.outputFormatRegName = $scope.registeredFormatName;
             $scope.$parent.outputSelectedFormatName = $scope.selectedFormatName;
         }
@@ -570,6 +573,7 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
 })
 .controller("RuleRegistryCtrl", function ($scope, $element) {
     $scope.saveRuleRegistry = function () {
+        $scope.$parent.backupRuleRegName = $scope.ruleRegName;
         $scope.$parent.ruleRegName = $scope.registeredRuleName;
         $element.modal("hide");
     }
