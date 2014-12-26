@@ -178,7 +178,7 @@ Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath
                 for (var i = 1; i < pathTokens.length; ++i) {
                     if (formatPath.length > 0)
                         formatPath += '.';
-                    formatPath += pathTokens[i].name;
+                    formatPath += pathTokens[i].name.indexOf('.') > 0 ? ("'" + pathTokens[i].name + "'") : pathTokens[i].name;
                 }
                 return formatPath;
             },
@@ -213,9 +213,10 @@ Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath
                                 for (var i in currentFormat.format) {
                                     var formatItem = currentFormat.format[i];
                                     nodeList[i] = {
+                                        nodeType: __this.isField(formatItem.form) ? "file" : (__this.isArray(formatItem.form) ? "folderset" : "folder"),
                                         label: formatItem.type === "None" ? formatItem.name : formatItem.name + "&nbsp;&nbsp;[" + formatItem.type + "]",
                                         name: formatItem.name,
-                                        nodeType: __this.isField(formatItem.form) ? "file" : (__this.isArray(formatItem.form) ? "folderset" : "folder"),
+                                        direction: direction,
                                         data: formatItem
                                     };
                                 }
@@ -235,9 +236,10 @@ Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath
                                     for (var i in currentFormat.format) {
                                         var formatItem = currentFormat.format[i];
                                         nodeList[i] = {
+                                            nodeType: __this.isField(formatItem.form) ? "file" : (__this.isArray(formatItem.form) ? "folderset" : "folder"),
                                             label: formatItem.type === "None" ? formatItem.name : formatItem.name + "&nbsp;&nbsp;[" + formatItem.type + "]",
                                             name: formatItem.name,
-                                            nodeType: __this.isField(formatItem.form) ? "file" : (__this.isArray(formatItem.form) ? "folderset" : "folder"),
+                                            direction: direction,
                                             data: formatItem
                                         };
                                     }
@@ -263,6 +265,16 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
                     this.transformRuleTree.remove();
                     this.transformRuleTree = null;
                 }
+            },
+            getFullPath: function (node) {
+                var formatPath = "";
+                var pathTokens = node.getPath();
+                for (var i = 0; i < pathTokens.length; ++i) {
+                    if (formatPath.length > 0)
+                        formatPath += '.';
+                    formatPath += pathTokens[i].name.indexOf('.') > 0 ? ("'" + pathTokens[i].name + "'") : pathTokens[i].name;
+                }
+                return formatPath;
             },
             buildTransformRuleTree: function () {
                 if (!this.transformRuleTree)
@@ -360,6 +372,10 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
                             click: function (current, parent) {
                                 $scope.$broadcast("ClickRuleItem", current);
                             },
+                            drop: function (node, current, parent) {
+                                if (node.direction === "OUT")
+                                    current.setScript('@' + __this.getFullPath(node));
+                            },
                             droppable: true
                         });
                         return this.transformRuleTree;
@@ -453,8 +469,12 @@ Lumens.services.factory('RuleWithFormatRegister', ['RuleTreeBuilder', function (
             pathEnding: "+-*/ &|!<>\n\r\t^%=;:?,",
             build: function ($scope) {
                 var inSelectedName = $scope.inputSelectedFormatName;
-                var ruleRegName = $scope.ruleRegName;
                 var outSelectedName = $scope.outputSelectedFormatName;
+                var ruleRegName = $scope.ruleRegName;
+                var displaySourceFormatList = $scope.displaySourceFormatList.format_entity;
+                var displayTargetFormatList = $scope.displayTargetFormatList.format_entity;
+                var selectedSourceFormat = this.findRootFormat(displaySourceFormatList, inSelectedName);
+                var selectedTargetFormat = this.findRootFormat(displaySourceFormatList, outSelectedName);
                 LumensLog.log("Rule entity:", $scope.transformRuleEntity);
                 var transformRuleEntry = {transform_rule: RuleTreeBuilder.buildTransformRuleTree()};
                 transformRuleEntry.name = ruleRegName;
@@ -462,10 +482,6 @@ Lumens.services.factory('RuleWithFormatRegister', ['RuleTreeBuilder', function (
                 transformRuleEntry.target_id = $scope.displayTargetFormatList.component_id;
                 transformRuleEntry.source_format_name = $scope.inputFormatRegName ? $scope.inputFormatRegName : ($scope.outputFormatRegName ? $scope.outputFormatRegName : "");
                 transformRuleEntry.target_format_name = $scope.outputFormatRegName ? $scope.outputFormatRegName : "";
-                var displaySourceFormatList = $scope.displaySourceFormatList.format_entity;
-                var displayTargetFormatList = $scope.displayTargetFormatList.format_entity;
-                var selectedSourceFormat = this.findRootFormat(displaySourceFormatList, inSelectedName);
-                var selectedTargetFormat = this.findRootFormat(displaySourceFormatList, outSelectedName);
                 this.backupSourceRegName = $scope.backupInputFormatRegName;
                 this.backupTargetRegName = $scope.backupOutputFormatRegName;
                 this.bacupRuleRegName = $scope.backupRuleRegName;

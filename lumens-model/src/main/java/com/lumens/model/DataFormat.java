@@ -172,7 +172,7 @@ public class DataFormat implements Format {
         if (parent != null) {
             Format format = this;
             while (format != null) {
-                fullPath.addLeft(format.getName());
+                fullPath.addLeft(format.getName().indexOf(".") > 0 ? ("'" + format.getName() + "'") : format.getName());
                 format = format.getParent();
             }
         }
