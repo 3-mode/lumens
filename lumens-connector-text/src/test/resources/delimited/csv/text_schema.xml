@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<format name="TextMessage">	
+    <field name="text1" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
+    <field name="text2" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
+    <field name="text3" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
+</format>
