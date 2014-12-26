@@ -17,31 +17,32 @@ import java.util.List;
  *
  * @author shaofeng.wang@outlook.com
  */
-public class OracleFormatBuilder {
+public class OracleElementBuilder {
 
     public List<Element> buildElement(Format output, ResultSet ret) throws Exception {
         List<Element> result = new ArrayList<>();
         if (output != null && !ret.isClosed()) {
             while (ret.next()) {
                 DataElement data = new DataElement(output);
-                Element fields = data.addChild(OracleConstants.FIELDS);
-                buildFieldList(fields, ret);
+                buildFieldList(data, ret);
                 result.add(data);
             }
         }
         return result;
     }
 
-    private void buildFieldList(Element fields, ResultSet ret) throws Exception {
+    private void buildFieldList(Element record, ResultSet ret) throws Exception {
         int fieldIndex = 1;
-        for (Format f : fields.getFormat().getChildren()) {
-            fields.addChild(f.getName()).setValue(getValue(f, ret, fieldIndex));
+        for (Format field : record.getFormat().getChildren()) {
+            if (OracleConstants.SQLPARAMS.equals(field.getName()))
+                continue;
+            record.addChild(field.getName()).setValue(getValue(field, ret, fieldIndex));
             ++fieldIndex;
         }
     }
 
-    private Value getValue(Format f, ResultSet ret, int fieldIndex) throws Exception {
-        switch (f.getType()) {
+    private Value getValue(Format format, ResultSet ret, int fieldIndex) throws Exception {
+        switch (format.getType()) {
             case BOOLEAN:
                 return new Value(ret.getBoolean(fieldIndex));
             case BYTE:

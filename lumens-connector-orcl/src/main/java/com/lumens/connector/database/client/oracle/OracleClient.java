@@ -8,7 +8,7 @@ import com.lumens.connector.database.DbUtils;
 import com.lumens.connector.database.client.AbstractClient;
 import static com.lumens.connector.database.client.oracle.OracleConstants.DATA_LENGTH;
 import static com.lumens.connector.database.client.oracle.OracleConstants.DATA_TYPE;
-import static com.lumens.connector.database.client.oracle.OracleConstants.FIELDS;
+import static com.lumens.connector.database.client.oracle.OracleConstants.SQLPARAMS;
 import static com.lumens.connector.database.client.oracle.OracleConstants.TABLECOLUMNS;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Element;
@@ -76,10 +76,10 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                     String type = ret.getString(3);
                     Format table = new DataFormat(tableName, Form.STRUCT);
                     tables.put(tableName, table);
-                    table.addChild(FIELDS, Form.STRUCT);
                     if (direction == Direction.IN) {
-                        table.addChild(OPERATION, Form.FIELD, Type.STRING);
-                        table.addChild(CLAUSE, Form.FIELD, Type.STRING);
+                        Format SQLParams = table.addChild(SQLPARAMS, Form.STRUCT);
+                        SQLParams.addChild(ACTION, Form.FIELD, Type.STRING);
+                        SQLParams.addChild(CLAUSE, Form.FIELD, Type.STRING);
                     }
                     table.setProperty(DESCRIPTION, new Value(description));
                     table.setProperty(TYPE, new Value(type));
@@ -107,8 +107,8 @@ public class OracleClient extends AbstractClient implements OracleConstants {
             stat = conn.createStatement();
             ret = stat.executeQuery(String.format(TABLECOLUMNS, format.getName()));
             if (!ret.isClosed()) {
-                Format fields = format.getChild(FIELDS);
-                if (fields != null && fields.getChildren() == null || fields.getChildren().isEmpty()) {
+                Format fields = format;
+                if (fields != null) {
                     while (ret.next()) {
                         String columnName = ret.getString(1);
                         String dataType = ret.getString(2);
@@ -159,7 +159,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
         }
     }
 
-    public List<Element> executeQuery(String SQL, OracleFormatBuilder elementBuilder, Format output) {
+    public List<Element> executeQuery(String SQL, OracleElementBuilder elementBuilder, Format output) {
         Statement stat = null;
         ResultSet ret = null;
         try {

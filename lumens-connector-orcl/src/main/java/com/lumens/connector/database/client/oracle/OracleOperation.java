@@ -19,11 +19,11 @@ public class OracleOperation implements Operation, OracleConstants {
 
     private static final Logger log = LogManager.getLogger(OracleOperation.class);
     private final OracleClient client;
-    private final OracleFormatBuilder elementBuilder;
+    private final OracleElementBuilder elementBuilder;
 
     public OracleOperation(OracleClient client) {
         this.client = client;
-        this.elementBuilder = new OracleFormatBuilder();
+        this.elementBuilder = new OracleElementBuilder();
     }
 
     @Override
@@ -31,11 +31,11 @@ public class OracleOperation implements Operation, OracleConstants {
         if (input != null && !input.isEmpty()) {
             List<Element> results = new ArrayList<>();
             for (Element elem : input) {
-                Element oper = elem.getChild(OPERATION);
-                if (oper == null || oper.getValue() == null) {
-                    throw new Exception("'operation' is mandatory");
+                Element action = elem.getChild(SQLPARAMS).getChild(ACTION);
+                if (action == null || action.getValue() == null) {
+                    throw new Exception("'action' is mandatory");
                 }
-                String operation = oper.getValue().getString();
+                String operation = action.getValue().getString();
                 if (SELECT.equalsIgnoreCase(operation)) {
                     OracleQuerySQLBuilder sql = new OracleQuerySQLBuilder(output);
                     String SQL = sql.generateSelectSQL(elem);
@@ -45,11 +45,11 @@ public class OracleOperation implements Operation, OracleConstants {
                 } else if (INSERT.equalsIgnoreCase(operation)) {
                     OracleWriteSQLBuilder sql = new OracleWriteSQLBuilder();
                     String SQL = sql.generateInsertSQL(elem);
-                    client.execute(SQL);                    
+                    client.execute(SQL);
                 } else if (UPDATE.equalsIgnoreCase(operation)) {
                     OracleWriteSQLBuilder sql = new OracleWriteSQLBuilder();
                     String SQL = sql.generateUpdateSQL(elem);
-                    client.execute(SQL);                    
+                    client.execute(SQL);
                 }
             }
             return new OracleOperationResult(results);

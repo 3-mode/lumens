@@ -31,7 +31,7 @@ public interface OracleConstants {
     public String INSERT = "INSERT";
     public String UPDATE = "UPDATE";
     // Constants node names
-    public String FIELDS = "fields";
+    public String SQLPARAMS = "SQLParams";
     public String CLAUSE = "clause";
-    public String OPERATION = "operation";
+    public String ACTION = "action";
 }

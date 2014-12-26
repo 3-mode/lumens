@@ -3,7 +3,6 @@
  */
 package com.lumens.connector.database.client.oracle.sql;
 
-import static com.lumens.connector.database.client.oracle.OracleConstants.FIELDS;
 import com.lumens.model.Element;
 import com.lumens.model.Value;
 
@@ -16,15 +15,12 @@ public class OracleWriteSQLBuilder extends OracleSQLBuilder {
     @Override
     public String generateInsertSQL(Element input) {
         String tableName = input.getFormat().getName();
-        Element fieldList = input.getChild(FIELDS);
-        if (fieldList == null) {
-            return null;
-        }
         StringBuilder sql = new StringBuilder();
         StringBuilder fields = new StringBuilder();
         StringBuilder values = new StringBuilder();
-        for (Element e : fieldList.getChildren()) {
-
+        for (Element e : input.getChildren()) {
+            if (SQLPARAMS.equals(e.getFormat().getName()))
+                continue;
             Value v = e.getValue();
             if (v != null) {
                 if (fields.length() > 0)
@@ -44,13 +40,11 @@ public class OracleWriteSQLBuilder extends OracleSQLBuilder {
     @Override
     public String generateUpdateSQL(Element input) {
         String tableName = input.getFormat().getName();
-        Element fieldList = input.getChild(FIELDS);
-        if (fieldList == null) {
-            return null;
-        }
         StringBuilder sql = new StringBuilder();
         StringBuilder values = new StringBuilder();
-        for (Element e : fieldList.getChildren()) {
+        for (Element e : input.getChildren()) {
+            if (SQLPARAMS.equals(e.getFormat().getName()))
+                continue;
             if (values.length() > 0) {
                 values.append(", ");
             }

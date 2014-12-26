@@ -4,7 +4,6 @@
 package com.lumens.connector.database.client.oracle.sql;
 
 import static com.lumens.connector.database.client.oracle.OracleConstants.CLAUSE;
-import static com.lumens.connector.database.client.oracle.OracleConstants.FIELDS;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 
@@ -26,15 +25,13 @@ public class OracleQuerySQLBuilder extends OracleSQLBuilder {
         String tableName = null;
         if (output != null) {
             tableName = output.getName();
-            Format fields = output.getChild(FIELDS);
-            if (fields == null) {
-                return null;
-            }
-            for (Format f : fields.getChildren()) {
+            for (Format child : output.getChildren()) {
+                if (SQLPARAMS.equals(child.getName()))
+                    continue;
                 if (queryFields.length() > 0) {
                     queryFields.append(", ");
                 }
-                queryFields.append(f.getName());
+                queryFields.append(child.getName());
             }
         } else {
             tableName = input.getFormat().getName();
