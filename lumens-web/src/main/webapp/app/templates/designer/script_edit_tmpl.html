@@ -2,5 +2,5 @@
     <div class="lumens-button-bar">
         <a ng-repeat="id_script_btn in ['id_script_back', 'id_script_validate', 'id_script_apply', 'id_rule_fmt_save']" class="lumens-button" ng-click="onCommand(id_script_btn)">{{i18n[id_script_btn]}}</a>
     </div>
-    <script-editor script-var="transformRuleScript" script-editor-holder="transformRuleScriptEditor"/>
+    <script-editor script-var="transformRuleScript" script-editor-holder="transformRuleScriptEditor" class="lumens-rule-script"/>
 </div>

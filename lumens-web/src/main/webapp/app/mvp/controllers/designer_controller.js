@@ -169,7 +169,6 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
                 }
                 function tabTransformationList($tabContent) {
                     $tabContent.append($compile($scope.transformListTemplate)($scope));
-
                 }
                 desgin.tabs = new Lumens.TabPanel(desgin.tabsContainer.getElement());
                 desgin.tabs.configure({
@@ -366,9 +365,9 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
         $scope.inputFormatRegName = ruleEntry.source_format_name;
         $scope.outputFormatRegName = ruleEntry.target_format_name;
         $scope.ruleRegName = ruleEntry.name;
-        var inFormat = $scope.currentUIComponent.hasFrom() ? $scope.currentUIComponent.getFrom(0).getRegisterOutputFormat($scope.inputFormatRegName) : null;
+        var inFormat = $scope.currentUIComponent.hasFrom() ? $scope.currentUIComponent.getFrom(0).getOutputFormat($scope.inputFormatRegName) : null;
         $scope.inputSelectedFormatName = inFormat ? inFormat.name : null;
-        var outFormat = $scope.currentUIComponent.hasTo() ? $scope.currentUIComponent.getTo(0).getRegisterInputFormat($scope.outputFormatRegName) : null;
+        var outFormat = $scope.currentUIComponent.hasTo() ? $scope.currentUIComponent.getTo(0).getInputFormat($scope.outputFormatRegName) : null;
         $scope.outputSelectedFormatName = outFormat ? outFormat.name : null;
         $scope.ruleData = {rule_entry: ruleEntry, format_entry: outFormat};
         showRuleEditor();
@@ -386,7 +385,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
         if (!currentUIComponent || !currentUIComponent.configure)
             return;
         if (currentUIComponent.configure.component_info.transform_rule_entry)
-            $scope.transformRuleEntryList = currentUIComponent.getTransformRuleEntry();
+            $scope.transformRuleEntryList = currentUIComponent.getRuleEntryList();
         else
             $scope.transformRuleEntryList = [];
 
@@ -524,7 +523,7 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
         }
     }
 })
-.controller("RuleScriptCtrl", function ($scope, RuleWithFormatRegister) {
+.controller("RuleScriptCtrl", function ($scope, TransformMapperStorageService) {
     $scope.$on("ClickRuleItem", function (evt, currentRuleItem) {
         $scope.currentSelectRuleItem = currentRuleItem;
         var script = currentRuleItem.getScript() ? currentRuleItem.getScript() : "";
@@ -542,7 +541,7 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
             Lumens.system.workspaceLayout.show();
         }
         else if (id_script_btn === "id_rule_fmt_save") {
-            RuleWithFormatRegister.build($scope);
+            TransformMapperStorageService.save($scope);
         }
     }
     LumensLog.log("In RuleScriptCtrl");
@@ -559,12 +558,12 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
 
     $scope.saveFormatRegistry = function () {
         if ($scope.selectedSide === 'left') {
-            $scope.$parent.backupInputFormatRegName = $scope.inputFormatRegName
+            $scope.$parent.orginalInputFormatRegName = $scope.inputFormatRegName
             $scope.$parent.inputFormatRegName = $scope.registeredFormatName;
             $scope.$parent.inputSelectedFormatName = $scope.selectedFormatName;
         }
         else if ($scope.selectedSide === 'right') {
-            $scope.$parent.backupOutputFormatRegName = $scope.outputFormatRegName
+            $scope.$parent.orginalOutputFormatRegName = $scope.outputFormatRegName
             $scope.$parent.outputFormatRegName = $scope.registeredFormatName;
             $scope.$parent.outputSelectedFormatName = $scope.selectedFormatName;
         }
@@ -573,7 +572,7 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
 })
 .controller("RuleRegistryCtrl", function ($scope, $element) {
     $scope.saveRuleRegistry = function () {
-        $scope.$parent.backupRuleRegName = $scope.ruleRegName;
+        $scope.$parent.orignalRuleRegName = $scope.ruleRegName;
         $scope.$parent.ruleRegName = $scope.registeredRuleName;
         $element.modal("hide");
     }

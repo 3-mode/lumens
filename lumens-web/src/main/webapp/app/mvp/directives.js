@@ -70,6 +70,8 @@ Lumens.directives.directive("ruleTree", function (RuleTreeBuilder) {
                 accept: ".lumens-tree-node",
                 drop: function (event, ui) {
                     var node = $.data(ui.draggable.get(0), "tree-node-data");
+                    if (!node.direction || node.direction === "OUT")
+                        return;
                     if (element.children().length > 0)
                         RuleTreeBuilder.appendFromData($scope, element, node);
                     else
@@ -93,10 +95,10 @@ Lumens.directives.directive("ruleTree", function (RuleTreeBuilder) {
 Lumens.directives.directive("scriptEditor", function () {
     return {
         restrict: 'E',
+        replace: true,
+        template: "<div></div>",
         link: function ($scope, element, attr) {
-            if (element.find("#scriptEditor").length === 0)
-                element.append('<div id="scriptEditor" class="lumens-rule-script" />');
-            $scope[attr.scriptEditorHolder] = CodeMirror(element.find("#scriptEditor").get(0), {
+            $scope[attr.scriptEditorHolder] = CodeMirror(element.get(0), {
                 mode: "javascript",
                 lineNumbers: true,
                 dragDrop: true,

@@ -226,7 +226,7 @@ Lumens.DataComponent = Lumens.Component.$extend({
     __init: function ($parent, config) {
         this.$super($parent, config);
     },
-    getFormatEntry: function (direction) {
+    getFormatEntryList: function (direction) {
         if (!this.isDataSource())
             return;
         var formatList = this.getCompData().format_list;
@@ -239,7 +239,7 @@ Lumens.DataComponent = Lumens.Component.$extend({
         }
         return null;
     },
-    setFormatEntry: function (direction, formatEntry) {
+    setFormatEntryList: function (direction, formatEntry) {
         if (!this.isDataSource())
             return;
         var formatList = this.getCompData().format_list;
@@ -262,25 +262,22 @@ Lumens.DataComponent = Lumens.Component.$extend({
         }
 
     },
-    getTransformRuleEntry: function () {
+    getRuleEntryList: function () {
         if (this.isDataSource())
             return null;
         return  this.getCompData().transform_rule_entry;
     },
-    setTransformRuleEntry: function (transformRuleEntry) {
+    setRuleEntryList: function (ruleEntryList) {
         if (this.isDataSource())
             return;
-        if (this.getCompData().transform_rule_entry)
-            this.getCompData().transform_rule_entry.push(transformRuleEntry);
-        else
-            this.getCompData().transform_rule_entry = [transformRuleEntry];
+        this.getCompData().transform_rule_entry = ruleEntryList;
     },
-    getRegisterInputFormat: function (regName) {
+    getInputFormat: function (regName) {
         var formatEntry = null;
         if (this.isDataSource()) {
-            formatEntry = this.getFormatEntry("IN");
+            formatEntry = this.getFormatEntryList("IN");
         } else if (this.hasFrom()) {
-            formatEntry = this.getFrom(0).getFormatEntry("OUT");
+            formatEntry = this.getFrom(0).getFormatEntryList("OUT");
         }
         if (formatEntry)
             for (var i in formatEntry)
@@ -288,12 +285,12 @@ Lumens.DataComponent = Lumens.Component.$extend({
                     return formatEntry[i].format;
         return null;
     },
-    getRegisterOutputFormat: function (regName) {
+    getOutputFormat: function (regName) {
         var formatEntry = null;
         if (this.isDataSource()) {
-            formatEntry = this.getFormatEntry("OUT");
+            formatEntry = this.getFormatEntryList("OUT");
         } else if (this.hasTo()) {
-            formatEntry = this.getTo(0).getFormatEntry("IN");
+            formatEntry = this.getTo(0).getFormatEntryList("IN");
         }
         if (formatEntry)
             for (var i in formatEntry)
