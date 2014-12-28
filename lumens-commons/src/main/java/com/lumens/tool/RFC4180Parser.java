@@ -42,7 +42,7 @@ public class RFC4180Parser {
     
     // PatternSyntaxException throw if Pattern parse error
     public static List<String> ParserField(String pattern, String field) throws PatternSyntaxException{        
-        Pattern p = Pattern.compile(field);
+        Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(field);
         
         List<String> list = new ArrayList();

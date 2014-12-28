@@ -36,9 +36,10 @@ import static org.junit.Assert.assertFalse;
 public class ConnectorTest {
 
     private final String path2read = getClass().getResource("/delimited/incsv.csv").getFile();
-    private final String folder2read = getClass().getResource("/delimited/").getFile();
+    private final String folder2read = getClass().getResource("/delimited/csv/").getFile();
     private final String path2write = getClass().getResource("/delimited").getPath() + "/outcsv.txt";
     private final String schemaPath = getClass().getResource("/delimited/incsv_schema.xml").getFile();
+    private final String folderSchemaPath = getClass().getResource("/delimited/csv/text_schema.xml").getFile();
 
     @Before
     public void testConnection() {
@@ -110,14 +111,71 @@ public class ConnectorTest {
     }
     
     @Test
-    public void testConnector() {
-                   
+    public void testConnectorReadFolder() {
         ConnectorFactory cntr = new TextConnectorFactory();
         TextConnector cntrR = (TextConnector) cntr.createConnector();
 
         Map<String, Value> propsR = new HashMap<>();
-        propsR.put(TextConstants.ESCAPE_CHAR, new Value("\\"));
-        propsR.put(TextConstants.QUOTE_CHAR, new Value(""));
+        propsR.put(TextConstants.ESCAPE_CHAR, new Value("\""));
+        propsR.put(TextConstants.QUOTE_CHAR, new Value("\""));
+        propsR.put(TextConstants.FILEDELIMITER, new Value(","));
+        propsR.put(TextConstants.SCHEMA_PATH, new Value(folderSchemaPath));
+        propsR.put(TextConstants.OPTION_MAXLINE, new Value(1000));
+        propsR.put(TextConstants.ENCODING, new Value("UTF-8"));
+        propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));        
+        propsR.put(TextConstants.OPTION_IGNORE_EMPTYLINE, new Value(true));
+        propsR.put(TextConstants.OPTION_MAXLINE, new Value(9));
+        propsR.put(TextConstants.FILE_EXTENSION, new Value("txt"));
+        propsR.put(TextConstants.FILE_FILTER, new Value("*.txt"));
+        propsR.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));  
+        cntrR.setPropertyList(propsR);
+        cntrR.open();
+
+        // test get format list
+        Map<String, Format> fmtListR = cntrR.getFormatList(Direction.IN);
+        if (fmtListR.isEmpty()) {
+            assertFalse("Fail to get source format list", true);
+        }
+
+        // test operation
+        Operation operR = cntrR.getOperation();
+        assertTrue("fail to open source text connector", cntrR.isOpen());
+
+        OperationResult resultR = null;
+        Format fmtR = fmtListR.get("TextMessage");
+        if (fmtR == null) {
+            assertFalse("Fail to get source format", true);
+        }
+        
+        try{
+            // Read a folder
+            operR.begin();          
+            
+            Element elemMultiRead = new DataElement(fmtR);
+            Element paramsMultiR = elemMultiRead.addChild(TextConstants.FORMAT_PARAMS);
+            paramsMultiR.setValue(new Value(TextConstants.FORMAT_MESSAGE));
+            paramsMultiR.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));
+            paramsMultiR.addChild(TextConstants.PATH).setValue(new Value(folder2read));
+            resultR = operR.execute(Arrays.asList(elemMultiRead), fmtR);
+            assertTrue("Fail to executre source element read: multi files read", resultR.hasResult());            
+            operR.commit();
+            
+            operR.end();
+        } catch (Exception ex) {                        
+            assertFalse("Fail to execute source connector read: multi files read.\n " + ex.getMessage(), true);
+        }
+        
+        cntrR.close();
+    }
+    
+    @Test
+    public void testConnectorReadCsv() {                   
+        ConnectorFactory cntr = new TextConnectorFactory();
+        TextConnector cntrR = (TextConnector) cntr.createConnector();
+
+        Map<String, Value> propsR = new HashMap<>();
+        propsR.put(TextConstants.ESCAPE_CHAR, new Value("\""));
+        propsR.put(TextConstants.QUOTE_CHAR, new Value("\""));
         propsR.put(TextConstants.FILEDELIMITER, new Value(","));
         propsR.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(1000));
@@ -143,6 +201,7 @@ public class ConnectorTest {
 
         OperationResult resultR = null;
         
+        // Read
         try {
             Format fmtR = fmtListR.get("TextMessage");
             if (fmtR == null) {
@@ -160,23 +219,16 @@ public class ConnectorTest {
             resultR = operR.execute(Arrays.asList(elemRead), fmtR);
             assertTrue("Fail to executre source element read", resultR.hasResult());
             operR.commit();
-            
-            // Read a folder
-            operR.begin();
-            Element elemMultiRead = new DataElement(fmtR);
-            Element paramsMultiR = elemMultiRead.addChild(TextConstants.FORMAT_PARAMS);
-            paramsMultiR.setValue(new Value(TextConstants.FORMAT_MESSAGE));
-            paramsMultiR.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));
-            paramsMultiR.addChild(TextConstants.PATH).setValue(new Value(folder2read));
-            resultR = operR.execute(Arrays.asList(elemMultiRead), fmtR);
-            assertTrue("Fail to executre source element read: multi files read", resultR.hasResult());            
-            operR.commit();
-            
             operR.end();
+            cntrR.close();
         } catch (Exception ex) {
-            assertFalse("Fail to execute source connector read: multi files read", true);
-        }
-        
+            assertFalse("Fail to execute source connector read: multi files read.\n " + ex.getMessage(), true);
+        }      
+    }
+    
+    @Test
+    public void testConnectorWrite() {
+        ConnectorFactory cntr = new TextConnectorFactory();
         // Element overwrite
         TextConnector cntrW = (TextConnector) cntr.createConnector();
 
@@ -193,11 +245,11 @@ public class ConnectorTest {
 
         // test get format list
         Map<String, Format> fmtListW = cntrW.getFormatList(Direction.OUT);
-        if (fmtListR.isEmpty()) {
+        if (fmtListW.isEmpty()) {
             assertFalse("Fail to get destination format list", true);
         }
 
-        // test operation
+        // Write
         Operation operW = cntrW.getOperation();
         assertTrue("fail to open destination text connector", cntrW.isOpen());
         try {
@@ -224,9 +276,14 @@ public class ConnectorTest {
             output.add(elemWrite);
             OperationResult result = operW.execute(output, fmtW);
             operW.commit();   
-            
+        } catch (Exception ex) {
+            assertFalse("Fail to execute source connector write.\n " + ex.getMessage(), true);
+        }
+        
+        // Append
+        try{
             operW.begin();
-            Format fmtA = fmtListR.get("TextMessage");
+            Format fmtA = fmtListW.get("TextMessage");
             if (fmtA == null) {
                 assertFalse("Fail to get destination format", true);
             }                
@@ -246,17 +303,14 @@ public class ConnectorTest {
 
             List<Element> outputA = new ArrayList();
             outputA.add(elemAppend);
-            OperationResult resultA = operW.execute(outputA, fmtW);
+            OperationResult resultA = operW.execute(outputA, fmtA);
             operW.commit();   
-            
-
             
             operW.end();                     
         } catch (Exception ex) {
-            assertFalse("Fail to execute element", true);
+            assertFalse("Fail to execute source connector append.\n " + ex.getMessage(), true);
         }
-
-        cntrR.close();
+        
         cntrW.close();
     }
    

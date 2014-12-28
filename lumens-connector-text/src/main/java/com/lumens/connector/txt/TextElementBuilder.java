@@ -19,19 +19,29 @@ import java.util.regex.*;
  */
 public class TextElementBuilder implements TextConstants{
     public static Element buildElement(Format fmt, String line, String delimiter, String escape, String quote) throws Exception {
-        if( fmt == null || fmt.getChildren() == null || line == null )
+        if (fmt == null || fmt.getChildren() == null || line == null || delimiter == null) {
             return null;
+        }
                
-        boolean bEscape = (escape != null) && (!escape.isEmpty());
+        boolean bNormalEscape = (escape != null) && escape.equals("\"") && 
+                                (quote != null) && (quote.equals("\"")) &&
+                                (delimiter.equals(","));
         
-        List<String> values = new ArrayList();
-        if (!bEscape){            
-            values.addAll(Arrays.asList(line.split(delimiter)));
-        }else{
-            // TODO: support specific escape char quote char. Need to build customize pattern
-            String pattern = RFC4180Parser.GetFieldPattern();
+        List<String> values = new ArrayList();       
+        
+        // Deal with first element empty
+        int start = 0;
+        while (line.charAt(start) == delimiter.charAt(0)) {
+            values.add("");
+            start++;
+        }
+        String curline = start > 0 ? line.substring(start):line;
+          
+        if (!bNormalEscape){            
+            // TODO: support specific escape char quote char. Need to build customize pattern  
+        }else{                   
             try{
-                values.addAll(RFC4180Parser.ParserField(line));
+                values.addAll(RFC4180Parser.ParserField(curline));
             }catch(PatternSyntaxException ex){
                 throw ex;
             }          
@@ -42,8 +52,9 @@ public class TextElementBuilder implements TextConstants{
         List<Format> children = fmt.getChildren();
         int index = 0;
         for(Format child: children){
+            int size = values.size();
             if(!child.getName().equalsIgnoreCase(TextConstants.FORMAT_PARAMS))
-                elem.addChild(child.getName()).setValue(new Value(child.getType(), values.get(index++)));
+                elem.addChild(child.getName()).setValue(new Value(child.getType(), index > size - 1 ? null:values.get(index++)));
         }
        
         return elem;        
