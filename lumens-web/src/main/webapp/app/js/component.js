@@ -252,12 +252,12 @@ Lumens.DataComponent = Lumens.Component.$extend({
             }
             formatList.push({
                 direction: direction,
-                format_entry: [formatEntry]
+                format_entry: formatEntry
             });
         } else {
             this.getCompData().format_list = [{
                     direction: direction,
-                    format_entry: [formatEntry]
+                    format_entry: formatEntry
                 }];
         }
 

@@ -658,8 +658,8 @@ Lumens.services.factory('TransformMapperStorageService', ['RuleTreeBuilder', fun
                 this.saveToTransformList($scope, ruleInfo);
             },
             isValidEndComponent: function ($scope, formatInfo) {
-                if (!$scope.currentUIComponent || !formatInfo)
-                    throw "In valid component is selected or mapping format is not valid !";
+                if (!$scope.currentUIComponent || !formatInfo || !formatInfo.format_entry.name)
+                    return false;
                 if (formatInfo.format_entry.direction === "IN")
                     return $scope.currentUIComponent.hasTo() && $scope.currentUIComponent.getTo(0).getCompData();
                 else if (formatInfo.format_entry.direction === "OUT")
