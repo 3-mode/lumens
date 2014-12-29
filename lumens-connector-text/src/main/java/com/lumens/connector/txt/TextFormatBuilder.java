@@ -29,7 +29,8 @@ public class TextFormatBuilder implements FormatBuilder {
     private SAXReader schemaReader;
     private Element schemaRoot;
     private String encoding;
-    Map<String, Value> propList;
+    private Map<String, Value> propList;
+    private boolean isInitalized = false;
 
     public TextFormatBuilder(Map<String, Value> props) {
         if (props.containsKey(TextConstants.SCHEMA_PATH))
@@ -47,14 +48,18 @@ public class TextFormatBuilder implements FormatBuilder {
                 Document doc = schemaReader.read(xmlSchemaPath);
                 schemaRoot = doc.getRootElement();
                 encoding = doc.getXMLEncoding();
+                isInitalized = true;
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
-        }
+        }       
     }
 
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
+        if (!isInitalized){
+            throw new RuntimeException("TextFormatBuilder not initalized.");
+        }
         Map<String, Format> fmtList = new HashMap<>();        
         String rootName = schemaRoot.getName();
         Attribute nameAttribute = schemaRoot.attribute(TextConstants.FORMAT_NAME);
@@ -83,7 +88,10 @@ public class TextFormatBuilder implements FormatBuilder {
     }
 
     @Override
-    public Format getFormat(Format format, String path, Direction direction) {        
+    public Format getFormat(Format format, String path, Direction direction) {   
+        if (!isInitalized){
+            throw new RuntimeException("TextFormatBuilder not initalized.");
+        }        
         Iterator fieldItor = schemaRoot.elementIterator();
         while (fieldItor.hasNext()) {
             Element columnNode = (Element) fieldItor.next();

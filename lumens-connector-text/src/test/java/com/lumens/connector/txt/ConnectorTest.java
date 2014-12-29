@@ -34,16 +34,21 @@ import static org.junit.Assert.assertFalse;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class ConnectorTest {
-
-    private final String path2read = getClass().getResource("/delimited/incsv.csv").getFile();
-    private final String folder2read = getClass().getResource("/delimited/csv/").getFile();
-    private final String path2write = getClass().getResource("/delimited").getPath() + "/outcsv.txt";
-    private final String schemaPath = getClass().getResource("/delimited/incsv_schema.xml").getFile();
-    private final String folderSchemaPath = getClass().getResource("/delimited/csv/text_schema.xml").getFile();
-
+    private String path2read = null;
+    private String folder2read = null;
+    private String path2write = null;
+    private String schemaPath = null;
+    private String folderSchemaPath = null;
+    
     @Before
     public void testConnection() {
         try {
+            path2read = getClass().getResource("/delimited/incsv.csv").toURI().getPath();
+            folder2read = getClass().getResource("/delimited/csv/").toURI().getPath();
+            path2write = getClass().getResource("/delimited").toURI().getPath() + "/outcsv.txt";
+            schemaPath = getClass().getResource("/delimited/incsv_schema.xml").toURI().getPath();
+            folderSchemaPath = getClass().getResource("/delimited/csv/text_schema.xml").toURI().getPath();
+    
             File file = new File(path2read);
             if (file.isFile() && file.exists()) {
                 InputStreamReader reader = new InputStreamReader(new FileInputStream(path2read), "UTF-8");
@@ -114,7 +119,7 @@ public class ConnectorTest {
     public void testConnectorReadFolder() {
         ConnectorFactory cntr = new TextConnectorFactory();
         TextConnector cntrR = (TextConnector) cntr.createConnector();
-
+        
         Map<String, Value> propsR = new HashMap<>();
         propsR.put(TextConstants.ESCAPE_CHAR, new Value("\""));
         propsR.put(TextConstants.QUOTE_CHAR, new Value("\""));
