@@ -71,6 +71,25 @@ Lumens.services.factory('ProjectById', function ($resource) {
         operate: {method: 'POST', isArray: false}
     });
 });
+Lumens.services.factory('Notifier', function () {
+    return {
+        message: function (type, title, text) {
+            new PNotify({
+                type: type,
+                title: title,
+                addclass: "lumens-bootstrap",
+                text: text,
+                delay: 2000,
+                buttons: {
+                    closer: true
+                },
+                nonblock: {
+                    nonblock: true
+                }
+            });
+        }
+    }
+});
 Lumens.services.factory('ProjectSave', function ($http) {
     return {
         save: function (projectJSON, onResponse) {

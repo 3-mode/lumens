@@ -304,7 +304,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
         projectListContent.children().show();
     });
 })
-.controller("ProjectCreateCtrl", function ($scope, $element) {
+.controller("ProjectCreateCtrl", function ($scope, $element, Notifier) {
     LumensLog.log("In ProjectCreateCtrl", $element);
     var i18n = $scope.$parent.i18n;
     var messageBoxParent = $scope.desgin.designPanel.getElement();
@@ -314,8 +314,8 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
     $scope.createProject = function () {
         if ($scope.projectName) {
             projectOperator.create($scope.projectName, $scope.projectDescription);
-            messageBox.showSuccess(i18n.id_new_project_successfully, messageBoxParent);
             $element.modal("hide");
+            Notifier.message("info", "Success", "Created a new project '" + $scope.projectName + "'");
         }
         else
             messageBox.showWarning(i18n.id_no_project_name, projectInfoContent);

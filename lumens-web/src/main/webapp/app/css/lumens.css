@@ -132,7 +132,6 @@ a, a:focus, a:hover {
     top: 0px;
     left: 0px;
     right: 0px;
-    z-index: 2000;
 }
 .lumens .lumens-header { 
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
