@@ -1,8 +1,10 @@
 <ul>
-    <li ng-repeat="transformator in project.transformator">
-        <span>{{transformator.name}}</span>
+    <div ng-repeat="transformer in project.transformer" style="padding-top:10px;">
+        <span style="cursor:pointer;"><i class="lumens-icon-link"></i>{{transformer.name}}</span>
         <ul>
-            <li>{{transformator.description}}</li>
+            <div ng-if="transformer.description" style="padding-top:8px;">
+                <span><i class="lumens-icon-info"></i>{{transformer.description}}</span>
+            </div>
         </ul>
-    </li>
+    </div>
 </ul>

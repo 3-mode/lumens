@@ -82,9 +82,6 @@ Lumens.services.factory('Notifier', function () {
                 delay: 2000,
                 buttons: {
                     closer: true
-                },
-                nonblock: {
-                    nonblock: true
                 }
             });
         }

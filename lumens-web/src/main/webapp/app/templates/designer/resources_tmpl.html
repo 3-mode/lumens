@@ -1,8 +1,10 @@
 <ul>
-    <li ng-repeat="datasource in project.datasource">
-        <span>{{datasource.name}}</span>
+    <div ng-repeat="datasource in project.datasource" style="padding-top:10px;">
+        <span style="cursor:pointer;"><i class="lumens-icon-link"></i>{{datasource.name}}</span>
         <ul>
-            <li>{{datasource.description}}</li>
+            <div ng-if="datasource.description" style="padding-top:8px;">
+                <span><i class="lumens-icon-info"></i>{{datasource.description}}</span>
+            </div>
         </ul>
-    </li>
+    </div>
 </ul>

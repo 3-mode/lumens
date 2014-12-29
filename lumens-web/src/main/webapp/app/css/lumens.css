@@ -323,7 +323,7 @@ a, a:focus, a:hover {
 }
 .lumens .lumens-v-resize-grip-border {
     overflow: hidden;
-    height: 18px;
+    height: 9px;
 }
 .lumens .lumens-v-resize-grip {
     z-index: 1000;
@@ -337,7 +337,7 @@ a, a:focus, a:hover {
     display:block;
     margin-left: 47%;
     width: 28px;
-    height: 18px;
+    height: 9px;
     background-image: url(img/vdragger.png);
     background-repeat: no-repeat;
 }
@@ -561,74 +561,116 @@ svg path {
     content: "\e6b0";
 }
 .lumens .lumens-icon-edit:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
     content: "\e7a2";
 }
 .lumens .lumens-icon-filter:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
     content: "\e8db";
 }
 .lumens .lumens-icon-exec:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
     content: "\e762";
 }
+.lumens .lumens-icon-active:before {
+    font-size: 16px;
+    padding-right: 5px;
+    content: "\e626";
+}
 .lumens .lumens-icon-deploy:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
     content: "\e85a";
 }
 .lumens .lumens-icon-close:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
     content: "\e75d";
 }
 .lumens .lumens-icon-open:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
     content: "\e7cb";
 }
 .lumens .lumens-icon-add:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
     content: "\e6ad";
 }
 .lumens .lumens-icon-del:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
-    content: "\e6d1";
+    content: "\e844";
 }
 .lumens .lumens-icon-check:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
     content: "\e84f";
 }
 .lumens .lumens-icon-save:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
     content: "\e74f";
 }
 .lumens .lumens-icon-save-disk:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
-    content: "\e7fc";
+    content: "\e7f7";
 }
 .lumens .lumens-icon-apply:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
     content: "\e897";
 }
 .lumens .lumens-icon-back:before {
-    font-size: 12px;
+    font-size: 16px;
     padding-right: 5px;
     content: "\e6f1";
+}
+.lumens .lumens-icon-project:before {
+    font-size: 23px;
+    padding-right: 5px;
+    content: "\e62b";
+}
+.lumens .lumens-icon-resource:before {
+    font-size: 16px;
+    padding-right: 5px;
+    content: "\e7cd";
+}
+.lumens .lumens-icon-instrucment:before {
+    font-size: 16px;
+    padding-right: 5px;
+    content: "\e77c";
+}
+.lumens .lumens-icon-desc:before {
+    font-size: 16px;
+    padding-right: 5px;
+    content: "\e6c8";
+}
+.lumens .lumens-icon-props:before {
+    font-size: 16px;
+    padding-right: 5px;
+    content: "\e779";
+}
+.lumens .lumens-icon-link:before {
+    font-size: 16px;
+    padding-right: 5px;
+    content: "\e773";
+    color: #4c4c4c;
+}
+.lumens .lumens-icon-info:before {
+    font-size: 16px;
+    padding-right: 5px;
+    content: "\e6b4";
+    color: #4c4c4c;
 }
 /*Form component Styles*/
 .lumens .lumens-window-title {
     float: left;
-    top: 0;
+    top: 0px;
     white-space: nowrap;  
     padding-left: 10px;
     color: #5A5A5A;
@@ -637,7 +679,7 @@ svg path {
 }
 .lumens .lumens-window-buttons {
     float:right;
-    top: 0;
+    top: 0px;
     padding-right: 10px;
     color: #5A5A5A;
 }

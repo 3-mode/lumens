@@ -97,6 +97,20 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
                     }
                 });
                 $scope.projectOperator = new Lumens.ProjectOperator($scope.compCagegory, desgin.designPanel, $scope);
+                // **************************************************************************************************************
+                // Try to load the project on local when refresh the currrent view if already there is a project is opened.
+                if (sessionStorage.local_project_storage) {
+                    var local_project_storage = angular.fromJson(sessionStorage.local_project_storage);
+                    ProjectById.get({project_id: local_project_storage.id}, function (projectData) {
+                        if ($scope.projectOperator)
+                            $scope.projectOperator.import(projectData);
+                        if (local_project_storage.is_active)
+                            ProjectById.operate({project_id: local_project_storage.id}, {action: 'active'}, function (result) {
+                                LumensLog.log(result);
+                            });
+                    });
+                }
+                // **************************************************************************************************************
                 // Create left menu
                 desgin.navMenu = new Lumens.NavMenu({
                     container: desgin.leftPanel.getElement(),
@@ -110,7 +124,8 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
                 });
 
                 // Create info form panel
-                desgin.designAndInfoPanel.getTitleElement().append($compile('<b>Name: {{project.name}}</b>')($scope));
+                var nameTmpl = '<table><tr><td><i class="lumens-icon-project"></i></td><td><b>Name:</b></td><td><b>{{project.name}}</b></td><tr></table>';
+                desgin.designAndInfoPanel.getTitleElement().append($compile(nameTmpl)($scope));
                 desgin.tabsContainer = new Lumens.Panel(desgin.designAndInfoPanel.getPart2Element())
                 .configure({
                     panelStyle: {"height": "100%", "width": "100%", "position": "relative", "overflow-y": "scroll", "overflow-x": "auto"}
@@ -123,9 +138,9 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
                             "Instruments"
                         ],
                         titleList: [
-                            "Description",
-                            "Resources",
-                            "Instruments"
+                            "<i class='lumens-icon-desc'></i>Description",
+                            "<i class='lumens-icon-resource'></i>Resources",
+                            "<i class='lumens-icon-instrucment'></i>Instruments"
                         ],
                         buildContent: function (itemContent, id, isExpand, title) {
                             if (isExpand) {
@@ -154,7 +169,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
                             "ComponentProps"
                         ],
                         titleList: [
-                            $compile('<span data-bind="categoryInfo.name">{{categoryInfo.name}}</span>')($scope)
+                            $compile('<span data-bind="categoryInfo.name"><i class="lumens-icon-props"></i>{{categoryInfo.name}}</span>')($scope)
                         ],
                         buildContent: function (itemContent, id, isExpand, title) {
                             if (isExpand) {
@@ -182,27 +197,19 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
         });
     });
     // <******* Design View ------------------------------------------------------------
-    // Try to load the project on local when refresh the currrent view if already there is a project is opened.
-    if (sessionStorage.local_project_storage) {
-        var local_project_storage = angular.fromJson(sessionStorage.local_project_storage);
-        ProjectById.get({project_id: local_project_storage.id}, function (projectData) {
-            if ($scope.projectOperator)
-                $scope.projectOperator.import(projectData);
-            if (local_project_storage.is_active)
-                ProjectById.operate({project_id: local_project_storage.id}, {action: 'active'}, function (result) {
-                    LumensLog.log(result);
-                });
-        });
-    }
-
 })
-.controller("DesginCmdCtrl", function ($scope, $element, $compile, ProjectListModal, ProjectCreateModal, ProjectSave, ProjectById) {
+.controller("DesginCmdCtrl", function ($scope, $element, $compile, Notifier, ProjectListModal, ProjectCreateModal, ProjectSave, ProjectById) {
     // Handle desgin command button event
     LumensLog.log("In DesginCmdCtrl", $element);
     var i18n = $scope.i18n;
     var projectOperator = $scope.projectOperator;
-    var messageBoxParent = $("#id-main-view");
-    var messageBox = $scope.messageBox;
+    function Message(response) {
+        LumensLog.log(response);
+        if (response && response.status === "OK")
+            Notifier.message("info", "Success", response.result_content);
+        else
+            Notifier.message("error", "Error", response.result_content);
+    }
     $scope.onCommand = function (id) {
         if ("id_open" === id) {
             if ($element.find('#projectListModal').length === 0) {
@@ -236,16 +243,17 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
                     if (response.status === "OK") {
                         var project = response.result_content.project[0];
                         projectOperator.setId(project.id);
-                        messageBox.showSuccess(i18n.id_save_project.format(project.name), messageBoxParent);
+                        Notifier.message("info", "Success", i18n.id_save_project.format(project.name));
                     }
                     else
-                        messageBox.showError(i18n.id_save_proj_err.format(project.name), messageBoxParent);
+                        Notifier.message("error", "Error", i18n.id_save_project.format(project.name));
                 });
             }
         }
         else if ("id_active" === id) {
-            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function (result) {
-                LumensLog.log(result);
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function (response) {
+                LumensLog.log(response);
+                Message(response);
                 sessionStorage.local_project_storage = angular.toJson({
                     id: projectOperator.get().projectId,
                     is_active: true
@@ -253,29 +261,28 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
             });
         }
         else if ("id_deploy" === id) {
-            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'deploy'}, function (result) {
-                LumensLog.log(result);
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'deploy'}, function (response) {
+                Message(response);
             });
         }
         else if ("id_execute" === id) {
-            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'execute'}, function (result) {
-                LumensLog.log(result);
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'execute'}, function (response) {
+                Message(response);
             });
         }
         else if ("id_delete" === id) {
-            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'delete'}, function (result) {
-                if (result.status === "OK")
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'delete'}, function (response) {
+                if (response.status === "OK")
                     projectOperator.close();
-                LumensLog.log(result);
+                Message(response);
             });
         }
         LumensLog.log("Clicked:", id);
     };
 })
-.controller("ProjectListCtrl", function ($scope, $element, ProjectList, ProjectById) {
+.controller("ProjectListCtrl", function ($scope, $element, Notifier, ProjectList, ProjectById) {
     var i18n = $scope.i18n;
     var projectOperator = $scope.projectOperator;
-    var messageBox = $scope.messageBox;
     var projectListContent = $element.find(".modal-body");
     $scope.selectProject = function (index, event) {
         $scope.selectIndex = index;
@@ -293,7 +300,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
             });
         }
         else {
-            messageBox.showWarning(i18n.id_no_project_select_warning, projectListContent);
+            Notifier.message("notice", "Warning", i18n.id_no_project_select_warning)
             return;
         }
         $element.modal("hide");
@@ -307,7 +314,6 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
 .controller("ProjectCreateCtrl", function ($scope, $element, Notifier) {
     LumensLog.log("In ProjectCreateCtrl", $element);
     var i18n = $scope.$parent.i18n;
-    var messageBoxParent = $scope.desgin.designPanel.getElement();
     var projectInfoContent = $element.find(".modal-body");
     var messageBox = $scope.messageBox;
     var projectOperator = $scope.projectOperator;
@@ -318,7 +324,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
             Notifier.message("info", "Success", "Created a new project '" + $scope.projectName + "'");
         }
         else
-            messageBox.showWarning(i18n.id_no_project_name, projectInfoContent);
+            Notifier.message("notice", "Warning", i18n.id_no_project_name, projectInfoContent);
     };
 })
 .controller("TransformListCtrl", function ($scope, $compile, $element, TransformEditTemplate) {
