@@ -413,7 +413,7 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
             $scope.currentScriptNode.setScript(script);
     }
     var projectOperator = $scope.projectOperator;
-    if ($scope.currentComponent.type === "type-transformer") {
+    if ($scope.currentComponent && $scope.currentComponent.type === "type-transformer") {
         var sourceComponentID, targetComponentID;
         if ($scope.currentUIComponent.hasFrom())
             sourceComponentID = $scope.currentUIComponent.getFrom(0).getId();
