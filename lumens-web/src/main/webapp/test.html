@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="libs/morris/morris.css">
         <link rel="stylesheet" href="libs/jqplot/jquery.jqplot.css">
         <link rel="stylesheet" href="libs/bootstrap/datetimepicker/css/bootstrap-datetimepicker.css">
+        <link rel="stylesheet" href="libs/pnotify/css/pnotify.css">
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="app/css/lumens_bootstrap.css">
         <!-- Application CSS -->
@@ -31,6 +32,7 @@
         <script src="libs/jqplot/plugins/jqplot.pieRenderer.js"></script>
         <script src="libs/codemirror/codemirror.js"></script>
         <script src="libs/codemirror/mode/javascript/javascript.js"></script>
+        <script src="libs/pnotify/pnotify.js"></script>
         <script src="libs/classy.js"></script>
         <script src="libs/json2.js"></script>
         <script src="libs/base64.js"></script>
@@ -88,29 +90,19 @@
                     $scope.project = $.parseJSON(projectData.content.project[0].data).project;
                     ProjectById.operate({project_id: $scope.projectID}, {action: 'active'}, function (result) {
                         console.log(result);
-                        FormatList.getIN({project_id: $scope.projectID, component_id: '1418770942895'}, function (result) {
-                            console.log(result);
-                            $scope.targetFormatList = {project_id: $scope.projectID, component_id: '1418770942895', direction: 'IN', format_entity: result.content.format_entity};
-                            $scope.displayTargetFormatList = $scope.targetFormatList;
-                        });
                     });
                 });
-                $scope.$on("ClickRuleItem", function (evt, currentRuleItem) {
-                    $scope.currentSelectRuleItem = currentRuleItem;
-                    if ($scope.currentSelectRuleItem) {
-                        var script = currentRuleItem.getScript() ? currentRuleItem.getScript() : "";
-                        $scope.$apply(function () {
-                            $scope.ruleScript = script;
-                        });
-                    }
-                });
-                $scope.$watch("ruleScript", function (ruleScript) {
-                    if ($scope.currentSelectRuleItem)
-                        $scope.currentSelectRuleItem.setScript(ruleScript);
-                });
-
-                $scope.onCommand = function () {
-                    console.log("Final rule save: ", RuleTreeBuilder.buildTransformRuleTree());
+                $scope.onCommand = function (id) {
+                    new PNotify({
+                        title: 'Success',
+                        addclass: "lumens-bootstrap",
+                        text: "Opened project '" + $scope.projectID + "'",
+                        type: "info",
+                        delay: 1000,
+                        buttons: {
+                            closer: true
+                        }
+                    });
                 }
             }
         </script>

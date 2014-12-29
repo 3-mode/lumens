@@ -132,7 +132,6 @@ a, a:focus, a:hover {
     top: 0px;
     left: 0px;
     right: 0px;
-    z-index: 2000;
 }
 .lumens .lumens-header { 
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
@@ -561,7 +560,71 @@ svg path {
     font-size: 13px;
     content: "\e6b0";
 }
-
+.lumens .lumens-icon-edit:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e7a2";
+}
+.lumens .lumens-icon-filter:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e8db";
+}
+.lumens .lumens-icon-exec:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e762";
+}
+.lumens .lumens-icon-deploy:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e85a";
+}
+.lumens .lumens-icon-close:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e75d";
+}
+.lumens .lumens-icon-open:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e7cb";
+}
+.lumens .lumens-icon-add:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e6ad";
+}
+.lumens .lumens-icon-del:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e6d1";
+}
+.lumens .lumens-icon-check:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e84f";
+}
+.lumens .lumens-icon-save:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e74f";
+}
+.lumens .lumens-icon-save-disk:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e7fc";
+}
+.lumens .lumens-icon-apply:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e897";
+}
+.lumens .lumens-icon-back:before {
+    font-size: 12px;
+    padding-right: 5px;
+    content: "\e6f1";
+}
 /*Form component Styles*/
 .lumens .lumens-window-title {
     float: left;

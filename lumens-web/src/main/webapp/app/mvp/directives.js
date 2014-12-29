@@ -70,7 +70,7 @@ Lumens.directives.directive("ruleTree", function (RuleTreeBuilder) {
                 accept: ".lumens-tree-node",
                 drop: function (event, ui) {
                     var node = $.data(ui.draggable.get(0), "tree-node-data");
-                    if (!node.direction || node.direction === "OUT")
+                    if (!node || !node.direction || node.direction === "OUT")
                         return;
                     if (element.children().length > 0)
                         RuleTreeBuilder.appendFromData($scope, element, node);
@@ -92,17 +92,26 @@ Lumens.directives.directive("ruleTree", function (RuleTreeBuilder) {
     };
 });
 
-Lumens.directives.directive("scriptEditor", function () {
+Lumens.directives.directive("scriptEditor", function (RuleTreeBuilder) {
     return {
         restrict: 'E',
         replace: true,
         template: "<div></div>",
         link: function ($scope, element, attr) {
-            $scope[attr.scriptEditorHolder] = CodeMirror(element.get(0), {
+            var codeMirror = $scope[attr.scriptEditorHolder] = CodeMirror(element.get(0), {
                 mode: "javascript",
                 lineNumbers: true,
                 dragDrop: true,
                 theme: "eclipse"
+            });
+            element.droppable({
+                drop: function (evt, ui) {
+                    console.log("CodeMirror drop: ", codeMirror, evt, ui)
+                    var node = $.data(ui.draggable.get(0), "tree-node-data");
+                    if (!node || !node.direction || node.direction !== "OUT")
+                        return;
+                    codeMirror.replaceSelection('@' + RuleTreeBuilder.getFullPath(node));
+                }
             });
 
             var unbind = $scope.$watch(function () {
