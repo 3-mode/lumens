@@ -4,23 +4,24 @@
             <div style="display: inline-block;">
                 <div style="float:left; padding-top:12px; padding-left:5px; margin-right:15px;">Input:</div>
                 <div style="float:left; padding-top:12px; padding-left:5px; margin-right:15px;">{{inputFormatRegName}}</div>
-                <a class="lumens-button" ng-click="onCommand('id_format_reg_edit_btn', 'left')">{{i18n['id_format_reg_edit_btn']}}</a>
-                <a class="lumens-button" ng-click="onCommand('id_format_reg_filter_btn', 'left')">{{i18n['id_format_reg_filter_btn']}}</a>
+                <a class="lumens-button" ng-click="onCommand('id_format_reg_edit_btn', 'left')"><i class="lumens-icon-edit"></i>{{i18n['id_format_reg_edit_btn']}}</a>
+                <a class="lumens-button" ng-click="onCommand('id_format_reg_filter_btn', 'left')"><i class="lumens-icon-filter"></i>{{i18n['id_format_reg_filter_btn']}}</a>
             </div>
         </div>
         <div style="float:left;width:36%;height:100%;">
             <div style="display: inline-block;">
                 <div style="float:left; padding-top:12px; padding-left:10px; margin-right:15px;">Name:</div>
                 <div style="float:left; padding-top:12px; padding-left:5px; margin-right:15px;">{{ruleRegName}}</div>
-                <a class="lumens-button" ng-click="onCommand('id_rule_reg_edit_btn')">{{i18n['id_rule_reg_edit_btn']}}</a>
+                <a class="lumens-button" ng-click="onCommand('id_rule_reg_edit_btn')"><i class="lumens-icon-edit"></i>{{i18n['id_rule_reg_edit_btn']}}</a>
+                <a class="lumens-button lumens-button-delete" ng-click="onCommand('id_rule_reg_delete_btn')"><i class="lumens-icon-del"></i>{{i18n.id_delete}}</a>
             </div>
         </div>
         <div style="float:left;width:32%;height:100%;">
             <div style="display: inline-block;">
                 <div style="float:left; padding-top:12px; padding-left:5px; margin-right:15px;">Output:</div>
                 <div style="float:left; padding-top:12px; padding-left:5px; margin-right:15px;">{{outputFormatRegName}}</div>
-                <a class="lumens-button" ng-click="onCommand('id_format_reg_edit_btn', 'right')">{{i18n['id_format_reg_edit_btn']}}</a>
-                <a class="lumens-button" ng-click="onCommand('id_format_reg_filter_btn', 'right')">{{i18n['id_format_reg_filter_btn']}}</a>
+                <a class="lumens-button" ng-click="onCommand('id_format_reg_edit_btn', 'right')"><i class="lumens-icon-edit"></i>{{i18n['id_format_reg_edit_btn']}}</a>
+                <a class="lumens-button" ng-click="onCommand('id_format_reg_filter_btn', 'right')"><i class="lumens-icon-filter"></i>{{i18n['id_format_reg_filter_btn']}}</a>
             </div>
         </div>
         <div id="reg_edit_dialog" class="lumens-bootstrap lumens-modal-holder"></div>
