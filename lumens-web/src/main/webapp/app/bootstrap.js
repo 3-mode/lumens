@@ -168,3 +168,8 @@ Lumens.system.switchTo = function (viewMode) {
         $("#theWorkspaceContainer").css("height", "0");
     }
 }
+
+window.LumensLog = window.console ? window.console : {
+    log: function () {
+    }
+};

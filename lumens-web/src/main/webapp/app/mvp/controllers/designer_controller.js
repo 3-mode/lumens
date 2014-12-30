@@ -124,7 +124,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
                 });
 
                 // Create info form panel
-                var nameTmpl = '<table><tr><td><i class="lumens-icon-project"></i></td><td><b>Name:</b></td><td><b>{{project.name}}</b></td><tr></table>';
+                var nameTmpl = '<table><tr><td><i class="lumens-icon-project lumens-icon-gap"></i></td><td><b>Name:</b></td><td><b>{{project.name}}</b></td><tr></table>';
                 desgin.designAndInfoPanel.getTitleElement().append($compile(nameTmpl)($scope));
                 desgin.tabsContainer = new Lumens.Panel(desgin.designAndInfoPanel.getPart2Element())
                 .configure({
@@ -138,9 +138,9 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
                             "Instruments"
                         ],
                         titleList: [
-                            "<i class='lumens-icon-desc'></i>Description",
-                            "<i class='lumens-icon-resource'></i>Resources",
-                            "<i class='lumens-icon-instrucment'></i>Instruments"
+                            "<i class='lumens-icon-desc lumens-icon-gap'></i>Description",
+                            "<i class='lumens-icon-resource lumens-icon-gap'></i>Resources",
+                            "<i class='lumens-icon-instrucment lumens-icon-gap'></i>Instruments"
                         ],
                         buildContent: function (itemContent, id, isExpand, title) {
                             if (isExpand) {
@@ -169,7 +169,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
                             "ComponentProps"
                         ],
                         titleList: [
-                            $compile('<span data-bind="categoryInfo.name"><i class="lumens-icon-props"></i>{{categoryInfo.name}}</span>')($scope)
+                            $compile('<span data-bind="categoryInfo.name"><i class="lumens-icon-props lumens-icon-gap"></i>{{categoryInfo.name}}</span>')($scope)
                         ],
                         buildContent: function (itemContent, id, isExpand, title) {
                             if (isExpand) {
@@ -408,7 +408,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
     });
 })
 .controller("TransformEditCtrl", function ($scope, $element, $compile,
-FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
+FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignViewUtils) {
     LumensLog.log("In TransformEditCtrl");
     // Load script editing panel
     ScriptEditTemplate.get(function (scriptEditTemplate) {
@@ -487,16 +487,11 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
                     if (formatEntity.length > 1 &&
                     $scope.inputSelectedFormatName &&
                     $scope.inputSelectedFormatName !== "") {
-                        var displaySourceFormatEntityList = [];
+                        var validDisplayFmtList = [];
                         for (var i = 0; i < formatEntity.length; ++i) {
                             if (formatEntity[i].format.name === $scope.inputSelectedFormatName) {
-                                displaySourceFormatEntityList.push(formatEntity[i]);
-                                $scope.displaySourceFormatList = {
-                                    project_id: $scope.displaySourceFormatList.project_id,
-                                    component_id: $scope.displaySourceFormatList.component_id,
-                                    direction: $scope.displaySourceFormatList.direction,
-                                    format_entity: displaySourceFormatEntityList
-                                };
+                                validDisplayFmtList.push(formatEntity[i]);
+                                $scope.displaySourceFormatList = DesignViewUtils.updateDisplayFormatList($scope.displaySourceFormatList, validDisplayFmtList);
                                 break;
                             }
                         }
@@ -508,16 +503,11 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal) {
                     if (formatEntity.length > 1 &&
                     $scope.outputSelectedFormatName &&
                     $scope.outputSelectedFormatName !== "") {
-                        var displayTargetFormatEntityList = [];
+                        var validDisplayFmtList = [];
                         for (var i = 0; i < formatEntity.length; ++i) {
                             if (formatEntity[i].format.name === $scope.outputSelectedFormatName) {
-                                displayTargetFormatEntityList.push(formatEntity[i]);
-                                $scope.displayTargetFormatList = {
-                                    project_id: $scope.displayTargetFormatList.project_id,
-                                    component_id: $scope.displayTargetFormatList.component_id,
-                                    direction: $scope.displayTargetFormatList.direction,
-                                    format_entity: displayTargetFormatEntityList
-                                };
+                                validDisplayFmtList.push(formatEntity[i]);
+                                $scope.displayTargetFormatList = DesignViewUtils.updateDisplayFormatList($scope.displayTargetFormatList, validDisplayFmtList);
                                 break;
                             }
                         }

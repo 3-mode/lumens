@@ -6,22 +6,33 @@
         <meta name="description" content="">
         <meta name="author" content="shaofeng.wang">
         <title>JAMES</title> 
-        <!-- Page Specific CSS -->
+        <!-- 3rd Party Specific CSS -->
         <link rel="stylesheet" href="libs/jquery/css/smoothness/jquery-ui-1.10.0.css">
-        <link rel="stylesheet" href="libs/morris/morris.css">
         <link rel="stylesheet" href="libs/codemirror/codemirror.css">
         <link rel="stylesheet" href="libs/codemirror/theme/eclipse.css">
+        <link rel="stylesheet" href="libs/morris/morris.css">
+        <link rel="stylesheet" href="libs/jqplot/jquery.jqplot.css">
+        <link rel="stylesheet" href="libs/bootstrap/datetimepicker/css/bootstrap-datetimepicker.css">
+        <link rel="stylesheet" href="libs/pnotify/css/pnotify.css">
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="app/css/lumens_bootstrap.css">
+        <!-- Application CSS -->
         <link rel="stylesheet" href="app/css/lumens.css">
         <!-- 3rd Party JS Plugins -->
         <script src="libs/jquery/js/jquery.js"></script>
         <script src="libs/jquery/js/jquery-ui.js"></script>
-        <script src="libs/bootstrap/js/bootstrap.js"></script>
+        <script src="libs/bootstrap/js/bootstrap.min.js"></script>
+        <script src="libs/bootstrap/datetimepicker/js/bootstrap-datetimepicker.js"></script>
         <script src="libs/raphael/raphael-min.js"></script>
+        <script src="libs/walmik/timer.jquery.min.js"></script> 
+        <script src="libs/morris/morris.min.js"></script> 
+        <script src="libs/jqplot/jquery.jqplot.js"></script>
+        <script src="libs/jqplot/plugins/jqplot.categoryAxisRenderer.js"></script>
+        <script src="libs/jqplot/plugins/jqplot.donutRenderer.js"></script>
+        <script src="libs/jqplot/plugins/jqplot.pieRenderer.js"></script>
         <script src="libs/codemirror/codemirror.js"></script>
         <script src="libs/codemirror/mode/javascript/javascript.js"></script>
-        <script src="libs/morris/morris.min.js"></script>
+        <script src="libs/pnotify/pnotify.js"></script>
         <script src="libs/classy.js"></script>
         <script src="libs/json2.js"></script>
         <script src="libs/base64.js"></script>
@@ -36,7 +47,9 @@
         <script src="app/js/list.js"></script> 
         <script src="app/js/tree.js"></script>
         <script src="app/js/component.js"></script>
+        <script src="app/js/message.js"></script>
         <script src="app/js/project.js"></script>
+        <script src="app/js/formatpath.js"></script>
         <script src="app/js/functions.js"></script>
         <!-- Angular JS -->
         <script src="libs/angular/angular.js"></script>
@@ -45,12 +58,13 @@
         <!-- Application Entry JS -->
         <script src="app/lumens.js"></script>
         <!-- Application Angular Modules -->
+        <script src="app/mvp/services.js"></script>
+        <script src="app/mvp/directives.js"></script>
+        <script src="app/mvp/services/design_services.js"></script>
         <script src="app/mvp/controllers/main_controller.js"></script>
         <script src="app/mvp/controllers/dashboard_controller.js"></script>
         <script src="app/mvp/controllers/manage_controller.js"></script>
         <script src="app/mvp/controllers/designer_controller.js"></script>
-        <script src="app/mvp/directives.js"></script>
-        <script src="app/mvp/services.js"></script>
         <style type="text/css">
             div.left, div.right {
                 float: left; outline: solid 1px #ccc; 
@@ -62,19 +76,11 @@
         <script type="text/javascript">
             var appModule = angular.module('lumensTest', ["lumens-directives", "lumens-services", "lumens-controllers", "ngRoute"]);
             function MainTestCtrl($scope, $compile, $sce, TransformEditTemplate, ScriptEditTemplate, ProjectById, FormatList) {
-
+                var i18n = $scope.i18n = Lumens.i18n;
+                $scope.templates_script_tmpl = "app/templates/designer/transform_edit_tmpl.html";
             }
         </script>
     </head>
-    <body ng-app='lumensTest' class='lumens' ng-controller="MainTestCtrl">
-        <div style="display:inline-block;">
-            <div class="left"> 
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-            </div> 
-
-            <div class="right"> 
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
-            </div> 
-        </div>
+    <body ng-app='lumensTest' class='lumens' ng-controller="MainTestCtrl" ng-include="templates_script_tmpl">
     </body>
 </html>
