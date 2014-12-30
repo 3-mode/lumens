@@ -26,7 +26,7 @@ Lumens.TreeNode = Class.$extend({
             this.$folder.addClass(classes);
         // ----------- Build folder header ----------------
         if (this.nodeType === "file") {
-            this.$fHeader = $('<div class="lumens-tree-folder-header"><div class="lumens-tree-node" ><i class="lumens-icon-file-node"></i><div class="lumens-tree-node-name"></div><div class="lumens-tree-node-script"></div></div></div>').appendTo(this.$folder);
+            this.$fHeader = $('<div class="lumens-tree-folder-header"><div class="lumens-tree-node lumens-file-node-offset" ><i class="lumens-icon-file-node"></i><div class="lumens-tree-node-name"></div><div class="lumens-tree-node-script"></div></div></div>').appendTo(this.$folder);
         }
         else if (this.nodeType === "folder") {
             this.$fHeader = $('<div class="lumens-tree-folder-header"><i id="folder-status" class="lumens-icon-folder-close"/><div class="lumens-tree-node"><i class="lumens-icon-folder-node"/><div class="lumens-tree-node-name"></div><div class="lumens-tree-node-script"></div></div></div>').appendTo(this.$folder);

@@ -540,6 +540,9 @@ svg path {
     margin-right: 2px;
     content: "\e611";
 }
+.lumens .lumens-file-node-offset {
+    margin-left: 13px;
+}
 .lumens .lumens-icon-file-node:before {
     font-size: 20px;
     margin-right: 2px;
