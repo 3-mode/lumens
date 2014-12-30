@@ -65,7 +65,8 @@
         <script src="app/mvp/controllers/manage_controller.js"></script>
         <script src="app/mvp/controllers/designer_controller.js"></script>
     </head>
-    <body ng-app='lumens-app' class='lumens'>
-        <div id="id-main-view" ng-controller="MainViewCtrl"></div>
+    <body ng-app='lumens-app' class='lumens' ng-controller="MainViewCtrl">
+        <div ng-include="templates_topbar_url"></div>
+        <div ng-view></div>
     </body>
 </html>
