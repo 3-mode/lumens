@@ -32,7 +32,7 @@ a, a:focus, a:hover {
     font-style: normal;
 }
 
-[class^="lumens-icon-"] {
+[class^="icon-"], [class*=" icon-"], [class^="lumens-icon-"] {
     font-family: 'icomoon';
     speak: none;
     font-style: normal;
