@@ -128,7 +128,7 @@ Lumens.TreeNode = Class.$extend({
             }
         }
     },
-    toggleContent: function () {
+    toggleContent: function (expandFirstLevel) {
         if (this.isFolder()) {
             var $status = this.$fHeader.find('#folder-status');
             if ($status.hasClass('lumens-icon-folder-open')) {
@@ -136,6 +136,8 @@ Lumens.TreeNode = Class.$extend({
                 this.$fContent.hide("blind", 200);
             }
             else {
+                if (expandFirstLevel && this.children && this.dblclickHandler)
+                    this.dblclickHandler(this, this.$parent);
                 this.$fContent.show("blind", 200);
                 $status.removeClass('lumens-icon-folder-close').addClass('lumens-icon-folder-open');
             }

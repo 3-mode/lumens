@@ -54,7 +54,8 @@ Lumens.directives.directive("formatList", function (FormatBuilder) {
                 return $scope[attr.formatList];
             }, function (formatList) {
                 element.empty();
-                FormatBuilder.build(element, formatList);
+                if (formatList)
+                    formatList.formatTree = FormatBuilder.build(element, formatList);
             });
         }
     };
@@ -81,17 +82,17 @@ Lumens.directives.directive("ruleTree", function (RuleTreeBuilder) {
             $scope.$on("RuleChanged", function (evt, data) {
                 $scope.$apply(function () {
                     console.log("In RuleChanged apply", data);
-                    $scope.ruleData = data;
+                    $scope[atrr.ruleData] = data;
                 });
             });
             $scope.$watch(attr.ruleData, function (ruleData) {
                 RuleTreeBuilder.clear();
-                RuleTreeBuilder.buildTreeFromRuleEntry($scope, element, ruleData);
+                if (ruleData)
+                    ruleData.ruleTree = RuleTreeBuilder.buildTreeFromRuleEntry($scope, element, ruleData);
             });
         }
     };
 });
-
 Lumens.directives.directive("scriptEditor", function (RuleTreeBuilder) {
     return {
         restrict: 'E',

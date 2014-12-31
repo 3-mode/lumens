@@ -451,10 +451,16 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignVi
             });
         }
 
-        $scope.onCommand = function (btn_id, side) {
-            LumensLog.log(btn_id, side);
+        $scope.onCommand = function (btn_id, side, evt) {
+            LumensLog.log(btn_id, side, evt);
             $scope.selectedSide = side;
-            if (side && "id_format_reg_edit_btn" === btn_id) {
+            if ("id_format_reg_expand_btn" === btn_id) {
+                DesignViewUtils.updateExpandStatus(evt, side === "left" ? $scope.displaySourceFormatList.formatTree : $scope.displayTargetFormatList.formatTree);
+            }
+            else if ("id_rule_reg_expand_btn" === btn_id) {
+                DesignViewUtils.updateExpandStatus(evt, $scope.ruleData.ruleTree);
+            }
+            else if (side && "id_format_reg_edit_btn" === btn_id) {
                 if ("left" === side)
                     $scope.currentFormatList = $scope.sourceFormatList.format_entity;
                 else if ("right" === side)
