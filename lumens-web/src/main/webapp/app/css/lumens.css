@@ -528,8 +528,9 @@ svg path {
     color: #5A5A5A;
 }
 .lumens .lumens-tree-node-select {
+    padding: 2px 3px;
     color: #fff !important;
-    background-color: #868686;
+    background-color: #939393;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
@@ -582,11 +583,13 @@ svg path {
     content: "\e60d";
 }
 .lumens .lumens-icon-folder-open:before {
+    min-height: 24px;
     min-width: 24px;
     font-size: 13px;
     content: "\e6af";
 }
 .lumens .lumens-icon-folder-close:before {
+    min-height: 24px;
     min-width: 24px;
     font-size: 13px;
     content: "\e6b0";
@@ -881,7 +884,6 @@ svg path {
     padding-right: 6px;
     padding-top: 1px;
     padding-bottom: 1px;
-    /* height: 100% !important; */
     font-size: 16px !important;
 }
 .lumens .lumens-must {

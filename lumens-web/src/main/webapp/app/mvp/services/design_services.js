@@ -7,6 +7,7 @@ Lumens.services.factory('DesignViewUtils', function ($resource) {
             var selectNode = treeNode.getSelectNode();
             if (selectNode)
                 selectNode.remove();
+            console.log(selectNode);
         },
         updateDisplayFormatList: function (displayFormatList, validDisplayFmtList) {
             return {
