@@ -124,7 +124,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
                 });
 
                 // Create info form panel
-                var nameTmpl = '<table><tr><td><i class="lumens-icon-project lumens-icon-gap"></i></td><td><b>Name:</b></td><td><b>{{project.name}}</b></td><tr></table>';
+                var nameTmpl = '<span class="lumens-icon-project lumens-icon-gap"></span><b>{{project.name}}</b>';
                 desgin.designAndInfoPanel.getTitleElement().append($compile(nameTmpl)($scope));
                 desgin.tabsContainer = new Lumens.Panel(desgin.designAndInfoPanel.getPart2Element())
                 .configure({
@@ -408,7 +408,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
     });
 })
 .controller("TransformEditCtrl", function ($scope, $element, $compile,
-FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignViewUtils) {
+FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignViewUtils, Notifier) {
     LumensLog.log("In TransformEditCtrl");
     // Load script editing panel
     ScriptEditTemplate.get(function (scriptEditTemplate) {
@@ -428,26 +428,33 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignVi
 
         if (sourceComponentID) {
             FormatList.getOUT({project_id: projectOperator.get().projectId, component_id: sourceComponentID}, function (result) {
-                $scope.sourceFormatList = {
-                    project_id: projectOperator.get().projectId,
-                    component_id: targetComponentID,
-                    direction: 'OUT',
-                    format_entity: result.content.format_entity
-                };
-                $scope.displaySourceFormatList = $scope.sourceFormatList;
-                $scope.onCommand("id_format_reg_filter_btn", "left");
+                if (result.status === "OK") {
+                    $scope.sourceFormatList = {
+                        project_id: projectOperator.get().projectId,
+                        component_id: targetComponentID,
+                        direction: 'OUT',
+                        format_entity: result.content.format_entity
+                    };
+                    $scope.displaySourceFormatList = $scope.sourceFormatList;
+                    $scope.onCommand("id_format_reg_filter_btn", "left");
+                }
+                else
+                    Notifier.message("error", "Error", result.error_message);
             });
         }
         if (targetComponentID) {
             FormatList.getIN({project_id: projectOperator.get().projectId, component_id: targetComponentID}, function (result) {
-                $scope.targetFormatList = {
-                    project_id: projectOperator.get().projectId,
-                    component_id: targetComponentID,
-                    direction: 'IN',
-                    format_entity: result.content.format_entity
-                };
-                $scope.displayTargetFormatList = $scope.targetFormatList;
-                $scope.onCommand("id_format_reg_filter_btn", "right");
+                if (result.status === "OK") {
+                    $scope.targetFormatList = {
+                        project_id: projectOperator.get().projectId,
+                        component_id: targetComponentID,
+                        direction: 'IN',
+                        format_entity: result.content.format_entity
+                    };
+                    $scope.displayTargetFormatList = $scope.targetFormatList;
+                    $scope.onCommand("id_format_reg_filter_btn", "right");
+                } else
+                    Notifier.message("error", "Error", result.error_message);
             });
         }
 

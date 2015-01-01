@@ -311,7 +311,7 @@ Lumens.ResizableSplitLayout = Lumens.SplitLayout.$extend({
         this.resizablePanel = new Lumens.SplitLayout(this.getPart2Element())
         .configure({
             mode: config.mode,
-            part1Size: "9"
+            part1Size: "7"
         });
         this.resizablePanel.getElement().addClass("lumens-v-resizable-border");
         this.resizablePanel.getPart1Element().addClass("lumens-v-resize-grip")

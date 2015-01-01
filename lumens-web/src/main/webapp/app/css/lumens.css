@@ -346,7 +346,7 @@ a, a:focus, a:hover {
 }
 .lumens .lumens-v-resize-grip-border {
     overflow: hidden;
-    height: 9px;
+    height: 7px;
 }
 .lumens .lumens-v-resize-grip {
     z-index: 1000;
@@ -360,7 +360,7 @@ a, a:focus, a:hover {
     display:block;
     margin-left: 47%;
     width: 28px;
-    height: 9px;
+    height: 7px;
     background-image: url(img/vdragger.png);
     background-repeat: no-repeat;
 }
@@ -657,7 +657,7 @@ svg path {
     content: "\e6f1";
 }
 .lumens .lumens-icon-project:before {
-    font-size: 23px;
+    font-size: 18px;
     content: "\e62b";
 }
 .lumens .lumens-icon-resource:before {
@@ -712,11 +712,12 @@ svg path {
 .lumens .lumens-window-title {
     float: left;
     top: 0px;
+    display: inline-table;
     white-space: nowrap;  
     padding-left: 10px;
     color: #5A5A5A;
     text-overflow: ellipsis;
-    width: auto;
+    width: 200px;
 }
 .lumens .lumens-window-buttons {
     float:right;
