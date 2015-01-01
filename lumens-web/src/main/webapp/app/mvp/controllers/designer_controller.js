@@ -528,7 +528,7 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignVi
         }
     }
 })
-.controller("RuleScriptCtrl", function ($scope, TransformMapperStorageService) {
+.controller("RuleScriptCtrl", function ($scope, TransformMapperStorageService, Notifier) {
     $scope.$on("ClickRuleItem", function (evt, currentRuleItem) {
         $scope.currentSelectRuleItem = currentRuleItem;
         var script = currentRuleItem.getScript() ? currentRuleItem.getScript() : "";
@@ -546,7 +546,12 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignVi
             Lumens.system.workspaceLayout.show();
         }
         else if (id_script_btn === "id_rule_fmt_save") {
-            TransformMapperStorageService.save($scope);
+            try {
+                TransformMapperStorageService.save($scope);
+                Notifier.message("info", "Success", "Apply the rule and format configuration successfully");
+            } catch (e) {
+                Notifier.message("error", "Error", "Failed to apply the rule and format configuration");
+            }
         }
     }
     LumensLog.log("In RuleScriptCtrl");
