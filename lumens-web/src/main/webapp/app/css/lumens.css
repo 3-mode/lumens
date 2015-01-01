@@ -550,6 +550,9 @@ svg path {
     display: inline-table;
     cursor: pointer;
 }
+.lumens .lumens-tree-node-script-select {
+    border-left: 1px solid #fff !important;
+}
 .lumens .lumens-tree-node-script {
     font-size: 14px;
     display: inline-table;

@@ -80,8 +80,8 @@ Lumens.TreeNode = Class.$extend({
     },
     updateSelectStatus: function () {
         if (this.root.selectNode)
-            this.root.selectNode.$fHeader.find(".lumens-tree-node").toggleClass("lumens-tree-node-select");
-        this.$fHeader.find(".lumens-tree-node").toggleClass("lumens-tree-node-select");
+            this.root.selectNode.$fHeader.find(".lumens-tree-node").toggleClass("lumens-tree-node-select").find(".lumens-tree-node-script").toggleClass("lumens-tree-node-script-select");
+        this.$fHeader.find(".lumens-tree-node").toggleClass("lumens-tree-node-select").find(".lumens-tree-node-script").toggleClass("lumens-tree-node-script-select");;
         this.root.selectNode = this;
     },
     getPath: function () {
