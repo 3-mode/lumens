@@ -3,14 +3,15 @@
  */
 
 Lumens.TreeNode = Class.$extend({
-    __init__: function (node, parent, classes) {
+    __init__: function (root, node, parent, classes) {
         var __this = this;
         this.children = {size: 0, map: {}};
+        this.root = root;
         this.$parent = parent;
+        this.$container = parent.getElement();
         this.clickHandler = parent.clickHandler;
         this.dblclickHandler = parent.dblclickHandler;
         this.dropHandler = parent.dropHandler;
-        this.$container = parent.getElement();
         this.levelNumber = parent.levelNumber + 1;
         this.indexNumber = parent.children.size;
         this.draggable = parent.draggable;
@@ -61,6 +62,7 @@ Lumens.TreeNode = Class.$extend({
             evt.stopPropagation();
             if (__this.clickHandler)
                 __this.clickHandler(__this, __this.$parent);
+            __this.updateSelectStatus();
         });
         this.$fHeader.dblclick(function (evt) {
             evt.stopPropagation();
@@ -68,6 +70,19 @@ Lumens.TreeNode = Class.$extend({
                 __this.dblclickHandler(__this, __this.$parent);
             __this.toggleContent();
         });
+    },
+    remove: function () {
+        if (this.root.selectNode === this)
+            this.root.selectNode = undefined;
+        this.$folder.remove();
+        delete this.$parent.children.map[this.getName()];
+        --this.$parent.children.size;
+    },
+    updateSelectStatus: function () {
+        if (this.root.selectNode)
+            this.root.selectNode.$fHeader.find(".lumens-tree-node").toggleClass("lumens-tree-node-select");
+        this.$fHeader.find(".lumens-tree-node").toggleClass("lumens-tree-node-select");
+        this.root.selectNode = this;
     },
     getPath: function () {
         var path = [];
@@ -83,10 +98,7 @@ Lumens.TreeNode = Class.$extend({
         return path;
     },
     getRoot: function () {
-        var node = this;
-        while (node.$parent && node.$parent.data)
-            node = node.$parent;
-        return node;
+        return this.root;
     },
     getScript: function () {
         return this.script;
@@ -113,8 +125,8 @@ Lumens.TreeNode = Class.$extend({
     getName: function () {
         return this.name;
     },
-    getId: function () {
-        return '(' + this.levelNumber + ',' + this.indexNumber + ')';
+    getIndex: function () {
+        return this.indexNumber;
     },
     getLevel: function () {
         return this.levelNumber;
@@ -149,7 +161,7 @@ Lumens.TreeNode = Class.$extend({
         var parent = this;
         for (var i in nodes) {
             var node = nodes[i];
-            var entry = new Lumens.TreeNode(node, parent);
+            var entry = new Lumens.TreeNode(this.root, node, parent);
             parent.children.map[entry.getName()] = entry;
             parent.children.size++;
         }
@@ -167,6 +179,9 @@ Lumens.Tree = Class.$extend({
         this.children = {size: 0, map: {}};
         this.levelNumber = -1;
     },
+    getSelectNode: function () {
+        return this.selectNode;
+    },
     remove: function () {
         this.$parentContainer.unbind();
         this.$parentContainer.remove();
@@ -177,7 +192,7 @@ Lumens.Tree = Class.$extend({
     addEntryList: function (entryList) {
         var parent = this;
         $.each(entryList, function () {
-            var entry = new Lumens.TreeNode(this, parent, parent.children.size ? "lumens-0n-level" : "lumens-00-level");
+            var entry = new Lumens.TreeNode(parent, this, parent, parent.children.size ? "lumens-0n-level" : "lumens-00-level");
             parent.children.map[entry.getName()] = entry;
             parent.children.size++;
         });

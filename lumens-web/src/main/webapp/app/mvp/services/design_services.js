@@ -3,6 +3,11 @@
  */
 Lumens.services.factory('DesignViewUtils', function ($resource) {
     return {
+        removeRuleNode: function (treeNode) {
+            var selectNode = treeNode.getSelectNode();
+            if (selectNode)
+                selectNode.remove();
+        },
         updateDisplayFormatList: function (displayFormatList, validDisplayFmtList) {
             return {
                 project_id: displayFormatList.project_id,
@@ -15,17 +20,14 @@ Lumens.services.factory('DesignViewUtils', function ($resource) {
         updateExpandStatus: function (evt, treeNode) {
             if (treeNode) {
                 console.log(treeNode);
-                var target = $(evt.target);
-                if (target.hasClass("lumens-icon2-expand") || target.hasClass("lumens-icon2-collapse")) {
-                    target.toggleClass("lumens-icon2-expand").toggleClass("lumens-icon2-collapse");
-                    var entryList = treeNode.getEntryList();
-                    var childKeys = Object.keys(entryList.map);
-                    for (var i in childKeys) {
-                        var childNode = entryList.map[childKeys[i]];
-                        childNode.toggleContent(true);
-                        this.updateChildrenExpandStatus(childNode.getChildList());
-                    }
+                var entryList = treeNode.getEntryList();
+                var childKeys = Object.keys(entryList.map);
+                for (var i in childKeys) {
+                    var childNode = entryList.map[childKeys[i]];
+                    childNode.toggleContent(true);
+                    this.updateChildrenExpandStatus(childNode.getChildList());
                 }
+                this.updateExpandIconStatus(evt);
             }
         },
         updateChildrenExpandStatus: function (childList) {
@@ -37,6 +39,22 @@ Lumens.services.factory('DesignViewUtils', function ($resource) {
                 childNode.toggleContent(true);
                 this.updateChildrenExpandStatus(childNode.getChildList());
             }
+        },
+        updateExpandIconStatus: function (evt) {
+            var target = $(evt.target), iconTarget;
+            if (target.hasClass("lumens-icon2-expand") || target.hasClass("lumens-icon2-collapse")) {
+                iconTarget = target;
+            }
+            else {
+                iconTarget = target.find(".lumens-icon2-expand");
+                if (iconTarget.length === 0) {
+                    iconTarget = target.find(".lumens-icon2-collapse");
+                    if (iconTarget.length === 0) {
+                        return;
+                    }
+                }
+            }
+            iconTarget.toggleClass("lumens-icon2-expand").toggleClass("lumens-icon2-collapse");
         }
     };
 });

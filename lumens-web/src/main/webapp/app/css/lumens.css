@@ -514,7 +514,7 @@ svg path {
     padding-left: 10px;
 }
 .lumens .lumens-tree-folder, .lumens .lumens-tree-file {
-    padding-top: 8px;
+    padding-top: 5px;
 }
 .lumens .lumens-tree-folder-header {
     white-space: nowrap;
@@ -523,9 +523,16 @@ svg path {
     -ms-user-select: none; /* IE10+ */
 }
 .lumens .lumens-tree-node {
-    display: inline-block;
+    display: inline-table;
     white-space: nowrap;
     color: #5A5A5A;
+}
+.lumens .lumens-tree-node-select {
+    color: #fff !important;
+    background-color: #868686;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
 .lumens .lumens-tree-folder-header:hover, .lumens .lumens-tree-node:hover {
     color: #428bca;
@@ -539,15 +546,13 @@ svg path {
 }
 .lumens .lumens-tree-node-name {
     font-size: 14px;
-    display: inline-block;
+    display: inline-table;
     cursor: pointer;
-    min-width: 50px;
 }
 .lumens .lumens-tree-node-script {
     font-size: 14px;
-    display: inline-block;
+    display: inline-table;
     cursor: pointer;
-    min-width: 10px;
     max-width: 500px;
     margin-left:8px;
     padding-left:8px;

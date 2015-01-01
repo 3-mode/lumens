@@ -460,6 +460,9 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignVi
             else if ("id_rule_reg_expand_btn" === btn_id) {
                 DesignViewUtils.updateExpandStatus(evt, $scope.ruleData.ruleTree);
             }
+            else if ("id_rule_reg_delete_btn" === btn_id) {
+                DesignViewUtils.removeRuleNode($scope.ruleData.ruleTree);
+            }
             else if (side && "id_format_reg_edit_btn" === btn_id) {
                 if ("left" === side)
                     $scope.currentFormatList = $scope.sourceFormatList.format_entity;
