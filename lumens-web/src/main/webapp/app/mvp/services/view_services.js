@@ -44,7 +44,6 @@ Lumens.services.factory('ViewUtils', function ($resource) {
                     childNode.toggleContent(true);
                     this.updateChildrenExpandStatus(childNode.getChildList());
                 }
-                this.updateExpandIconStatus(evt);
             }
         },
         updateChildrenExpandStatus: function (childList) {

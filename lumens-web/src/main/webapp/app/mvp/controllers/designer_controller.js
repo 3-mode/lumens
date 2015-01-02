@@ -313,7 +313,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
 })
 .controller("ProjectCreateCtrl", function ($scope, $element, Notifier) {
     LumensLog.log("In ProjectCreateCtrl", $element);
-    var i18n = $scope.$parent.i18n;
+    var i18n = $scope.i18n;
     var projectInfoContent = $element.find(".modal-body");
     var messageBox = $scope.messageBox;
     var projectOperator = $scope.projectOperator;
@@ -410,6 +410,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
 .controller("TransformEditCtrl", function ($scope, $element, $compile,
 FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, ViewUtils, Notifier) {
     LumensLog.log("In TransformEditCtrl");
+    var i18n = $scope.i18n;
     // Load script editing panel
     RuleEditTemplate.get(function (ruleEditTemplate) {
         $compile(ruleEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart1Element());

@@ -12,7 +12,14 @@
             </div>
         </div>
         <div format-list="displaySourceFormatList" class="lumens-format-panel"></div>
-        <div class="lumens-format-prop-panel"></div>
+        <div class="lumens-format-prop-parent-panel">
+            <div class="lumens-prop-title">
+                <div>
+                    <a class="lumens-label-button"><i class="lumens-icon-name2 lumens-icon-gap"></i>{{i18n.id_prop_title}}</a>
+                </div>
+            </div>
+            <format-prop class="lumens-format-prop-panel lumens-bootstrap" prop-data="displaySourceFormatList.select_format_prop"></format-prop>
+        </div>
     </div>
     <div id="rulePanelId" class="lumens-rule-panel lumens-format-panel-border">
     </div>
@@ -29,7 +36,14 @@
             </div>
         </div>
         <div format-list="displayTargetFormatList" class="lumens-format-panel"></div>
-        <div class="lumens-format-prop-panel"></div>
+        <div class="lumens-format-prop-parent-panel">
+            <div class="lumens-prop-title">
+                <div>
+                    <a class="lumens-label-button"><i class="lumens-icon-name2 lumens-icon-gap"></i>{{i18n.id_prop_title}}</a>
+                </div>
+            </div>
+            <format-prop class="lumens-format-prop-panel lumens-bootstrap" prop-data="displayTargetFormatList.select_format_prop"></format-prop>
+        </div>
     </div>
     <div id="reg_edit_dialog" class="lumens-bootstrap lumens-modal-holder"></div>
 </div>

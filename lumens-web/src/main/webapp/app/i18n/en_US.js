@@ -53,6 +53,7 @@ Lumens.i18n = {
     id_format_reg_edit_btn: "Edit",
     id_format_reg_filter_btn: "Filter",
     id_rule_reg_edit_btn: "Edit",
+    id_prop_title: "Format Properties",
     // Messages
     id_no_project_warning: "Please create a new project first before you design an integration solution.",
     id_new_project_successfully: "A new project is created successfully.",

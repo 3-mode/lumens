@@ -18,7 +18,7 @@ Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath
                 }
                 return formatPath;
             },
-            build: function ($element, formatList) {
+            build: function ($scope, attrName, $element, formatList) {
                 console.log("Format List: ", formatList);
                 if (formatList) {
                     var __this = this;
@@ -39,6 +39,9 @@ Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath
                                 });
                             }
                             parentNode.addEntryList(entryList);
+                        },
+                        click: function (current, parent) {
+                            $scope.$broadcast("ClickFormatItem", {name: attrName, node: current});
                         },
                         dblclick: function (current, parent) {
                             if (current.hasContent() || !current.isFolder())

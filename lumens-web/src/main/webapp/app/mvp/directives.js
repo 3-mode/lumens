@@ -55,7 +55,7 @@ Lumens.directives.directive("formatList", function (FormatBuilder) {
             }, function (formatList) {
                 element.empty();
                 if (formatList)
-                    formatList.formatTree = FormatBuilder.build(element, formatList);
+                    formatList.formatTree = FormatBuilder.build($scope, attr.formatList, element, formatList);
             });
         }
     };
@@ -82,7 +82,7 @@ Lumens.directives.directive("ruleTree", function (RuleTreeBuilder) {
             $scope.$on("RuleChanged", function (evt, data) {
                 $scope.$apply(function () {
                     console.log("In RuleChanged apply", data);
-                    $scope[atrr.ruleData] = data;
+                    $scope[attr.ruleData] = data;
                 });
             });
             $scope.$watch(attr.ruleData, function (ruleData) {
@@ -126,6 +126,40 @@ Lumens.directives.directive("scriptEditor", function (RuleTreeBuilder) {
             $scope.$on('$destroy', function () {
                 console.log("$destroy");
                 unbind();
+            });
+        }
+    };
+});
+Lumens.directives.directive("formatProp", function () {
+    return {
+        restrict: 'E',
+        replace: true,
+        template: '<div></div>',
+        link: function ($scope, element, attr) {
+            $scope.$on("ClickFormatItem", function (evt, info) {
+                $scope.$apply(function () {
+                    $scope[info.name].select_format_prop = info.node.data.property;
+                    console.log("In ClickFormatItem apply", info);
+                });
+            });
+            $scope.$watch(function () {
+                var accessString = attr.propData.split(".");
+                var value = accessString[0] ? $scope[accessString[0]] : null;
+                return value ? value[accessString[1]] : null;
+            }, function (propData) {
+                element.empty();
+                console.log("Current format prop", propData);
+                if (propData) {
+                    var propHtml = '<table class="table table-bordered">'
+                    for (var i in propData) {
+                        propHtml += '<tr><td><b>' + propData[i].name + '</b></td><td>' + propData[i].value + '</td></tr>';
+                    }
+                    propHtml += '</table>';
+                    element.append(propHtml);
+                }
+                else {
+                    element.append('<div class="lumens-format-prop-value"><b>No property</b></div>');
+                }
             });
         }
     };
