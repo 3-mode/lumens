@@ -1,8 +1,9 @@
 /* 
  * Application
  */
-Lumens.$ngApp = angular.module("lumens-app", ["lumens-directives", "lumens-services", "lumens-controllers", "ngRoute"]);
 Lumens.controllers = angular.module("lumens-controllers", ["ngRoute"]);
+Lumens.services = angular.module('lumens-services', ['ngResource']);
+Lumens.$ngApp = angular.module("lumens-app", ["lumens-directives", "lumens-services", "lumens-controllers", "ngRoute"]);
 Lumens.$ngApp.config(function ($routeProvider) {
     $routeProvider
     .when("/id-dashboard-view", {

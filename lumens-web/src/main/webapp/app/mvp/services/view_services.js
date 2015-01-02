@@ -1,7 +1,23 @@
 /* 
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-Lumens.services.factory('DesignViewUtils', function ($resource) {
+Lumens.services.factory('Notifier', function () {
+    return {
+        message: function (type, title, text) {
+            new PNotify({
+                type: type,
+                title: title,
+                addclass: "lumens-bootstrap",
+                text: text,
+                delay: 2000,
+                buttons: {
+                    closer: true
+                }
+            });
+        }
+    }
+});
+Lumens.services.factory('ViewUtils', function ($resource) {
     return {
         removeRuleNode: function (treeNode) {
             var selectNode = treeNode.getSelectNode();

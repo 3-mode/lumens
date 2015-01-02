@@ -122,10 +122,12 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
   margin-bottom: -30px; margin-right: -30px;
   padding-bottom: 30px;
   height: 100%;
-  outline: none; /* Prevent dragging from highlighting the element */
+  
+ outline: none; /* Prevent dragging from highlighting the element */
   position: relative;
   -moz-box-sizing: content-box;
-  box-sizing: content-box;
+  
+ box-sizing: content-box;
 }
 .CodeMirror-sizer {
   position: relative;

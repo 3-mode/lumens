@@ -334,13 +334,13 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
         Lumens.system.workspaceLayout.hide();
         //TODO show to the transform editing
         TransformEditTemplate.get(function (transformEditTemplate) {
-            $scope.transformEditPanel = new Lumens.ResizableVSplitLayoutExt(Lumens.system.theLayout.getPart2Element())
+            $scope.ruleTreeEditor = $compile(transformEditTemplate)($scope).appendTo(Lumens.system.theLayout.getPart2Element());
+            $scope.transformEditPanel = new Lumens.ResizableVSplitLayoutExt($scope.ruleTreeEditor.find("#rulePanelId"))
             .configure({
                 mode: "vertical",
                 useRatio: true,
                 part1Size: "40%"
             });
-            var transforEditor = $compile(transformEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart1Element());
             $(window).resize(function (evt) {
                 if (evt.target !== this)
                     return;
@@ -408,9 +408,12 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
     });
 })
 .controller("TransformEditCtrl", function ($scope, $element, $compile,
-FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignViewUtils, Notifier) {
+FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, ViewUtils, Notifier) {
     LumensLog.log("In TransformEditCtrl");
     // Load script editing panel
+    RuleEditTemplate.get(function (ruleEditTemplate) {
+        $compile(ruleEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart1Element());
+    })
     ScriptEditTemplate.get(function (scriptEditTemplate) {
         $compile(scriptEditTemplate)($scope).appendTo($scope.transformEditPanel.getPart2Element());
     })
@@ -462,13 +465,13 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignVi
             LumensLog.log(btn_id, side, evt);
             $scope.selectedSide = side;
             if ("id_format_reg_expand_btn" === btn_id) {
-                DesignViewUtils.updateExpandStatus(evt, side === "left" ? $scope.displaySourceFormatList.formatTree : $scope.displayTargetFormatList.formatTree);
+                ViewUtils.updateExpandStatus(evt, side === "left" ? $scope.displaySourceFormatList.formatTree : $scope.displayTargetFormatList.formatTree);
             }
             else if ("id_rule_reg_expand_btn" === btn_id) {
-                DesignViewUtils.updateExpandStatus(evt, $scope.ruleData.ruleTree);
+                ViewUtils.updateExpandStatus(evt, $scope.ruleData.ruleTree);
             }
             else if ("id_rule_reg_delete_btn" === btn_id) {
-                DesignViewUtils.removeRuleNode($scope.ruleData.ruleTree);
+                ViewUtils.removeRuleNode($scope.ruleData.ruleTree);
             }
             else if (side && "id_format_reg_edit_btn" === btn_id) {
                 if ("left" === side)
@@ -507,7 +510,7 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignVi
                         for (var i = 0; i < formatEntity.length; ++i) {
                             if (formatEntity[i].format.name === $scope.inputSelectedFormatName) {
                                 validDisplayFmtList.push(formatEntity[i]);
-                                $scope.displaySourceFormatList = DesignViewUtils.updateDisplayFormatList($scope.displaySourceFormatList, validDisplayFmtList);
+                                $scope.displaySourceFormatList = ViewUtils.updateDisplayFormatList($scope.displaySourceFormatList, validDisplayFmtList);
                                 break;
                             }
                         }
@@ -523,7 +526,7 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignVi
                         for (var i = 0; i < formatEntity.length; ++i) {
                             if (formatEntity[i].format.name === $scope.outputSelectedFormatName) {
                                 validDisplayFmtList.push(formatEntity[i]);
-                                $scope.displayTargetFormatList = DesignViewUtils.updateDisplayFormatList($scope.displayTargetFormatList, validDisplayFmtList);
+                                $scope.displayTargetFormatList = ViewUtils.updateDisplayFormatList($scope.displayTargetFormatList, validDisplayFmtList);
                                 break;
                             }
                         }
@@ -550,6 +553,7 @@ FormatList, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, DesignVi
         }
         else if (id_script_btn === "id_script_back") {
             $scope.transformEditPanel.remove();
+            $scope.ruleTreeEditor.remove();
             Lumens.system.workspaceLayout.show();
         }
         else if (id_script_btn === "id_rule_fmt_save") {

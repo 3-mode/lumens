@@ -1,48 +1,35 @@
 <div ng-controller="TransformEditCtrl" style="height:100%;width:100%;float:top;">
-    <div style="float:left;width:28%;height:100%;">
-        <div style="float:top;width:100%;height:35px;border-bottom:1px solid #C2C2C2;">
-            <div style="height:100%;float:left;">
+    <div class="lumens-format-parent-panel">
+        <div class="lumens-format-bar">
+            <div>
                 <a class="lumens-label-button" ng-click="onCommand('id_format_reg_edit_btn', 'left')"><i class="lumens-icon-name2 lumens-icon-gap"></i>{{inputFormatRegName}}</a>
             </div>
-            <div style="height:100%;float:left;padding-left:8px;">
+            <div style="padding-left:8px;">
                 <a class="lumens-icon-button" ng-click="onCommand('id_format_reg_filter_btn', 'left')"><i class="lumens-icon-filter"></i></a>
             </div>
-            <div style="height:100%;float:left;">
+            <div>
                 <a class="lumens-icon-button" ng-click="onCommand('id_format_reg_expand_btn', 'left', $event)"><i class="lumens-icon2-expand"></i></a>
             </div>
         </div>
-        <div format-list="displaySourceFormatList" class="lumens-format-panel" style="float:left;width:100%;height:calc(100% - 36px);"></div>
+        <div format-list="displaySourceFormatList" class="lumens-format-panel"></div>
+        <div class="lumens-format-prop-panel"></div>
     </div>
-    <div class="lumens-format-panel-border" style="float:left;width:44%;height:100%;">
-        <div style="float:top;width:100%;height:35px;border-bottom:1px solid #C2C2C2;">
-            <div style="height:100%;float:left;">
-                <a class="lumens-label-button" ng-click="onCommand('id_rule_reg_edit_btn')"><i class="lumens-icon-name lumens-icon-gap"></i>{{ruleRegName}}</a>
-            </div>
-            <div style="height:100%;float:left;padding-left:8px;">
-                <a class="lumens-icon-button lumens-icon-button-delete" ng-click="onCommand('id_rule_reg_delete_btn')"><i class="lumens-icon-del"></i></a>
-            </div>
-            <div style="height:100%;float:left;">
-                <a class="lumens-icon-button" ng-click="onCommand('id_rule_reg_expand_btn', null, $event)"><i class="lumens-icon2-collapse"></i></a>
-            </div>
-            <div style="height:100%;float:left;">
-                <a class="lumens-icon-button" ng-click="onCommand('id_rule_reg_max_btn')"><i class="lumens-icon2-max"></i></a>
-            </div> 
-        </div>
-        <rule-tree rule-data="ruleData" class="lumens-format-panel" style="width:calc(100% - 1px);height:calc(100% - 36px);"/>
+    <div id="rulePanelId" class="lumens-rule-panel lumens-format-panel-border">
     </div>
-    <div style="float:left;width:28%;height:100%;">
-        <div style="float:top;width:100%;height:35px;border-bottom:1px solid #C2C2C2;display: inline-block;">
-            <div style="height:100%;float:left;">
+    <div class="lumens-format-parent-panel">
+        <div class="lumens-format-bar">
+            <div>
                 <a class="lumens-label-button" ng-click="onCommand('id_format_reg_edit_btn', 'right')"><i class="lumens-icon-name2 lumens-icon-gap"></i>{{outputFormatRegName}}</a>
             </div>
-            <div style="height:100%;float:left;padding-left:8px;">
+            <div style="padding-left:8px;">
                 <a class="lumens-icon-button" ng-click="onCommand('id_format_reg_filter_btn', 'right')"><i class="lumens-icon-filter"></i></a>
             </div>
-            <div style="height:100%;float:left;">
+            <div>
                 <a class="lumens-icon-button" ng-click="onCommand('id_format_reg_expand_btn', 'right', $event)"><i class="lumens-icon2-expand"></i></a>
             </div>
         </div>
-        <div format-list="displayTargetFormatList" class="lumens-format-panel" style="float:left;width:100%;height:calc(100% - 46px);"></div>
+        <div format-list="displayTargetFormatList" class="lumens-format-panel"></div>
+        <div class="lumens-format-prop-panel"></div>
     </div>
     <div id="reg_edit_dialog" class="lumens-bootstrap lumens-modal-holder"></div>
 </div>

@@ -842,6 +842,9 @@ svg path {
 }
 .lumens .lumens-format-panel {
     overflow: auto;
+    float: top;
+    width: 100%;
+    height: calc(65% - 36px);
 }
 .lumens .lumens-format-panel-border {
     box-sizing:border-box;
@@ -850,10 +853,15 @@ svg path {
     border-left: 1px solid #C2C2C2;
     border-right: 1px solid #C2C2C2;
 }
+.lumens .lumens-format-prop-panel {
+    float: top;
+    width: 100%;
+    height: 35%;
+    border-top: 1px solid #C2C2C2;
+}
 .lumens .lumens-rule-script-panel {
     width: 100%;
     height:100%;
-    border: 1px solid #C2C2C2;
 }
 .lumens .lumens-rule-script {
     width: 100%;
@@ -922,6 +930,27 @@ svg path {
     width: 300px;
     height:250px;
 }
+.lumens .lumens-format-parent-panel {
+    float:left;
+    width: 25%;
+    height: 100%;
+}
+.lumens .lumens-rule-panel {
+    float:left;
+    width: 50%;
+    height: 100%;
+}
+.lumens .lumens-format-bar {
+    float: top; 
+    width: 100%;
+    height: 35px;
+    border-bottom: 1px solid #C2C2C2;
+}
+.lumens .lumens-format-bar > div {
+    height:100%;
+    float:left;
+}
+/*3rdparty*/
 .jqplot-table-legend {
     font-size: 20px;
 }
