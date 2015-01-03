@@ -1,5 +1,5 @@
 {
-    "SqlServerName": "SqlServer",
+    "SqlServerName": "MSSQLServer",
     "Name": "Name",
     "OJDBC": "JDBC Driver",
     "ConnectionURL": "JDBC URL",

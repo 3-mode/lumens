@@ -19,12 +19,19 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <archive>
                         <manifestEntries>
                             <Addin-Name>Lumens SQL Server connector</Addin-Name>
-                            <Addin-Activator>com.lumens.connector.database.client.sqlserver.service</Addin-Activator>
+                            <Addin-Activator>com.lumens.connector.database.client.sqlserver.service.Activator</Addin-Activator>
                             <Addin-Classpath>lib,3rdparty</Addin-Classpath>
                         </manifestEntries>
                     </archive>
