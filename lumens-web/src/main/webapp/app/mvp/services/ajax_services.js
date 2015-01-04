@@ -144,9 +144,9 @@ Lumens.services.factory('SyncGet', function () {
         }
     };
 });
-Lumens.services.factory('jSyncHtml', function () {
+Lumens.services.factory('TemplateService', function () {
     return {
-        get: function (items) {
+        getItems: function (items) {
             for (var i = 0; i < items.length; ++i) {
                 if (items[i].html_url) {
                     $.ajax({
@@ -158,6 +158,17 @@ Lumens.services.factory('jSyncHtml', function () {
                     });
                 }
             }
+        },
+        get: function (templateUrl) {
+            var templateText = "";
+            $.ajax({
+                async: false,
+                url: templateUrl,
+                contentType: "plain/text"
+            }).done(function (data) {
+                templateText = data;
+            });
+            return templateText;
         }
     };
 });

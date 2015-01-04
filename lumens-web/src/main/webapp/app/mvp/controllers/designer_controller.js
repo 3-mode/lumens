@@ -4,7 +4,7 @@
 
 Lumens.controllers.controller("DesignViewCtrl", function ($scope, $route, $http, $compile,
 DesignNavMenu, SuccessTemplate, WarningTemplate, ErrorTemplate, PropFormTemplate, TransformListTemplate,
-DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
+DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectById) {
     Lumens.system.switchTo(Lumens.system.NormalView);
     // Set the default page view as dashboard view
     var i18n = $scope.i18n = Lumens.i18n;
@@ -45,7 +45,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
             InstrumentCategory.get(function (instrument_items) {
                 menu.sections[0].items = data_source_items.items;
                 menu.sections[1].items = instrument_items.items;
-                jSyncHtml.get(instrument_items.items);
+                TemplateService.getItems(instrument_items.items);
                 // Create a dictionary to find the correct icon
                 $scope.compCagegory = {};
                 $.each(data_source_items.items, function () {
@@ -364,6 +364,8 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
             $scope.ruleData = null;
             showRuleEditor();
         } else if (id_btn === "id_rule_delete") {
+            // TODO delete transform rulle
+            // TODO delete register format from source and target components
             console.log("Delete transform rule item", $scope.transformRuleEntryList[$scope.selectIndex].name);
         }
     };

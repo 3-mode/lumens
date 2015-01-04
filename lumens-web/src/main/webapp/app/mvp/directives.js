@@ -186,7 +186,7 @@ Lumens.directives.directive("formatProp", function () {
         }
     };
 });
-Lumens.directives.directive("scriptConfig", function () {
+Lumens.directives.directive("scriptConfig", function ($compile, TemplateService) {
     return {
         restrict: 'E',
         replace: true,
@@ -200,6 +200,7 @@ Lumens.directives.directive("scriptConfig", function () {
                     element.hide();
             });
             $scope.$watch(attr.configVar, function (selectRuleItem) {
+                console.log("Current scriptConfig", selectRuleItem);
                 element.empty();
                 var tabScriptConfig = new Lumens.TabPanel(element);
                 tabScriptConfig.configure({
@@ -207,19 +208,20 @@ Lumens.directives.directive("scriptConfig", function () {
                             id: "id-foreach",
                             label: "<i class='lumens-icon2-loop lumens-icon-gap'></i>Foreach",
                             content: function (tab) {
+                                $scope.hello = "Hello foreach configuration";
+                                tab.append($compile(TemplateService.get("app/templates/designer/foreach_tmpl.html"))($scope));
                             }
                         },
                         {
                             id: "id-reconcil",
                             label: "<i class='lumens-icon-reconcil lumens-icon-gap'></i>Reconcillation",
                             content: function (tab) {
+                                tab.append("<div></div>");
                             }
                         }
                     ]
                 });
             });
-            //element.append(new Date().toString());
-            console.log("Current scriptConfig", attr);
         }
     };
 });
