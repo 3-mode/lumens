@@ -165,7 +165,7 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
                     var ruleEntry = ruleData.rule_entry;
                     var formatEntry = ruleData.format_entry;
                     if (parent.children().length === 0) {
-                        this.transformRuleTree = new Lumens.Tree(parent).configure({
+                        var ruleTree = __this.transformRuleTree = new Lumens.Tree(parent).configure({
                             handler: function (parentNode) {
                                 var rootRuleItem = __this.getRootRuleItem(ruleEntry);
                                 __this.checkRuleWithFormat(rootRuleItem.format_name, formatEntry.name);
@@ -174,7 +174,7 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
                                 __this.buildRuleItemChildren(parentNode, rootRuleItem, formatEntry);
                             },
                             click: function (current, parent) {
-                                $scope.$broadcast("ClickRuleItem", current);
+                                $scope.$broadcast("SelectRuleItem", current);
                             },
                             drop: function (node, current, parent) {
                                 if (node.direction === "OUT")
@@ -182,7 +182,12 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
                             },
                             droppable: true
                         });
-                        return this.transformRuleTree;
+                        $scope.$on("ApplyScript", function (evt, script) {
+                            var selectNode = ruleTree.getSelectNode();
+                            if (selectNode && script)
+                                selectNode.setScript(script);
+                        })
+                        return __this.transformRuleTree;
                     } else if (parent.children().length > 0) {
                         // TODO find the parent node for the drag object and append it to the parent node
                         console.log("appended");

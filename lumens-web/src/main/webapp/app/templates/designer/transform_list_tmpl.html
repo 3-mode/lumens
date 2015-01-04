@@ -30,9 +30,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="lumens-transform-item" style="cursor: pointer;"
+                    <tr class="lumens-transform-item"
+                        ng-class="{'lumens-h-active':$index === selectIndex}"
                         ng-if="currentComponent && currentComponent.transform_rule_entry"
-                        ng-repeat="ruleEntry in transformRuleEntryList" ng-dblclick="openTransformEditing(ruleEntry)">
+                        ng-repeat="ruleEntry in transformRuleEntryList" ng-dblclick="openTransformEditing(ruleEntry)" ng-click="onSelectRow($index)">
                         <td>{{ruleEntry.name}}</td><td>{{ruleEntry.source_format_name}}</td><td>{{ruleEntry.target_format_name}}</td>
                     </tr>
                 </tbody>

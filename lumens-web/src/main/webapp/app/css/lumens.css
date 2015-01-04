@@ -694,6 +694,26 @@ svg path {
     font-size: 12px;
     content: "\e7cc";
 }
+.lumens .lumens-icon-rule-config-name:before {
+    font-size: 16px;
+    content: "\e781";
+}
+.lumens .lumens-icon2-script-config-name:before {
+    font-size: 16px;
+    content: "\f05f";
+}
+.lumens .lumens-config-button-pos {
+    float: right;
+    margin-top: 8px !important;
+}
+.lumens .lumens-gap-right {
+    margin-right: 10px;
+}
+.lumens .lumens-rule-config-panel {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
 .lumens .lumens-icon2-collapse:before {
     content: "\f08a";
 }
@@ -707,6 +727,14 @@ svg path {
 .lumens .lumens-icon2-min:before {
     font-size: 16px;
     content: "\e682";
+}
+.lumens .lumens-icon2-loop:before {
+    font-size: 16px;
+    content: "\eaf1";
+}
+.lumens .lumens-icon-reconcil:before {
+    font-size: 16px;
+    content: "\e67a";
 }
 /*Form component Styles*/
 .lumens .lumens-window-title {
@@ -834,6 +862,7 @@ svg path {
 .lumens .lumens-transform-item:hover {
     background-color: #3276b1 !important;
     color: white;
+    cursor: pointer;
 }
 @media (min-width: 200px) {
     .lumens .lumens-input, .lumens .lumens-select {
@@ -877,13 +906,18 @@ svg path {
     height: 100%;
     text-align: center;
 }
-.lumens .lumens-rule-script-panel {
+.lumens .lumens-rule-script-parent-panel {
     width: 100%;
     height:100%;
 }
-.lumens .lumens-rule-script {
+.lumens .lumens-rule-script-panel {
     width: 100%;
     height:calc(100% - 46px);
+}
+.lumens .lumens-rule-script {
+    width: 100%;
+    height:100%;
+    color: #5A5A5A;
 }
 .lumens .CodeMirror {
     height:100% !important;

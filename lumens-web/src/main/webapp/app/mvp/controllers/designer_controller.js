@@ -329,7 +329,9 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
 })
 .controller("TransformListCtrl", function ($scope, $compile, $element, TransformEditTemplate) {
     LumensLog.log("In TransformListCtrl", $element);
-
+    $scope.onSelectRow = function (index) {
+        $scope.selectIndex = index;
+    };
     function showRuleEditor() {
         Lumens.system.workspaceLayout.hide();
         //TODO show to the transform editing
@@ -362,6 +364,7 @@ DatasourceCategory, InstrumentCategory, jSyncHtml, DesignButtons, ProjectById) {
             $scope.ruleData = null;
             showRuleEditor();
         } else if (id_btn === "id_rule_delete") {
+            console.log("Delete transform rule item", $scope.transformRuleEntryList[$scope.selectIndex].name);
         }
     };
 
@@ -476,7 +479,7 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
             }
             else if (side && "id_format_reg_edit_btn" === btn_id) {
                 if ("left" === side)
-                    $scope.currentFormatList = $scope.sourceFormatList.format_entity;
+                    $scope.currentFormatList = $scope.sourceFormatList ? $scope.sourceFormatList.format_entity : null;
                 else if ("right" === side)
                     $scope.currentFormatList = $scope.targetFormatList.format_entity;
 
@@ -540,14 +543,9 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
     }
 })
 .controller("RuleScriptCtrl", function ($scope, TransformMapperStorageService, Notifier) {
-    $scope.$on("ClickRuleItem", function (evt, currentRuleItem) {
-        $scope.currentSelectRuleItem = currentRuleItem;
-        var script = currentRuleItem.getScript() ? currentRuleItem.getScript() : "";
-        $scope.transformRuleScriptEditor.setValue(script);
-    });
     $scope.onCommand = function (id_script_btn) {
         if (id_script_btn === "id_script_apply") {
-            $scope.currentSelectRuleItem.setScript($scope.transformRuleScriptEditor.getValue());
+            $scope.$broadcast("ApplyScriptToRuleItem");
         }
         else if (id_script_btn === "id_script_validate") {
             LumensLog.log("Validate transform_rule_entry:", $scope.currentRuleEntry);
@@ -564,6 +562,14 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
             } catch (e) {
                 Notifier.message("error", "Error", "Failed to apply the rule and format configuration");
             }
+        }
+        else if (id_script_btn === "id_rule_script") {
+            $scope.$broadcast("ScriptEditorDisplay", "show");
+            $scope.$broadcast("ScriptConfigDispaly", "hide");
+        }
+        else if (id_script_btn === "id_rule_configuration") {
+            $scope.$broadcast("ScriptEditorDisplay", "hide");
+            $scope.$broadcast("ScriptConfigDispaly", "show");
         }
     }
     LumensLog.log("In RuleScriptCtrl");

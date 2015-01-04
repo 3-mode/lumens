@@ -114,6 +114,28 @@ Lumens.directives.directive("scriptEditor", function (RuleTreeBuilder) {
                     codeMirror.replaceSelection('@' + RuleTreeBuilder.getFullPath(node));
                 }
             });
+            $scope.$on("SelectRuleItem", function (evt, currentRuleItem) {
+                console.log("SelectRuleItem", currentRuleItem);
+                $scope.selectRuleItem = currentRuleItem;
+                var script = currentRuleItem.getScript() ? currentRuleItem.getScript() : "";
+                codeMirror.setValue(script);
+            });
+            $scope.$on("ApplyScriptToRuleItem", function () {
+                $scope.$parent.$broadcast("ApplyScript", codeMirror.getValue());
+            });
+            $scope.$on("ScriptEditorDisplay", function (evt, mode) {
+                console.log("RuleEditorDisplay", element);
+                if (mode === "show") {
+                    element.show();
+                    if ($scope.selectRuleItem) {
+                        var currentRuleItem = $scope.selectRuleItem;
+                        var script = currentRuleItem.getScript() ? currentRuleItem.getScript() : "";
+                        codeMirror.setValue(script);
+                    }
+                }
+                else if (mode === "hide")
+                    element.hide();
+            });
 
             var unbind = $scope.$watch(function () {
                 return $scope[attr.scriptVar];
@@ -121,7 +143,7 @@ Lumens.directives.directive("scriptEditor", function (RuleTreeBuilder) {
                 console.log("scriptEditorText:", scriptEditorText);
                 if (!scriptEditorText)
                     scriptEditorText = "";
-                $scope[attr.scriptEditorHolder].setValue(scriptEditorText);
+                codeMirror.setValue(scriptEditorText);
             });
             $scope.$on('$destroy', function () {
                 console.log("$destroy");
@@ -161,6 +183,43 @@ Lumens.directives.directive("formatProp", function () {
                     element.append('<div class="lumens-format-prop-value"><b>No property</b></div>');
                 }
             });
+        }
+    };
+});
+Lumens.directives.directive("scriptConfig", function () {
+    return {
+        restrict: 'E',
+        replace: true,
+        template: '<div></div>',
+        link: function ($scope, element, attr) {
+            $scope.$on("ScriptConfigDispaly", function (evt, mode) {
+                console.log("ScriptConfigDispaly", element);
+                if (mode === "show")
+                    element.show();
+                else if (mode === "hide")
+                    element.hide();
+            });
+            $scope.$watch(attr.configVar, function (selectRuleItem) {
+                element.empty();
+                var tabScriptConfig = new Lumens.TabPanel(element);
+                tabScriptConfig.configure({
+                    tab: [{
+                            id: "id-foreach",
+                            label: "<i class='lumens-icon2-loop lumens-icon-gap'></i>Foreach",
+                            content: function (tab) {
+                            }
+                        },
+                        {
+                            id: "id-reconcil",
+                            label: "<i class='lumens-icon-reconcil lumens-icon-gap'></i>Reconcillation",
+                            content: function (tab) {
+                            }
+                        }
+                    ]
+                });
+            });
+            //element.append(new Date().toString());
+            console.log("Current scriptConfig", attr);
         }
     };
 });
