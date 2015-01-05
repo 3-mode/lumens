@@ -60,8 +60,11 @@ public class TextClient {
                 propList.get(TextConstants.OPTION_IGNORE_EMPTYLINE).getBoolean():
                 param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE).getValue().getBoolean();
         boolean firstLineAsTitle = param.getChild(TextConstants.OPTION_FIRST_LINE_ASTITLE) == null
-                ? propList.get(TextConstants.OPTION_FORMAT_ASTITLE).getBoolean()
-                : param.getChild(TextConstants.OPTION_FORMAT_ASTITLE).getValue().getBoolean();        
+                ? propList.get(TextConstants.OPTION_FIRST_LINE_ASTITLE).getBoolean()
+                : param.getChild(TextConstants.OPTION_FIRST_LINE_ASTITLE).getValue().getBoolean();   
+        boolean ignoreReadlineError = param.getChild(TextConstants.OPTION_IGNORE_READLINE_ERROR) == null
+                ? propList.get(TextConstants.OPTION_IGNORE_READLINE_ERROR).getBoolean()
+                : param.getChild(TextConstants.OPTION_IGNORE_READLINE_ERROR).getValue().getBoolean(); 
         int maxLine = param.getChild(TextConstants.OPTION_MAXLINE) == null ?
                 propList.get(TextConstants.OPTION_MAXLINE).getInt():
                 param.getChild(TextConstants.OPTION_MAXLINE).getValue().getInt();
@@ -101,8 +104,16 @@ public class TextClient {
                         break;
                     }
                     
-                    Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote);
-                    result.add(build);
+                    try{
+                        Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote);
+                        result.add(build);
+                    }catch(Exception ex){
+                        if (ignoreReadlineError){
+                            continue;
+                        }else{
+                            throw new RuntimeException(ex);
+                        }
+                    }                    
                 }
                 reader.close();
                 reader = null;

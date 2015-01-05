@@ -26,6 +26,7 @@ public interface TextConstants {
     public static final String OPTION_MAXLINE = "MaxLine";
     public static final String OPTION_FORMAT_ASTITLE = "FormatAsTitle";  
     public static final String OPTION_FIRST_LINE_ASTITLE = "FirstLineAsTitle";  
+    public static final String OPTION_IGNORE_READLINE_ERROR = "IgnoreReadlineError"; 
     public static final String OPTION_IGNORE_EMPTYLINE = "IgnoreEmptyLine"; 
     
     // connector operation    
