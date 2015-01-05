@@ -76,7 +76,10 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                         LumensLog.log("Dblclick:", component);
                         if ($scope.currentUIComponent === component)
                             return;
+                        if ($scope.currentUIComponent)
+                            $scope.currentUIComponent.updateSelect(false);
                         $scope.currentUIComponent = component;
+                        $scope.currentUIComponent.updateSelect(true);
                         var config = component.configure;
                         $scope.$apply(function () {
                             $scope.componentForm = $compile(component.getFormHtml())($scope);
