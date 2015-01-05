@@ -153,7 +153,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
             conn.commit();
         } catch (Exception e) {
             DbUtils.rollback(conn);
-            throw new RuntimeException(e);
+            throw new RuntimeException(SQL, e);
         } finally {
             DbUtils.releaseStatement(stat);
         }
@@ -167,7 +167,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
             ret = stat.executeQuery(SQL);
             return elementBuilder.buildElement(output, ret);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(SQL, e);
         } finally {
             DbUtils.releaseResultSet(ret);
             DbUtils.releaseStatement(stat);

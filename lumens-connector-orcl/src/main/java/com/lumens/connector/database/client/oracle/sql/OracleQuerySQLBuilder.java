@@ -40,11 +40,14 @@ public class OracleQuerySQLBuilder extends OracleSQLBuilder {
         StringBuilder querySQL = new StringBuilder();
         querySQL.append("SELECT ").append(queryFields.toString()).append(" FROM ").append(tableName);
         if (input != null) {
-            Element clause = input.getChild(CLAUSE);
-            if (clause != null) {
-                String sqlClause = clause.getValue().getString();
-                if (sqlClause != null && !sqlClause.isEmpty()) {
-                    querySQL.append(' ').append(sqlClause);
+            Element sqlParams = input.getChild(SQLPARAMS);
+            if (sqlParams != null) {
+                Element clause = sqlParams.getChild(CLAUSE);
+                if (clause != null) {
+                    String sqlClause = clause.getValue().getString();
+                    if (sqlClause != null && !sqlClause.isEmpty()) {
+                        querySQL.append(' ').append(sqlClause);
+                    }
                 }
             }
         }
