@@ -133,6 +133,8 @@ public class ConnectorTest {
         propsR.put(TextConstants.FILE_EXTENSION, new Value("txt"));
         propsR.put(TextConstants.FILE_FILTER, new Value("*.txt"));
         propsR.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));  
+        propsR.put(TextConstants.OPTION_FIRST_LINE_ASTITLE, new Value(false));
+        propsR.put(TextConstants.OPTION_IGNORE_READLINE_ERROR, new Value(true));
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
@@ -190,7 +192,9 @@ public class ConnectorTest {
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(9));
         propsR.put(TextConstants.FILE_EXTENSION, new Value("csv"));
         propsR.put(TextConstants.FILE_FILTER, new Value("*.csv"));
-        propsR.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));  
+        propsR.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));
+        propsR.put(TextConstants.OPTION_FIRST_LINE_ASTITLE, new Value(false));
+        propsR.put(TextConstants.OPTION_IGNORE_READLINE_ERROR, new Value(true));
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
