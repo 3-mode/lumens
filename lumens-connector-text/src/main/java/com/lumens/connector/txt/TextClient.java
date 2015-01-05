@@ -105,13 +105,17 @@ public class TextClient {
                     Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote);
                     result.add(build);
                 }
+                reader.close();
+                reader = null;
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
-        }finally{
-            try{
-                reader.close();
-            }catch (Exception ex) {                
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (Exception ex) {
             }
         }
 
@@ -177,6 +181,7 @@ public class TextClient {
             
             writer.flush();
             writer.close();
+            writer = null;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
