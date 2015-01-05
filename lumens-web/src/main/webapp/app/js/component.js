@@ -278,6 +278,48 @@ Lumens.DataComponent = Lumens.Component.$extend({
             return;
         this.getCompData().transform_rule_entry = ruleEntryList;
     },
+    removeRuleEntry: function (ruleName) {
+        if (!this.isDataSource()) {
+            var ruleList = this.getRuleEntryList();
+            for (var i in ruleList) {
+                if (ruleList[i].name === ruleName) {
+                    var ruleEntry = ruleList[i];
+                    ruleList.splice(i, 1);
+                    return ruleEntry;
+                }
+            }
+        }
+    },
+    removeInputFormat: function (regName) {
+        var formatEntry = null;
+        if (this.isDataSource()) {
+            formatEntry = this.getFormatEntryList("IN");
+        } else if (this.hasFrom()) {
+            formatEntry = this.getFrom(0).getFormatEntryList("OUT");
+        }
+        if (formatEntry)
+            for (var i in formatEntry)
+                if (formatEntry[i].name === regName) {
+                    var format = formatEntry[i].format;
+                    formatEntry.splice(i, 1);
+                    return format;
+                }
+    },
+    removeOutputFormat: function (regName) {
+        var formatEntry = null;
+        if (this.isDataSource()) {
+            formatEntry = this.getFormatEntryList("OUT");
+        } else if (this.hasTo()) {
+            formatEntry = this.getTo(0).getFormatEntryList("IN");
+        }
+        if (formatEntry)
+            for (var i in formatEntry)
+                if (formatEntry[i].name === regName) {
+                    var format = formatEntry[i].format;
+                    formatEntry.splice(i, 1);
+                    return format;
+                }
+    },
     getInputFormat: function (regName) {
         var formatEntry = null;
         if (this.isDataSource()) {

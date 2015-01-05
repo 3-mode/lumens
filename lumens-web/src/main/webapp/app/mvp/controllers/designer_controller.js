@@ -369,7 +369,12 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         } else if (id_btn === "id_rule_delete") {
             // TODO delete transform rulle
             // TODO delete register format from source and target components
-            console.log("Delete transform rule item", $scope.transformRuleEntryList[$scope.selectIndex].name);
+            console.log("Delete rule: ", $scope.transformRuleEntryList[$scope.selectIndex]);
+            if ($scope.currentUIComponent) {
+                $scope.currentUIComponent.removeInputFormat($scope.transformRuleEntryList[$scope.selectIndex].source_format_name);
+                $scope.currentUIComponent.removeOutputFormat($scope.transformRuleEntryList[$scope.selectIndex].target_format_name);
+                $scope.currentUIComponent.removeRuleEntry($scope.transformRuleEntryList[$scope.selectIndex].name);
+            }
         }
     };
 
@@ -379,9 +384,9 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         $scope.inputFormatRegName = ruleEntry.source_format_name;
         $scope.outputFormatRegName = ruleEntry.target_format_name;
         $scope.ruleRegName = ruleEntry.name;
-        var inFormat = $scope.currentUIComponent.hasFrom() ? $scope.currentUIComponent.getFrom(0).getOutputFormat($scope.inputFormatRegName) : null;
+        var inFormat = $scope.currentUIComponent.hasFrom() ? $scope.currentUIComponent.getInputFormat($scope.inputFormatRegName) : null;
         $scope.inputSelectedFormatName = inFormat ? inFormat.name : null;
-        var outFormat = $scope.currentUIComponent.hasTo() ? $scope.currentUIComponent.getTo(0).getInputFormat($scope.outputFormatRegName) : null;
+        var outFormat = $scope.currentUIComponent.hasTo() ? $scope.currentUIComponent.getOutputFormat($scope.outputFormatRegName) : null;
         $scope.outputSelectedFormatName = outFormat ? outFormat.name : null;
         $scope.ruleData = {rule_entry: ruleEntry, format_entry: outFormat};
         showRuleEditor();

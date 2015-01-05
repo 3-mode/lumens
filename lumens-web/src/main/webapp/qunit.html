@@ -8,7 +8,13 @@
         <title>JAMES</title> 
         <!-- 3rd Party Specific CSS -->
         <link rel="stylesheet" href="libs/jquery/css/smoothness/jquery-ui-1.10.0.css">
+        <link rel="stylesheet" href="libs/codemirror/codemirror.css">
+        <link rel="stylesheet" href="libs/codemirror/theme/eclipse.css">
         <link rel="stylesheet" href="libs/morris/morris.css">
+        <link rel="stylesheet" href="libs/jqplot/jquery.jqplot.css">
+        <link rel="stylesheet" href="libs/bootstrap/datetimepicker/css/bootstrap-datetimepicker.css">
+        <link rel="stylesheet" href="libs/pnotify/css/pnotify.css">
+        <!-- QUnit -->
         <link rel="stylesheet" href="libs/qunit/qunit.css">
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="app/css/lumens_bootstrap.css">
@@ -17,13 +23,21 @@
         <!-- 3rd Party JS Plugins -->
         <script src="libs/jquery/js/jquery.js"></script>
         <script src="libs/jquery/js/jquery-ui.js"></script>
-        <script src="libs/bootstrap/js/bootstrap.js"></script>
+        <script src="libs/bootstrap/js/bootstrap.min.js"></script>
+        <script src="libs/bootstrap/datetimepicker/js/bootstrap-datetimepicker.js"></script>
         <script src="libs/raphael/raphael-min.js"></script>
-        <script src="libs/morris/morris.min.js"></script>
+        <script src="libs/walmik/timer.jquery.min.js"></script> 
+        <script src="libs/morris/morris.min.js"></script> 
+        <script src="libs/jqplot/jquery.jqplot.js"></script>
+        <script src="libs/jqplot/plugins/jqplot.categoryAxisRenderer.js"></script>
+        <script src="libs/jqplot/plugins/jqplot.donutRenderer.js"></script>
+        <script src="libs/jqplot/plugins/jqplot.pieRenderer.js"></script>
+        <script src="libs/codemirror/codemirror.js"></script>
+        <script src="libs/codemirror/mode/javascript/javascript.js"></script>
+        <script src="libs/pnotify/pnotify.js"></script>
         <script src="libs/classy.js"></script>
         <script src="libs/json2.js"></script>
         <script src="libs/base64.js"></script>
-        <script src="libs/qunit/qunit.js"></script>
         <!-- Application JS  -->
         <script src="app/bootstrap.js"></script>
         <script src="app/i18n/en_US.js"></script>
@@ -35,6 +49,7 @@
         <script src="app/js/list.js"></script> 
         <script src="app/js/tree.js"></script>
         <script src="app/js/component.js"></script>
+        <script src="app/js/message.js"></script>
         <script src="app/js/project.js"></script>
         <script src="app/js/formatpath.js"></script>
         <script src="app/js/functions.js"></script>
@@ -42,36 +57,34 @@
         <script src="libs/angular/angular.js"></script>
         <script src="libs/angular/angular-route.js"></script>
         <script src="libs/angular/angular-resource.js"></script>
+        <!-- QUnit -->
+        <script src="libs/qunit/qunit.js"></script>
         <!-- Application Entry JS -->
         <script src="app/lumens.js"></script>
         <!-- Application Angular Modules -->
+        <script src="app/mvp/services/ajax_services.js"></script>
+        <script src="app/mvp/services/view_services.js"></script>
+        <script src="app/mvp/services/format_services.js"></script>
+        <script src="app/mvp/services/rule_services.js"></script>
+        <script src="app/mvp/directives.js"></script>
         <script src="app/mvp/controllers/main_controller.js"></script>
         <script src="app/mvp/controllers/dashboard_controller.js"></script>
         <script src="app/mvp/controllers/manage_controller.js"></script>
         <script src="app/mvp/controllers/designer_controller.js"></script>
-        <script src="app/mvp/directives.js"></script>
-        <script src="app/mvp/services.js"></script>
         <script type="text/javascript">
             var appModule = angular.module('LumensQUnit', ["lumens-directives", "lumens-services", "lumens-controllers", "ngRoute"]);
-            function MainQUnitCtrl($scope, $http, FormatRegister) {
-                $http.get("app/mock/json/hr_tables.json").success(function (data) {
-                    console.log("Mocked data:", data);
-                    $scope.displaySourceFormatList = $scope.displayTargetFormatList = data;
-                    $scope.inputFormatRegName = "JOBS-Source";
-                    $scope.inputSelectedFormatName = "JOBS";
-                    $scope.outputFormatRegName = "DEPART-Target"
-                    $scope.outputSelectedFormatName = "DEPARTMENTS";
-                    $http.get("app/mock/json/rule_count-depart.json").success(function (rule) {
-                        $scope.transformRuleEntity = rule;
-                        FormatRegister.build($scope);
-                        QUnit.test("Register Format testing", function (assert) {
-                            assert.ok(1 == "1", "Passed!");
-                        });
-                        QUnit.test("Register Format testing 2", function (assert) {
-                            assert.ok(1 == "1", "Passed!");
-                        });
-                    })
-                })
+            function MainQUnitCtrl($scope, $http) {
+                var array = ["test1", "test2", "test3"];
+                console.log("before delete ", array);
+                delete array[1];
+                console.log("after delete ", array);
+
+                QUnit.test("Register Format testing", function (assert) {
+                    assert.ok(1 == "1", "Passed!");
+                });
+                QUnit.test("Register Format testing 2", function (assert) {
+                    assert.ok(1 == "1", "Passed!");
+                });
             }
         </script>
     </head>
