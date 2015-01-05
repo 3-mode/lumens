@@ -272,11 +272,11 @@ public class ProjectJsonParser {
                 JsonNode tgtJson = transformRuleEntryJson.get("target_id");
                 JsonNode srcFmtJson = transformRuleEntryJson.get("source_format_name");
                 JsonNode tgtFmtJson = transformRuleEntryJson.get("target_format_name");
-                if (isNotNull(nameJson) && isNotNull(srcJson) && isNotNull(tgtJson) && isNotNull(srcFmtJson) && isNotNull(tgtFmtJson)) {
+                if (isNotNull(nameJson) && isNotNull(tgtJson) && isNotNull(tgtFmtJson)) {
                     JsonNode transformRuleJson = transformRuleEntryJson.get("transform_rule");
                     TransformRule tr = readTransformRuleFromJson(dt, tgtJson.asText(), tgtFmtJson.asText(), transformRuleJson);
                     if (tr != null) {
-                        TransformRuleEntry transformRuleEntry = new TransformRuleEntry(nameJson.asText(), srcJson.asText(), srcFmtJson.asText(), tgtJson.asText(), tgtFmtJson.asText(), tr);
+                        TransformRuleEntry transformRuleEntry = new TransformRuleEntry(nameJson.asText(), isNotNull(srcJson) ? srcJson.asText() : "", isNotNull(srcFmtJson) ? srcFmtJson.asText() : "", tgtJson.asText(), tgtFmtJson.asText(), tr);
                         dt.registerRule(transformRuleEntry);
                     }
                 }
