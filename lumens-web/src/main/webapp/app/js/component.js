@@ -127,6 +127,12 @@ Lumens.Component = Class.$extend({
         this.$to_list = [];
         this.$from_list = [];
     },
+    updateSelect: function (isSelect) {
+        if (isSelect)
+            this.$elem.addClass("data-comp-select");
+        else
+            this.$elem.removeClass("data-comp-select");
+    },
     setShortDescription: function (shortDesc) {
         this.$elem.find('#id-shortdsc').text(shortDesc);
     },
