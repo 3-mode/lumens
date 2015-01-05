@@ -41,7 +41,7 @@ public class TextElementBuilder implements TextConstants{
             // TODO: support specific escape char quote char. Need to build customize pattern  
         }else{                   
             try{
-                values.addAll(RFC4180Parser.ParserField(curline));
+                values.addAll(RFC4180Parser.ParseField(curline));
             }catch(PatternSyntaxException ex){
                 throw ex;
             }          
