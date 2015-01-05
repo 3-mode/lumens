@@ -32,11 +32,8 @@ public class OracleOperation implements Operation, OracleConstants {
             List<Element> results = new ArrayList<>();
             for (Element elem : input) {
                 Element action = elem.getChild(SQLPARAMS).getChild(ACTION);
-                if (action == null || action.getValue() == null) {
-                    throw new Exception("'action' is mandatory");
-                }
-                String operation = action.getValue().getString();
-                if (SELECT.equalsIgnoreCase(operation)) {
+                String operation = (action == null || action.getValue() == null) ? null : action.getValue().getString();
+                if (operation == null || SELECT.equalsIgnoreCase(operation)) {
                     OracleQuerySQLBuilder sql = new OracleQuerySQLBuilder(output);
                     String SQL = sql.generateSelectSQL(elem);
                     List<Element> result = client.executeQuery(SQL, elementBuilder, output);
