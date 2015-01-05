@@ -6,6 +6,7 @@ package com.lumens.lumens.scheduler;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import java.util.Date;
 
 
 /**
@@ -14,6 +15,6 @@ import org.quartz.JobExecutionException;
  */
 public class DefaultJob implements Job{
     public void execute(JobExecutionContext jec) throws JobExecutionException{     
-        System.out.println("Hello! Default job is running");
+        System.out.println("[" + (new Date()) + "]" + jec.getTrigger().getKey().getName() + " job is running");
     }
 }
