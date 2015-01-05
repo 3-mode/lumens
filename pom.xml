@@ -70,7 +70,8 @@
         <module>lumens-connector-sqlserver</module>
         <module>lumens-connector-text</module>
         <module>lumens-management</module>
-    </modules>
+        <module>lumens-scheduler</module>
+  </modules>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
