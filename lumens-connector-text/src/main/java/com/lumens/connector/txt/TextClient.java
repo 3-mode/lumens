@@ -92,14 +92,13 @@ public class TextClient {
                 while ((line = reader.readLine()) != null) {
                     if (line.isEmpty() && ignoreEmptyLine) {
                         continue;
-                    }                    
-                    if (maxLine > 0 && --maxLine <= 0) {
-                        break;
-                    }
-                                        
+                    }         
                     if (firstLineAsTitle){
                         firstLineAsTitle = false;
                         continue;
+                    }       
+                    if (maxLine > 0 && --maxLine <= 0) {
+                        break;
                     }
                     
                     Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote);
