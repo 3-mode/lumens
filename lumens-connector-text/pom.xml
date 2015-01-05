@@ -6,6 +6,7 @@
     <groupId>com.lumens</groupId>
     <artifactId>lumens</artifactId>
     <version>1.0</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
   <groupId>com.lumens</groupId>
   <artifactId>lumens-connector-text</artifactId>
