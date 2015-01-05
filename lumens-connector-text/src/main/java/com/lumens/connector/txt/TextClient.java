@@ -90,11 +90,11 @@ public class TextClient {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    if (maxLine > 0 && --maxLine <= 0) {
-                        break;
-                    }
                     if (line.isEmpty() && ignoreEmptyLine) {
                         continue;
+                    }                    
+                    if (maxLine > 0 && --maxLine <= 0) {
+                        break;
                     }
                                         
                     if (firstLineAsTitle){
