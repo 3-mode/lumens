@@ -59,7 +59,7 @@ public class TextClient {
         boolean ignoreEmptyLine = param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE) == null ?
                 propList.get(TextConstants.OPTION_IGNORE_EMPTYLINE).getBoolean():
                 param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE).getValue().getBoolean();
-        boolean formatAsTitle = param.getChild(TextConstants.OPTION_FORMAT_ASTITLE) == null
+        boolean firstLineAsTitle = param.getChild(TextConstants.OPTION_FIRST_LINE_ASTITLE) == null
                 ? propList.get(TextConstants.OPTION_FORMAT_ASTITLE).getBoolean()
                 : param.getChild(TextConstants.OPTION_FORMAT_ASTITLE).getValue().getBoolean();        
         int maxLine = param.getChild(TextConstants.OPTION_MAXLINE) == null ?
@@ -96,10 +96,10 @@ public class TextClient {
                     if (line.isEmpty() && ignoreEmptyLine) {
                         continue;
                     }
-                    
-                    // TODO: deal with title while reading 
-                    if (formatAsTitle){
-                        
+                                        
+                    if (firstLineAsTitle){
+                        firstLineAsTitle = false;
+                        continue;
                     }
                     
                     Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote);
