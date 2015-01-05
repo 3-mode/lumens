@@ -23,6 +23,8 @@ public class RFC4180Parser {
     private final static String NON_ESCAPE = String.format("(?:%s)+", TEXTDATA);
     // "([\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"|(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+
     private final static String FIELD = String.format("%s|%s", ESCAPE, NON_ESCAPE);
+    
+    private final static Pattern defaultPattern = Pattern.compile(FIELD);
        
     public static String GetTextDataPattern(){
         return TEXTDATA;
@@ -41,8 +43,8 @@ public class RFC4180Parser {
     }
     
     // PatternSyntaxException throw if Pattern parse error
-    public static List<String> ParserField(String pattern, String field) throws PatternSyntaxException{        
-        Pattern p = Pattern.compile(pattern);
+    public static List<String> ParseField(String pattern, String field) throws PatternSyntaxException{        
+        Pattern p = pattern.equals(FIELD) ? defaultPattern : Pattern.compile(pattern);
         Matcher m = p.matcher(field);
         
         List<String> list = new ArrayList();
@@ -53,7 +55,7 @@ public class RFC4180Parser {
         return list;
     }    
     
-    public static List<String> ParserField(String field){   
-        return ParserField(FIELD, field);
+    public static List<String> ParseField(String field){   
+        return ParseField(FIELD, field);
     }
 }
