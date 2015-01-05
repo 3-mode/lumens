@@ -211,7 +211,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         if (response && response.status === "OK")
             Notifier.message("info", "Success", response.result_content);
         else
-            Notifier.message("error", "Error", response.result_content);
+            Notifier.message("error", "Error", response.error_message);
     }
     $scope.onCommand = function (id) {
         if ("id_open" === id) {
@@ -318,7 +318,6 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
     LumensLog.log("In ProjectCreateCtrl", $element);
     var i18n = $scope.i18n;
     var projectInfoContent = $element.find(".modal-body");
-    var messageBox = $scope.messageBox;
     var projectOperator = $scope.projectOperator;
     $scope.createProject = function () {
         if ($scope.projectName) {
@@ -437,42 +436,42 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
     }
     var projectOperator = $scope.projectOperator;
     if ($scope.currentComponent && $scope.currentComponent.type === "type-transformer") {
-        var sourceComponentID, targetComponentID;
-        if ($scope.currentUIComponent.hasFrom())
-            sourceComponentID = $scope.currentUIComponent.getFrom(0).getId();
-        if ($scope.currentUIComponent.hasTo())
-            targetComponentID = $scope.currentUIComponent.getTo(0).getId();
-
-        if (sourceComponentID) {
-            FormatList.getOUT({project_id: projectOperator.get().projectId, component_id: sourceComponentID}, function (result) {
-                if (result.status === "OK") {
-                    $scope.sourceFormatList = {
-                        project_id: projectOperator.get().projectId,
-                        component_id: targetComponentID,
-                        direction: 'OUT',
-                        format_entity: result.content.format_entity
-                    };
-                    $scope.displaySourceFormatList = $scope.sourceFormatList;
-                    $scope.onCommand("id_format_reg_filter_btn", "left");
-                }
-                else
-                    Notifier.message("error", "Error", result.error_message);
-            });
+        if ($scope.currentUIComponent.hasFrom()) {
+            var sourceComponentID = $scope.currentUIComponent.getFrom(0).getId();
+            if (sourceComponentID) {
+                FormatList.getOUT({project_id: projectOperator.get().projectId, component_id: sourceComponentID}, function (result) {
+                    if (result.status === "OK") {
+                        $scope.sourceFormatList = {
+                            project_id: projectOperator.get().projectId,
+                            component_id: sourceComponentID,
+                            direction: 'OUT',
+                            format_entity: result.content.format_entity
+                        };
+                        $scope.displaySourceFormatList = $scope.sourceFormatList;
+                        $scope.onCommand("id_format_reg_filter_btn", "left");
+                    }
+                    else
+                        Notifier.message("error", "Error", result.error_message);
+                });
+            }
         }
-        if (targetComponentID) {
-            FormatList.getIN({project_id: projectOperator.get().projectId, component_id: targetComponentID}, function (result) {
-                if (result.status === "OK") {
-                    $scope.targetFormatList = {
-                        project_id: projectOperator.get().projectId,
-                        component_id: targetComponentID,
-                        direction: 'IN',
-                        format_entity: result.content.format_entity
-                    };
-                    $scope.displayTargetFormatList = $scope.targetFormatList;
-                    $scope.onCommand("id_format_reg_filter_btn", "right");
-                } else
-                    Notifier.message("error", "Error", result.error_message);
-            });
+        if ($scope.currentUIComponent.hasTo()) {
+            var targetComponentID = $scope.currentUIComponent.getTo(0).getId();
+            if (targetComponentID) {
+                FormatList.getIN({project_id: projectOperator.get().projectId, component_id: targetComponentID}, function (result) {
+                    if (result.status === "OK") {
+                        $scope.targetFormatList = {
+                            project_id: projectOperator.get().projectId,
+                            component_id: targetComponentID,
+                            direction: 'IN',
+                            format_entity: result.content.format_entity
+                        };
+                        $scope.displayTargetFormatList = $scope.targetFormatList;
+                        $scope.onCommand("id_format_reg_filter_btn", "right");
+                    } else
+                        Notifier.message("error", "Error", result.error_message);
+                });
+            }
         }
 
         $scope.onCommand = function (btn_id, side, evt) {

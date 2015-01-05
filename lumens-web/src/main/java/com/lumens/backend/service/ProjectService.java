@@ -119,7 +119,7 @@ public class ProjectService implements ServiceConstants {
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
             json.writeStringField("status", "OK");
-            json.writeStringField("message", "executing is invoked");
+            json.writeStringField("result_content", "executing is invoked");
             json.writeEndObject();
             return Response.ok().entity(utility.toUTF8String()).build();
         } catch (Exception ex) {
