@@ -20,7 +20,8 @@ import java.util.Map;
 class OracleConnector implements Connector, DatabaseConstants {
 
     private OracleClient dbClient;
-    private Map<String, Format> tables;
+    private Map<String, Format> inTables;
+    private Map<String, Format> outTables;
     private String ojdbcURL;
     private String connURL;
     private String user;
@@ -46,15 +47,17 @@ class OracleConnector implements Connector, DatabaseConstants {
         }
         isOpen = false;
         dbClient = null;
-        tables = null;
-
+        inTables = null;
+        outTables = null;
     }
 
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
-        if (tables == null)
-            tables = dbClient.getFormatList(direction, fullLoad);
-        return tables;
+        if (inTables == null && Direction.IN == direction)
+            inTables = dbClient.getFormatList(direction, fullLoad);
+        else if (outTables == null && Direction.OUT == direction)
+            outTables = dbClient.getFormatList(direction, fullLoad);
+        return Direction.IN == direction ? inTables : outTables;
     }
 
     @Override
