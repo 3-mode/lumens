@@ -36,12 +36,12 @@ public class TextOperation implements Operation {
                     throw new Exception("'operation' is mandatory");
 
                 String operation = oper.getValue().toString();
-                if (TextConstants.OPERATION_READ.equals(operation)) {
+                if (TextConstants.OPERATION_READ.equalsIgnoreCase(operation)) {
                     result.addAll(client.read(elem, fmt));
-                } else if (TextConstants.OPERATION_APPEND.equals(operation)) {
+                } else if (TextConstants.OPERATION_APPEND.equalsIgnoreCase(operation)) {
                     client.write(elem, true);
                 }
-                if (TextConstants.OPERATION_OVERWRITE.equals(operation)) {
+                if (TextConstants.OPERATION_OVERWRITE.equalsIgnoreCase(operation)) {
                     client.write(elem, false);
                 }
             }

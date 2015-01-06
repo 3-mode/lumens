@@ -24,12 +24,12 @@ import java.util.Iterator;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class TextFormatBuilder implements FormatBuilder {
+public class TextFormatBuilder implements FormatBuilder, TextConstants {
     private String xmlSchemaPath;
     private SAXReader schemaReader;
     private Element schemaRoot;
     private String encoding;
-    private Map<String, Value> propList;
+    private final Map<String, Value> propList;
     private boolean isInitalized = false;
 
     public TextFormatBuilder(Map<String, Value> props) {
@@ -52,35 +52,35 @@ public class TextFormatBuilder implements FormatBuilder {
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
-        }       
+        }
     }
 
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
-        if (!isInitalized){
+        if (!isInitalized) {
             throw new RuntimeException("TextFormatBuilder not initalized.");
         }
-        Map<String, Format> fmtList = new HashMap<>();        
+        Map<String, Format> fmtList = new HashMap<>();
         String rootName = schemaRoot.getName();
-        Attribute nameAttribute = schemaRoot.attribute(TextConstants.FORMAT_NAME);
-        String formatName = nameAttribute == null ? rootName : nameAttribute.getValue();        
-        
-        if (rootName.equalsIgnoreCase(TextConstants.FORMAT_FORMAT)) {
+        Attribute nameAttribute = schemaRoot.attribute(FORMAT_NAME);
+        String formatName = nameAttribute == null ? rootName : nameAttribute.getValue();
+
+        if (rootName.equalsIgnoreCase(FORMAT_FORMAT)) {
             Format rootFmt = new DataFormat(formatName, Form.STRUCT);
             fmtList.put(formatName, rootFmt);
-            
+
             // This encoding is for schema file itself rather than processing encoding
-            rootFmt.setProperty(TextConstants.SCHEMA_ENCODING, new Value(encoding));
-           
-            Format params = rootFmt.addChild(TextConstants.FORMAT_PARAMS, Form.STRUCT);
-            params.addChild(TextConstants.ENCODING, Form.FIELD, Type.STRING);
-            params.addChild(TextConstants.PATH, Form.FIELD, Type.STRING);
-            params.addChild(TextConstants.LINEDELIMITER, Form.FIELD, Type.STRING);
-            params.addChild(TextConstants.FILEDELIMITER, Form.FIELD, Type.STRING);
-            params.addChild(TextConstants.ESCAPE_CHAR, Form.FIELD, Type.STRING);
-            params.addChild(TextConstants.OPTION_MAXLINE, Form.FIELD, Type.STRING);
-            params.addChild(TextConstants.OPERATION, Form.FIELD, Type.STRING);
-            
+            rootFmt.setProperty(SCHEMA_ENCODING, new Value(encoding));
+
+            Format params = rootFmt.addChild(FORMAT_PARAMS, Form.STRUCT);
+            params.addChild(ENCODING, Form.FIELD, Type.STRING);
+            params.addChild(PATH, Form.FIELD, Type.STRING);
+            params.addChild(LINEDELIMITER, Form.FIELD, Type.STRING);
+            params.addChild(FILEDELIMITER, Form.FIELD, Type.STRING);
+            params.addChild(ESCAPE_CHAR, Form.FIELD, Type.STRING);
+            params.addChild(OPTION_MAXLINE, Form.FIELD, Type.STRING);
+            params.addChild(OPERATION, Form.FIELD, Type.STRING);
+
             getFormat(rootFmt, null, direction);
         }
 
@@ -88,46 +88,43 @@ public class TextFormatBuilder implements FormatBuilder {
     }
 
     @Override
-    public Format getFormat(Format format, String path, Direction direction) {   
-        if (!isInitalized){
+    public Format getFormat(Format format, String path, Direction direction) {
+        if (!isInitalized) {
             throw new RuntimeException("TextFormatBuilder not initalized.");
-        }        
+        }
         Iterator fieldItor = schemaRoot.elementIterator();
         while (fieldItor.hasNext()) {
             Element columnNode = (Element) fieldItor.next();
             String node = columnNode.getName();
-            if (node.equalsIgnoreCase(TextConstants.FORMAT_FIELD)) {
+            if (FORMAT_FIELD.equalsIgnoreCase(node)) {
                 Format field = null;
                 Iterator attrItor = columnNode.attributeIterator();
-
                 //Note that to be simply coding, the name in schema MUST be the first property
                 while (attrItor.hasNext()) {
                     Attribute attr = (Attribute) attrItor.next();
-                    String name = attr.getName();
-                    String value = attr.getValue();
-
+                    String attrName = attr.getName();
+                    String attrValue = attr.getValue();
                     // create field element
-                    if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_NAME) && !value.isEmpty()) {
-                        field = new DataFormat(value, Form.FIELD);   // set type later
-                        format.addChild(field);
-                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_KEY) && !value.isEmpty()) {
-                        field.setProperty(name, new Value(value));
-                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_TYPE) && !value.isEmpty()) {
-                        field.setType(Type.parseString(value));
-                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_NULLABLE) && !value.isEmpty()) {
-                        field.setProperty(name, new Value(value));
-                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_PATTERN) && !value.isEmpty()) {
-                        field.setProperty(name, new Value(value));
-                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_LENGTH) && !value.isEmpty()) {
-                        field.setProperty(name, new Value(Integer.parseInt(value)));
-                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_COMMENT) && !value.isEmpty()) {
-                        field.setProperty(name, new Value(value));
-                    } else if (name != null && name.equalsIgnoreCase(TextConstants.FORMAT_PRECISION) && !value.isEmpty()) {
-                        field.setProperty(name, new Value(Integer.parseInt(value)));
+                    if (FORMAT_NAME.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
+                        field = format.addChild(attrValue, Form.FIELD); // Set type later
+                    } else if (FORMAT_KEY.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
+                        field.setProperty(attrName, new Value(attrValue));
+                    } else if (FORMAT_TYPE.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
+                        field.setType(Type.parseString(attrValue));
+                    } else if (FORMAT_NULLABLE.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
+                        field.setProperty(attrName, new Value(attrValue));
+                    } else if (FORMAT_PATTERN.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
+                        field.setProperty(attrName, new Value(attrValue));
+                    } else if (FORMAT_LENGTH.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
+                        field.setProperty(attrName, new Value(Integer.parseInt(attrValue)));
+                    } else if (FORMAT_COMMENT.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
+                        field.setProperty(attrName, new Value(attrValue));
+                    } else if (FORMAT_PRECISION.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
+                        field.setProperty(attrName, new Value(Integer.parseInt(attrValue)));
                     }
                 }
             }
-        }        
+        }
 
         return format;
     }

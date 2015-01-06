@@ -18,114 +18,81 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.io.File;
-
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class TextClient {
-    String filepath;
-    BufferedReader reader;
-    BufferedWriter writer;
-    boolean bInit = false;
-    Map<String, Value> propList;
+    private String filepath;
+    private boolean bInit = false;
+    private Map<String, Value> propList;
 
     public TextClient(Map<String, Value> props) {
         propList = props;
     }
 
     public List<Element> read(Element elem, Format fmt) {
-        List<Element> result = new ArrayList();        
+        List<Element> result = new ArrayList();
         Element param = elem.getChild(TextConstants.FORMAT_PARAMS);
-        String encoding = param.getChild(TextConstants.ENCODING) == null ? 
-                propList.get(TextConstants.ENCODING).toString()         : 
-                param.getChild(TextConstants.ENCODING).getValue().toString();        
-        String path = param.getChild(TextConstants.PATH) == null ? 
-                propList.get(TextConstants.PATH).toString()     : 
-                param.getChild(TextConstants.PATH).getValue().toString();
-        String filter = param.getChild(TextConstants.FILE_FILTER) == null ? 
-                propList.get(TextConstants.FILE_FILTER).toString()     : 
-                param.getChild(TextConstants.FILE_FILTER).getValue().toString();        
-        String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null ?  
-                propList.get(TextConstants.FILEDELIMITER).toString()          : 
-                param.getChild(TextConstants.FILEDELIMITER).getValue().toString();
-        String escape = param.getChild(TextConstants.ESCAPE_CHAR) == null ? 
-                propList.get(TextConstants.ESCAPE_CHAR).toString()         : 
-                param.getChild(TextConstants.ESCAPE_CHAR).getValue().toString();
-        String quote = param.getChild(TextConstants.QUOTE_CHAR) == null ? 
-                propList.get(TextConstants.QUOTE_CHAR).toString()         : 
-                param.getChild(TextConstants.QUOTE_CHAR).getValue().toString();        
-        boolean ignoreEmptyLine = param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE) == null ?
-                propList.get(TextConstants.OPTION_IGNORE_EMPTYLINE).getBoolean():
-                param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE).getValue().getBoolean();
-        boolean firstLineAsTitle = param.getChild(TextConstants.OPTION_FIRST_LINE_ASTITLE) == null
-                ? propList.get(TextConstants.OPTION_FIRST_LINE_ASTITLE).getBoolean()
-                : param.getChild(TextConstants.OPTION_FIRST_LINE_ASTITLE).getValue().getBoolean();   
-        boolean ignoreReadlineError = param.getChild(TextConstants.OPTION_IGNORE_READLINE_ERROR) == null
-                ? propList.get(TextConstants.OPTION_IGNORE_READLINE_ERROR).getBoolean()
-                : param.getChild(TextConstants.OPTION_IGNORE_READLINE_ERROR).getValue().getBoolean(); 
-        int maxLine = param.getChild(TextConstants.OPTION_MAXLINE) == null ?
-                propList.get(TextConstants.OPTION_MAXLINE).getInt():
-                param.getChild(TextConstants.OPTION_MAXLINE).getValue().getInt();
-        
-        if (delimiter.equals(escape)){
+        String encoding = param.getChild(TextConstants.ENCODING) == null ? propList.get(TextConstants.ENCODING).toString() : param.getChild(TextConstants.ENCODING).getValue().toString();
+        String path = param.getChild(TextConstants.PATH) == null ? propList.get(TextConstants.PATH).toString() : param.getChild(TextConstants.PATH).getValue().toString();
+        String filter = param.getChild(TextConstants.FILE_FILTER) == null ? propList.get(TextConstants.FILE_FILTER).toString() : param.getChild(TextConstants.FILE_FILTER).getValue().toString();
+        String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null ? propList.get(TextConstants.FILEDELIMITER).toString() : param.getChild(TextConstants.FILEDELIMITER).getValue().toString();
+        String escape = param.getChild(TextConstants.ESCAPE_CHAR) == null ? propList.get(TextConstants.ESCAPE_CHAR).toString() : param.getChild(TextConstants.ESCAPE_CHAR).getValue().toString();
+        String quote = param.getChild(TextConstants.QUOTE_CHAR) == null ? propList.get(TextConstants.QUOTE_CHAR).toString() : param.getChild(TextConstants.QUOTE_CHAR).getValue().toString();
+        boolean ignoreEmptyLine = param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE) == null ? propList.get(TextConstants.OPTION_IGNORE_EMPTYLINE).getBoolean() : param.getChild(TextConstants.OPTION_IGNORE_EMPTYLINE).getValue().getBoolean();
+        boolean firstLineAsTitle = param.getChild(TextConstants.OPTION_FIRST_LINE_ASTITLE) == null ? propList.get(TextConstants.OPTION_FIRST_LINE_ASTITLE).getBoolean() : param.getChild(TextConstants.OPTION_FIRST_LINE_ASTITLE).getValue().getBoolean();
+        boolean ignoreReadlineError = param.getChild(TextConstants.OPTION_IGNORE_READLINE_ERROR) == null ? propList.get(TextConstants.OPTION_IGNORE_READLINE_ERROR).getBoolean() : param.getChild(TextConstants.OPTION_IGNORE_READLINE_ERROR).getValue().getBoolean();
+        int maxLine = param.getChild(TextConstants.OPTION_MAXLINE) == null ? propList.get(TextConstants.OPTION_MAXLINE).getInt() : param.getChild(TextConstants.OPTION_MAXLINE).getValue().getInt();
+
+        if (delimiter.equals(escape)) {
             throw new RuntimeException("Delimiter should not be equal to escape char.");
         }
-        
-        try {
-            // Add file list
-            List<File> files = new ArrayList();
-            File fileOrDir = new File(path);
-            if (!fileOrDir.exists()){
-                throw new RuntimeException("Path not exist!");
+
+        // Add file list
+        List<File> files = new ArrayList();
+        File fileOrDir = new File(path);
+        if (!fileOrDir.exists()) {
+            throw new RuntimeException("Path not exist!");
+        }
+        if (fileOrDir.isFile()) {
+            files.add(new File(path));
+        } else if (fileOrDir.isDirectory()) {
+            for (File f : fileOrDir.listFiles(new LocalFileNameFilter(filter))) {
+                if (f.isFile())
+                    files.add(f);
             }
-            if (fileOrDir.isFile()){
-                files.add(new File(path));
-            }else if (fileOrDir.isDirectory()){                
-                for(File f : fileOrDir.listFiles(new LocalFileNameFilter(filter))){                       
-                    if (f.isFile()) 
-                        files.add(f);                   
-                }                
-            }
-            
-            for( File file: files){
-                reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
+        }
+
+        for (File file : files) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     if (line.isEmpty() && ignoreEmptyLine) {
                         continue;
-                    }         
-                    if (firstLineAsTitle){
+                    }
+                    if (firstLineAsTitle) {
                         firstLineAsTitle = false;
                         continue;
-                    }       
-                    if (maxLine > 0 && --maxLine <= 0) {
-                        break;
                     }
-                    
-                    try{
+                    if (maxLine > 0 && --maxLine <= 0)
+                        break;
+                    try {
                         Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote);
                         result.add(build);
-                    }catch(Exception ex){
-                        if (ignoreReadlineError){
-                            continue;
-                        }else{
+                    } catch (Exception ex) {
+                        if (!ignoreReadlineError)
                             throw new RuntimeException(ex);
-                        }
-                    }                    
-                }
-                reader.close();
-                reader = null;
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        } finally {
-            try {
-                if (reader != null) {
-                    reader.close();
+                    }
                 }
             } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         }
 
@@ -133,52 +100,34 @@ public class TextClient {
     }
 
     public void write(Element elem, boolean append) {
-        Element param = elem.getChild(TextConstants.FORMAT_PARAMS);        
-        String encoding = param.getChild(TextConstants.ENCODING) == null
-                ? propList.get(TextConstants.ENCODING).toString()
-                : param.getChild(TextConstants.ENCODING).getValue().toString();
-        String path = param.getChild(TextConstants.PATH) == null
-                ? propList.get(TextConstants.PATH).toString()
-                : param.getChild(TextConstants.PATH).getValue().toString();
-        String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null
-                ? propList.get(TextConstants.FILEDELIMITER).toString()
-                : param.getChild(TextConstants.FILEDELIMITER).getValue().toString();
-        String linedelimter = param.getChild(TextConstants.LINEDELIMITER) == null
-                ? propList.get(TextConstants.LINEDELIMITER).toString()
-                : param.getChild(TextConstants.LINEDELIMITER).getValue().toString();
-        boolean formatAsTitle = param.getChild(TextConstants.OPTION_FORMAT_ASTITLE) == null
-                ? propList.get(TextConstants.OPTION_FORMAT_ASTITLE).getBoolean()
-                : param.getChild(TextConstants.OPTION_FORMAT_ASTITLE).getValue().getBoolean();
-        
-        try {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), encoding));
-            
+        Element param = elem.getChild(TextConstants.FORMAT_PARAMS);
+        String encoding = param.getChild(TextConstants.ENCODING) == null ? propList.get(TextConstants.ENCODING).toString() : param.getChild(TextConstants.ENCODING).getValue().toString();
+        String path = param.getChild(TextConstants.PATH) == null ? propList.get(TextConstants.PATH).toString() : param.getChild(TextConstants.PATH).getValue().toString();
+        String delimiter = param.getChild(TextConstants.FILEDELIMITER) == null ? propList.get(TextConstants.FILEDELIMITER).toString() : param.getChild(TextConstants.FILEDELIMITER).getValue().toString();
+        String linedelimter = param.getChild(TextConstants.LINEDELIMITER) == null ? propList.get(TextConstants.LINEDELIMITER).toString() : param.getChild(TextConstants.LINEDELIMITER).getValue().toString();
+        boolean formatAsTitle = param.getChild(TextConstants.OPTION_FORMAT_ASTITLE) == null ? propList.get(TextConstants.OPTION_FORMAT_ASTITLE).getBoolean() : param.getChild(TextConstants.OPTION_FORMAT_ASTITLE).getValue().getBoolean();
+
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), encoding))) {
             String line = "";
             String title = "";
             for (Element field : elem.getChildren()) {
-                if (field.getFormat().getName().equalsIgnoreCase(TextConstants.FORMAT_PARAMS)){
+                if (TextConstants.FORMAT_PARAMS.equalsIgnoreCase(field.getFormat().getName()))
                     continue;
-                }
-                    
-                if (formatAsTitle && !title.isEmpty()) {
+                if (formatAsTitle && !title.isEmpty())
                     title += delimiter;
-                }                
-                if (formatAsTitle) {
+                if (formatAsTitle)
                     title += field.getFormat().getName();
-                }
-
-                if (!line.isEmpty()) {
+                if (!line.isEmpty())
                     line += delimiter;
-                }
                 line += field.getValue().toString();
             }
+
             if (formatAsTitle) {
                 writer.write(title);
-                if (linedelimter.isEmpty()) {
+                if (linedelimter.isEmpty())
                     writer.newLine();
-                } else {
+                else
                     writer.write(linedelimter);
-                }
                 formatAsTitle = false;
             }
 
@@ -188,10 +137,8 @@ public class TextClient {
             } else {
                 writer.write(linedelimter);
             }
-            
+
             writer.flush();
-            writer.close();
-            writer = null;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
