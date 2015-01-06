@@ -4,18 +4,15 @@
 package com.lumens.backend.service;
 
 import com.lumens.backend.ApplicationContext;
+import com.lumens.backend.DataElementLoggingHandler;
 import com.lumens.connector.Direction;
-import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.resource.DataSource;
-import com.lumens.engine.handler.LastResultHandler;
 import com.lumens.engine.handler.ResultHandler;
 import com.lumens.engine.run.SingleThreadTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.io.JsonUtility;
-import com.lumens.model.Element;
 import com.lumens.model.Format;
-import com.lumens.model.serializer.ElementSerializer;
 import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.Pair;
 import com.lumens.backend.ServerUtils;
@@ -27,7 +24,6 @@ import com.lumens.backend.sql.dao.ProjectDAO;
 import com.lumens.backend.sql.entity.Project;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,20 +95,8 @@ public class ProjectService implements ServiceConstants {
             TransformProject projectInstance = new TransformProject();
             new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
             // Execute all start rules to drive the ws connector
-            class MyResultHandler implements LastResultHandler {
-
-                @Override
-                public void process(TransformComponent src, String resultName, List<Element> results) {
-                    try {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        new ElementSerializer(results.get(0), true).writeToJson(baos);
-                        ApplicationContext.get().cacheResultString(baos.toString());
-                    } catch (Exception ex) {
-                    }
-                }
-            }
             List<ResultHandler> handlers = new ArrayList<>();
-            handlers.add(new MyResultHandler());
+            handlers.add(new DataElementLoggingHandler());
             ApplicationContext.get().getTransformEngine().execute(new SingleThreadTransformExecuteJob(projectInstance, handlers));
             // TODO to run the project job
             JsonUtility utility = JsonUtility.createJsonUtility();

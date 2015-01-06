@@ -44,15 +44,18 @@ public class ServiceTest {
             //assertEquals(3, projectInstance.getDataTransformerList().size());
             //assertEquals(4, projectInstance.getDatasourceList().size());
             class MyResultHandler implements TransformerResultHandler {
-
                 @Override
-                public void process(TransformComponent src, String resultName, List<Element> results) {
+                public void processOutput(TransformComponent src, String targetName, List<Element> output) {
                     try {
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        new ElementSerializer(results.get(0), true).writeToJson(baos);
+                        new ElementSerializer(output.get(0), true).writeToJson(baos);
                         System.out.println(baos.toString());
                     } catch (Exception ex) {
                     }
+                }
+
+                @Override
+                public void processInput(TransformComponent src, String targetName, List<Element> input) {
                 }
             }
             List<ResultHandler> handlers = new ArrayList<>();

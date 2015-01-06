@@ -188,12 +188,15 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                 function tabTransformationList($tabContent) {
                     $tabContent.append($compile($scope.transformListTemplate)($scope));
                 }
+                function tabExecOnceResult($tabContent) {
+                }
                 desgin.tabs = new Lumens.TabPanel(desgin.tabsContainer.getElement());
                 desgin.tabs.configure({
                     tab: [
                         {id: "id-project-info", label: "Project Summary", content: tabSummary},
                         {id: "id-component-selected-props", label: "Component Properties", content: tabConfiguration},
-                        {id: "id-component-transformation-list", label: "Transformations", content: tabTransformationList}
+                        {id: "id-component-transformation-list", label: "Transformations", content: tabTransformationList},
+                        {id: "id-component-exec-once-result", label: "Execute Once Result", content: tabExecOnceResult}
                     ]
                 });
             })
