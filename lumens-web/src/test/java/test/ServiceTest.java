@@ -5,7 +5,9 @@ package test;
 
 import com.lumens.backend.ApplicationContext;
 import com.lumens.backend.sql.DAOFactory;
+import com.lumens.backend.sql.dao.InOutLogDAO;
 import com.lumens.backend.sql.dao.ProjectDAO;
+import com.lumens.backend.sql.entity.InOutLogItem;
 import com.lumens.backend.sql.entity.Project;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
@@ -13,11 +15,15 @@ import com.lumens.engine.handler.ResultHandler;
 import com.lumens.engine.handler.TransformerResultHandler;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
+import com.lumens.model.DateTime;
 import com.lumens.model.Element;
 import com.lumens.model.serializer.ElementSerializer;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import org.junit.Test;
 
@@ -67,6 +73,23 @@ public class ServiceTest {
 
     public void testDeleteProject() {
         ProjectDAO pDAO = DAOFactory.getProjectDAO();
-        pDAO.delete(1414288134865L);
+        pDAO.delete(0L);
     }
+
+    @Test
+    public void testPutLog() {
+        InOutLogDAO inoutLogDAO = DAOFactory.getInOutLogDAO();
+        InOutLogItem item = new InOutLogItem();
+        item.componentID = 100;
+        item.projectID = 1000;
+        item.direction = "IN";
+        item.targetName = "test";
+        item.data = "test";
+        DateFormat sf = DateTime.DATETIME_PATTERN[0];
+        String date = sf.format(Calendar.getInstance().getTime());
+        System.out.println(date);
+        item.lastModifTime = Timestamp.valueOf(date);
+        inoutLogDAO.create(item);
+    }
+
 }

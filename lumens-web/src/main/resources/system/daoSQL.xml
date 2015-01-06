@@ -37,4 +37,21 @@ DELETE FROM LUNS_PROJECT WHERE id = ?
 ]]>
         </sql>
     </database-access-object>
+    <database-access-object name="InOutLogDAO">
+        <sql name="GetLogByProject">
+<![CDATA[
+SELECT * FROM lUNS_INOUTLOG WHERE PROJECT_ID = ?
+]]>
+        </sql>
+        <sql name="GetLogByComponent">
+<![CDATA[
+SELECT * FROM lUNS_INOUTLOG WHERE PROJECT_ID = ? AND COMPONENT_ID = ?
+]]>
+        </sql>
+        <sql name="PutLog">
+<![CDATA[
+INSERT INTO lUNS_INOUTLOG (COMPNENT_ID, PROJECT_ID, DIRECTION, TARGET_NAME, DATA, LAST_MODIF_TIME) VALUES (?, ?, ?, ?, ?, ?)
+]]>
+        </sql>
+    </database-access-object>
 </database-access-objects>

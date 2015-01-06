@@ -6,7 +6,7 @@ package com.lumens.backend.sql.entity;
 import com.lumens.backend.sql.Column;
 import com.lumens.backend.sql.Table;
 
-@Table(name = "Project")
+@Table(name = "LUNS_PROJECT")
 public class Project {
 
     @Column(name = "id")

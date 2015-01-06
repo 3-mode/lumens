@@ -16,6 +16,11 @@ import java.util.List;
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
 public class DataElementLoggingHandler implements DataSourceResultHandler, TransformerResultHandler {
+    private final long projectID;
+
+    public DataElementLoggingHandler(long projectID) {
+        this.projectID = projectID;
+    }
 
     @Override
     public void processOutput(TransformComponent src, String targetName, List<Element> output) {

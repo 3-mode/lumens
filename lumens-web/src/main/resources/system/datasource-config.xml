@@ -30,6 +30,11 @@
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
         <property name="transactionTemplate" ref="transactionTemplate"/>
     </bean>
+    <bean id="inputLogDAO" class="com.lumens.backend.sql.dao.InOutLogDAO">
+        <property name="sqlManager" ref="sqlManager"/>
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="transactionTemplate" ref="transactionTemplate"/>
+    </bean>
 
     <bean id="sqlManager" class="com.lumens.backend.sql.SQLManager">
         <constructor-arg value="system/daoSQL.xml"/>

@@ -96,7 +96,7 @@ public class ProjectService implements ServiceConstants {
             new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
             // Execute all start rules to drive the ws connector
             List<ResultHandler> handlers = new ArrayList<>();
-            handlers.add(new DataElementLoggingHandler());
+            handlers.add(new DataElementLoggingHandler(projectID));
             ApplicationContext.get().getTransformEngine().execute(new SequenceTransformExecuteJob(projectInstance, handlers));
             // TODO to run the project job
             JsonUtility utility = JsonUtility.createJsonUtility();

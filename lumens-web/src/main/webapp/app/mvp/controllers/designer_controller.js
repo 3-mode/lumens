@@ -189,6 +189,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                     $tabContent.append($compile($scope.transformListTemplate)($scope));
                 }
                 function tabExecOnceResult($tabContent) {
+                    $tabContent.append($compile(TemplateService.get("app/templates/designer/exec_log_tmpl.html"))($scope));
                 }
                 desgin.tabs = new Lumens.TabPanel(desgin.tabsContainer.getElement());
                 desgin.tabs.configure({
@@ -617,4 +618,5 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
         $element.modal("hide");
     }
 })
-;
+.controller("ExecLogCtrl", function ($scope, $element) {
+});
