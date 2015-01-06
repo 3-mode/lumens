@@ -25,8 +25,8 @@ import java.io.File;
  */
 public class TextClient {
     private String filepath;
-    private boolean bInit = false;
-    private Map<String, Value> propList;
+    private final boolean bInit = false;
+    private final Map<String, Value> propList;
 
     public TextClient(Map<String, Value> props) {
         propList = props;
