@@ -1,5 +1,6 @@
 package com.lumens.connector.webservice.soap;
 
+import com.lumens.connector.ElementChunk;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.model.Element;
@@ -20,23 +21,12 @@ public class SoapOperation implements Operation {
     }
 
     @Override
-    public OperationResult execute(List<Element> input, Format output) throws Exception {
+    public OperationResult execute(ElementChunk input, Format output) throws Exception {
+        List<Element> dataList = input.getData();
         // TODO need to handle chunk
         SOAPEnvelope envelope = null;
-        if (!input.isEmpty())
-            envelope = client.execute(input.get(0));
+        if (!dataList.isEmpty())
+            envelope = client.execute(dataList.get(0));
         return new SoapResult(output, envelope);
-    }
-
-    @Override
-    public void begin() {
-    }
-
-    @Override
-    public void end() {
-    }
-
-    @Override
-    public void commit() {
     }
 }

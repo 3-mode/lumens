@@ -78,7 +78,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         assertNotNull(o);
     }
 
-    public void TtestSoapConnector() throws Exception {
+    public void testSoapConnector() throws Exception {
         Connector connector = new SoapConnectorFactory().createConnector();
         HashMap<String, Value> props = new HashMap<>();
         props.put(WSDL, new Value(getClass().getResource("/wsdl/IncidentManagement.wsdl").toString()));
@@ -87,16 +87,17 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         Map<String, Format> services = connector.getFormatList(Direction.IN);
         Format retrieveIncident = services.get("RetrieveIncident");
 
+        connector.getFormat(retrieveIncident, "RetrieveIncidentRequest", Direction.IN);
+
         connector.getFormat(retrieveIncident, "RetrieveIncidentRequest.model.instance", Direction.IN);
-        connector.getFormat(retrieveIncident, "RetrieveIncidentRequest.model.instance.attachments",
-                            Direction.IN);
+        connector.getFormat(retrieveIncident, "RetrieveIncidentRequest.model.instance.attachments", Direction.IN);
         new FormatSerializer(retrieveIncident).writeToXml(System.out);
         assertNotNull(retrieveIncident.getChildByPath("RetrieveIncidentRequest.model.instance.attachments.attachment"));
 
         TransformRule rule = new TransformRule(retrieveIncident);
-        rule.getRuleItem("RetrieveIncidentRequest.attachmentData").setScript("true");
-        rule.getRuleItem("RetrieveIncidentRequest.model.instance.AssigneeName").setScript("\'test\'");
-        rule.getRuleItem("RetrieveIncidentRequest.model.instance.ClosedTime").setScript("dateToString(now(), \"yyyy-MM-dd HH:mm:ss\")");
+        rule.getRuleItem("RetrieveIncident.RetrieveIncidentRequest.attachmentData").setScript("true");
+        rule.getRuleItem("RetrieveIncident.RetrieveIncidentRequest.model.instance.AssigneeName").setScript("\'test\'");
+        rule.getRuleItem("RetrieveIncident.RetrieveIncidentRequest.model.instance.ClosedTime").setScript("dateToString(now(), \"yyyy-MM-dd HH:mm:ss\")");
         Processor transformProcessor = new TransformMapper();
         List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
         new ElementSerializer(result.get(0), true).writeToXml(System.out);
@@ -114,7 +115,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         Format getOpenFundString = services.get("getOpenFundString");
         connector.getFormat(getOpenFundString, "getOpenFundString", Direction.IN);
         rule = new TransformRule(getOpenFundString);
-        rule.getRuleItem("getOpenFundString.userID").setScript("\"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\"");
+        rule.getRuleItem("getOpenFundString.getOpenFundString.userID").setScript("\"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\"");
         transformProcessor = new TransformMapper();
         result = (List<Element>) transformProcessor.execute(rule, null);
         new ElementSerializer(result.get(0), true).writeToXml(System.out);
@@ -124,7 +125,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         Format getOpenFundStringResp = services.get("getOpenFundString");
         connector.getFormat(getOpenFundStringResp, "getOpenFundStringResponse.getOpenFundStringResult.string.string", Direction.OUT);
         Operation op = connector.getOperation();
-        OperationResult opResult = op.execute(result, getOpenFundStringResp);
+        OperationResult opResult = op.execute(new ElementChunk(result), getOpenFundStringResp);
         List<Element> response = opResult.getResult();
         new ElementSerializer(response.get(0), true).writeToXml(System.out);
         new FormatSerializer(getOpenFundString).writeToXml(System.out);

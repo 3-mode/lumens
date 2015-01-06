@@ -5,6 +5,7 @@ package com.lumens.engine.connector;
 
 import com.lumens.connector.Connector;
 import com.lumens.connector.Direction;
+import com.lumens.connector.ElementChunk;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.model.DataElement;
@@ -50,19 +51,11 @@ public class ChameleonConnector implements Connector {
         return new Operation() {
 
             @Override
-            public void begin() {
-            }
+            public OperationResult execute(ElementChunk input, Format output) throws Exception {
 
-            @Override
-            public void end() {
-            }
-
-            @Override
-            public OperationResult execute(List<Element> input, Format output) throws Exception {
-
-                final List<Element> inputList = input;
+                final List<Element> inputList = input.getData();
                 final Format format = output;
-                if (input != null && !input.isEmpty()) {
+                if (inputList != null && !inputList.isEmpty()) {
                     if (output == null)
                         countFinal += inputList.size();
                 }
@@ -122,11 +115,6 @@ public class ChameleonConnector implements Connector {
                     }
                 };
             }
-
-            @Override
-            public void commit() {
-            }
-
         };
     }
 

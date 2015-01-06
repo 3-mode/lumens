@@ -4,9 +4,7 @@
  */
 package com.lumens.connector;
 
-import com.lumens.model.Element;
 import com.lumens.model.Format;
-import java.util.List;
 
 /**
  *
@@ -14,11 +12,6 @@ import java.util.List;
  */
 public interface Operation {
 
-    public void begin();
+    public OperationResult execute(ElementChunk input, Format output) throws Exception;
 
-    public void end();
-
-    public OperationResult execute(List<Element> input, Format output) throws Exception;
-
-    public void commit();
 }

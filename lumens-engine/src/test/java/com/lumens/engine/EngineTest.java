@@ -10,7 +10,7 @@ import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.component.instrument.DataTransformer;
 import com.lumens.engine.handler.ResultHandler;
-import com.lumens.engine.run.SingleThreadTransformExecuteJob;
+import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
@@ -155,8 +155,8 @@ public class EngineTest extends Assert implements SoapConstants {
         handlers.add(new MyResultHandler());
         TransformEngine stEngine = new TransformEngine();
 
-        stEngine.execute(new SingleThreadTransformExecuteJob(newProject, handlers));
-        stEngine.execute(new SingleThreadTransformExecuteJob(projectReaded));
+        stEngine.execute(new SequenceTransformExecuteJob(newProject, handlers));
+        stEngine.execute(new SequenceTransformExecuteJob(projectReaded));
         Thread.sleep(10000);
     }
 
@@ -169,7 +169,7 @@ public class EngineTest extends Assert implements SoapConstants {
         projXml.readFromXml(getResourceAsByteArrayInputStream("/xml/project.xml"));
         List<ResultHandler> handlers = new ArrayList<>();
         handlers.add(new MyResultHandler());
-        new SingleThreadTransformExecuteJob(newProject, handlers).run();
+        new SequenceTransformExecuteJob(newProject, handlers).run();
         // TODO check project object
     }
 
@@ -233,7 +233,7 @@ public class EngineTest extends Assert implements SoapConstants {
         List<ResultHandler> handlers = new ArrayList<>();
         handlers.add(new MyResultHandler());
         TransformEngine stEngine = new TransformEngine();
-        stEngine.execute(new SingleThreadTransformExecuteJob(newProject, handlers));
+        stEngine.execute(new SequenceTransformExecuteJob(newProject, handlers));
         Thread.sleep(10000);
     }
 

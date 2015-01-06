@@ -3,9 +3,9 @@
  */
 package com.lumens.engine;
 
+import com.lumens.connector.ElementChunk;
 import com.lumens.engine.component.resource.DataContext;
 import com.lumens.engine.handler.ResultHandler;
-import com.lumens.model.Element;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ public interface ExecuteContext {
 
     public String getTargetFormatName();
 
-    public List<Element> getInput();
+    public ElementChunk getInput();
 
     public List<ResultHandler> getResultHandlers();
 

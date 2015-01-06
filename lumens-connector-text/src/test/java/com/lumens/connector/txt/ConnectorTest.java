@@ -5,13 +5,13 @@ package com.lumens.connector.txt;
 
 import com.lumens.connector.ConnectorFactory;
 import com.lumens.connector.Direction;
+import com.lumens.connector.ElementChunk;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.model.DataElement;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
-import com.lumens.tool.RFC4180Parser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,7 +39,7 @@ public class ConnectorTest {
     private String path2write = null;
     private String schemaPath = null;
     private String folderSchemaPath = null;
-    
+
     @Before
     public void testConnection() {
         try {
@@ -48,7 +48,7 @@ public class ConnectorTest {
             path2write = getClass().getResource("/delimited").toURI().getPath() + "/outcsv.txt";
             schemaPath = getClass().getResource("/delimited/incsv_schema.xml").toURI().getPath();
             folderSchemaPath = getClass().getResource("/delimited/csv/text_schema.xml").toURI().getPath();
-    
+
             File file = new File(path2read);
             if (file.isFile() && file.exists()) {
                 InputStreamReader reader = new InputStreamReader(new FileInputStream(path2read), "UTF-8");
@@ -66,60 +66,60 @@ public class ConnectorTest {
     }
 
     @Test
-    public void testRFC4180(){                       
-        String escape = RFC4180Parser.GetEscapePattern();        
+    public void testRFC4180() {
+        String escape = RFC4180Parser.GetEscapePattern();
         String nonescape = RFC4180Parser.GetNonEscapePattern();
-        
+
         // "(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"|(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+
         String field = String.format("%s|%s", escape, nonescape);
-        String record = String.format("(?:%s,%s)*", field, field);       
-        
+        String record = String.format("(?:%s,%s)*", field, field);
+
         String non_escape_string = "-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3";
-               
+
         // abc, cde,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3                           
         String field_string0 = "abc, cde,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3";
         // comma in head: ,abc, cde,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3 
-        String field_string1 = ",abc, cde,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3" ;
+        String field_string1 = ",abc, cde,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3";
         // comma at last: abc, cde,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3,
         String field_string2 = "abc, cde,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3.";
         // comma and space in head:  ,abc, cde,"abc,","abc","abc,""","ab""""c,""",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3 
         String field_string3 = " , cde,\"abc,\",\"abc\",\"abc,\"\"\",\"ab\"\"\"\"c,\"\"\",-   !#$%&abCDE*1,   !#$%&abCDE*2,---   !#$%&abCDE*3 ";
 
         String[] fields = {field_string0, field_string1, field_string2, field_string3};
-        
+
         // Field test
-        for (String field_string: fields){
+        for (String field_string : fields) {
             Pattern p = Pattern.compile(field);
             Matcher m = p.matcher(field_string);
             String sub = null;
             List<String> list = new ArrayList();
             while (m.find()) {
-                sub = m.group();                
+                sub = m.group();
                 list.add(sub);
             }
             assertTrue("field test fail: size not be equal", list.size() == 9);
         }
-                
+
         String escape_string1 = "\"abc,\"";             // Normal: "abc,"        
         String escape_string2 = "\"abc,\"\"\"\"";      // Missing last ":"abc,""""        
         String escape_string3 = "\"abc,\"\"";           // Missing first ":"abc,""        
         String escape_string4 = "\"abc,\"\"\\r\\n\"";  // with CRLF: "abc,""\r\n"        
-        
+
         // Escape test         
-        assertTrue("escape test fail",escape_string1.matches(escape));        
-        assertFalse("escape test fail",escape_string2.matches(escape));        
-        assertFalse("escape test fail",escape_string3.matches(escape));      
-        assertTrue("escape test fail",escape_string4.matches(escape));        
+        assertTrue("escape test fail", escape_string1.matches(escape));
+        assertFalse("escape test fail", escape_string2.matches(escape));
+        assertFalse("escape test fail", escape_string3.matches(escape));
+        assertTrue("escape test fail", escape_string4.matches(escape));
         // Non escape test
-        assertFalse("non escape test fail",non_escape_string.matches(escape));        
+        assertFalse("non escape test fail", non_escape_string.matches(escape));
 
     }
-    
+
     @Test
     public void testConnectorReadFolder() {
         ConnectorFactory cntr = new TextConnectorFactory();
         TextConnector cntrR = (TextConnector) cntr.createConnector();
-        
+
         Map<String, Value> propsR = new HashMap<>();
         propsR.put(TextConstants.ESCAPE_CHAR, new Value("\""));
         propsR.put(TextConstants.QUOTE_CHAR, new Value("\""));
@@ -127,12 +127,12 @@ public class ConnectorTest {
         propsR.put(TextConstants.SCHEMA_PATH, new Value(folderSchemaPath));
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(1000));
         propsR.put(TextConstants.ENCODING, new Value("UTF-8"));
-        propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));        
+        propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));
         propsR.put(TextConstants.OPTION_IGNORE_EMPTYLINE, new Value(true));
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(9));
         propsR.put(TextConstants.FILE_EXTENSION, new Value("txt"));
         propsR.put(TextConstants.FILE_FILTER, new Value("*.txt"));
-        propsR.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));  
+        propsR.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));
         propsR.put(TextConstants.OPTION_FIRST_LINE_ASTITLE, new Value(false));
         propsR.put(TextConstants.OPTION_IGNORE_READLINE_ERROR, new Value(true));
         cntrR.setPropertyList(propsR);
@@ -153,30 +153,25 @@ public class ConnectorTest {
         if (fmtR == null) {
             assertFalse("Fail to get source format", true);
         }
-        
-        try{
+
+        try {
             // Read a folder
-            operR.begin();          
-            
             Element elemMultiRead = new DataElement(fmtR);
             Element paramsMultiR = elemMultiRead.addChild(TextConstants.FORMAT_PARAMS);
             paramsMultiR.setValue(new Value(TextConstants.FORMAT_MESSAGE));
             paramsMultiR.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));
             paramsMultiR.addChild(TextConstants.PATH).setValue(new Value(folder2read));
-            resultR = operR.execute(Arrays.asList(elemMultiRead), fmtR);
-            assertTrue("Fail to executre source element read: multi files read", resultR.hasResult());            
-            operR.commit();
-            
-            operR.end();
-        } catch (Exception ex) {                        
+            resultR = operR.execute(new ElementChunk(Arrays.asList(elemMultiRead)), fmtR);
+            assertTrue("Fail to executre source element read: multi files read", resultR.hasResult());
+        } catch (Exception ex) {
             assertFalse("Fail to execute source connector read: multi files read.\n " + ex.getMessage(), true);
         }
-        
+
         cntrR.close();
     }
-    
+
     @Test
-    public void testConnectorReadCsv() {                   
+    public void testConnectorReadCsv() {
         ConnectorFactory cntr = new TextConnectorFactory();
         TextConnector cntrR = (TextConnector) cntr.createConnector();
 
@@ -187,7 +182,7 @@ public class ConnectorTest {
         propsR.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(1000));
         propsR.put(TextConstants.ENCODING, new Value("UTF-8"));
-        propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));        
+        propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));
         propsR.put(TextConstants.OPTION_IGNORE_EMPTYLINE, new Value(true));
         propsR.put(TextConstants.OPTION_MAXLINE, new Value(9));
         propsR.put(TextConstants.FILE_EXTENSION, new Value("csv"));
@@ -209,7 +204,7 @@ public class ConnectorTest {
         assertTrue("fail to open source text connector", cntrR.isOpen());
 
         OperationResult resultR = null;
-        
+
         // Read
         try {
             Format fmtR = fmtListR.get("TextMessage");
@@ -224,17 +219,14 @@ public class ConnectorTest {
             paramsR.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));
             paramsR.addChild(TextConstants.PATH).setValue(new Value(path2read));
 
-            operR.begin();
-            resultR = operR.execute(Arrays.asList(elemRead), fmtR);
+            resultR = operR.execute(new ElementChunk(Arrays.asList(elemRead)), fmtR);
             assertTrue("Fail to executre source element read", resultR.hasResult());
-            operR.commit();
-            operR.end();
             cntrR.close();
         } catch (Exception ex) {
             assertFalse("Fail to execute source connector read: multi files read.\n " + ex.getMessage(), true);
-        }      
+        }
     }
-    
+
     @Test
     public void testConnectorWrite() {
         ConnectorFactory cntr = new TextConnectorFactory();
@@ -245,10 +237,10 @@ public class ConnectorTest {
         propsW.put(TextConstants.ESCAPE_CHAR, new Value("\\"));
         propsW.put(TextConstants.FILEDELIMITER, new Value("|"));
         propsW.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
-        propsW.put(TextConstants.PATH, new Value(path2write));        
+        propsW.put(TextConstants.PATH, new Value(path2write));
         propsW.put(TextConstants.ENCODING, new Value("UTF-8"));
         propsW.put(TextConstants.LINEDELIMITER, new Value("\r\n"));
-        propsW.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));        
+        propsW.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));
         cntrW.setPropertyList(propsW);
         cntrW.open();
 
@@ -265,8 +257,7 @@ public class ConnectorTest {
             Format fmtW = fmtListW.get("TextMessage");
             if (fmtW == null) {
                 assertFalse("Fail to get destination format", true);
-            }            
-            operW.begin();
+            }
             Element elemWrite = new DataElement(fmtW);
             Element paramsW = elemWrite.addChild(TextConstants.FORMAT_PARAMS);
             paramsW.setValue(new Value(TextConstants.FORMAT_MESSAGE));
@@ -283,19 +274,17 @@ public class ConnectorTest {
 
             List<Element> output = new ArrayList();
             output.add(elemWrite);
-            OperationResult result = operW.execute(output, fmtW);
-            operW.commit();   
+            OperationResult result = operW.execute(new ElementChunk(output), fmtW);
         } catch (Exception ex) {
             assertFalse("Fail to execute source connector write.\n " + ex.getMessage(), true);
         }
-        
+
         // Append
-        try{
-            operW.begin();
+        try {
             Format fmtA = fmtListW.get("TextMessage");
             if (fmtA == null) {
                 assertFalse("Fail to get destination format", true);
-            }                
+            }
             Element elemAppend = new DataElement(fmtA);
             Element paramsA = elemAppend.addChild(TextConstants.FORMAT_PARAMS);
             paramsA.setValue(new Value(TextConstants.FORMAT_MESSAGE));
@@ -312,17 +301,14 @@ public class ConnectorTest {
 
             List<Element> outputA = new ArrayList();
             outputA.add(elemAppend);
-            OperationResult resultA = operW.execute(outputA, fmtA);
-            operW.commit();   
-            
-            operW.end();                     
+            OperationResult resultA = operW.execute(new ElementChunk(outputA), fmtA);
         } catch (Exception ex) {
             assertFalse("Fail to execute source connector append.\n " + ex.getMessage(), true);
         }
-        
+
         cntrW.close();
     }
-   
+
     @Test
     public void testSchema() {
         File schema = new File(schemaPath);

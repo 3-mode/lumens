@@ -12,6 +12,7 @@ import com.lumens.addin.AddinEngine;
 import com.lumens.addin.ServiceEntity;
 import com.lumens.connector.Connector;
 import com.lumens.connector.ConnectorFactory;
+import com.lumens.connector.ElementChunk;
 import com.lumens.connector.OperationResult;
 import static com.lumens.connector.database.DatabaseConstants.CONST_CNTR_SQLSERVER_CLAUSE;
 import static com.lumens.connector.database.DatabaseConstants.CONST_CNTR_SQLSERVER_OPERATION;
@@ -199,11 +200,9 @@ public class ConnectorTest {
         client.open();
 
         SqlServerOperation oo = new SqlServerOperation(client);
-        oo.begin();
         Element select = new DataElement(employeeFmt);
         select.addChild(CONST_CNTR_SQLSERVER_OPERATION).setValue("select");
-        OperationResult result = oo.execute(Arrays.asList(select), employeeFmt);
-        oo.end();
+        OperationResult result = oo.execute(new ElementChunk(Arrays.asList(select)), employeeFmt);
 
         System.out.println("Got recoreds: " + result.getResult().size());
         TransformRule rule = new TransformRule(employeeFmtTest);
@@ -225,7 +224,7 @@ public class ConnectorTest {
         List<Element> resultList = (List<Element>) transformProcessor.execute(rule, result.getResult());
         employeeTest.addAll(resultList);
         assertTrue(employeeTest.size() == result.getResult().size());
-        oo.execute(employeeTest, null);
+        oo.execute(new ElementChunk(employeeTest), null);
 
         // Ending
         client.close();

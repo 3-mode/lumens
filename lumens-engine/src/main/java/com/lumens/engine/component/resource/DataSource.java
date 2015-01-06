@@ -8,6 +8,7 @@ import com.lumens.connector.ConnectorFactory;
 import com.lumens.connector.Direction;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
+import com.lumens.connector.ElementChunk;
 import com.lumens.engine.EngineContext;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.component.AbstractTransformComponent;
@@ -18,7 +19,6 @@ import com.lumens.engine.TransformComponent;
 import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.handler.DataSourceResultHandler;
 import com.lumens.engine.handler.ResultHandler;
-import com.lumens.engine.handler.TransformerResultHandler;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
@@ -100,6 +100,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             List<Element> results = new ArrayList<>();
             DataContext dataCtx = null;
             OperationResult opRet = null;
+            boolean isLast = false;
             if (context instanceof DataContext) {
                 if (this != context.getTargetComponent())
                     throw new RuntimeException(String.format("Fatal logical error with target component '%s'", context.getTargetComponent().getName()));
@@ -107,12 +108,12 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 context = context.getParentContext();
             } else {
                 Format targetFormat = entry != null ? entry.getFormat() : null;
-                List<Element> inputDataList = context.getInput();
+                ElementChunk inputChunk = context.getInput();
                 // Log input data
-                handleInputLogging(context.getResultHandlers(), targetFmtName, inputDataList);
+                handleInputLogging(context.getResultHandlers(), targetFmtName, inputChunk.getData());
                 // TODO how commit
                 Operation operation = connector.getOperation();
-                opRet = operation.execute(inputDataList, targetFormat);
+                opRet = operation.execute(inputChunk, targetFormat);
             }
 
             if (opRet != null && opRet.hasResult()) {
@@ -123,13 +124,14 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 } else {
                     // If dataCtx is null then need to return to parent node not return to sibling 
                     // because datasource can be link to multiple destination
+                    isLast = true;
                     dataCtx = context.getParentDataContext();
                 }
 
                 if (!results.isEmpty() && this.hasTarget()) {
                     for (TransformComponent target : this.getTargetList().values()) {
                         if (!results.isEmpty() && entry != null && target.accept(entry.getName()))
-                            exList.add(new TransformExecuteContext(dataCtx, results, target, entry.getName(), context.getResultHandlers()));
+                            exList.add(new TransformExecuteContext(dataCtx, new ElementChunk(isLast, results), target, entry.getName(), context.getResultHandlers()));
                     }
                 }
             }

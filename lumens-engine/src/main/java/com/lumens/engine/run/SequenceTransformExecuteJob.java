@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author shaofeng wang (shaofeng.wang@outlook.com)
  */
-public class SingleThreadTransformExecuteJob implements ExecuteJob, Runnable {
+public class SequenceTransformExecuteJob implements ExecuteJob, Runnable {
 
     private TransformProject project;
     private Thread currentThread;
@@ -30,12 +30,12 @@ public class SingleThreadTransformExecuteJob implements ExecuteJob, Runnable {
         }
     }
 
-    public SingleThreadTransformExecuteJob(TransformProject project, List<ResultHandler> handlers) {
+    public SequenceTransformExecuteJob(TransformProject project, List<ResultHandler> handlers) {
         this.project = project;
         this.handlers = handlers;
     }
 
-    public SingleThreadTransformExecuteJob(TransformProject project) {
+    public SequenceTransformExecuteJob(TransformProject project) {
         this(project, new ArrayList<ResultHandler>(1));
     }
 
@@ -48,20 +48,8 @@ public class SingleThreadTransformExecuteJob implements ExecuteJob, Runnable {
     @Override
     public void run() {
         try {
-            if (!project.isOpen())
-                project.open();
-            List<StartEntry> startList = project.getStartEntryList();
-            for (StartEntry entry : startList) {
-                SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
-                executorStack.push(new TransformExecuteContext(entry.getStartComponent(), entry.getStartFormatName(), handlers));
-                while (!executorStack.isEmpty()) {
-                    ExecuteContext exectueCtx = executorStack.pop();
-                    TransformComponent exeComponent = exectueCtx.getTargetComponent();
-                    List<ExecuteContext> exList = exeComponent.execute(exectueCtx);
-                    if (!exList.isEmpty())
-                        executorStack.push(exList);
-                }
-            }
+            project.open();
+            this.executeTransform(project);
             project.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -75,5 +63,24 @@ public class SingleThreadTransformExecuteJob implements ExecuteJob, Runnable {
                 currentThread.join();
             } catch (InterruptedException ex) {
             }
+    }
+
+    protected void executeTransform(TransformProject transformProject) {
+        try {
+            List<StartEntry> startList = transformProject.getStartEntryList();
+            for (StartEntry entry : startList) {
+                SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
+                executorStack.push(new TransformExecuteContext(entry.getStartComponent(), entry.getStartFormatName(), handlers));
+                while (!executorStack.isEmpty()) {
+                    ExecuteContext exectueCtx = executorStack.pop();
+                    TransformComponent exeComponent = exectueCtx.getTargetComponent();
+                    List<ExecuteContext> exList = exeComponent.execute(exectueCtx);
+                    if (!exList.isEmpty())
+                        executorStack.push(exList);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

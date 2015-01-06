@@ -18,7 +18,7 @@ import com.lumens.engine.connector.ChameleonConnector;
 import com.lumens.engine.connector.Mock;
 import com.lumens.engine.handler.DataSourceResultHandler;
 import com.lumens.engine.handler.ResultHandler;
-import com.lumens.engine.run.SingleThreadTransformExecuteJob;
+import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectJsonParser;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.model.Element;
@@ -173,7 +173,7 @@ public class TransferEngineTest {
             public void processInput(TransformComponent src, String targetName, List<Element> input) {
             }
         };
-        new SingleThreadTransformExecuteJob(project, Arrays.asList(log)).run();
+        new SequenceTransformExecuteJob(project, Arrays.asList(log)).run();
         //**********************************************************************
         assertTrue(ChameleonConnector.countFinal == 150);
 
@@ -189,7 +189,7 @@ public class TransferEngineTest {
         ProjectJsonParser preader = new ProjectJsonParser(projectRead);
         preader.parse(EngineTest.getResourceAsByteArrayInputStream("/json/chameleon_project.json"));
         ChameleonConnector.countFinal = 1;
-        new SingleThreadTransformExecuteJob(projectRead, Arrays.asList(log)).run();
+        new SequenceTransformExecuteJob(projectRead, Arrays.asList(log)).run();
         assertTrue(ChameleonConnector.countFinal == 151);
         System.out.println("Run readed project completed");
     }

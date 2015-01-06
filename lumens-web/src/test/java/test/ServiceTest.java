@@ -11,7 +11,7 @@ import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.handler.ResultHandler;
 import com.lumens.engine.handler.TransformerResultHandler;
-import com.lumens.engine.run.SingleThreadTransformExecuteJob;
+import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.model.Element;
 import com.lumens.model.serializer.ElementSerializer;
@@ -60,8 +60,8 @@ public class ServiceTest {
             }
             List<ResultHandler> handlers = new ArrayList<>();
             handlers.add(new MyResultHandler());
-            new SingleThreadTransformExecuteJob(projectInstance, handlers).run();
-            //ApplicationContext.get().getTransformEngine().execute(new SingleThreadTransformExecuteJob(projectInstance, handlers));
+            new SequenceTransformExecuteJob(projectInstance, handlers).run();
+            //ApplicationContext.get().getTransformEngine().execute(new SequenceTransformExecuteJob(projectInstance, handlers));
         }
     }
 

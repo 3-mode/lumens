@@ -9,7 +9,7 @@ import com.lumens.connector.Direction;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.handler.ResultHandler;
-import com.lumens.engine.run.SingleThreadTransformExecuteJob;
+import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.io.JsonUtility;
 import com.lumens.model.Format;
@@ -97,7 +97,7 @@ public class ProjectService implements ServiceConstants {
             // Execute all start rules to drive the ws connector
             List<ResultHandler> handlers = new ArrayList<>();
             handlers.add(new DataElementLoggingHandler());
-            ApplicationContext.get().getTransformEngine().execute(new SingleThreadTransformExecuteJob(projectInstance, handlers));
+            ApplicationContext.get().getTransformEngine().execute(new SequenceTransformExecuteJob(projectInstance, handlers));
             // TODO to run the project job
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();

@@ -2,7 +2,7 @@
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
-package com.lumens.tool;
+package com.lumens.connector.txt;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.ArrayList;

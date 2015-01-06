@@ -3,6 +3,7 @@
  */
 package com.lumens.engine;
 
+import com.lumens.connector.ElementChunk;
 import com.lumens.engine.component.resource.DataContext;
 import com.lumens.engine.handler.ResultHandler;
 import com.lumens.model.Element;
@@ -16,11 +17,11 @@ import java.util.List;
 public class TransformExecuteContext implements ExecuteContext {
 
     private List<ResultHandler> handlers;
-    private final List<Element> input;
     private final TransformComponent target;
     private final String targetFmtName;
     private final ExecuteContext parentCtx;
     private final List<ExecuteContext> children = new ArrayList<>();
+    private final ElementChunk chunk;
 
     public TransformExecuteContext(String targetName) {
         this(null, targetName, new ArrayList<ResultHandler>(1));
@@ -30,17 +31,17 @@ public class TransformExecuteContext implements ExecuteContext {
         this(null, null, target, targetFmtName, handlers);
     }
 
-    public TransformExecuteContext(ExecuteContext parentCtx, List<Element> input, TransformComponent target, String targetFmtName, List<ResultHandler> handlers) {
+    public TransformExecuteContext(ExecuteContext parentCtx, ElementChunk chunk, TransformComponent target, String targetFmtName, List<ResultHandler> handlers) {
         this.parentCtx = parentCtx;
-        this.input = input;
+        this.chunk = chunk;
         this.target = target;
         this.targetFmtName = targetFmtName;
         this.handlers = handlers;
     }
 
     @Override
-    public List<Element> getInput() {
-        return input;
+    public ElementChunk getInput() {
+        return chunk == null ? new ElementChunk(null) : chunk;
     }
 
     @Override

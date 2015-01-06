@@ -7,10 +7,8 @@ import com.lumens.model.DataElement;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
-import com.lumens.tool.RFC4180Parser;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.regex.*;
 
 /**

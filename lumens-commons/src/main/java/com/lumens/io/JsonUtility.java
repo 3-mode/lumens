@@ -18,8 +18,8 @@ import org.codehaus.jackson.node.NullNode;
  */
 public class JsonUtility {
 
-    private JsonGenerator json;
-    private ByteArrayOutputStream baos;
+    private final JsonGenerator json;
+    private final ByteArrayOutputStream baos;
 
     public JsonUtility(JsonGenerator json, ByteArrayOutputStream baos) {
         this.json = json;

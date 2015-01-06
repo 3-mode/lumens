@@ -4,10 +4,10 @@
 package com.lumens.engine.component.resource;
 
 import com.lumens.connector.OperationResult;
+import com.lumens.connector.ElementChunk;
 import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.handler.ResultHandler;
-import com.lumens.model.Element;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class DataContext implements ExecuteContext {
     }
 
     @Override
-    public List<Element> getInput() {
+    public ElementChunk getInput() {
         return parentCtx.getInput();
     }
 

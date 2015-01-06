@@ -3,6 +3,7 @@
  */
 package com.lumens.engine.component.instrument;
 
+import com.lumens.connector.ElementChunk;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.component.AbstractTransformComponent;
 import com.lumens.engine.Instrument;
@@ -83,18 +84,18 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
         List<ExecuteContext> exList = new ArrayList<>();
         String targetFmtName = context.getTargetFormatName();
         List<TransformRuleEntry> rules = ruleFindList.get(targetFmtName);
-        List<Element> input = context.getInput();
-        handleInputLogging(context.getResultHandlers(), targetFmtName, input);
+        ElementChunk inputChunk = context.getInput();
+        handleInputLogging(context.getResultHandlers(), targetFmtName, inputChunk.getData());
         for (TransformRuleEntry rule : rules) {
             List<Element> results = new ArrayList<>();
-            List<Element> result = (List<Element>) processor.execute(rule.getRule(), input);
+            List<Element> result = (List<Element>) processor.execute(rule.getRule(), inputChunk.getData());
             if (!result.isEmpty())
                 results.addAll(result);
 
             if (!results.isEmpty() && this.hasTarget()) {
                 for (TransformComponent target : this.getTargetList().values())
                     if (!result.isEmpty() && target.accept(rule.getTargetFormatName()))
-                        exList.add(new TransformExecuteContext(context, results, target, rule.getTargetFormatName(), context.getResultHandlers()));
+                        exList.add(new TransformExecuteContext(context, new ElementChunk(inputChunk.IsLast(), results), target, rule.getTargetFormatName(), context.getResultHandlers()));
             }
             handleOutputLogging(context.getResultHandlers(), targetFmtName, results);
         }

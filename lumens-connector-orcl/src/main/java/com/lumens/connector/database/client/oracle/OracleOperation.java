@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.database.client.oracle;
 
+import com.lumens.connector.ElementChunk;
 import org.apache.logging.log4j.Logger;
 
 import com.lumens.connector.database.client.oracle.sql.OracleWriteSQLBuilder;
@@ -27,10 +28,11 @@ public class OracleOperation implements Operation, OracleConstants {
     }
 
     @Override
-    public OperationResult execute(List<Element> input, Format output) throws Exception {
-        if (input != null && !input.isEmpty()) {
+    public OperationResult execute(ElementChunk input, Format output) throws Exception {
+        List<Element> dataList = input.getData();
+        if (dataList != null && !dataList.isEmpty()) {
             List<Element> results = new ArrayList<>();
-            for (Element elem : input) {
+            for (Element elem : dataList) {
                 Element action = elem.getChild(SQLPARAMS).getChild(ACTION);
                 String operation = (action == null || action.getValue() == null) ? null : action.getValue().getString();
                 if (operation == null || SELECT.equalsIgnoreCase(operation)) {
@@ -52,17 +54,5 @@ public class OracleOperation implements Operation, OracleConstants {
             return new OracleOperationResult(results);
         }
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void begin() {
-    }
-
-    @Override
-    public void end() {
-    }
-
-    @Override
-    public void commit() {
     }
 }

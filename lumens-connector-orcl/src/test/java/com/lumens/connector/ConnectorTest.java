@@ -148,11 +148,9 @@ public class ConnectorTest implements DatabaseConstants, OracleConstants {
         client.open();
 
         OracleOperation oo = new OracleOperation(client);
-        oo.begin();
         Element select = new DataElement(employeeFmt);
         select.addChild(SQLPARAMS).addChild(ACTION).setValue("SELECT");
-        OperationResult result = oo.execute(Arrays.asList(select), employeeFmt);
-        oo.end();
+        OperationResult result = oo.execute(new ElementChunk(Arrays.asList(select)), employeeFmt);
 
         System.out.println("Got recoreds: " + result.getResult().size());
         TransformRule rule = new TransformRule(employeeFmtTest);
@@ -174,7 +172,7 @@ public class ConnectorTest implements DatabaseConstants, OracleConstants {
         List<Element> resultList = (List<Element>) transformMappter.execute(rule, result.getResult());
         employeeTest.addAll(resultList);
         assertTrue(employeeTest.size() == result.getResult().size());
-        oo.execute(employeeTest, null);
+        oo.execute(new ElementChunk(employeeTest), null);
 
         // Ending
         client.close();

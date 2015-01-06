@@ -29,7 +29,6 @@ public class DataElementLoggingHandler implements DataSourceResultHandler, Trans
 
     @Override
     public void processInput(TransformComponent src, String targetName, List<Element> input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

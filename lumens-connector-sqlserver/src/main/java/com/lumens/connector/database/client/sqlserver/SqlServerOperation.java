@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.database.client.sqlserver;
 
+import com.lumens.connector.ElementChunk;
 import com.lumens.connector.database.DatabaseConstants;
 import com.lumens.connector.database.ElementFromDbBuilder;
 import org.apache.logging.log4j.Logger;
@@ -32,44 +33,33 @@ public class SqlServerOperation implements Operation, DatabaseConstants {
     }
 
     @Override
-    public OperationResult execute(List<Element> inputList, Format output) throws Exception {
-        if (inputList != null && !inputList.isEmpty()) {
+    public OperationResult execute(ElementChunk input, Format output) throws Exception {
+        List<Element> dataList = input.getData();
+        if (dataList != null && !dataList.isEmpty()) {
             List<Element> results = new ArrayList<>();
-            for (Element input : inputList) {
-                Element oper = input.getChild(CONST_CNTR_SQLSERVER_OPERATION);
+            for (Element data : dataList) {
+                Element oper = data.getChild(CONST_CNTR_SQLSERVER_OPERATION);
                 if (oper == null || oper.getValue() == null)
                     throw new Exception("'operation' is mandatory");
                 String operation = oper.getValue().getString();
                 if (CONST_CNTR_SQLSERVER_SELECT.equalsIgnoreCase(operation)) {
                     SqlServerQuerySQLBuilder sql = new SqlServerQuerySQLBuilder(output);
-                    String SQL = sql.generateSelectSQL(input);
+                    String SQL = sql.generateSelectSQL(data);
                     List<Element> result = client.executeQuery(SQL, elementBuilder, output);
                     if (result != null && !result.isEmpty())
                         results.addAll(result);
                 } else if (CONST_CNTR_SQLSERVER_INSERT.equalsIgnoreCase(operation)) {
                     SqlServerWriteSQLBuilder sql = new SqlServerWriteSQLBuilder();
-                    String SQL = sql.generateInsertSQL(input);
-                    client.execute(SQL);                    
+                    String SQL = sql.generateInsertSQL(data);
+                    client.execute(SQL);
                 } else if (CONST_CNTR_SQLSERVER_UPDATE.equalsIgnoreCase(operation)) {
                     SqlServerWriteSQLBuilder sql = new SqlServerWriteSQLBuilder();
-                    String SQL = sql.generateUpdateSQL(input);
-                    client.execute(SQL);                    
-                } 
+                    String SQL = sql.generateUpdateSQL(data);
+                    client.execute(SQL);
+                }
             }
             return new SqlServerOperationResult(results);
         }
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void begin() {
-    }
-
-    @Override
-    public void end() {
-    }
-
-    @Override
-    public void commit() {
     }
 }

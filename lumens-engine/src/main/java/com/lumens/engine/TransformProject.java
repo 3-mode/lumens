@@ -79,14 +79,16 @@ public class TransformProject {
     }
 
     public void open() throws Exception {
-        try {
-            for (DataSource ds : datasourceList)
-                ds.open();
-            for (DataTransformer dt : transformerList)
-                dt.open();
-            isOpen = true;
-        } catch (Exception ex) {
-            throw new Exception(ex);
+        if (!isOpen()) {
+            try {
+                for (DataSource ds : datasourceList)
+                    ds.open();
+                for (DataTransformer dt : transformerList)
+                    dt.open();
+                isOpen = true;
+            } catch (Exception ex) {
+                throw new Exception(ex);
+            }
         }
     }
 
