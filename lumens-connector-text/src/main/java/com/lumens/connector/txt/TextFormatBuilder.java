@@ -105,22 +105,23 @@ public class TextFormatBuilder implements FormatBuilder, TextConstants {
                     String attrName = attr.getName();
                     String attrValue = attr.getValue();
                     // create field element
-                    if (FORMAT_NAME.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
-                        field = format.addChild(attrValue, Form.FIELD); // Set type later
-                    } else if (FORMAT_KEY.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
-                        field.setProperty(attrName, new Value(attrValue));
-                    } else if (FORMAT_TYPE.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
-                        field.setType(Type.parseString(attrValue));
-                    } else if (FORMAT_NULLABLE.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
-                        field.setProperty(attrName, new Value(attrValue));
-                    } else if (FORMAT_PATTERN.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
-                        field.setProperty(attrName, new Value(attrValue));
-                    } else if (FORMAT_LENGTH.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
-                        field.setProperty(attrName, new Value(Integer.parseInt(attrValue)));
-                    } else if (FORMAT_COMMENT.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
-                        field.setProperty(attrName, new Value(attrValue));
-                    } else if (FORMAT_PRECISION.equalsIgnoreCase(attrName) && !attrValue.isEmpty()) {
-                        field.setProperty(attrName, new Value(Integer.parseInt(attrValue)));
+                    if (!attrValue.isEmpty()) {
+                        if (FORMAT_NAME.equalsIgnoreCase(attrName))
+                            field = format.addChild(attrValue, Form.FIELD); // Set type later
+                        else if (FORMAT_KEY.equalsIgnoreCase(attrName))
+                            field.setProperty(attrName, new Value(attrValue));
+                        else if (FORMAT_TYPE.equalsIgnoreCase(attrName))
+                            field.setType(Type.parseString(attrValue));
+                        else if (FORMAT_NULLABLE.equalsIgnoreCase(attrName))
+                            field.setProperty(attrName, new Value(attrValue));
+                        else if (FORMAT_PATTERN.equalsIgnoreCase(attrName))
+                            field.setProperty(attrName, new Value(attrValue));
+                        else if (FORMAT_LENGTH.equalsIgnoreCase(attrName))
+                            field.setProperty(attrName, new Value(Integer.parseInt(attrValue)));
+                        else if (FORMAT_COMMENT.equalsIgnoreCase(attrName))
+                            field.setProperty(attrName, new Value(attrValue));
+                        else if (FORMAT_PRECISION.equalsIgnoreCase(attrName))
+                            field.setProperty(attrName, new Value(Integer.parseInt(attrValue)));
                     }
                 }
             }
