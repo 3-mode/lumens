@@ -25,7 +25,6 @@ import com.lumens.model.Element;
 import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformRule;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
@@ -166,8 +165,12 @@ public class TransferEngineTest {
         ResultHandler log = new DataSourceResultHandler() {
 
             @Override
-            public void process(TransformComponent src, String resultName, List<Element> results) {
-                System.out.println(String.format("### %s size is '%d'", resultName, results.size()));
+            public void processOutput(TransformComponent src, String targetName, List<Element> output) {
+                System.out.println(String.format("### %s size is '%d'", targetName, output.size()));
+            }
+
+            @Override
+            public void processInput(TransformComponent src, String targetName, List<Element> input) {
             }
         };
         new SingleThreadTransformExecuteJob(project, Arrays.asList(log)).run();

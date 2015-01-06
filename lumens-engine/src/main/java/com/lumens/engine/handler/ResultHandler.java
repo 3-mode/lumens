@@ -9,5 +9,7 @@ import java.util.List;
 
 public interface ResultHandler {
 
-    public void process(TransformComponent src, String resultName, List<Element> results);
+    public void processOutput(TransformComponent src, String targetName, List<Element> output);
+
+    public void processInput(TransformComponent src, String targetName, List<Element> input);
 }

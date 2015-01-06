@@ -18,6 +18,7 @@ import com.lumens.engine.TransformComponent;
 import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.handler.DataSourceResultHandler;
 import com.lumens.engine.handler.ResultHandler;
+import com.lumens.engine.handler.TransformerResultHandler;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
@@ -96,7 +97,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             String targetFmtName = context.getTargetFormatName();
             FormatEntry entry = registerOUTFormatList.get(targetFmtName);
             List<ExecuteContext> exList = new ArrayList<>();
-            List<Element> result = new ArrayList<>();
+            List<Element> results = new ArrayList<>();
             DataContext dataCtx = null;
             OperationResult opRet = null;
             if (context instanceof DataContext) {
@@ -107,12 +108,15 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             } else {
                 Format targetFormat = entry != null ? entry.getFormat() : null;
                 List<Element> inputDataList = context.getInput();
+                // Log input data
+                handleInputLogging(context.getResultHandlers(), targetFmtName, inputDataList);
+                // TODO how commit
                 Operation operation = connector.getOperation();
                 opRet = operation.execute(inputDataList, targetFormat);
             }
 
             if (opRet != null && opRet.hasResult()) {
-                result.addAll(opRet.getResult());
+                results.addAll(opRet.getResult());
                 if (opRet.hasResult()) {
                     // Cache the next chunk of current data source
                     dataCtx = new DataContext(context, opRet);
@@ -122,10 +126,10 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                     dataCtx = context.getParentDataContext();
                 }
 
-                if (!result.isEmpty() && this.hasTarget()) {
+                if (!results.isEmpty() && this.hasTarget()) {
                     for (TransformComponent target : this.getTargetList().values()) {
-                        if (!result.isEmpty() && entry != null && target.accept(entry.getName()))
-                            exList.add(new TransformExecuteContext(dataCtx, result, target, entry.getName(), context.getResultHandlers()));
+                        if (!results.isEmpty() && entry != null && target.accept(entry.getName()))
+                            exList.add(new TransformExecuteContext(dataCtx, results, target, entry.getName(), context.getResultHandlers()));
                     }
                 }
             }
@@ -135,15 +139,25 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 if (dataCtx != null)
                     exList.add(dataCtx);
             }
-
-            for (ResultHandler handler : context.getResultHandlers())
-                if (handler instanceof DataSourceResultHandler)
-                    handler.process(this, targetFmtName, result);
+            // Log output data
+            handleOutputLogging(context.getResultHandlers(), targetFmtName, results);
 
             return exList;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    private void handleInputLogging(List<ResultHandler> handlers, String targetName, List<Element> input) {
+        for (ResultHandler handler : handlers)
+            if (handler instanceof DataSourceResultHandler)
+                handler.processInput(this, targetName, input);
+    }
+
+    private void handleOutputLogging(List<ResultHandler> handlers, String targetName, List<Element> input) {
+        for (ResultHandler handler : handlers)
+            if (handler instanceof DataSourceResultHandler)
+                handler.processOutput(this, targetName, input);
     }
 
     public Connector getConnector() {

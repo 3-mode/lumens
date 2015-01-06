@@ -84,6 +84,7 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
         String targetFmtName = context.getTargetFormatName();
         List<TransformRuleEntry> rules = ruleFindList.get(targetFmtName);
         List<Element> input = context.getInput();
+        handleInputLogging(context.getResultHandlers(), targetFmtName, input);
         for (TransformRuleEntry rule : rules) {
             List<Element> results = new ArrayList<>();
             List<Element> result = (List<Element>) processor.execute(rule.getRule(), input);
@@ -95,11 +96,21 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
                     if (!result.isEmpty() && target.accept(rule.getTargetFormatName()))
                         exList.add(new TransformExecuteContext(context, results, target, rule.getTargetFormatName(), context.getResultHandlers()));
             }
-            for (ResultHandler handler : context.getResultHandlers())
-                if (handler instanceof TransformerResultHandler)
-                    handler.process(this, targetFmtName, results);
+            handleOutputLogging(context.getResultHandlers(), targetFmtName, results);
         }
         return exList;
+    }
+
+    private void handleInputLogging(List<ResultHandler> handlers, String targetName, List<Element> input) {
+        for (ResultHandler handler : handlers)
+            if (handler instanceof TransformerResultHandler)
+                handler.processInput(this, targetName, input);
+    }
+
+    private void handleOutputLogging(List<ResultHandler> handlers, String targetName, List<Element> input) {
+        for (ResultHandler handler : handlers)
+            if (handler instanceof TransformerResultHandler)
+                handler.processOutput(this, targetName, input);
     }
 
     @Override

@@ -28,19 +28,30 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.Test;
 
 public class EngineTest extends Assert implements SoapConstants {
 
     class MyResultHandler implements ResultHandler {
 
         @Override
-        public void process(TransformComponent src, String resultName, List<Element> results) {
+        public void processOutput(TransformComponent src, String targetName, List<Element> output) {
             System.out.println(">>>>>>>>>>>Transform>>>>>>>>>>>>>>>>>>>>");
-            System.out.println("Component name: " + src.getName() + "; Format name: " + resultName + "; result size: " + results.size());
+            System.out.println("Component name: " + src.getName() + "; Format name: " + targetName + "; output size: " + output.size());
             try {
                 System.out.println("Only print last one");
-                new ElementSerializer(results.get(results.size() - 1), true).writeToXml(System.out);
+                new ElementSerializer(output.get(output.size() - 1), true).writeToXml(System.out);
+            } catch (Exception ex) {
+            }
+            System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        }
+
+        @Override
+        public void processInput(TransformComponent src, String targetName, List<Element> input) {
+            System.out.println(">>>>>>>>>>>Transform>>>>>>>>>>>>>>>>>>>>");
+            System.out.println("Component name: " + src.getName() + "; Format name: " + targetName + "; input size: " + input.size());
+            try {
+                System.out.println("Only print last one");
+                new ElementSerializer(input.get(input.size() - 1), true).writeToXml(System.out);
             } catch (Exception ex) {
             }
             System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
@@ -191,8 +202,9 @@ public class EngineTest extends Assert implements SoapConstants {
         DataSource ws = new DataSource("type-soap", "20003");
         Map<String, Value> wsProps = new HashMap<>();
         wsProps.put(WSDL, new Value("http://webservice.webxml.com.cn/webservices/DomesticAirline.asmx?wsdl"));/*
-        wsProps.put(PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
-        wsProps.put(PROXY_PORT, new Value(8080));//*/
+         wsProps.put(PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
+         wsProps.put(PROXY_PORT, new Value(8080));//*/
+
         ws.setPropertyList(wsProps);
         ws.setName("Airline query soap");
         ws.setDescription("Airline query soap test");
