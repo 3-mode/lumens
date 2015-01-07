@@ -14,48 +14,15 @@ import java.util.regex.PatternSyntaxException;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 // Refer to RFC4180 code: http://tools.ietf.org/html/rfc4180#page-2 
-public class RFC4180Parser {
+public class RFC4180Parser  extends PatternParser{
     // [\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]
     private final static String TEXTDATA = "[\\x20-\\x21]|[\\x23-\\x2B]|[\\x2D-\\x7E]";
     // "([\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"
     private final static String ESCAPE = String.format("\"(?:%s+|,|\\r|\\n|\"\")+\"", TEXTDATA);
     // (?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+
     private final static String NON_ESCAPE = String.format("(?:%s)+", TEXTDATA);
-    // "([\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"|(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+
-    private final static String FIELD = String.format("%s|%s", ESCAPE, NON_ESCAPE);
-
-    private final static Pattern defaultPattern = Pattern.compile(FIELD);
-
-    public static String GetTextDataPattern() {
-        return TEXTDATA;
-    }
-
-    public static String GetEscapePattern() {
-        return ESCAPE;
-    }
-
-    public static String GetNonEscapePattern() {
-        return NON_ESCAPE;
-    }
-
-    public static String GetFieldPattern() {
-        return FIELD;
-    }
-
-    // PatternSyntaxException throw if Pattern parse error
-    public static List<String> ParseField(String pattern, String field) throws PatternSyntaxException {
-        Pattern p = pattern.equals(FIELD) ? defaultPattern : Pattern.compile(pattern);
-        Matcher m = p.matcher(field);
-
-        List<String> list = new ArrayList();
-        while (m.find()) {
-            list.add(m.group());
-        }
-
-        return list;
-    }
-
-    public static List<String> ParseField(String field) {
-        return ParseField(FIELD, field);
+    // "([\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"|(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+ 
+    public RFC4180Parser(){
+        super(TEXTDATA,ESCAPE,NON_ESCAPE);
     }
 }
