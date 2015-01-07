@@ -1,10 +1,12 @@
 package com.lumens.model;
 
+import com.lumens.io.JsonUtility;
 import com.lumens.model.serializer.ElementSerializer;
 import com.lumens.model.serializer.FormatSerializer;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import junit.framework.TestCase;
+import org.codehaus.jackson.JsonGenerator;
 
 public class ModelSerializeTest extends TestCase {
 
@@ -47,7 +49,16 @@ public class ModelSerializeTest extends TestCase {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         serializer.writeToXml(baos);
         System.out.println(baos.toString());
+        baos.reset();
+        serializer.writeToJson(baos);
+        System.out.println(baos.toString());
 
+        JsonUtility utility = JsonUtility.createJsonUtility();
+        JsonGenerator json = utility.getGenerator();
+        json.writeStartObject();
+        serializer.writeToJson(json);
+        json.writeEndObject();
+        System.out.println(utility.toUTF8String());
     }
 
     public void testUnSerializeFromXml() throws Exception {
@@ -59,5 +70,11 @@ public class ModelSerializeTest extends TestCase {
             xmlSerializer.writeToJson(System.out);
             System.out.println();
         }
+        JsonUtility utility = JsonUtility.createJsonUtility();
+        JsonGenerator json = utility.getGenerator();
+        json.writeStartObject();
+        xmlSerializer.writeToJson(json);
+        json.writeEndObject();
+        System.out.println(utility.toUTF8String());
     }
 }

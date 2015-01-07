@@ -103,8 +103,11 @@ public class ElementSerializer implements XmlSerializer {
             jGenerator.writeStringField("value", element.getValue().getString());
         if (element.getChildren() != null) {
             jGenerator.writeArrayFieldStart("element");
-            for (Element child : element.getChildren())
+            for (Element child : element.getChildren()) {
+                jGenerator.writeStartObject();
                 writeElementToJson(child, jGenerator);
+                jGenerator.writeEndObject();
+            }
             jGenerator.writeEndArray();
         }
         jGenerator.writeEndObject();
@@ -112,7 +115,6 @@ public class ElementSerializer implements XmlSerializer {
     }
 
     private void writeElementToJson(Element element, JsonGenerator jGenerator) throws IOException {
-        jGenerator.writeStartObject();
         jGenerator.writeStringField("name", element.getFormat().getName());
         jGenerator.writeStringField("form", element.getFormat().getForm().toString());
         jGenerator.writeStringField("type", element.getFormat().getType().toString());
@@ -120,10 +122,12 @@ public class ElementSerializer implements XmlSerializer {
             jGenerator.writeStringField("value", element.getValue().getString());
         if (element.getChildren() != null) {
             jGenerator.writeArrayFieldStart("element");
-            for (Element child : element.getChildren())
+            for (Element child : element.getChildren()) {
+                jGenerator.writeStartObject();
                 writeElementToJson(child, jGenerator);
+                jGenerator.writeEndObject();
+            }
             jGenerator.writeEndArray();
         }
-        jGenerator.writeEndObject();
     }
 }
