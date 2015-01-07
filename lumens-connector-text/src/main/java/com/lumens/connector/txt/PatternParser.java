@@ -15,36 +15,37 @@ import java.util.regex.PatternSyntaxException;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public abstract class PatternParser {
-    protected static String TEXTDATA = "[\\x20-\\x21]|[\\x23-\\x2B]|[\\x2D-\\x7E]";
-    protected static String ESCAPE = String.format("\"(?:%s+|,|\\r|\\n|\"\")+\"", TEXTDATA);
-    protected static String NON_ESCAPE = String.format("(?:%s)+", TEXTDATA);
-    protected static String FIELD = String.format("%s|%s", ESCAPE, NON_ESCAPE);
-    protected static Pattern defaultPattern = Pattern.compile(FIELD);
+    protected String TEXTDATA;
+    protected String ESCAPE;
+    protected String NON_ESCAPE;
+    protected String FIELD = String.format("%s|%s", ESCAPE, NON_ESCAPE);
+    protected Pattern defaultPattern;
 
     public PatternParser(String text, String escape, String nonEscape){
         TEXTDATA = text;
         ESCAPE = escape;
         NON_ESCAPE = nonEscape;
+        defaultPattern = Pattern.compile(FIELD);
     }
     
-    public static String GetTextDataPattern() {
+    public String GetTextDataPattern() {
         return TEXTDATA;
     }
 
-    public static String GetEscapePattern() {
+    public String GetEscapePattern() {
         return ESCAPE;
     }
 
-    public static String GetNonEscapePattern() {
+    public String GetNonEscapePattern() {
         return NON_ESCAPE;
     }
 
-    public static String GetFieldPattern() {
+    public String GetFieldPattern() {
         return FIELD;
     }
 
     // PatternSyntaxException throw if Pattern parse error
-    public static List<String> ParseField(String pattern, String field) throws PatternSyntaxException {
+    public List<String> ParseField(String pattern, String field) throws PatternSyntaxException {
         Pattern p = pattern.equals(FIELD) ? defaultPattern : Pattern.compile(pattern);
         Matcher m = p.matcher(field);
 
@@ -56,7 +57,7 @@ public abstract class PatternParser {
         return list;
     }
 
-    public static List<String> ParseField(String field) {
+    public List<String> ParseField(String field) {
         return ParseField(FIELD, field);
     }
 }

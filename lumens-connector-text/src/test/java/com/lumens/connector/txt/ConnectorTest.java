@@ -67,8 +67,9 @@ public class ConnectorTest {
 
     @Test
     public void testRFC4180() {
-        String escape = RFC4180Parser.GetEscapePattern();
-        String nonescape = RFC4180Parser.GetNonEscapePattern();
+        PatternParser parser= new RFC4180Parser();
+        String escape = parser.GetEscapePattern();
+        String nonescape = parser.GetNonEscapePattern();
 
         // "(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"|(?:[\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E])+
         String field = String.format("%s|%s", escape, nonescape);
