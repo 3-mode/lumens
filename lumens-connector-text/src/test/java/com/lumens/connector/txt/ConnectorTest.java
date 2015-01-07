@@ -33,7 +33,7 @@ import static org.junit.Assert.assertFalse;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class ConnectorTest {
+public class ConnectorTest implements TextConstants{
     private String path2read = null;
     private String folder2read = null;
     private String path2write = null;
@@ -41,7 +41,7 @@ public class ConnectorTest {
     private String folderSchemaPath = null;
 
     @Before
-    public void testConnection() {
+    public void testConnection(){
         try {
             path2read = getClass().getResource("/delimited/incsv.csv").toURI().getPath();
             folder2read = getClass().getResource("/delimited/csv/").toURI().getPath();
@@ -122,20 +122,20 @@ public class ConnectorTest {
         TextConnector cntrR = (TextConnector) cntr.createConnector();
 
         Map<String, Value> propsR = new HashMap<>();
-        propsR.put(TextConstants.ESCAPE_CHAR, new Value("\""));
-        propsR.put(TextConstants.QUOTE_CHAR, new Value("\""));
-        propsR.put(TextConstants.FILEDELIMITER, new Value(","));
-        propsR.put(TextConstants.SCHEMA_PATH, new Value(folderSchemaPath));
-        propsR.put(TextConstants.OPTION_MAXLINE, new Value(1000));
-        propsR.put(TextConstants.ENCODING, new Value("UTF-8"));
-        propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));
-        propsR.put(TextConstants.OPTION_IGNORE_EMPTYLINE, new Value(true));
-        propsR.put(TextConstants.OPTION_MAXLINE, new Value(9));
-        propsR.put(TextConstants.FILE_EXTENSION, new Value("txt"));
-        propsR.put(TextConstants.FILE_FILTER, new Value("*.txt"));
-        propsR.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));
-        propsR.put(TextConstants.OPTION_FIRST_LINE_ASTITLE, new Value(false));
-        propsR.put(TextConstants.OPTION_IGNORE_READLINE_ERROR, new Value(true));
+        propsR.put(ESCAPE_CHAR, new Value("\""));
+        propsR.put(QUOTE_CHAR, new Value("\""));
+        propsR.put(FILEDELIMITER, new Value(","));
+        propsR.put(SCHEMA_PATH, new Value(folderSchemaPath));
+        propsR.put(OPTION_MAXLINE, new Value(1000));
+        propsR.put(ENCODING, new Value("UTF-8"));
+        propsR.put(LINEDELIMITER, new Value("\n"));
+        propsR.put(OPTION_IGNORE_EMPTYLINE, new Value(true));
+        propsR.put(OPTION_MAXLINE, new Value(9));
+        propsR.put(FILE_EXTENSION, new Value("txt"));
+        propsR.put(FILE_FILTER, new Value("*.txt"));
+        propsR.put(OPTION_FORMAT_ASTITLE, new Value(true));
+        propsR.put(OPTION_FIRST_LINE_ASTITLE, new Value(false));
+        propsR.put(OPTION_IGNORE_READLINE_ERROR, new Value(true));
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
@@ -158,10 +158,10 @@ public class ConnectorTest {
         try {
             // Read a folder
             Element elemMultiRead = new DataElement(fmtR);
-            Element paramsMultiR = elemMultiRead.addChild(TextConstants.FORMAT_PARAMS);
-            paramsMultiR.setValue(new Value(TextConstants.FORMAT_MESSAGE));
-            paramsMultiR.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));
-            paramsMultiR.addChild(TextConstants.PATH).setValue(new Value(folder2read));
+            Element paramsMultiR = elemMultiRead.addChild(FORMAT_PARAMS);
+            paramsMultiR.setValue(new Value(FORMAT_MESSAGE));
+            paramsMultiR.addChild(OPERATION).setValue(new Value(OPERATION_READ));
+            paramsMultiR.addChild(PATH).setValue(new Value(folder2read));
             resultR = operR.execute(new ElementChunk(Arrays.asList(elemMultiRead)), fmtR);
             assertTrue("Fail to executre source element read: multi files read", resultR.hasResult());
         } catch (Exception ex) {
@@ -177,20 +177,20 @@ public class ConnectorTest {
         TextConnector cntrR = (TextConnector) cntr.createConnector();
 
         Map<String, Value> propsR = new HashMap<>();
-        propsR.put(TextConstants.ESCAPE_CHAR, new Value("\""));
-        propsR.put(TextConstants.QUOTE_CHAR, new Value("\""));
-        propsR.put(TextConstants.FILEDELIMITER, new Value(","));
-        propsR.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
-        propsR.put(TextConstants.OPTION_MAXLINE, new Value(1000));
-        propsR.put(TextConstants.ENCODING, new Value("UTF-8"));
-        propsR.put(TextConstants.LINEDELIMITER, new Value("\n"));
-        propsR.put(TextConstants.OPTION_IGNORE_EMPTYLINE, new Value(true));
-        propsR.put(TextConstants.OPTION_MAXLINE, new Value(9));
-        propsR.put(TextConstants.FILE_EXTENSION, new Value("csv"));
-        propsR.put(TextConstants.FILE_FILTER, new Value("*.csv"));
-        propsR.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));
-        propsR.put(TextConstants.OPTION_FIRST_LINE_ASTITLE, new Value(false));
-        propsR.put(TextConstants.OPTION_IGNORE_READLINE_ERROR, new Value(true));
+        propsR.put(ESCAPE_CHAR, new Value("\""));
+        propsR.put(QUOTE_CHAR, new Value("\""));
+        propsR.put(FILEDELIMITER, new Value(","));
+        propsR.put(SCHEMA_PATH, new Value(schemaPath));
+        propsR.put(OPTION_MAXLINE, new Value(1000));
+        propsR.put(ENCODING, new Value("UTF-8"));
+        propsR.put(LINEDELIMITER, new Value("\n"));
+        propsR.put(OPTION_IGNORE_EMPTYLINE, new Value(true));
+        propsR.put(OPTION_MAXLINE, new Value(9));
+        propsR.put(FILE_EXTENSION, new Value("csv"));
+        propsR.put(FILE_FILTER, new Value("*.csv"));
+        propsR.put(OPTION_FORMAT_ASTITLE, new Value(true));
+        propsR.put(OPTION_FIRST_LINE_ASTITLE, new Value(false));
+        propsR.put(OPTION_IGNORE_READLINE_ERROR, new Value(true));
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
@@ -215,10 +215,10 @@ public class ConnectorTest {
 
             // Element read            
             Element elemRead = new DataElement(fmtR);
-            Element paramsR = elemRead.addChild(TextConstants.FORMAT_PARAMS);
-            paramsR.setValue(new Value(TextConstants.FORMAT_MESSAGE));
-            paramsR.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_READ));
-            paramsR.addChild(TextConstants.PATH).setValue(new Value(path2read));
+            Element paramsR = elemRead.addChild(FORMAT_PARAMS);
+            paramsR.setValue(new Value(FORMAT_MESSAGE));
+            paramsR.addChild(OPERATION).setValue(new Value(OPERATION_READ));
+            paramsR.addChild(PATH).setValue(new Value(path2read));
 
             resultR = operR.execute(new ElementChunk(Arrays.asList(elemRead)), fmtR);
             assertTrue("Fail to executre source element read", resultR.hasResult());
@@ -235,13 +235,13 @@ public class ConnectorTest {
         TextConnector cntrW = (TextConnector) cntr.createConnector();
 
         Map<String, Value> propsW = new HashMap<>();
-        propsW.put(TextConstants.ESCAPE_CHAR, new Value("\\"));
-        propsW.put(TextConstants.FILEDELIMITER, new Value("|"));
-        propsW.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
-        propsW.put(TextConstants.PATH, new Value(path2write));
-        propsW.put(TextConstants.ENCODING, new Value("UTF-8"));
-        propsW.put(TextConstants.LINEDELIMITER, new Value("\r\n"));
-        propsW.put(TextConstants.OPTION_FORMAT_ASTITLE, new Value(true));
+        propsW.put(ESCAPE_CHAR, new Value("\\"));
+        propsW.put(FILEDELIMITER, new Value("|"));
+        propsW.put(SCHEMA_PATH, new Value(schemaPath));
+        propsW.put(PATH, new Value(path2write));
+        propsW.put(ENCODING, new Value("UTF-8"));
+        propsW.put(LINEDELIMITER, new Value("\r\n"));
+        propsW.put(OPTION_FORMAT_ASTITLE, new Value(true));
         cntrW.setPropertyList(propsW);
         cntrW.open();
 
@@ -260,13 +260,13 @@ public class ConnectorTest {
                 assertFalse("Fail to get destination format", true);
             }
             Element elemWrite = new DataElement(fmtW);
-            Element paramsW = elemWrite.addChild(TextConstants.FORMAT_PARAMS);
-            paramsW.setValue(new Value(TextConstants.FORMAT_MESSAGE));
-            paramsW.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_OVERWRITE));
-            paramsW.addChild(TextConstants.PATH).setValue(new Value(path2write));
-            paramsW.addChild(TextConstants.ENCODING).setValue(new Value("UTF-8"));
-            paramsW.addChild(TextConstants.FILEDELIMITER).setValue(new Value("|"));
-            paramsW.addChild(TextConstants.LINEDELIMITER).setValue(new Value("\r\n"));
+            Element paramsW = elemWrite.addChild(FORMAT_PARAMS);
+            paramsW.setValue(new Value(FORMAT_MESSAGE));
+            paramsW.addChild(OPERATION).setValue(new Value(OPERATION_OVERWRITE));
+            paramsW.addChild(PATH).setValue(new Value(path2write));
+            paramsW.addChild(ENCODING).setValue(new Value("UTF-8"));
+            paramsW.addChild(FILEDELIMITER).setValue(new Value("|"));
+            paramsW.addChild(LINEDELIMITER).setValue(new Value("\r\n"));
 
             elemWrite.addChild("number").setValue(new Value("100"));
             elemWrite.addChild("text").setValue(new Value("text100"));
@@ -287,13 +287,13 @@ public class ConnectorTest {
                 assertFalse("Fail to get destination format", true);
             }
             Element elemAppend = new DataElement(fmtA);
-            Element paramsA = elemAppend.addChild(TextConstants.FORMAT_PARAMS);
-            paramsA.setValue(new Value(TextConstants.FORMAT_MESSAGE));
-            paramsA.addChild(TextConstants.OPERATION).setValue(new Value(TextConstants.OPERATION_APPEND));
-            paramsA.addChild(TextConstants.PATH).setValue(new Value(path2write));
-            paramsA.addChild(TextConstants.ENCODING).setValue(new Value("UTF-8"));
-            paramsA.addChild(TextConstants.FILEDELIMITER).setValue(new Value("***"));
-            paramsA.addChild(TextConstants.LINEDELIMITER).setValue(new Value("\r\n"));
+            Element paramsA = elemAppend.addChild(FORMAT_PARAMS);
+            paramsA.setValue(new Value(FORMAT_MESSAGE));
+            paramsA.addChild(OPERATION).setValue(new Value(OPERATION_APPEND));
+            paramsA.addChild(PATH).setValue(new Value(path2write));
+            paramsA.addChild(ENCODING).setValue(new Value("UTF-8"));
+            paramsA.addChild(FILEDELIMITER).setValue(new Value("***"));
+            paramsA.addChild(LINEDELIMITER).setValue(new Value("\r\n"));
 
             elemAppend.addChild("number").setValue(new Value("99"));
             elemAppend.addChild("text").setValue(new Value("append"));
@@ -314,12 +314,12 @@ public class ConnectorTest {
     public void testSchema() {
         File schema = new File(schemaPath);
         Map<String, Value> propList = new HashMap<>();
-        propList.put(TextConstants.ENCODING, new Value("UTF-8"));
-        propList.put(TextConstants.ESCAPE_CHAR, new Value("\\"));
-        propList.put(TextConstants.FILEDELIMITER, new Value(","));
-        propList.put(TextConstants.SCHEMA_PATH, new Value(schemaPath));
-        propList.put(TextConstants.OPTION_MAXLINE, new Value(1000));
-        propList.put(TextConstants.ENCODING, new Value("UTF-8"));
+        propList.put(ENCODING, new Value("UTF-8"));
+        propList.put(ESCAPE_CHAR, new Value("\\"));
+        propList.put(FILEDELIMITER, new Value(","));
+        propList.put(SCHEMA_PATH, new Value(schemaPath));
+        propList.put(OPTION_MAXLINE, new Value(1000));
+        propList.put(ENCODING, new Value("UTF-8"));
         if (schema.isFile() && schema.exists()) {
             TextFormatBuilder xsdReader = new TextFormatBuilder(propList);
             xsdReader.initalize();

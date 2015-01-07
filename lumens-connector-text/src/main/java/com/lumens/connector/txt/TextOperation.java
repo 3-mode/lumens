@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class TextOperation implements Operation {
+public class TextOperation implements Operation, TextConstants {
     private final TextClient client;
 
     TextOperation(TextClient cli) {
@@ -28,20 +28,20 @@ public class TextOperation implements Operation {
         List<Element> elementList = input.getData();
         if (elementList != null && !elementList.isEmpty()) {
             for (Element elem : elementList) {
-                Element params = elem.getChild(TextConstants.FORMAT_PARAMS);
+                Element params = elem.getChild(FORMAT_PARAMS);
                 if (params == null)
                     break;
-                Element oper = params.getChild(TextConstants.OPERATION);
+                Element oper = params.getChild(OPERATION);
                 if (oper == null || oper.getValue() == null)
                     throw new Exception("'operation' is mandatory");
 
                 String operation = oper.getValue().toString();
-                if (TextConstants.OPERATION_READ.equalsIgnoreCase(operation)) {
+                if (OPERATION_READ.equalsIgnoreCase(operation)) {
                     result.addAll(client.read(elem, fmt));
-                } else if (TextConstants.OPERATION_APPEND.equalsIgnoreCase(operation)) {
+                } else if (OPERATION_APPEND.equalsIgnoreCase(operation)) {
                     client.write(elem, true);
                 }
-                if (TextConstants.OPERATION_OVERWRITE.equalsIgnoreCase(operation)) {
+                if (OPERATION_OVERWRITE.equalsIgnoreCase(operation)) {
                     client.write(elem, false);
                 }
             }

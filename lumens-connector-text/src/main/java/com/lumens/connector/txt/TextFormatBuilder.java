@@ -33,8 +33,8 @@ public class TextFormatBuilder implements FormatBuilder, TextConstants {
     private boolean isInitalized = false;
 
     public TextFormatBuilder(Map<String, Value> props) {
-        if (props.containsKey(TextConstants.SCHEMA_PATH))
-            xmlSchemaPath = props.get(TextConstants.SCHEMA_PATH).toString();
+        if (props.containsKey(SCHEMA_PATH))
+            xmlSchemaPath = props.get(SCHEMA_PATH).toString();
         propList = props;
         schemaRoot = null;
     }

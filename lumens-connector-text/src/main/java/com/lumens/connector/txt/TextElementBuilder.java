@@ -51,7 +51,7 @@ public class TextElementBuilder implements TextConstants {
         int index = 0;
         for (Format child : children) {
             int size = values.size();
-            if (!TextConstants.FORMAT_PARAMS.equalsIgnoreCase(child.getName()))
+            if (!FORMAT_PARAMS.equalsIgnoreCase(child.getName()))
                 elem.addChild(child.getName()).setValue(new Value(child.getType(), index > size - 1 ? null : values.get(index++)));
         }
 
