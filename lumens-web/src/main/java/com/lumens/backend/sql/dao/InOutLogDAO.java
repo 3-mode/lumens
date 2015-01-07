@@ -32,12 +32,15 @@ public class InOutLogDAO extends BaseDAO {
                     }, new PreparedStatementCallback<Boolean>() {
                         @Override
                         public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                            ps.setLong(1, inoutLogItem.componentID);
-                            ps.setLong(2, inoutLogItem.projectID);
-                            ps.setString(3, inoutLogItem.direction);
-                            ps.setString(4, inoutLogItem.targetName);
-                            ps.setString(5, inoutLogItem.data);
-                            ps.setTimestamp(6, inoutLogItem.lastModifTime);
+                            ps.setLong(1, inoutLogItem.logID);
+                            ps.setLong(2, inoutLogItem.componentID);
+                            ps.setString(3, inoutLogItem.componentName);
+                            ps.setLong(4, inoutLogItem.projectID);
+                            ps.setString(5, inoutLogItem.projectName);
+                            ps.setString(6, inoutLogItem.direction);
+                            ps.setString(7, inoutLogItem.targetName);
+                            ps.setString(8, inoutLogItem.data);
+                            ps.setTimestamp(9, inoutLogItem.lastModifTime);
                             return ps.execute();
                         }
                     });

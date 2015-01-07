@@ -12,7 +12,11 @@ import org.codehaus.jackson.JsonGenerator;
 public class ServerUtils {
 
     public static long generateID() {
-        return System.currentTimeMillis();
+        long ID1 = System.currentTimeMillis(), ID2;
+        do {
+            ID2 = System.currentTimeMillis();
+        } while (ID1 == ID2);
+        return ID2;
     }
 
     public static String getNormalizedPath(String path) {

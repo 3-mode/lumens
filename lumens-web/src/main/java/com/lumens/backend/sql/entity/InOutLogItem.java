@@ -13,10 +13,16 @@ import java.sql.Timestamp;
  */
 @Table(name = "LUNS_INOUTLOG")
 public class InOutLogItem {
+    @Column(name = "log_id")
+    public long logID;
     @Column(name = "component_id")
     public long componentID;
+    @Column(name = "component_name")
+    public String componentName;
     @Column(name = "project_id")
     public long projectID;
+    @Column(name = "project_name")
+    public String projectName;
     @Column(name = "direction")
     public String direction;
     @Column(name = "target_name")

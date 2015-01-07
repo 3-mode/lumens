@@ -4,6 +4,7 @@
 package test;
 
 import com.lumens.backend.ApplicationContext;
+import com.lumens.backend.DataElementLoggingHandler;
 import com.lumens.backend.sql.DAOFactory;
 import com.lumens.backend.sql.dao.InOutLogDAO;
 import com.lumens.backend.sql.dao.ProjectDAO;
@@ -23,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import org.junit.Test;
@@ -65,7 +67,7 @@ public class ServiceTest {
                 }
             }
             List<ResultHandler> handlers = new ArrayList<>();
-            handlers.add(new MyResultHandler());
+            handlers.addAll(Arrays.asList(new DataElementLoggingHandler(project.id, project.name)));
             new SequenceTransformExecuteJob(projectInstance, handlers).run();
             //ApplicationContext.get().getTransformEngine().execute(new SequenceTransformExecuteJob(projectInstance, handlers));
         }
@@ -80,6 +82,7 @@ public class ServiceTest {
     public void testPutLog() {
         InOutLogDAO inoutLogDAO = DAOFactory.getInOutLogDAO();
         InOutLogItem item = new InOutLogItem();
+        item.logID = System.currentTimeMillis();
         item.componentID = 100;
         item.projectID = 1000;
         item.direction = "IN";
