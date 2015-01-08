@@ -90,28 +90,6 @@ public class TextClient implements TextConstants {
                         }
                     }
                 }
-                /*
-                 String line;
-                 while ((line = reader.readLine()) != null) {
-                 if (line.isEmpty() && ignoreEmptyLine) {
-                 continue;
-                 }
-                 if (firstLineAsTitle) {
-                 firstLineAsTitle = false;
-                 continue;
-                 }
-                 if (maxLine > 0 && --maxLine <= 0) {
-                 break;
-                 }
-                 try {
-                 Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote, bTrim);
-                 result.add(build);
-                 } catch (Exception ex) {
-                 if (!ignoreReadlineError) {
-                 throw new RuntimeException(ex);
-                 }
-                 }
-                 }*/
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }

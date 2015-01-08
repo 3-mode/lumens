@@ -8,8 +8,6 @@ import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.regex.*;
 
 /**
  *
@@ -20,31 +18,8 @@ public class TextElementBuilder implements TextConstants {
         if (fmt == null || fmt.getChildren() == null) {
             return null;
         }
-/*
-        List<String> values = new ArrayList();
 
-        // Deal with first element empty
-        int start = 0;
-        while (line.charAt(start) == delimiter.charAt(0)) {
-            values.add("");
-            start++;
-        }
-        String curline = start > 0 ? line.substring(start) : line;
-
-        if (!bNormalEscape) {
-            // TODO: support specific escape char quote char. Need to build customize pattern  
-        } else {
-            try {
-                PatternParser parser = new RFC4180Parser();
-                parser.SetOption(OPTION_TRIM_SPACE, new Value(trim));
-                values.addAll(parser.ParseField(curline));
-            } catch (PatternSyntaxException ex) {
-                throw ex;
-            }
-        }
-*/
         Element elem = new DataElement(fmt);
-
         List<Format> children = fmt.getChildren();
         int index = 0;
         for (Format child : children) {
