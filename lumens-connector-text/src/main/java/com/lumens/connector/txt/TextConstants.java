@@ -27,6 +27,7 @@ public interface TextConstants {
     public static final String OPTION_FIRST_LINE_ASTITLE = "FirstLineAsTitle";
     public static final String OPTION_IGNORE_READLINE_ERROR = "IgnoreReadlineError";
     public static final String OPTION_IGNORE_EMPTYLINE = "IgnoreEmptyLine";
+    public static final String OPTION_TRIM_SPACE = "TrimSpace";
 
     // connector operation    
     public static final String OPERATION = "Operation";

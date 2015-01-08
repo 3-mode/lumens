@@ -5,10 +5,13 @@
 package com.lumens.connector.txt;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import com.lumens.model.Value;
 
 /**
  *
@@ -18,13 +21,15 @@ public abstract class PatternParser {
     protected String TEXTDATA;
     protected String ESCAPE;
     protected String NON_ESCAPE;
-    protected String FIELD = String.format("%s|%s", ESCAPE, NON_ESCAPE);
+    protected String FIELD;
     protected Pattern defaultPattern;
+    protected Map<String, Value> options = new HashMap();
 
-    public PatternParser(String text, String escape, String nonEscape){
+    public PatternParser(String text, String escape, String nonEscape, String field){
         TEXTDATA = text;
         ESCAPE = escape;
         NON_ESCAPE = nonEscape;
+        FIELD = String.format("%s|%s", ESCAPE, NON_ESCAPE);
         defaultPattern = Pattern.compile(FIELD);
     }
     
@@ -50,8 +55,14 @@ public abstract class PatternParser {
         Matcher m = p.matcher(field);
 
         List<String> list = new ArrayList();
+        String group;
+        
+        boolean bTrim = options.containsKey(TextConstants.OPTION_TRIM_SPACE) && options.get(TextConstants.OPTION_TRIM_SPACE).getBoolean();
         while (m.find()) {
-            list.add(m.group());
+            group = m.group();
+            if (bTrim)
+                group = group.trim();
+            list.add(group);
         }
 
         return list;
@@ -59,5 +70,14 @@ public abstract class PatternParser {
 
     public List<String> ParseField(String field) {
         return ParseField(FIELD, field);
+    }
+    
+    public void SetOption(String key, Value v){
+        Value val;
+        if ((val = options.get(key)) != null){
+            val.set(v);
+        }else{
+            options.put(key, v);
+        }
     }
 }

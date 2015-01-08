@@ -42,6 +42,7 @@ public class TextClient implements TextConstants{
         boolean ignoreEmptyLine = param.getChild(OPTION_IGNORE_EMPTYLINE) == null ? propList.get(OPTION_IGNORE_EMPTYLINE).getBoolean() : param.getChild(OPTION_IGNORE_EMPTYLINE).getValue().getBoolean();
         boolean firstLineAsTitle = param.getChild(OPTION_FIRST_LINE_ASTITLE) == null ? propList.get(OPTION_FIRST_LINE_ASTITLE).getBoolean() : param.getChild(OPTION_FIRST_LINE_ASTITLE).getValue().getBoolean();
         boolean ignoreReadlineError = param.getChild(OPTION_IGNORE_READLINE_ERROR) == null ? propList.get(OPTION_IGNORE_READLINE_ERROR).getBoolean() : param.getChild(OPTION_IGNORE_READLINE_ERROR).getValue().getBoolean();
+        boolean bTrim = param.getChild(OPTION_TRIM_SPACE) == null ? propList.get(OPTION_TRIM_SPACE).getBoolean() : param.getChild(OPTION_TRIM_SPACE).getValue().getBoolean();
         int maxLine = param.getChild(OPTION_MAXLINE) == null ? propList.get(OPTION_MAXLINE).getInt() : param.getChild(OPTION_MAXLINE).getValue().getInt();
 
         if (delimiter.equals(escape)) {
@@ -77,7 +78,7 @@ public class TextClient implements TextConstants{
                     if (maxLine > 0 && --maxLine <= 0)
                         break;
                     try {
-                        Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote);
+                        Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote, bTrim);
                         result.add(build);
                     } catch (Exception ex) {
                         if (!ignoreReadlineError)
@@ -99,6 +100,7 @@ public class TextClient implements TextConstants{
         String delimiter = param.getChild(FILEDELIMITER) == null ? propList.get(FILEDELIMITER).toString() : param.getChild(FILEDELIMITER).getValue().toString();
         String linedelimter = param.getChild(LINEDELIMITER) == null ? propList.get(LINEDELIMITER).toString() : param.getChild(LINEDELIMITER).getValue().toString();
         boolean formatAsTitle = param.getChild(OPTION_FORMAT_ASTITLE) == null ? propList.get(OPTION_FORMAT_ASTITLE).getBoolean() : param.getChild(OPTION_FORMAT_ASTITLE).getValue().getBoolean();
+        boolean bTrim = param.getChild(OPTION_TRIM_SPACE) == null ? propList.get(OPTION_TRIM_SPACE).getBoolean() : param.getChild(OPTION_TRIM_SPACE).getValue().getBoolean();
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), encoding))) {
             String line = "";
@@ -106,13 +108,18 @@ public class TextClient implements TextConstants{
             for (Element field : elem.getChildren()) {
                 if (FORMAT_PARAMS.equalsIgnoreCase(field.getFormat().getName()))
                     continue;
+                
+                String fieldString = field.getValue().toString();
+                if (bTrim)
+                    fieldString = fieldString.trim();
                 if (formatAsTitle && !title.isEmpty())
                     title += delimiter;
                 if (formatAsTitle)
                     title += field.getFormat().getName();
                 if (!line.isEmpty())
-                    line += delimiter;
-                line += field.getValue().toString();
+                    line += delimiter;               
+                
+                line += fieldString;
             }
 
             if (formatAsTitle) {

@@ -136,6 +136,7 @@ public class ConnectorTest implements TextConstants{
         propsR.put(OPTION_FORMAT_ASTITLE, new Value(true));
         propsR.put(OPTION_FIRST_LINE_ASTITLE, new Value(false));
         propsR.put(OPTION_IGNORE_READLINE_ERROR, new Value(true));
+        propsR.put(OPTION_TRIM_SPACE, new Value(false));
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
@@ -191,6 +192,7 @@ public class ConnectorTest implements TextConstants{
         propsR.put(OPTION_FORMAT_ASTITLE, new Value(true));
         propsR.put(OPTION_FIRST_LINE_ASTITLE, new Value(false));
         propsR.put(OPTION_IGNORE_READLINE_ERROR, new Value(true));
+        propsR.put(OPTION_TRIM_SPACE, new Value(true));
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
@@ -242,6 +244,7 @@ public class ConnectorTest implements TextConstants{
         propsW.put(ENCODING, new Value("UTF-8"));
         propsW.put(LINEDELIMITER, new Value("\r\n"));
         propsW.put(OPTION_FORMAT_ASTITLE, new Value(true));
+        propsW.put(OPTION_TRIM_SPACE, new Value(true));
         cntrW.setPropertyList(propsW);
         cntrW.open();
 
@@ -293,7 +296,7 @@ public class ConnectorTest implements TextConstants{
             paramsA.addChild(PATH).setValue(new Value(path2write));
             paramsA.addChild(ENCODING).setValue(new Value("UTF-8"));
             paramsA.addChild(FILEDELIMITER).setValue(new Value("***"));
-            paramsA.addChild(LINEDELIMITER).setValue(new Value("\r\n"));
+            paramsA.addChild(LINEDELIMITER).setValue(new Value("\r\n"));            
 
             elemAppend.addChild("number").setValue(new Value("99"));
             elemAppend.addChild("text").setValue(new Value("append"));

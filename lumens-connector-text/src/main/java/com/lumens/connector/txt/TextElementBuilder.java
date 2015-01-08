@@ -16,7 +16,7 @@ import java.util.regex.*;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class TextElementBuilder implements TextConstants {
-    public static Element buildElement(Format fmt, String line, String delimiter, String escape, String quote) throws Exception {
+    public static Element buildElement(Format fmt, String line, String delimiter, String escape, String quote, boolean trim) throws Exception {
         if (fmt == null || fmt.getChildren() == null || line == null || delimiter == null) {
             return null;
         }
@@ -51,8 +51,9 @@ public class TextElementBuilder implements TextConstants {
         int index = 0;
         for (Format child : children) {
             int size = values.size();
-            if (!FORMAT_PARAMS.equalsIgnoreCase(child.getName()))
+            if (!FORMAT_PARAMS.equalsIgnoreCase(child.getName())){
                 elem.addChild(child.getName()).setValue(new Value(child.getType(), index > size - 1 ? null : values.get(index++)));
+            }
         }
 
         return elem;
