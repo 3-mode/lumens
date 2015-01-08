@@ -5,6 +5,7 @@ package test;
 
 import com.lumens.backend.ApplicationContext;
 import com.lumens.backend.DataElementLoggingHandler;
+import com.lumens.backend.service.ProjectService;
 import com.lumens.backend.sql.DAOFactory;
 import com.lumens.backend.sql.dao.InOutLogDAO;
 import com.lumens.backend.sql.dao.ProjectDAO;
@@ -21,12 +22,15 @@ import com.lumens.model.Element;
 import com.lumens.model.serializer.ElementSerializer;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import javax.ws.rs.core.Response;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
@@ -78,7 +82,6 @@ public class ServiceTest {
         pDAO.delete(0L);
     }
 
-    @Test
     public void testPutLog() {
         InOutLogDAO inoutLogDAO = DAOFactory.getInOutLogDAO();
         InOutLogItem item = new InOutLogItem();
@@ -93,6 +96,13 @@ public class ServiceTest {
         System.out.println(date);
         item.lastModifTime = Timestamp.valueOf(date);
         inoutLogDAO.create(item);
+    }
+
+    @Test
+    public void readLog() throws IOException {
+        ProjectService service = new ProjectService();
+        Response resp = service.getProjectExecutionResults(1415415434544L, 1415415407248L);
+        System.out.println(resp.getEntity().toString());
     }
 
 }

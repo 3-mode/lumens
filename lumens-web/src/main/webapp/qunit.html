@@ -73,11 +73,21 @@
         <script src="app/mvp/controllers/designer_controller.js"></script>
         <script type="text/javascript">
             var appModule = angular.module('LumensQUnit', ["lumens-directives", "lumens-services", "lumens-controllers", "ngRoute"]);
-            function MainQUnitCtrl($scope, $http) {
+            function MainQUnitCtrl($scope, $http, TestExecLogService) {
                 var array = ["test1", "test2", "test3"];
                 console.log("before delete ", array);
                 delete array[1];
                 console.log("after delete ", array);
+
+                TestExecLogService.get({
+                    project_id: 1415415434544,
+                    component_id: 1415415407248
+                }, function (result) {
+                    console.log(result);
+                    QUnit.test("Read testexec log", function (assert) {
+                        assert.ok(result.result_content.log_items.lenth > 0, "Passed!");
+                    });
+                });
 
                 QUnit.test("Register Format testing", function (assert) {
                     assert.ok(1 == "1", "Passed!");

@@ -3,6 +3,7 @@
  */
 Lumens.controllers = angular.module("lumens-controllers", ["ngRoute"]);
 Lumens.services = angular.module('lumens-services', ['ngResource']);
+Lumens.directives = angular.module("lumens-directives", []);
 Lumens.$ngApp = angular.module("lumens-app", ["lumens-directives", "lumens-services", "lumens-controllers", "ngRoute"]);
 Lumens.$ngApp.config(function ($routeProvider) {
     $routeProvider

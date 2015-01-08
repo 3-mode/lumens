@@ -20,7 +20,9 @@ import com.lumens.backend.ServiceConstants;
 import static com.lumens.backend.ServiceConstants.ACTIVE;
 import static com.lumens.backend.ServiceConstants.DELETE;
 import com.lumens.backend.sql.DAOFactory;
+import com.lumens.backend.sql.dao.InOutLogDAO;
 import com.lumens.backend.sql.dao.ProjectDAO;
+import com.lumens.backend.sql.entity.InOutLogItem;
 import com.lumens.backend.sql.entity.Project;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import java.io.ByteArrayInputStream;
@@ -179,24 +181,14 @@ public class ProjectService implements ServiceConstants {
     }
 
     @GET
-    @Path("/result")
+    @Path("/testexec/log")
     @Produces("application/json")
-    public Response getProjectExecutionResults(@QueryParam("page") int page, @Context HttpServletRequest req) throws IOException {
-        JsonUtility utility = JsonUtility.createJsonUtility();
-        JsonGenerator json = utility.getGenerator();
-        json.writeStartObject();
-        json.writeArrayFieldStart("Result");
-        boolean isFirst = true;
-        for (String result : ApplicationContext.get().getCacheResultString()) {
-            if (!isFirst)
-                json.writeRaw(',');
-            else
-                isFirst = false;
-            json.writeRaw(result);
+    public Response getProjectExecutionResults(@QueryParam("project_id") long projectID, @QueryParam("component_id") long componentID) throws IOException {
+        try {
+            return this.getProjectTestExecResult(projectID, componentID);
+        } catch (Exception ex) {
+            return ServerUtils.getErrorMessageResponse(ex);
         }
-        json.writeEndArray();
-        json.writeEndObject();
-        return Response.ok().entity(utility.toUTF8String()).build();
     }
 
     @GET
@@ -358,5 +350,31 @@ public class ProjectService implements ServiceConstants {
     private Response deployProject(long projectID, HttpServletRequest req) throws Exception {
         this.getProject(projectID, req);
         return this.activeProject(projectID, req);
+    }
+
+    private Response getProjectTestExecResult(long projectID, long componentID) throws Exception {
+        InOutLogDAO inoutLogDAO = DAOFactory.getInOutLogDAO();
+        List<InOutLogItem> items = inoutLogDAO.getLogList(projectID, componentID);
+        JsonUtility utility = JsonUtility.createJsonUtility();
+        JsonGenerator json = utility.getGenerator();
+        json.writeStartObject();
+        json.writeStringField("status", "OK");
+        json.writeObjectFieldStart("result_content");
+        json.writeNumberField("project_id", projectID);
+        json.writeNumberField("component_id", componentID);
+        json.writeArrayFieldStart("log_items");
+        for (InOutLogItem item : items) {
+            json.writeStartObject();
+            json.writeStringField("log_id", Long.toString(item.logID));
+            json.writeStringField("target_name", item.targetName);
+            json.writeStringField("direction", item.direction);
+            json.writeStringField("last_modif_time", item.lastModifTime.toString());
+            json.writeStringField("log_records", item.data);
+            json.writeEndObject();
+        }
+        json.writeEndArray();
+        json.writeEndObject();
+        json.writeEndObject();
+        return Response.ok().entity(utility.toUTF8String()).build();
     }
 }

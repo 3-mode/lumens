@@ -177,3 +177,8 @@ Lumens.services.factory('FormatByPath', function ($resource) {
         get: {method: 'GET', isArray: false}
     });
 });
+Lumens.services.factory('TestExecLogService', function ($resource) {
+    return $resource("rest/project/testexec/log?project_id=:project_id&component_id=:component_id", {}, {
+        get: {method: 'GET', isArray: false}
+    });
+});
