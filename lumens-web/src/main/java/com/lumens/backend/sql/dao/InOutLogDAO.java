@@ -3,14 +3,19 @@
  */
 package com.lumens.backend.sql.dao;
 
+import com.lumens.backend.sql.EntityFactory;
 import com.lumens.backend.sql.entity.InOutLogItem;
 import com.lumens.backend.sql.entity.Project;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
@@ -51,5 +56,16 @@ public class InOutLogDAO extends BaseDAO {
                 }
             }
         });
+    }
+
+    public List<InOutLogItem> getLogList(long projectID, long componentID) {
+        final List<InOutLogItem> pList = new ArrayList<>();
+        jdbcTemplate.query(sqlManager.getSQL("InOutLogDAO/GetLogByComponent", projectID, componentID), new RowCallbackHandler() {
+            @Override
+            public void processRow(ResultSet rs) throws SQLException {
+                pList.add(EntityFactory.createEntity(InOutLogItem.class, rs));
+            }
+        });
+        return pList;
     }
 }

@@ -4,7 +4,6 @@
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
-Lumens.directives = angular.module("lumens-directives", []);
 Lumens.directives.directive("dynamicPropertyForm", function () {
     return {
         restrict: 'A',
