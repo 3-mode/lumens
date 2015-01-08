@@ -39,7 +39,9 @@ public class TextElementBuilder implements TextConstants {
             // TODO: support specific escape char quote char. Need to build customize pattern  
         } else {
             try {
-                values.addAll((new RFC4180Parser()).ParseField(curline));
+                PatternParser parser = new RFC4180Parser();
+                parser.SetOption(OPTION_TRIM_SPACE, new Value(trim));
+                values.addAll(parser.ParseField(curline));
             } catch (PatternSyntaxException ex) {
                 throw ex;
             }
