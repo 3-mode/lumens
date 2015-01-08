@@ -164,9 +164,9 @@ public class ConnectorTest implements TextConstants{
             paramsMultiR.addChild(OPERATION).setValue(new Value(OPERATION_READ));
             paramsMultiR.addChild(PATH).setValue(new Value(folder2read));
             resultR = operR.execute(new ElementChunk(Arrays.asList(elemMultiRead)), fmtR);
-            assertTrue("Fail to executre source element read: multi files read", resultR.hasResult());
+            assertTrue("Fail to executre source element read: multi files read folder", resultR.hasResult());
         } catch (Exception ex) {
-            assertFalse("Fail to execute source connector read: multi files read.\n " + ex.getMessage(), true);
+            assertFalse("Fail to execute source connector read: multi files read folder.\n " + ex.getMessage(), true);
         }
 
         cntrR.close();
@@ -226,7 +226,7 @@ public class ConnectorTest implements TextConstants{
             assertTrue("Fail to executre source element read", resultR.hasResult());
             cntrR.close();
         } catch (Exception ex) {
-            assertFalse("Fail to execute source connector read: multi files read.\n " + ex.getMessage(), true);
+            assertFalse("Fail to execute source connector read: single file read.\n " + ex.getMessage(), true);
         }
     }
 

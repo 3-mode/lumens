@@ -23,7 +23,8 @@ import java.io.File;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class TextClient implements TextConstants{
+public class TextClient implements TextConstants {
+
     private final Map<String, Value> propList;
 
     public TextClient(Map<String, Value> props) {
@@ -59,32 +60,58 @@ public class TextClient implements TextConstants{
             files.add(new File(path));
         } else if (fileOrDir.isDirectory()) {
             for (File f : fileOrDir.listFiles(new LocalFileNameFilter(filter))) {
-                if (f.isFile())
+                if (f.isFile()) {
                     files.add(f);
+                }
             }
         }
 
+        CSVHelper helper = new CSVHelper()
+                .setOption(QUOTE_CHAR, new Value(quote))
+                .setOption(FILEDELIMITER, new Value(delimiter))
+                .setOption(LINEDELIMITER, new Value(delimiter))
+                .setOption(OPTION_IGNORE_EMPTYLINE, new Value(delimiter))
+                .setOption(OPTION_SKIP_COMMENTS, new Value(delimiter))
+                .setOption(FILEDELIMITER, new Value(delimiter));
+
         for (File file : files) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (line.isEmpty() && ignoreEmptyLine) {
-                        continue;
-                    }
-                    if (firstLineAsTitle) {
-                        firstLineAsTitle = false;
-                        continue;
-                    }
-                    if (maxLine > 0 && --maxLine <= 0)
+                List<Object> columns;
+                while ((columns = helper.read(reader)) != null) {
+                    if (maxLine > 0 && --maxLine <= 0) {
                         break;
+                    }
                     try {
-                        Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote, bTrim);
+                        Element build = TextElementBuilder.buildElement(fmt, columns);
                         result.add(build);
                     } catch (Exception ex) {
-                        if (!ignoreReadlineError)
+                        if (!ignoreReadlineError) {
                             throw new RuntimeException(ex);
+                        }
                     }
                 }
+                /*
+                 String line;
+                 while ((line = reader.readLine()) != null) {
+                 if (line.isEmpty() && ignoreEmptyLine) {
+                 continue;
+                 }
+                 if (firstLineAsTitle) {
+                 firstLineAsTitle = false;
+                 continue;
+                 }
+                 if (maxLine > 0 && --maxLine <= 0) {
+                 break;
+                 }
+                 try {
+                 Element build = TextElementBuilder.buildElement(fmt, line, delimiter, escape, quote, bTrim);
+                 result.add(build);
+                 } catch (Exception ex) {
+                 if (!ignoreReadlineError) {
+                 throw new RuntimeException(ex);
+                 }
+                 }
+                 }*/
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -106,28 +133,34 @@ public class TextClient implements TextConstants{
             String line = "";
             String title = "";
             for (Element field : elem.getChildren()) {
-                if (FORMAT_PARAMS.equalsIgnoreCase(field.getFormat().getName()))
+                if (FORMAT_PARAMS.equalsIgnoreCase(field.getFormat().getName())) {
                     continue;
-                
+                }
+
                 String fieldString = field.getValue().toString();
-                if (bTrim)
+                if (bTrim) {
                     fieldString = fieldString.trim();
-                if (formatAsTitle && !title.isEmpty())
+                }
+                if (formatAsTitle && !title.isEmpty()) {
                     title += delimiter;
-                if (formatAsTitle)
+                }
+                if (formatAsTitle) {
                     title += field.getFormat().getName();
-                if (!line.isEmpty())
-                    line += delimiter;               
-                
+                }
+                if (!line.isEmpty()) {
+                    line += delimiter;
+                }
+
                 line += fieldString;
             }
 
             if (formatAsTitle) {
                 writer.write(title);
-                if (linedelimter.isEmpty())
+                if (linedelimter.isEmpty()) {
                     writer.newLine();
-                else
+                } else {
                     writer.write(linedelimter);
+                }
                 formatAsTitle = false;
             }
 

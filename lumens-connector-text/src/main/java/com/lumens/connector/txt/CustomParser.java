@@ -7,6 +7,8 @@ package com.lumens.connector.txt;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
+
+// Customized delimiter in pattern:  tab[0B], space[20], colon[3A], ;[3B], pipe[7C]
 public class CustomParser extends PatternParser {
 
     // [\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]

@@ -16,15 +16,11 @@ import java.util.regex.*;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class TextElementBuilder implements TextConstants {
-    public static Element buildElement(Format fmt, String line, String delimiter, String escape, String quote, boolean trim) throws Exception {
-        if (fmt == null || fmt.getChildren() == null || line == null || delimiter == null) {
+    public static Element buildElement(Format fmt, List<Object> columns) throws Exception {
+        if (fmt == null || fmt.getChildren() == null) {
             return null;
         }
-
-        boolean bNormalEscape = (escape != null) && escape.equals("\"")
-                                && (quote != null) && (quote.equals("\""))
-                                && (delimiter.equals(","));
-
+/*
         List<String> values = new ArrayList();
 
         // Deal with first element empty
@@ -46,15 +42,15 @@ public class TextElementBuilder implements TextConstants {
                 throw ex;
             }
         }
-
+*/
         Element elem = new DataElement(fmt);
 
         List<Format> children = fmt.getChildren();
         int index = 0;
         for (Format child : children) {
-            int size = values.size();
+            int size = columns.size();
             if (!FORMAT_PARAMS.equalsIgnoreCase(child.getName())){
-                elem.addChild(child.getName()).setValue(new Value(child.getType(), index > size - 1 ? null : values.get(index++)));
+                elem.addChild(child.getName()).setValue(new Value(child.getType(), index > size - 1 ? null : columns.get(index++)));
             }
         }
 
