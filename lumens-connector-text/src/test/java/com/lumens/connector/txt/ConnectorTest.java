@@ -55,8 +55,9 @@ public class ConnectorTest implements TextConstants {
                 InputStreamReader reader = new InputStreamReader(new FileInputStream(path2read), "UTF-8");
                 BufferedReader bufReader = new BufferedReader(reader);
                 String lineTxt = null;
+                //System.out.println("---------Test connection---------------");
                 while ((lineTxt = bufReader.readLine()) != null) {
-                    System.out.println(lineTxt);
+                    //System.out.println(lineTxt);
                 }
             }
         } catch (Exception e) {
@@ -167,6 +168,19 @@ public class ConnectorTest implements TextConstants {
             paramsMultiR.addChild(PATH).setValue(new Value(folder2read));
             resultR = operR.execute(new ElementChunk(Arrays.asList(elemMultiRead)), fmtR);
             assertTrue("Fail to executre source element read: multi files read folder", resultR.hasResult());
+
+            System.out.println("-----------------------------------------");
+            System.out.println("Reading multi csv files:");
+            for (Element elem : resultR.getResult()) {
+                StringBuilder line = new StringBuilder();
+                for (Element el : elem.getChildren()) {
+                    if (line.length() > 0) {
+                        line.append(",");
+                    }
+                    line.append(el.getValue().toString());
+                }
+                System.out.println(line);
+            }
         } catch (Exception ex) {
             assertFalse("Fail to execute source connector read: multi files read folder.\n " + ex.getMessage(), true);
         }
@@ -227,6 +241,18 @@ public class ConnectorTest implements TextConstants {
 
             resultR = operR.execute(new ElementChunk(Arrays.asList(elemRead)), fmtR);
             assertTrue("Fail to executre source element read", resultR.hasResult());
+            System.out.println("-----------------------------------------");
+            System.out.println("Reading single csv file:");
+            for (Element elem : resultR.getResult()) {
+                StringBuilder line = new StringBuilder();
+                for (Element el : elem.getChildren()) {
+                    if (line.length() > 0) {
+                        line.append(",");
+                    }
+                    line.append(el.getValue().toString());
+                }
+                System.out.println(line);
+            }
             cntrR.close();
         } catch (Exception ex) {
             assertFalse("Fail to execute source connector read: single file read.\n " + ex.getMessage(), true);
@@ -284,6 +310,18 @@ public class ConnectorTest implements TextConstants {
 
             List<Element> output = new ArrayList();
             output.add(elemWrite);
+            System.out.println("-----------------------------------------");
+            System.out.println("Content to write:");
+            StringBuilder line = new StringBuilder();
+            for (Element el : elemWrite.getChildren()) {
+                if (line.length() > 0) {
+                    line.append(",");
+                }
+                line.append(el.getValue().toString());
+            }
+            System.out.println(line);
+            System.out.println();
+
             OperationResult result = operW.execute(new ElementChunk(output), fmtW);
         } catch (Exception ex) {
             assertFalse("Fail to execute source connector write.\n " + ex.getMessage(), true);
