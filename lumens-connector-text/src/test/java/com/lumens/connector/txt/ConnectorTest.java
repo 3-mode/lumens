@@ -304,7 +304,7 @@ public class ConnectorTest implements TextConstants {
             paramsW.addChild(LINEDELIMITER).setValue(new Value("\r\n"));
 
             elemWrite.addChild("number").setValue(new Value("100"));
-            elemWrite.addChild("text").setValue(new Value("text100"));
+            elemWrite.addChild("text").setValue(new Value("测试"));
             elemWrite.addChild("date").setValue(new Value("2014-12-12"));
             elemWrite.addChild("available").setValue(new Value(true));
 
@@ -349,6 +349,18 @@ public class ConnectorTest implements TextConstants {
 
             List<Element> outputA = new ArrayList();
             outputA.add(elemAppend);
+            System.out.println("-----------------------------------------");
+            System.out.println("Content to append:");
+            StringBuilder lineA = new StringBuilder();
+            for (Element elem : outputA) {
+                for (Element el : elem.getChildren()) {
+                    if (lineA.length() > 0) {
+                        lineA.append(",");
+                    }
+                    lineA.append(el.getValue().toString());
+                }
+                System.out.println(lineA);
+            }
             OperationResult resultA = operW.execute(new ElementChunk(outputA), fmtA);
         } catch (Exception ex) {
             assertFalse("Fail to execute source connector append.\n " + ex.getMessage(), true);
