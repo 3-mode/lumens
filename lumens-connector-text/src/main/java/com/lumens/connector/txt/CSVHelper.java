@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.io.Reader;
+import java.io.Writer;
 import java.io.IOException;
 import org.supercsv.io.ICsvListReader;
 import org.supercsv.io.ICsvListWriter;
@@ -46,7 +47,20 @@ public class CSVHelper implements TextConstants {
         return this;
     }
 
-    public List<String> readline() throws Exception {        
+    public CSVHelper build(Writer writer) throws Exception {
+        try {
+            if (listWriter != null) {
+                listWriter.close();
+            }
+
+            listWriter = new CsvListWriter(writer, createPreperence());
+        } catch (Exception ex) {
+            throw new IOException(ex);
+        }
+        return this;
+    }
+
+    public List<String> readline() throws Exception {
         return listReader.read();
     }
 
@@ -69,13 +83,48 @@ public class CSVHelper implements TextConstants {
                 listReader = null;
             }
         } catch (Exception ex) {
-            if (listReader != null) {
-                listReader.close();
-            }
+            // Not close let outside caller to deal with and to continue or not
             throw ex;
         }
 
         return customerList;
+    }
+
+    public void writeLine(String line) throws Exception {
+        try {
+            listWriter.write(line);
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    public void write(List<Object> columns) throws Exception {
+        try {
+            if (columns != null) {
+                CellProcessor[] processors = new CellProcessor[columns.size()];
+                if (options.get(OPTION_TRIM_SPACE).getBoolean()) {
+                    for (int i = 0; i < processors.length; i++) {
+                        processors[i] = new Trim();
+                    }
+                }
+                listWriter.write(columns, processors);
+            }
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    public void close() throws Exception {
+        try {
+            if (listReader != null) {
+                listReader.close();
+            }
+            if (listWriter != null) {
+                listWriter.close();
+            }
+        } catch (Exception ex) {
+            throw ex;
+        }
     }
 
     public CSVHelper setOption(String key, Value v) {
