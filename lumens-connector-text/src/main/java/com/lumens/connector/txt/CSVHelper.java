@@ -14,6 +14,7 @@ import org.supercsv.io.ICsvListWriter;
 import org.supercsv.io.CsvListReader;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.cellprocessor.ift.CellProcessor;
+import org.supercsv.cellprocessor.Trim;
 import org.supercsv.prefs.CsvPreference;
 import org.supercsv.comment.CommentStartsWith;
 import org.supercsv.quote.AlwaysQuoteMode;
@@ -28,22 +29,60 @@ public class CSVHelper implements TextConstants {
     private ICsvListReader listReader;
     private ICsvListWriter listWriter;
 
-    public CSVHelper(Reader reader) throws Exception{
+    public CSVHelper() {
         initOption();
-        
+    }
+
+    public CSVHelper build(Reader reader) throws Exception {
         try {
             if (listReader != null) {
                 listReader.close();
             }
-            
+
             listReader = new CsvListReader(reader, createPreperence());
             listReader.getHeader(false); // skip the header          
-                       
+
         } catch (Exception ex) {
             throw new IOException(ex);
-        }               
+        }
+        return this;
     }
 
+    // Outside caller is responsible for closing stream
+    public List<Object> read() throws Exception {
+        List<Object> customerList = null;
+        try {
+            if (listReader.read() != null) {
+                CellProcessor[] processors = new CellProcessor[listReader.length()];
+                if (options.get(OPTION_TRIM_SPACE).getBoolean()) {
+                    for (int i = 0; i < processors.length; i++) {
+                        processors[i] = new Trim();
+                    }
+                }
+                customerList = listReader.executeProcessors(processors);
+            }
+
+            if (customerList == null) {
+                listReader.close();
+                listReader = null;
+            }
+        } catch (Exception ex) {
+            if (listReader != null) {
+                listReader.close();
+            }
+            throw ex;
+        }
+
+        return customerList;
+    }
+
+    public CSVHelper setOption(String key, Value v) {
+        options.put(key, v);
+
+        return this;
+    }
+
+    // Private methods
     private void initOption() {
         options.put(QUOTE_CHAR, new Value("\""));
         options.put(FILEDELIMITER, new Value(","));
@@ -52,6 +91,7 @@ public class CSVHelper implements TextConstants {
         options.put(OPTION_SKIP_COMMENTS, new Value(false));
         options.put(OPTION_SURROUNDING_SPACES_NEED_QUOTES, new Value(false));
         options.put(OPTION_QUOTE_MODE, new Value(false));
+        options.put(OPTION_TRIM_SPACE, new Value(false));
     }
 
     private CsvPreference createPreperence() {
@@ -75,39 +115,5 @@ public class CSVHelper implements TextConstants {
         }
 
         return builder.build();
-    }
-
-    // Outside caller is responsible for closing stream
-    public List<Object> read() throws Exception {
-        List<Object> customerList = null;
-        try {
-            if (listReader.read() != null) {
-                final CellProcessor[] processors = new CellProcessor[listReader.length()];
-                customerList = listReader.executeProcessors(processors);
-            }
-
-            if (customerList == null) {
-                listReader.close();
-                listReader = null;
-            }
-        } catch (Exception ex) {
-            if (listReader != null) {
-                listReader.close();
-            }
-            throw ex;
-        }
-
-        return customerList;
-    }
-
-    public CSVHelper setOption(String key, Value v) {
-        Value val;
-        if ((val = options.get(key)) != null) {
-            val = v;
-        } else {
-            options.put(key, v);
-        }
-
-        return this;
     }
 }

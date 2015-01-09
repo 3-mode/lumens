@@ -68,20 +68,27 @@ public class TextClient implements TextConstants {
             }
         }
 
+        CSVHelper helper = new CSVHelper()
+                .setOption(QUOTE_CHAR, new Value(quote))
+                .setOption(FILEDELIMITER, new Value(delimiter))
+                .setOption(LINEDELIMITER, new Value(linedelimiter))
+                .setOption(OPTION_IGNORE_EMPTYLINE, new Value(ignoreEmptyLine))
+                .setOption(OPTION_SKIP_COMMENTS, new Value(skipComments))
+                .setOption(OPTION_TRIM_SPACE, new Value(bTrim));
+        
         for (File file : files) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding))) {
-                CSVHelper helper = new CSVHelper(reader)
-                        .setOption(QUOTE_CHAR, new Value(quote))
-                        .setOption(FILEDELIMITER, new Value(delimiter))
-                        .setOption(LINEDELIMITER, new Value(linedelimiter))
-                        .setOption(OPTION_IGNORE_EMPTYLINE, new Value(ignoreEmptyLine))
-                        .setOption(OPTION_SKIP_COMMENTS, new Value(skipComments))
-                        .setOption(OPTION_TRIM_SPACE, new Value(true));                        
-                
+                helper.build(reader);
+
                 List<Object> columns;
                 while ((columns = helper.read()) != null) {
                     if (maxLine > 0 && --maxLine <= 0) {
                         break;
+                    }
+                    if (firstLineAsTitle){
+                        firstLineAsTitle = false;
+                        // TODO: sent first line to UI, how?
+                        continue;
                     }
                     try {
                         Element build = TextElementBuilder.buildElement(fmt, columns);
