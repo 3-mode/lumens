@@ -137,6 +137,7 @@ public class ConnectorTest implements TextConstants{
         propsR.put(OPTION_FIRST_LINE_ASTITLE, new Value(false));
         propsR.put(OPTION_IGNORE_READLINE_ERROR, new Value(true));
         propsR.put(OPTION_TRIM_SPACE, new Value(false));
+        propsR.put(OPTION_SKIP_COMMENTS, new Value(false));
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
@@ -193,6 +194,7 @@ public class ConnectorTest implements TextConstants{
         propsR.put(OPTION_FIRST_LINE_ASTITLE, new Value(false));
         propsR.put(OPTION_IGNORE_READLINE_ERROR, new Value(true));
         propsR.put(OPTION_TRIM_SPACE, new Value(true));
+        propsR.put(OPTION_SKIP_COMMENTS, new Value(false));
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
@@ -245,6 +247,7 @@ public class ConnectorTest implements TextConstants{
         propsW.put(LINEDELIMITER, new Value("\r\n"));
         propsW.put(OPTION_FORMAT_ASTITLE, new Value(true));
         propsW.put(OPTION_TRIM_SPACE, new Value(true));
+        propsW.put(OPTION_SKIP_COMMENTS, new Value(false));
         cntrW.setPropertyList(propsW);
         cntrW.open();
 

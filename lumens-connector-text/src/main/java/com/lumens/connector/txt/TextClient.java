@@ -38,9 +38,11 @@ public class TextClient implements TextConstants {
         String path = param.getChild(PATH) == null ? propList.get(PATH).toString() : param.getChild(PATH).getValue().toString();
         String filter = param.getChild(FILE_FILTER) == null ? propList.get(FILE_FILTER).toString() : param.getChild(FILE_FILTER).getValue().toString();
         String delimiter = param.getChild(FILEDELIMITER) == null ? propList.get(FILEDELIMITER).toString() : param.getChild(FILEDELIMITER).getValue().toString();
+        String linedelimiter = param.getChild(LINEDELIMITER) == null ? propList.get(LINEDELIMITER).toString() : param.getChild(LINEDELIMITER).getValue().toString();
         String escape = param.getChild(ESCAPE_CHAR) == null ? propList.get(ESCAPE_CHAR).toString() : param.getChild(ESCAPE_CHAR).getValue().toString();
         String quote = param.getChild(QUOTE_CHAR) == null ? propList.get(QUOTE_CHAR).toString() : param.getChild(QUOTE_CHAR).getValue().toString();
         boolean ignoreEmptyLine = param.getChild(OPTION_IGNORE_EMPTYLINE) == null ? propList.get(OPTION_IGNORE_EMPTYLINE).getBoolean() : param.getChild(OPTION_IGNORE_EMPTYLINE).getValue().getBoolean();
+        boolean skipComments = param.getChild(OPTION_SKIP_COMMENTS) == null ? propList.get(OPTION_SKIP_COMMENTS).getBoolean() : param.getChild(OPTION_SKIP_COMMENTS).getValue().getBoolean();
         boolean firstLineAsTitle = param.getChild(OPTION_FIRST_LINE_ASTITLE) == null ? propList.get(OPTION_FIRST_LINE_ASTITLE).getBoolean() : param.getChild(OPTION_FIRST_LINE_ASTITLE).getValue().getBoolean();
         boolean ignoreReadlineError = param.getChild(OPTION_IGNORE_READLINE_ERROR) == null ? propList.get(OPTION_IGNORE_READLINE_ERROR).getBoolean() : param.getChild(OPTION_IGNORE_READLINE_ERROR).getValue().getBoolean();
         boolean bTrim = param.getChild(OPTION_TRIM_SPACE) == null ? propList.get(OPTION_TRIM_SPACE).getBoolean() : param.getChild(OPTION_TRIM_SPACE).getValue().getBoolean();
@@ -71,10 +73,10 @@ public class TextClient implements TextConstants {
                 CSVHelper helper = new CSVHelper(reader)
                         .setOption(QUOTE_CHAR, new Value(quote))
                         .setOption(FILEDELIMITER, new Value(delimiter))
-                        .setOption(LINEDELIMITER, new Value(delimiter))
-                        .setOption(OPTION_IGNORE_EMPTYLINE, new Value(delimiter))
-                        .setOption(OPTION_SKIP_COMMENTS, new Value(delimiter))
-                        .setOption(FILEDELIMITER, new Value(delimiter));
+                        .setOption(LINEDELIMITER, new Value(linedelimiter))
+                        .setOption(OPTION_IGNORE_EMPTYLINE, new Value(ignoreEmptyLine))
+                        .setOption(OPTION_SKIP_COMMENTS, new Value(skipComments))
+                        .setOption(OPTION_TRIM_SPACE, new Value(true));                        
                 
                 List<Object> columns;
                 while ((columns = helper.read()) != null) {
