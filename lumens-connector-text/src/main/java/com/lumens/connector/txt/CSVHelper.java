@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.io.Reader;
+import java.io.IOException;
 import org.supercsv.io.ICsvListReader;
 import org.supercsv.io.ICsvListWriter;
 import org.supercsv.io.CsvListReader;
@@ -27,11 +28,23 @@ public class CSVHelper implements TextConstants {
     private ICsvListReader listReader;
     private ICsvListWriter listWriter;
 
-    public CSVHelper() {
-        init();
+    public CSVHelper(Reader reader) throws Exception{
+        initOption();
+        
+        try {
+            if (listReader != null) {
+                listReader.close();
+            }
+            
+            listReader = new CsvListReader(reader, createPreperence());
+            listReader.getHeader(false); // skip the header          
+                       
+        } catch (Exception ex) {
+            throw new IOException(ex);
+        }               
     }
 
-    private void init() {
+    private void initOption() {
         options.put(QUOTE_CHAR, new Value("\""));
         options.put(FILEDELIMITER, new Value(","));
         options.put(LINEDELIMITER, new Value("\\r\\n"));
@@ -65,25 +78,20 @@ public class CSVHelper implements TextConstants {
     }
 
     // Outside caller is responsible for closing stream
-    public List<Object> read(Reader reader) throws Exception {
+    public List<Object> read() throws Exception {
         List<Object> customerList = null;
         try {
-            if (listReader == null) {
-                listReader = new CsvListReader(reader, createPreperence());
-                listReader.getHeader(true); // skip the header (can't be used with CsvListReader)           
-            }
-
-            if (listReader.read() != null) {                
+            if (listReader.read() != null) {
                 final CellProcessor[] processors = new CellProcessor[listReader.length()];
                 customerList = listReader.executeProcessors(processors);
             }
-            
-            if (customerList == null){
+
+            if (customerList == null) {
                 listReader.close();
                 listReader = null;
             }
         } catch (Exception ex) {
-            if (listReader != null){
+            if (listReader != null) {
                 listReader.close();
             }
             throw ex;

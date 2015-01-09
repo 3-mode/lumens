@@ -66,18 +66,18 @@ public class TextClient implements TextConstants {
             }
         }
 
-        CSVHelper helper = new CSVHelper()
-                .setOption(QUOTE_CHAR, new Value(quote))
-                .setOption(FILEDELIMITER, new Value(delimiter))
-                .setOption(LINEDELIMITER, new Value(delimiter))
-                .setOption(OPTION_IGNORE_EMPTYLINE, new Value(delimiter))
-                .setOption(OPTION_SKIP_COMMENTS, new Value(delimiter))
-                .setOption(FILEDELIMITER, new Value(delimiter));
-
         for (File file : files) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding))) {
+                CSVHelper helper = new CSVHelper(reader)
+                        .setOption(QUOTE_CHAR, new Value(quote))
+                        .setOption(FILEDELIMITER, new Value(delimiter))
+                        .setOption(LINEDELIMITER, new Value(delimiter))
+                        .setOption(OPTION_IGNORE_EMPTYLINE, new Value(delimiter))
+                        .setOption(OPTION_SKIP_COMMENTS, new Value(delimiter))
+                        .setOption(FILEDELIMITER, new Value(delimiter));
+                
                 List<Object> columns;
-                while ((columns = helper.read(reader)) != null) {
+                while ((columns = helper.read()) != null) {
                     if (maxLine > 0 && --maxLine <= 0) {
                         break;
                     }
