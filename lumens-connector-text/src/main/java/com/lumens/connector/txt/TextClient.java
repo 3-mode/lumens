@@ -79,12 +79,12 @@ public class TextClient implements TextConstants {
         for (File file : files) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding))) {
                 helper.build(reader);
-                if (firstLineAsTitle) {                    
+                if (firstLineAsTitle) {
                     // TODO: sent first line to UI, how?
                     List<String> titles = helper.readline();
                     continue;
                 }
-                
+
                 List<Object> columns;
                 while ((columns = helper.read()) != null) {
                     if (maxLine > 0 && --maxLine <= 0) {
@@ -95,6 +95,7 @@ public class TextClient implements TextConstants {
                         result.add(build);
                     } catch (Exception ex) {
                         if (!ignoreReadlineError) {
+                            helper.close();
                             throw new RuntimeException(ex);
                         }
                     }
@@ -112,10 +113,12 @@ public class TextClient implements TextConstants {
         String encoding = param.getChild(ENCODING) == null ? propList.get(ENCODING).toString() : param.getChild(ENCODING).getValue().toString();
         String path = param.getChild(PATH) == null ? propList.get(PATH).toString() : param.getChild(PATH).getValue().toString();
         String delimiter = param.getChild(FILEDELIMITER) == null ? propList.get(FILEDELIMITER).toString() : param.getChild(FILEDELIMITER).getValue().toString();
-        String linedelimter = param.getChild(LINEDELIMITER) == null ? propList.get(LINEDELIMITER).toString() : param.getChild(LINEDELIMITER).getValue().toString();
+        String linedelimiter = param.getChild(LINEDELIMITER) == null ? propList.get(LINEDELIMITER).toString() : param.getChild(LINEDELIMITER).getValue().toString();
+        String quote = param.getChild(QUOTE_CHAR) == null ? propList.get(QUOTE_CHAR).toString() : param.getChild(QUOTE_CHAR).getValue().toString();
         boolean formatAsTitle = param.getChild(OPTION_FORMAT_ASTITLE) == null ? propList.get(OPTION_FORMAT_ASTITLE).getBoolean() : param.getChild(OPTION_FORMAT_ASTITLE).getValue().getBoolean();
         boolean bTrim = param.getChild(OPTION_TRIM_SPACE) == null ? propList.get(OPTION_TRIM_SPACE).getBoolean() : param.getChild(OPTION_TRIM_SPACE).getValue().getBoolean();
-
+        boolean alwaysQuoteMode = param.getChild(OPTION_QUOTE_MODE) == null ? propList.get(OPTION_QUOTE_MODE).getBoolean() : param.getChild(OPTION_QUOTE_MODE).getValue().getBoolean();
+        
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), encoding))) {
             String line = "";
             String title = "";
@@ -138,24 +141,28 @@ public class TextClient implements TextConstants {
                     line += delimiter;
                 }
 
-                line += fieldString;
+                if (alwaysQuoteMode) {
+                    line += quote + fieldString + quote;
+                } else {
+                    line += fieldString;
+                }
             }
 
             if (formatAsTitle) {
                 writer.write(title);
-                if (linedelimter.isEmpty()) {
+                if (linedelimiter.isEmpty()) {
                     writer.newLine();
                 } else {
-                    writer.write(linedelimter);
+                    writer.write(linedelimiter);
                 }
                 formatAsTitle = false;
             }
 
             writer.write(line);
-            if (linedelimter.isEmpty()) {
+            if (linedelimiter.isEmpty()) {
                 writer.newLine();
             } else {
-                writer.write(linedelimter);
+                writer.write(linedelimiter);
             }
 
             writer.flush();

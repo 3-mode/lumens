@@ -33,7 +33,8 @@ import static org.junit.Assert.assertFalse;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class ConnectorTest implements TextConstants{
+public class ConnectorTest implements TextConstants {
+
     private String path2read = null;
     private String folder2read = null;
     private String path2write = null;
@@ -41,7 +42,7 @@ public class ConnectorTest implements TextConstants{
     private String folderSchemaPath = null;
 
     @Before
-    public void testConnection(){
+    public void testConnection() {
         try {
             path2read = getClass().getResource("/delimited/incsv.csv").toURI().getPath();
             folder2read = getClass().getResource("/delimited/csv/").toURI().getPath();
@@ -67,7 +68,7 @@ public class ConnectorTest implements TextConstants{
 
     @Test
     public void testRFC4180() {
-        PatternParser parser= new RFC4180Parser();
+        PatternParser parser = new RFC4180Parser();
         String escape = parser.GetEscapePattern();
         String nonescape = parser.GetNonEscapePattern();
 
@@ -248,6 +249,8 @@ public class ConnectorTest implements TextConstants{
         propsW.put(OPTION_FORMAT_ASTITLE, new Value(true));
         propsW.put(OPTION_TRIM_SPACE, new Value(true));
         propsW.put(OPTION_SKIP_COMMENTS, new Value(false));
+        propsW.put(OPTION_QUOTE_MODE, new Value(true));
+        propsW.put(QUOTE_CHAR, new Value("\""));
         cntrW.setPropertyList(propsW);
         cntrW.open();
 
@@ -299,7 +302,7 @@ public class ConnectorTest implements TextConstants{
             paramsA.addChild(PATH).setValue(new Value(path2write));
             paramsA.addChild(ENCODING).setValue(new Value("UTF-8"));
             paramsA.addChild(FILEDELIMITER).setValue(new Value("***"));
-            paramsA.addChild(LINEDELIMITER).setValue(new Value("\r\n"));            
+            paramsA.addChild(LINEDELIMITER).setValue(new Value("\r\n"));
 
             elemAppend.addChild("number").setValue(new Value("99"));
             elemAppend.addChild("text").setValue(new Value("append"));
