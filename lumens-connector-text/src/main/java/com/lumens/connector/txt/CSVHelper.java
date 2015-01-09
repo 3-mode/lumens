@@ -40,12 +40,14 @@ public class CSVHelper implements TextConstants {
             }
 
             listReader = new CsvListReader(reader, createPreperence());
-            listReader.getHeader(false); // skip the header          
-
         } catch (Exception ex) {
             throw new IOException(ex);
         }
         return this;
+    }
+
+    public List<String> readline() throws Exception {        
+        return listReader.read();
     }
 
     // Outside caller is responsible for closing stream

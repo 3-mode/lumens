@@ -75,20 +75,20 @@ public class TextClient implements TextConstants {
                 .setOption(OPTION_IGNORE_EMPTYLINE, new Value(ignoreEmptyLine))
                 .setOption(OPTION_SKIP_COMMENTS, new Value(skipComments))
                 .setOption(OPTION_TRIM_SPACE, new Value(bTrim));
-        
+
         for (File file : files) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding))) {
                 helper.build(reader);
-
+                if (firstLineAsTitle) {                    
+                    // TODO: sent first line to UI, how?
+                    List<String> titles = helper.readline();
+                    continue;
+                }
+                
                 List<Object> columns;
                 while ((columns = helper.read()) != null) {
                     if (maxLine > 0 && --maxLine <= 0) {
                         break;
-                    }
-                    if (firstLineAsTitle){
-                        firstLineAsTitle = false;
-                        // TODO: sent first line to UI, how?
-                        continue;
                     }
                     try {
                         Element build = TextElementBuilder.buildElement(fmt, columns);
