@@ -17,7 +17,7 @@ import com.lumens.model.Value;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public abstract class PatternParser {
+public abstract class CSVPattern {
     protected String TEXTDATA;
     protected String ESCAPE;
     protected String NON_ESCAPE;
@@ -25,7 +25,7 @@ public abstract class PatternParser {
     protected Pattern defaultPattern;
     protected Map<String, Value> options = new HashMap();
 
-    public PatternParser(String text, String escape, String nonEscape, String field){
+    public CSVPattern(String text, String escape, String nonEscape, String field){
         TEXTDATA = text;
         ESCAPE = escape;
         NON_ESCAPE = nonEscape;

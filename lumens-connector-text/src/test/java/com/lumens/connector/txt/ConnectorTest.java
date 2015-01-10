@@ -67,7 +67,7 @@ public class ConnectorTest implements TextConstants {
 
     @Test
     public void testRFC4180() {
-        PatternParser parser = new RFC4180Parser();
+        CSVPattern parser = new RFC4180Parser();
         String escape = parser.GetEscapePattern();
         String nonescape = parser.GetNonEscapePattern();
 

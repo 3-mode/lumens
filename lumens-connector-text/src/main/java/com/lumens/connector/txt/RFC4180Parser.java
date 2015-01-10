@@ -8,7 +8,7 @@ package com.lumens.connector.txt;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 // Refer to RFC4180 code: http://tools.ietf.org/html/rfc4180#page-2 
-public class RFC4180Parser  extends PatternParser{
+public class RFC4180Parser  extends CSVPattern{
     // [\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]
     private final static String TEXTDATA = "[\\x20-\\x21]|[\\x23-\\x2B]|[\\x2D-\\x7E]";
     // "([\x20-\x21]|[\x23-\x2B]|[\x2D-\x7E]|,|\r|\n|"")+"
