@@ -64,6 +64,14 @@ public class CSVHelper implements TextConstants {
         return listReader.read();
     }
 
+    public int getRowNumber() {
+        return listReader.getRowNumber();
+    }
+
+    public int getLineNumber() {
+        return listReader.getLineNumber();
+    }
+
     // Outside caller is responsible for closing stream
     public List<Object> read() throws Exception {
         List<Object> customerList = null;
