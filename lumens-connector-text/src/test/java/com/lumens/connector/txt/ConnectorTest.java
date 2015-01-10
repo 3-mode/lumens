@@ -44,7 +44,7 @@ public class ConnectorTest implements TextConstants {
     @Before
     public void testConnection() {
         try {
-            path2read = getClass().getResource("/delimited/incsv.csv").toURI().getPath();
+            path2read = getClass().getResource("/delimited/csv/rfc4180_LastLineBreakCN.txt").toURI().getPath();
             folder2read = getClass().getResource("/delimited/csv/").toURI().getPath();
             path2write = getClass().getResource("/delimited").toURI().getPath() + "/outcsv.txt";
             schemaPath = getClass().getResource("/delimited/incsv_schema.xml").toURI().getPath();
@@ -54,10 +54,8 @@ public class ConnectorTest implements TextConstants {
             if (file.isFile() && file.exists()) {
                 InputStreamReader reader = new InputStreamReader(new FileInputStream(path2read), "UTF-8");
                 BufferedReader bufReader = new BufferedReader(reader);
-                String lineTxt = null;
-                //System.out.println("---------Test connection---------------");
-                while ((lineTxt = bufReader.readLine()) != null) {
-                    //System.out.println(lineTxt);
+                String lineTxt = null;                
+                while ((lineTxt = bufReader.readLine()) != null) {                    
                 }
             }
         } catch (Exception e) {
@@ -129,7 +127,7 @@ public class ConnectorTest implements TextConstants {
         propsR.put(FILEDELIMITER, new Value(","));
         propsR.put(SCHEMA_PATH, new Value(folderSchemaPath));
         propsR.put(OPTION_MAXLINE, new Value(1000));
-        propsR.put(ENCODING, new Value("UTF-8"));
+        propsR.put(ENCODING, new Value("utf-8"));
         propsR.put(LINEDELIMITER, new Value("\n"));
         propsR.put(OPTION_IGNORE_EMPTYLINE, new Value(true));
         propsR.put(OPTION_MAXLINE, new Value(9));
