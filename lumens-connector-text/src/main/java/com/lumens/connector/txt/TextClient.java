@@ -86,17 +86,25 @@ public class TextClient implements TextConstants {
                 }
 
                 List<Object> columns;
-                while ((columns = helper.read()) != null) {
-                    if (maxLine > 0 && --maxLine <= 0) {
-                        break;
-                    }
+                while (true) {
                     try {
+                        if ((columns = helper.read()) == null) {
+                            break;
+                        }
+                        if (maxLine > 0 && --maxLine <= 0) {
+                            break;
+                        }
+
                         Element build = TextElementBuilder.buildElement(fmt, columns);
                         result.add(build);
                     } catch (Exception ex) {
                         if (!ignoreReadlineError) {
                             helper.close();
                             throw new RuntimeException(ex);
+                        }else{
+                            // TODO: log here, now use System.out.println();
+                            System.err.println("Reading error on reading file:" + file.toString());                           
+                            System.err.println("Error message:" + ex.getMessage());
                         }
                     }
                 }
@@ -118,7 +126,7 @@ public class TextClient implements TextConstants {
         boolean formatAsTitle = param.getChild(OPTION_FORMAT_ASTITLE) == null ? propList.get(OPTION_FORMAT_ASTITLE).getBoolean() : param.getChild(OPTION_FORMAT_ASTITLE).getValue().getBoolean();
         boolean bTrim = param.getChild(OPTION_TRIM_SPACE) == null ? propList.get(OPTION_TRIM_SPACE).getBoolean() : param.getChild(OPTION_TRIM_SPACE).getValue().getBoolean();
         boolean alwaysQuoteMode = param.getChild(OPTION_QUOTE_MODE) == null ? propList.get(OPTION_QUOTE_MODE).getBoolean() : param.getChild(OPTION_QUOTE_MODE).getValue().getBoolean();
-        
+
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), encoding))) {
             String line = "";
             String title = "";
