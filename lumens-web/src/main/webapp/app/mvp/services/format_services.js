@@ -1,7 +1,7 @@
 /* 
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-Lumens.services.factory('FormatBuilder', ['FormatByPath', function (FormatByPath) {
+Lumens.services.factory('FormatService', ['FormatByPath', function (FormatByPath) {
         return {
             isField: function (form) {
                 return form === "Field";

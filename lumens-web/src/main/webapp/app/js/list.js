@@ -9,10 +9,10 @@ Lumens.List = Class.$extend({
 
         this.sectionHTMLTemplate =
         '<div class="lumens-accordion-item">' +
-        '  <div class="lumens-accordion-title">' +
+        '  <div class="lumens-accordion-title lumens-accordion-border">' +
         '    <div style="padding-top: 5px; padding-left: 10px;">' +
         '      <div class="lumens-accordion-icon icon-collapse">' +
-        '         <b></b>' +
+        '         <b id="id-accordion-title"></b>' +
         '      </div>' +
         '    </div>' +
         '  </div>' +
@@ -42,13 +42,12 @@ Lumens.List = Class.$extend({
         else
             accordion = $(this.sectionHTMLTemplate).appendTo(this.$accordionHolder);
         if (config.titleList && config.titleList.length > i)
-            accordion.find("b").html(config.titleList[i]);
+            accordion.find("#id-accordion-title").html(config.titleList[i]);
         if (config.contentList && config.contentList.length > i)
             accordion.find("#content-holder").append(config.contentList[i]);
 
         var accordionTitle = accordion.find(".lumens-accordion-title");
-        var form = accordion.find("ul");
-        form.toggle(200);
+        accordion.find("ul").hide();
         accordion.attr("id", config.IdList[i])
         accordionTitle.click(function () {
             __this.doExpandCollapse(accordion);
@@ -87,4 +86,19 @@ Lumens.List = Class.$extend({
     }
 });
 
-
+Lumens.RecordList = Lumens.List.$extend({
+    __init__: function (container) {
+        this.$super(container);
+        this.sectionHTMLTemplate =
+        '<div class="lumens-accordion-item">' +
+        '  <div class="lumens-accordion-title lumens-record-border">' +
+        '    <div style="padding-top: 5px; padding-left: 10px;">' +
+        '      <div class="lumens-accordion-icon icon-collapse">' +
+        '         <b id="id-accordion-title"></b>' +
+        '      </div>' +
+        '    </div>' +
+        '  </div>' +
+        '  <ul class="lumens-accordion-content"><li id="content-holder"></li></ul>' +
+        '</div>';
+    }
+});

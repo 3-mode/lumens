@@ -1,7 +1,7 @@
 /* 
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBuilder) {
+Lumens.services.factory('RuleTreeService', ['FormatService', function (FormatService) {
         return {
             clear: function () {
                 if (this.transformRuleTree) {
@@ -184,7 +184,7 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
                         });
                         $scope.$on("ApplyScript", function (evt, script) {
                             var selectNode = ruleTree.getSelectNode();
-                            if (selectNode && script)
+                            if (selectNode)
                                 selectNode.setScript(script);
                         })
                         return __this.transformRuleTree;
@@ -199,7 +199,7 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
                 return [{
                         label: rootRuleItem.format_name,
                         name: rootRuleItem.format_name,
-                        nodeType: FormatBuilder.isField(formatEntry.form) ? "file" : "folder",
+                        nodeType: FormatService.isField(formatEntry.form) ? "file" : "folder",
                         data: formatEntry
                     }];
             },
@@ -246,7 +246,7 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
                 var node = {
                     label: format.name,
                     name: format.name,
-                    nodeType: FormatBuilder.isField(format.form) ? "file" : (FormatBuilder.isArray(format.form) ? "folderset" : "folder"),
+                    nodeType: FormatService.isField(format.form) ? "file" : (FormatService.isArray(format.form) ? "folderset" : "folder"),
                     data: format
                 };
                 if (ruleItem && ruleItem.script)
@@ -273,7 +273,7 @@ Lumens.services.factory('RuleTreeBuilder', ['FormatBuilder', function (FormatBui
         };
     }]
 );
-Lumens.services.factory('TransformMapperStorageService', ['RuleTreeBuilder', function (RuleTreeBuilder) {
+Lumens.services.factory('TransformMapperStorageService', ['RuleTreeService', function (RuleTreeService) {
         return {
             pathEnding: "+-*/ &|!<>\n\r\t^%=;:?,",
             findRootFormat: function (formatList, formatName) {
@@ -297,7 +297,7 @@ Lumens.services.factory('TransformMapperStorageService', ['RuleTreeBuilder', fun
                     required.orginalOutRegName = $scope.orignalOutputFormatRegName;
                 if ($scope.orignalRuleRegName)
                     required.orginalRuleRegName = $scope.orignalRuleRegName;
-                required.ruleScriptList = RuleTreeBuilder.getRuleScriptList();
+                required.ruleScriptList = RuleTreeService.getRuleScriptList();
 
                 if ($scope.ruleRegName)
                     required.ruleEntry.name = $scope.ruleRegName;
@@ -307,7 +307,7 @@ Lumens.services.factory('TransformMapperStorageService', ['RuleTreeBuilder', fun
                     required.ruleEntry.target_id = $scope.displayTargetFormatList.component_id;
                 required.ruleEntry.source_format_name = $scope.inputFormatRegName ? $scope.inputFormatRegName : "";
                 required.ruleEntry.target_format_name = $scope.outputFormatRegName ? $scope.outputFormatRegName : "";
-                required.ruleEntry.transform_rule = RuleTreeBuilder.buildTransformRuleTree();
+                required.ruleEntry.transform_rule = RuleTreeService.buildTransformRuleTree();
                 // End ******************************************************************************
                 return required;
             },
@@ -376,7 +376,7 @@ Lumens.services.factory('TransformMapperStorageService', ['RuleTreeBuilder', fun
                 }
             },
             discoverTargetFormat: function (required) {
-                var result_format = RuleTreeBuilder.buildTargetFormatTree();
+                var result_format = RuleTreeService.buildTargetFormatTree();
                 if (result_format) {
                     return {
                         orignal_name: required.orginalOutRegName,

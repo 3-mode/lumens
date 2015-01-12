@@ -68,4 +68,8 @@ public class InOutLogDAO extends BaseDAO {
         });
         return pList;
     }
+
+    public void deleteAllLog(long projectID) {
+        jdbcTemplate.execute(sqlManager.getSQL("InOutLogDAO/ClearLog", projectID));
+    }
 }

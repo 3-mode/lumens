@@ -25,12 +25,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ws.rs.core.Response;
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
@@ -92,9 +93,7 @@ public class ServiceTest {
         item.targetName = "test";
         item.data = "test";
         DateFormat sf = DateTime.DATETIME_PATTERN[0];
-        String date = sf.format(Calendar.getInstance().getTime());
-        System.out.println(date);
-        item.lastModifTime = Timestamp.valueOf(date);
+        item.lastModifTime = new Timestamp(System.currentTimeMillis());
         inoutLogDAO.create(item);
     }
 
@@ -103,6 +102,11 @@ public class ServiceTest {
         ProjectService service = new ProjectService();
         Response resp = service.getProjectExecutionResults(1415415434544L, 1415415407248L);
         System.out.println(resp.getEntity().toString());
+    }
+
+    @Test
+    public void testMicrosecond() throws Exception {
+        System.out.println(new Timestamp(System.currentTimeMillis()).toString());
     }
 
 }

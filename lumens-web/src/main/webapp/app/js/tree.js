@@ -40,7 +40,7 @@ Lumens.TreeNode = Class.$extend({
         //-------------------------------------------------
         this.$fHeader.find('.lumens-tree-node-name').html(this.label);
         if (this.script)
-            this.$fHeader.find('.lumens-tree-node-script').html(this.script);
+            this.$fHeader.find('.lumens-tree-node-script').addClass('lumens-script-display').html(this.script);
         if (this.draggable)
             this.$fHeader.find(".lumens-tree-node").draggable({
                 appendTo: "body",
@@ -62,7 +62,8 @@ Lumens.TreeNode = Class.$extend({
             evt.stopPropagation();
             if (__this.clickHandler)
                 __this.clickHandler(__this, __this.$parent);
-            __this.updateSelectStatus();
+            if (!__this.disableSelectStatus)
+                __this.updateSelectStatus();
         });
         this.$fHeader.dblclick(function (evt) {
             evt.stopPropagation();
@@ -112,7 +113,10 @@ Lumens.TreeNode = Class.$extend({
     },
     setScript: function (script) {
         this.script = script;
-        this.$fHeader.find('.lumens-tree-node-script').html(this.script);
+        var scriptNode = script ?
+        this.$fHeader.find('.lumens-tree-node-script').addClass('lumens-script-display')
+        : this.$fHeader.find('.lumens-tree-node-script').removeClass('lumens-script-display');
+        scriptNode.html(this.script);
     },
     getElement: function () {
         return this.$fContent ? this.$fContent : this.$folder;

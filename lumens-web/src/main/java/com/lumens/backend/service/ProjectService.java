@@ -33,6 +33,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -186,6 +187,24 @@ public class ProjectService implements ServiceConstants {
     public Response getProjectExecutionResults(@QueryParam("project_id") long projectID, @QueryParam("component_id") long componentID) throws IOException {
         try {
             return this.getProjectTestExecResult(projectID, componentID);
+        } catch (Exception ex) {
+            return ServerUtils.getErrorMessageResponse(ex);
+        }
+    }
+
+    @DELETE
+    @Path("/testexec/log")
+    @Produces("application/json")
+    public Response deleteProjectExecutionResults(@QueryParam("project_id") long projectID) throws IOException {
+        try {
+            InOutLogDAO inoutLogDAO = DAOFactory.getInOutLogDAO();
+            inoutLogDAO.deleteAllLog(projectID);
+            JsonUtility utility = JsonUtility.createJsonUtility();
+            JsonGenerator json = utility.getGenerator();
+            json.writeStartObject();
+            json.writeStringField("status", "OK");
+            json.writeEndObject();
+            return Response.ok().entity(utility.toUTF8String()).build();
         } catch (Exception ex) {
             return ServerUtils.getErrorMessageResponse(ex);
         }
@@ -360,16 +379,15 @@ public class ProjectService implements ServiceConstants {
         json.writeStartObject();
         json.writeStringField("status", "OK");
         json.writeObjectFieldStart("result_content");
-        json.writeNumberField("project_id", projectID);
-        json.writeNumberField("component_id", componentID);
         json.writeArrayFieldStart("log_items");
         for (InOutLogItem item : items) {
             json.writeStartObject();
             json.writeStringField("log_id", Long.toString(item.logID));
+            json.writeStringField("component_id", Long.toString(item.componentID));
             json.writeStringField("target_name", item.targetName);
             json.writeStringField("direction", item.direction);
+            json.writeStringField("log_data", item.data);
             json.writeStringField("last_modif_time", item.lastModifTime.toString());
-            json.writeStringField("log_records", item.data);
             json.writeEndObject();
         }
         json.writeEndArray();

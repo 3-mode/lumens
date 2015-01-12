@@ -1,9 +1,11 @@
 <div class="lumens-transform-list" ng-controller="TransformListCtrl">
     <div ng-if="currentUIComponent.configure.category_info.type !== 'datasource'">
         <div class="lumens-button-bar">
+            <a class="lumens-label-button-light" ng-click="onCommand('id_format_reg_edit_btn')"><i class="lumens-icon2-input lumens-icon-gap"></i>{{theSourceNameList[0]}}</a>
+            <i class="lumens-icon-arrow-right"></i>
             <a class="lumens-label-button" ng-click="onCommand('id_format_reg_edit_btn')"><i class="lumens-icon2-middle lumens-icon-gap"></i>{{componentProps.Name.value}}</a>
-            <a class="lumens-label-button" ng-click="onCommand('id_format_reg_edit_btn')"><i class="lumens-icon2-input lumens-icon-gap"></i>{{theSourceNameList[0]}}</a>
-            <a class="lumens-label-button" ng-click="onCommand('id_format_reg_edit_btn')"><i class="lumens-icon2-output lumens-icon-gap"></i>{{theTargetNameList[0]}}</a>
+            <i class="lumens-icon-arrow-right"></i>
+            <a class="lumens-label-button-light" ng-click="onCommand('id_format_reg_edit_btn')"><i class="lumens-icon2-output lumens-icon-gap"></i>{{theTargetNameList[0]}}</a>
         </div>
         <div class="lumens-button-bar">
             <a class="lumens-button" ng-click="onRuleCommand('id_rule_new')"><i class="lumens-icon-add lumens-icon-gap"></i>{{i18n.id_rule_new}}</a>

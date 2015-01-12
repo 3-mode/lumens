@@ -12,12 +12,12 @@ import com.lumens.engine.handler.TransformerResultHandler;
 import com.lumens.io.JsonUtility;
 import com.lumens.model.DateTime;
 import com.lumens.model.Element;
-import com.lumens.model.Format;
 import com.lumens.model.serializer.ElementSerializer;
-import com.lumens.model.serializer.FormatSerializer;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.codehaus.jackson.JsonGenerator;
 
@@ -49,30 +49,24 @@ public class DataElementLoggingHandler implements DataSourceResultHandler, Trans
             if (eList == null || eList.isEmpty())
                 return;
             InOutLogDAO inoutLogDAO = DAOFactory.getInOutLogDAO();
-            InOutLogItem item = new InOutLogItem();
-            item.logID = ServerUtils.generateID();
-            item.componentID = Long.parseLong(src.getId());
-            item.componentName = src.getName();
-            item.projectID = this.projectID;
-            item.projectName = this.projectName;
-            item.direction = direction;
-            item.targetName = targetName;
-            DateFormat sf = DateTime.DATETIME_PATTERN[0];
-            String date = sf.format(Calendar.getInstance().getTime());
-            item.lastModifTime = Timestamp.valueOf(date);
-            JsonUtility utility = JsonUtility.createJsonUtility();
-            JsonGenerator json = utility.getGenerator();
-            json.writeStartObject();
-            json.writeArrayFieldStart("element_list");
             for (Element e : eList) {
+                InOutLogItem item = new InOutLogItem();
+                item.logID = ServerUtils.generateID();
+                item.componentID = Long.parseLong(src.getId());
+                item.componentName = src.getName();
+                item.projectID = this.projectID;
+                item.projectName = this.projectName;
+                item.direction = direction;
+                item.targetName = targetName;
+                item.lastModifTime = new Timestamp(System.currentTimeMillis());
+                JsonUtility utility = JsonUtility.createJsonUtility();
+                JsonGenerator json = utility.getGenerator();
                 json.writeStartObject();
                 new ElementSerializer(e, true).writeToJson(json);
                 json.writeEndObject();
+                item.data = utility.toUTF8String();
+                inoutLogDAO.create(item);
             }
-            json.writeEndArray();
-            json.writeEndObject();
-            item.data = utility.toUTF8String();
-            inoutLogDAO.create(item);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

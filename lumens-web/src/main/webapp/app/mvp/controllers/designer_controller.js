@@ -618,5 +618,36 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
         $element.modal("hide");
     }
 })
-.controller("ExecLogCtrl", function ($scope, $element) {
+.controller("ExecLogCtrl", function ($scope, TestExecLogService, Notifier) {
+    function getCurrentComponentLog() {
+        TestExecLogService.get({
+            project_id: $scope.projectOperator.get().projectId,
+            component_id: $scope.currentUIComponent.getId()
+        }, function (resp) {
+            $scope.logItemList = resp.result_content.log_items;
+            for (var i in $scope.logItemList) {
+                $scope.logItemList[i].log_data = $.parseJSON($scope.logItemList[i].log_data);
+            }
+        });
+    }
+    $scope.$watch("currentUIComponent", function () {
+        if (!$scope.currentUIComponent)
+            return;
+        getCurrentComponentLog();
+    });
+    $scope.onCommand = function (id_btn) {
+        if ("id_exec_log_refresh" === id_btn) {
+            getCurrentComponentLog();
+        }
+        else if ("id_exec_log_clear" === id_btn) {
+            TestExecLogService.delete({project_id: $scope.projectOperator.get().projectId}, function (response) {
+                if (response.status === 'OK') {
+                    Notifier.message("info", "Success", "Clean project execution result log");
+                    $scope.logItemList = null;
+                }
+                else
+                    Notifier.message("error", "Error", "Error to clean project execution result log");
+            })
+        }
+    }
 });

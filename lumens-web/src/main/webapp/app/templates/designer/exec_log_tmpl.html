@@ -1,6 +1,28 @@
 <div ng-controller="ExecLogCtrl">
     <div class="lumens-button-bar">
+        <a class="lumens-label-button"><i class="lumens-icon2-middle lumens-icon-gap"></i>{{componentProps.Name.value}}</a>
+    </div>
+    <div class="lumens-button-bar">
         <a class="lumens-button" ng-click="onCommand('id_exec_log_refresh')"><i class="lumens-icon2-refresh lumens-icon-gap"></i>{{i18n.id_exec_log_refresh}}</a>
         <a class="lumens-button" ng-click="onCommand('id_exec_log_clear')"><i class="lumens-icon-del lumens-icon-gap"></i>{{i18n.id_exec_log_clear}}</a>
+    </div>
+    <div class="lumens-log-data lumens-bootstrap table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Direction</th>
+                    <th>Data</th>
+                    <th>Last Modify Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="cursor: pointer;"
+                    ng-if="logItemList"
+                    ng-repeat="logItem in logItemList">
+                    <td>{{logItem.target_name}}</td><td>{{logItem.direction}}</td><td><div element-data="logItem"></div></td><td>{{logItem.last_modif_time}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
