@@ -136,6 +136,9 @@ Lumens.Component = Class.$extend({
     setShortDescription: function (shortDesc) {
         this.$elem.find('#id-shortdsc').text(shortDesc);
     },
+    getShortDescript: function () {
+        return this.$elem.find('#id-shortdsc').text();
+    },
     getId: function () {
         return this.getCompData().id;
     },

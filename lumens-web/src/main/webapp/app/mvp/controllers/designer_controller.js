@@ -33,8 +33,9 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         LumensLog.log("Current editing props:", $scope.componentProps);
         LumensLog.log("Current editing component:", $scope.currentComponent);
         // *** TODO shortDescription changed then the related linked component target name should be changed also
-        $scope.currentUIComponent.setShortDescription($scope.componentProps.Name.value);
         applyProperty($scope.componentProps, $scope.currentUIComponent);
+        $scope.currentUIComponent.setShortDescription($scope.componentProps.Name.value);
+        $scope.$broadcast("ApplyProperty", {UI: $scope.currentUIComponent});
     };
 
     // Load menu category
@@ -87,6 +88,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                             $scope.componentProps = ComponentPropertyList(config);
                             $scope.currentComponent = config.component_info ? config.component_info : $scope.currentComponent
                         });
+                        $scope.$broadcast("UIComponentSelect", {UI: component});
                     },
                     onBeforeComponentAdd: function () {
                         if ($scope.project)
@@ -401,27 +403,22 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
     };
 
     // Init the trnasformation rule list to show all rules
-    $scope.$watch(function () {
-        return $scope.currentUIComponent;
-    }, function (currentUIComponent) {
-        if (!currentUIComponent || !currentUIComponent.configure)
+    $scope.$on("ApplyProperty", function (evt, data) {
+        if (!data.UI || !data.UI.configure)
             return;
-        if (currentUIComponent.configure.component_info.transform_rule_entry)
-            $scope.transformRuleEntryList = currentUIComponent.getRuleEntryList();
-        else
-            $scope.transformRuleEntryList = [];
-
-        if (currentUIComponent.$from_list &&
-        currentUIComponent.hasFrom())
-            $scope.theSourceNameList = [currentUIComponent.getFrom(0).getConfig().short_desc];
-        else
-            $scope.theSourceNameList = [currentUIComponent.getConfig().short_desc];
-
-        if (currentUIComponent.hasTo())
-            $scope.theTargetNameList = [currentUIComponent.getTo(0).getConfig().short_desc];
-        else
-            $scope.theTargetNameList = [];
+        $scope.transformRuleEntryList = data.UI.getRuleEntryList();
+        $scope.theSourceNameList = data.UI.hasFrom() ? [data.UI.getFrom(0).getCompData().name] : [data.UI.getCompData().name];
+        $scope.theTargetNameList = data.UI.hasTo() ? [data.UI.getTo(0).getCompData().name] : [];
     });
+    $scope.$on("UIComponentSelect", function (evt, data) {
+        if (!data.UI || !data.UI.configure)
+            return;
+        $scope.$apply(function () {
+            $scope.transformRuleEntryList = data.UI.getRuleEntryList();
+            $scope.theSourceNameList = data.UI.hasFrom() ? [data.UI.getFrom(0).getCompData().name] : [data.UI.getCompData().name];
+            $scope.theTargetNameList = data.UI.hasTo() ? [data.UI.getTo(0).getCompData().name] : [];
+        });
+    })
 })
 .controller("TransformEditCtrl", function ($scope, $element, $compile,
 FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegistryModal, ViewUtils, Notifier) {
@@ -618,7 +615,7 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
         $element.modal("hide");
     }
 })
-.controller("ExecLogCtrl", function ($scope, TestExecLogService, Notifier) {
+.controller("ExecLogCtrl", function ($scope, $element, TestExecLogService, Notifier) {
     function getCurrentComponentLog() {
         TestExecLogService.get({
             project_id: $scope.projectOperator.get().projectId,
@@ -630,8 +627,8 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
             }
         });
     }
-    $scope.$watch("currentUIComponent", function () {
-        if (!$scope.currentUIComponent)
+    $scope.$on("UIComponentSelect", function () {
+        if (!$scope.currentUIComponent || $element.is(':hidden'))
             return;
         getCurrentComponentLog();
     });
