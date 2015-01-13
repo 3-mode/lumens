@@ -162,6 +162,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-connector-db</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>lumens-management</artifactId>
             <version>${project.version}</version>
         </dependency>
