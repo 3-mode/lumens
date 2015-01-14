@@ -44,7 +44,7 @@
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
-                            <excludeGroupIds>com.lumens</excludeGroupIds>
+                            <excludeArtifactIds>lumens-model,lumens-connector,lumens-addin,lumens-commons</excludeArtifactIds>
                             <includeScope>runtime</includeScope>
                         </configuration>
                     </execution>
@@ -76,30 +76,9 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>com.lumens</groupId>
-            <artifactId>lumens-model</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-connector-db</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lumens</groupId>
-            <artifactId>lumens-connector</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lumens</groupId>
-            <artifactId>lumens-processor</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
