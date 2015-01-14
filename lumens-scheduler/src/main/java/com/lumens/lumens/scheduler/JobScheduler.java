@@ -10,5 +10,5 @@ import java.util.List;
  * @author xiaoxiao
  */
 public interface JobScheduler {
-    public List<Long> getJobList();
+    public void resume();
 }
