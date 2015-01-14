@@ -28,7 +28,7 @@ public class SoapResult implements OperationResult {
     }
 
     @Override
-    public List<Element> getResult() {
+    public List<Element> get() {
         hasResultData = false;
         Element result = elementBuilder.buildElement(resultFormat, envelope);
         if (result != null) {
@@ -40,7 +40,12 @@ public class SoapResult implements OperationResult {
     }
 
     @Override
-    public boolean hasResult() {
+    public boolean has() {
         return hasResultData;
+    }
+
+    @Override
+    public boolean hasMore() {
+        return false;
     }
 }

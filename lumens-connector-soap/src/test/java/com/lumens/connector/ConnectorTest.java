@@ -126,7 +126,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         connector.getFormat(getOpenFundStringResp, "getOpenFundStringResponse.getOpenFundStringResult.string.string", Direction.OUT);
         Operation op = connector.getOperation();
         OperationResult opResult = op.execute(new ElementChunk(result), getOpenFundStringResp);
-        List<Element> response = opResult.getResult();
+        List<Element> response = opResult.get();
         new ElementSerializer(response.get(0), true).writeToXml(System.out);
         new FormatSerializer(getOpenFundString).writeToXml(System.out);
     }

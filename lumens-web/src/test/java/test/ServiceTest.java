@@ -25,11 +25,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import org.junit.Test;
@@ -46,12 +43,11 @@ public class ServiceTest {
     // The methods must be annotated with annotation @Test. For example:
     //
 
-    @Test
     public void testDBProject() throws Exception {
         if (true) {
             ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
-            Project project = pDAO.getProject(1415415434544L);
+            Project project = pDAO.getProject(1421234160179L); //1421234160179L //1415415434544L
             TransformProject projectInstance = new TransformProject();
             new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
             //assertEquals(3, projectInstance.getDataTransformerList().size());
@@ -97,14 +93,12 @@ public class ServiceTest {
         inoutLogDAO.create(item);
     }
 
-    @Test
     public void readLog() throws IOException {
         ProjectService service = new ProjectService();
         Response resp = service.getProjectExecutionResults(1415415434544L, 1415415407248L);
         System.out.println(resp.getEntity().toString());
     }
 
-    @Test
     public void testMicrosecond() throws Exception {
         System.out.println(new Timestamp(System.currentTimeMillis()).toString());
     }

@@ -26,7 +26,7 @@ public class ElementChunk {
     /**
      * @return the isLast
      */
-    public boolean IsLast() {
+    public boolean isLast() {
         return isLast;
     }
 

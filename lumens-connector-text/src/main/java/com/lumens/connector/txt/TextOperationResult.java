@@ -21,13 +21,18 @@ public class TextOperationResult implements OperationResult {
     }
 
     @Override
-    public List<Element> getResult() {
+    public List<Element> get() {
         this.hasResultData = false;
         return result;
     }
 
     @Override
-    public boolean hasResult() {
+    public boolean has() {
         return hasResultData;
+    }
+
+    @Override
+    public boolean hasMore() {
+        return false;
     }
 }

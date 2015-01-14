@@ -165,11 +165,11 @@ public class ConnectorTest implements TextConstants {
             paramsMultiR.addChild(OPERATION).setValue(new Value(OPERATION_READ));
             paramsMultiR.addChild(PATH).setValue(new Value(folder2read));
             resultR = operR.execute(new ElementChunk(Arrays.asList(elemMultiRead)), fmtR);
-            assertTrue("Fail to executre source element read: multi files read folder", resultR.hasResult());
+            assertTrue("Fail to executre source element read: multi files read folder", resultR.has());
 
             System.out.println("-----------------------------------------");
             System.out.println("Reading multi csv files:");
-            for (Element elem : resultR.getResult()) {
+            for (Element elem : resultR.get()) {
                 StringBuilder line = new StringBuilder();
                 for (Element el : elem.getChildren()) {
                     if (line.length() > 0) {
@@ -238,10 +238,10 @@ public class ConnectorTest implements TextConstants {
             paramsR.addChild(PATH).setValue(new Value(path2read));
 
             resultR = operR.execute(new ElementChunk(Arrays.asList(elemRead)), fmtR);
-            assertTrue("Fail to executre source element read", resultR.hasResult());
+            assertTrue("Fail to executre source element read", resultR.has());
             System.out.println("-----------------------------------------");
             System.out.println("Reading single csv file:");
-            for (Element elem : resultR.getResult()) {
+            for (Element elem : resultR.get()) {
                 StringBuilder line = new StringBuilder();
                 for (Element el : elem.getChildren()) {
                     if (line.length() > 0) {
