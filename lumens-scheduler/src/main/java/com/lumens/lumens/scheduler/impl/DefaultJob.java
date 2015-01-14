@@ -14,20 +14,39 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class DefaultJob implements Job{
-    public DefaultJob(long jobId){
-        
+public class DefaultJob implements Job {
+
+    private long jobId;
+    private String name;
+    private String description;
+
+    public DefaultJob(long jobId, String name, String description) {
+        this.jobId = jobId;
+        this.name = name;
+        this.description = description;
     }
-    
-    public void execute(JobExecutionContext jec) throws JobExecutionException{     
+
+    public long getJobId() {
+        return jobId;
+    }
+
+    public long getJobName() {
+        return name;
+    }
+
+    public long getJobDescription() {
+        return description;
+    }
+
+    public void execute(JobExecutionContext jec) throws JobExecutionException {
         System.out.println("[" + (new Date()) + "]" + jec.getTrigger().getKey().getName() + " job is running");
     }
-    
-    public void LoadJobFromDb(){
-        
+
+    public void loadJobFromDb() {
+
     }
-    
-    public void SaveJobToDb(){
-        
+
+    public void saveJobToDb() {
+
     }
 }
