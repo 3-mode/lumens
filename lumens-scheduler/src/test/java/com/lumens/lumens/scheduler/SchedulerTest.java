@@ -3,6 +3,7 @@
  */
 package com.lumens.lumens.scheduler;
 
+import com.lumens.lumens.scheduler.impl.DefaultJob;
 import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.assertTrue;
