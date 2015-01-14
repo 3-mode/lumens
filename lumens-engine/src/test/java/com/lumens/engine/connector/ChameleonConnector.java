@@ -64,12 +64,12 @@ public class ChameleonConnector implements Connector {
                     private int chunkSize = 5;
 
                     @Override
-                    public boolean hasResult() {
+                    public boolean has() {
                         return chunkSize > 0;
                     }
 
                     @Override
-                    public List<Element> getResult() {
+                    public List<Element> get() {
                         --chunkSize;
                         List<Element> resultList = new ArrayList<>();
                         if (Mock.PERSON == typeName) {
@@ -112,6 +112,11 @@ public class ChameleonConnector implements Connector {
                         assetItemPart = assetDataItem.addChild("Part");
                         assetItemPart.addArrayItem().addChild("name").setValue("HP mouse");
                         assetItemPart.addArrayItem().addChild("name").setValue("HP keyboard");
+                    }
+
+                    @Override
+                    public boolean hasMore() {
+                        return chunkSize > 0;
                     }
                 };
             }

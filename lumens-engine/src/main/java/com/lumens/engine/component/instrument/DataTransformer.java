@@ -95,7 +95,7 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
             if (!results.isEmpty() && this.hasTarget()) {
                 for (TransformComponent target : this.getTargetList().values())
                     if (!result.isEmpty() && target.accept(rule.getTargetFormatName()))
-                        exList.add(new TransformExecuteContext(context, new ElementChunk(inputChunk.IsLast(), results), target, rule.getTargetFormatName(), context.getResultHandlers()));
+                        exList.add(new TransformExecuteContext(context, new ElementChunk(inputChunk.isLast(), results), target, rule.getTargetFormatName(), context.getResultHandlers()));
             }
             handleOutputLogging(context.getResultHandlers(), rule.getTargetFormatName(), results);
         }

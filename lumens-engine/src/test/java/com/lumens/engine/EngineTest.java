@@ -1,10 +1,8 @@
 package com.lumens.engine;
 
-import com.lumens.addin.AddinContext;
-import com.lumens.addin.AddinEngine;
 import com.lumens.connector.Connector;
 import com.lumens.connector.Direction;
-import com.lumens.connector.database.DatabaseConstants;
+import com.lumens.connector.database.DBConstants;
 import com.lumens.connector.webservice.soap.SoapConstants;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.resource.DataSource;
@@ -56,15 +54,6 @@ public class EngineTest extends Assert implements SoapConstants {
             }
             System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
         }
-    }
-
-    public EngineTest() {
-        AddinEngine ae = new AddinEngine(EngineTest.class.getClassLoader());
-        ae.start();
-        AddinContext ac = ae.getAddinContext();
-        new com.lumens.connector.database.client.oracle.service.Activator().start(ac);
-        new com.lumens.connector.webservice.service.Activator().start(ac);
-        EngineContext.start(new DefaultConnectorFactoryHolder(ac));
     }
 
     //@Test
@@ -176,11 +165,11 @@ public class EngineTest extends Assert implements SoapConstants {
     //@Test
     public void testOracleConnectorInEngine() throws Exception {
         HashMap<String, Value> props = new HashMap<>();
-        props.put(DatabaseConstants.OJDBC, new Value("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar"));
-        props.put(DatabaseConstants.CONNECTION_URL, new Value("jdbc:oracle:thin:@localhost:1521:xe"));
-        props.put(DatabaseConstants.USER, new Value("hr"));
-        props.put(DatabaseConstants.PASSWORD, new Value("hr"));
-        props.put(DatabaseConstants.SESSION_ALTER, new Value("alter session set NLS_DATE_FORMAT='yyyy-mm-dd'"));
+        props.put(DBConstants.OJDBC, new Value("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar"));
+        props.put(DBConstants.CONNECTION_URL, new Value("jdbc:oracle:thin:@localhost:1521:xe"));
+        props.put(DBConstants.USER, new Value("hr"));
+        props.put(DBConstants.PASSWORD, new Value("hr"));
+        props.put(DBConstants.SESSION_ALTER, new Value("alter session set NLS_DATE_FORMAT='yyyy-mm-dd'"));
         DataSource datasource = new DataSource("type-oracle-jdbc", "20002");
         datasource.setName("Database HR");
         datasource.setDescription("this is testing demo datasource for oracle jdbc");
