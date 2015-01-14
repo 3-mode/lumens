@@ -30,11 +30,11 @@ public class DefaultJob implements Job {
         return jobId;
     }
 
-    public long getJobName() {
+    public String getJobName() {
         return name;
     }
 
-    public long getJobDescription() {
+    public String getJobDescription() {
         return description;
     }
 
