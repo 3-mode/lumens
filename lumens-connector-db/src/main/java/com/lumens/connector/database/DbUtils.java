@@ -20,17 +20,19 @@ import org.apache.commons.io.IOUtils;
  * @author shaofeng wang
  */
 public class DbUtils {
+
     public static void releaseConnection(Connection conn) {
         if (conn != null) {
             try {
                 conn.close();
-            } catch (SQLException ex) {                
+            } catch (SQLException ex) {
             }
         }
     }
 
     public static Connection getConnection(Driver driver, String connURL, String user, String password) {
         try {
+            // TODO check null ?
             Properties props = new Properties();
             props.put("user", user);
             props.put("password", password);
@@ -85,6 +87,13 @@ public class DbUtils {
             return IOUtils.toByteArray(binaryStream);
         } finally {
             IOUtils.closeQuietly(binaryStream);
+        }
+    }
+
+    public static void rollback(Connection conn) {
+        try {
+            conn.rollback();
+        } catch (SQLException e) {
         }
     }
 }
