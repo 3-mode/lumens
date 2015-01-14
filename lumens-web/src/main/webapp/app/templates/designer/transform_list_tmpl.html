@@ -1,5 +1,5 @@
 <div class="lumens-transform-list" ng-controller="TransformListCtrl">
-    <div ng-if="currentUIComponent.configure.category_info.type !== 'datasource'">
+    <div ng-if="currentUIComponent.configure.category_info.class_type !== 'datasource'">
         <div class="lumens-button-bar">
             <a ng-if="theSourceNameList" class="lumens-label-button-light"><i class="lumens-icon2-input lumens-icon-gap"></i>{{theSourceNameList[0]}}</a>
             <i ng-if="theSourceNameList" class="lumens-icon-arrow-right"></i>
@@ -13,7 +13,7 @@
             <a class="lumens-button lumens-button-delete" ng-click="onRuleCommand('id_rule_delete')"><i class="lumens-icon-del lumens-icon-gap"></i>{{i18n.id_rule_delete}}</a>
         </div>
         <div id="rule_edit_dialog" class="lumens-bootstrap lumens-modal-holder"></div>
-        <div class="lumens-bootstrap  table-responsive">
+        <div class="lumens-bootstrap table-responsive">
             <table class="table">
                 <thead>
                     <tr>
@@ -33,12 +33,15 @@
             </table>
         </div>
     </div>
-    <div ng-if="currentUIComponent.configure.category_info.type === 'datasource'">
-        <div style="display: inline-block; height: 48px; width: 100%; border-bottom: 1px solid rgb(214, 214, 214);">
-            <div style="float: left; padding-top: 6px; margin-right: 15px;">Datasource: {{componentProps.Name.value}}</div>
+    <div ng-if="currentUIComponent.configure.category_info.class_type === 'datasource'">
+        <div class="lumens-button-bar">
+            <a ng-if="theSourceNameList" class="lumens-label-button-light"><i class="lumens-icon2-input lumens-icon-gap"></i>{{theSourceNameList[0]}}</a>
+            <i ng-if="theSourceNameList" class="lumens-icon-arrow-right"></i>
+            <a class="lumens-label-button"><i class="lumens-icon2-middle lumens-icon-gap"></i>{{componentProps.Name.value}}</a>
+            <i ng-if="theTargetNameList" class="lumens-icon-arrow-right"></i>
+            <a ng-if="theTargetNameList" class="lumens-label-button-light"><i class="lumens-icon2-output lumens-icon-gap"></i>{{theTargetNameList[0]}}</a>
         </div>
         <div class="lumens-button-bar">
-            <a class="lumens-button" ng-click="onFormatCommand('id_format_new')"><i class="lumens-icon-add lumens-icon-gap"></i>{{i18n.id_format_new}}</a>
             <a class="lumens-button" ng-click="onFormatCommand('id_format_delete')"><i class="lumens-icon-del lumens-icon-gap"></i>{{i18n.id_format_delete}}</a>
         </div>
         <div id="format_edit_dialog" class="lumens-bootstrap lumens-modal-holder"></div>
@@ -47,15 +50,17 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Input</th>
-                        <th>Output</th>
+                        <th>Direction</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="lumens-transform-item" style="cursor: pointer;"
-                        ng-if="currentComponent && currentComponent.transform_rule_entry"
-                        ng-repeat="ruleEntry in transformRuleEntryList" ng-dblclick="openTransformEditing(ruleEntry)">
-                        <td>{{ruleEntry.name}}</td><td>{{ruleEntry.source_format_name}}</td><td>{{ruleEntry.target_format_name}}</td>
+                    <tr class="lumens-transform-item" style="cursor: pointer;" ng-if="inFormatEntryList" ng-class="{'lumens-h-active':$index === selectInFmtIndex}"
+                        ng-repeat="fmtEntry in inFormatEntryList" ng-click="onSelectInFmtRow($index)">
+                        <td>{{fmtEntry.name}}</td><td>{{fmtEntry.direction}}</td>
+                    </tr>
+                    <tr class="lumens-transform-item" style="cursor: pointer;" ng-if="outFormatEntryList" ng-class="{'lumens-h-active':$index === selectOutFmtIndex}"
+                        ng-repeat="fmtEntry in outFormatEntryList" ng-click="onSelectOutFmtRow($index)">
+                        <td>{{fmtEntry.name}}</td><td>{{fmtEntry.direction}}</td>
                     </tr>
                 </tbody>
             </table>

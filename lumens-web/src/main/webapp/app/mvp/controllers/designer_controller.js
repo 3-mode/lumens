@@ -279,6 +279,15 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                 Message(response);
             });
         }
+        else if ("id_close" === id) {
+            ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'close'}, function (response) {
+                if (response.status === "OK") {
+                    projectOperator.close();
+                    delete sessionStorage.local_project_storage;
+                }
+                Message(response);
+            });
+        }
         else if ("id_delete" === id) {
             ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'delete'}, function (response) {
                 if (response.status === "OK")
@@ -337,9 +346,28 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
 })
 .controller("TransformListCtrl", function ($scope, $compile, $element, TransformEditTemplate) {
     LumensLog.log("In TransformListCtrl", $element);
+    $scope.selectIndex = $scope.selectInFmtIndex = $scope.selectOutFmtIndex = -1;
     $scope.onSelectRow = function (index) {
         $scope.selectIndex = index;
     };
+    $scope.onSelectInFmtRow = function (index) {
+        $scope.selectInFmtIndex = index;
+        $scope.selectOutFmtIndex = -1;
+    };
+    $scope.onSelectOutFmtRow = function (index) {
+        $scope.selectInFmtIndex = -1;
+        $scope.selectOutFmtIndex = index;
+    };
+    $scope.onFormatCommand = function (id_btn) {
+        if ("id_format_delete" === id_btn) {
+            if ($scope.selectInFmtIndex >= 0 && $scope.inFormatEntryList) {
+                $scope.currentUIComponent.removeInputFormat($scope.inFormatEntryList[$scope.selectInFmtIndex].name);
+            }
+            else if ($scope.selectOutFmtIndex >= 0 && $scope.outFormatEntryList) {
+                $scope.currentUIComponent.removeOutputFormat($scope.outFormatEntryList[$scope.selectOutFmtIndex].name);
+            }
+        }
+    }
     function showRuleEditor() {
         Lumens.system.workspaceLayout.hide();
         //TODO show to the transform editing
@@ -359,6 +387,20 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
             });
         });
     }
+
+    $scope.openTransformEditing = function (ruleEntry) {
+        LumensLog.log("Opening rule: ", ruleEntry);
+        $scope.currentRuleEntry = ruleEntry;
+        $scope.inputFormatRegName = ruleEntry.source_format_name;
+        $scope.outputFormatRegName = ruleEntry.target_format_name;
+        $scope.ruleRegName = ruleEntry.name;
+        var inFormat = $scope.currentUIComponent.hasFrom() ? $scope.currentUIComponent.getInputFormat($scope.inputFormatRegName) : null;
+        $scope.inputSelectedFormatName = inFormat ? inFormat.name : null;
+        var outFormat = $scope.currentUIComponent.hasTo() ? $scope.currentUIComponent.getOutputFormat($scope.outputFormatRegName) : null;
+        $scope.outputSelectedFormatName = outFormat ? outFormat.name : null;
+        $scope.ruleData = {rule_entry: ruleEntry, format_entry: outFormat};
+        showRuleEditor();
+    };
 
     $scope.onRuleCommand = function (id_btn) {
         if (id_btn === "id_rule_new") {
@@ -380,21 +422,9 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                 $scope.currentUIComponent.removeOutputFormat($scope.transformRuleEntryList[$scope.selectIndex].target_format_name);
                 $scope.currentUIComponent.removeRuleEntry($scope.transformRuleEntryList[$scope.selectIndex].name);
             }
+        } else if (id_btn === "id_rule_edit") {
+            $scope.openTransformEditing($scope.transformRuleEntryList[$scope.selectIndex]);
         }
-    };
-
-    $scope.openTransformEditing = function (ruleEntry) {
-        LumensLog.log("Opening rule: ", ruleEntry);
-        $scope.currentRuleEntry = ruleEntry;
-        $scope.inputFormatRegName = ruleEntry.source_format_name;
-        $scope.outputFormatRegName = ruleEntry.target_format_name;
-        $scope.ruleRegName = ruleEntry.name;
-        var inFormat = $scope.currentUIComponent.hasFrom() ? $scope.currentUIComponent.getInputFormat($scope.inputFormatRegName) : null;
-        $scope.inputSelectedFormatName = inFormat ? inFormat.name : null;
-        var outFormat = $scope.currentUIComponent.hasTo() ? $scope.currentUIComponent.getOutputFormat($scope.outputFormatRegName) : null;
-        $scope.outputSelectedFormatName = outFormat ? outFormat.name : null;
-        $scope.ruleData = {rule_entry: ruleEntry, format_entry: outFormat};
-        showRuleEditor();
     };
 
     $scope.backFromTransformEditing = function () {
@@ -415,6 +445,8 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
             return;
         $scope.$apply(function () {
             $scope.transformRuleEntryList = data.UI.getRuleEntryList();
+            $scope.inFormatEntryList = data.UI.getFormatEntryList("IN");
+            $scope.outFormatEntryList = data.UI.getFormatEntryList("OUT");
             $scope.theSourceNameList = data.UI.hasFrom() ? [data.UI.getFrom(0).getCompData().name] : null;
             $scope.theTargetNameList = data.UI.hasTo() ? [data.UI.getTo(0).getCompData().name] : null;
         });

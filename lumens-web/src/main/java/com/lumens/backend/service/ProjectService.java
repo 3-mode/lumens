@@ -68,6 +68,8 @@ public class ProjectService implements ServiceConstants {
                     return updateProject(projectID, contentJson);
                 else if (DELETE.equalsIgnoreCase(action))
                     return deleteProject(projectID, req);
+                else if (CLOSE.equalsIgnoreCase(action))
+                    return closeProject(projectID, req);
                 else if (DEPLOY.equalsIgnoreCase(action))
                     return deployProject(projectID, req);
                 else if (ACTIVE.equalsIgnoreCase(action))
@@ -78,7 +80,7 @@ public class ProjectService implements ServiceConstants {
         } catch (Exception ex) {
             return ServerUtils.getErrorMessageResponse(ex);
         }
-        return ServerUtils.getErrorMessageResponse(new RuntimeException("Not supported [" + message + "]"));
+        return ServerUtils.getErrorMessageResponse("Not supported [" + message + "]");
     }
 
     @POST
@@ -92,7 +94,7 @@ public class ProjectService implements ServiceConstants {
             if (CREATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
                 return createProject(contentJson);
         }
-        return ServerUtils.getErrorMessageResponse(new RuntimeException("Unkown error"));
+        return ServerUtils.getErrorMessageResponse("Unkown error");
     }
 
     private Response executeProjectJob(long projectID) throws Exception {
@@ -394,5 +396,26 @@ public class ProjectService implements ServiceConstants {
         json.writeEndObject();
         json.writeEndObject();
         return Response.ok().entity(utility.toUTF8String()).build();
+    }
+
+    private Response closeProject(long projectID, HttpServletRequest req) {
+        Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
+        if (attr != null) {
+            try {
+                Pair<String, TransformProject> pair = (Pair<String, TransformProject>) attr;
+                pair.getSecond().close();
+                JsonUtility utility = JsonUtility.createJsonUtility();
+                JsonGenerator json = utility.getGenerator();
+                json.writeStartObject();
+                json.writeStringField("status", "OK");
+                json.writeStringField("result_content", String.format("Project '%s' is closed", pair.getSecond().getName()));
+                json.writeEndObject();
+                req.getSession().removeAttribute(CURRENT__EDITING__PROJECT);
+                return Response.ok().entity(utility.toUTF8String()).build();
+            } catch (Exception ex) {
+                return ServerUtils.getErrorMessageResponse(ex);
+            }
+        }
+        return ServerUtils.getErrorMessageResponse("No project is opened!");
     }
 }
