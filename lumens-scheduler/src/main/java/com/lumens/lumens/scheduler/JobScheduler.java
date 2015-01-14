@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface JobScheduler {
     public void resume();
+    public void start();
+    public void shutdown();
 }

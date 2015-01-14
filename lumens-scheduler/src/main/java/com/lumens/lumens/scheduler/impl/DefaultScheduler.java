@@ -37,8 +37,16 @@ public class DefaultScheduler implements JobScheduler {
         
     }
     
-    public List<Long> getJobList() {
-        return null;
+    public void start(){
+        
+    }
+    
+    public void shutdown(){
+        
+    }
+    
+    public List<DefaultJob> getJobList() {
+        return jobList;
     }
 
     public void loadFromDb() {
