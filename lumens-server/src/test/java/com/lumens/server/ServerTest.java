@@ -49,7 +49,6 @@ public class ServerTest {
         }
     }
 
-    @Test
     public void testDatabase() throws Exception {
         ProjectDAO pDAO = DAOFactory.getProjectDAO();
         System.out.println("size of short project: " + pDAO.getAllShortProject().size());

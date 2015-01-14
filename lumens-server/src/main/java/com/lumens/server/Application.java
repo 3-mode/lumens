@@ -25,6 +25,7 @@ public class Application {
 
     private static final String OS = System.getProperty("os.name").toLowerCase();
     private static final String WAR_PATH = System.getProperty("lumens.web", "module/web");
+    private static final int PORT = Integer.getInteger("lumens.port", 8080);
     private static Application application;
 
     public static void main(String[] args) throws Exception {
@@ -43,7 +44,7 @@ public class Application {
     private void launch() throws Exception {
         Server server = new Server();
         ServerConnector connector = new ServerConnector(server);
-        connector.setPort(8080);
+        connector.setPort(PORT);
         server.setConnectors(new Connector[]{connector});
         HashSessionManager manager = new HashSessionManager();
         SessionHandler sessions = new SessionHandler(manager);
@@ -66,7 +67,7 @@ public class Application {
         webapp_provider.setMonitoredDirName(monitorDir);
         webapp_provider.setTempDir(new File(tempDir));
         webapp_provider.setScanInterval(1);
-        webapp_provider.setExtractWars(false);
+        webapp_provider.setExtractWars(true);
         webapp_provider.setDefaultsDescriptor(defaultDesc);
         webapp_provider.setConfigurationManager(new PropertiesConfigurationManager());
         deployer.addAppProvider(webapp_provider);
