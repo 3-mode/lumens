@@ -1,29 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
+    <parent>
         <artifactId>lumens</artifactId>
         <groupId>com.lumens</groupId>
         <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
-  </parent>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
-  <groupId>com.lumens</groupId>
-  <artifactId>lumens-connector-sqlserver</artifactId>
-  <version>1.0</version>
-  <name>lumens-connector-sqlserver</name>
-  <properties>
+    <groupId>com.lumens</groupId>
+    <artifactId>lumens-connector-sqlserver</artifactId>
+    <version>1.0</version>
+    <name>lumens-connector-sqlserver</name>
+    <properties>
         <connector.app.dir>${copyto.addin.dir}/sqlserver</connector.app.dir>
         <connector.lib.dir>${copyto.addin.dir}/sqlserver/lib</connector.lib.dir>
-  </properties>
+    </properties>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -52,7 +45,7 @@
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
-                            <excludeGroupIds>${project.groupId}</excludeGroupIds>
+                            <excludeArtifactIds>lumens-model,lumens-connector,lumens-addin,lumens-commons</excludeArtifactIds>
                             <includeScope>runtime</includeScope>
                         </configuration>
                     </execution>
@@ -65,7 +58,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>${project.groupId}</groupId>
+                                    <groupId>${pom.groupId}</groupId>
                                     <artifactId>${pom.artifactId}</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
@@ -82,37 +75,16 @@
             </plugin>
         </plugins>
     </build>
-  <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>lumens-model</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>lumens-connector</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>lumens-addin</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>lumens-connector-db</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>lumens-processor</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
-      <type>zip</type>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-connector-db</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-addin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

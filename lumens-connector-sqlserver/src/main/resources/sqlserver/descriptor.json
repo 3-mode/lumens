@@ -24,10 +24,6 @@
                 "type": "String"
             },
             {
-                "name": "SessionAlter",
-                "type": "String"
-            },
-            {
                 "name": "FullLoad",
                 "type": "Boolean"
             }
