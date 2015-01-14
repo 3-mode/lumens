@@ -407,16 +407,16 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         if (!data.UI || !data.UI.configure)
             return;
         $scope.transformRuleEntryList = data.UI.getRuleEntryList();
-        $scope.theSourceNameList = data.UI.hasFrom() ? [data.UI.getFrom(0).getCompData().name] : [data.UI.getCompData().name];
-        $scope.theTargetNameList = data.UI.hasTo() ? [data.UI.getTo(0).getCompData().name] : [];
+        $scope.theSourceNameList = data.UI.hasFrom() ? [data.UI.getFrom(0).getCompData().name] : null;
+        $scope.theTargetNameList = data.UI.hasTo() ? [data.UI.getTo(0).getCompData().name] : null;
     });
     $scope.$on("UIComponentSelect", function (evt, data) {
         if (!data.UI || !data.UI.configure)
             return;
         $scope.$apply(function () {
             $scope.transformRuleEntryList = data.UI.getRuleEntryList();
-            $scope.theSourceNameList = data.UI.hasFrom() ? [data.UI.getFrom(0).getCompData().name] : [data.UI.getCompData().name];
-            $scope.theTargetNameList = data.UI.hasTo() ? [data.UI.getTo(0).getCompData().name] : [];
+            $scope.theSourceNameList = data.UI.hasFrom() ? [data.UI.getFrom(0).getCompData().name] : null;
+            $scope.theTargetNameList = data.UI.hasTo() ? [data.UI.getTo(0).getCompData().name] : null;
         });
     })
 })
