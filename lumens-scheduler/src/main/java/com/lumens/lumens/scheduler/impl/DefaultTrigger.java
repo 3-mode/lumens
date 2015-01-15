@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
 package com.lumens.lumens.scheduler.impl;
@@ -14,13 +12,14 @@ import static org.quartz.DateBuilder.*;
 
 /**
  *
- * @author xiaoxiao
+ * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultTrigger implements Trigger{
     private Date startTime;
     private Date endTime;
     private int repeatCount;
     private int interval;
+    private long id;
     
     public DefaultTrigger(Date startTime, Date endTime, int repeatCount, int interval){
         this.startTime = startTime;
@@ -29,8 +28,8 @@ public class DefaultTrigger implements Trigger{
         this.interval = interval;
     }
     
-    public DefaultTrigger(String cron){
-        
+    public Long getId(){
+        return id;
     }
     
     public int getRepeatCount(){

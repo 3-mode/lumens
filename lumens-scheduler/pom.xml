@@ -32,5 +32,10 @@
             <artifactId>spring-data-jdbc-core</artifactId>
             <version>1.0.0.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

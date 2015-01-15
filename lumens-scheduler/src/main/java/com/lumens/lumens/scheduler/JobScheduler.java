@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  *
- * @author xiaoxiao
+ * @author Xiaoxin(whiskeyfly@163.com)
  */
 public interface JobScheduler {
     public void resume();
