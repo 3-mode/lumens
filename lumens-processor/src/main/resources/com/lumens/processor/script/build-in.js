@@ -2,6 +2,7 @@ var ScriptUtils = com.lumens.processor.script.ScriptUtils;
 var SimpleDateFormat = java.text.SimpleDateFormat;
 var Calendar = java.util.Calendar;
 var System = java.lang.System;
+var Timestamp = java.sql.Timestamp;
 
 /*Get the value by the current path*/
 function getElementValue(ctx, path) {
