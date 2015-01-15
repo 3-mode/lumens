@@ -103,8 +103,8 @@ public class TextClient implements TextConstants {
         String linedelimiter = connector.getLinedelimiter();
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(connector.getPath(), append), connector.getEncoding()))) {
-            String line = "";
-            String title = "";
+            StringBuilder title = new StringBuilder();
+            StringBuilder line = new StringBuilder();
             for (Element field : elem.getChildren()) {
                 if (FORMAT_PARAMS.equalsIgnoreCase(field.getFormat().getName())) {
                     continue;
@@ -114,39 +114,38 @@ public class TextClient implements TextConstants {
                 if (connector.isTrim()) {
                     fieldString = fieldString.trim();
                 }
-                if (formatAsTitle && !title.isEmpty()) {
-                    title += connector.getDelimiter();
+                if (formatAsTitle && title.length() > 0) {
+                    title.append(connector.getDelimiter());
                 }
                 if (formatAsTitle) {
-                    title += field.getFormat().getName();
+                    title.append(field.getFormat().getName());
                 }
-                if (!line.isEmpty()) {
-                    line += connector.getDelimiter();
+                if (line.length() > 0) {
+                    line.append(connector.getDelimiter());
                 }
 
                 if (connector.isQuoteMode()) {
-                    line += connector.getQuote() + fieldString + connector.getQuote();
+                    line.append(connector.getQuote()).append(fieldString).append(connector.getQuote());
                 } else {
-                    line += fieldString;
+                    line.append(fieldString);
                 }
             }
 
             if (formatAsTitle) {
-                writer.write(title);
-                if (linedelimiter.isEmpty()) {
+                writer.write(title.toString());
+                if (linedelimiter.isEmpty())
                     writer.newLine();
-                } else {
+                else
                     writer.write(linedelimiter);
-                }
                 formatAsTitle = false;
             }
 
-            writer.write(line);
-            if (linedelimiter.isEmpty()) {
+            writer.write(line.toString());
+
+            if (linedelimiter.isEmpty())
                 writer.newLine();
-            } else {
+            else
                 writer.write(linedelimiter);
-            }
 
             writer.flush();
         } catch (Exception ex) {
