@@ -24,6 +24,10 @@
                 "type": "String"
             },
             {
+                "name": "PageSize",
+                "type": "Integer"
+            },
+            {
                 "name": "FullLoad",
                 "type": "Boolean"
             }

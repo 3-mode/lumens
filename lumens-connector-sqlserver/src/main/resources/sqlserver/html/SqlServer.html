@@ -1,63 +1,42 @@
-<style type="text/css">
-    input, textarea {
-        font-size: 16px;
-        margin-left:3px;
-        width:100%;
-        height:100%;
-    }
-    .must {
-        color: red;
-    }
-    .label-style {
-        width: 100px;
-        height: 30px;
-        text-align: right;
-    }
-    .value-style {
-        width: 250px;
-        height: 30px;
-        border-left:1px solid rgb(163, 163, 163);
-    }
-    .value-style-colspan-3 {
-        height: 30px;
-        border-left: 1px solid rgb(163, 163, 163);
-    }
-    .value-textarea-style-colspan-3 {
-        height: 60px;
-        border-left: 1px solid rgb(163, 163, 163);
-    }
-</style>
-<table style="margin-top: 10px;">
+<table style="margin-top: 10px;" class="lumens-bootstrap lumens-addin">
     <tbody>
         <tr>
-            <td class="label-style must">{{componentProps.Name.label}}</td>
-            <td class="value-style-colspan-3" colspan="3">
-                <input type="text" ng-model="componentProps.Name.value"/>
+            <td class="lumens-label-style lumens-must">{{componentProps.Name.label}}</td>
+            <td class="lumens-value-style-colspan-3" colspan="3">
+                <input type="text" ng-model="componentProps.Name.value" class="form-control lumens-control" />
             </td>
         </tr>
         <tr>
-            <td class="label-style must">{{componentProps.OJDBC.label}}</td>
-            <td class="value-style">
-                <input type="text" ng-model="componentProps.OJDBC.value"/>
+            <td class="lumens-label-style lumens-must">{{componentProps.OJDBC.label}}</td>
+            <td class="lumens-value-style">
+                <input type="text" ng-model="componentProps.OJDBC.value" class="form-control lumens-control" />
             </td>
-            <td class="label-style must">{{componentProps.ConnectionURL.label}}</td>
-            <td class="value-style">
-                <input type="text" ng-model="componentProps.ConnectionURL.value"/>
-            </td>
-        </tr>
-        <tr>
-            <td class="label-style must">{{componentProps.User.label}}</td>
-            <td class="value-style">
-                <input type="text" ng-model="componentProps.User.value"/></td>
-            <td class="label-style">{{componentProps.Password.label}}</td>
-            <td class="value-style">
-                <input type="password" ng-model="componentProps.Password.value"/>
+            <td class="lumens-label-style lumens-must">{{componentProps.ConnectionURL.label}}</td>
+            <td class="lumens-value-style">
+                <input type="text" ng-model="componentProps.ConnectionURL.value" class="form-control lumens-control" />
             </td>
         </tr>
         <tr>
-            <td class="label-style">{{componentProps.Description.label}}</td>
-            <td class="value-textarea-style-colspan-3" colspan="3">
-                <textarea ng-model="componentProps.Description.value">{{componentProps.Description.value}}</textarea>
+            <td class="lumens-label-style lumens-must">{{componentProps.User.label}}</td>
+            <td class="lumens-value-style">
+                <input type="text" ng-model="componentProps.User.value" class="form-control lumens-control" />
+            </td>
+            <td class="lumens-label-style">{{componentProps.Password.label}}</td>
+            <td class="lumens-value-style">
+                <input type="password" ng-model="componentProps.Password.value" class="form-control lumens-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="lumens-label-style">{{componentProps.PageSize.label}}</td>
+            <td class="lumens-value-style">
+                <input type="number" ng-model="componentProps.PageSize.value" class="form-control lumens-control" value="1000"/>
+            </td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td class="lumens-label-style">{{componentProps.Description.label}}</td>
+            <td class="lumens-value-textarea-style-colspan-3" colspan="3">
+                <textarea ng-model="componentProps.Description.value" class="form-control lumens-control">{{componentProps.Description.value}}</textarea>
             </td>
         </tr>
         <tr>

@@ -5,6 +5,7 @@
     "ConnectionURL": "JDBC URL",
     "User": "User",
     "Password": "Password",
+    "PageSize": "Page Size",
     "SessionAlter": "Session Alter",
     "FullLoad": "Load all table fields",
     "Description": "Description"
