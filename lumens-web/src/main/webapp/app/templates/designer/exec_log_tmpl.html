@@ -10,17 +10,18 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>No.</th>
                     <th>Name</th>
                     <th>Direction</th>
                     <th>Data</th>
-                    <th>Last Modify Time</th>
+                    <th>Time</th>
                 </tr>
             </thead>
             <tbody>
                 <tr style="cursor: pointer;"
                     ng-if="logItemList"
                     ng-repeat="logItem in logItemList">
-                    <td>{{logItem.target_name}}</td><td>{{logItem.direction}}</td><td><div element-data="logItem"></div></td><td>{{logItem.last_modif_time}}</td>
+                    <td>{{$index + 1}}</td><td>{{logItem.target_name}}</td><td>{{logItem.direction}}</td><td><div element-data="logItem"></div></td><td>{{logItem.last_modif_time}}</td>
                 </tr>
             </tbody>
         </table>
