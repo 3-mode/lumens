@@ -65,7 +65,6 @@
         <module>assembler</module>
         <module>lumens-addin</module>
         <module>lumens-connector-xml</module>
-        <module>lumens-task</module>
         <module>lumens-connector-db</module>
         <module>lumens-connector-sqlserver</module>
         <module>lumens-connector-text</module>
