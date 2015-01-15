@@ -16,6 +16,10 @@ import java.util.Map;
 public class OracleConnector extends DBConnector {
     protected String sessionAlter;
 
+    public String getSessionAlter() {
+        return sessionAlter;
+    }
+
     @Override
     public Operation getOperation() {
         return new OracleOperation(dbClient);
@@ -31,7 +35,7 @@ public class OracleConnector extends DBConnector {
 
     @Override
     protected Client createDBClient() {
-        return new OracleClient(ojdbcURL, connURL, user, password, sessionAlter, pageSize);
+        return new OracleClient(this);
     }
 
 }

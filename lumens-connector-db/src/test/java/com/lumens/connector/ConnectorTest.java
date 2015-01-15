@@ -129,10 +129,8 @@ public class ConnectorTest implements OracleConstants {
         sqlSelect = sqlTest.generateSelectSQL(select);
         System.out.println("Generated select SQL: " + OracleQuerySQLBuilder.generatePageSQL(sqlSelect, 1, 100));
 
-        StringBuilder alterSession = new StringBuilder();
-        alterSession.append("alter session set NLS_DATE_FORMAT='yyyy-mm-dd'");
-        OracleClient client = new OracleClient("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar",
-                                               "jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr", alterSession.toString(), 50);
+        OracleClient client = new OracleClient(new MockOracleConnector("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar",
+                                                                       "jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr", "alter session set NLS_DATE_FORMAT='yyyy-mm-dd'", 50));
         client.open();
         OracleOperation oo = new OracleOperation(client);
         OperationResult result = oo.execute(new ElementChunk(Arrays.asList(select)), employeeFmtTest);
@@ -177,8 +175,8 @@ public class ConnectorTest implements OracleConstants {
 
         StringBuilder alterSession = new StringBuilder();
         alterSession.append("alter session set NLS_DATE_FORMAT='yyyy-mm-dd'");
-        OracleClient client = new OracleClient("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar",
-                                               "jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr", alterSession.toString(), 100);
+        OracleClient client = new OracleClient(new MockOracleConnector("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar",
+                                                                       "jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr", alterSession.toString(), 100));
         client.open();
 
         OracleOperation oo = new OracleOperation(client);

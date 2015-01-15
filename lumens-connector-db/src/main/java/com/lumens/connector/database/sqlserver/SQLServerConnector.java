@@ -15,7 +15,7 @@ public class SQLServerConnector extends DBConnector {
 
     @Override
     protected Client createDBClient() {
-        return new SQLServerClient(ojdbcURL, connURL, user, password, pageSize);
+        return new SQLServerClient(this);
     }
 
     @Override

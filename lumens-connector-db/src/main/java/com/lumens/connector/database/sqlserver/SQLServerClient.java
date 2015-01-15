@@ -3,7 +3,6 @@
  */
 package com.lumens.connector.database.sqlserver;
 
-import com.lumens.connector.database.DbUtils;
 import com.lumens.connector.database.client.AbstractClient;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
@@ -18,13 +17,8 @@ import java.sql.SQLException;
  */
 public class SQLServerClient extends AbstractClient implements SQLServerConstants {
 
-    public SQLServerClient(String ojdbcURL, String connURL, String user, String password, int pageSize) {
-        super(ojdbcURL, SQLSERVER_CLASS, connURL, user, password, pageSize);
-    }
-
-    @Override
-    public void open() {
-        conn = DbUtils.getConnection(driver, connURL, user, password);
+    public SQLServerClient(SQLServerConnector connector) {
+        super(connector, SQLSERVER_CLASS);
     }
 
     @Override

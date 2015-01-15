@@ -20,16 +20,15 @@ import java.sql.Statement;
  * @author shaofeng wang
  */
 public class OracleClient extends AbstractClient implements OracleConstants {
-    private final String sessionAlter;
 
-    public OracleClient(String ojdbcURL, String connURL, String user, String password, String sessionAlter, int pageSize) {
-        super(ojdbcURL, ORACLE_CLASS, connURL, user, password, pageSize);
-        this.sessionAlter = sessionAlter;
+    public OracleClient(OracleConnector connector) {
+        super(connector, ORACLE_CLASS);
     }
 
     @Override
     public void open() {
-        conn = DbUtils.getConnection(driver, connURL, user, password);
+        super.open();
+        String sessionAlter = ((OracleConnector) connector).getSessionAlter();
         if (sessionAlter != null && !sessionAlter.isEmpty()) {
             Statement stat = null;
             try {

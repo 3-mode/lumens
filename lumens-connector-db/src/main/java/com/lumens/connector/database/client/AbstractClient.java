@@ -31,23 +31,22 @@ public abstract class AbstractClient implements Client, DBConstants {
     protected URLClassLoader driverLoader;
     protected Driver driver;
     protected Connection conn;
-    protected String connURL;
-    protected String user;
-    protected String password;
     protected DBElementBuilder elementBuilder;
-    private int pageSize;
+    protected DBConnector connector;
 
-    public AbstractClient(String driverURL, String driverClass, String connURL, String user, String password, int pageSize) {
+    public AbstractClient(DBConnector connector, String driverClass) {
         try {
-            driver = (Driver) DbUtils.getInstance(driverURL, driverClass);
-            this.connURL = connURL;
-            this.user = user;
-            this.password = password;
-            this.pageSize = pageSize;
+            this.connector = connector;
+            driver = (Driver) DbUtils.getInstance(connector.getOjdbcURL(), driverClass);
             this.elementBuilder = new DBElementBuilder();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public void open() {
+        conn = DbUtils.getConnection(driver, connector.getConnURL(), connector.getUser(), connector.getPassword());
     }
 
     @Override
@@ -57,7 +56,7 @@ public abstract class AbstractClient implements Client, DBConstants {
 
     @Override
     public int getPageSize() {
-        return this.pageSize;
+        return connector.getPageSize();
     }
 
     @Override

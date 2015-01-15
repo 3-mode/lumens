@@ -19,16 +19,40 @@ import java.util.Map;
  */
 public abstract class DBConnector implements Connector, DBConstants {
 
-    protected Client dbClient;
     protected Map<String, Format> inTables;
     protected Map<String, Format> outTables;
+    protected Client dbClient;
     protected String ojdbcURL;
     protected String connURL;
     protected String user;
     protected String password;
     protected boolean fullLoad = true;
+
+    public String getOjdbcURL() {
+        return ojdbcURL;
+    }
+
+    public boolean isFullLoad() {
+        return fullLoad;
+    }
     protected boolean isOpen;
     protected int pageSize = 1000;
+
+    public String getConnURL() {
+        return connURL;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
 
     @Override
     public void open() {
@@ -91,6 +115,6 @@ public abstract class DBConnector implements Connector, DBConstants {
     public boolean isOpen() {
         return isOpen;
     }
-    
+
     protected abstract Client createDBClient();
 }
