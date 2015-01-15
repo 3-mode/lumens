@@ -664,6 +664,9 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
             return;
         getCurrentComponentLog();
     });
+    $scope.$on("InitProject", function () {
+        $scope.logItemList = null;
+    })
     $scope.onCommand = function (id_btn) {
         if ("id_exec_log_refresh" === id_btn) {
             getCurrentComponentLog();

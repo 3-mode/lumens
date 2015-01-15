@@ -3,15 +3,15 @@
  */
 
 Lumens.ProjectOperator = Class.$extend({
-    __init__: function(compCagegory, componentPanel, $scope) {
+    __init__: function (compCagegory, componentPanel, $scope) {
         this.compCagegory = compCagegory;
         this.componentPanel = componentPanel;
         this.$scope = $scope;
     },
-    isValid: function() {
+    isValid: function () {
         return this.$scope.project
     },
-    close: function() {
+    close: function () {
         this.componentPanel.emptyComponent();
         this.projectId = undefined;
         this.$scope.componentForm = undefined;
@@ -19,7 +19,7 @@ Lumens.ProjectOperator = Class.$extend({
         this.$scope.categoryInfo = {name: "to select"};
         this.$scope.currentComponent = {name: "to select"};
     },
-    create: function(name, description) {
+    create: function (name, description) {
         this.componentPanel.emptyComponent();
         this.projectId = undefined;
         this.$scope.project = {
@@ -33,14 +33,15 @@ Lumens.ProjectOperator = Class.$extend({
         this.$scope.componentProps = {Name: {value: "to select"}};
         this.$scope.categoryInfo = {name: "to select"};
         this.$scope.currentComponent = {name: "to select"};
+        this.$scope.$broadcast("InitProject");
     },
-    get: function() {
+    get: function () {
         return {
             projectId: this.projectId,
             project: this.$scope.project
         };
     },
-    add: function(component, class_type) {
+    add: function (component, class_type) {
         var project = this.$scope.project;
         if (class_type === "datasource")
             project.datasource.push(component);
@@ -49,25 +50,25 @@ Lumens.ProjectOperator = Class.$extend({
         else
             console.error("Not supported type", component);
     },
-    sync: function() {
+    sync: function () {
         // Sync data from client before saving the project
         console.log("Sync data from web client before saving the proejct '" + this.$scope.project.name + "'");
         var componentList = this.componentPanel.getComponentList();
-        $.each(componentList, function() {
+        $.each(componentList, function () {
             var curComp = this;
             curComp.getCompData().position = curComp.getXY();
             // Reset the target list
             curComp.getCompData().target = [];
-            $.each(this.getToLinkList(), function() {
+            $.each(this.getToLinkList(), function () {
                 var targetComp = this.getTo();
                 curComp.getCompData().target.push({id: targetComp.getCompData().id});
             });
         });
     },
-    setId: function(projectId) {
+    setId: function (projectId) {
         this.projectId = projectId;
     },
-    import: function(projectData) {
+    import: function (projectData) {
         console.log("<============= Opening a project ==============>");
         var __this = this;
         __this.close();
@@ -78,13 +79,13 @@ Lumens.ProjectOperator = Class.$extend({
             var project = this.$scope.project = $.parseJSON(projectData.content.project[0].data).project;
             console.log("Opened project:", project);
             // ==================== Update angular JS data model ====================
-            $.each(project.datasource, function() {
+            $.each(project.datasource, function () {
                 compDict[this.id] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.type], this);
             });
-            $.each(project.transformer, function() {
+            $.each(project.transformer, function () {
                 compDict[this.id] = __this.componentPanel.addComponent(this.position, __this.compCagegory[this.type], this);
             });
-            $.each(project.datasource, function() {
+            $.each(project.datasource, function () {
                 if (compDict[this.id]) {
                     for (var i = 0; i < this.target.length; ++i) {
                         if (compDict[this.target[i].id])
@@ -92,7 +93,7 @@ Lumens.ProjectOperator = Class.$extend({
                     }
                 }
             });
-            $.each(project.transformer, function() {
+            $.each(project.transformer, function () {
                 if (compDict[this.id]) {
                     for (var i = 0; i < this.target.length; ++i) {
                         if (compDict[this.target[i].id])
@@ -102,14 +103,15 @@ Lumens.ProjectOperator = Class.$extend({
             });
 
             var compList = __this.componentPanel.getComponentList();
-            $.each(compList, function() {
+            $.each(compList, function () {
                 if (this.isDataSource()) {
-                    this.changeStatus(function() {
+                    this.changeStatus(function () {
                         console.log("open or close");
                         return true;
                     });
                 }
             })
         }
+        this.$scope.$broadcast("InitProject");
     }
 });
