@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class ProjectContext {
 
-    private Map<ProjectIndex, TransformProject> projecInstanceList = new HashMap<>();
+    private final Map<ProjectIndex, TransformProject> projecInstanceList = new HashMap<>();
 
     public ProjectContext add(String projectID, TransformProject project) {
         projecInstanceList.put(new ProjectIndex(projectID, project.getDescription()), project);
