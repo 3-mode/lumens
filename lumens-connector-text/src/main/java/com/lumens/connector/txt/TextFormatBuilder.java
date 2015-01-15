@@ -25,17 +25,14 @@ import java.util.Iterator;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class TextFormatBuilder implements FormatBuilder, TextConstants {
-    private String xmlSchemaPath;
+    private final String xmlSchemaPath;
     private SAXReader schemaReader;
     private Element schemaRoot;
     private String encoding;
-    private final Map<String, Value> propList;
     private boolean isInitalized = false;
 
-    public TextFormatBuilder(Map<String, Value> props) {
-        if (props.containsKey(SCHEMA_PATH))
-            xmlSchemaPath = props.get(SCHEMA_PATH).toString();
-        propList = props;
+    public TextFormatBuilder(String schemaPath) {
+        xmlSchemaPath = schemaPath;
         schemaRoot = null;
     }
 

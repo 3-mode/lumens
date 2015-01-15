@@ -54,8 +54,8 @@ public class ConnectorTest implements TextConstants {
             if (file.isFile() && file.exists()) {
                 InputStreamReader reader = new InputStreamReader(new FileInputStream(path2read), "UTF-8");
                 BufferedReader bufReader = new BufferedReader(reader);
-                String lineTxt = null;                
-                while ((lineTxt = bufReader.readLine()) != null) {                    
+                String lineTxt = null;
+                while ((lineTxt = bufReader.readLine()) != null) {
                 }
             }
         } catch (Exception e) {
@@ -378,7 +378,7 @@ public class ConnectorTest implements TextConstants {
         propList.put(OPTION_MAXLINE, new Value(1000));
         propList.put(ENCODING, new Value("UTF-8"));
         if (schema.isFile() && schema.exists()) {
-            TextFormatBuilder xsdReader = new TextFormatBuilder(propList);
+            TextFormatBuilder xsdReader = new TextFormatBuilder(schemaPath);
             xsdReader.initalize();
             Map<String, Format> formats = xsdReader.getFormatList(Direction.IN);
         }
