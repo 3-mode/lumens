@@ -5,7 +5,6 @@ package com.lumens.backend.sql.dao;
 
 import com.lumens.backend.sql.EntityFactory;
 import com.lumens.backend.sql.entity.InOutLogItem;
-import com.lumens.backend.sql.entity.Project;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
