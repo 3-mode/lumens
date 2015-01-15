@@ -1,0 +1,14 @@
+{
+    "Name": "Name",
+    "TextName": "CSV",
+    "EscapeChar": "Escape Char",
+    "FiledDelimiter": "File Delimiter",
+    "SchemaPath": "Schema Path",
+    "Path": "Path",
+    "Encoding": "Code Page",
+    "LineDelimiter": "Line Delimiter",
+    "AlwaysQuoteMode": "Quote Mode",
+    "Description": "Description",
+    "Yes": "Yes",
+    "No": "No"
+}

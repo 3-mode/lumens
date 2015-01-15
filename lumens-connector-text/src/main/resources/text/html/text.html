@@ -1,0 +1,61 @@
+<table style="margin-top: 10px;" class="lumens-bootstrap lumens-addin">
+    <tbody>
+        <tr>
+            <td class="lumens-label-style lumens-must">{{componentProps.Name.label}}</td>
+            <td class="lumens-value-style-colspan-3" colspan="3">
+                <input type="text" ng-model="componentProps.Name.value" class="form-control lumens-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="lumens-label-style lumens-must">{{componentProps.EscapeChar.label}}</td>
+            <td class="lumens-value-style">
+                <input type="text" ng-model="componentProps.EscapeChar.value" class="form-control lumens-control" />
+            </td>
+            <td class="lumens-label-style lumens-must">{{componentProps.Encoding.label}}</td>
+            <td class="lumens-value-style">
+                <input type="text" ng-model="componentProps.Encoding.value" class="form-control lumens-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="lumens-label-style lumens-must">{{componentProps.FiledDelimiter.label}}</td>
+            <td class="lumens-value-style">
+                <input type="text" ng-model="componentProps.FiledDelimiter.value" class="form-control lumens-control" />
+            </td>
+            <td class="lumens-label-style lumens-must">{{componentProps.LineDelimiter.label}}</td>
+            <td class="lumens-value-style">
+                <input type="text" ng-model="componentProps.LineDelimiter.value" class="form-control lumens-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="lumens-label-style  lumens-must">{{componentProps.SchemaPath.label}}</td>
+            <td class="lumens-value-style-colspan-3" colspan="3">
+                <input type="text" ng-model="componentProps.SchemaPath.value" class="form-control lumens-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="lumens-label-style  lumens-must">{{componentProps.Path.label}}</td>
+            <td class="lumens-value-style-colspan-3" colspan="3">
+                <input type="text" ng-model="componentProps.Path.value" class="form-control lumens-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="lumens-label-style">{{componentProps.AlwaysQuoteMode.label}}</td>
+            <td class="lumens-value-style">
+                <select ng-model="componentProps.AlwaysQuoteMode.value" class="form-control lumens-control">
+                    <option value="true">{{categoryInfo.i18n.Yes}}</option>
+                    <option value="false">{{categoryInfo.i18n.No}}</option>
+                </select>
+            </td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td class="lumens-label-style">{{componentProps.Description.label}}</td>
+            <td class="lumens-value-textarea-style-colspan-3" colspan="3">
+                <textarea ng-model="componentProps.Description.value" class="form-control lumens-control">{{componentProps.Description.value}}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4"></td>
+        </tr>
+    </tbody>
+</table>

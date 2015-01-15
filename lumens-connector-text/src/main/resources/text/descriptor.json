@@ -1,0 +1,40 @@
+{
+    "type-text": {
+        "name": "TextName",
+        "class_type": "datasource",
+        "item_icon": "img/Text24x24.png",
+        "instance_icon": "img/Text64x64.png",
+        "html_url": "html/text.html",
+        "i18n": "i18n/text.json",
+        "property": [
+            {
+                "name": "EscapeChar",
+                "type": "String"
+            },
+            {
+                "name": "FiledDelimiter",
+                "type": "String"
+            },
+            {
+                "name": "SchemaPath",
+                "type": "String"
+            },
+            {
+                "name": "Path",
+                "type": "String"
+            },
+            {
+                "name": "Encoding",
+                "type": "String"
+            },
+            {
+                "name": "LineDelimiter",
+                "type": "String"
+            },
+            {
+                "name": "AlwaysQuoteMode",
+                "type": "Boolean"
+            }
+        ]
+    }
+}

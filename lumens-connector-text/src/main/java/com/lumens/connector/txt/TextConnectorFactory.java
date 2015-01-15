@@ -14,7 +14,7 @@ public class TextConnectorFactory implements ConnectorFactory {
 
     @Override
     public String getComponentType() {
-        return "type-txt";
+        return "type-text";
     }
 
     @Override
