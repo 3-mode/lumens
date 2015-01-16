@@ -94,6 +94,15 @@ public class DbUtils {
         try {
             conn.rollback();
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void commit(Connection conn) {
+        try {
+            conn.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

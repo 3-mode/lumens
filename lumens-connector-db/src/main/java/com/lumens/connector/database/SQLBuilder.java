@@ -4,12 +4,15 @@
 package com.lumens.connector.database;
 
 import com.lumens.model.Element;
+import com.lumens.model.Format;
 
 /**
  *
  * @author shaofeng.wang@outlook.com
  */
 public interface SQLBuilder {
+
+    public Format getFormat();
 
     public String generateInsertSQL(Element input);
 

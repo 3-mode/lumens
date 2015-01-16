@@ -23,7 +23,8 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
 
     @Override
     protected Type toType(String dataType) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // TODO
+        return Type.STRING;
     }
 
     @Override
@@ -44,6 +45,17 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
         Format table = new DataFormat(tableName, Format.Form.STRUCT);
         table.setProperty(SQLSERVER_ID, new Value(tableId));
         table.setProperty(SQLSERVER_XTYPE, new Value(tableXType));
+        try (ResultSet primaryKeyRet = stat.executeQuery(String.format(SQLSERVER_PRIMARYKEY, tableName))) {
+            StringBuilder primaryKeyList = new StringBuilder();
+            while (primaryKeyRet.next()) {
+                if (primaryKeyList.length() > 0)
+                    primaryKeyList.append(", ");
+                primaryKeyList.append(primaryKeyRet.getString(1));
+            }
+            if (primaryKeyList.length() > 0)
+                table.setProperty(SQLSERVER_PK, new Value(primaryKeyList.toString()));
+        }
+
         return table;
     }
 }

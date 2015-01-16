@@ -18,25 +18,29 @@ public class OracleQuerySQLBuilder extends DBQuerySQLBuilder {
     }
 
     @Override
-    protected String generatePageSQL(String tableName, String fields, String strWhere, String strOrderBy, String strGroupBy) {
+    protected String generatePageSQL(Format table, String fields, String strWhere, String strOrderBy, String strGroupBy) {
         StringBuilder innerQuerySQL = new StringBuilder();
-        innerQuerySQL.append("SELECT ").append(fields).append("ROWNUM AS rowno").append(" FROM ").append(tableName);
+        innerQuerySQL.append("SELECT ").append(fields).append(", ROWNUM AS rowno").append(" FROM ").append(table.getName());
         if (StringUtils.isNotEmpty(strWhere) && StringUtils.isNotBlank(strWhere))
             innerQuerySQL.append(" WHERE (").append(strWhere.trim()).append(") AND ROWNUM < %d");
         else
             innerQuerySQL.append(" WHERE ").append("ROWNUM < %d");
         if (StringUtils.isNotEmpty(strOrderBy) && StringUtils.isNotBlank(strOrderBy))
-            innerQuerySQL.append(" ORDERBY (").append(strOrderBy.trim()).append(")");
+            innerQuerySQL.append(" ORDER BY (").append(strOrderBy.trim()).append(")");
         if (StringUtils.isNotEmpty(strGroupBy) && StringUtils.isNotBlank(strGroupBy))
-            innerQuerySQL.append(" GROUPBY (").append(strGroupBy.trim()).append(")");
+            innerQuerySQL.append(" GROUP BY (").append(strGroupBy.trim()).append(")");
 
         // Build final paging query SQL
         StringBuilder finalSQL = new StringBuilder();
-        String aliasName = tableName + "_Alias";
         finalSQL.append("SELECT * FROM (");
-        finalSQL.append(innerQuerySQL.toString()).append(") ").append(aliasName).append(" WHERE ").append(aliasName).append(".rowno >= %d");
+        finalSQL.append(innerQuerySQL.toString()).append(") ").append(PAGEQUERY_TABLEALIAS).append(" WHERE ").append(PAGEQUERY_TABLEALIAS).append(".rowno >= %d");
 
         return finalSQL.toString();
+    }
+
+    @Override
+    public String generatePageSQL(String SQL, int start, int page) {
+        return String.format(SQL, start + page, start);
     }
 
 }

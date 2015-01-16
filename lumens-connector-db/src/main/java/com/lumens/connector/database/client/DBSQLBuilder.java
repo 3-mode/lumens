@@ -5,6 +5,7 @@ package com.lumens.connector.database.client;
 
 import com.lumens.connector.database.SQLBuilder;
 import com.lumens.model.Element;
+import com.lumens.model.Format;
 
 /**
  *
@@ -30,5 +31,10 @@ public class DBSQLBuilder implements SQLBuilder {
     @Override
     public String generateDeleteSQL(Element input) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Format getFormat() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

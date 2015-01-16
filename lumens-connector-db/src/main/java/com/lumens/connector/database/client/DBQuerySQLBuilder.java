@@ -19,8 +19,9 @@ public abstract class DBQuerySQLBuilder extends DBSQLBuilder implements DBConsta
         this.output = output;
     }
 
-    public static String generatePageSQL(String SQL, int start, int page) {
-        return String.format(SQL, start + page, start);
+    @Override
+    public Format getFormat() {
+        return output;
     }
 
     @Override
@@ -28,11 +29,12 @@ public abstract class DBQuerySQLBuilder extends DBSQLBuilder implements DBConsta
         StringBuilder queryFields = new StringBuilder();
         String tableName = null;
         if (output != null) {
-            tableName = output.getName();
             for (Format child : output.getChildren()) {
                 if (SQLPARAMS.equals(child.getName()))
                     continue;
-                queryFields.append(child.getName()).append(", ");
+                if (queryFields.length() > 0)
+                    queryFields.append(", ");
+                queryFields.append(child.getName());
             }
         } else {
             throw new RuntimeException("Error no output format");
@@ -52,8 +54,10 @@ public abstract class DBQuerySQLBuilder extends DBSQLBuilder implements DBConsta
                     strOrderBy = groupByElem.getValue().getString();
             }
         }
-        return generatePageSQL(tableName, queryFields.toString(), strWhere, strOrderBy, strGroupBy);
+        return generatePageSQL(output, queryFields.toString(), strWhere, strOrderBy, strGroupBy);
     }
 
-    protected abstract String generatePageSQL(String tableName, String fields, String strWhere, String strOrderBy, String strGroupBy);
+    public abstract String generatePageSQL(String SQL, int start, int page);
+
+    protected abstract String generatePageSQL(Format table, String fields, String strWhere, String strOrderBy, String strGroupBy);
 }

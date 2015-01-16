@@ -90,7 +90,7 @@ public class ConnectorTest implements OracleConstants {
         sqlEParams.addChild(GROUPBY).setValue("department");
 
         String sqlSelect = sql.generateSelectSQL(employeeQuery);
-        System.out.println("Generated select SQL: " + OracleQuerySQLBuilder.generatePageSQL(sqlSelect, 0, 100));
+        System.out.println("Generated select SQL: " + sql.generatePageSQL(sqlSelect, 0, 100));
         //assertTrue("SELECT Id, name, job_title, department FROM Testtable where (Id = 'E10001') order by Id group by department".equalsIgnoreCase(String.format(sqlSelect, 0, 100)));
 
         // Test insert SQL generating
@@ -127,16 +127,17 @@ public class ConnectorTest implements OracleConstants {
         select.addChild(SQLPARAMS).addChild(ACTION).setValue("SELECT");
         OracleQuerySQLBuilder sqlTest = new OracleQuerySQLBuilder(employeeFmtTest);
         sqlSelect = sqlTest.generateSelectSQL(select);
-        System.out.println("Generated select SQL: " + OracleQuerySQLBuilder.generatePageSQL(sqlSelect, 1, 100));
+        System.out.println("Generated select SQL: " + sqlTest.generatePageSQL(sqlSelect, 1, 100));
 
         OracleClient client = new OracleClient(new MockOracleConnector("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar",
                                                                        "jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr", "alter session set NLS_DATE_FORMAT='yyyy-mm-dd'", 50));
         client.open();
+        client.getFormatList(Direction.IN, true);
         OracleOperation oo = new OracleOperation(client);
         OperationResult result = oo.execute(new ElementChunk(Arrays.asList(select)), employeeFmtTest);
         assertTrue(result.get().size() == 50);
         while (result.has())
-            result.get();
+            System.out.println("current query size: " + result.get().size());
         client.close();
     }
 

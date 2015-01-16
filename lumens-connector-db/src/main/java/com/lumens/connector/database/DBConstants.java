@@ -33,4 +33,7 @@ public interface DBConstants {
     public String DESCRIPTION = "description";
     public String DATA_LENGTH = "data_length";
     public String DATA_TYPE = "data_type";
+
+    // CONST
+    public String PAGEQUERY_TABLEALIAS = "PageQuery_Alias";
 }

@@ -26,33 +26,34 @@ public abstract class DBOperation implements Operation, DBConstants {
 
     @Override
     public OperationResult execute(ElementChunk input, Format output) throws Exception {
-        List<Element> dataList = input.getData();
+        List<Element> dataList = input == null ? null : input.getData();
         if (dataList != null && !dataList.isEmpty()) {
             for (Element elem : dataList) {
                 Element action = elem.getChild(SQLPARAMS).getChild(ACTION);
                 String operation = (action == null || action.getValue() == null) ? null : action.getValue().getString();
                 if (operation == null || SELECT.equalsIgnoreCase(operation)) {
-                    DBQuerySQLBuilder sql = getQuerySQLBuilder(output);
-                    String SQL = sql.generateSelectSQL(elem);
-                    List<Element> result = client.executeQuery(DBQuerySQLBuilder.generatePageSQL(SQL, 1, client.getPageSize()), output);
+                    DBQuerySQLBuilder sqlBuilder = getQuerySQLBuilder(output);
+                    String SQL = sqlBuilder.generateSelectSQL(elem);
+                    List<Element> result = client.executeQuery(sqlBuilder.generatePageSQL(SQL, 1, client.getPageSize()), output);
                     if (result != null && !result.isEmpty())
-                        return new DBQueryResult(client, SQL, output, result);
-                } else if (INSERT_ONLY.equalsIgnoreCase(operation)) {
-                    DBWriteSQLBuilder sql = getWriteSQLBuilder();
-                    String SQL = sql.generateInsertSQL(elem);
-                    client.execute(SQL);
-                } else if (UPDATE_ONLY.equalsIgnoreCase(operation)) {
-                    DBWriteSQLBuilder sql = getWriteSQLBuilder();
-                    String SQL = sql.generateUpdateSQL(elem);
-                    client.execute(SQL);
-                } else if (UPDATE_OR_INSERT.equalsIgnoreCase(operation)) {
-                    throw new RuntimeException("Not supported now");
+                        return new DBQueryResult(client, sqlBuilder, SQL, result);
+                } else {
+                    if (INSERT_ONLY.equalsIgnoreCase(operation)) {
+                        client.execute(getWriteSQLBuilder().generateInsertSQL(elem));
+                    } else if (UPDATE_ONLY.equalsIgnoreCase(operation)) {
+                        client.execute(getWriteSQLBuilder().generateUpdateSQL(elem));
+                    } else {
+                        // TODO UPDATE_OR_INSERT.equalsIgnoreCase(operation)
+                        throw new RuntimeException("Not supported now");
+                    }
+                    if (input.isLast())
+                        client.commit();
                 }
             }
             // Except query, for update, delete no result for output
             return null;
         }
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Error, the input data can not be empty !");
     }
 
     protected DBWriteSQLBuilder getWriteSQLBuilder() {

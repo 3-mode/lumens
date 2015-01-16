@@ -6,7 +6,6 @@ package com.lumens.connector.database.client;
 import com.lumens.connector.OperationResult;
 import com.lumens.connector.database.Client;
 import com.lumens.model.Element;
-import com.lumens.model.Format;
 import java.util.List;
 
 /**
@@ -18,13 +17,13 @@ public class DBQueryResult implements OperationResult {
     private List<Element> result;
     private final Client client;
     private final String SQL;
-    private final Format output;
+    private final DBQuerySQLBuilder sqlBuilder;
     private int start;
 
-    DBQueryResult(Client client, String SQL, Format output, List<Element> result) {
+    public DBQueryResult(Client client, DBQuerySQLBuilder sqlBuilder, String SQL, List<Element> result) {
         this.client = client;
+        this.sqlBuilder = sqlBuilder;
         this.SQL = SQL;
-        this.output = output;
         this.result = result;
         this.start = client.getPageSize() + 1;
     }
@@ -33,7 +32,7 @@ public class DBQueryResult implements OperationResult {
     public List<Element> get() {
         List<Element> prevResult = result;
         if (hasMore()) {
-            result = client.executeQuery(DBQuerySQLBuilder.generatePageSQL(SQL, start, client.getPageSize()), output);
+            result = client.executeQuery(sqlBuilder.generatePageSQL(SQL, start, client.getPageSize()), sqlBuilder.getFormat());
             start += client.getPageSize();
         } else {
             result = null;
