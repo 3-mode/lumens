@@ -6,9 +6,6 @@ package com.lumens.lumens.scheduler.impl;
 
 import com.lumens.lumens.scheduler.Trigger;
 import java.util.Date;
-import static org.quartz.TriggerBuilder.*;
-import static org.quartz.SimpleScheduleBuilder.*;
-import static org.quartz.DateBuilder.*;
 
 /**
  *
