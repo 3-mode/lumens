@@ -15,22 +15,18 @@ import static org.quartz.DateBuilder.*;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultTrigger implements Trigger{
-    private Date startTime;
-    private Date endTime;
-    private int repeatCount;
-    private int interval;
-    private long id;
+    private final Date startTime;
+    private final Date endTime;
+    private final int repeatCount;
+    private final int interval;
     
     public DefaultTrigger(Date startTime, Date endTime, int repeatCount, int interval){
         this.startTime = startTime;
         this.endTime = endTime;
         this.repeatCount = repeatCount;
         this.interval = interval;
-    }
-    
-    public Long getId(){
-        return id;
-    }
+    }    
+
     
     public int getRepeatCount(){
         return repeatCount;

@@ -14,6 +14,5 @@ public interface Trigger {
     public int getRepeatCount();
     public Date getStartTime();
     public Date getEndTime();
-    public int getRepeatInterval();
-    public Long getId();
+    public int getRepeatInterval();   
 }

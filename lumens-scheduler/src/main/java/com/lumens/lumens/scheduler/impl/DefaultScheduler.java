@@ -17,6 +17,8 @@ import org.quartz.ScheduleBuilder;
 import org.quartz.SchedulerFactory;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.SimpleScheduleBuilder;
+
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
@@ -27,21 +29,15 @@ import static org.quartz.TriggerBuilder.newTrigger;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultScheduler implements JobScheduler {
-
+    boolean isStarted;
     Scheduler sched;
     List<DefaultJob> jobList = new ArrayList();
     Map<Long, DefaultJob> jobMap = new HashMap<>();
     Map<Long, DefaultTrigger> triggerMap = new HashMap<>();
 
     public DefaultScheduler() {
-        SchedulerFactory schedFact = new org.quartz.impl.StdSchedulerFactory();
-
-        try {
-            sched = schedFact.getScheduler();
-            sched.start();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+        isStarted = false;
+        startup();
     }
 
     public JobScheduler addSchedule(DefaultJob job, DefaultTrigger trigger) {
@@ -51,7 +47,7 @@ public class DefaultScheduler implements JobScheduler {
 
         jobList.add(job);
         jobMap.put(job.getId(), job);
-        triggerMap.put(trigger.getId(), trigger);
+        triggerMap.put(job.getId(), trigger);
 
         return this;
     }
@@ -76,12 +72,25 @@ public class DefaultScheduler implements JobScheduler {
                         .build();
 
                 DefaultTrigger defaultTrigger = triggerMap.get(job.getId());
-                TriggerBuilder<Trigger> builder = newTrigger();
-                builder.withIdentity(defaultTrigger.getId().toString(), group).startNow();                
-                builder.withSchedule(simpleSchedule().withIntervalInSeconds(defaultTrigger.getRepeatInterval()));
-                if (defaultTrigger.getRepeatCount() <= 0){
-                    
+                SimpleScheduleBuilder simpleBuilder = simpleSchedule();
+
+                int repeatCount = defaultTrigger.getRepeatCount();
+                if (repeatCount > 0) {
+                    simpleBuilder.withRepeatCount(repeatCount);
+                } else if (repeatCount < 0) {
+                    simpleBuilder.repeatForever();
                 }
+                int repeatInterval = defaultTrigger.getRepeatInterval();
+                if (repeatCount != 0 && repeatInterval > 0) {
+                    simpleBuilder.withIntervalInSeconds(repeatInterval);
+                }
+
+                TriggerBuilder<Trigger> builder = newTrigger();
+                builder.withIdentity(job.getId().toString(), group);
+                builder.startNow();
+                builder.withSchedule(simpleBuilder);
+                builder.startAt(defaultTrigger.getStartTime());
+
                 try {
                     sched.scheduleJob(jobDetail, builder.build());
                 } catch (Exception ex) {
@@ -91,11 +100,25 @@ public class DefaultScheduler implements JobScheduler {
         }
     }
 
+    public void startup() {        
+        try {
+            if (!isStarted){
+                sched = new org.quartz.impl.StdSchedulerFactory().getScheduler();
+                sched.start();
+            }            
+
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+
     public void shutdown() {
         try {
-            sched.shutdown();
-        } catch (SchedulerException ex) {
-            // TODO: log exception
+            if (isStarted){
+                sched.shutdown();
+            }
+        }catch(Exception ex){            
         }
     }
 
