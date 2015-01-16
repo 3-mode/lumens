@@ -17,3 +17,7 @@
 /lumens-model/target/
 /lumens-processor/target/
 /lumens-scheduler/target/
+/lumens-engine/target/
+/lumens-log/target/
+/lumens-connector-db/target/
+/lumens-management/target/
