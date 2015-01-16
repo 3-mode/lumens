@@ -1,10 +1,10 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.backend.sql.dao;
+package com.lumens.sysdb.dao;
 
-import com.lumens.backend.sql.EntityFactory;
-import com.lumens.backend.sql.entity.InOutLogItem;
+import com.lumens.sysdb.EntityFactory;
+import com.lumens.sysdb.entity.InOutLogItem;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -1,5 +1,5 @@
 
-package com.lumens.backend.sql.config;
+package com.lumens.sysdb.config;
 
 import java.util.ArrayList;
 import java.util.List;

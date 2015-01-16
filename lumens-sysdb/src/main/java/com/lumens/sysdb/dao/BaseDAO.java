@@ -1,6 +1,6 @@
-package com.lumens.backend.sql.dao;
+package com.lumens.sysdb.dao;
 
-import com.lumens.backend.sql.SQLManager;
+import com.lumens.sysdb.SQLManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.JdbcTemplate;

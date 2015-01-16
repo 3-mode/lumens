@@ -1,8 +1,8 @@
-package com.lumens.backend.sql;
+package com.lumens.sysdb;
 
-import com.lumens.backend.sql.config.DatabaseAccessObject;
-import com.lumens.backend.sql.config.DatabaseAccessObjects;
-import com.lumens.backend.sql.config.Sql;
+import com.lumens.sysdb.config.DatabaseAccessObject;
+import com.lumens.sysdb.config.DatabaseAccessObjects;
+import com.lumens.sysdb.config.Sql;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ import org.apache.commons.io.IOUtils;
  */
 public class SQLManager {
 
-    private Map<String, Sql> sqlList = new HashMap<>();
+    private final Map<String, Sql> sqlList = new HashMap<>();
 
     public SQLManager(String strSQLURL) {
         loadSQL(strSQLURL);

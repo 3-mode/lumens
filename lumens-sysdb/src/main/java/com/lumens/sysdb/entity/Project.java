@@ -1,10 +1,10 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.backend.sql.entity;
+package com.lumens.sysdb.entity;
 
-import com.lumens.backend.sql.Column;
-import com.lumens.backend.sql.Table;
+import com.lumens.sysdb.Column;
+import com.lumens.sysdb.Table;
 
 @Table(name = "LUNS_PROJECT")
 public class Project {

@@ -1,5 +1,5 @@
 
-package com.lumens.backend.sql.config;
+package com.lumens.sysdb.config;
 
 import javax.xml.bind.annotation.XmlRegistry;
 

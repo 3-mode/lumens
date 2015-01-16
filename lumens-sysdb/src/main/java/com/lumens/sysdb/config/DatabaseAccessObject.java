@@ -1,12 +1,13 @@
 
-package com.lumens.backend.sql.config;
+package com.lumens.sysdb.config;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlValue;
 import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -16,16 +17,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "value"
+    "sql"
 })
-@XmlRootElement(name = "sql")
-public class Sql {
+@XmlRootElement(name = "database-access-object")
+public class DatabaseAccessObject {
 
     @XmlAttribute
     @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
     protected String name;
-    @XmlValue
-    protected String value;
+    protected List<Sql> sql;
 
     /**
      * Gets the value of the name property.
@@ -52,27 +52,32 @@ public class Sql {
     }
 
     /**
-     * Gets the value of the value property.
+     * Gets the value of the sql property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getvalue() {
-        return value;
-    }
-
-    /**
-     * Sets the value of the value property.
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the sql property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getSql().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Sql }
+     * 
+     * 
      */
-    public void setvalue(String value) {
-        this.value = value;
+    public List<Sql> getSql() {
+        if (sql == null) {
+            sql = new ArrayList<Sql>();
+        }
+        return this.sql;
     }
 
 }

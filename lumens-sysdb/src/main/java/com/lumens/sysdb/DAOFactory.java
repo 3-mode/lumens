@@ -1,7 +1,7 @@
-package com.lumens.backend.sql;
+package com.lumens.sysdb;
 
-import com.lumens.backend.sql.dao.InOutLogDAO;
-import com.lumens.backend.sql.dao.ProjectDAO;
+import com.lumens.sysdb.dao.InOutLogDAO;
+import com.lumens.sysdb.dao.ProjectDAO;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

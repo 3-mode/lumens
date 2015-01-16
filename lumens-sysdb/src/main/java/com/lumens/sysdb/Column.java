@@ -1,15 +1,13 @@
-package com.lumens.backend.sql;
+package com.lumens.sysdb;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(value = {ElementType.TYPE})
+@Target(value = {ElementType.FIELD})
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface Table {
+public @interface Column {
 
     public String name() default "";
-
-    public String schema() default "";
 }

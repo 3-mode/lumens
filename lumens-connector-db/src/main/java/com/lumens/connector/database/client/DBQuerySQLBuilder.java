@@ -3,7 +3,7 @@
  */
 package com.lumens.connector.database.client;
 
-import com.lumens.connector.database.client.oracle.OracleConstants;
+import com.lumens.connector.database.DBConstants;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 
@@ -11,7 +11,7 @@ import com.lumens.model.Format;
  *
  * @author shaofeng.wang@outlook.com
  */
-public abstract class DBQuerySQLBuilder extends DBSQLBuilder implements OracleConstants {
+public abstract class DBQuerySQLBuilder extends DBSQLBuilder implements DBConstants {
 
     private final Format output;
 
