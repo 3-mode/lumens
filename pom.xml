@@ -70,7 +70,8 @@
         <module>lumens-connector-text</module>
         <module>lumens-management</module>
         <module>lumens-scheduler</module>
-  </modules>
+        <module>lumens-sysdb</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

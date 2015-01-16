@@ -3,9 +3,9 @@
  */
 package com.lumens.backend;
 
-import com.lumens.backend.sql.DAOFactory;
-import com.lumens.backend.sql.dao.InOutLogDAO;
-import com.lumens.backend.sql.entity.InOutLogItem;
+import com.lumens.sysdb.DAOFactory;
+import com.lumens.sysdb.dao.InOutLogDAO;
+import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.handler.DataSourceResultHandler;
 import com.lumens.engine.handler.TransformerResultHandler;
