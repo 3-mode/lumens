@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.database.client;
 
+import com.lumens.connector.database.DBConstants;
 import com.lumens.model.Element;
 import com.lumens.model.Value;
 import org.apache.commons.lang.StringUtils;
@@ -20,7 +21,7 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
         StringBuilder fields = new StringBuilder();
         StringBuilder values = new StringBuilder();
         for (Element e : input.getChildren()) {
-            if (SQLPARAMS.equals(e.getFormat().getName()))
+            if (DBConstants.SQLPARAMS.equals(e.getFormat().getName()))
                 continue;
             Value v = e.getValue();
             if (v != null) {
@@ -44,7 +45,7 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
         StringBuilder sql = new StringBuilder();
         StringBuilder values = new StringBuilder();
         for (Element e : input.getChildren()) {
-            if (SQLPARAMS.equals(e.getFormat().getName()))
+            if (DBConstants.SQLPARAMS.equals(e.getFormat().getName()))
                 continue;
             if (values.length() > 0) {
                 values.append(", ");
@@ -59,7 +60,7 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
         }
         sql.append("UPDATE ").append(tableName).append(" SET ").append(values.toString());
         if (input != null) {
-            Element whereElem = input.getChild(WHERE);
+            Element whereElem = input.getChild(DBConstants.WHERE);
             if (whereElem != null) {
                 String strWhere = whereElem.getValue().getString();
                 if (StringUtils.isNotEmpty(strWhere) && StringUtils.isNotBlank(strWhere)) {

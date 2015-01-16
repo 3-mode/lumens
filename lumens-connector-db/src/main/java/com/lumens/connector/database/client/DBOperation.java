@@ -9,13 +9,13 @@ import org.apache.logging.log4j.Logger;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.connector.database.Client;
-import com.lumens.connector.database.client.oracle.OracleConstants;
+import com.lumens.connector.database.DBConstants;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 
-public abstract class DBOperation implements Operation, OracleConstants {
+public abstract class DBOperation implements Operation, DBConstants {
 
     private static final Logger log = LogManager.getLogger(DBOperation.class);
     private final Client client;
