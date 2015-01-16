@@ -20,12 +20,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultJob implements Job {
+
     private final long jobId;
     private final String name;
     private final String description;
 
     List<TransformProject> projectList = new ArrayList();
-    Map<String, TransformProject> projectMap = new HashMap<>();
 
     public DefaultJob(long jobId, String name, String description) {
         this.jobId = jobId;
@@ -38,7 +38,7 @@ public class DefaultJob implements Job {
         this.name = "default";
         this.description = "";
     }
-    
+
     public Long getId() {
         return jobId;
     }
@@ -52,11 +52,7 @@ public class DefaultJob implements Job {
     }
 
     public DefaultJob addProject(TransformProject project) {
-        String projectName = project.getName();
-        if (projectMap.containsKey(projectName)) {
-            projectMap.put(projectName, project);
-            projectList.add(project);
-        }
+        projectList.add(project);
 
         return this;
     }
