@@ -34,7 +34,7 @@ public class DefaultScheduler implements JobScheduler {
     List<DefaultJob> jobList = new ArrayList();
     Map<Long, DefaultJob> jobMap = new HashMap<>();
     Map<Long, DefaultTrigger> triggerMap = new HashMap<>();
-
+    
     public DefaultScheduler() {
         isStarted = false;
         startup();
@@ -52,21 +52,18 @@ public class DefaultScheduler implements JobScheduler {
         return this;
     }
 
+    @Override
     public void resume() {
         loadFromDb();
         start();
     }
 
+    @Override
     public void start() {
-        Iterator itor = jobList.iterator();
-        while (itor.hasNext()) {
-            DefaultJob job = (DefaultJob) itor.next();
+        for (DefaultJob job : jobList) {
             String group = job.getId().toString();
-
             List<TransformProject> projectList = job.getProjectList();
-            Iterator itorP = projectList.iterator();
-            while (itorP.hasNext()) {
-                TransformProject proj = (TransformProject) itorP.next();
+            for (TransformProject proj : projectList) {
                 JobDetail jobDetail = newJob(DefaultJob.class)
                         .withIdentity(proj.getName(), group)
                         .build();
@@ -93,32 +90,33 @@ public class DefaultScheduler implements JobScheduler {
 
                 try {
                     sched.scheduleJob(jobDetail, builder.build());
-                } catch (Exception ex) {
+                } catch (SchedulerException ex) {
                     throw new RuntimeException(ex);
                 }
             }
         }
     }
 
-    public void startup() {        
+    public final void startup() {        
         try {
             if (!isStarted){
                 sched = new org.quartz.impl.StdSchedulerFactory().getScheduler();
                 sched.start();
             }            
 
-        } catch (Exception ex) {
+        } catch (SchedulerException ex) {
             throw new RuntimeException(ex);
         }
     }
 
-
+    @Override
     public void shutdown() {
         try {
             if (isStarted){
                 sched.shutdown();
             }
-        }catch(Exception ex){            
+        }catch(SchedulerException ex){            
+            // TODO: Print log
         }
     }
 
@@ -127,11 +125,12 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     public void loadFromDb() {
+        // TODO: load scheduler from db, load project list from db
+        
 
     }
 
     public void saveToDb() {
 
     }
-
 }
