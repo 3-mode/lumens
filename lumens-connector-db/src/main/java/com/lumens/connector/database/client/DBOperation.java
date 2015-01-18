@@ -38,6 +38,10 @@ public abstract class DBOperation implements Operation, DBConstants {
                 Element action = elem.getChild(SQLPARAMS).getChild(ACTION);
                 String strOper = Utils.isNullValue(action) ? null : action.getValue().getString();
                 if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
+                    // If i < input.getStart then there are some input handled as update or insert need to commit before
+                    // exeute the next query, use this way to handle the mixed operation with select, update or insert
+                    if (input.getStart() < i)
+                        client.commit();
                     return new DBQueryResult(this, getQuerySQLBuilder(output), input);
                 } else if (INSERT_ONLY.equalsIgnoreCase(strOper)) {
                     client.execute(getWriteSQLBuilder().generateInsertSQL(elem));

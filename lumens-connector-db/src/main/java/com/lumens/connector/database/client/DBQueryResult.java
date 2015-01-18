@@ -33,7 +33,6 @@ public class DBQueryResult implements OperationResult {
         this.pageSize = operation.getClient().getPageSize();
         this.SQL = sqlBuilder.generateSelectSQL(input.getData().get(input.getStart()));
         this.result = client.executeQuery(sqlBuilder.generatePageSQL(SQL, 1, pageSize), sqlBuilder.getFormat());
-        this.input.setStart(input.getStart() + 1);
     }
 
     @Override
@@ -57,6 +56,7 @@ public class DBQueryResult implements OperationResult {
     public OperationResult next() {
         if (hasNext() && result.size() < pageSize) {
             try {
+                this.input.setStart(input.getStart() + 1);
                 return operation.execute(input, sqlBuilder.getFormat());
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
