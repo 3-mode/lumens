@@ -5,7 +5,6 @@ package com.lumens.connector.database.client.oracle;
 
 import static com.lumens.connector.database.DBConstants.DESCRIPTION;
 import static com.lumens.connector.database.DBConstants.TYPE;
-import com.lumens.connector.database.DbUtils;
 import com.lumens.connector.database.client.AbstractClient;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
@@ -30,9 +29,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
         super.open();
         String sessionAlter = ((OracleConnector) connector).getSessionAlter();
         if (sessionAlter != null && !sessionAlter.isEmpty()) {
-            Statement stat = null;
-            try {
-                stat = conn.createStatement();
+            try (Statement stat = conn.createStatement()) {
                 String[] alterList = sessionAlter.split("\n");
                 for (String alter : alterList) {
                     alter = alter.trim();
@@ -41,8 +38,6 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
-            } finally {
-                DbUtils.releaseStatement(stat);
             }
         }
     }

@@ -20,8 +20,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -32,7 +30,6 @@ public abstract class AbstractClient implements Client, DBConstants {
     protected URLClassLoader driverLoader;
     protected Driver driver;
     protected Connection conn;
-    protected Statement stat;
     protected DBElementBuilder elementBuilder;
     protected DBConnector connector;
 
@@ -49,16 +46,10 @@ public abstract class AbstractClient implements Client, DBConstants {
     @Override
     public void open() {
         conn = DbUtils.getConnection(driver, connector.getConnURL(), connector.getUser(), connector.getPassword());
-        try {
-            stat = conn.createStatement();
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 
     @Override
     public void close() {
-        DbUtils.releaseStatement(stat);
         DbUtils.releaseConnection(conn);
     }
 
@@ -75,7 +66,8 @@ public abstract class AbstractClient implements Client, DBConstants {
     @Override
     public Map<String, Format> getFormatList(Direction direction, boolean fullLoad) {
         Map<String, Format> tables = new HashMap<>();
-        try (ResultSet ret = stat.executeQuery(getTableNameQuerySQL())) {
+        try (Statement stat = conn.createStatement();
+             ResultSet ret = stat.executeQuery(getTableNameQuerySQL())) {
 
             if (!ret.isClosed()) {
                 while (ret.next()) {
@@ -101,7 +93,8 @@ public abstract class AbstractClient implements Client, DBConstants {
 
     @Override
     public Format getFormat(Format format) {
-        try (ResultSet ret = stat.executeQuery(String.format(getTableColumnQuerySQL(), format.getName()))) {
+        try (Statement stat = conn.createStatement();
+             ResultSet ret = stat.executeQuery(String.format(getTableColumnQuerySQL(), format.getName()))) {
             Format fields = format;
             if (fields != null) {
                 while (ret.next()) {
@@ -121,7 +114,7 @@ public abstract class AbstractClient implements Client, DBConstants {
 
     @Override
     public void execute(String SQL) {
-        try {
+        try (Statement stat = conn.createStatement()) {
             stat.execute(SQL);
         } catch (Exception e) {
             DbUtils.rollback(conn);
@@ -131,7 +124,8 @@ public abstract class AbstractClient implements Client, DBConstants {
 
     @Override
     public List<Element> executeQuery(String SQL, Format output) {
-        try (ResultSet ret = stat.executeQuery(SQL)) {
+        try (Statement stat = conn.createStatement();
+             ResultSet ret = stat.executeQuery(SQL)) {
             return elementBuilder.buildElement(output, ret);
         } catch (Exception e) {
             throw new RuntimeException(SQL, e);
