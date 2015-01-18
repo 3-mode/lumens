@@ -1,7 +1,7 @@
 /* 
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-Lumens.services.factory('FormatService', ['FormatByPath', function (FormatByPath) {
+Lumens.services.factory('FormatService', ['FormatByPath', 'ViewUtils', function (FormatByPath, ViewUtils) {
         return {
             isField: function (form) {
                 return form === "Field";
@@ -89,6 +89,9 @@ Lumens.services.factory('FormatService', ['FormatByPath', function (FormatByPath
                         },
                         draggable: true
                     });
+
+                    if (formatEntityList.length === 1)
+                        ViewUtils.updateExpandStatus(null, formatTree);
 
                     return formatTree;
                 }
