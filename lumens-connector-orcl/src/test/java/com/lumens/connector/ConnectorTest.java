@@ -136,8 +136,10 @@ public class ConnectorTest implements OracleConstants {
         OracleOperation oo = new OracleOperation(client);
         OperationResult result = oo.execute(new ElementChunk(Arrays.asList(select)), employeeFmtTest);
         assertTrue(result.get().size() == 50);
-        while (result.has())
+        while (result.has()) {
             System.out.println("current query size: " + result.get().size());
+            result.next();
+        }
         client.close();
     }
 

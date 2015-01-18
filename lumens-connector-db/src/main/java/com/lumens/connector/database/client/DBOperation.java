@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.database.client;
 
+import com.lumens.Utils;
 import com.lumens.connector.ElementChunk;
 import org.apache.logging.log4j.Logger;
 
@@ -24,32 +25,31 @@ public abstract class DBOperation implements Operation, DBConstants {
         this.client = client;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
     @Override
     public OperationResult execute(ElementChunk input, Format output) throws Exception {
         List<Element> dataList = input == null ? null : input.getData();
         if (dataList != null && !dataList.isEmpty()) {
-            for (Element elem : dataList) {
+            for (int i = input.getStart(); i < dataList.size(); ++i) {
+                Element elem = dataList.get(i);
                 Element action = elem.getChild(SQLPARAMS).getChild(ACTION);
-                String operation = (action == null || action.getValue() == null) ? null : action.getValue().getString();
-                if (operation == null || SELECT.equalsIgnoreCase(operation)) {
-                    DBQuerySQLBuilder sqlBuilder = getQuerySQLBuilder(output);
-                    String SQL = sqlBuilder.generateSelectSQL(elem);
-                    List<Element> result = client.executeQuery(sqlBuilder.generatePageSQL(SQL, 1, client.getPageSize()), output);
-                    if (result != null && !result.isEmpty())
-                        return new DBQueryResult(client, sqlBuilder, SQL, result);
+                String strOper = Utils.isNullValue(action) ? null : action.getValue().getString();
+                if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
+                    return new DBQueryResult(this, getQuerySQLBuilder(output), input);
+                } else if (INSERT_ONLY.equalsIgnoreCase(strOper)) {
+                    client.execute(getWriteSQLBuilder().generateInsertSQL(elem));
+                } else if (UPDATE_ONLY.equalsIgnoreCase(strOper)) {
+                    client.execute(getWriteSQLBuilder().generateUpdateSQL(elem));
                 } else {
-                    if (INSERT_ONLY.equalsIgnoreCase(operation)) {
-                        client.execute(getWriteSQLBuilder().generateInsertSQL(elem));
-                    } else if (UPDATE_ONLY.equalsIgnoreCase(operation)) {
-                        client.execute(getWriteSQLBuilder().generateUpdateSQL(elem));
-                    } else {
-                        // TODO UPDATE_OR_INSERT.equalsIgnoreCase(operation)
-                        throw new RuntimeException("Not supported now");
-                    }
-                    if (input.isLast())
-                        client.commit();
+                    // TODO UPDATE_OR_INSERT.equalsIgnoreCase(operation)
+                    throw new RuntimeException("Not supported now");
                 }
             }
+            if (input.isLast())
+                client.commit();
             // Except query, for update, delete no result for output
             return null;
         }

@@ -45,7 +45,12 @@ public class SoapResult implements OperationResult {
     }
 
     @Override
-    public boolean hasMore() {
+    public boolean hasNext() {
         return false;
+    }
+
+    @Override
+    public OperationResult next() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

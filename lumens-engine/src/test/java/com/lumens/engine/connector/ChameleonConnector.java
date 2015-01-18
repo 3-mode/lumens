@@ -115,8 +115,13 @@ public class ChameleonConnector implements Connector {
                     }
 
                     @Override
-                    public boolean hasMore() {
+                    public boolean hasNext() {
                         return chunkSize > 0;
+                    }
+
+                    @Override
+                    public OperationResult next() {
+                        return this;
                     }
                 };
             }

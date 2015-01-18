@@ -16,5 +16,7 @@ public interface OperationResult {
 
     public List<Element> get();
 
-    public boolean hasMore();
+    public boolean hasNext();
+
+    public OperationResult next();
 }

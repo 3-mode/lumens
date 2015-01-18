@@ -32,7 +32,13 @@ public class TextOperationResult implements OperationResult {
     }
 
     @Override
-    public boolean hasMore() {
+    public boolean hasNext() {
+        // TODO need to handle big file data
         return false;
+    }
+
+    @Override
+    public OperationResult next() {
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 }
