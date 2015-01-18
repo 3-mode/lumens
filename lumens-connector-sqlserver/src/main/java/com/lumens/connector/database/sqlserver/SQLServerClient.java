@@ -10,6 +10,7 @@ import com.lumens.model.Type;
 import com.lumens.model.Value;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -45,7 +46,8 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
         Format table = new DataFormat(tableName, Format.Form.STRUCT);
         table.setProperty(SQLSERVER_ID, new Value(tableId));
         table.setProperty(SQLSERVER_XTYPE, new Value(tableXType));
-        try (ResultSet primaryKeyRet = stat.executeQuery(String.format(SQLSERVER_PRIMARYKEY, tableName))) {
+        try (Statement stat = conn.createStatement();
+             ResultSet primaryKeyRet = stat.executeQuery(String.format(SQLSERVER_PRIMARYKEY, tableName))) {
             StringBuilder primaryKeyList = new StringBuilder();
             while (primaryKeyRet.next()) {
                 if (primaryKeyList.length() > 0)
