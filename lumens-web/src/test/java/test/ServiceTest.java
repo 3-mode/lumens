@@ -43,7 +43,6 @@ public class ServiceTest {
     // The methods must be annotated with annotation @Test. For example:
     //
 
-    @Test
     public void testDBProject() throws Exception {
         if (true) {
             ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
