@@ -2,7 +2,7 @@
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
-package com.lumens.lumens.scheduler;
+package com.lumens.scheduler;
 
 import java.util.Date;
 

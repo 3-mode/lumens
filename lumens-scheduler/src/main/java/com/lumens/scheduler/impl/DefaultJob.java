@@ -1,7 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.lumens.scheduler.impl;
+package com.lumens.scheduler.impl;
 
 import java.util.ArrayList;
 import java.util.Map;

@@ -1,11 +1,14 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.lumens.scheduler;
+package com.lumens.scheduler;
 
+import com.lumens.scheduler.impl.DefaultScheduler;
+import com.lumens.scheduler.impl.DefaultTrigger;
+import com.lumens.scheduler.impl.DefaultJob;
+import com.lumens.scheduler.SchedulerFactory;
 import java.util.Date;
 import com.lumens.engine.TransformProject;
-import com.lumens.lumens.scheduler.impl.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
