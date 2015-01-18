@@ -57,8 +57,7 @@ public class DefaultScheduler implements JobScheduler {
         loadFromDb();
         start();
     }
-
-    @Override
+    
     public void start() {
         for (DefaultJob job : jobList) {
             String group = job.getId().toString();
@@ -97,6 +96,7 @@ public class DefaultScheduler implements JobScheduler {
         }
     }
 
+    @Override
     public final void startup() {        
         try {
             if (!isStarted){
