@@ -4,6 +4,7 @@
 package com.lumens.backend;
 
 import com.lumens.engine.TransformEngine;
+import com.lumens.scheduler.*;
 import com.lumens.management.server.monitor.OSResourcesMonitor;
 import com.lumens.management.server.monitor.ServerManagementFactory;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class ApplicationContext {
     private TransformEngine engine;
     private ProjectContext projectContext;
     private OSResourcesMonitor osResourcesMonitor;
+    private JobScheduler scheduler;
     private static ApplicationContext context;
 
     public static void createInstance(ClassLoader classLoader) {
@@ -65,6 +67,10 @@ public class ApplicationContext {
         return this.osResourcesMonitor;
     }
 
+    public JobScheduler getScheduler() {
+        return this.scheduler;
+    }
+
     public String getRealPath() {
         return strRealPath;
     }
@@ -90,6 +96,8 @@ public class ApplicationContext {
         engine.start(ServerUtils.getNormalizedPath(getRealPath() + LUMENS_ADDIN));
         // Load the manage service
         osResourcesMonitor = ServerManagementFactory.get().createOSResourcesMonitor();
+        scheduler = SchedulerFactory.get().createScheduler();
+        // scheduler.start(); // TODO: enable it after final test PASS
     }
 
     public void stop() {
