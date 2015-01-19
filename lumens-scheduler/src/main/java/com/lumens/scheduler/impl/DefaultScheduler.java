@@ -37,7 +37,7 @@ public class DefaultScheduler implements JobScheduler {
     
     public DefaultScheduler() {
         isStarted = false;
-        startup();
+        start();
     }
 
     public JobScheduler addSchedule(DefaultJob job, DefaultTrigger trigger) {
@@ -55,10 +55,10 @@ public class DefaultScheduler implements JobScheduler {
     @Override
     public void resume() {
         loadFromDb();
-        start();
+        schedule();
     }
     
-    public void start() {
+    public void schedule() {
         for (DefaultJob job : jobList) {
             String group = job.getId().toString();
             List<TransformProject> projectList = job.getProjectList();
@@ -97,7 +97,7 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public final void startup() {        
+    public final void start() {        
         try {
             if (!isStarted){
                 sched = new org.quartz.impl.StdSchedulerFactory().getScheduler();
@@ -110,7 +110,7 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public void shutdown() {
+    public void stop() {
         try {
             if (isStarted){
                 sched.shutdown();

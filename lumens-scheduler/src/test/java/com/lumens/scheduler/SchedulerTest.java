@@ -47,7 +47,7 @@ public class SchedulerTest
         DefaultJob job = new DefaultJob(1001, "job1001", "This is a sample job");
         job.addProject(project);
         scheduler.addSchedule(job, trigger);
-        scheduler.start();
+        scheduler.schedule();
         
         try {
             Thread.sleep(10000);

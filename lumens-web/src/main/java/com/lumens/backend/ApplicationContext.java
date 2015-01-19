@@ -97,7 +97,7 @@ public class ApplicationContext {
         // Load the manage service
         osResourcesMonitor = ServerManagementFactory.get().createOSResourcesMonitor();
         scheduler = SchedulerFactory.get().createScheduler();
-        scheduler.startup(); 
+        scheduler.start(); 
     }
 
     public void stop() {
