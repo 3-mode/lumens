@@ -20,10 +20,10 @@ public class ApplicationContext {
     public static String LUMENS_JNI = "/module/manage/jni";
     private final List<String> resultCache = new ArrayList<>();
     private final String strRealPath;
-    private TransformEngine engine;
+    private TransformEngine transformEngine;
     private ProjectContext projectContext;
     private OSResourcesMonitor osResourcesMonitor;
-    private JobScheduler scheduler;
+    private JobScheduler jobScheduler;
     private static ApplicationContext context;
 
     public static void createInstance(ClassLoader classLoader) {
@@ -40,8 +40,9 @@ public class ApplicationContext {
     public ApplicationContext(String realPath, ClassLoader classLoader) {
         System.out.println("Application Context is initializing ...");
         strRealPath = realPath;
-        engine = new TransformEngine(classLoader);
+        transformEngine = new TransformEngine(classLoader);
         projectContext = new ProjectContext();
+        jobScheduler = SchedulerFactory.get().createScheduler();
         System.out.println("Application Context completed initializing .");
     }
 
@@ -55,12 +56,12 @@ public class ApplicationContext {
     }
 
     public ApplicationContext setTransformEngine(TransformEngine engine) {
-        this.engine = engine;
+        this.transformEngine = engine;
         return this;
     }
 
     public TransformEngine getTransformEngine() {
-        return this.engine;
+        return this.transformEngine;
     }
 
     public OSResourcesMonitor getOSResourcesMonitor() {
@@ -68,7 +69,7 @@ public class ApplicationContext {
     }
 
     public JobScheduler getScheduler() {
-        return this.scheduler;
+        return this.jobScheduler;
     }
 
     public String getRealPath() {
@@ -89,15 +90,14 @@ public class ApplicationContext {
     }
 
     public void start() {
-
         // Initialize the JNI path when starting
         System.setProperty("java.library.path", ServerUtils.getNormalizedPath(getRealPath() + LUMENS_JNI));
-        // Load the addin connectors
-        engine.start(ServerUtils.getNormalizedPath(getRealPath() + LUMENS_ADDIN));
-        // Load the manage service
+        // Load the manage service, monitor must be created after jni path setting
         osResourcesMonitor = ServerManagementFactory.get().createOSResourcesMonitor();
-        scheduler = SchedulerFactory.get().createScheduler();
-        scheduler.startup(); 
+        // Load the addin connectors
+        transformEngine.start(ServerUtils.getNormalizedPath(getRealPath() + LUMENS_ADDIN));
+        // Standby jobScheduler
+        jobScheduler.startup();
     }
 
     public void stop() {
