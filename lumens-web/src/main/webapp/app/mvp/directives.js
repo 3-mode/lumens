@@ -199,41 +199,32 @@ Lumens.directives.directive("formatProp", function () {
         }
     };
 });
-Lumens.directives.directive("scriptConfig", function ($compile, TemplateService) {
+Lumens.directives.directive("scriptPanel", function ($compile, TemplateService) {
     return {
         restrict: 'E',
         replace: true,
         template: '<div></div>',
         link: function ($scope, $element, attr) {
-            $scope.$on("ScriptConfigDispaly", function (evt, mode) {
-                console.log("ScriptConfigDispaly", $element);
-                if (mode === "show")
-                    $element.show();
-                else if (mode === "hide")
-                    $element.hide();
-            });
-            $scope.$watch(attr.configVar, function (selectRuleItem) {
-                console.log("Current scriptConfig", selectRuleItem);
-                $element.empty();
-                var tabScriptConfig = new Lumens.TabPanel($element);
-                tabScriptConfig.configure({
-                    tab: [{
-                            id: "id-foreach",
-                            label: "<i class='lumens-icon2-loop lumens-icon-gap'></i>Foreach",
-                            content: function (tab) {
-                                $scope.hello = "Hello foreach configuration";
-                                tab.append($compile(TemplateService.get("app/templates/designer/foreach_tmpl.html"))($scope));
-                            }
-                        },
-                        {
-                            id: "id-reconcil",
-                            label: "<i class='lumens-icon-reconcil lumens-icon-gap'></i>Reconcillation",
-                            content: function (tab) {
-                                tab.append("<div></div>");
-                            }
+            $scope.scriptConfigList = new Lumens.List($element).configure({
+                activeIndex: 1,
+                IdList: [
+                    "id_foreach",
+                    "id_rule_script"
+                ],
+                titleList: [
+                    '<i class="lumens-icon-rule-config-name lumens-icon-gap"></i>Foreach',
+                    '<i class="lumens-icon2-script-config-name lumens-icon-gap"></i>Script'
+                ],
+                buildContent: function (itemContent, id, isExpand, title) {
+                    if (isExpand) {
+                        if (id === "id_foreach") {
+                            $compile($(TemplateService.get("app/templates/designer/foreach_tmpl.html")).appendTo(itemContent))($scope);
                         }
-                    ]
-                });
+                        else if (id === "id_rule_script") {
+                            $compile($('<script-editor class="lumens-rule-script-panel" script-var="transformRuleScript"></script-editor>').appendTo(itemContent))($scope);
+                        }
+                    }
+                }
             });
         }
     };

@@ -978,7 +978,8 @@ svg path {
 }
 .lumens .lumens-rule-script-panel {
     width: 100%;
-    height:calc(100% - 46px);
+    min-height: 30px;
+    height: auto !important;
     color: #5A5A5A;
 }
 .lumens .CodeMirror {
@@ -1066,6 +1067,11 @@ svg path {
 }
 .lumens .lumens-log-data {
     color: #4c4c4c;
+}
+.lumens .lumens-script-panel {
+    height: calc(100% - 46px);
+    width: 100%;
+    overflow: auto;
 }
 /*3rdparty*/
 .jqplot-table-legend {

@@ -30,8 +30,14 @@ Lumens.List = Class.$extend({
         if (this.$accordionHolder)
             this.$accordionHolder.find(".lumens-accordion-content").trigger("resize");
     },
-    doExpandCollapse: function (accordion) {
-        accordion.find("ul").toggle(200);
+    doExpandCollapse: function (config, accordion) {
+        var __this = this;
+        accordion.find("ul").toggle({
+            duration: 200,
+            complete: function () {
+                __this.buildContent(config, accordion);
+            }
+        });
         accordion.find(".lumens-accordion-icon").toggleClass("icon-expand").toggleClass("icon-collapse");
     },
     addAccordion: function (config, i, isAddToHead) {
@@ -50,11 +56,7 @@ Lumens.List = Class.$extend({
         accordion.find("ul").hide();
         accordion.attr("id", config.IdList[i])
         accordionTitle.click(function () {
-            __this.doExpandCollapse(accordion);
-            // Load data
-            if (config.buildContent) {
-                __this.buildContent(config, accordion);
-            }
+            __this.doExpandCollapse(config, accordion);
         });
     },
     addItem: function (config, pos, isAddToHead) {
@@ -62,9 +64,6 @@ Lumens.List = Class.$extend({
         var accordion = this.$accordionHolder.find("#" + config.IdList[0]);
         if (pos === 0)
             this.doExpandCollapse(accordion);
-        var contentHolder = accordion.find("#content-holder");
-        if (config.buildContent && contentHolder.children().length === 0)
-            config.buildContent(contentHolder);
         return this;
     },
     configure: function (config) {
@@ -72,10 +71,8 @@ Lumens.List = Class.$extend({
             this.addAccordion(config, i);
 
         var accordions = this.$accordionHolder.find(".lumens-accordion-item");
-        if (accordions.length) {
-            var accordion = $(accordions[0]);
-            this.doExpandCollapse($(accordions[0]));
-            this.buildContent(config, accordion);
+        if (accordions.length > 0) {
+            this.doExpandCollapse(config, $(accordions[config.activeIndex ? config.activeIndex : 0]));
         }
         return this;
     },
@@ -83,22 +80,5 @@ Lumens.List = Class.$extend({
         var contentHolder = accordion.find("#content-holder");
         if (config.buildContent && contentHolder.children().length === 0)
             config.buildContent(contentHolder, accordion.attr("id"), accordion.find(".icon-expand").length > 0, accordion.find(".lumens-accordion-title"), accordion.find(".lumens-accordion-title").find('b'));
-    }
-});
-
-Lumens.RecordList = Lumens.List.$extend({
-    __init__: function (container) {
-        this.$super(container);
-        this.sectionHTMLTemplate =
-        '<div class="lumens-accordion-item">' +
-        '  <div class="lumens-accordion-title lumens-record-border">' +
-        '    <div style="padding-top: 5px; padding-left: 10px;">' +
-        '      <div class="lumens-accordion-icon icon-collapse">' +
-        '         <b id="id-accordion-title"></b>' +
-        '      </div>' +
-        '    </div>' +
-        '  </div>' +
-        '  <ul class="lumens-accordion-content"><li id="content-holder"></li></ul>' +
-        '</div>';
     }
 });
