@@ -10,7 +10,7 @@ import com.lumens.sysdb.Table;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-@Table(name = "LUNS_PROJECT")
+@Table(name = "LUNS_RELATION")
 public class Relation {
 
     @Column(name = "job_id")
