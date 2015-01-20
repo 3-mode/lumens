@@ -1,0 +1,1551 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions targetNamespace="https://10.197.76.44:8443/PAS/services/WSCentralService" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="https://10.197.76.44:8443/PAS/services/WSCentralService" xmlns:intf="https://10.197.76.44:8443/PAS/services/WSCentralService" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://client.wscentralservice.services.dharma.iconclude.com" xmlns:tns2="http://iconclude.com/webservices/rss/v2.0/soap" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">    <!--WSDL created by Apache Axis version: 1.4    Built on Aug 20, 2009 (08:52:53 PDT)-->    
+    <wsdl:types>        
+        <schema targetNamespace="http://client.wscentralservice.services.dharma.iconclude.com" xmlns="http://www.w3.org/2001/XMLSchema">            
+            <import namespace="http://iconclude.com/webservices/rss/v2.0/soap"/>            
+            <import namespace="http://xml.apache.org/xml-soap"/>            
+            <import namespace="https://10.197.76.44:8443/PAS/services/WSCentralService"/>            
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>            
+            <complexType name="WSGroupPermissions">                
+                <sequence>                    
+                    <element name="groupName" type="xsd:string"/>                    
+                    <element name="permissions" type="xsd:string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSAttribute">                
+                <sequence>                    
+                    <element name="name" type="xsd:string"/>                    
+                    <element name="value" type="xsd:string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSGroup">                
+                <sequence>                    
+                    <element name="groupName" type="soapenc:string"/>                    
+                    <element name="description" nillable="true" type="soapenc:string"/>                    
+                    <element name="capabilities" nillable="true" type="xsd:long"/>                    
+                    <element name="externalGroups" nillable="true" type="impl:ArrayOf_xsd_string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSUser">                
+                <sequence>                    
+                    <element name="username" type="soapenc:string"/>                    
+                    <element name="password" nillable="true" type="soapenc:string"/>                    
+                    <element name="isInternal" nillable="true" type="soapenc:boolean"/>                    
+                    <element name="isEnabled" nillable="true" type="soapenc:boolean"/>                    
+                    <element name="groups" nillable="true" type="impl:ArrayOf_xsd_string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSLwssoConfiguration">                
+                <sequence>                    
+                    <element name="enabled" type="soapenc:boolean"/>                    
+                    <element name="initString" nillable="true" type="xsd:string"/>                    
+                    <element name="domain" nillable="true" type="xsd:string"/>                    
+                    <element name="protectedDomains" nillable="true" type="impl:ArrayOf_xsd_string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSRunHistoryDetailsExtend">                
+                <sequence>                    
+                    <element name="uuid" nillable="true" type="xsd:string"/>                    
+                    <element name="flowRevision" nillable="true" type="xsd:string"/>                    
+                    <element name="runHistoryId" type="xsd:long"/>                    
+                    <element name="runName" nillable="true" type="xsd:string"/>                    
+                    <element name="userId" nillable="true" type="xsd:string"/>                    
+                    <element name="status" nillable="true" type="xsd:string"/>                    
+                    <element name="startTime" type="xsd:long"/>                    
+                    <element name="duration" type="xsd:long"/>                    
+                    <element name="numSteps" type="xsd:int"/>                    
+                    <element name="scheduledBy" nillable="true" type="xsd:string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSClusterNodeDetails">                
+                <sequence>                    
+                    <element name="url" nillable="true" type="xsd:string"/>                    
+                    <element name="state" nillable="true" type="xsd:string"/>                    
+                    <element name="studioSessions" nillable="true" type="xsd:long"/>                    
+                    <element name="centralSessions" nillable="true" type="xsd:long"/>                    
+                    <element name="activeRuns" nillable="true" type="xsd:long"/>                    
+                    <element name="pendingRuns" nillable="true" type="xsd:long"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSListDetails">                
+                <sequence>                    
+                    <element name="uuid" nillable="true" type="xsd:string"/>                    
+                    <element name="name" nillable="true" type="xsd:string"/>                    
+                    <element name="description" nillable="true" type="xsd:string"/>                    
+                    <element name="values" nillable="true" type="xsd:string"/>                    
+                    <element name="version" nillable="true" type="xsd:string"/>                    
+                    <element name="comment" nillable="true" type="xsd:string"/>                    
+                    <element name="lastModifiedBy" nillable="true" type="xsd:string"/>                    
+                    <element name="lastModified" nillable="true" type="xsd:string"/>                
+                </sequence>            
+            </complexType>        
+        </schema>        
+        <schema targetNamespace="https://10.197.76.44:8443/PAS/services/WSCentralService" xmlns="http://www.w3.org/2001/XMLSchema">            
+            <import namespace="http://client.wscentralservice.services.dharma.iconclude.com"/>            
+            <import namespace="http://iconclude.com/webservices/rss/v2.0/soap"/>            
+            <import namespace="http://xml.apache.org/xml-soap"/>            
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>            
+            <complexType name="ArrayOf_tns1_WSGroupPermissions">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:WSGroupPermissions[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_WSFlow">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:WSFlow[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_WSFolderDetails">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:WSFolderDetails[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_xsd_string">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns1_WSAttribute">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:WSAttribute[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_WSFlowInput">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:WSFlowInput[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_WSRunHandle">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:WSRunHandle[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_WSRunStepDetails">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:WSRunStepDetails[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_xsd_anyType">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_ScheduleFlowInfo">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:ScheduleFlowInfo[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOfArrayOf_xsd_string">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[][]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_WSScheduleDetails">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:WSScheduleDetails[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_Pair">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:Pair[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_WSFlowInputDef">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:WSFlowInputDef[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_WSFlowDetails">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:WSFlowDetails[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOfArrayOf_tns2_WSInputDescriptor">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:WSInputDescriptor[][]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_WSRunStatus">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:WSRunStatus[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_WSRunHistoryQueryParams">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:WSRunHistoryQueryParams[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns2_WSRunHistoryDetails">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:WSRunHistoryDetails[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns1_WSRunHistoryDetailsExtend">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:WSRunHistoryDetailsExtend[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="ArrayOf_tns1_WSClusterNodeDetails">                
+                <complexContent>                    
+                    <restriction base="soapenc:Array">                        
+                        <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:WSClusterNodeDetails[]"/>                    
+                    </restriction>                
+                </complexContent>            
+            </complexType>        
+        </schema>        
+        <schema targetNamespace="http://iconclude.com/webservices/rss/v2.0/soap" xmlns="http://www.w3.org/2001/XMLSchema">            
+            <import namespace="http://client.wscentralservice.services.dharma.iconclude.com"/>            
+            <import namespace="http://xml.apache.org/xml-soap"/>            
+            <import namespace="https://10.197.76.44:8443/PAS/services/WSCentralService"/>            
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>            
+            <complexType name="WSFlow">                
+                <sequence>                    
+                    <element name="UUID" nillable="true" type="xsd:string"/>                    
+                    <element name="name" nillable="true" type="xsd:string"/>                    
+                    <element name="path" nillable="true" type="xsd:string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSFolderDetails">                
+                <sequence>                    
+                    <element name="lastModifiedBy" nillable="true" type="xsd:string"/>                    
+                    <element name="lastModifiedTime" type="xsd:long"/>                    
+                    <element name="name" nillable="true" type="xsd:string"/>                    
+                    <element name="path" nillable="true" type="xsd:string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSFolderContent">                
+                <sequence>                    
+                    <element name="flows" nillable="true" type="impl:ArrayOf_tns2_WSFlow"/>                    
+                    <element name="folderFound" type="xsd:boolean"/>                    
+                    <element name="folderName" nillable="true" type="xsd:string"/>                    
+                    <element name="folders" nillable="true" type="impl:ArrayOf_tns2_WSFolderDetails"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSFlowInput">                
+                <sequence>                    
+                    <element name="encrypted" type="xsd:boolean"/>                    
+                    <element name="listValues" nillable="true" type="impl:ArrayOf_xsd_string"/>                    
+                    <element name="name" nillable="true" type="xsd:string"/>                    
+                    <element name="value" nillable="true" type="xsd:string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSRunParameters">                
+                <sequence>                    
+                    <element name="async" type="xsd:boolean"/>                    
+                    <element name="flowInputs" nillable="true" type="impl:ArrayOf_tns2_WSFlowInput"/>                    
+                    <element name="runName" nillable="true" type="xsd:string"/>                    
+                    <element name="startPaused" type="xsd:boolean"/>                    
+                    <element name="trackStatus" type="xsd:boolean"/>                    
+                    <element name="uuid" nillable="true" type="xsd:string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSRunParametersEx">                
+                <complexContent>                    
+                    <extension base="tns2:WSRunParameters">                        
+                        <sequence>                            
+                            <element name="primaryResultWanted" type="xsd:boolean"/>                            
+                            <element name="rawResultWanted" type="xsd:boolean"/>                            
+                            <element name="statusWanted" type="xsd:boolean"/>                        
+                        </sequence>                    
+                    </extension>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="WSRunStatusCursor">                
+                <sequence>                    
+                    <element name="cursorPosition" type="xsd:int"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSRunHandle">                
+                <sequence>                    
+                    <element name="runID" nillable="true" type="xsd:string"/>                    
+                    <element name="statusCursor" nillable="true" type="tns2:WSRunStatusCursor"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSRunStepDetails">                
+                <sequence>                    
+                    <element name="childRuns" nillable="true" type="impl:ArrayOf_tns2_WSRunHandle"/>                    
+                    <element name="endTime" type="xsd:long"/>                    
+                    <element name="flowName" nillable="true" type="xsd:string"/>                    
+                    <element name="name" nillable="true" type="xsd:string"/>                    
+                    <element name="runStepLevel" type="xsd:int"/>                    
+                    <element name="startTime" type="xsd:long"/>                    
+                    <element name="stepResponse" nillable="true" type="xsd:string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSRunStatus">                
+                <sequence>                    
+                    <element name="runHandle" nillable="true" type="tns2:WSRunHandle"/>                    
+                    <element name="runReportUrl" nillable="true" type="xsd:string"/>                    
+                    <element name="runResponse" nillable="true" type="xsd:string"/>                    
+                    <element name="runResumeUrl" nillable="true" type="xsd:string"/>                    
+                    <element name="status" type="xsd:int"/>                    
+                    <element name="steps" nillable="true" type="impl:ArrayOf_tns2_WSRunStepDetails"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSStatusOptionsEx">                
+                <sequence>                    
+                    <element name="primaryResultWanted" type="xsd:boolean"/>                    
+                    <element name="rawResultWanted" type="xsd:boolean"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSRunStatusEx">                
+                <complexContent>                    
+                    <extension base="tns2:WSRunStatus">                        
+                        <sequence>                            
+                            <element name="primaryResult" nillable="true" type="xsd:string"/>                            
+                            <element name="rawResult" nillable="true" type="xsd:string"/>                            
+                            <element name="statusOptions" nillable="true" type="tns2:WSStatusOptionsEx"/>                        
+                        </sequence>                    
+                    </extension>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="WSRunHandleEx">                
+                <complexContent>                    
+                    <extension base="tns2:WSRunHandle">                        
+                        <sequence>                            
+                            <element name="runStatusEx" nillable="true" type="tns2:WSRunStatusEx"/>                            
+                            <element name="statusOptions" nillable="true" type="tns2:WSStatusOptionsEx"/>                        
+                        </sequence>                    
+                    </extension>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="WSRunCtrlParams">                
+                <sequence>                    
+                    <element name="runID" nillable="true" type="xsd:string"/>                    
+                    <element name="sync" type="xsd:boolean"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSRunCtrlResult">                
+                <sequence>                    
+                    <element name="errorMsg" nillable="true" type="xsd:string"/>                    
+                    <element name="success" type="xsd:boolean"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="ScheduleFlowInfo">                
+                <sequence>                    
+                    <element name="description" nillable="true" type="xsd:string"/>                    
+                    <element name="enabled" nillable="true" type="xsd:boolean"/>                    
+                    <element name="executing" nillable="true" type="xsd:boolean"/>                    
+                    <element name="flowName" nillable="true" type="xsd:string"/>                    
+                    <element name="lastRunReportURL" nillable="true" type="xsd:string"/>                    
+                    <element name="lastRunReturnCode" nillable="true" type="xsd:string"/>                    
+                    <element name="lastRunSuccessful" nillable="true" type="xsd:boolean"/>                    
+                    <element name="name" nillable="true" type="xsd:string"/>                    
+                    <element name="nextRuntime" nillable="true" type="xsd:dateTime"/>                    
+                    <element name="nextTriggerNames" nillable="true" type="impl:ArrayOf_xsd_anyType"/>                    
+                    <element name="paused" nillable="true" type="xsd:boolean"/>                    
+                    <element name="prevRuntime" nillable="true" type="xsd:dateTime"/>                    
+                    <element name="prevTriggerNames" nillable="true" type="impl:ArrayOf_xsd_anyType"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSScheduleType">                
+                <sequence>                    
+                    <element name="description" nillable="true" type="xsd:string"/>                    
+                    <element name="type" type="xsd:int"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSScheduleUnitType">                
+                <sequence>                    
+                    <element name="description" nillable="true" type="xsd:string"/>                    
+                    <element name="unit" type="xsd:int"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSScheduleDetails">                
+                <sequence>                    
+                    <element name="cronExpression" nillable="true" type="xsd:string"/>                    
+                    <element name="description" nillable="true" type="xsd:string"/>                    
+                    <element name="enabled" nillable="true" type="xsd:boolean"/>                    
+                    <element name="endTime" type="xsd:long"/>                    
+                    <element name="executing" nillable="true" type="xsd:boolean"/>                    
+                    <element name="flowUuid" nillable="true" type="xsd:string"/>                    
+                    <element name="name" nillable="true" type="xsd:string"/>                    
+                    <element name="nextRuntime" type="xsd:long"/>                    
+                    <element name="params" nillable="true" type="impl:ArrayOfArrayOf_xsd_string"/>                    
+                    <element name="prevRuntime" type="xsd:long"/>                    
+                    <element name="repeatIntervalMilli" type="xsd:long"/>                    
+                    <element name="startTime" type="xsd:long"/>                    
+                    <element name="type" nillable="true" type="tns2:WSScheduleType"/>                    
+                    <element name="unit" nillable="true" type="tns2:WSScheduleUnitType"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="Pair">                
+                <sequence>                    
+                    <element name="first" nillable="true" type="xsd:anyType"/>                    
+                    <element name="second" nillable="true" type="xsd:anyType"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="ScheduleInfo">                
+                <sequence>                    
+                    <element name="cronExpression" nillable="true" type="xsd:string"/>                    
+                    <element name="dayNumber" type="xsd:int"/>                    
+                    <element name="dayOrder" type="xsd:int"/>                    
+                    <element name="dayType" type="xsd:int"/>                    
+                    <element name="description" nillable="true" type="xsd:string"/>                    
+                    <element name="enabled" nillable="true" type="xsd:boolean"/>                    
+                    <element name="endTime" nillable="true" type="xsd:dateTime"/>                    
+                    <element name="executing" nillable="true" type="xsd:boolean"/>                    
+                    <element name="internalUser" type="xsd:boolean"/>                    
+                    <element name="monthNumber" type="xsd:int"/>                    
+                    <element name="name" nillable="true" type="xsd:string"/>                    
+                    <element name="nextRuntime" nillable="true" type="xsd:dateTime"/>                    
+                    <element name="params" nillable="true" type="impl:ArrayOf_tns2_Pair"/>                    
+                    <element name="paused" nillable="true" type="xsd:boolean"/>                    
+                    <element name="prevRuntime" nillable="true" type="xsd:dateTime"/>                    
+                    <element name="repeatCount" type="xsd:int"/>                    
+                    <element name="repeatIntervalMilli" type="xsd:long"/>                    
+                    <element name="startTime" nillable="true" type="xsd:dateTime"/>                    
+                    <element name="triggerName" nillable="true" type="xsd:string"/>                    
+                    <element name="type" type="xsd:int"/>                    
+                    <element name="units" nillable="true" type="xsd:string"/>                    
+                    <element name="userName" nillable="true" type="xsd:string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSFlowInputDef">                
+                <sequence>                    
+                    <element name="defaultValue" nillable="true" type="xsd:string"/>                    
+                    <element name="defaultValues" nillable="true" type="impl:ArrayOf_xsd_string"/>                    
+                    <element name="description" nillable="true" type="xsd:string"/>                    
+                    <element name="encrypted" type="xsd:boolean"/>                    
+                    <element name="list" type="xsd:boolean"/>                    
+                    <element name="listType" type="xsd:int"/>                    
+                    <element name="name" nillable="true" type="xsd:string"/>                    
+                    <element name="required" type="xsd:boolean"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSFlowDetails">                
+                <complexContent>                    
+                    <extension base="tns2:WSFlow">                        
+                        <sequence>                            
+                            <element name="categories" nillable="true" type="impl:ArrayOf_xsd_string"/>                            
+                            <element name="description" nillable="true" type="xsd:string"/>                            
+                            <element name="domain" nillable="true" type="xsd:string"/>                            
+                            <element name="flowVersion" nillable="true" type="xsd:string"/>                            
+                            <element name="lastModifiedBy" nillable="true" type="xsd:string"/>                            
+                            <element name="lastModifiedTime" type="xsd:long"/>                            
+                            <element name="parameters" nillable="true" type="impl:ArrayOf_tns2_WSFlowInputDef"/>                            
+                            <element name="userCanRunFlow" type="xsd:boolean"/>                        
+                        </sequence>                    
+                    </extension>                
+                </complexContent>            
+            </complexType>            
+            <complexType name="WSInputValueAssignment">                
+                <sequence>                    
+                    <element name="assignFromConstantValue" type="xsd:boolean"/>                    
+                    <element name="assignFromDomainTerm" type="xsd:boolean"/>                    
+                    <element name="assignFromFlowVariableList" type="xsd:boolean"/>                    
+                    <element name="assignFromLoginCredentials" type="xsd:boolean"/>                    
+                    <element name="assignFromPreviousStepResult" type="xsd:boolean"/>                    
+                    <element name="assignFromSelectionList" type="xsd:boolean"/>                    
+                    <element name="assignFromSystemAccount" type="xsd:boolean"/>                    
+                    <element name="assignFromUserInput" type="xsd:boolean"/>                    
+                    <element name="constantValue" nillable="true" type="xsd:string"/>                    
+                    <element name="domainTermDescription" nillable="true" type="xsd:string"/>                    
+                    <element name="domainTermName" nillable="true" type="xsd:string"/>                    
+                    <element name="domainTermValues" nillable="true" type="impl:ArrayOf_xsd_string"/>                    
+                    <element name="flowVariableListDelimiter" nillable="true" type="xsd:string"/>                    
+                    <element name="flowVariableListName" nillable="true" type="xsd:string"/>                    
+                    <element name="multipleSelectionAllowed" type="xsd:boolean"/>                    
+                    <element name="postAssignFlowVariableName" nillable="true" type="xsd:string"/>                    
+                    <element name="postAssignToFlowVariable" type="xsd:boolean"/>                    
+                    <element name="preAssignFlowVariableName" nillable="true" type="xsd:string"/>                    
+                    <element name="preAssignFromFlowVariable" type="xsd:boolean"/>                    
+                    <element name="selectionListDescription" nillable="true" type="xsd:string"/>                    
+                    <element name="selectionListName" nillable="true" type="xsd:string"/>                    
+                    <element name="selectionListValues" nillable="true" type="impl:ArrayOf_xsd_string"/>                    
+                    <element name="systemAccountName" nillable="true" type="xsd:string"/>                    
+                    <element name="userInputPrompt" nillable="true" type="xsd:string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSInputValueReporting">                
+                <sequence>                    
+                    <element name="domainTermName" nillable="true" type="xsd:string"/>                    
+                    <element name="recordAsDomainTerm" type="xsd:boolean"/>                    
+                    <element name="recordInHistory" type="xsd:boolean"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSInputValueType">                
+                <sequence>                    
+                    <element name="listDelimiter" nillable="true" type="xsd:string"/>                    
+                    <element name="typeId" type="xsd:int"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSInputValueEvaluation">                
+                <sequence>                    
+                    <element name="evaluatorDescription" nillable="true" type="xsd:string"/>                    
+                    <element name="evaluatorName" nillable="true" type="xsd:string"/>                    
+                    <element name="evaluatorText" nillable="true" type="xsd:string"/>                    
+                    <element name="evaluatorType" type="xsd:int"/>                    
+                    <element name="ignoreCase" type="xsd:boolean"/>                    
+                    <element name="regexMatchWholeInput" type="xsd:boolean"/>                    
+                    <element name="regexMultiLine" type="xsd:boolean"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSInputDescriptor">                
+                <sequence>                    
+                    <element name="encrypted" type="xsd:boolean"/>                    
+                    <element name="error" type="xsd:boolean"/>                    
+                    <element name="errorMessage" nillable="true" type="xsd:string"/>                    
+                    <element name="inputName" nillable="true" type="xsd:string"/>                    
+                    <element name="operationUuid" nillable="true" type="xsd:string"/>                    
+                    <element name="required" type="xsd:boolean"/>                    
+                    <element name="valueAssignmentPolicy" nillable="true" type="tns2:WSInputValueAssignment"/>                    
+                    <element name="valueReportingPolicy" nillable="true" type="tns2:WSInputValueReporting"/>                    
+                    <element name="valueType" nillable="true" type="tns2:WSInputValueType"/>                    
+                    <element name="valueValidationPolicy" nillable="true" type="tns2:WSInputValueEvaluation"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSRunHistoryQueryParams">                
+                <sequence>                    
+                    <element name="endTime" type="xsd:long"/>                    
+                    <element name="flowUuid" nillable="true" type="xsd:string"/>                    
+                    <element name="startAtRowIndex" type="xsd:int"/>                    
+                    <element name="startTime" type="xsd:long"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSRunHistoryDetails">                
+                <sequence>                    
+                    <element name="duration" type="xsd:long"/>                    
+                    <element name="flowRevision" nillable="true" type="xsd:string"/>                    
+                    <element name="numSteps" type="xsd:int"/>                    
+                    <element name="runId" type="xsd:long"/>                    
+                    <element name="startTime" type="xsd:long"/>                    
+                    <element name="status" nillable="true" type="xsd:string"/>                    
+                    <element name="userId" nillable="true" type="xsd:string"/>                
+                </sequence>            
+            </complexType>            
+            <complexType name="WSFlowGraph">                
+                <sequence>                    
+                    <element name="imageBinaryData" nillable="true" type="xsd:base64Binary"/>                    
+                    <element name="imageName" nillable="true" type="xsd:string"/>                    
+                    <element name="imageSize" type="xsd:long"/>                    
+                    <element name="imageType" nillable="true" type="xsd:string"/>                
+                </sequence>            
+            </complexType>        
+        </schema>        
+        <schema targetNamespace="http://xml.apache.org/xml-soap" xmlns="http://www.w3.org/2001/XMLSchema">            
+            <import namespace="http://client.wscentralservice.services.dharma.iconclude.com"/>            
+            <import namespace="http://iconclude.com/webservices/rss/v2.0/soap"/>            
+            <import namespace="https://10.197.76.44:8443/PAS/services/WSCentralService"/>            
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>            
+            <complexType name="Vector">                
+                <sequence>                    
+                    <element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType"/>                
+                </sequence>            
+            </complexType>        
+        </schema>    
+    </wsdl:types>    
+    <wsdl:message name="runFlowExResponse">        
+        <wsdl:part name="runFlowExReturn" type="tns2:WSRunHandleEx"/>    
+    </wsdl:message>    
+    <wsdl:message name="getFlowInputDescriptionsRequest">        
+        <wsdl:part name="flowUuids" type="impl:ArrayOf_xsd_string"/>    
+    </wsdl:message>    
+    <wsdl:message name="cancelRunResponse">        
+        <wsdl:part name="cancelRunReturn" type="tns2:WSRunCtrlResult"/>    
+    </wsdl:message>    
+    <wsdl:message name="getSchedulesForFlowCategoryResponse">        
+        <wsdl:part name="getSchedulesForFlowCategoryReturn" type="impl:ArrayOf_tns2_WSScheduleDetails"/>    
+    </wsdl:message>    
+    <wsdl:message name="pauseScheduleRequest">        
+        <wsdl:part name="schedule" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="createFolderRequest">        
+        <wsdl:part name="path" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="getRunStatusResponse">        
+        <wsdl:part name="getRunStatusReturn" type="tns2:WSRunStatus"/>    
+    </wsdl:message>    
+    <wsdl:message name="moveFlowRequest">        
+        <wsdl:part name="identifier" type="soapenc:string"/>        
+        <wsdl:part name="destinationPath" type="soapenc:string"/>        
+        <wsdl:part name="overwrite" type="soapenc:boolean"/>    
+    </wsdl:message>    
+    <wsdl:message name="getCategoriesRequest">    </wsdl:message>    
+    <wsdl:message name="getUserGroupsRequest">        
+        <wsdl:part name="username" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="isSchedulerEnabledRequest">    </wsdl:message>    
+    <wsdl:message name="renameRepoEntityRequest">        
+        <wsdl:part name="identifier" type="soapenc:string"/>        
+        <wsdl:part name="newName" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="getSchedulesOfFlowRequest">        
+        <wsdl:part name="flowUuid" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="resumeScheduledFlowResponse">    </wsdl:message>    
+    <wsdl:message name="getFlowDetailsRequest">        
+        <wsdl:part name="flowUuids" type="impl:ArrayOf_xsd_string"/>    
+    </wsdl:message>    
+    <wsdl:message name="updateGroupRequest">        
+        <wsdl:part name="group" type="tns1:WSGroup"/>    
+    </wsdl:message>    
+    <wsdl:message name="moveFolderResponse">        
+        <wsdl:part name="moveFolderReturn" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="deleteRepoEntityResponse">    </wsdl:message>    
+    <wsdl:message name="createGroupResponse">    </wsdl:message>    
+    <wsdl:message name="isSchedulePausedResponse">        
+        <wsdl:part name="isSchedulePausedReturn" type="xsd:boolean"/>    
+    </wsdl:message>    
+    <wsdl:message name="searchResponse">        
+        <wsdl:part name="searchReturn" type="impl:ArrayOf_tns2_WSFlow"/>    
+    </wsdl:message>    
+    <wsdl:message name="getRunStatusRequest">        
+        <wsdl:part name="runHandle" type="tns2:WSRunHandle"/>    
+    </wsdl:message>    
+    <wsdl:message name="getRunStatusExResponse">        
+        <wsdl:part name="getRunStatusExReturn" type="tns2:WSRunStatusEx"/>    
+    </wsdl:message>    
+    <wsdl:message name="getAttributesResponse">        
+        <wsdl:part name="getAttributesReturn" type="impl:ArrayOf_tns1_WSAttribute"/>    
+    </wsdl:message>    
+    <wsdl:message name="renameRepoEntityResponse">    </wsdl:message>    
+    <wsdl:message name="resumeScheduleRequest">        
+        <wsdl:part name="schedule" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="getCategoriesResponse">        
+        <wsdl:part name="getCategoriesReturn" type="impl:ArrayOf_xsd_string"/>    
+    </wsdl:message>    
+    <wsdl:message name="resumeRunResponse">        
+        <wsdl:part name="resumeRunReturn" type="tns2:WSRunCtrlResult"/>    
+    </wsdl:message>    
+    <wsdl:message name="isScheduledFlowPausedResponse">        
+        <wsdl:part name="isScheduledFlowPausedReturn" type="xsd:boolean"/>    
+    </wsdl:message>    
+    <wsdl:message name="deleteScheduleRequest">        
+        <wsdl:part name="schedule" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="getFlowRunHistoryByRunIdRequest">        
+        <wsdl:part name="runId" type="soapenc:long"/>    
+    </wsdl:message>    
+    <wsdl:message name="getRunStatusExRequest">        
+        <wsdl:part name="runHandle" type="tns2:WSRunHandle"/>        
+        <wsdl:part name="options" type="tns2:WSStatusOptionsEx"/>    
+    </wsdl:message>    
+    <wsdl:message name="scheduleFlowResponse">    </wsdl:message>    
+    <wsdl:message name="scheduleFlowRequest">        
+        <wsdl:part name="flowUuid" type="soapenc:string"/>        
+        <wsdl:part name="info" type="tns2:ScheduleInfo"/>    
+    </wsdl:message>    
+    <wsdl:message name="getFlowRunHistoryResponse">        
+        <wsdl:part name="getFlowRunHistoryReturn" type="impl:ArrayOf_tns2_WSRunHistoryDetails"/>    
+    </wsdl:message>    
+    <wsdl:message name="getScheduledFlowsRequest">    </wsdl:message>    
+    <wsdl:message name="deleteRepoEntityRequest">        
+        <wsdl:part name="identifier" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="getStatusForRunsRequest">        
+        <wsdl:part name="runHandles" type="impl:ArrayOf_tns2_WSRunHandle"/>    
+    </wsdl:message>    
+    <wsdl:message name="createSelectionListRequest">        
+        <wsdl:part name="name" type="soapenc:string"/>        
+        <wsdl:part name="description" type="soapenc:string"/>        
+        <wsdl:part name="values" type="impl:ArrayOf_xsd_string"/>    
+    </wsdl:message>    
+    <wsdl:message name="getClusterNodesResponse">        
+        <wsdl:part name="getClusterNodesReturn" type="impl:ArrayOf_tns1_WSClusterNodeDetails"/>    
+    </wsdl:message>    
+    <wsdl:message name="deleteUserRequest">        
+        <wsdl:part name="username" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="listRequest">        
+        <wsdl:part name="basePath" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="getScheduleResponse">        
+        <wsdl:part name="getScheduleReturn" type="tns2:ScheduleInfo"/>    
+    </wsdl:message>    
+    <wsdl:message name="resumeScheduledFlowRequest">        
+        <wsdl:part name="flowUuid" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="getFlowInputDescriptionsResponse">        
+        <wsdl:part name="getFlowInputDescriptionsReturn" type="impl:ArrayOfArrayOf_tns2_WSInputDescriptor"/>    
+    </wsdl:message>    
+    <wsdl:message name="setPermissionsResponse">    </wsdl:message>    
+    <wsdl:message name="moveFolderRequest">        
+        <wsdl:part name="sourcePath" type="soapenc:string"/>        
+        <wsdl:part name="destinationPath" type="soapenc:string"/>        
+        <wsdl:part name="overwrite" type="soapenc:boolean"/>    
+    </wsdl:message>    
+    <wsdl:message name="updateDescriptionResponse">        
+        <wsdl:part name="updateDescriptionReturn" type="soapenc:boolean"/>    
+    </wsdl:message>    
+    <wsdl:message name="pauseScheduledFlowRequest">        
+        <wsdl:part name="flowUuid" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="deleteUserResponse">        
+        <wsdl:part name="deleteUserReturn" type="xsd:boolean"/>    
+    </wsdl:message>    
+    <wsdl:message name="setPermissionsRequest">        
+        <wsdl:part name="identifier" type="soapenc:string"/>        
+        <wsdl:part name="groupPermissions" type="impl:ArrayOf_tns1_WSGroupPermissions"/>        
+        <wsdl:part name="applyToAllContents" type="xsd:boolean"/>        
+        <wsdl:part name="copyToNewContent" type="xsd:boolean"/>    
+    </wsdl:message>    
+    <wsdl:message name="getScheduleRequest">        
+        <wsdl:part name="schedule" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="updateDescriptionRequest">        
+        <wsdl:part name="identifier" type="soapenc:string"/>        
+        <wsdl:part name="description" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="getFlowsRunHistoryRequest">        
+        <wsdl:part name="queries" type="impl:ArrayOf_tns2_WSRunHistoryQueryParams"/>    
+    </wsdl:message>    
+    <wsdl:message name="createGroupRequest">        
+        <wsdl:part name="group" type="tns1:WSGroup"/>    
+    </wsdl:message>    
+    <wsdl:message name="runFlowExRequest">        
+        <wsdl:part name="paramsEx" type="tns2:WSRunParametersEx"/>    
+    </wsdl:message>    
+    <wsdl:message name="resumeRunRequest">        
+        <wsdl:part name="runCtrlParams" type="tns2:WSRunCtrlParams"/>    
+    </wsdl:message>    
+    <wsdl:message name="getFlowRunHistoryRequest">        
+        <wsdl:part name="query" type="tns2:WSRunHistoryQueryParams"/>    
+    </wsdl:message>    
+    <wsdl:message name="updateUserRequest">        
+        <wsdl:part name="user" type="tns1:WSUser"/>    
+    </wsdl:message>    
+    <wsdl:message name="getFlowGraphResponse">        
+        <wsdl:part name="getFlowGraphReturn" type="tns2:WSFlowGraph"/>    
+    </wsdl:message>    
+    <wsdl:message name="getFlowRunHistoryByRunIdResponse">        
+        <wsdl:part name="getFlowRunHistoryByRunIdReturn" type="impl:ArrayOf_tns1_WSRunHistoryDetailsExtend"/>    
+    </wsdl:message>    
+    <wsdl:message name="getScheduledFlowsResponse">        
+        <wsdl:part name="getScheduledFlowsReturn" type="impl:ArrayOf_tns2_ScheduleFlowInfo"/>    
+    </wsdl:message>    
+    <wsdl:message name="runFlowResponse">        
+        <wsdl:part name="runFlowReturn" type="tns2:WSRunHandle"/>    
+    </wsdl:message>    
+    <wsdl:message name="pauseScheduledFlowResponse">    </wsdl:message>    
+    <wsdl:message name="deleteGroupResponse">        
+        <wsdl:part name="deleteGroupReturn" type="xsd:boolean"/>    
+    </wsdl:message>    
+    <wsdl:message name="getFlowsRunHistoryResponse">        
+        <wsdl:part name="getFlowsRunHistoryReturn" type="impl:ArrayOf_tns2_WSRunHistoryDetails"/>    
+    </wsdl:message>    
+    <wsdl:message name="updateUserResponse">    </wsdl:message>    
+    <wsdl:message name="getAttributesRequest">        
+        <wsdl:part name="identifier" type="soapenc:string"/>        
+        <wsdl:part name="attributes" type="impl:ArrayOf_xsd_string"/>    
+    </wsdl:message>    
+    <wsdl:message name="getSchedulesOfFlowResponse">        
+        <wsdl:part name="getSchedulesOfFlowReturn" type="impl:ArrayOf_tns2_WSScheduleDetails"/>    
+    </wsdl:message>    
+    <wsdl:message name="deleteScheduledFlowRequest">        
+        <wsdl:part name="flowUuid" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="updateGroupResponse">    </wsdl:message>    
+    <wsdl:message name="isSchedulerEnabledResponse">        
+        <wsdl:part name="isSchedulerEnabledReturn" type="xsd:boolean"/>    
+    </wsdl:message>    
+    <wsdl:message name="getUserGroupsResponse">        
+        <wsdl:part name="getUserGroupsReturn" type="impl:ArrayOf_xsd_string"/>    
+    </wsdl:message>    
+    <wsdl:message name="searchRequest">        
+        <wsdl:part name="queryString" type="soapenc:string"/>        
+        <wsdl:part name="basePath" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="resumeScheduleResponse">    </wsdl:message>    
+    <wsdl:message name="pauseRunRequest">        
+        <wsdl:part name="runCtrlParams" type="tns2:WSRunCtrlParams"/>    
+    </wsdl:message>    
+    <wsdl:message name="cancelRunRequest">        
+        <wsdl:part name="runCtrlParams" type="tns2:WSRunCtrlParams"/>    
+    </wsdl:message>    
+    <wsdl:message name="getFlowDetailsResponse">        
+        <wsdl:part name="getFlowDetailsReturn" type="impl:ArrayOf_tns2_WSFlowDetails"/>    
+    </wsdl:message>    
+    <wsdl:message name="getLwssoConfigResponse">        
+        <wsdl:part name="getLwssoConfigReturn" type="tns1:WSLwssoConfiguration"/>    
+    </wsdl:message>    
+    <wsdl:message name="pauseRunResponse">        
+        <wsdl:part name="pauseRunReturn" type="tns2:WSRunCtrlResult"/>    
+    </wsdl:message>    
+    <wsdl:message name="getFlowGraphRequest">        
+        <wsdl:part name="uuid" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="deleteScheduledFlowResponse">    </wsdl:message>    
+    <wsdl:message name="createSelectionListResponse">        
+        <wsdl:part name="createSelectionListReturn" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="isScheduledFlowPausedRequest">        
+        <wsdl:part name="flowUuid" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="createUserResponse">    </wsdl:message>    
+    <wsdl:message name="pauseScheduleResponse">    </wsdl:message>    
+    <wsdl:message name="getLwssoConfigRequest">    </wsdl:message>    
+    <wsdl:message name="isSchedulePausedRequest">        
+        <wsdl:part name="schedule" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="getSelectionListResponse">        
+        <wsdl:part name="getSelectionListReturn" type="tns1:WSListDetails"/>    
+    </wsdl:message>    
+    <wsdl:message name="createFolderResponse">        
+        <wsdl:part name="createFolderReturn" type="xsd:boolean"/>    
+    </wsdl:message>    
+    <wsdl:message name="createUserRequest">        
+        <wsdl:part name="user" type="tns1:WSUser"/>    
+    </wsdl:message>    
+    <wsdl:message name="getStatusForRunsResponse">        
+        <wsdl:part name="getStatusForRunsReturn" type="impl:ArrayOf_tns2_WSRunStatus"/>    
+    </wsdl:message>    
+    <wsdl:message name="getPermissionsResponse">        
+        <wsdl:part name="getPermissionsReturn" type="impl:ArrayOf_tns1_WSGroupPermissions"/>    
+    </wsdl:message>    
+    <wsdl:message name="getSelectionListRequest">        
+        <wsdl:part name="name" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="listResponse">        
+        <wsdl:part name="listReturn" type="tns2:WSFolderContent"/>    
+    </wsdl:message>    
+    <wsdl:message name="getPermissionsRequest">        
+        <wsdl:part name="identifier" type="soapenc:string"/>        
+        <wsdl:part name="showAllGroups" type="xsd:boolean"/>        
+        <wsdl:part name="useLinuxStyle" type="xsd:boolean"/>    
+    </wsdl:message>    
+    <wsdl:message name="getClusterNodesRequest">    </wsdl:message>    
+    <wsdl:message name="updateLwssoConfigResponse">    </wsdl:message>    
+    <wsdl:message name="getSchedulesForFlowCategoryRequest">        
+        <wsdl:part name="flowCategory" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="moveFlowResponse">        
+        <wsdl:part name="moveFlowReturn" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="updateLwssoConfigRequest">        
+        <wsdl:part name="conf" type="tns1:WSLwssoConfiguration"/>    
+    </wsdl:message>    
+    <wsdl:message name="deleteScheduleResponse">    </wsdl:message>    
+    <wsdl:message name="deleteGroupRequest">        
+        <wsdl:part name="groupName" type="soapenc:string"/>    
+    </wsdl:message>    
+    <wsdl:message name="runFlowRequest">        
+        <wsdl:part name="params" type="tns2:WSRunParameters"/>    
+    </wsdl:message>    
+    <wsdl:portType name="WSCentralService">        
+        <wsdl:operation name="getPermissions" parameterOrder="identifier showAllGroups useLinuxStyle">            
+            <wsdl:input message="impl:getPermissionsRequest" name="getPermissionsRequest"/>            
+            <wsdl:output message="impl:getPermissionsResponse" name="getPermissionsResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="list" parameterOrder="basePath">            
+            <wsdl:input message="impl:listRequest" name="listRequest"/>            
+            <wsdl:output message="impl:listResponse" name="listResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="search" parameterOrder="queryString basePath">            
+            <wsdl:input message="impl:searchRequest" name="searchRequest"/>            
+            <wsdl:output message="impl:searchResponse" name="searchResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getAttributes" parameterOrder="identifier attributes">            
+            <wsdl:input message="impl:getAttributesRequest" name="getAttributesRequest"/>            
+            <wsdl:output message="impl:getAttributesResponse" name="getAttributesResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="createGroup" parameterOrder="group">            
+            <wsdl:input message="impl:createGroupRequest" name="createGroupRequest"/>            
+            <wsdl:output message="impl:createGroupResponse" name="createGroupResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="setPermissions" parameterOrder="identifier groupPermissions applyToAllContents copyToNewContent">            
+            <wsdl:input message="impl:setPermissionsRequest" name="setPermissionsRequest"/>            
+            <wsdl:output message="impl:setPermissionsResponse" name="setPermissionsResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="runFlow" parameterOrder="params">            
+            <wsdl:input message="impl:runFlowRequest" name="runFlowRequest"/>            
+            <wsdl:output message="impl:runFlowResponse" name="runFlowResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="resumeRun" parameterOrder="runCtrlParams">            
+            <wsdl:input message="impl:resumeRunRequest" name="resumeRunRequest"/>            
+            <wsdl:output message="impl:resumeRunResponse" name="resumeRunResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getScheduledFlows">            
+            <wsdl:input message="impl:getScheduledFlowsRequest" name="getScheduledFlowsRequest"/>            
+            <wsdl:output message="impl:getScheduledFlowsResponse" name="getScheduledFlowsResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getSchedulesOfFlow" parameterOrder="flowUuid">            
+            <wsdl:input message="impl:getSchedulesOfFlowRequest" name="getSchedulesOfFlowRequest"/>            
+            <wsdl:output message="impl:getSchedulesOfFlowResponse" name="getSchedulesOfFlowResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="deleteScheduledFlow" parameterOrder="flowUuid">            
+            <wsdl:input message="impl:deleteScheduledFlowRequest" name="deleteScheduledFlowRequest"/>            
+            <wsdl:output message="impl:deleteScheduledFlowResponse" name="deleteScheduledFlowResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="deleteSchedule" parameterOrder="schedule">            
+            <wsdl:input message="impl:deleteScheduleRequest" name="deleteScheduleRequest"/>            
+            <wsdl:output message="impl:deleteScheduleResponse" name="deleteScheduleResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getSchedule" parameterOrder="schedule">            
+            <wsdl:input message="impl:getScheduleRequest" name="getScheduleRequest"/>            
+            <wsdl:output message="impl:getScheduleResponse" name="getScheduleResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="scheduleFlow" parameterOrder="flowUuid info">            
+            <wsdl:input message="impl:scheduleFlowRequest" name="scheduleFlowRequest"/>            
+            <wsdl:output message="impl:scheduleFlowResponse" name="scheduleFlowResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="pauseScheduledFlow" parameterOrder="flowUuid">            
+            <wsdl:input message="impl:pauseScheduledFlowRequest" name="pauseScheduledFlowRequest"/>            
+            <wsdl:output message="impl:pauseScheduledFlowResponse" name="pauseScheduledFlowResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="pauseSchedule" parameterOrder="schedule">            
+            <wsdl:input message="impl:pauseScheduleRequest" name="pauseScheduleRequest"/>            
+            <wsdl:output message="impl:pauseScheduleResponse" name="pauseScheduleResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="resumeScheduledFlow" parameterOrder="flowUuid">            
+            <wsdl:input message="impl:resumeScheduledFlowRequest" name="resumeScheduledFlowRequest"/>            
+            <wsdl:output message="impl:resumeScheduledFlowResponse" name="resumeScheduledFlowResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="resumeSchedule" parameterOrder="schedule">            
+            <wsdl:input message="impl:resumeScheduleRequest" name="resumeScheduleRequest"/>            
+            <wsdl:output message="impl:resumeScheduleResponse" name="resumeScheduleResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="isScheduledFlowPaused" parameterOrder="flowUuid">            
+            <wsdl:input message="impl:isScheduledFlowPausedRequest" name="isScheduledFlowPausedRequest"/>            
+            <wsdl:output message="impl:isScheduledFlowPausedResponse" name="isScheduledFlowPausedResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="isSchedulePaused" parameterOrder="schedule">            
+            <wsdl:input message="impl:isSchedulePausedRequest" name="isSchedulePausedRequest"/>            
+            <wsdl:output message="impl:isSchedulePausedResponse" name="isSchedulePausedResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getCategories">            
+            <wsdl:input message="impl:getCategoriesRequest" name="getCategoriesRequest"/>            
+            <wsdl:output message="impl:getCategoriesResponse" name="getCategoriesResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="pauseRun" parameterOrder="runCtrlParams">            
+            <wsdl:input message="impl:pauseRunRequest" name="pauseRunRequest"/>            
+            <wsdl:output message="impl:pauseRunResponse" name="pauseRunResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="cancelRun" parameterOrder="runCtrlParams">            
+            <wsdl:input message="impl:cancelRunRequest" name="cancelRunRequest"/>            
+            <wsdl:output message="impl:cancelRunResponse" name="cancelRunResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="createUser" parameterOrder="user">            
+            <wsdl:input message="impl:createUserRequest" name="createUserRequest"/>            
+            <wsdl:output message="impl:createUserResponse" name="createUserResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getRunStatus" parameterOrder="runHandle">            
+            <wsdl:input message="impl:getRunStatusRequest" name="getRunStatusRequest"/>            
+            <wsdl:output message="impl:getRunStatusResponse" name="getRunStatusResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getUserGroups" parameterOrder="username">            
+            <wsdl:input message="impl:getUserGroupsRequest" name="getUserGroupsRequest"/>            
+            <wsdl:output message="impl:getUserGroupsResponse" name="getUserGroupsResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getLwssoConfig">            
+            <wsdl:input message="impl:getLwssoConfigRequest" name="getLwssoConfigRequest"/>            
+            <wsdl:output message="impl:getLwssoConfigResponse" name="getLwssoConfigResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getRunStatusEx" parameterOrder="runHandle options">            
+            <wsdl:input message="impl:getRunStatusExRequest" name="getRunStatusExRequest"/>            
+            <wsdl:output message="impl:getRunStatusExResponse" name="getRunStatusExResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getFlowDetails" parameterOrder="flowUuids">            
+            <wsdl:input message="impl:getFlowDetailsRequest" name="getFlowDetailsRequest"/>            
+            <wsdl:output message="impl:getFlowDetailsResponse" name="getFlowDetailsResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getFlowInputDescriptions" parameterOrder="flowUuids">            
+            <wsdl:input message="impl:getFlowInputDescriptionsRequest" name="getFlowInputDescriptionsRequest"/>            
+            <wsdl:output message="impl:getFlowInputDescriptionsResponse" name="getFlowInputDescriptionsResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getStatusForRuns" parameterOrder="runHandles">            
+            <wsdl:input message="impl:getStatusForRunsRequest" name="getStatusForRunsRequest"/>            
+            <wsdl:output message="impl:getStatusForRunsResponse" name="getStatusForRunsResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="runFlowEx" parameterOrder="paramsEx">            
+            <wsdl:input message="impl:runFlowExRequest" name="runFlowExRequest"/>            
+            <wsdl:output message="impl:runFlowExResponse" name="runFlowExResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="isSchedulerEnabled">            
+            <wsdl:input message="impl:isSchedulerEnabledRequest" name="isSchedulerEnabledRequest"/>            
+            <wsdl:output message="impl:isSchedulerEnabledResponse" name="isSchedulerEnabledResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getSchedulesForFlowCategory" parameterOrder="flowCategory">            
+            <wsdl:input message="impl:getSchedulesForFlowCategoryRequest" name="getSchedulesForFlowCategoryRequest"/>            
+            <wsdl:output message="impl:getSchedulesForFlowCategoryResponse" name="getSchedulesForFlowCategoryResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getFlowsRunHistory" parameterOrder="queries">            
+            <wsdl:input message="impl:getFlowsRunHistoryRequest" name="getFlowsRunHistoryRequest"/>            
+            <wsdl:output message="impl:getFlowsRunHistoryResponse" name="getFlowsRunHistoryResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getFlowRunHistory" parameterOrder="query">            
+            <wsdl:input message="impl:getFlowRunHistoryRequest" name="getFlowRunHistoryRequest"/>            
+            <wsdl:output message="impl:getFlowRunHistoryResponse" name="getFlowRunHistoryResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getFlowRunHistoryByRunId" parameterOrder="runId">            
+            <wsdl:input message="impl:getFlowRunHistoryByRunIdRequest" name="getFlowRunHistoryByRunIdRequest"/>            
+            <wsdl:output message="impl:getFlowRunHistoryByRunIdResponse" name="getFlowRunHistoryByRunIdResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getFlowGraph" parameterOrder="uuid">            
+            <wsdl:input message="impl:getFlowGraphRequest" name="getFlowGraphRequest"/>            
+            <wsdl:output message="impl:getFlowGraphResponse" name="getFlowGraphResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getClusterNodes">            
+            <wsdl:input message="impl:getClusterNodesRequest" name="getClusterNodesRequest"/>            
+            <wsdl:output message="impl:getClusterNodesResponse" name="getClusterNodesResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="moveFlow" parameterOrder="identifier destinationPath overwrite">            
+            <wsdl:input message="impl:moveFlowRequest" name="moveFlowRequest"/>            
+            <wsdl:output message="impl:moveFlowResponse" name="moveFlowResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="moveFolder" parameterOrder="sourcePath destinationPath overwrite">            
+            <wsdl:input message="impl:moveFolderRequest" name="moveFolderRequest"/>            
+            <wsdl:output message="impl:moveFolderResponse" name="moveFolderResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="createSelectionList" parameterOrder="name description values">            
+            <wsdl:input message="impl:createSelectionListRequest" name="createSelectionListRequest"/>            
+            <wsdl:output message="impl:createSelectionListResponse" name="createSelectionListResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="getSelectionList" parameterOrder="name">            
+            <wsdl:input message="impl:getSelectionListRequest" name="getSelectionListRequest"/>            
+            <wsdl:output message="impl:getSelectionListResponse" name="getSelectionListResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="createFolder" parameterOrder="path">            
+            <wsdl:input message="impl:createFolderRequest" name="createFolderRequest"/>            
+            <wsdl:output message="impl:createFolderResponse" name="createFolderResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="deleteUser" parameterOrder="username">            
+            <wsdl:input message="impl:deleteUserRequest" name="deleteUserRequest"/>            
+            <wsdl:output message="impl:deleteUserResponse" name="deleteUserResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="updateUser" parameterOrder="user">            
+            <wsdl:input message="impl:updateUserRequest" name="updateUserRequest"/>            
+            <wsdl:output message="impl:updateUserResponse" name="updateUserResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="deleteGroup" parameterOrder="groupName">            
+            <wsdl:input message="impl:deleteGroupRequest" name="deleteGroupRequest"/>            
+            <wsdl:output message="impl:deleteGroupResponse" name="deleteGroupResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="updateGroup" parameterOrder="group">            
+            <wsdl:input message="impl:updateGroupRequest" name="updateGroupRequest"/>            
+            <wsdl:output message="impl:updateGroupResponse" name="updateGroupResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="updateDescription" parameterOrder="identifier description">            
+            <wsdl:input message="impl:updateDescriptionRequest" name="updateDescriptionRequest"/>            
+            <wsdl:output message="impl:updateDescriptionResponse" name="updateDescriptionResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="deleteRepoEntity" parameterOrder="identifier">            
+            <wsdl:input message="impl:deleteRepoEntityRequest" name="deleteRepoEntityRequest"/>            
+            <wsdl:output message="impl:deleteRepoEntityResponse" name="deleteRepoEntityResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="renameRepoEntity" parameterOrder="identifier newName">            
+            <wsdl:input message="impl:renameRepoEntityRequest" name="renameRepoEntityRequest"/>            
+            <wsdl:output message="impl:renameRepoEntityResponse" name="renameRepoEntityResponse"/>        
+        </wsdl:operation>        
+        <wsdl:operation name="updateLwssoConfig" parameterOrder="conf">            
+            <wsdl:input message="impl:updateLwssoConfigRequest" name="updateLwssoConfigRequest"/>            
+            <wsdl:output message="impl:updateLwssoConfigResponse" name="updateLwssoConfigResponse"/>        
+        </wsdl:operation>    
+    </wsdl:portType>    
+    <wsdl:binding name="WSCentralServiceSoapBinding" type="impl:WSCentralService">        
+        <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>        
+        <wsdl:operation name="getPermissions">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getPermissionsRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getPermissionsResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="list">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="listRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="listResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="search">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="searchRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="searchResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getAttributes">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getAttributesRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getAttributesResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="createGroup">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="createGroupRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="createGroupResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="setPermissions">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="setPermissionsRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="setPermissionsResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="runFlow">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="runFlowRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="runFlowResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="resumeRun">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="resumeRunRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="resumeRunResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getScheduledFlows">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getScheduledFlowsRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getScheduledFlowsResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getSchedulesOfFlow">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getSchedulesOfFlowRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getSchedulesOfFlowResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="deleteScheduledFlow">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="deleteScheduledFlowRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="deleteScheduledFlowResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="deleteSchedule">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="deleteScheduleRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="deleteScheduleResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getSchedule">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getScheduleRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getScheduleResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="scheduleFlow">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="scheduleFlowRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="scheduleFlowResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="pauseScheduledFlow">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="pauseScheduledFlowRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="pauseScheduledFlowResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="pauseSchedule">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="pauseScheduleRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="pauseScheduleResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="resumeScheduledFlow">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="resumeScheduledFlowRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="resumeScheduledFlowResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="resumeSchedule">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="resumeScheduleRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="resumeScheduleResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="isScheduledFlowPaused">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="isScheduledFlowPausedRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="isScheduledFlowPausedResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="isSchedulePaused">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="isSchedulePausedRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="isSchedulePausedResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getCategories">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getCategoriesRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getCategoriesResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="pauseRun">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="pauseRunRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="pauseRunResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="cancelRun">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="cancelRunRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="cancelRunResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="createUser">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="createUserRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="createUserResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getRunStatus">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getRunStatusRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getRunStatusResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getUserGroups">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getUserGroupsRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getUserGroupsResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getLwssoConfig">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getLwssoConfigRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getLwssoConfigResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getRunStatusEx">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getRunStatusExRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getRunStatusExResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getFlowDetails">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getFlowDetailsRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getFlowDetailsResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getFlowInputDescriptions">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getFlowInputDescriptionsRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getFlowInputDescriptionsResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getStatusForRuns">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getStatusForRunsRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getStatusForRunsResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="runFlowEx">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="runFlowExRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="runFlowExResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="isSchedulerEnabled">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="isSchedulerEnabledRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="isSchedulerEnabledResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getSchedulesForFlowCategory">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getSchedulesForFlowCategoryRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getSchedulesForFlowCategoryResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getFlowsRunHistory">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getFlowsRunHistoryRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getFlowsRunHistoryResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getFlowRunHistory">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getFlowRunHistoryRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getFlowRunHistoryResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getFlowRunHistoryByRunId">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getFlowRunHistoryByRunIdRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getFlowRunHistoryByRunIdResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getFlowGraph">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getFlowGraphRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getFlowGraphResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getClusterNodes">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getClusterNodesRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getClusterNodesResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="moveFlow">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="moveFlowRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="moveFlowResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="moveFolder">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="moveFolderRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="moveFolderResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="createSelectionList">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="createSelectionListRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="createSelectionListResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="getSelectionList">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="getSelectionListRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="getSelectionListResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="createFolder">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="createFolderRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="createFolderResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="deleteUser">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="deleteUserRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="deleteUserResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="updateUser">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="updateUserRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="updateUserResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="deleteGroup">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="deleteGroupRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="deleteGroupResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="updateGroup">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="updateGroupRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="updateGroupResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="updateDescription">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="updateDescriptionRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="updateDescriptionResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="deleteRepoEntity">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="deleteRepoEntityRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="deleteRepoEntityResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="renameRepoEntity">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="renameRepoEntityRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="renameRepoEntityResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>        
+        <wsdl:operation name="updateLwssoConfig">            
+            <wsdlsoap:operation soapAction=""/>            
+            <wsdl:input name="updateLwssoConfigRequest">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://wscentralservice.services.dharma.iconclude.com" use="encoded"/>            
+            </wsdl:input>            
+            <wsdl:output name="updateLwssoConfigResponse">                
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="https://10.197.76.44:8443/PAS/services/WSCentralService" use="encoded"/>            
+            </wsdl:output>        
+        </wsdl:operation>    
+    </wsdl:binding>    
+    <wsdl:service name="WSCentralServiceService">        
+        <wsdl:port binding="impl:WSCentralServiceSoapBinding" name="WSCentralService">            <!-- <wsdlsoap:address location="https://10.197.76.44:8443/PAS/services/WSCentralService"/> -->            
+            <wsdlsoap:address location="http://localhost:8080/WSCenterService"/>        
+        </wsdl:port>    
+    </wsdl:service>
+</wsdl:definitions>
