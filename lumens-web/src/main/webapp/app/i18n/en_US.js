@@ -42,6 +42,8 @@ Lumens.i18n = {
     id_script_apply: "Apply",
     id_script_validate: "Validate",
     id_rule_fmt_save: "Save",
+    id_rule_foreach: "Foreach",
+    id_rule_index: "Index",
     // Rule list Ctrls
     id_rule_new: "New",
     id_rule_edit: "Edit",

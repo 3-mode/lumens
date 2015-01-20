@@ -1073,6 +1073,9 @@ svg path {
     width: 100%;
     overflow: auto;
 }
+.lumens .lumens-control-size {
+    width: 100%;
+}
 /*3rdparty*/
 .jqplot-table-legend {
     font-size: 20px;

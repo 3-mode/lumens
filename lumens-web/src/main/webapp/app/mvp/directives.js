@@ -219,6 +219,8 @@ Lumens.directives.directive("scriptPanel", function ($compile, TemplateService) 
                     if (isExpand) {
                         if (id === "id_foreach") {
                             $compile($(TemplateService.get("app/templates/designer/foreach_tmpl.html")).appendTo(itemContent))($scope);
+                            // #Workaround It is used to resolve the bind variable not update value
+                            $scope.$apply();
                         }
                         else if (id === "id_rule_script") {
                             $compile($('<script-editor class="lumens-rule-script-panel" script-var="transformRuleScript"></script-editor>').appendTo(itemContent))($scope);
