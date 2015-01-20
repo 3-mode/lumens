@@ -20,11 +20,11 @@ public class Job {
     public String name;
     @Column(name = "description")
     public String description;
-    @Column(name = "repeatMode")
+    @Column(name = "repeat_mode")
     public int repeatMode;
-    @Column(name = "startTime")
+    @Column(name = "start_time")
     public Date startTime;
-    @Column(name = "endTime")
+    @Column(name = "end_time")
     public Date endTime;
 
     public Job(long id, String name, String description, int repeatMode, Date startTime, Date endTime) {
