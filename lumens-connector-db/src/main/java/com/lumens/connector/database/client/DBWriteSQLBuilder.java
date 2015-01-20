@@ -3,8 +3,8 @@
  */
 package com.lumens.connector.database.client;
 
-import com.lumens.Utils;
 import com.lumens.connector.database.DBConstants;
+import com.lumens.model.Utils;
 import com.lumens.model.Element;
 import com.lumens.model.Value;
 import org.apache.commons.lang.StringUtils;

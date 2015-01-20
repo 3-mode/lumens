@@ -36,12 +36,12 @@ public class DBQueryResult implements OperationResult {
     }
 
     @Override
-    public List<Element> get() {
+    public List<Element> getData() {
         return result;
     }
 
     @Override
-    public boolean has() {
+    public boolean hasData() {
         return result != null && !result.isEmpty();
     }
 
@@ -53,7 +53,7 @@ public class DBQueryResult implements OperationResult {
     }
 
     @Override
-    public OperationResult next() {
+    public OperationResult executeNext() {
         if (hasNext() && result.size() < pageSize) {
             try {
                 this.input.setStart(input.getStart() + 1);

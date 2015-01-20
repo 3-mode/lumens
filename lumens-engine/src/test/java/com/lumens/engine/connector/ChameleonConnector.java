@@ -64,12 +64,12 @@ public class ChameleonConnector implements Connector {
                     private int chunkSize = 5;
 
                     @Override
-                    public boolean has() {
+                    public boolean hasData() {
                         return chunkSize > 0;
                     }
 
                     @Override
-                    public List<Element> get() {
+                    public List<Element> getData() {
                         --chunkSize;
                         List<Element> resultList = new ArrayList<>();
                         if (Mock.PERSON == typeName) {
@@ -120,7 +120,7 @@ public class ChameleonConnector implements Connector {
                     }
 
                     @Override
-                    public OperationResult next() {
+                    public OperationResult executeNext() {
                         return this;
                     }
                 };

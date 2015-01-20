@@ -115,12 +115,12 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 opRet = operation.execute(inputChunk, targetFormat);
             }
 
-            if (opRet != null && opRet.has())
-                results.addAll(opRet.get());
+            if (opRet != null && opRet.hasData())
+                results.addAll(opRet.getData());
 
-            // Cache the next chunk of current data source
+            // Cache the executeNext chunk of current data source
             if (opRet != null && opRet.hasNext())
-                dataCtx = new DataContext(context, opRet.next());
+                dataCtx = new DataContext(context, opRet.executeNext());
             else {
                 // If dataCtx is null then need to return to parent node not return to sibling 
                 // because datasource can be link to multiple destination

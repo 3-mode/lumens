@@ -1,9 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens;
-
-import com.lumens.model.Element;
+package com.lumens.model;
 
 /**
  *

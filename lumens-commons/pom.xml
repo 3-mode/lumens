@@ -27,10 +27,5 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.8</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>lumens-model</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 </project>

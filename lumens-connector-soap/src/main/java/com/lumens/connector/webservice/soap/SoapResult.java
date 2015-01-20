@@ -28,7 +28,7 @@ public class SoapResult implements OperationResult {
     }
 
     @Override
-    public List<Element> get() {
+    public List<Element> getData() {
         hasResultData = false;
         Element result = elementBuilder.buildElement(resultFormat, envelope);
         if (result != null) {
@@ -40,7 +40,7 @@ public class SoapResult implements OperationResult {
     }
 
     @Override
-    public boolean has() {
+    public boolean hasData() {
         return hasResultData;
     }
 
@@ -50,7 +50,7 @@ public class SoapResult implements OperationResult {
     }
 
     @Override
-    public OperationResult next() {
+    public OperationResult executeNext() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

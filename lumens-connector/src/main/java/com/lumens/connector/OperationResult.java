@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface OperationResult {
 
-    public boolean has();
+    public boolean hasData();
 
-    public List<Element> get();
+    public List<Element> getData();
 
     public boolean hasNext();
 
-    public OperationResult next();
+    public OperationResult executeNext();
 }

@@ -21,13 +21,13 @@ public class TextOperationResult implements OperationResult {
     }
 
     @Override
-    public List<Element> get() {
+    public List<Element> getData() {
         this.hasResultData = false;
         return result;
     }
 
     @Override
-    public boolean has() {
+    public boolean hasData() {
         return hasResultData;
     }
 
@@ -38,7 +38,7 @@ public class TextOperationResult implements OperationResult {
     }
 
     @Override
-    public OperationResult next() {
+    public OperationResult executeNext() {
         throw new UnsupportedOperationException("Not supported yet."); 
     }
 }

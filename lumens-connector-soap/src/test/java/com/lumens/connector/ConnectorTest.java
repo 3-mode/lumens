@@ -126,7 +126,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         connector.getFormat(getOpenFundStringResp, "getOpenFundStringResponse.getOpenFundStringResult.string.string", Direction.OUT);
         Operation op = connector.getOperation();
         OperationResult opResult = op.execute(new ElementChunk(result), getOpenFundStringResp);
-        List<Element> response = opResult.get();
+        List<Element> response = opResult.getData();
         new ElementSerializer(response.get(0), true).writeToXml(System.out);
         new FormatSerializer(getOpenFundString).writeToXml(System.out);
     }
@@ -159,8 +159,8 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         connector.getFormat(getRequests, "getRequestsResponse.return.simpleFields.stringValue", Direction.OUT);
         new FormatSerializer(getRequests).writeToXml(System.out);
         assertNotNull(getRequests.getChildByPath("getRequestsResponse.return.simpleFields.stringValue"));
-        //List<Element> response = op.execute(result.get(0), getRequests);
-        //new DataElementXmlSerializer(response.get(0), "UTF-8", true).write(System.out);
+        //List<Element> response = op.execute(result.getData(0), getRequests);
+        //new DataElementXmlSerializer(response.getData(0), "UTF-8", true).write(System.out);
     }
 
     public void testAddin() throws Exception {

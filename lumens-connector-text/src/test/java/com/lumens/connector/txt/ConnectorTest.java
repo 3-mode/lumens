@@ -141,7 +141,7 @@ public class ConnectorTest implements TextConstants {
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
-        // test get format list
+        // test getData format list
         Map<String, Format> fmtListR = cntrR.getFormatList(Direction.IN);
         if (fmtListR.isEmpty()) {
             assertFalse("Fail to get source format list", true);
@@ -165,11 +165,11 @@ public class ConnectorTest implements TextConstants {
             paramsMultiR.addChild(OPERATION).setValue(new Value(OPERATION_READ));
             paramsMultiR.addChild(PATH).setValue(new Value(folder2read));
             resultR = operR.execute(new ElementChunk(Arrays.asList(elemMultiRead)), fmtR);
-            assertTrue("Fail to executre source element read: multi files read folder", resultR.has());
+            assertTrue("Fail to executre source element read: multi files read folder", resultR.hasData());
 
             System.out.println("-----------------------------------------");
             System.out.println("Reading multi csv files:");
-            for (Element elem : resultR.get()) {
+            for (Element elem : resultR.getData()) {
                 StringBuilder line = new StringBuilder();
                 for (Element el : elem.getChildren()) {
                     if (line.length() > 0) {
@@ -211,7 +211,7 @@ public class ConnectorTest implements TextConstants {
         cntrR.setPropertyList(propsR);
         cntrR.open();
 
-        // test get format list
+        // test getData format list
         Map<String, Format> fmtListR = cntrR.getFormatList(Direction.IN);
         if (fmtListR.isEmpty()) {
             assertFalse("Fail to get source format list", true);
@@ -238,10 +238,10 @@ public class ConnectorTest implements TextConstants {
             paramsR.addChild(PATH).setValue(new Value(path2read));
 
             resultR = operR.execute(new ElementChunk(Arrays.asList(elemRead)), fmtR);
-            assertTrue("Fail to executre source element read", resultR.has());
+            assertTrue("Fail to executre source element read", resultR.hasData());
             System.out.println("-----------------------------------------");
             System.out.println("Reading single csv file:");
-            for (Element elem : resultR.get()) {
+            for (Element elem : resultR.getData()) {
                 StringBuilder line = new StringBuilder();
                 for (Element el : elem.getChildren()) {
                     if (line.length() > 0) {
@@ -278,7 +278,7 @@ public class ConnectorTest implements TextConstants {
         cntrW.setPropertyList(propsW);
         cntrW.open();
 
-        // test get format list
+        // test getData format list
         Map<String, Format> fmtListW = cntrW.getFormatList(Direction.OUT);
         if (fmtListW.isEmpty()) {
             assertFalse("Fail to get destination format list", true);

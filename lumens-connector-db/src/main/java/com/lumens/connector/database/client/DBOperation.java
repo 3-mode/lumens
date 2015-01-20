@@ -3,7 +3,7 @@
  */
 package com.lumens.connector.database.client;
 
-import com.lumens.Utils;
+import com.lumens.model.Utils;
 import com.lumens.connector.ElementChunk;
 import org.apache.logging.log4j.Logger;
 
@@ -39,7 +39,7 @@ public abstract class DBOperation implements Operation, DBConstants {
                 String strOper = Utils.isNullValue(action) ? null : action.getValue().getString();
                 if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
                     // If i < input.getStart then there are some input handled as update or insert need to commit before
-                    // exeute the next query, use this way to handle the mixed operation with select, update or insert
+                    // exeute the executeNext query, use this way to handle the mixed operation with select, update or insert
                     if (input.getStart() < i)
                         client.commit();
                     return new DBQueryResult(this, getQuerySQLBuilder(output), input);

@@ -135,10 +135,10 @@ public class ConnectorTest implements OracleConstants {
         client.getFormatList(Direction.IN, true);
         OracleOperation oo = new OracleOperation(client);
         OperationResult result = oo.execute(new ElementChunk(Arrays.asList(select)), employeeFmtTest);
-        assertTrue(result.get().size() == 50);
-        while (result.has()) {
-            System.out.println("current query size: " + result.get().size());
-            result.next();
+        assertTrue(result.getData().size() == 50);
+        while (result.hasData()) {
+            System.out.println("current query size: " + result.getData().size());
+            result.executeNext();
         }
         client.close();
     }
@@ -188,7 +188,7 @@ public class ConnectorTest implements OracleConstants {
         select.getChild(SQLPARAMS).addChild(WHERE).setValue("EMPLOYEE_ID = 100");
         OperationResult result = oo.execute(new ElementChunk(Arrays.asList(select)), employeeFmt);
 
-        System.out.println("Got recoreds: " + result.get().size());
+        System.out.println("Got recoreds: " + result.getData().size());
         TransformRule rule = new TransformRule(employeeFmtTest);
         rule.getRuleItem("EMPLOYEES_TEST.SQLParams.action").setScript("'INSERT'");
         rule.getRuleItem("EMPLOYEES_TEST.EMPLOYEE_ID").setScript("@EMPLOYEE.EMPLOYEE_ID");
@@ -205,9 +205,9 @@ public class ConnectorTest implements OracleConstants {
 
         Processor transformMappter = new TransformMapper();
         List<Element> employeeTest = new ArrayList<>();
-        List<Element> resultList = (List<Element>) transformMappter.execute(rule, result.get());
+        List<Element> resultList = (List<Element>) transformMappter.execute(rule, result.getData());
         employeeTest.addAll(resultList);
-        assertTrue(employeeTest.size() == result.get().size());
+        assertTrue(employeeTest.size() == result.getData().size());
         //oo.execute(new ElementChunk(employeeTest), null);
 
         // Ending
