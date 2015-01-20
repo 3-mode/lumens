@@ -1,5 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database-access-objects>
+     <database-access-object name="RelationDAO">
+        <sql name="AllProject">
+<![CDATA[
+SELECT job_id, project_id FROM LUNS_RELATION WHERE job_id = %d
+]]>
+        </sql>
+   
+    </database-access-object>
+    <database-access-object name="JobDAO">
+        <sql name="total">
+ <![CDATA[
+ SELECT count(1) FROM LUNS_JOB
+ ]]>
+        </sql>
+        <sql name="AllJob">
+<![CDATA[
+SELECT id, name, description, repeat_count, interval, start_time, end_time FROM LUNS_JOB
+]]>
+        </sql>
+        <sql name="FindJob">
+<![CDATA[
+SELECT id, name, description, repeat_count, interval, start_time, end_time FROM LUNS_JOB WHERE id = %d
+]]>
+        </sql>
+        <sql name="CreateJob">
+<![CDATA[
+INSERT INTO LUNS_JOB (id, name, description, repeat_count, interval, start_time, end_time) VALUES (?,?,?,?,?,?,?)
+]]>
+        </sql>
+        <sql name="UpdateJob">
+<![CDATA[
+UPDATE LUNS_JOB set name=?, description=?, repeat_count=?, interval,=?, start_time=?, end_time=? WHERE id = ?
+]]>
+        </sql> 
+        <sql name="DeleteJob">
+<![CDATA[
+DELETE FROM LUNS_JOB WHERE id = ?
+]]>
+        </sql>
+    </database-access-object>
     <database-access-object name="ProjectDAO">
         <sql name="total">
  <![CDATA[
