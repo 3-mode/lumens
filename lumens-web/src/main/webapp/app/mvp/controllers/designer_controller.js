@@ -485,6 +485,8 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
                     }
                     else
                         Notifier.message("error", "Error", result.error_message);
+                }, function (response) {
+                    Notifier.message("error", "Error", response.data);
                 });
             }
         }
@@ -503,6 +505,8 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
                         $scope.onCommand("id_format_reg_filter_btn", "right");
                     } else
                         Notifier.message("error", "Error", result.error_message);
+                }, function (response) {
+                    Notifier.message("error", "Error", response.data);
                 });
             }
         }
