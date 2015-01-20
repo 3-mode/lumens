@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database-access-objects>
-     <database-access-object name="RelationDAO">
-        <sql name="AllProject">
+    <database-access-object name="RelationDAO">
+        <sql name="AllJob">
 <![CDATA[
 SELECT job_id, project_id FROM LUNS_RELATION WHERE job_id = %d
 ]]>
         </sql>
-   
+        <sql name="CreateJob">
+<![CDATA[
+INSERT INTO LUNS_RELATION (job_id, project_id) VALUES (?,?)
+]]>
+        </sql>        
+        <sql name="DeleteJob">
+<![CDATA[
+DELETE FROM LUNS_RELATION WHERE job_id = ?
+]]>
+        </sql>
+        <sql name="DeleteProject">
+<![CDATA[
+DELETE FROM LUNS_RELATION WHERE job_id = ? and project_id = ?
+]]>
+        </sql>        
     </database-access-object>
     <database-access-object name="JobDAO">
         <sql name="total">
