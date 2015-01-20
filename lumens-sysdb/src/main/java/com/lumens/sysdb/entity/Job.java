@@ -5,13 +5,13 @@ package com.lumens.sysdb.entity;
 
 import com.lumens.sysdb.Column;
 import com.lumens.sysdb.Table;
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-@Table(name = "LUNS_PROJECT")
+@Table(name = "LUNS_JOB")
 public class Job {
 
     @Column(name = "id")
@@ -20,18 +20,21 @@ public class Job {
     public String name;
     @Column(name = "description")
     public String description;
-    @Column(name = "repeat_mode")
-    public int repeatMode;
+    @Column(name = "repeat_count")
+    public int repeatCount;
+    @Column(name = "interval")
+    public int interval;    
     @Column(name = "start_time")
-    public Date startTime;
+    public Timestamp startTime;
     @Column(name = "end_time")
-    public Date endTime;
+    public Timestamp endTime;
 
-    public Job(long id, String name, String description, int repeatMode, Date startTime, Date endTime) {
+    public Job(long id, String name, String description, int repeatCount, int interval, Timestamp startTime, Timestamp endTime) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.repeatMode = repeatMode;
+        this.repeatCount = repeatCount;
+        this.interval = interval;
         this.startTime = startTime;
         this.endTime = endTime;
     }
