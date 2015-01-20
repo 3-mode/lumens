@@ -13,4 +13,8 @@ public interface Processor {
     public String getName();
 
     public Object execute(Rule rule, List<Element> input);
+
+    public void start();
+
+    public void stop();
 }

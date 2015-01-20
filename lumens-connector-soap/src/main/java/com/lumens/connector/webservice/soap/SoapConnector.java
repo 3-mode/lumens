@@ -149,4 +149,12 @@ class SoapConnector implements Connector, SoapConstants {
     public boolean isOpen() {
         return isOpen;
     }
+
+    @Override
+    public void start() {
+    }
+
+    @Override
+    public void stop() {
+    }
 }

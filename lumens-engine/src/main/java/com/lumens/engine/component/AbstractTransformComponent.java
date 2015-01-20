@@ -115,4 +115,12 @@ public abstract class AbstractTransformComponent implements TransformComponent {
     public boolean isOpen() {
         return isOpen;
     }
+
+    @Override
+    public void stop() {
+    }
+
+    @Override
+    public void start() {
+    }
 }

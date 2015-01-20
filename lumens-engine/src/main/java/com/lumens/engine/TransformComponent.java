@@ -55,4 +55,8 @@ public interface TransformComponent {
     public String getComponentType();
 
     public String getId();
+
+    public void start();
+
+    public void stop();
 }

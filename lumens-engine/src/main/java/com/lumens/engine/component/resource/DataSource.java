@@ -204,4 +204,15 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     public boolean isSingleTarget() {
         return false;
     }
+
+    @Override
+    public void start() {
+        this.connector.start();
+    }
+
+    @Override
+    public void stop() {
+        this.connector.stop();
+    }
+
 }

@@ -172,4 +172,14 @@ public class ChameleonConnector implements Connector {
     public void setPropertyList(Map<String, Value> parameters) {
     }
 
+    @Override
+    public void start() {
+        System.out.println("In start");
+    }
+
+    @Override
+    public void stop() {
+        System.out.println("In stop");
+    }
+
 }

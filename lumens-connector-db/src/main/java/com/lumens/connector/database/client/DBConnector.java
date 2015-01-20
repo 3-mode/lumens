@@ -116,5 +116,13 @@ public abstract class DBConnector implements Connector, DBConstants {
         return isOpen;
     }
 
+    @Override
+    public void stop() {
+    }
+
+    @Override
+    public void start() {
+    }
+
     protected abstract Client createDBClient();
 }

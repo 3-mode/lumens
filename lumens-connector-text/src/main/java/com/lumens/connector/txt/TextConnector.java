@@ -176,4 +176,12 @@ public class TextConnector implements Connector, TextConstants {
     public Format getFormat(Format format, String path, Direction direction) {
         return formatBuilder.getFormat(format, path, direction);
     }
+
+    @Override
+    public void start() {
+    }
+
+    @Override
+    public void stop() {
+    }
 }

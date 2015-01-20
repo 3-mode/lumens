@@ -24,4 +24,12 @@ public abstract class AbstractProcessor implements Processor {
     public String getName() {
         return name;
     }
+
+    @Override
+    public void start() {
+    }
+
+    @Override
+    public void stop() {
+    }
 }

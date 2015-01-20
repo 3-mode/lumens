@@ -161,4 +161,15 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
         super.targetTo(target);
         //throw new LumensException("DataTransformer only can link to one target");
     }
+
+    @Override
+    public void start() {
+        this.processor.start();
+    }
+
+    @Override
+    public void stop() {
+        this.processor.stop();
+    }
+
 }

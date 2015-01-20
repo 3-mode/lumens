@@ -23,4 +23,8 @@ public interface Connector extends Configurable {
     public Map<String, Format> getFormatList(Direction direction);
 
     public Format getFormat(Format format, String path, Direction direction);
+
+    public void start();
+
+    public void stop();
 }

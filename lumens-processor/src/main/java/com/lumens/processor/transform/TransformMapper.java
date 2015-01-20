@@ -166,4 +166,14 @@ public class TransformMapper extends AbstractProcessor {
         if (foreachLevelDepth > 5)
             throw new RuntimeException(String.format("Too many for each loop configurations level '%d'", foreachLevelDepth));
     }
+
+    @Override
+    public void start() {
+        // TODO initialize the script global variable or others
+    }
+
+    @Override
+    public void stop() {
+        // TODO clean something here
+    }
 }
