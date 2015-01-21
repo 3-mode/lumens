@@ -3,7 +3,7 @@
  */
 package com.lumens.sysdb.dao;
 
-import com.lumens.sysdb.entity.Project;
+import com.lumens.sysdb.entity.Job;
 import com.lumens.scheduler.Trigger;
 import com.lumens.scheduler.impl.DefaultJob;
 import com.lumens.sysdb.EntityFactory;
@@ -123,23 +123,23 @@ public class JobDAO extends BaseDAO {
         return jobId;
     }  
     
-    public DefaultJob getJob(long jobId) {
-        final List<DefaultJob> pList = new ArrayList<>();
+    public Job getJob(long jobId) {
+        final List<Job> pList = new ArrayList<>();
         jdbcTemplate.query(sqlManager.getSQL("JobDAO/FindJob", jobId), new RowCallbackHandler() {
             @Override
             public void processRow(ResultSet rs) throws SQLException {
-                pList.add(EntityFactory.createEntity(DefaultJob.class, rs));
+                pList.add(EntityFactory.createEntity(Job.class, rs));
             }
         });
         return pList.size() > 0 ? pList.get(0) : null;
     }    
     
-    public List<DefaultJob> getAllJob() {
-        final List<DefaultJob> pList = new ArrayList<>();
+    public List<Job> getAllJob() {
+        final List<Job> pList = new ArrayList<>();
         jdbcTemplate.query(sqlManager.getSQL("JobDAO/AllJob"), new RowCallbackHandler() {
             @Override
             public void processRow(ResultSet rs) throws SQLException {
-                pList.add(EntityFactory.createEntity(DefaultJob.class, rs));
+                pList.add(EntityFactory.createEntity(Job.class, rs));
             }
         });
         return pList;

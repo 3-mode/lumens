@@ -3,10 +3,12 @@
  */
 package com.lumens.sysdb.dao;
 
-import com.lumens.sysdb.entity.InOutLogItem;
+import com.lumens.sysdb.entity.Job;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -46,8 +48,10 @@ public class RelationDAO extends BaseDAO {
         });
     }
 
-    public void getAllJob(long jobId) {
+    public List<Job> getAllJob(long jobId) {
+        final List<Job> pList = new ArrayList<>();
         jdbcTemplate.execute(sqlManager.getSQL("RelationDAO/AllJob", jobId));
+        return pList;
     }
     
     public void deleteAllJob(long jobId) {
