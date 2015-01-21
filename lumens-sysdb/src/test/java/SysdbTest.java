@@ -3,16 +3,25 @@
  */
 
 import com.lumens.model.DateTime;
+import com.lumens.scheduler.Trigger;
+import com.lumens.scheduler.impl.DefaultJob;
+import com.lumens.scheduler.impl.DefaultTrigger;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.dao.JobDAO;
+import com.lumens.sysdb.dao.RelationDAO;
 import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.sysdb.entity.Job;
+import com.lumens.sysdb.entity.Relation;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.util.List;
+import java.util.Date;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.After;
 
 /**
  *
@@ -20,16 +29,81 @@ import static org.junit.Assert.*;
  */
 public class SysdbTest {
 
-    @Test
-    public void testDeleteProject() {
-        ProjectDAO pDAO = DAOFactory.getProjectDAO();
-        pDAO.delete(0L);
+    @Before
+    public void testCreateJob() {
+        DefaultJob uiJob = new DefaultJob(1234, "firstJob", "This is a test job.");
+        Trigger uiTrigger = new DefaultTrigger(new Date(), new Date(System.currentTimeMillis() + 2000), 1, 1);
+        JobDAO pDAO = DAOFactory.getJobDAO();
+        RelationDAO projectRelation = DAOFactory.getRelationDAO();
+        Job job = pDAO.getJob(1234);
+        if (job != null) {
+            pDAO.delete(job.id);            
+        }
+        pDAO.create(uiJob, uiTrigger);
+        projectRelation.deleteAllRelation(1234);
+        projectRelation.create(1234, 1111);
+        projectRelation.create(1234, 2222);
+        projectRelation.create(1234, 3333);
     }
 
     @Test
+    public void testGetJob() {
+        JobDAO pDAO = DAOFactory.getJobDAO();
+        Job job = pDAO.getJob(1234);
+        System.out.println("A test Job details: ");
+        System.out.println("  id = " + job.id);
+        System.out.println("  name = " + job.name);
+        System.out.println("  inteveral = " + job.interval);
+        System.out.println("  repeat count = " + job.repeatCount);
+        System.out.println("  start time = " + job.startTime.toString());
+        System.out.println("  end time = " + job.endTime.toString());
+        System.out.println();
+        assertNotNull(job);
+
+        RelationDAO projectRelation = DAOFactory.getRelationDAO();
+        List<Relation> list = projectRelation.getAllRelation(job.id);
+        System.out.println("Jobs' Project list:");
+        for (Relation relation : list) {
+            System.out.println("Project id = " + relation.projectId);
+        }
+    }
+
+    @Test
+    public void testGetAllJob() {
+        JobDAO pDAO = DAOFactory.getJobDAO();
+        List<Job> all = pDAO.getAllJob();
+        System.out.println("All Jobs details: ");
+        for (Job job : all) {
+            System.out.println("  job id = " + job.id);
+            System.out.println("  name = " + job.name);
+            System.out.println("  inteveral = " + job.interval);
+            System.out.println("  repeat count = " + job.repeatCount);
+            System.out.println("  start time = " + job.startTime.toString());
+            System.out.println("  end time = " + job.endTime.toString());            
+
+            RelationDAO projectRelation = DAOFactory.getRelationDAO();
+            List<Relation> list = projectRelation.getAllRelation(job.id);
+            System.out.println("Jobs' Project list:");
+            for (Relation relation : list) {
+                System.out.println("Project id = " + relation.projectId);
+            }
+            System.out.println();
+        }
+        assertTrue(all.size() > 0);
+    }
+
+    @After
     public void testDeleteJob() {
         JobDAO pDAO = DAOFactory.getJobDAO();
-        pDAO.delete(0L);
+        pDAO.delete(1234);
+        RelationDAO projectRelation = DAOFactory.getRelationDAO();
+        projectRelation.deleteAllRelation(1234);
+    }
+
+    @After
+    public void testDeleteProject() {
+        ProjectDAO pDAO = DAOFactory.getProjectDAO();
+        pDAO.delete(1234);
     }
 
     @Test

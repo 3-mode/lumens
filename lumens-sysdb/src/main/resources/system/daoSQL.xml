@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database-access-objects>
     <database-access-object name="RelationDAO">
-        <sql name="AllJob">
+        <sql name="AllRelation">
 <![CDATA[
 SELECT job_id, project_id FROM LUNS_RELATION WHERE job_id = %d
 ]]>
         </sql>
-        <sql name="CreateJob">
+        <sql name="CreateRelation">
 <![CDATA[
 INSERT INTO LUNS_RELATION (job_id, project_id) VALUES (?,?)
 ]]>
         </sql>        
-        <sql name="DeleteJob">
+        <sql name="DeleteAllRelation">
 <![CDATA[
-DELETE FROM LUNS_RELATION WHERE job_id = ?
+DELETE FROM LUNS_RELATION WHERE job_id = %d
 ]]>
         </sql>
-        <sql name="DeleteProject">
+        <sql name="DeleteRelation">
 <![CDATA[
-DELETE FROM LUNS_RELATION WHERE job_id = ? and project_id = ?
+DELETE FROM LUNS_RELATION WHERE job_id = ? and project_id = %d
 ]]>
         </sql>        
     </database-access-object>
