@@ -15,6 +15,7 @@ import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.entity.Relation;
 import com.lumens.sysdb.entity.Project;
 import java.io.ByteArrayInputStream;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
@@ -40,14 +41,14 @@ import static org.quartz.TriggerBuilder.newTrigger;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultScheduler implements JobScheduler {
+
     boolean isStarted;
     Scheduler sched;
     List<DefaultJob> jobList = new ArrayList();
     Map<Long, DefaultJob> jobMap = new HashMap<>();
     Map<Long, JobTrigger> triggerMap = new HashMap<>();
-    
-    // TODO: maintain a running job list
 
+    // TODO: maintain a running job list
     public DefaultScheduler() {
         isStarted = false;
         start();
@@ -67,9 +68,9 @@ public class DefaultScheduler implements JobScheduler {
 
     @Override
     public void resume() {
-        try{
+        try {
             loadFromDb();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             // TODO: log load job exception
         }
         schedule();
@@ -150,7 +151,7 @@ public class DefaultScheduler implements JobScheduler {
             // Add job
             DefaultJob uiJob = new DefaultJob(dbJob.id, dbJob.name, dbJob.description);
             jobList.add(uiJob);
-            
+
             // Add trigger
             JobTrigger uiTrigger = new DefaultTrigger(new Date(dbJob.startTime.getTime()), new Date(dbJob.endTime.getTime()), dbJob.repeatCount, dbJob.interval);
             triggerMap.put(dbJob.id, uiTrigger);
@@ -167,6 +168,27 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     public void saveToDb() {
+        JobDAO jobDAO = DAOFactory.getJobDAO();
+        RelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
+        ProjectDAO projectDAO = DAOFactory.getProjectDAO();
+
+        for (DefaultJob uiJob : jobList) {
+            // Save or update job details
+            long jobId = uiJob.getId();
+            JobTrigger uiTrigger = triggerMap.get(jobId);
+            Job dbJob = new Job(jobId, uiJob.getName(),uiJob.getDescription(),uiTrigger.getRepeatCount(), uiTrigger.getRepeatInterval(), 
+                                new Timestamp(uiTrigger.getStartTime().getTime()),new Timestamp(uiTrigger.getEndTime().getTime()));
+            if(jobDAO.getJob(jobId) == null){
+                jobDAO.create(dbJob);
+            }else{
+                jobDAO.update(dbJob);
+            }
+            
+            // Save projects relation
+            for(TransformProject uiProject:uiJob.getProjectList()){
+                // TODO: check if project available in DB
+            }
+        }
 
     }
 }

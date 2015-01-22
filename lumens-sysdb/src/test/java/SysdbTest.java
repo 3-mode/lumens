@@ -3,9 +3,6 @@
  */
 
 import com.lumens.model.DateTime;
-import com.lumens.scheduler.Trigger;
-import com.lumens.scheduler.impl.DefaultJob;
-import com.lumens.scheduler.impl.DefaultTrigger;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
@@ -31,15 +28,14 @@ public class SysdbTest {
 
     @Before
     public void testCreateJob() {
-        DefaultJob uiJob = new DefaultJob(1234, "firstJob", "This is a test job.");
-        Trigger uiTrigger = new DefaultTrigger(new Date(), new Date(System.currentTimeMillis() + 2000), 1, 1);
+        Job dbJob = new Job(1234, "firstJob", "This is a test job.", 1, 1, new Timestamp(System.currentTimeMillis()),new Timestamp(System.currentTimeMillis() + 2000));
         JobDAO pDAO = DAOFactory.getJobDAO();
         RelationDAO projectRelation = DAOFactory.getRelationDAO();
         Job job = pDAO.getJob(1234);
         if (job != null) {
             pDAO.delete(job.id);            
         }
-        pDAO.create(uiJob, uiTrigger);
+        pDAO.create(dbJob);
         projectRelation.deleteAllRelation(1234);
         projectRelation.create(1234, 1111);
         projectRelation.create(1234, 2222);

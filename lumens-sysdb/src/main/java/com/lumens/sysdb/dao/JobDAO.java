@@ -4,8 +4,6 @@
 package com.lumens.sysdb.dao;
 
 import com.lumens.sysdb.entity.Job;
-import com.lumens.scheduler.Trigger;
-import com.lumens.scheduler.impl.DefaultJob;
 import com.lumens.sysdb.EntityFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,7 +28,7 @@ public class JobDAO extends BaseDAO {
         return super.getTotal("JobDAO/total");
     }
     
-    public long create(final DefaultJob job, final Trigger trigger) {
+    public long create(final Job job) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus paramTransactionStatus) {
@@ -43,13 +41,13 @@ public class JobDAO extends BaseDAO {
                     }, new PreparedStatementCallback<Boolean>() {
                         @Override
                         public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                            ps.setLong(1, job.getId());
-                            ps.setString(2, job.getName());
-                            ps.setString(3, job.getDescription());
-                            ps.setInt(4, trigger.getRepeatCount());
-                            ps.setInt(5, trigger.getRepeatInterval());
-                            ps.setTimestamp(6, new Timestamp(trigger.getStartTime().getTime()));
-                            ps.setTimestamp(7, new Timestamp(trigger.getEndTime().getTime()));
+                            ps.setLong(1, job.id);
+                            ps.setString(2, job.name);
+                            ps.setString(3, job.description);
+                            ps.setInt(4, job.repeatCount);
+                            ps.setInt(5, job.interval);
+                            ps.setTimestamp(6, job.startTime);
+                            ps.setTimestamp(7, job.endTime);
                             return ps.execute();
                         }
                     });
@@ -60,10 +58,10 @@ public class JobDAO extends BaseDAO {
                 }
             }
         });
-        return job.getId();
+        return job.id;
     }
 
-    public long update(final DefaultJob job, final Trigger trigger) {
+    public long update(final Job job) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus paramTransactionStatus) {
@@ -76,13 +74,13 @@ public class JobDAO extends BaseDAO {
                     }, new PreparedStatementCallback<Boolean>() {
                         @Override
                         public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                            ps.setLong(1, job.getId());
-                            ps.setString(2, job.getName());
-                            ps.setString(3, job.getDescription());
-                            ps.setInt(4, trigger.getRepeatCount());
-                            ps.setInt(5, trigger.getRepeatInterval());
-                            ps.setTimestamp(6, new Timestamp(trigger.getStartTime().getTime()));
-                            ps.setTimestamp(7, new Timestamp(trigger.getEndTime().getTime()));
+                            ps.setLong(1, job.id);
+                            ps.setString(2, job.name);
+                            ps.setString(3, job.description);
+                            ps.setInt(4, job.repeatCount);
+                            ps.setInt(5, job.interval);
+                            ps.setTimestamp(6, job.startTime);
+                            ps.setTimestamp(7, job.endTime);
                             return ps.execute();
                         }
                     });
@@ -93,7 +91,7 @@ public class JobDAO extends BaseDAO {
                 }
             }
         });
-        return job.getId();
+        return job.id;
     }
 
     public long delete(final long jobId) {
