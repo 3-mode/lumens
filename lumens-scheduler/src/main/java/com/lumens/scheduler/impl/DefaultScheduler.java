@@ -44,9 +44,9 @@ public class DefaultScheduler implements JobScheduler {
 
     boolean isStarted;
     Scheduler sched;
-    List<DefaultJob> jobList = new ArrayList();
-    Map<Long, DefaultJob> jobMap = new HashMap<>();
-    Map<Long, JobTrigger> triggerMap = new HashMap<>();
+    List<Job> jobList = new ArrayList();
+    Map<Long, Job> jobMap = new HashMap<>();
+    Map<Long, List<Project>> projectMap = new HashMap<>();
 
     // TODO: maintain a running job list
     public DefaultScheduler() {
@@ -54,14 +54,29 @@ public class DefaultScheduler implements JobScheduler {
         start();
     }
 
-    public JobScheduler addSchedule(DefaultJob job, DefaultTrigger trigger) {
+    public JobScheduler addSchedule(DefaultJob job, JobTrigger trigger) {
         if (jobMap.containsKey(job.getId())) {
             throw new RuntimeException("Job " + job.getId() + " already exist.");
         }
 
-        jobList.add(job);
-        jobMap.put(job.getId(), job);
-        triggerMap.put(job.getId(), trigger);
+        Job dbJob = new Job(job.getId(), job.getName(), job.getDescription(),
+                trigger.getRepeatCount(), trigger.getRepeatInterval(),
+                new Timestamp(trigger.getStartTime().getTime()), new Timestamp(trigger.getEndTime().getTime()));
+        jobList.add(dbJob);
+        long jobId = job.getId();
+        jobMap.put(jobId, dbJob);
+        ProjectDAO projectDAO = DAOFactory.getProjectDAO();        
+        List<Project> projectList = projectMap.get(jobId);
+        if (projectList == null){
+            projectList = new ArrayList();
+            projectMap.put(jobId, projectList);
+        }
+        for (long projectId: job.getProjectList()){
+            Project dbProject = projectDAO.getProject(projectId);
+            if (dbProject == null)
+                throw new RuntimeException("Invalid project");
+            projectList.add(dbProject);
+        }
 
         return this;
     }
@@ -77,33 +92,32 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     public void schedule() {
-        for (DefaultJob job : jobList) {
-            String group = job.getId().toString();
-            List<TransformProject> projectList = job.getProjectList();
-            for (TransformProject proj : projectList) {
+        for (Job job : jobList) {
+            long jobId = job.id;
+            String group = String.valueOf(job.id);
+            List<Project> projectList = projectMap.get(jobId);
+            for (Project proj : projectList) {
                 JobDetail jobDetail = newJob(DefaultJob.class)
-                        .withIdentity(proj.getName(), group)
+                        .withIdentity(String.valueOf(proj.id), group)
                         .build();
-
-                JobTrigger defaultTrigger = triggerMap.get(job.getId());
+         
                 SimpleScheduleBuilder simpleBuilder = simpleSchedule();
-
-                int repeatCount = defaultTrigger.getRepeatCount();
+                int repeatCount = job.repeatCount;
                 if (repeatCount > 0) {
                     simpleBuilder.withRepeatCount(repeatCount);
                 } else if (repeatCount < 0) {
                     simpleBuilder.repeatForever();
                 }
-                int repeatInterval = defaultTrigger.getRepeatInterval();
+                int repeatInterval = job.interval;
                 if (repeatCount != 0 && repeatInterval > 0) {
                     simpleBuilder.withIntervalInSeconds(repeatInterval);
                 }
 
                 TriggerBuilder<Trigger> builder = newTrigger();
-                builder.withIdentity(job.getId().toString(), group);
+                builder.withIdentity(String.valueOf(job.id), group);
                 builder.startNow();
                 builder.withSchedule(simpleBuilder);
-                builder.startAt(defaultTrigger.getStartTime());
+                builder.startAt(job.startTime);
 
                 try {
                     sched.scheduleJob(jobDetail, builder.build());
@@ -138,57 +152,60 @@ public class DefaultScheduler implements JobScheduler {
         }
     }
 
-    public List<DefaultJob> getJobList() {
+    public List<Job> getJobList() {
         return jobList;
     }
 
-    public void loadFromDb() throws Exception {
+    private List<Job> loadJobFromDb() {
+        List<Job> jobList = new ArrayList();
         JobDAO jobDAO = DAOFactory.getJobDAO();
-        RelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
+        jobList.addAll(jobDAO.getAllJob());
+
+        return jobList;
+    }
+
+    private List<Project> loadProjectFromDb(long jobId) {
+        List<Project> projectList = new ArrayList();
+        RelationDAO relationDAO = DAOFactory.getRelationDAO();
         ProjectDAO projectDAO = DAOFactory.getProjectDAO();
-        List<Job> all = jobDAO.getAllJob();
-        for (Job dbJob : all) {
-            // Add job
-            DefaultJob uiJob = new DefaultJob(dbJob.id, dbJob.name, dbJob.description);
-            jobList.add(uiJob);
+        List<Relation> relationList = relationDAO.getAllRelation(jobId);
+        for (Relation relation : relationList) {
+            projectList.add(projectDAO.getProject(relation.projectId));
+        }
 
-            // Add trigger
-            JobTrigger uiTrigger = new DefaultTrigger(new Date(dbJob.startTime.getTime()), new Date(dbJob.endTime.getTime()), dbJob.repeatCount, dbJob.interval);
-            triggerMap.put(dbJob.id, uiTrigger);
+        return projectList;
+    }
 
-            // Add projects
-            List<Relation> list = projectRelationDAO.getAllRelation(dbJob.id);
-            for (Relation relation : list) {
-                Project dbProject = projectDAO.getProject(relation.projectId);
-                TransformProject uiProject = new TransformProject();
-                new ProjectSerializer(uiProject).readFromJson(new ByteArrayInputStream(dbProject.data.getBytes()));
-                uiJob.addProject(uiProject);
-            }
+    public void loadFromDb() throws Exception {
+        jobList.clear();
+        projectMap.clear();
+
+        List<Job> allJob = loadJobFromDb();
+        for (Job dbJob : allJob) {
+            jobList.add(dbJob);
+            long jobId = dbJob.id;
+            projectMap.put(jobId, loadProjectFromDb(jobId));
         }
     }
 
     public void saveToDb() {
         JobDAO jobDAO = DAOFactory.getJobDAO();
         RelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
-        ProjectDAO projectDAO = DAOFactory.getProjectDAO();
 
-        for (DefaultJob uiJob : jobList) {
-            // Save or update job details
-            long jobId = uiJob.getId();
-            JobTrigger uiTrigger = triggerMap.get(jobId);
-            Job dbJob = new Job(jobId, uiJob.getName(),uiJob.getDescription(),uiTrigger.getRepeatCount(), uiTrigger.getRepeatInterval(), 
-                                new Timestamp(uiTrigger.getStartTime().getTime()),new Timestamp(uiTrigger.getEndTime().getTime()));
-            if(jobDAO.getJob(jobId) == null){
+        // Save a job
+        for (Job dbJob : jobList) {
+            long jobId = dbJob.id;
+            if (jobDAO.getJob(jobId) == null) {
                 jobDAO.create(dbJob);
-            }else{
+            } else {
                 jobDAO.update(dbJob);
             }
-            
-            // Save projects relation
-            for(TransformProject uiProject:uiJob.getProjectList()){
-                // TODO: check if project available in DB
+
+            // Delete old relation
+            projectRelationDAO.deleteAllRelation(jobId);
+            for (Project project : projectMap.get(jobId)) {
+                projectRelationDAO.create(jobId, project.id);
             }
         }
-
     }
 }
