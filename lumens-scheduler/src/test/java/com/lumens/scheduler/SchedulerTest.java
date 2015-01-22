@@ -12,22 +12,10 @@ import java.util.Date;
 import com.lumens.engine.TransformProject;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.entity.Project;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
-
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.impl.StdSchedulerFactory;
-import org.quartz.Scheduler;
-import org.quartz.JobDetail;
-import org.quartz.Trigger;
-import static org.quartz.JobBuilder.*;
-import static org.quartz.TriggerBuilder.*;
-import static org.quartz.SimpleScheduleBuilder.*;
 
 /**
  *
