@@ -26,11 +26,10 @@ public class SchedulerTest
     @Before
     public void Before() {
         ProjectDAO projectDAO = DAOFactory.getProjectDAO();
-        long projectId = 1111;
-        if (projectDAO.getProject(projectId) != null){
-            projectDAO.delete(projectId);
-        }
-        projectDAO.create(new Project(projectId, "testPoject", "testDescription",""));  // TODO: add data
+        long projectId = 1421324074892L;
+        if (projectDAO.getProject(projectId) == null){
+            projectDAO.create(new Project(projectId, "testPoject", "testDescription",""));  // TODO: add data
+        }        
     }
 
     @Test
@@ -42,7 +41,7 @@ public class SchedulerTest
         JobTrigger trigger = new DefaultTrigger(new Date(System.currentTimeMillis() + 10000), new Date(), 1,1 );
         
         DefaultJob job = new DefaultJob(1001, "job1001", "This is a sample job");
-        job.addProject(1111);
+        job.addProject(1421324074892L);
         scheduler.addSchedule(job, trigger);
         scheduler.schedule();
         
