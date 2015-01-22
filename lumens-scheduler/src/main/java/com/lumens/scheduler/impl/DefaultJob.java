@@ -20,7 +20,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultJob implements Job {
-
     private final long jobId;
     private final String name;
     private final String description;

@@ -4,7 +4,18 @@
 package com.lumens.scheduler.impl;
 
 import com.lumens.scheduler.JobScheduler;
+import com.lumens.scheduler.JobTrigger;
 import com.lumens.engine.TransformProject;
+import com.lumens.engine.serializer.ProjectSerializer;
+import com.lumens.sysdb.DAOFactory;
+import com.lumens.sysdb.dao.JobDAO;
+import com.lumens.sysdb.dao.RelationDAO;
+import com.lumens.sysdb.dao.ProjectDAO;
+import com.lumens.sysdb.entity.Job;
+import com.lumens.sysdb.entity.Relation;
+import com.lumens.sysdb.entity.Project;
+import java.io.ByteArrayInputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -33,8 +44,10 @@ public class DefaultScheduler implements JobScheduler {
     Scheduler sched;
     List<DefaultJob> jobList = new ArrayList();
     Map<Long, DefaultJob> jobMap = new HashMap<>();
-    Map<Long, DefaultTrigger> triggerMap = new HashMap<>();
+    Map<Long, JobTrigger> triggerMap = new HashMap<>();
     
+    // TODO: maintain a running job list
+
     public DefaultScheduler() {
         isStarted = false;
         start();
@@ -54,10 +67,14 @@ public class DefaultScheduler implements JobScheduler {
 
     @Override
     public void resume() {
-        loadFromDb();
+        try{
+            loadFromDb();
+        }catch (Exception ex){
+            // TODO: log load job exception
+        }
         schedule();
     }
-    
+
     public void schedule() {
         for (DefaultJob job : jobList) {
             String group = job.getId().toString();
@@ -67,7 +84,7 @@ public class DefaultScheduler implements JobScheduler {
                         .withIdentity(proj.getName(), group)
                         .build();
 
-                DefaultTrigger defaultTrigger = triggerMap.get(job.getId());
+                JobTrigger defaultTrigger = triggerMap.get(job.getId());
                 SimpleScheduleBuilder simpleBuilder = simpleSchedule();
 
                 int repeatCount = defaultTrigger.getRepeatCount();
@@ -97,12 +114,12 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public final void start() {        
+    public final void start() {
         try {
-            if (!isStarted){
+            if (!isStarted) {
                 sched = new org.quartz.impl.StdSchedulerFactory().getScheduler();
                 sched.start();
-            }            
+            }
 
         } catch (SchedulerException ex) {
             throw new RuntimeException(ex);
@@ -112,10 +129,10 @@ public class DefaultScheduler implements JobScheduler {
     @Override
     public void stop() {
         try {
-            if (isStarted){
+            if (isStarted) {
                 sched.shutdown();
             }
-        }catch(SchedulerException ex){            
+        } catch (SchedulerException ex) {
             // TODO: Print log
         }
     }
@@ -124,10 +141,29 @@ public class DefaultScheduler implements JobScheduler {
         return jobList;
     }
 
-    public void loadFromDb() {
-        // TODO: load scheduler from db, load project list from db
-        
+    public void loadFromDb() throws Exception {
+        JobDAO jobDAO = DAOFactory.getJobDAO();
+        RelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
+        ProjectDAO projectDAO = DAOFactory.getProjectDAO();
+        List<Job> all = jobDAO.getAllJob();
+        for (Job dbJob : all) {
+            // Add job
+            DefaultJob uiJob = new DefaultJob(dbJob.id, dbJob.name, dbJob.description);
+            jobList.add(uiJob);
+            
+            // Add trigger
+            JobTrigger uiTrigger = new DefaultTrigger(new Date(dbJob.startTime.getTime()), new Date(dbJob.endTime.getTime()), dbJob.repeatCount, dbJob.interval);
+            triggerMap.put(dbJob.id, uiTrigger);
 
+            // Add projects
+            List<Relation> list = projectRelationDAO.getAllRelation(dbJob.id);
+            for (Relation relation : list) {
+                Project dbProject = projectDAO.getProject(relation.projectId);
+                TransformProject uiProject = new TransformProject();
+                new ProjectSerializer(uiProject).readFromJson(new ByteArrayInputStream(dbProject.data.getBytes()));
+                uiJob.addProject(uiProject);
+            }
+        }
     }
 
     public void saveToDb() {

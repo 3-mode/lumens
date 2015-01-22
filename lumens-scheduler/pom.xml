@@ -42,5 +42,10 @@
             <artifactId>lumens-sysdb</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-sysdb</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

@@ -4,14 +4,14 @@
 
 package com.lumens.scheduler.impl;
 
-import com.lumens.scheduler.Trigger;
+import com.lumens.scheduler.JobTrigger;
 import java.util.Date;
 
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class DefaultTrigger implements Trigger{
+public class DefaultTrigger implements JobTrigger{
     private final Date startTime;
     private final Date endTime;
     private final int repeatCount;
