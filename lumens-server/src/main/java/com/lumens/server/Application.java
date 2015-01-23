@@ -24,7 +24,7 @@ import org.eclipse.jetty.server.session.SessionHandler;
 public class Application {
 
     private static final String OS = System.getProperty("os.name").toLowerCase();
-    private static final String WAR_PATH = System.getProperty("lumens.web", "module/web");
+    private static final String WAR_PATH = System.getProperty("lumens.web", System.getProperty("user.dir") + File.separatorChar + "module" + File.separatorChar + "web");
     private static final int PORT = Integer.getInteger("lumens.port", 8080);
     private static Application application;
 
