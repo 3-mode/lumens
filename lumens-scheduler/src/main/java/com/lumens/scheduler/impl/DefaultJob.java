@@ -6,7 +6,6 @@ package com.lumens.scheduler.impl;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-import com.lumens.engine.TransformProject;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -20,12 +19,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultJob implements Job {
-
     private final long jobId;
     private final String name;
     private final String description;
 
-    List<TransformProject> projectList = new ArrayList();
+    List<Long> projectIdList = new ArrayList();
 
     public DefaultJob(long jobId, String name, String description) {
         this.jobId = jobId;
@@ -51,14 +49,14 @@ public class DefaultJob implements Job {
         return description;
     }
 
-    public DefaultJob addProject(TransformProject project) {
-        projectList.add(project);
+    public DefaultJob addProject(long projectId) {
+        projectIdList.add(projectId);
 
         return this;
     }
 
-    public List<TransformProject> getProjectList() {
-        return projectList;
+    public List<Long> getProjectList() {
+        return projectIdList;
     }
 
     public void execute(JobExecutionContext jec) throws JobExecutionException {

@@ -3,10 +3,12 @@
  */
 package com.lumens.sysdb.dao;
 
-import com.lumens.sysdb.entity.InOutLogItem;
+import com.lumens.sysdb.entity.Relation;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -27,7 +29,7 @@ public class RelationDAO extends BaseDAO {
                     jdbcTemplate.execute(new PreparedStatementCreator() {
                         @Override
                         public PreparedStatement createPreparedStatement(Connection cnctn) throws SQLException {
-                            return cnctn.prepareStatement(sqlManager.getSQL("RelationDAO/CreateJob"));
+                            return cnctn.prepareStatement(sqlManager.getSQL("RelationDAO/CreateRelation"));
                         }
                     }, new PreparedStatementCallback<Boolean>() {
                         @Override
@@ -46,15 +48,18 @@ public class RelationDAO extends BaseDAO {
         });
     }
 
-    public void getAllJob(long jobId) {
-        jdbcTemplate.execute(sqlManager.getSQL("RelationDAO/AllJob", jobId));
+    public List<Relation> getAllRelation(long jobId) {
+        final List<Relation> pList = new ArrayList<>();
+        jdbcTemplate.execute(sqlManager.getSQL("RelationDAO/AllRelation", jobId));
+        return pList;
     }
     
-    public void deleteAllJob(long jobId) {
-        jdbcTemplate.execute(sqlManager.getSQL("RelationDAO/DeleteJob", jobId));
+    public void deleteAllRelation(long jobId) {
+        String sql = sqlManager.getSQL("RelationDAO/DeleteAllRelation", jobId);
+        jdbcTemplate.execute(sql);
     }    
     
-    public long delete(final long jobId, final long projectId) {
+    public void delete(final long jobId, final long projectId) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus paramTransactionStatus) {
@@ -62,7 +67,7 @@ public class RelationDAO extends BaseDAO {
                     jdbcTemplate.execute(new PreparedStatementCreator() {
                         @Override
                         public PreparedStatement createPreparedStatement(Connection cnctn) throws SQLException {
-                            return cnctn.prepareStatement(sqlManager.getSQL("RelationDAO/DeleteProject"));
+                            return cnctn.prepareStatement(sqlManager.getSQL("RelationDAO/DeleteRelation"));
                         }
                     }, new PreparedStatementCallback<Boolean>() {
                         @Override
@@ -78,7 +83,6 @@ public class RelationDAO extends BaseDAO {
                     throw new RuntimeException(e);
                 }
             }
-        });
-        return jobId;
+        });        
     }      
 }

@@ -35,7 +35,16 @@
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
         <property name="transactionTemplate" ref="transactionTemplate"/>
     </bean>
-
+    <bean id="JobDAO" class="com.lumens.sysdb.dao.JobDAO">
+        <property name="sqlManager" ref="sqlManager"/>
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="transactionTemplate" ref="transactionTemplate"/>
+    </bean>
+    <bean id="RelationDAO" class="com.lumens.sysdb.dao.RelationDAO">
+        <property name="sqlManager" ref="sqlManager"/>
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="transactionTemplate" ref="transactionTemplate"/>
+    </bean>
     <bean id="sqlManager" class="com.lumens.sysdb.SQLManager">
         <constructor-arg value="system/daoSQL.xml"/>
     </bean>
