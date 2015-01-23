@@ -109,10 +109,10 @@ public class DefaultScheduler implements JobScheduler {
                 }
 
                 TriggerBuilder<Trigger> builder = newTrigger();
-                builder.withIdentity(String.valueOf(job.id), group);
-                builder.startNow();
+                builder.withIdentity(String.valueOf(job.id), group);                
                 builder.withSchedule(simpleBuilder);
                 builder.startAt(job.startTime);
+                builder.endAt(job.endTime);
 
                 try {
                     sched.scheduleJob(jobDetail, builder.build());
@@ -140,7 +140,7 @@ public class DefaultScheduler implements JobScheduler {
     public void stop() {
         try {
             if (isStarted) {
-                sched.shutdown();
+                sched.shutdown(false);  // no wait of tasks finished
             }
         } catch (SchedulerException ex) {
             // TODO: Print log
