@@ -85,6 +85,7 @@ public class DefaultScheduler implements JobScheduler {
         schedule();
     }
 
+    @Override
     public void schedule() {
         for (Job job : jobList) {
             long jobId = job.id;
