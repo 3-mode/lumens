@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class ApplicationContext {
 
-    public static String LUMENS_BASE = System.getProperty("lumens.base", "../dist/lumens");
+    public static String LUMENS_BASE = System.getProperty("lumens.base", System.getProperty("user.dir"));
     public static String LUMENS_ADDIN = "/addin";
     public static String LUMENS_JNI = "/module/manage/jni";
     private final List<String> resultCache = new ArrayList<>();

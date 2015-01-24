@@ -129,7 +129,6 @@ Lumens.directives.directive("scriptEditor", function (RuleTreeService) {
             });
             $scope.$on("SelectRuleItem", function (evt, currentRuleItem) {
                 console.log("SelectRuleItem", currentRuleItem);
-                $scope.selectRuleItem = currentRuleItem;
                 var script = currentRuleItem.getScript() ? currentRuleItem.getScript() : "";
                 codeMirror.setValue(script);
             });
@@ -212,8 +211,8 @@ Lumens.directives.directive("scriptPanel", function ($compile, TemplateService) 
                     "id_rule_script"
                 ],
                 titleList: [
-                    '<i class="lumens-icon-rule-config-name lumens-icon-gap"></i>Foreach',
-                    '<i class="lumens-icon2-script-config-name lumens-icon-gap"></i>Script'
+                    '<i class="lumens-icon-rule-config-name lumens-icon-gap"></i>' + $scope.i18n.id_rule_foreach,
+                    '<i class="lumens-icon2-script-config-name lumens-icon-gap"></i>' + $scope.i18n.id_rule_script
                 ],
                 buildContent: function (itemContent, id, isExpand, title) {
                     if (isExpand) {

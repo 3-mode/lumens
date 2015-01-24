@@ -217,7 +217,7 @@ public class ProjectService implements ServiceConstants {
     public Response listProject(@QueryParam("page") int page, @Context HttpServletRequest req) throws IOException {
         try {
             // TODO test loading icon
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException ex) {
         }
         //

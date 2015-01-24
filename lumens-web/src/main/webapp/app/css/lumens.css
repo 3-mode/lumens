@@ -135,7 +135,7 @@ a, a:focus, a:hover {
     -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
     -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 -1px 3px rgba(40, 40, 40, 0.2);
-    background-color: #3276b1; /*Use an background-image to work on IE7,8 */
+    background-color: #428bca; /*Use an background-image to work on IE7,8 */
     color:white !important;
 }
 .lumens .lumens-v-active {
@@ -721,6 +721,22 @@ svg path {
     font-size: 16px;
     content: "\f05f";
 }
+.lumens .lumens-icon-foreach-add:before {
+    font-size: 16px;
+    color: #4c4c4c;
+    content: "\e6ad";
+    cursor: pointer;
+}
+.lumens .lumens-icon-foreach-del:before {
+    font-size: 16px;
+    color: #ADADAD;
+    content: "\e6ac";
+    cursor: pointer;
+    margin-top: 5px;
+}
+.lumens .lumens-icon-foreach-del:hover {
+    color: #4c4c4c !important;
+}
 .lumens .lumens-config-button-pos {
     float: right;
     margin-top: 8px !important;
@@ -926,7 +942,7 @@ svg path {
     color: #4C4C4C;
 }
 .lumens .lumens-transform-item:hover {
-    background-color: #3276b1 !important;
+    background-color: #318cc1 !important;
     color: white;
     cursor: pointer;
 }

@@ -1,15 +1,27 @@
 <div class="lumens-bootstrap" style="padding-left: 10px; padding-right: 10px;">
-    <div class="row">
-        <div class="col-md-8">
+    <div class="row" ng-repeat="foreach in forEachList">
+        <div class="col-md-7">
             <div class="input-group input-group-sm lumens-control-size">
                 <span class="input-group-addon" style="width: 30px;"><b>{{i18n.id_rule_foreach}}</b></span>
-                <input type="text" class="form-control lumens-control" placeholder="source format full path">
+                <input type="text" ng-model="foreach.source_path" class="form-control lumens-control" placeholder="format full path">
             </div>
         </div>
         <div class="col-md-4">
             <div class="input-group input-group-sm lumens-control-size">
                 <span class="input-group-addon" style="width: 30px;"><b>{{i18n.id_rule_index}}</b></span>
-                <input type="text" class="form-control lumens-control" placeholder="index variable name">
+                <input type="text" ng-model="foreach.index_name" class="form-control lumens-control" placeholder="variable name">
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="lumens-control-size" style="height: 30px; margin-top: 6px;">
+                <i class="lumens-icon-foreach-del" ng-click="onRemove()"></i>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1">
+            <div class="lumens-control-size" style="height: 30px;margin-top: 6px;">
+                <i class="lumens-icon-foreach-add" ng-click="onAdd()"></i>
             </div>
         </div>
     </div>

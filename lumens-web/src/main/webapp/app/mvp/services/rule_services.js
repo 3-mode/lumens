@@ -108,6 +108,8 @@ Lumens.services.factory('RuleTreeService', ['FormatService', function (FormatSer
                     var currentRuleItem = {format_name: entry.data.name};
                     if (entry.script)
                         currentRuleItem.script = entry.script;
+                    if (entry.for_each)
+                        currentRuleItem.for_each = entry.for_each;
                     var transform_rule_item = this.buildTransformRuleTreeChildren(entry.getChildList());
                     if (transform_rule_item.length > 0)
                         currentRuleItem.transform_rule_item = transform_rule_item;
@@ -174,6 +176,7 @@ Lumens.services.factory('RuleTreeService', ['FormatService', function (FormatSer
                                 __this.buildRuleItemChildren(parentNode, rootRuleItem, formatEntry);
                             },
                             click: function (current, parent) {
+                                $scope.selectRuleItem = current;
                                 $scope.$broadcast("SelectRuleItem", current);
                             },
                             drop: function (node, current, parent) {
@@ -196,12 +199,17 @@ Lumens.services.factory('RuleTreeService', ['FormatService', function (FormatSer
                 return null;
             },
             buildRootRuleItem: function (rootRuleItem, formatEntry) {
-                return [{
-                        label: rootRuleItem.format_name,
-                        name: rootRuleItem.format_name,
-                        nodeType: FormatService.isField(formatEntry.form) ? "file" : "folder",
-                        data: formatEntry
-                    }];
+                var root = {
+                    label: rootRuleItem.format_name,
+                    name: rootRuleItem.format_name,
+                    nodeType: FormatService.isField(formatEntry.form) ? "file" : "folder",
+                    data: formatEntry
+                };
+                if (rootRuleItem && rootRuleItem.script)
+                    root.script = rootRuleItem.script;
+                if (rootRuleItem && rootRuleItem.for_each)
+                    root.for_each = rootRuleItem.for_each;
+                return [root];
             },
             buildRuleItemChildren: function (parentNode, ruleItem, formatEntry) {
                 var entryList = parentNode.getEntryList ? parentNode.getEntryList() : parentNode.getChildList();
@@ -251,6 +259,8 @@ Lumens.services.factory('RuleTreeService', ['FormatService', function (FormatSer
                 };
                 if (ruleItem && ruleItem.script)
                     node.script = ruleItem.script;
+                if (ruleItem && ruleItem.for_each)
+                    node.for_each = ruleItem.for_each;
                 return node;
             },
             getChildFormat: function (formatList, formatName) {
