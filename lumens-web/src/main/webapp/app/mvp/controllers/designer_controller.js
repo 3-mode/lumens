@@ -622,7 +622,7 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
         $scope.forEachList.push({});
     };
     $scope.onRemove = function (index) {
-
+        $scope.forEachList.splice(index, 1);
     };
     LumensLog.log("In RuleScriptCtrl");
 })
