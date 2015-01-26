@@ -618,19 +618,8 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
             $scope.$broadcast("ScriptConfigDispaly", "show");
         }
     }
-    $scope.$on("SelectRuleItem", function (evt, currentRuleItem) {
-        console.log("SelectRuleItem", currentRuleItem);
-        $scope.$apply(function () {
-            $scope.forEachList = currentRuleItem.for_each;
-        });
-    });
     $scope.onAdd = function () {
-        if (!$scope.forEachList) {
-            $scope.forEachList = $scope.selectRuleItem.for_each = [{}];
-        }
-        else {
-            $scope.forEachList.push({});
-        }
+        $scope.forEachList.push({});
     };
     $scope.onRemove = function (index) {
 

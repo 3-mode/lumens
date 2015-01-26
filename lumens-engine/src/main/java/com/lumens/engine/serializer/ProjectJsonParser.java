@@ -343,7 +343,7 @@ public class ProjectJsonParser {
             value = foreachNode.get("index_name");
             String indexName = isNotNull(value) ? value.asText().trim() : "";
             value = foreachNode.get("index_value");
-            String indexValue = isNotNull(value) ? value.asText().trim() : "";
+            String indexValue = isNotNull(value) ? value.asText().trim() : "0";
             ritem.addTransformForeach(new TransformForeach(sourcePath, shortSourcePath, indexName, Integer.parseInt(indexValue)));
         }
     }

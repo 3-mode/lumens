@@ -19,6 +19,20 @@ Lumens.services.factory('RuleTreeService', ['FormatService', function (FormatSer
                 }
                 return formatPath;
             },
+            getForeachList: function (currentRuleItem) {
+                var foreachList = currentRuleItem.for_each;
+                var copyForeachList = [];
+                if (foreachList && foreachList.length > 0) {
+                    for (var i in foreachList) {
+                        var keys = Object.keys(foreachList[i]);
+                        var foreach = {};
+                        for (var ki in keys)
+                            foreach[keys[ki]] = foreachList[i][keys[ki]];
+                        copyForeachList.push(foreach);
+                    }
+                }
+                return copyForeachList;
+            },
             duplicateFormat: function (format) {
                 if (!format)
                     return;
@@ -189,6 +203,11 @@ Lumens.services.factory('RuleTreeService', ['FormatService', function (FormatSer
                             var selectNode = ruleTree.getSelectNode();
                             if (selectNode)
                                 selectNode.setScript(script);
+                        });
+                        $scope.$on("ApplyForeach", function (evt, foreachList) {
+                            var selectNode = ruleTree.getSelectNode();
+                            if (selectNode)
+                                selectNode.for_each = foreachList;
                         })
                         return __this.transformRuleTree;
                     } else if (parent.children().length > 0) {

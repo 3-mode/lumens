@@ -112,7 +112,7 @@ Lumens.directives.directive("scriptEditor", function (RuleTreeService) {
         replace: true,
         template: "<div></div>",
         link: function ($scope, $element, attr) {
-            var codeMirror = $scope[attr.scriptEditorHolder] = CodeMirror($element.get(0), {
+            var codeMirror = CodeMirror($element.get(0), {
                 mode: "javascript",
                 lineNumbers: true,
                 dragDrop: true,
@@ -198,7 +198,7 @@ Lumens.directives.directive("formatProp", function () {
         }
     };
 });
-Lumens.directives.directive("scriptPanel", function ($compile, TemplateService) {
+Lumens.directives.directive("scriptPanel", function ($compile, TemplateService, RuleTreeService) {
     return {
         restrict: 'E',
         replace: true,
@@ -222,11 +222,20 @@ Lumens.directives.directive("scriptPanel", function ($compile, TemplateService) 
                             $scope.$apply();
                         }
                         else if (id === "id_rule_script") {
-                            $compile($('<script-editor class="lumens-rule-script-panel" script-var="transformRuleScript"></script-editor>').appendTo(itemContent))($scope);
+                            $compile($('<script-editor class="lumens-rule-script-panel"></script-editor>').appendTo(itemContent))($scope);
                         }
                     }
                 }
             });
+            $scope.$on("SelectRuleItem", function (evt, currentRuleItem) {
+                console.log("on SelectRuleItem", currentRuleItem);
+                $scope.$apply(function () {
+                    $scope.forEachList = RuleTreeService.getForeachList(currentRuleItem);
+                });
+            });
+            $scope.$on("ApplyScriptToRuleItem", function () {
+               $scope.$parent.$broadcast("ApplyForeach", $scope.forEachList);
+            })
         }
     };
 });
