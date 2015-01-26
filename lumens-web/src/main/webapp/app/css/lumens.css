@@ -1043,6 +1043,7 @@ svg path {
 }
 .lumens .lumens-value-style-colspan-3 {
     height: 40px;
+    width: 600px;
 }
 .lumens .lumens-value-textarea-style-colspan-3 {
     height: 80px;

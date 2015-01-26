@@ -138,19 +138,19 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                 function tabSummary($tabContent) {
                     desgin.tabs.projSummaryList = new Lumens.List($tabContent).configure({
                         IdList: [
-                            "Description",
+                            "Configuration",
                             "Resources",
                             "Instruments"
                         ],
                         titleList: [
-                            "<i class='lumens-icon-desc lumens-icon-gap'></i>Description",
+                            "<i class='lumens-icon-desc lumens-icon-gap'></i>Configuration",
                             "<i class='lumens-icon-resource lumens-icon-gap'></i>Resources",
                             "<i class='lumens-icon-instrucment lumens-icon-gap'></i>Instruments"
                         ],
                         buildContent: function (itemContent, id, isExpand, title) {
                             if (isExpand) {
-                                if (id === "Description") {
-                                    $http.get("app/templates/designer/project_desc_tmpl.html").success(function (project_desc_tmpl) {
+                                if (id === "Configuration") {
+                                    $http.get("app/templates/designer/project_config_tmpl.html").success(function (project_desc_tmpl) {
                                         itemContent.append($compile(project_desc_tmpl)($scope));
                                     });
                                 }

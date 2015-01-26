@@ -1,0 +1,723 @@
+{
+    "project": {
+        "name": "DEMO",
+        "description": "This is a demo for oracle database transform",
+        "datasource": [{
+                "id": 1415415407248,
+                "type": "type-oracle-jdbc",
+                "name": "Employee Oracle XE",
+                "description": "The data source is used to query the employee information",
+                "target": [{
+                        "id": 1415415412544
+                    }],
+                "position": {
+                    "x": 364,
+                    "y": 28
+                },
+                "property": [{
+                        "name": "OJDBC",
+                        "type": "String",
+                        "value": "file:///C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server\\jdbc\\lib\\ojdbc6.jar"
+                    }, {
+                        "name": "ConnectionURL",
+                        "type": "String",
+                        "value": "jdbc:oracle:thin:@localhost:1521:xe"
+                    }, {
+                        "name": "User",
+                        "type": "String",
+                        "value": "hr"
+                    }, {
+                        "name": "Password",
+                        "type": "String",
+                        "value": "hr"
+                    }, {
+                        "name": "SessionAlter",
+                        "type": "String",
+                        "value": "alter session set NLS_DATE_FORMAT='yyyy-mm-dd hh:mi:ss'"
+                    }, {
+                        "name": "FullLoad",
+                        "type": "Boolean"
+                    }],
+                "format_list": [{
+                        "direction": "IN",
+                        "format_entry": [{
+                                "name": "Get Employee List",
+                                "format": {
+                                    "form": "Struct",
+                                    "name": "EMPLOYEES",
+                                    "type": "None",
+                                    "property": [{
+                                            "name": "description",
+                                            "type": "String",
+                                            "value": "employees table. Contains 107 rows. References with departments,\njobs, job_history tables. Contains a self reference."
+                                        }, {
+                                            "name": "type",
+                                            "type": "String",
+                                            "value": "TABLE"
+                                        }],
+                                    "format": [{
+                                            "form": "Struct",
+                                            "name": "SQLParams",
+                                            "type": "None",
+                                            "format": [{
+                                                    "form": "Field",
+                                                    "name": "action",
+                                                    "type": "String"
+                                                }, {
+                                                    "form": "Field",
+                                                    "name": "where",
+                                                    "type": "String"
+                                                }]
+                                        }]
+                                },
+                                "direction": "IN",
+                                "$$hashKey": "018"
+                            }]
+                    }, {
+                        "direction": "OUT",
+                        "format_entry": [{
+                                "name": "Get Employee List",
+                                "format": {
+                                    "name": "EMPLOYEES",
+                                    "form": "Struct",
+                                    "type": "None",
+                                    "property": [{
+                                            "name": "description",
+                                            "type": "String",
+                                            "value": "employees table. Contains 107 rows. References with departments,\njobs, job_history tables. Contains a self reference."
+                                        }, {
+                                            "name": "type",
+                                            "type": "String",
+                                            "value": "TABLE"
+                                        }],
+                                    "format": [{
+                                            "name": "FIRST_NAME",
+                                            "form": "Field",
+                                            "type": "String",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "VARCHAR2"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "20"
+                                                }]
+                                        }, {
+                                            "name": "LAST_NAME",
+                                            "form": "Field",
+                                            "type": "String",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "VARCHAR2"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "25"
+                                                }]
+                                        }, {
+                                            "name": "EMAIL",
+                                            "form": "Field",
+                                            "type": "String",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "VARCHAR2"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "25"
+                                                }]
+                                        }, {
+                                            "name": "PHONE_NUMBER",
+                                            "form": "Field",
+                                            "type": "String",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "VARCHAR2"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "20"
+                                                }]
+                                        }, {
+                                            "name": "JOB_ID",
+                                            "form": "Field",
+                                            "type": "String",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "VARCHAR2"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "10"
+                                                }]
+                                        }, {
+                                            "name": "SALARY",
+                                            "form": "Field",
+                                            "type": "Integer",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "NUMBER"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "22"
+                                                }]
+                                        }, {
+                                            "name": "COMMISSION_PCT",
+                                            "form": "Field",
+                                            "type": "Integer",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "NUMBER"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "22"
+                                                }]
+                                        }, {
+                                            "name": "MANAGER_ID",
+                                            "form": "Field",
+                                            "type": "Integer",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "NUMBER"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "22"
+                                                }]
+                                        }, {
+                                            "name": "DEPARTMENT_ID",
+                                            "form": "Field",
+                                            "type": "Integer",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "NUMBER"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "22"
+                                                }]
+                                        }]
+                                },
+                                "direction": "OUT",
+                                "$$hashKey": "00N"
+                            }]
+                    }],
+                "$$hashKey": "008"
+            }, {
+                "id": 1415415410512,
+                "type": "type-oracle-jdbc",
+                "name": "Employee_Test Oracle XE",
+                "description": "",
+                "target": [],
+                "position": {
+                    "x": 1133,
+                    "y": 29
+                },
+                "property": [{
+                        "name": "OJDBC",
+                        "type": "String",
+                        "value": "file:///C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server\\jdbc\\lib\\ojdbc6.jar"
+                    }, {
+                        "name": "ConnectionURL",
+                        "type": "String",
+                        "value": "jdbc:oracle:thin:@localhost:1521:xe"
+                    }, {
+                        "name": "User",
+                        "type": "String",
+                        "value": "hr"
+                    }, {
+                        "name": "Password",
+                        "type": "String",
+                        "value": "hr"
+                    }, {
+                        "name": "SessionAlter",
+                        "type": "String",
+                        "value": "alter session set NLS_DATE_FORMAT='yyyy-mm-dd hh:mi:ss'"
+                    }, {
+                        "name": "FullLoad",
+                        "type": "Boolean"
+                    }],
+                "format_list": [{
+                        "direction": "IN",
+                        "format_entry": [{
+                                "name": "Insert Employee_test",
+                                "format": {
+                                    "form": "Struct",
+                                    "name": "EMPLOYEES_TEST",
+                                    "type": "None",
+                                    "property": [{
+                                            "name": "description",
+                                            "type": "String",
+                                            "value": ""
+                                        }, {
+                                            "name": "type",
+                                            "type": "String",
+                                            "value": "TABLE"
+                                        }],
+                                    "format": [{
+                                            "form": "Struct",
+                                            "name": "SQLParams",
+                                            "type": "None",
+                                            "format": [{
+                                                    "form": "Field",
+                                                    "name": "action",
+                                                    "type": "String"
+                                                }]
+                                        }, {
+                                            "form": "Field",
+                                            "name": "EMPLOYEE_ID",
+                                            "type": "Integer",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "NUMBER"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "22"
+                                                }]
+                                        }, {
+                                            "form": "Field",
+                                            "name": "FIRST_NAME",
+                                            "type": "String",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "VARCHAR2"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "200"
+                                                }]
+                                        }, {
+                                            "form": "Field",
+                                            "name": "LAST_NAME",
+                                            "type": "String",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "VARCHAR2"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "25"
+                                                }]
+                                        }, {
+                                            "form": "Field",
+                                            "name": "EMAIL",
+                                            "type": "String",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "VARCHAR2"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "25"
+                                                }]
+                                        }, {
+                                            "form": "Field",
+                                            "name": "PHONE_NUMBER",
+                                            "type": "String",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "VARCHAR2"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "20"
+                                                }]
+                                        }, {
+                                            "form": "Field",
+                                            "name": "HIRE_DATE",
+                                            "type": "Date",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "DATE"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "7"
+                                                }]
+                                        }, {
+                                            "form": "Field",
+                                            "name": "JOB_ID",
+                                            "type": "String",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "VARCHAR2"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "10"
+                                                }]
+                                        }, {
+                                            "form": "Field",
+                                            "name": "SALARY",
+                                            "type": "Integer",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "NUMBER"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "22"
+                                                }]
+                                        }, {
+                                            "form": "Field",
+                                            "name": "COMMISSION_PCT",
+                                            "type": "Integer",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "NUMBER"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "22"
+                                                }]
+                                        }, {
+                                            "form": "Field",
+                                            "name": "MANAGER_ID",
+                                            "type": "Integer",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "NUMBER"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "22"
+                                                }]
+                                        }, {
+                                            "form": "Field",
+                                            "name": "DEPARTMENT_ID",
+                                            "type": "Integer",
+                                            "property": [{
+                                                    "name": "data_type",
+                                                    "type": "String",
+                                                    "value": "NUMBER"
+                                                }, {
+                                                    "name": "data_length",
+                                                    "type": "String",
+                                                    "value": "22"
+                                                }]
+                                        }]
+                                },
+                                "direction": "IN",
+                                "$$hashKey": "00X"
+                            }]
+                    }],
+                "$$hashKey": "009"
+            }, {
+                "id": 1418770942895,
+                "type": "type-soap",
+                "name": "Incident SOAP Service",
+                "description": "",
+                "target": [{
+                        "id": 1421625069611
+                    }],
+                "position": {
+                    "x": 382,
+                    "y": 167
+                },
+                "property": [{
+                        "name": "WSDL",
+                        "type": "String",
+                        "value": "file:///X:/PRODUCT/3MODE/lumens/lumens-connector-soap/src/test/resources/wsdl/IncidentManagement.wsdl"
+                    }, {
+                        "name": "User",
+                        "type": "String"
+                    }, {
+                        "name": "Password",
+                        "type": "String"
+                    }, {
+                        "name": "ProxyAddress",
+                        "type": "String"
+                    }, {
+                        "name": "ProxyPort",
+                        "type": "Integer"
+                    }, {
+                        "name": "ProxyUser",
+                        "type": "String"
+                    }, {
+                        "name": "ProxyPassword",
+                        "type": "String"
+                    }],
+                "format_list": [{
+                        "direction": "IN",
+                        "format_entry": [{
+                                "name": "test",
+                                "format": {
+                                    "form": "Struct",
+                                    "name": "CreateIncident",
+                                    "type": "None",
+                                    "property": [{
+                                            "name": "targetNamespace",
+                                            "type": "String",
+                                            "value": "http://schemas.hp.com/SM/7"
+                                        }, {
+                                            "name": "SOAPAddress",
+                                            "type": "String",
+                                            "value": "http://usplsvulm842.eit.elabs.eds.com:47002/SM/7/ws"
+                                        }, {
+                                            "name": "SOAPAction",
+                                            "type": "String",
+                                            "value": "Create"
+                                        }, {
+                                            "name": "BindingOutput",
+                                            "type": "String",
+                                            "value": ""
+                                        }, {
+                                            "name": "BindingInput",
+                                            "type": "String",
+                                            "value": ""
+                                        }],
+                                    "format": [{
+                                            "form": "Struct",
+                                            "name": "CreateIncidentRequest",
+                                            "type": "None",
+                                            "property": [{
+                                                    "name": "targetNamespace",
+                                                    "type": "String",
+                                                    "value": "http://schemas.hp.com/SM/7"
+                                                }, {
+                                                    "name": "SOAPMessage",
+                                                    "type": "Integer",
+                                                    "value": "0"
+                                                }],
+                                            "format": [{
+                                                    "form": "Struct",
+                                                    "name": "model",
+                                                    "type": "None",
+                                                    "property": [{
+                                                            "name": "targetNamespace",
+                                                            "type": "String",
+                                                            "value": "http://schemas.hp.com/SM/7"
+                                                        }],
+                                                    "format": [{
+                                                            "form": "Struct",
+                                                            "name": "messages",
+                                                            "type": "None",
+                                                            "property": [{
+                                                                    "name": "targetNamespace",
+                                                                    "type": "String",
+                                                                    "value": "http://schemas.hp.com/SM/7"
+                                                                }],
+                                                            "format": [{
+                                                                    "form": "ArrayOfStruct",
+                                                                    "name": "message",
+                                                                    "type": "String",
+                                                                    "property": [{
+                                                                            "name": "targetNamespace",
+                                                                            "type": "String",
+                                                                            "value": "http://schemas.hp.com/SM/7/Common"
+                                                                        }],
+                                                                    "format": [{
+                                                                            "form": "Field",
+                                                                            "name": "severity",
+                                                                            "type": "Integer",
+                                                                            "property": [{
+                                                                                    "name": "SOAPAttribute",
+                                                                                    "type": "Boolean",
+                                                                                    "value": "true"
+                                                                                }, {
+                                                                                    "name": "targetNamespace",
+                                                                                    "type": "String",
+                                                                                    "value": ""
+                                                                                }]
+                                                                        }]
+                                                                }]
+                                                        }]
+                                                }]
+                                        }]
+                                },
+                                "direction": "IN"
+                            }]
+                    }],
+                "$$hashKey": "00A"
+            }],
+        "transformer": [{
+                "id": 1415415412544,
+                "type": "type-transformer",
+                "name": "Insert Employee_test",
+                "description": "",
+                "target": [{
+                        "id": 1415415410512
+                    }],
+                "position": {
+                    "x": 741,
+                    "y": 30
+                },
+                "transform_rule_entry": [{
+                        "name": "Build Insert into Employee_test",
+                        "source_id": 1415415407248,
+                        "target_id": 1415415410512,
+                        "source_format_name": "Get Employee List",
+                        "target_format_name": "Insert Employee_test",
+                        "transform_rule": {
+                            "name": "EMPLOYEES_TEST",
+                            "transform_rule_item": {
+                                "format_name": "EMPLOYEES_TEST",
+                                "transform_rule_item": [{
+                                        "format_name": "SQLParams",
+                                        "transform_rule_item": [{
+                                                "format_name": "action",
+                                                "script": "\"INSERT_ONLY\""
+                                            }]
+                                    }, {
+                                        "format_name": "EMPLOYEE_ID",
+                                        "script": "Math.round(Math.random() * 100000)"
+                                    }, {
+                                        "format_name": "FIRST_NAME",
+                                        "script": "@EMPLOYEES.FIRST_NAME + \"-\" + new Date().toString()"
+                                    }, {
+                                        "format_name": "LAST_NAME",
+                                        "script": "@EMPLOYEES.LAST_NAME"
+                                    }, {
+                                        "format_name": "EMAIL",
+                                        "script": "@EMPLOYEES.EMAIL"
+                                    }, {
+                                        "format_name": "PHONE_NUMBER",
+                                        "script": "@EMPLOYEES.PHONE_NUMBER"
+                                    }, {
+                                        "format_name": "HIRE_DATE",
+                                        "script": "return dateToString(new Date(), 'yyyy-MM-dd hh:mm:ss')"
+                                    }, {
+                                        "format_name": "JOB_ID",
+                                        "script": "@EMPLOYEES.JOB_ID"
+                                    }, {
+                                        "format_name": "SALARY",
+                                        "script": "@EMPLOYEES.SALARY"
+                                    }, {
+                                        "format_name": "COMMISSION_PCT",
+                                        "script": "@EMPLOYEES.COMMISSION_PCT"
+                                    }, {
+                                        "format_name": "MANAGER_ID",
+                                        "script": "@EMPLOYEES.MANAGER_ID"
+                                    }, {
+                                        "format_name": "DEPARTMENT_ID",
+                                        "script": "@EMPLOYEES.DEPARTMENT_ID"
+                                    }]
+                            }
+                        },
+                        "$$hashKey": "01M"
+                    }],
+                "property": [],
+                "$$hashKey": "00E"
+            }, {
+                "id": 1415415418504,
+                "type": "type-transformer",
+                "name": "Query Orginal Employee",
+                "description": "",
+                "target": [{
+                        "id": 1415415407248
+                    }],
+                "position": {
+                    "x": 25,
+                    "y": 32
+                },
+                "transform_rule_entry": [{
+                        "name": "Build Employee Query",
+                        "target_id": 1415415407248,
+                        "source_format_name": "",
+                        "target_format_name": "Get Employee List",
+                        "transform_rule": {
+                            "name": "EMPLOYEES",
+                            "transform_rule_item": {
+                                "format_name": "EMPLOYEES",
+                                "transform_rule_item": [{
+                                        "format_name": "SQLParams",
+                                        "transform_rule_item": [{
+                                                "format_name": "action",
+                                                "script": "\"SELECT\""
+                                            }, {
+                                                "format_name": "where",
+                                                "script": "\"EMPLOYEE_ID = 100 OR EMPLOYEE_ID = 101\""
+                                            }]
+                                    }]
+                            }
+                        },
+                        "$$hashKey": "010"
+                    }],
+                "property": [],
+                "$$hashKey": "00F"
+            }, {
+                "id": 1419451156652,
+                "type": "type-transformer",
+                "name": "SOAP Test",
+                "description": "",
+                "target": [{
+                        "id": 1418770942895
+                    }],
+                "position": {
+                    "x": 23,
+                    "y": 169
+                },
+                "transform_rule_entry": [{
+                        "name": "test-map",
+                        "target_id": 1418770942895,
+                        "source_format_name": "",
+                        "target_format_name": "test",
+                        "transform_rule": {
+                            "name": "CreateIncident",
+                            "transform_rule_item": {
+                                "format_name": "CreateIncident",
+                                "transform_rule_item": [{
+                                        "format_name": "CreateIncidentRequest",
+                                        "transform_rule_item": [{
+                                                "format_name": "model",
+                                                "transform_rule_item": [{
+                                                        "format_name": "messages",
+                                                        "transform_rule_item": [{
+                                                                "format_name": "message",
+                                                                "for_each": [{
+                                                                        "$$hashKey": "00V",
+                                                                        "source_path": "aaa",
+                                                                        "index_name": "bbb"
+                                                                    }],
+                                                                "transform_rule_item": [{
+                                                                        "format_name": "severity",
+                                                                        "script": "0",
+                                                                        "for_each": []
+                                                                    }]
+                                                            }]
+                                                    }]
+                                            }]
+                                    }]
+                            }
+                        },
+                        "$$hashKey": "00Z"
+                    }],
+                "$$hashKey": "00G",
+                "property": []
+            }, {
+                "id": 1421625069611,
+                "type": "type-transformer",
+                "name": "[ Transformer_7 ]",
+                "description": "",
+                "target": [],
+                "position": {
+                    "x": 772,
+                    "y": 167
+                },
+                "transform_rule_entry": []
+            }],
+        "start_entry": []
+    }
+}
