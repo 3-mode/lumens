@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 import static org.quartz.JobBuilder.newJob;
 import org.quartz.JobDetail;
+import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
@@ -38,13 +39,14 @@ public class DefaultScheduler implements JobScheduler {
 
     boolean isStarted;
     Scheduler sched;
+    JobListener listener;
     List<Job> jobList = new ArrayList();
     Map<Long, Job> jobMap = new HashMap<>();
     Map<Long, List<Project>> projectMap = new HashMap<>();
 
     // TODO: maintain a running job list
     public DefaultScheduler() {
-        isStarted = false;
+        isStarted = false; 
         start();
     }
 
@@ -129,6 +131,8 @@ public class DefaultScheduler implements JobScheduler {
             if (!isStarted) {
                 sched = new org.quartz.impl.StdSchedulerFactory().getScheduler();
                 sched.start();
+                listener = new DefaultJobListener();
+                sched.getListenerManager().addJobListener(listener);
             }
 
         } catch (SchedulerException ex) {
@@ -203,4 +207,4 @@ public class DefaultScheduler implements JobScheduler {
             }
         }
     }
-}
+    }
