@@ -73,14 +73,14 @@ public class JobDAO extends BaseDAO {
                         }
                     }, new PreparedStatementCallback<Boolean>() {
                         @Override
-                        public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                            ps.setLong(1, job.id);
-                            ps.setString(2, job.name);
-                            ps.setString(3, job.description);
-                            ps.setInt(4, job.repeatCount);
-                            ps.setInt(5, job.interval);
-                            ps.setTimestamp(6, job.startTime);
-                            ps.setTimestamp(7, job.endTime);
+                        public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {                            
+                            ps.setString(1, job.name);
+                            ps.setString(2, job.description);
+                            ps.setInt(3, job.repeatCount);
+                            ps.setInt(4, job.interval);
+                            ps.setTimestamp(5, job.startTime);
+                            ps.setTimestamp(6, job.endTime);
+                            ps.setLong(7, job.id);
                             return ps.execute();
                         }
                     });
