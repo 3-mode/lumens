@@ -9,20 +9,20 @@ import com.lumens.connector.ConnectorFactory;
  *
  * @author shaofeng.wang
  */
-public class EngineContext {
+public class TransformEngineContext {
 
-    private static EngineContext instance;
+    private static TransformEngineContext instance;
     private final ConnectorFactoryHolder fHolder;
 
-    private EngineContext(ConnectorFactoryHolder fHolder) {
+    private TransformEngineContext(ConnectorFactoryHolder fHolder) {
         this.fHolder = fHolder;
     }
 
     public static void start(ConnectorFactoryHolder fHolder) {
-        instance = new EngineContext(fHolder);
+        instance = new TransformEngineContext(fHolder);
     }
 
-    public static EngineContext getContext() {
+    public static TransformEngineContext getContext() {
         return instance;
     }
 
