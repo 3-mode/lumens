@@ -45,7 +45,7 @@ INSERT INTO LUNS_JOB (id, name, description, repeat_count, interval, start_time,
         </sql>
         <sql name="UpdateJob">
 <![CDATA[
-UPDATE LUNS_JOB set name=?, description=?, repeat_count=?, interval,=?, start_time=?, end_time=? WHERE id = ?
+UPDATE LUNS_JOB set name=?, description=?, repeat_count=?, interval=?, start_time=?, end_time=? WHERE id = ?
 ]]>
         </sql> 
         <sql name="DeleteJob">
