@@ -16,18 +16,23 @@ public class DefaultJobListener implements JobListener {
     public DefaultJobListener(){
         name = "Default Listener";
     }
+    
+    @Override
     public String getName(){
         return name;
     }
 
+    @Override
     public void jobToBeExecuted(JobExecutionContext jec){
         
     }
 
+    @Override
     public void jobExecutionVetoed(JobExecutionContext jec){
         
     }
 
+    @Override
     public void jobWasExecuted(JobExecutionContext jec, JobExecutionException jee){
         
     }

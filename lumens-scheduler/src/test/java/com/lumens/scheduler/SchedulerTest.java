@@ -38,12 +38,12 @@ public class SchedulerTest
         scheduler.start();        
         TransformProject project = new TransformProject();
         project.setName("Test project");
-        JobTrigger trigger = new DefaultTrigger(new Date(System.currentTimeMillis() + 10000), new Date(), 1,1 );
+        JobTrigger trigger = new DefaultTrigger(new Date(), new Date(System.currentTimeMillis() + 10000), 1,1 );
         
         DefaultJob job = new DefaultJob(1001, "job1001", "This is a sample job");
         job.addProject(1421324074892L);
         scheduler.addSchedule(job, trigger);
-        scheduler.schedule();
+        scheduler.startJob(job.getId());
         
         try {
             Thread.sleep(10000);

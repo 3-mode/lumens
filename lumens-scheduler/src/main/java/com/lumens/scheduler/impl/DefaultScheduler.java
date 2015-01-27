@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import static org.quartz.JobBuilder.newJob;
+import org.quartz.JobKey;
 import org.quartz.JobDetail;
 import org.quartz.JobListener;
 import org.quartz.Scheduler;
@@ -46,7 +47,7 @@ public class DefaultScheduler implements JobScheduler {
 
     // TODO: maintain a running job list
     public DefaultScheduler() {
-        isStarted = false; 
+        isStarted = false;
         start();
     }
 
@@ -61,20 +62,117 @@ public class DefaultScheduler implements JobScheduler {
         jobList.add(dbJob);
         long jobId = job.getId();
         jobMap.put(jobId, dbJob);
-        ProjectDAO projectDAO = DAOFactory.getProjectDAO();        
+        ProjectDAO projectDAO = DAOFactory.getProjectDAO();
         List<Project> projectList = projectMap.get(jobId);
-        if (projectList == null){
+        if (projectList == null) {
             projectList = new ArrayList();
             projectMap.put(jobId, projectList);
         }
-        for (long projectId: job.getProjectList()){
+        for (long projectId : job.getProjectList()) {
             Project dbProject = projectDAO.getProject(projectId);
-            if (dbProject == null)
+            if (dbProject == null) {
                 throw new RuntimeException("Invalid project");
+            }
             projectList.add(dbProject);
         }
 
         return this;
+    }
+
+    public void startJob(long jobId) {
+        Job job = jobMap.get(jobId);
+        if (job == null) {
+            throw new RuntimeException("A job must be added to scheduler before start.");
+        }
+
+        String group = String.valueOf(job.id);
+        List<Project> projectList = projectMap.get(jobId);
+        for (Project proj : projectList) {
+            JobDetail jobDetail = newJob(DefaultJob.class)
+                    .withIdentity(String.valueOf(proj.id), group)
+                    .usingJobData("Project", proj.data)
+                    .build();
+
+            SimpleScheduleBuilder simpleBuilder = simpleSchedule();
+            int repeatCount = job.repeatCount;
+            if (repeatCount > 0) {
+                simpleBuilder.withRepeatCount(repeatCount);
+            } else if (repeatCount < 0) {
+                simpleBuilder.repeatForever();
+            }
+            int repeatInterval = job.interval;
+            if (repeatCount != 0 && repeatInterval > 0) {
+                simpleBuilder.withIntervalInSeconds(repeatInterval);
+            }
+
+            TriggerBuilder<Trigger> builder = newTrigger();
+            builder.withIdentity(String.valueOf(job.id), group);
+            builder.withSchedule(simpleBuilder);
+            builder.startAt(job.startTime);
+            builder.endAt(job.endTime);
+
+            try {
+                sched.scheduleJob(jobDetail, builder.build());
+            } catch (SchedulerException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+    public void stopJob(long jobId) {
+        Job job = jobMap.get(jobId);
+        if (job == null) {
+            throw new RuntimeException("A job must be added to scheduler before stop.");
+        }
+    }
+
+    public void saveJob(long jobId) {
+        Job job = jobMap.get(jobId);
+        if (job == null) {
+            throw new RuntimeException("A job must be added to scheduler before saving.");
+        }
+
+        JobDAO jobDAO = DAOFactory.getJobDAO();
+        RelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
+
+        if (jobDAO.getJob(jobId) == null) {
+            jobDAO.create(job);
+        } else {
+            jobDAO.update(job);
+        }
+
+        // Delete old relation
+        projectRelationDAO.deleteAllRelation(jobId);
+        for (Project project : projectMap.get(jobId)) {
+            projectRelationDAO.create(jobId, project.id);
+        }
+    }
+
+    public void deleteJob(long jobId) {
+        Job job = jobMap.remove(jobId);
+        if (job == null) {
+            throw new RuntimeException("A job must be added to scheduler before deleting.");
+        }
+
+        // Remove from map and scheduler
+        String group = String.valueOf(job.id);
+        List<Project> projectList = projectMap.remove(jobId);
+        for (Project proj : projectList) {
+            try {
+                sched.deleteJob(new JobKey(String.valueOf(proj.id), group));
+            } catch (Exception ex) {
+                // TODO: log error 
+            }
+        }       
+        
+        // Remove from db
+        JobDAO jobDAO = DAOFactory.getJobDAO();
+        RelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
+
+        if (jobDAO.getJob(jobId) != null) {
+            jobDAO.delete(jobId);
+            projectRelationDAO.deleteAllRelation(jobId);
+        }
     }
 
     @Override
@@ -84,45 +182,7 @@ public class DefaultScheduler implements JobScheduler {
         } catch (Exception ex) {
             // TODO: log load job exception
         }
-        schedule();
-    }
-
-    @Override
-    public void schedule() {
-        for (Job job : jobList) {
-            long jobId = job.id;
-            String group = String.valueOf(job.id);
-            List<Project> projectList = projectMap.get(jobId);
-            for (Project proj : projectList) {
-                JobDetail jobDetail = newJob(DefaultJob.class)
-                        .withIdentity(String.valueOf(proj.id), group)
-                        .build();
-         
-                SimpleScheduleBuilder simpleBuilder = simpleSchedule();
-                int repeatCount = job.repeatCount;
-                if (repeatCount > 0) {
-                    simpleBuilder.withRepeatCount(repeatCount);
-                } else if (repeatCount < 0) {
-                    simpleBuilder.repeatForever();
-                }
-                int repeatInterval = job.interval;
-                if (repeatCount != 0 && repeatInterval > 0) {
-                    simpleBuilder.withIntervalInSeconds(repeatInterval);
-                }
-
-                TriggerBuilder<Trigger> builder = newTrigger();
-                builder.withIdentity(String.valueOf(job.id), group);                
-                builder.withSchedule(simpleBuilder);
-                builder.startAt(job.startTime);
-                builder.endAt(job.endTime);
-
-                try {
-                    sched.scheduleJob(jobDetail, builder.build());
-                } catch (SchedulerException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }
+        scheduleAll();
     }
 
     @Override
@@ -153,6 +213,12 @@ public class DefaultScheduler implements JobScheduler {
 
     public List<Job> getJobList() {
         return jobList;
+    }
+
+    private void scheduleAll() {
+        for (Job job : jobList) {
+            startJob(job.id);
+        }
     }
 
     private List<Job> loadJobFromDb() {
@@ -207,4 +273,4 @@ public class DefaultScheduler implements JobScheduler {
             }
         }
     }
-    }
+}
