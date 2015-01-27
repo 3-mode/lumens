@@ -77,24 +77,24 @@ SELECT id, name, description, data FROM LUNS_PROJECT WHERE id = %d
         </sql>
         <sql name="CreateProject">
 <![CDATA[
-INSERT INTO LUNS_PROJECT (id, name, description, data) VALUES (?,?,?,?)
+INSERT INTO LUNS_PROJECT (id, name, description, data) VALUES (%d,'%s','%s','%s')
 ]]>
         </sql>
         <sql name="UpdateProject">
 <![CDATA[
-UPDATE LUNS_PROJECT set name=?, description=?, data=? WHERE id = ?
+UPDATE LUNS_PROJECT set name='%s', description='%s', data='%s' WHERE id = %d
 ]]>
         </sql> 
         <sql name="DeleteProject">
 <![CDATA[
-DELETE FROM LUNS_PROJECT WHERE id = ?
+DELETE FROM LUNS_PROJECT WHERE id = %d
 ]]>
         </sql>
     </database-access-object>
     <database-access-object name="InOutLogDAO">
         <sql name="GetLogByProject">
 <![CDATA[
-SELECT * FROM lUNS_INOUTLOG WHERE PROJECT_ID = ?
+SELECT * FROM lUNS_INOUTLOG WHERE PROJECT_ID = %d
 ]]>
         </sql>
         <sql name="GetLogByComponent">
@@ -104,7 +104,7 @@ SELECT LOG_ID, COMPONENT_ID, COMPONENT_NAME, PROJECT_ID, PROJECT_NAME, DIRECTION
         </sql>
         <sql name="PutLog">
 <![CDATA[
-INSERT INTO lUNS_INOUTLOG (LOG_ID, COMPONENT_ID, COMPONENT_NAME, PROJECT_ID, PROJECT_NAME, DIRECTION, TARGET_NAME, DATA, LAST_MODIF_TIME) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+INSERT INTO lUNS_INOUTLOG (LOG_ID, COMPONENT_ID, COMPONENT_NAME, PROJECT_ID, PROJECT_NAME, DIRECTION, TARGET_NAME, DATA, LAST_MODIF_TIME) VALUES (%d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s')
 ]]>
         </sql>
         <sql name="ClearLog">

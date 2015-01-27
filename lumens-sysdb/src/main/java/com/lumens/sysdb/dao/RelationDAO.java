@@ -55,7 +55,7 @@ public class RelationDAO extends BaseDAO {
     }
 
     public void deleteAllRelation(long jobId) {
-        this.transactionExecute(sqlManager.getSQL("RelationDAO/DeleteAllRelation", jobId));
+        this.simpleTransactionExecute(sqlManager.getSQL("RelationDAO/DeleteAllRelation", jobId));
     }
 
     public void delete(final long jobId, final long projectId) {

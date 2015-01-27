@@ -1,15 +1,21 @@
 package com.lumens.sysdb.dao;
 
+import com.lumens.sysdb.EntityFactory;
 import com.lumens.sysdb.SQLManager;
+import com.lumens.sysdb.entity.Project;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -56,7 +62,23 @@ public class BaseDAO {
         this.transactionTemplate = transactionTemplate;
     }
 
-    public void transactionExecute(final String SQL, final Object... values) {
+    public PlatformTransactionManager getTransactionManager() {
+        return this.transactionTemplate.getTransactionManager();
+    }
+
+    public void simpleTransactionExecute(final String SQL) {
+        TransactionStatus status = getTransactionManager().getTransaction(null);
+        try {
+            jdbcTemplate.execute(SQL);
+            getTransactionManager().commit(status);
+
+        } catch (DataAccessException | TransactionException ex) {
+            getTransactionManager().rollback(status);
+            throw ex;
+        }
+    }
+
+    public void simplePrepareStatTransactionExecute(final String SQL, final Object... values) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus paramTransactionStatus) {
@@ -81,5 +103,16 @@ public class BaseDAO {
                 }
             }
         });
+    }
+
+    public <T> List<T> simpleQuery(final String SQL, final Class<?> clazz) {
+        final List<T> resultList = new ArrayList<>();
+        jdbcTemplate.query(SQL, new RowCallbackHandler() {
+            @Override
+            public void processRow(ResultSet rs) throws SQLException {
+                resultList.add((T) EntityFactory.createEntity(clazz, rs));
+            }
+        });
+        return resultList;
     }
 }

@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class EntityFactory {
 
-    public static <T> T createEntity(Class<T> clazz, ResultSet rs) throws SQLException {
+    public static <T> T createEntity(final Class<T> clazz, ResultSet rs) throws SQLException {
         try {
             T entity = (T) clazz.newInstance();
             Field[] fieldList = clazz.getDeclaredFields();
