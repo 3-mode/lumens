@@ -69,6 +69,6 @@ public class InOutLogDAO extends BaseDAO {
     }
 
     public void deleteAllLog(long projectID) {
-        jdbcTemplate.execute(sqlManager.getSQL("InOutLogDAO/ClearLog", projectID));
+        this.transactionExecute(sqlManager.getSQL("InOutLogDAO/ClearLog", projectID));
     }
 }

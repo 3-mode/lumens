@@ -53,12 +53,11 @@ public class RelationDAO extends BaseDAO {
         jdbcTemplate.execute(sqlManager.getSQL("RelationDAO/AllRelation", jobId));
         return pList;
     }
-    
+
     public void deleteAllRelation(long jobId) {
-        String sql = sqlManager.getSQL("RelationDAO/DeleteAllRelation", jobId);
-        jdbcTemplate.execute(sql);
-    }    
-    
+        this.transactionExecute(sqlManager.getSQL("RelationDAO/DeleteAllRelation", jobId));
+    }
+
     public void delete(final long jobId, final long projectId) {
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -83,6 +82,6 @@ public class RelationDAO extends BaseDAO {
                     throw new RuntimeException(e);
                 }
             }
-        });        
-    }      
+        });
+    }
 }
