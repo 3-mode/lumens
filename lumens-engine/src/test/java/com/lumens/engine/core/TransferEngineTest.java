@@ -7,7 +7,7 @@ import com.lumens.connector.Connector;
 import com.lumens.connector.ConnectorFactory;
 import com.lumens.connector.Direction;
 import com.lumens.engine.ConnectorFactoryHolder;
-import com.lumens.engine.EngineContext;
+import com.lumens.engine.TransformEngineContext;
 import com.lumens.engine.EngineTest;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
@@ -43,7 +43,7 @@ public class TransferEngineTest {
     }
 
     public TransferEngineTest() {
-        EngineContext.start(new ConnectorFactoryHolder() {
+        TransformEngineContext.start(new ConnectorFactoryHolder() {
 
             @Override
             public ConnectorFactory getFactory(String componentType) {

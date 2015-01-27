@@ -9,7 +9,7 @@ import com.lumens.connector.Direction;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.connector.ElementChunk;
-import com.lumens.engine.EngineContext;
+import com.lumens.engine.TransformEngineContext;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.component.AbstractTransformComponent;
 import com.lumens.engine.component.FormatEntry;
@@ -45,8 +45,8 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
         registerOUTFormatList = new HashMap<>();
         registerINFormatList = new HashMap<>();
         // Try to search the OSGI bundle if exist else try to instance it directly
-        if (EngineContext.getContext() != null) {
-            ConnectorFactory factory = EngineContext.getContext().getConnectorFactory(getComponentType());
+        if (TransformEngineContext.getContext() != null) {
+            ConnectorFactory factory = TransformEngineContext.getContext().getConnectorFactory(getComponentType());
             if (factory != null)
                 connector = factory.createConnector();
             else
