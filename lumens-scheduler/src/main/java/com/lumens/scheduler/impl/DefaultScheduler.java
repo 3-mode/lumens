@@ -124,6 +124,17 @@ public class DefaultScheduler implements JobScheduler {
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before stop.");
         }
+
+        // Remove from map and scheduler
+        String group = String.valueOf(jobId);
+        List<Project> projectList = projectMap.get(jobId);
+        for (Project proj : projectList) {
+            try {
+                sched.deleteJob(new JobKey(String.valueOf(proj.id), group));
+            } catch (Exception ex) {
+                // TODO: log error 
+            }
+        }
     }
 
     public void saveJob(long jobId) {
@@ -154,17 +165,19 @@ public class DefaultScheduler implements JobScheduler {
             throw new RuntimeException("A job must be added to scheduler before deleting.");
         }
 
+        jobList.remove(job);       
+                
         // Remove from map and scheduler
         String group = String.valueOf(job.id);
-        List<Project> projectList = projectMap.remove(jobId);
+        List<Project> projectList = projectMap.remove(jobId);        
         for (Project proj : projectList) {
             try {
                 sched.deleteJob(new JobKey(String.valueOf(proj.id), group));
             } catch (Exception ex) {
                 // TODO: log error 
             }
-        }       
-        
+        }
+
         // Remove from db
         JobDAO jobDAO = DAOFactory.getJobDAO();
         RelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
