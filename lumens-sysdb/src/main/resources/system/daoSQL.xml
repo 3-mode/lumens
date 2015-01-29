@@ -77,12 +77,12 @@ SELECT id, name, description, data FROM LUNS_PROJECT WHERE id = %d
         </sql>
         <sql name="CreateProject">
 <![CDATA[
-INSERT INTO LUNS_PROJECT (id, name, description, data) VALUES (%d,'%s','%s','%s')
+INSERT INTO LUNS_PROJECT (id, name, description, data) VALUES (?,?,?,?)
 ]]>
         </sql>
         <sql name="UpdateProject">
 <![CDATA[
-UPDATE LUNS_PROJECT set name='%s', description='%s', data='%s' WHERE id = %d
+UPDATE LUNS_PROJECT set name=?, description=?, data=? WHERE id = ?
 ]]>
         </sql> 
         <sql name="DeleteProject">

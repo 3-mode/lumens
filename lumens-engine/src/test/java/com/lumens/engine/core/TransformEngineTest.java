@@ -8,8 +8,8 @@ import com.lumens.connector.ConnectorFactory;
 import com.lumens.connector.Direction;
 import com.lumens.engine.ConnectorFactoryHolder;
 import com.lumens.engine.TransformEngineContext;
-import com.lumens.engine.EngineTest;
 import com.lumens.engine.TransformComponent;
+import com.lumens.engine.TransformEngine;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.instrument.DataTransformer;
@@ -24,9 +24,13 @@ import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.model.Element;
 import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformRule;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -34,7 +38,9 @@ import static org.junit.Assert.*;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class TransferEngineTest {
+public class TransformEngineTest {
+
+    private TransformEngine transformEngine;
 
     public static String generateID() {
         for (int i = 0; i < 100; ++i)
@@ -42,7 +48,12 @@ public class TransferEngineTest {
         return Long.toString(System.currentTimeMillis() + Math.round(Math.random()));
     }
 
-    public TransferEngineTest() {
+    public TransformEngineTest() {
+        transformEngine = new TransformEngine();
+    }
+
+    private void mockEngeinContext() {
+
         TransformEngineContext.start(new ConnectorFactoryHolder() {
 
             @Override
@@ -94,6 +105,7 @@ public class TransferEngineTest {
 
     @Test
     public void runSimpleTransformTask() throws Exception {
+        mockEngeinContext();
         DataSource personDs = new DataSource(Mock.PERSON.name(), generateID());
         personDs.open();
         System.out.println(String.format("Person DS id '%s'", personDs.getId()));
@@ -187,7 +199,7 @@ public class TransferEngineTest {
 
         TransformProject projectRead = new TransformProject();
         ProjectJsonParser preader = new ProjectJsonParser(projectRead);
-        preader.parse(EngineTest.getResourceAsByteArrayInputStream("/json/chameleon_project.json"));
+        preader.parse(getResourceAsByteArrayInputStream("/json/chameleon_project.json"));
         ChameleonConnector.countFinal = 1;
         new SequenceTransformExecuteJob(projectRead, Arrays.asList(log)).run();
         assertTrue(ChameleonConnector.countFinal == 151);
@@ -197,7 +209,41 @@ public class TransferEngineTest {
     public void testLoadDBProject() throws Exception {
         TransformProject projectRead = new TransformProject();
         ProjectJsonParser preader = new ProjectJsonParser(projectRead);
-        preader.parse(EngineTest.getResourceAsByteArrayInputStream("/json/db_project.json"));
+        preader.parse(getResourceAsByteArrayInputStream("/json/db_project.json"));
         System.out.println("Project Loaded");
+    }
+
+    @Test
+    public void testEngine() throws Exception {
+        transformEngine.start("../dist/lumens/addin");
+        TransformProject project = loadProjectFromJson();
+        assertEquals(3, project.getDatasourceList().size());
+        assertEquals(4, project.getDataTransformerList().size());
+        String projectJson = projectSerialize2Json(project);
+        assertEquals(projectJson, IOUtils.toString(getResourceAsByteArrayInputStream("/json/soap_db_project.json")));
+    }
+
+    public TransformProject loadProjectFromJson() throws Exception {
+        TransformProject newProject = new TransformProject();
+        ProjectSerializer projSerializer = new ProjectSerializer(newProject);
+        projSerializer.readFromJson(getResourceAsByteArrayInputStream("/json/soap_db_project.json"));
+        return newProject;
+    }
+
+    private String projectSerialize2Json(TransformProject project) throws Exception {
+        ByteArrayOutputStream baosXML = new ByteArrayOutputStream();
+        ByteArrayOutputStream baosJson = new ByteArrayOutputStream();
+        new ProjectSerializer(project).writeToXml(baosXML);
+        new ProjectSerializer(project).writeToJson(baosJson);
+        System.out.println(baosXML.toString());
+        System.out.println(baosJson.toString());
+        System.out.println();
+        return baosJson.toString();
+    }
+
+    public static InputStream getResourceAsByteArrayInputStream(String url) throws IOException {
+        try (InputStream in = TransformEngineTest.class.getResourceAsStream(url)) {
+            return new ByteArrayInputStream(IOUtils.toByteArray(in));
+        }
     }
 }
