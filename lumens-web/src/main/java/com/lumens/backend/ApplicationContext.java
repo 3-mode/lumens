@@ -43,6 +43,7 @@ public class ApplicationContext {
         transformEngine = new TransformEngine(classLoader);
         projectContext = new ProjectContext();
         jobScheduler = SchedulerFactory.get().createScheduler();
+        jobScheduler.SetEngine(transformEngine);
         System.out.println("Application Context completed initializing .");
     }
 
