@@ -4,4 +4,9 @@
     <field name="text" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
     <field name="date" key="false" type="Date" nullable="false" pattern="dd-MM-yyyy" length="16" precision="" comment=""/>
     <field name="available" key="false" type="Boolean" nullable="false" pattern="" length="" precision="" comment=""/>
+    <field name="text2" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
+    <field name="text3" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
+    <field name="text4" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
+    <field name="text5" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
+    <field name="text6" key="false" type="String" nullable="true" pattern="" length="255" precision="" comment=""/>	
 </format>
