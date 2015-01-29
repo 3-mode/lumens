@@ -1,23 +1,23 @@
 <table class="lumens-bootstrap lumens-addin">
     <tbody>
         <tr>
-            <td class="lumens-label-style lumens-must">Name</td>
+            <td class="lumens-label-style lumens-must">{{i18n.id_project_name}}</td>
             <td class="lumens-value-style-colspan-3" colspan="3">
                 <input type="text" ng-model="project.name" class="form-control lumens-control" />
             </td>
         </tr>
         <tr>
-            <td class="lumens-label-style">Description</td>
+            <td class="lumens-label-style">{{i18n.id_project_desc}}</td>
             <td class="lumens-value-textarea-style-colspan-3" colspan="3">
                 <textarea ng-model="project.description" class="form-control lumens-control">{{project.description}}</textarea>
             </td>
         </tr>
         <tr>
-            <td class="lumens-label-style">Sequence</td>
+            <td class="lumens-label-style">{{i18n.id_project_seq}}</td>
             <td class="lumens-value-style-colspan-3" colspan="3">
-                <button type="button" class="btn btn-default" style="font-size: 16px; width: 100%;">Execute Sequence Configuration ...</button>
+                <span class="lumens-label-button lumens-label-button-p100"><i class="lumens-icon2-seq lumens-icon-gap"></i>{{i18n.id_project_exec_seq}}</span>
             </td>
-        </tr> 
+        </tr>
         <tr>
             <td></td><td></td><td></td><td></td>
         </tr>

@@ -19,6 +19,7 @@ import com.lumens.backend.ServerUtils;
 import com.lumens.backend.ServiceConstants;
 import static com.lumens.backend.ServiceConstants.ACTIVE;
 import static com.lumens.backend.ServiceConstants.DELETE;
+import com.lumens.engine.StartEntry;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
@@ -26,6 +27,7 @@ import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.sysdb.entity.Project;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,9 +145,12 @@ public class ProjectService implements ServiceConstants {
     private Response updateProject(long projectID, JsonNode contentJson) throws Exception {
         ByteArrayInputStream bais = new ByteArrayInputStream(contentJson.asText().getBytes(UTF_8));
         TransformProject project = new TransformProject();
-        new ProjectSerializer(project).readFromJson(bais);
+        ProjectSerializer projSerial = new ProjectSerializer(project);
+        projSerial.readFromJson(bais);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        projSerial.writeToJson(baos);
         ProjectDAO pDAO = DAOFactory.getProjectDAO();
-        long projectId = pDAO.update(new Project(projectID, project.getName(), project.getDescription(), contentJson.asText()));
+        long projectId = pDAO.update(new Project(projectID, project.getName(), project.getDescription(), baos.toString()));
         JsonUtility utility = JsonUtility.createJsonUtility();
         JsonGenerator json = utility.getGenerator();
         json.writeStartObject();
@@ -273,6 +278,41 @@ public class ProjectService implements ServiceConstants {
             json.writeEndObject();
             json.writeEndObject();
             return Response.ok().entity(utility.toUTF8String()).build();
+        } catch (Exception ex) {
+            return ServerUtils.getErrorMessageResponse(ex);
+        }
+    }
+
+    @GET
+    @Path("{projectID}/start_entry")
+    @Produces("application/json")
+    public Response getProjectStartEntryList(@PathParam("projectID") long projectID, @Context HttpServletRequest req) throws IOException {
+        try {
+            Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
+            if (attr != null) {
+                Pair<Long, TransformProject> pair = (Pair<Long, TransformProject>) attr;
+                TransformProject project = pair.getSecond();
+                if (project == null || pair.getFirst() != projectID)
+                    return ServerUtils.getErrorMessageResponse(String.format("The project with id '%s' is not opened", projectID));
+
+                JsonUtility utility = JsonUtility.createJsonUtility();
+                JsonGenerator json = utility.getGenerator();
+                json.writeStartObject();
+                json.writeStringField("status", "OK");
+                json.writeObjectFieldStart("content");
+                json.writeArrayFieldStart("start_entry");
+                for (StartEntry entry : project.getStartEntryList()) {
+                    json.writeStartObject();
+                    json.writeStringField("component_id", entry.getStartComponent().getId());
+                    json.writeStringField("format_name", entry.getStartFormatName());
+                    json.writeEndObject();
+                }
+                json.writeEndArray();
+                json.writeEndObject();
+                json.writeEndObject();
+                return Response.ok().entity(utility.toUTF8String()).build();
+            }
+            return Response.status(Response.Status.BAD_REQUEST).entity("No project loaded in current session!").build();
         } catch (Exception ex) {
             return ServerUtils.getErrorMessageResponse(ex);
         }

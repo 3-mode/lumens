@@ -4,7 +4,6 @@
 package test;
 
 import com.lumens.backend.ApplicationContext;
-import com.lumens.backend.DataElementLoggingHandler;
 import com.lumens.backend.service.ProjectService;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.InOutLogDAO;
@@ -26,7 +25,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import org.junit.Test;
@@ -45,9 +43,10 @@ public class ServiceTest {
 
     public void testDBProject() throws Exception {
         if (true) {
+            System.setProperty("lumens.base", "../dist/lumens");
             ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
-            Project project = pDAO.getProject(1415415434544L); //1421234160179L page //1415415434544L //1421324074892L CSV
+            Project project = pDAO.getProject(1421234160179L); //1421234160179L page //1415415434544L //1421842012147L CSV
             TransformProject projectInstance = new TransformProject();
             new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
             //assertEquals(3, projectInstance.getDataTransformerList().size());
@@ -68,8 +67,11 @@ public class ServiceTest {
                 }
             }
             List<ResultHandler> handlers = new ArrayList<>();
-            handlers.addAll(Arrays.asList(new DataElementLoggingHandler(project.id, project.name)));
-            new SequenceTransformExecuteJob(projectInstance, handlers).run();
+            //handlers.addAll(Arrays.asList(new DataElementLoggingHandler(project.id, project.name)));
+            for (int i = 0; i < 1000; ++i) {
+                System.out.println("Transform: " + i);
+                new SequenceTransformExecuteJob(projectInstance, handlers).run();
+            }
             //ApplicationContext.get().getTransformEngine().execute(new SequenceTransformExecuteJob(projectInstance, handlers));
         }
     }

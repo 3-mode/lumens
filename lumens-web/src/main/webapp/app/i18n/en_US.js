@@ -30,11 +30,14 @@ Lumens.i18n = {
     id_job_repeat_yearly: "Yearly",
     // Project
     id_new_project: "New Project",
-    id_new_project_name: "Name",
+    id_project_name: "Name",
     id_create_project: "Create",
     id_close_project_create: "Close",
     id_project_name_placeholder: "Project Name",
     id_project_desc: "Description",
+    id_project_config: "Configuration",
+    id_project_exec_seq: "Execute Sequence Configuration ...",
+    id_project_seq: "Sequence",
     // Component Config
     id_comp_apply: "Apply",
     // Script Ctrls

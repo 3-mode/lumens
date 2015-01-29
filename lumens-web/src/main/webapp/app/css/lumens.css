@@ -792,6 +792,10 @@ svg path {
     font-size: 16px;
     content: "\e6f4";
 }
+.lumens .lumens-icon2-seq:before {
+    font-size: 16px;
+    content: "\e791";
+}
 /*Form component Styles*/
 .lumens .lumens-window-title {
     float: left;
@@ -873,6 +877,10 @@ svg path {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
+}
+.lumens .lumens-label-button-p100 {
+    width: 100%;
+    margin-left: 0px;
 }
 .lumens .lumens-icon-button {
     cursor: pointer;
