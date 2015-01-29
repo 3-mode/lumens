@@ -12,6 +12,8 @@ import java.sql.Driver;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 
@@ -20,6 +22,8 @@ import org.apache.commons.io.IOUtils;
  * @author shaofeng wang
  */
 public class DbUtils {
+
+    private static Map<String, Class<?>> driverClassMap = new HashMap<>();
 
     public static void releaseConnection(Connection conn) {
         if (conn != null) {
@@ -65,20 +69,19 @@ public class DbUtils {
     public static Object getInstance(String jarURL, String className) throws Exception {
         ClassLoader savedClassLoader = Thread.currentThread().getContextClassLoader();
         try {
-            try {
-                // Try to instance if fail then try to load the jar first
-                Class clazz = Class.forName(className);
-                return clazz.newInstance();
-            } catch (ClassNotFoundException ce) {
+            // Try to instance if fail then try to load the jar first
+            Class clazz = Class.forName(className);
+            return clazz.newInstance();
+        } catch (ClassNotFoundException ce) {
+            Class<?> clazz = driverClassMap.get(jarURL);
+            if (clazz == null) {
                 ClassLoader urlClassLoader = new URLClassLoader(new URL[]{
                     new URL(jarURL)
-                });
-                Thread.currentThread().setContextClassLoader(urlClassLoader);
-                Class clazz = Class.forName(className, true, urlClassLoader);
-                return clazz.newInstance();
+                }, savedClassLoader);
+                clazz = Class.forName(className, true, urlClassLoader);
+                driverClassMap.put(jarURL, clazz);
             }
-        } finally {
-            Thread.currentThread().setContextClassLoader(savedClassLoader);
+            return clazz.newInstance();
         }
     }
 
