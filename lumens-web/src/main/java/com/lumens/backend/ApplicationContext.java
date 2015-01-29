@@ -42,8 +42,7 @@ public class ApplicationContext {
         strRealPath = realPath;
         transformEngine = new TransformEngine(classLoader);
         projectContext = new ProjectContext();
-        jobScheduler = SchedulerFactory.get().createScheduler();
-        jobScheduler.SetEngine(transformEngine);
+        jobScheduler = SchedulerFactory.get().createScheduler(transformEngine);
         System.out.println("Application Context completed initializing .");
     }
 

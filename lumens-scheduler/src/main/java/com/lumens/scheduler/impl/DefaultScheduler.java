@@ -53,7 +53,8 @@ public class DefaultScheduler implements JobScheduler {
         start();
     }
 
-    public void SetEngine(TransformEngine engine){
+    @Override
+    public void setEngine(TransformEngine engine) {
         this.engine = engine;
     }
             
