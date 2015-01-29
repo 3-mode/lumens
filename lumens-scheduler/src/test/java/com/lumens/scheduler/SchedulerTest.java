@@ -39,7 +39,7 @@ public class SchedulerTest {
 
     @Test
     public void SchedulerTest() {
-        DefaultScheduler scheduler = (DefaultScheduler) SchedulerFactory.get().createScheduler();
+        DefaultScheduler scheduler = (DefaultScheduler) SchedulerFactory.get().createScheduler(null);
         scheduler.start();
         TransformProject project = new TransformProject();
         project.setName("Test project");
