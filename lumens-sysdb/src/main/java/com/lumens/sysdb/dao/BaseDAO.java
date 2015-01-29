@@ -92,7 +92,7 @@ public class BaseDAO {
                         @Override
                         public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                             for (int i = 0; i < values.length; ++i)
-                                ps.setObject(i, values[i]);
+                                ps.setObject(i + 1, values[i]);
                             return ps.execute();
                         }
                     });
