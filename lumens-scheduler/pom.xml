@@ -42,23 +42,5 @@
             <artifactId>lumens-sysdb</artifactId>
             <version>${project.version}</version>
         </dependency>
-<<<<<<< HEAD
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>lumens-sysdb</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>lumens-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>lumens-log</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-=======
->>>>>>> 8e7757f8863c8006b774c30491cdab7902cfdf78
     </dependencies>
 </project>
