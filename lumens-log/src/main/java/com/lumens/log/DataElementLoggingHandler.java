@@ -1,7 +1,9 @@
+package com.lumens.log;
+
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.backend;
+
 
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.InOutLogDAO;
@@ -15,6 +17,7 @@ import com.lumens.model.serializer.ElementSerializer;
 import java.sql.Timestamp;
 import java.util.List;
 import org.codehaus.jackson.JsonGenerator;
+import com.lumens.io.Utils;
 
 /**
  *
@@ -46,7 +49,7 @@ public class DataElementLoggingHandler implements DataSourceResultHandler, Trans
             InOutLogDAO inoutLogDAO = DAOFactory.getInOutLogDAO();
             for (Element e : eList) {
                 InOutLogItem item = new InOutLogItem();
-                item.logID = ServerUtils.generateID();
+                item.logID = Utils.generateID();
                 item.componentID = Long.parseLong(src.getId());
                 item.componentName = src.getName();
                 item.projectID = this.projectID;

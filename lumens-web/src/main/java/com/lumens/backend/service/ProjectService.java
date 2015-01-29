@@ -4,7 +4,7 @@
 package com.lumens.backend.service;
 
 import com.lumens.backend.ApplicationContext;
-import com.lumens.backend.DataElementLoggingHandler;
+import com.lumens.log.DataElementLoggingHandler;
 import com.lumens.connector.Direction;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.resource.DataSource;
@@ -12,6 +12,7 @@ import com.lumens.engine.handler.ResultHandler;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.io.JsonUtility;
+import com.lumens.io.Utils;
 import com.lumens.model.Format;
 import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.Pair;
@@ -124,7 +125,7 @@ public class ProjectService implements ServiceConstants {
         // Load it first to verify the project
         new ProjectSerializer(project).readFromJson(bais);
         ProjectDAO pDAO = DAOFactory.getProjectDAO();
-        long projectId = pDAO.create(new Project(ServerUtils.generateID(), project.getName(), project.getDescription(), contentJson.asText()));
+        long projectId = pDAO.create(new Project(Utils.generateID(), project.getName(), project.getDescription(), contentJson.asText()));
         JsonUtility utility = JsonUtility.createJsonUtility();
         JsonGenerator json = utility.getGenerator();
         json.writeStartObject();
