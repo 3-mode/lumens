@@ -23,7 +23,7 @@ import org.apache.commons.io.IOUtils;
  */
 public class DbUtils {
 
-    private static Map<String, Class<?>> driverClassMap = new HashMap<>();
+    private static Map<String, ClassLoader> driverClassMap = new HashMap<>();
 
     public static void releaseConnection(Connection conn) {
         if (conn != null) {
@@ -73,14 +73,14 @@ public class DbUtils {
             Class clazz = Class.forName(className);
             return clazz.newInstance();
         } catch (ClassNotFoundException ce) {
-            Class<?> clazz = driverClassMap.get(jarURL);
-            if (clazz == null) {
-                ClassLoader urlClassLoader = new URLClassLoader(new URL[]{
+            ClassLoader urlClassLoader = driverClassMap.get(jarURL);
+            if (urlClassLoader == null) {
+                urlClassLoader = new URLClassLoader(new URL[]{
                     new URL(jarURL)
                 }, savedClassLoader);
-                clazz = Class.forName(className, true, urlClassLoader);
-                driverClassMap.put(jarURL, clazz);
+                driverClassMap.put(jarURL, urlClassLoader);
             }
+            Class<?> clazz = Class.forName(className, true, urlClassLoader);
             return clazz.newInstance();
         }
     }

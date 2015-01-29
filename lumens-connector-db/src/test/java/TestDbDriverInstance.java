@@ -9,7 +9,7 @@ import com.lumens.connector.database.DbUtils;
  */
 public class TestDbDriverInstance {
     public static void main(String[] args) throws Exception {
-        for (int i = 0; i < 1000; ++i) {
+        for (int i = 0; i < 200; ++i) {
             System.out.println("new db driver" + i);
             DbUtils.getInstance("file:///C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server\\jdbc\\lib\\ojdbc6.jar", "oracle.jdbc.OracleDriver");
         }
