@@ -185,7 +185,7 @@ public class TransformEngineTest {
             public void processInput(TransformComponent src, String targetName, List<Element> input) {
             }
         };
-        new SequenceTransformExecuteJob(project, Arrays.asList(log)).run();
+        new SequenceTransformExecuteJob(project, Arrays.asList(log)).execute();
         //**********************************************************************
         assertTrue(ChameleonConnector.countFinal == 150);
 
@@ -201,7 +201,7 @@ public class TransformEngineTest {
         ProjectJsonParser preader = new ProjectJsonParser(projectRead);
         preader.parse(getResourceAsByteArrayInputStream("/json/chameleon_project.json"));
         ChameleonConnector.countFinal = 1;
-        new SequenceTransformExecuteJob(projectRead, Arrays.asList(log)).run();
+        new SequenceTransformExecuteJob(projectRead, Arrays.asList(log)).execute();
         assertTrue(ChameleonConnector.countFinal == 151);
         System.out.println("Run readed project completed");
     }

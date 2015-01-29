@@ -70,7 +70,7 @@ public class ServiceTest {
             //handlers.addAll(Arrays.asList(new DataElementLoggingHandler(project.id, project.name)));
             for (int i = 0; i < 1000; ++i) {
                 System.out.println("Transform: " + i);
-                new SequenceTransformExecuteJob(projectInstance, handlers).run();
+                new SequenceTransformExecuteJob(projectInstance, handlers).execute();
             }
             //ApplicationContext.get().getTransformEngine().execute(new SequenceTransformExecuteJob(projectInstance, handlers));
         }

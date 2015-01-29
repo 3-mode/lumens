@@ -7,9 +7,8 @@ package com.lumens.engine.run;
  *
  * @author shaofeng.wang@outlook.com
  */
-public interface ExecuteJob {
+public interface Executor {
 
     public void execute();
 
-    public void join();
 }

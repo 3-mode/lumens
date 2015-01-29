@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author shaofeng wang (shaofeng.wang@outlook.com)
  */
-public class SequenceTransformExecuteJob implements ExecuteJob, Runnable {
+public class SequenceTransformExecuteJob implements Executor {
 
     private TransformProject project;
     private Thread currentThread;
@@ -42,12 +42,6 @@ public class SequenceTransformExecuteJob implements ExecuteJob, Runnable {
 
     @Override
     public void execute() {
-        currentThread = new Thread(this);
-        currentThread.start();
-    }
-
-    @Override
-    public void run() {
         try {
             project.open();
             this.executeTransform(project);
@@ -55,15 +49,6 @@ public class SequenceTransformExecuteJob implements ExecuteJob, Runnable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public void join() {
-        if (currentThread != null)
-            try {
-                currentThread.join();
-            } catch (InterruptedException ex) {
-            }
     }
 
     private void executeStart(List<TransformComponent> componentList) {
