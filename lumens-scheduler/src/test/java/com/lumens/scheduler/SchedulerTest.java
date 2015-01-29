@@ -42,8 +42,7 @@ public class SchedulerTest {
     public void SchedulerTest() {
         TransformEngine engine = new TransformEngine();
         engine.start("../dist/lumens/addin");
-        DefaultScheduler scheduler = (DefaultScheduler) SchedulerFactory.get().createScheduler();
-        scheduler.SetEngine(engine);
+        DefaultScheduler scheduler = (DefaultScheduler) SchedulerFactory.get().createScheduler(engine);
         scheduler.start();
         TransformProject project = new TransformProject();
         project.setName("Test project");
