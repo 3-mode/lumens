@@ -3,6 +3,7 @@
  */
 
 package com.lumens.scheduler;
+import com.lumens.engine.TransformEngine;
 import com.lumens.scheduler.impl.DefaultJob;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public interface JobScheduler {
+    public void SetEngine(TransformEngine engine);
     public JobScheduler addSchedule(DefaultJob job, JobTrigger trigger);
     public void startJob(long jobId);
     public void stopJob(long jobId);

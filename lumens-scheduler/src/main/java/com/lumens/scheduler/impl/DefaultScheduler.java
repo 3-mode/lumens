@@ -3,6 +3,7 @@
  */
 package com.lumens.scheduler.impl;
 
+import com.lumens.engine.TransformEngine;
 import com.lumens.scheduler.JobScheduler;
 import com.lumens.scheduler.JobTrigger;
 import com.lumens.engine.TransformProject;
@@ -44,6 +45,7 @@ public class DefaultScheduler implements JobScheduler {
     List<Job> jobList = new ArrayList();
     Map<Long, Job> jobMap = new HashMap<>();
     Map<Long, List<Project>> projectMap = new HashMap<>();
+    TransformEngine engine;
 
     // TODO: maintain a running job list
     public DefaultScheduler() {
@@ -51,6 +53,10 @@ public class DefaultScheduler implements JobScheduler {
         start();
     }
 
+    public void SetEngine(TransformEngine engine){
+        this.engine = engine;
+    }
+            
     public JobScheduler addSchedule(DefaultJob job, JobTrigger trigger) {
         if (jobMap.containsKey(job.getId())) {
             throw new RuntimeException("Job " + job.getId() + " already exist.");
@@ -88,7 +94,7 @@ public class DefaultScheduler implements JobScheduler {
         String group = String.valueOf(job.id);
         List<Project> projectList = projectMap.get(jobId);
         for (Project proj : projectList) {
-            JobDetail jobDetail = newJob(DefaultJob.class)
+            JobDetail jobDetail = newJob(JobThread.class)
                     .withIdentity(String.valueOf(proj.id), group)
                     .usingJobData("Project", proj.data)
                     .build();
