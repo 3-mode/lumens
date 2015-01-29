@@ -42,6 +42,7 @@ public class JobThread implements Job {
             engine.execute(new SequenceTransformExecuteJob(projectInstance, handlers));
         } catch (Exception ex) {
             System.out.println("Fail to execute Job: " + jobId + " Project:" + projectId);
+            ex.printStackTrace();
         }
     }
 }
