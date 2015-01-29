@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -53,10 +54,11 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
             if (r.getName().equals(rule.getName()))
                 return r.getRule();
         ruleList.add(rule);
-        List<TransformRuleEntry> rules = ruleFindList.get(rule.getSourceFormatName());
+        String findFormatName = StringUtils.isEmpty(rule.getSourceFormatName()) ? rule.getName(): rule.getSourceFormatName();
+        List<TransformRuleEntry> rules = ruleFindList.get(findFormatName);
         if (rules == null) {
             rules = new ArrayList<>();
-            ruleFindList.put(rule.getSourceFormatName(), rules);
+            ruleFindList.put(findFormatName, rules);
         }
         rules.add(rule);
         return rule.getRule();
@@ -69,7 +71,8 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
             TransformRuleEntry rule = it.next();
             if (rule.getName().equals(ruleName)) {
                 it.remove();
-                List<TransformRuleEntry> rules = ruleFindList.get(rule.getSourceFormatName());
+                String findFormatName = StringUtils.isEmpty(rule.getSourceFormatName()) ? rule.getName() : rule.getSourceFormatName();
+                List<TransformRuleEntry> rules = ruleFindList.get(findFormatName);
                 if (rules == null)
                     throw new RuntimeException("Not found");
                 rules.remove(rule);

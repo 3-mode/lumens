@@ -62,7 +62,7 @@ public class TransformProject {
             // build start point list
             for (TransformRuleEntry tr : dt.getTransformRuleList())
                 if (tr.getSourceId() == null || tr.getSourceId().isEmpty() || tr.getSourceId().equals(dt.getId()))
-                    startList.add(new StartEntry(tr.getSourceFormatName(), dt));
+                    startList.add(new StartEntry(tr.getName(), dt));
         }
         for (DataSource ds : this.datasourceList) {
             Map<String, FormatEntry> inFmtList = ds.getRegisteredFormatList(Direction.IN);
