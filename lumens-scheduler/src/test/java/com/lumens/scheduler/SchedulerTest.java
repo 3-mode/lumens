@@ -3,6 +3,7 @@
  */
 package com.lumens.scheduler;
 
+import com.lumens.engine.TransformEngine;
 import com.lumens.scheduler.impl.DefaultScheduler;
 import com.lumens.scheduler.impl.DefaultTrigger;
 import com.lumens.scheduler.impl.DefaultJob;
@@ -39,7 +40,10 @@ public class SchedulerTest {
 
     @Test
     public void SchedulerTest() {
-        DefaultScheduler scheduler = (DefaultScheduler) SchedulerFactory.get().createScheduler(null);
+        TransformEngine engine = new TransformEngine();
+        engine.start("../dist/lumens/addin");
+        DefaultScheduler scheduler = (DefaultScheduler) SchedulerFactory.get().createScheduler();
+        scheduler.SetEngine(engine);
         scheduler.start();
         TransformProject project = new TransformProject();
         project.setName("Test project");

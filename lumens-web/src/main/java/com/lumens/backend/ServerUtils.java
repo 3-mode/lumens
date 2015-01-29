@@ -10,15 +10,6 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jackson.JsonGenerator;
 
 public class ServerUtils {
-
-    public static long generateID() {
-        long ID1 = System.currentTimeMillis(), ID2;
-        do {
-            ID2 = System.currentTimeMillis();
-        } while (ID1 == ID2);
-        return ID2;
-    }
-
     public static String getNormalizedPath(String path) {
         return Paths.get(new File(path).toURI()).normalize().toFile().getAbsolutePath();
     }

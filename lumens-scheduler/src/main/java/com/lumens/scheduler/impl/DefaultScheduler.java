@@ -97,9 +97,11 @@ public class DefaultScheduler implements JobScheduler {
         for (Project proj : projectList) {
             JobDetail jobDetail = newJob(JobThread.class)
                     .withIdentity(String.valueOf(proj.id), group)
-                    .usingJobData("Project", proj.data)
+                    .usingJobData("ProjectData", proj.data)   
+                    .usingJobData("ProjectName", proj.name) 
                     .build();
 
+            jobDetail.getJobDataMap().put("EngineObject", this.engine);            
             SimpleScheduleBuilder simpleBuilder = simpleSchedule();
             int repeatCount = job.repeatCount;
             if (repeatCount > 0) {
