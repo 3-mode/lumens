@@ -22,7 +22,7 @@ import org.quartz.JobExecutionException;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class JobThread implements Job {
-
+    @Override
     public void execute(JobExecutionContext jec) throws JobExecutionException {
         JobDetail job = jec.getJobDetail();
         String jobId = job.getKey().getGroup();
