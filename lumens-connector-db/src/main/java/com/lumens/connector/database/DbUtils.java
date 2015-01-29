@@ -23,7 +23,7 @@ import org.apache.commons.io.IOUtils;
  */
 public class DbUtils {
 
-    private static Map<String, ClassLoader> driverClassMap = new HashMap<>();
+    private static final Map<String, ClassLoader> driverClassMap = new HashMap<>();
 
     public static void releaseConnection(Connection conn) {
         if (conn != null) {
