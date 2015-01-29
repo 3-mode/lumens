@@ -53,10 +53,12 @@ public class DefaultScheduler implements JobScheduler {
         start();
     }
 
+    @Override
     public void SetEngine(TransformEngine engine){
         this.engine = engine;
     }
             
+    @Override
     public JobScheduler addSchedule(DefaultJob job, JobTrigger trigger) {
         if (jobMap.containsKey(job.getId())) {
             throw new RuntimeException("Job " + job.getId() + " already exist.");
@@ -85,6 +87,7 @@ public class DefaultScheduler implements JobScheduler {
         return this;
     }
 
+    @Override
     public void startJob(long jobId) {
         Job job = jobMap.get(jobId);
         if (job == null) {
@@ -127,6 +130,7 @@ public class DefaultScheduler implements JobScheduler {
         }
     }
 
+    @Override
     public void stopJob(long jobId) {
         Job job = jobMap.get(jobId);
         if (job == null) {
@@ -139,12 +143,13 @@ public class DefaultScheduler implements JobScheduler {
         for (Project proj : projectList) {
             try {
                 sched.deleteJob(new JobKey(String.valueOf(proj.id), group));
-            } catch (Exception ex) {
+            } catch (SchedulerException ex) {
                 // TODO: log error 
             }
         }
     }
 
+    @Override
     public void saveJob(long jobId) {
         Job job = jobMap.get(jobId);
         if (job == null) {
@@ -167,6 +172,7 @@ public class DefaultScheduler implements JobScheduler {
         }
     }
 
+    @Override
     public void deleteJob(long jobId) {
         Job job = jobMap.remove(jobId);
         if (job == null) {
@@ -181,7 +187,7 @@ public class DefaultScheduler implements JobScheduler {
         for (Project proj : projectList) {
             try {
                 sched.deleteJob(new JobKey(String.valueOf(proj.id), group));
-            } catch (Exception ex) {
+            } catch (SchedulerException ex) {
                 // TODO: log error 
             }
         }

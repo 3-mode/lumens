@@ -24,20 +24,23 @@ public class DefaultTrigger implements JobTrigger{
         this.interval = interval;
     }    
 
-    
+    @Override
     public int getRepeatCount(){
         return repeatCount;
     }
     
+    @Override
     public Date getStartTime(){
         return startTime;
     }
     
+    @Override
     public Date getEndTime(){
         return endTime;
     }
     
     // In millisecond
+    @Override
     public int getRepeatInterval(){
         return interval;
     }
