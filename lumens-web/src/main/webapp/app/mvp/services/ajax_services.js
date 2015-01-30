@@ -75,18 +75,6 @@ Lumens.services.factory('ProjectById', function ($resource) {
         operate: {method: 'POST', isArray: false}
     });
 });
-Lumens.services.factory('ProjectSave', function ($http) {
-    return {
-        save: function (projectJSON, onResponse) {
-            var projectData = {
-                action: projectJSON.projectId ? "update" : "create",
-                content: angular.toJson({project: projectJSON.project})
-            };
-            LumensLog.log("Saved data:", projectData);
-            $http.post(projectJSON.projectId ? "rest/project/" + projectJSON.projectId : "rest/project", projectData).success(onResponse);
-        }
-    };
-});
 Lumens.services.factory('FormatList', function ($resource) {
     return $resource("rest/project/:project_id/format?component_id=:component_id&direction=:direction", {}, {
         get: {method: 'GET', isArray: false},
@@ -184,10 +172,5 @@ Lumens.services.factory('TestExecLogService', function ($resource) {
     return $resource("rest/project/testexec/log?project_id=:project_id&component_id=:component_id", {}, {
         get: {method: 'GET', isArray: false},
         delete: {method: "DELETE", isArray: false}
-    });
-});
-Lumens.services.factory('StartEntryService', function ($resource) {
-    return $resource("rest/project/:project_id/start_entry", {}, {
-        get: {method: 'GET', isArray: false}
     });
 });

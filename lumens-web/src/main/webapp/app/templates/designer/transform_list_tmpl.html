@@ -1,5 +1,5 @@
 <div class="lumens-transform-list" ng-controller="TransformListCtrl">
-    <div ng-if="currentUIComponent.configure.category_info.class_type !== 'datasource'">
+    <div ng-if="currentUIComponent.isTransformer()">
         <div class="lumens-button-bar">
             <a ng-if="theSourceNameList" class="lumens-label-button-light"><i class="lumens-icon2-input lumens-icon-gap"></i>{{theSourceNameList[0]}}</a>
             <i ng-if="theSourceNameList" class="lumens-icon-arrow-right"></i>
@@ -33,7 +33,7 @@
             </table>
         </div>
     </div>
-    <div ng-if="currentUIComponent.configure.category_info.class_type === 'datasource'">
+    <div ng-if="currentUIComponent.isDataSource()">
         <div class="lumens-button-bar">
             <a ng-if="theSourceNameList" class="lumens-label-button-light"><i class="lumens-icon2-input lumens-icon-gap"></i>{{theSourceNameList[0]}}</a>
             <i ng-if="theSourceNameList" class="lumens-icon-arrow-right"></i>

@@ -29,7 +29,7 @@ Lumens.ProjectOperator = Class.$extend({
             transformer: [],
             start_entry: []
         };
-        this.$scope.componentForm = undefined;
+        this.$scope.componentForm = null;
         this.$scope.componentProps = {Name: {value: "to select"}};
         this.$scope.categoryInfo = {name: "to select"};
         this.$scope.currentComponent = {name: "to select"};
@@ -41,18 +41,18 @@ Lumens.ProjectOperator = Class.$extend({
             project: this.$scope.project
         };
     },
-    add: function (component, class_type) {
+    add: function (component) {
         var project = this.$scope.project;
-        if (class_type === "datasource")
-            project.datasource.push(component);
-        else if (class_type === "transformer")
-            project.transformer.push(component)
+        if (component.isDataSource())
+            project.datasource.push(component.getCompData());
+        else if (component.isTransformer())
+            project.transformer.push(component.getCompData())
         else
             console.error("Not supported type", component);
     },
     sync: function () {
         // Sync data from client before saving the project
-        console.log("Sync data from web client before saving the proejct '" + this.$scope.project.name + "'");
+        console.log("Sync data from web client before saving the project '" + this.$scope.project.name + "'");
         var componentList = this.componentPanel.getComponentList();
         $.each(componentList, function () {
             var curComp = this;
@@ -64,6 +64,38 @@ Lumens.ProjectOperator = Class.$extend({
                 curComp.getCompData().target.push({id: targetComp.getCompData().id});
             });
         });
+    },
+    discoverStartEntryList: function () {
+        var discoverStartEntryList = [];
+        var componentList = this.componentPanel.getComponentList();
+        for (var i in componentList) {
+            var comp = componentList[i];
+            if (comp.isTransformer()) {
+                var ruleList = comp.getRuleEntryList();
+                for (var j in ruleList) {
+                    var rule = ruleList[j];
+                    if (!rule.source_id || rule.source_id === '0' || rule.source_id === comp.getId())
+                        discoverStartEntryList.push({
+                            component_id: comp.getId(),
+                            component_name: comp.getShortDescription(),
+                            format_name: rule.name
+                        });
+                }
+            }
+            else if (comp.isDataSource()) {
+                var outFmtList = comp.getFormatEntryList("OUT");
+                for (var j in outFmtList) {
+                    var outFmt = outFmtList[j];
+                    if (!comp.getInputFormat(outFmt.name))
+                        discoverStartEntryList.push({
+                            component_id: comp.getId(),
+                            component_name: comp.getShortDescription(),
+                            format_name: outFmt.name
+                        });
+                }
+            }
+        }
+        return discoverStartEntryList;
     },
     setId: function (projectId) {
         this.projectId = projectId;

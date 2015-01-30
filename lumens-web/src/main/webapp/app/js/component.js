@@ -136,7 +136,7 @@ Lumens.Component = Class.$extend({
     setShortDescription: function (shortDesc) {
         this.$elem.find('#id-shortdsc').text(shortDesc);
     },
-    getShortDescript: function () {
+    getShortDescription: function () {
         return this.$elem.find('#id-shortdsc').text();
     },
     getId: function () {
@@ -217,9 +217,6 @@ Lumens.Component = Class.$extend({
     getFormHtml: function () {
         return this.getCategory().html;
     },
-    isDataSource: function () {
-        return this.getCategory().class_type === "datasource";
-    },
     getClassType: function () {
         return this.getCategory().class_type;
     },
@@ -234,6 +231,12 @@ Lumens.Component = Class.$extend({
 Lumens.DataComponent = Lumens.Component.$extend({
     __init: function ($parent, config) {
         this.$super($parent, config);
+    },
+    isDataSource: function () {
+        return this.getCategory().class_type === "datasource";
+    },
+    isTransformer: function () {
+        return this.getCategory().class_type === "transformer";
     },
     getFormatEntryList: function (direction) {
         if (!this.isDataSource())

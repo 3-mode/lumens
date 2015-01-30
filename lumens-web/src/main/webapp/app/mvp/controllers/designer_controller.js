@@ -98,7 +98,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                     },
                     onAfterComponentAdd: function (component) {
                         LumensLog.log("Added compnoent:", component);
-                        $scope.projectOperator.add(component.getCompData(), component.getClassType());
+                        $scope.projectOperator.add(component);
                     }
                 });
                 $scope.projectOperator = new Lumens.ProjectOperator($scope.compCagegory, desgin.designPanel, $scope);
@@ -207,7 +207,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
     });
     // <******* Design View ------------------------------------------------------------
 })
-.controller("DesginCmdCtrl", function ($scope, $element, $compile, Notifier, ProjectListModal, ProjectCreateModal, ProjectSave, ProjectById) {
+.controller("DesginCmdCtrl", function ($scope, $element, $compile, Notifier, ProjectListModal, ProjectCreateModal, ProjectService, ProjectById) {
     // Handle desgin command button event
     LumensLog.log("In DesginCmdCtrl", $element);
     var i18n = $scope.i18n;
@@ -247,7 +247,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                 projectOperator.sync();
                 LumensLog.log("Saving project:", projectOperator.get());
                 LumensLog.log("Saveing propery:", $scope.$parent.componentProps);
-                ProjectSave.save(projectOperator.get(), function (response) {
+                ProjectService.save(projectOperator.get(), function (response) {
                     LumensLog.log("Save project status:", response);
                     if (response.status === "OK") {
                         var project = response.result_content.project[0];
@@ -300,22 +300,16 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
 .controller("ProjectConfigCtrl", function ($scope, $element, $compile, ProjectSeqConfigModal, StartEntryService) {
     $scope.onStartEntryListConfig = function () {
         console.log("onStartEntryListConfig");
-        StartEntryService.get({project_id: $scope.projectOperator.get().projectId}, function (response) {
-            if (response.status === 'OK') {
-                $scope.startEntryList = response.content.start_entry;
-                if ($element.find('#projectSeqConfig').length === 0) {
-                    ProjectSeqConfigModal.get(function (project_seq_config_modal_tmpl) {
-                        var projectSeqConfigDialog = $element.find("#project_dialog");
-                        projectSeqConfigDialog.append($compile(project_seq_config_modal_tmpl)($scope));
-                        $('#projectSeqConfig').on("hidden.bs.modal", function () {
-                            projectSeqConfigDialog.empty();
-                        }).modal({backdrop: "static"});
-                    });
-                }
-            }
-            else
-                Notifier.message("error", "Error", response);
-        })
+        $scope.startEntryList = $scope.projectOperator.discoverStartEntryList();
+        if ($element.find('#projectSeqConfig').length === 0) {
+            ProjectSeqConfigModal.get(function (project_seq_config_modal_tmpl) {
+                var projectSeqConfigDialog = $element.find("#project_dialog");
+                projectSeqConfigDialog.append($compile(project_seq_config_modal_tmpl)($scope));
+                $('#projectSeqConfig').on("hidden.bs.modal", function () {
+                    projectSeqConfigDialog.empty();
+                }).modal({backdrop: "static"});
+            });
+        }
     }
 })
 .controller("ProjectSeqConfigCtrl", function ($scope, $element) {
