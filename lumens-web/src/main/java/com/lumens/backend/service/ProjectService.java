@@ -284,60 +284,6 @@ public class ProjectService implements ServiceConstants {
         }
     }
 
-    @POST
-    @Path("{projectID}/start_entry")
-    @Produces("application/json")
-    @Consumes("application/json")
-    public Response setStartEntrySequenceOrder(@PathParam("projectID") long projectID, String message, @Context HttpServletRequest req) {
-        Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
-        if (attr != null) {
-            Pair<Long, TransformProject> pair = (Pair<Long, TransformProject>) attr;
-            TransformProject project = pair.getSecond();
-            if (project == null || pair.getFirst() != projectID)
-                return ServerUtils.getErrorMessageResponse(String.format("The project with id '%s' is not opened", projectID));
-            JsonNode messageJson = JsonUtility.createJson(message);
-            JsonNode contentJson = messageJson.get(CONTENT);
-            JsonNode actionJson = messageJson.get(ACTION);
-        }
-        return Response.ok().build();
-    }
-
-    @GET
-    @Path("{projectID}/start_entry")
-    @Produces("application/json")
-    public Response getProjectStartEntryList(@PathParam("projectID") long projectID, @Context HttpServletRequest req) throws IOException {
-        try {
-            Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
-            if (attr != null) {
-                Pair<Long, TransformProject> pair = (Pair<Long, TransformProject>) attr;
-                TransformProject project = pair.getSecond();
-                if (project == null || pair.getFirst() != projectID)
-                    return ServerUtils.getErrorMessageResponse(String.format("The project with id '%s' is not opened", projectID));
-
-                JsonUtility utility = JsonUtility.createJsonUtility();
-                JsonGenerator json = utility.getGenerator();
-                json.writeStartObject();
-                json.writeStringField("status", "OK");
-                json.writeObjectFieldStart("content");
-                json.writeArrayFieldStart("start_entry");
-                for (StartEntry entry : project.discoverStartEntryList()) {
-                    json.writeStartObject();
-                    json.writeStringField("component_id", entry.getStartComponent().getId());
-                    json.writeStringField("component_name", entry.getStartComponent().getName());
-                    json.writeStringField("format_name", entry.getStartFormatName());
-                    json.writeEndObject();
-                }
-                json.writeEndArray();
-                json.writeEndObject();
-                json.writeEndObject();
-                return Response.ok().entity(utility.toUTF8String()).build();
-            }
-            return Response.status(Response.Status.BAD_REQUEST).entity("No project loaded in current session!").build();
-        } catch (Exception ex) {
-            return ServerUtils.getErrorMessageResponse(ex);
-        }
-    }
-
     @GET
     @Path("{projectID}/format")
     @Produces("application/json")

@@ -17,6 +17,7 @@ public interface ServiceConstants {
     public String DEPLOY = "deploy";
     public String CLOSE = "close";
     public String DELETE = "delete";
+    public String SET = "set";
     public String CONTENT = "content";
     public String ACTION = "action";
     public String CURRENT__EDITING__PROJECT = "Current_Editing_Project";
