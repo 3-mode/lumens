@@ -3,21 +3,19 @@ package com.lumens.log;
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-
-
-import com.lumens.sysdb.DAOFactory;
-import com.lumens.sysdb.dao.InOutLogDAO;
-import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.handler.DataSourceResultHandler;
 import com.lumens.engine.handler.TransformerResultHandler;
+import com.lumens.sysdb.DAOFactory;
+import com.lumens.sysdb.dao.InOutLogDAO;
+import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.io.JsonUtility;
-import com.lumens.model.Element;
-import com.lumens.model.serializer.ElementSerializer;
 import java.sql.Timestamp;
 import java.util.List;
 import org.codehaus.jackson.JsonGenerator;
 import com.lumens.io.Utils;
+import com.lumens.model.Element;
+import com.lumens.model.serializer.ElementSerializer;
 
 /**
  *
