@@ -284,6 +284,24 @@ public class ProjectService implements ServiceConstants {
         }
     }
 
+    @POST
+    @Path("{projectID}/start_entry")
+    @Produces("application/json")
+    @Consumes("application/json")
+    public Response setStartEntrySequenceOrder(@PathParam("projectID") long projectID, String message, @Context HttpServletRequest req) {
+        Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
+        if (attr != null) {
+            Pair<Long, TransformProject> pair = (Pair<Long, TransformProject>) attr;
+            TransformProject project = pair.getSecond();
+            if (project == null || pair.getFirst() != projectID)
+                return ServerUtils.getErrorMessageResponse(String.format("The project with id '%s' is not opened", projectID));
+            JsonNode messageJson = JsonUtility.createJson(message);
+            JsonNode contentJson = messageJson.get(CONTENT);
+            JsonNode actionJson = messageJson.get(ACTION);
+        }
+        return Response.ok().build();
+    }
+
     @GET
     @Path("{projectID}/start_entry")
     @Produces("application/json")
@@ -327,7 +345,8 @@ public class ProjectService implements ServiceConstants {
                                            @QueryParam("format_name") String formatName,
                                            @QueryParam("format_path") String formatPath,
                                            @QueryParam("direction") String direction,
-                                           @Context HttpServletRequest req) {
+                                           @Context HttpServletRequest req
+    ) {
         if (componentId != null && direction != null) {
             Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
             if (attr != null) {

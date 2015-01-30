@@ -261,7 +261,6 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         }
         else if ("id_active" === id) {
             ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function (response) {
-                LumensLog.log(response);
                 Message(response);
                 sessionStorage.local_project_storage = angular.toJson({
                     id: projectOperator.get().projectId,
@@ -297,6 +296,25 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         }
         LumensLog.log("Clicked:", id);
     };
+})
+.controller("ProjectConfigCtrl", function ($scope, $element, $compile, ProjectSeqConfigModal) {
+    $scope.onStartEntryListConfig = function () {
+        console.log("onStartEntryListConfig");
+        if ($element.find('#projectSeqConfig').length === 0) {
+            ProjectSeqConfigModal.get(function (project_seq_config_modal_tmpl) {
+                var projectSeqConfigDialog = $element.find("#project_dialog");
+                projectSeqConfigDialog.append($compile(project_seq_config_modal_tmpl)($scope));
+                $('#projectSeqConfig').on("hidden.bs.modal", function () {
+                    projectSeqConfigDialog.empty();
+                }).modal({backdrop: "static"});
+            });
+        }
+    }
+})
+.controller("ProjectSeqConfigCtrl", function ($scope, $element) {
+    $scope.onSaveSeqConfig = function () {
+        $element.modal("hide");
+    }
 })
 .controller("ProjectListCtrl", function ($scope, $element, Notifier, ProjectList, ProjectById) {
     var i18n = $scope.i18n;

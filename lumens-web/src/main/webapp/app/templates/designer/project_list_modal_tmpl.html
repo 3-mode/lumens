@@ -3,27 +3,29 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myModalLabel">Project Catalog</h4>
+                <h4 class="modal-title" id="myModalLabel">{{i18n.id_project_catalog}}</h4>
             </div>
             <div class="modal-body table-responsive">
-                <div id='projectLoading'><img src='app/css/img/loading.gif'/></div>
+                <div id='projectLoading'><img src='app/css/img/loading.gif' alt="{{i18n.id_loading}}"/></div>
                 <table class="table" style="display: none;">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Description</th>
+                            <th>{{i18n.id_project_name}}</th>
+                            <th>{{i18n.id_project_desc}}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="project in projects" project-id="{{project.id}}" style="cursor: pointer;" ng-class="{'lumens-h-active':{{$index}}===selectIndex}" ng-click="selectProject($index, $event)" ng-dblclick="openProject()">
+                        <tr ng-repeat="project in projects" project-id="{{project.id}}" style="cursor: pointer;"
+                            ng-class="{'lumens-h-active':selectIndex === {{$index}} }"
+                            ng-click="selectProject($index, $event)" ng-dblclick="openProject()">
                             <td>{{project.name}}</td><td>{{project.description}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="openProject()">Open Project</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{i18n.id_project_close}}</button>
+                <button type="button" class="btn btn-primary" ng-click="openProject()">{{i18n.id_project_open}}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

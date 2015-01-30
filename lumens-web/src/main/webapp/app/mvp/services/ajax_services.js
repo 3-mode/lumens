@@ -39,6 +39,9 @@ Lumens.services.factory('ProjectListModal', function ($http, $q) {
 Lumens.services.factory('ProjectCreateModal', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/project_create_modal_tmpl.html");
 });
+Lumens.services.factory('ProjectSeqConfigModal', function ($http, $q) {
+    return createGetTemplateObject($http, $q, "app/templates/designer/project_exec_seq_modal_tmpl.html");
+});
 Lumens.services.factory('FormatRegistryModal', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/format_registry_modal_tmpl.html");
 });

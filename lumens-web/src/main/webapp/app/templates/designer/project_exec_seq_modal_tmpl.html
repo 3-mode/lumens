@@ -1,0 +1,31 @@
+<div id="projectSeqConfig" ng-controller="ProjectSeqConfigCtrl" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">{{i18n.id_project_exec_seq}}</h4>
+            </div>
+            <div class="modal-body table-responsive">
+                <table class="table" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>{{i18n.id_project_comp_name}}</th>
+                            <th>{{i18n.id_project_format_name}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="startEntry in startEntryList" component-id="{{startEntry.component_id}}" style="cursor: pointer;"
+                            ng-class="{'lumens-h-active':selectIndex === {{$index}} }"
+                            ng-click="selectStartEntry($index)">
+                            <td>{{startEntry.component_name}}</td><td>{{startEntry.format_name}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{i18n.id_project_seq_close}}</button>
+                <button type="button" class="btn btn-primary" ng-click="onSaveSeqConfig()">{{i18n.id_project_seq_save}}</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
