@@ -24,23 +24,16 @@
  */
 package com.lumens.connector.xml;
 
-import java.io.File;
 import java.io.FileNotFoundException;  
-import java.io.FileOutputStream;  
 import java.io.FileInputStream;  
-import java.io.IOException;  
-import java.io.IOException;  
 import java.io.InputStream;  
-import java.io.OutputStream;  
 
 import com.lumens.connector.Connector;
 import com.lumens.connector.FormatBuilder;
 import com.lumens.connector.Operation;
 import com.lumens.connector.Direction;
-import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
-import java.util.HashMap;
 import java.util.Map;
 
 public class XmlConnector implements Connector{
@@ -121,4 +114,14 @@ public class XmlConnector implements Connector{
     public Format getFormat(Format format, String path, Direction direction){
         return xml.getFormat(format, path, direction);
     }     
+
+    @Override
+    public void start() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void stop() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

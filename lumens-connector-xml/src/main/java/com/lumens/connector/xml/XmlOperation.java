@@ -3,11 +3,10 @@
  */
 package com.lumens.connector.xml;
 
+import com.lumens.connector.ElementChunk;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
-import com.lumens.model.Element;
 import com.lumens.model.Format;
-import java.util.List;
 
 /**
  *
@@ -16,19 +15,7 @@ import java.util.List;
 public class XmlOperation implements Operation {
 
     @Override
-    public void begin() {
-    }
-
-    @Override
-    public void end() {
-    }
-
-    @Override
-    public OperationResult execute(List<Element> input, Format output) throws Exception {
-        return null;
-    }
-
-    @Override
-    public void commit() {
+    public OperationResult execute(ElementChunk input, Format output) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
