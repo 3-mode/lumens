@@ -13,27 +13,28 @@ import org.quartz.JobListener;
  */
 public class DefaultJobListener implements JobListener {
     String name;
-    public DefaultJobListener(){
+
+    public DefaultJobListener() {
         name = "Default Listener";
     }
-    
+
     @Override
-    public String getName(){
+    public String getName() {
         return name;
     }
 
     @Override
-    public void jobToBeExecuted(JobExecutionContext jec){
-        
+    public void jobToBeExecuted(JobExecutionContext jec) {
+
     }
 
     @Override
-    public void jobExecutionVetoed(JobExecutionContext jec){
-        
+    public void jobExecutionVetoed(JobExecutionContext jec) {
+
     }
 
     @Override
-    public void jobWasExecuted(JobExecutionContext jec, JobExecutionException jee){
-        
+    public void jobWasExecuted(JobExecutionContext jec, JobExecutionException jee) {
+
     }
 }

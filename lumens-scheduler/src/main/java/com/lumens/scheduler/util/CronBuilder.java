@@ -1,7 +1,6 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-
 package com.lumens.scheduler.util;
 
 /**
@@ -16,8 +15,8 @@ public class CronBuilder {
     private long dayOfWeek;
     private long month;
     private long year;  // optional
-    
-    public CronBuilder(long hour, long minute, long second, long month, long dayOfMonth, long dayOfWeek, long year){
+
+    public CronBuilder(long hour, long minute, long second, long month, long dayOfMonth, long dayOfWeek, long year) {
         this.hour = hour;
         this.minute = minute;
         this.second = second;
@@ -26,8 +25,8 @@ public class CronBuilder {
         this.dayOfWeek = dayOfWeek;
         this.year = year;
     }
-    
-    public String getCronExpression(){
+
+    public String getCronExpression() {
         return null;
     }
 }

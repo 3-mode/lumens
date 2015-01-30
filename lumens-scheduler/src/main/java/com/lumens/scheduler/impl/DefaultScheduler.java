@@ -57,7 +57,7 @@ public class DefaultScheduler implements JobScheduler {
     public void setEngine(TransformEngine engine) {
         this.engine = engine;
     }
-            
+
     @Override
     public JobScheduler addSchedule(DefaultJob job, JobTrigger trigger) {
         if (jobMap.containsKey(job.getId())) {
@@ -65,8 +65,8 @@ public class DefaultScheduler implements JobScheduler {
         }
 
         Job dbJob = new Job(job.getId(), job.getName(), job.getDescription(),
-                trigger.getRepeatCount(), trigger.getRepeatInterval(),
-                new Timestamp(trigger.getStartTime().getTime()), new Timestamp(trigger.getEndTime().getTime()));
+                            trigger.getRepeatCount(), trigger.getRepeatInterval(),
+                            new Timestamp(trigger.getStartTime().getTime()), new Timestamp(trigger.getEndTime().getTime()));
         jobList.add(dbJob);
         long jobId = job.getId();
         jobMap.put(jobId, dbJob);
@@ -98,12 +98,12 @@ public class DefaultScheduler implements JobScheduler {
         List<Project> projectList = projectMap.get(jobId);
         for (Project proj : projectList) {
             JobDetail jobDetail = newJob(JobThread.class)
-                    .withIdentity(String.valueOf(proj.id), group)
-                    .usingJobData("ProjectData", proj.data)   
-                    .usingJobData("ProjectName", proj.name) 
-                    .build();
+            .withIdentity(String.valueOf(proj.id), group)
+            .usingJobData("ProjectData", proj.data)
+            .usingJobData("ProjectName", proj.name)
+            .build();
 
-            jobDetail.getJobDataMap().put("EngineObject", this.engine);            
+            jobDetail.getJobDataMap().put("EngineObject", this.engine);
             SimpleScheduleBuilder simpleBuilder = simpleSchedule();
             int repeatCount = job.repeatCount;
             if (repeatCount > 0) {
@@ -179,11 +179,11 @@ public class DefaultScheduler implements JobScheduler {
             throw new RuntimeException("A job must be added to scheduler before deleting.");
         }
 
-        jobList.remove(job);       
-                
+        jobList.remove(job);
+
         // Remove from map and scheduler
         String group = String.valueOf(job.id);
-        List<Project> projectList = projectMap.remove(jobId);        
+        List<Project> projectList = projectMap.remove(jobId);
         for (Project proj : projectList) {
             try {
                 sched.deleteJob(new JobKey(String.valueOf(proj.id), group));
