@@ -14,7 +14,6 @@ import com.lumens.sysdb.entity.Relation;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.List;
-import java.util.Date;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
