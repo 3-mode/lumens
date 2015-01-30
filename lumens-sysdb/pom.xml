@@ -8,6 +8,7 @@
     </parent>
     <artifactId>lumens-sysdb</artifactId>
     <packaging>jar</packaging>
+    <name>lumens-sysdb</name>
     <build>
         <plugins>
             <plugin>
@@ -47,9 +48,9 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>lumens-scheduler</artifactId>
+            <artifactId>lumens-model</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-    <name>lumens-sysdb</name>
 </project>
