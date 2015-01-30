@@ -61,8 +61,6 @@ public class ProjectHandlerImpl implements ProjectHandler {
     private TransformRuleEntry curRuleEntry;
     private String curComponentTargetId;
     private List<TransformRule> ruleList;
-    // Start
-    private List<StartEntry> startList;
 
     public ProjectHandlerImpl(TransformProject project) {
         this.project = project;
@@ -358,16 +356,14 @@ public class ProjectHandlerImpl implements ProjectHandler {
 
     @Override
     public void start_start_entry_list(Attributes meta) throws SAXException {
-        startList = new ArrayList<>();
     }
 
     @Override
     public void end_start_entry_list() throws SAXException {
-        project.getStartEntryList().addAll(startList);
     }
 
     @Override
     public void handle_start_entry(Attributes meta) throws SAXException {
-        startList.add(new StartEntry(meta.getValue("format-name"), tComponentCache.get(meta.getValue("component-id"))));
+        project.addStartEntry(new StartEntry(meta.getValue("format-name"), tComponentCache.get(meta.getValue("component-id"))));
     }
 }

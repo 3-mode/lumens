@@ -166,7 +166,7 @@ public class ProjectJsonParser {
         if (isNotNull(nameJson) && isNotNull(targetId)) {
             TransformComponent tComponent = tComponentCache.get(targetId.asText());
             if (tComponent != null)
-                project.getStartEntryList().add(new StartEntry(nameJson.asText(), tComponent));
+                project.addStartEntry(new StartEntry(nameJson.asText(), tComponent));
             else
                 throw new RuntimeException("Invalid target component id '" + targetId.asText() + "' !");
         }

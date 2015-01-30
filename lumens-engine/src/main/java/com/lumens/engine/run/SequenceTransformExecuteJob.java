@@ -3,12 +3,12 @@
  */
 package com.lumens.engine.run;
 
-import com.lumens.engine.handler.ResultHandler;
 import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.TransformProject;
+import com.lumens.engine.handler.ResultHandler;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -42,13 +42,9 @@ public class SequenceTransformExecuteJob implements Executor {
 
     @Override
     public void execute() {
-        try {
-            project.open();
-            this.executeTransform(project);
-            project.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        project.open();
+        this.executeTransform(project);
+        project.close();
     }
 
     private void executeStart(List<TransformComponent> componentList) {
@@ -62,7 +58,7 @@ public class SequenceTransformExecuteJob implements Executor {
     }
 
     private List<TransformComponent> buildComponentSequenceList(TransformProject transformProject) {
-        List<StartEntry> startEntryList = transformProject.getStartEntryList();
+        List<StartEntry> startEntryList = transformProject.discoverStartEntryList();
         List<TransformComponent> startList = new LinkedList<>();
         for (StartEntry entry : startEntryList) {
             startList.add(entry.getStartComponent());
@@ -84,7 +80,7 @@ public class SequenceTransformExecuteJob implements Executor {
         try {
             List<TransformComponent> componentList = this.buildComponentSequenceList(transformProject);
             this.executeStart(componentList);
-            List<StartEntry> startList = transformProject.getStartEntryList();
+            List<StartEntry> startList = transformProject.discoverStartEntryList();
             for (StartEntry entry : startList) {
                 SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
                 executorStack.push(new TransformExecuteContext(entry.getStartComponent(), entry.getStartFormatName(), handlers));

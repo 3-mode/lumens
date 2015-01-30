@@ -20,6 +20,7 @@ public class TransformProject {
 
     private List<DataSource> datasourceList = new ArrayList<>();
     private List<DataTransformer> transformerList = new ArrayList<>();
+    private List<StartEntry> startList = new ArrayList<>();
     private String name;
     private String description;
     private boolean isOpen;
@@ -56,43 +57,51 @@ public class TransformProject {
         this.description = description;
     }
 
-    public List<StartEntry> getStartEntryList() {
-        List<StartEntry> startList = new ArrayList<>();
+    public void setStartEntryList(List<StartEntry> startList) {
+        this.startList = startList;
+    }
+
+    public List<StartEntry> discoverStartEntryList() {
+        // By default the order is on created order
         for (DataTransformer dt : transformerList) {
-            // build start point list
             for (TransformRuleEntry tr : dt.getTransformRuleList())
                 if (tr.getSourceId() == null || tr.getSourceId().isEmpty() || tr.getSourceId().equals(dt.getId()))
-                    startList.add(new StartEntry(tr.getName(), dt));
+                    addStartEntry(new StartEntry(tr.getName(), dt));
         }
         for (DataSource ds : this.datasourceList) {
             Map<String, FormatEntry> inFmtList = ds.getRegisteredFormatList(Direction.IN);
             for (FormatEntry entry : ds.getRegisteredFormatList(Direction.OUT).values()) {
                 if (!inFmtList.containsKey(entry.getName()))
-                    startList.add(new StartEntry(entry.getName(), ds));
+                    addStartEntry(new StartEntry(entry.getName(), ds));
             }
         }
         return startList;
+    }
+
+    public void addStartEntry(StartEntry startEntry) {
+        for (StartEntry entry : startList) {
+            if (startEntry.getStartComponent().getId().equals(entry.getStartComponent().getId())
+                && startEntry.getStartFormatName().equals(entry.getStartFormatName()))
+                return;
+        }
+        startList.add(startEntry);
     }
 
     public boolean isOpen() {
         return isOpen;
     }
 
-    public void open() throws Exception {
+    public void open() {
         if (!isOpen()) {
-            try {
-                for (DataSource ds : datasourceList)
-                    ds.open();
-                for (DataTransformer dt : transformerList)
-                    dt.open();
-                isOpen = true;
-            } catch (Exception ex) {
-                throw new Exception(ex);
-            }
+            for (DataSource ds : datasourceList)
+                ds.open();
+            for (DataTransformer dt : transformerList)
+                dt.open();
+            isOpen = true;
         }
     }
 
-    public void close() throws Exception {
+    public void close() {
         if (isOpen()) {
             for (DataSource ds : datasourceList)
                 ds.close();

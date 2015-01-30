@@ -40,7 +40,7 @@ import static org.junit.Assert.*;
  */
 public class TransformEngineTest {
 
-    private TransformEngine transformEngine;
+    private final TransformEngine transformEngine;
 
     public static String generateID() {
         for (int i = 0; i < 100; ++i)
@@ -109,6 +109,7 @@ public class TransformEngineTest {
         DataSource personDs = new DataSource(Mock.PERSON.name(), generateID());
         personDs.open();
         System.out.println(String.format("Person DS id '%s'", personDs.getId()));
+
         DataSource warehouseDs = new DataSource(Mock.WAREHOUSE.name(), generateID());
         warehouseDs.open();
         System.out.println(String.format("WareHouse DS id '%s'", warehouseDs.getId()));
@@ -116,7 +117,6 @@ public class TransformEngineTest {
         DataSource finalDs = new DataSource(Mock.FINAL.name(), generateID());
         finalDs.open();
         System.out.println(String.format("Final DS id '%s'", finalDs.getId()));
-        // FormatEntry p11 = personDs.registerFormat("GetPerson", personDs.getFormatList(Direction.IN).get("Person"), Direction.IN);
 
         FormatEntry p10 = personDs.registerFormat("GetPerson0", personDs.getFormatList(Direction.OUT).get("Person"), Direction.OUT);
         FormatEntry p12 = personDs.registerFormat("GetPerson1", personDs.getFormatList(Direction.OUT).get("Person"), Direction.OUT);

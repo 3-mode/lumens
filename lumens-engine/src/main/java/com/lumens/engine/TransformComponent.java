@@ -36,7 +36,7 @@ public interface TransformComponent {
 
     public boolean isOpen();
 
-    public void open() throws Exception;
+    public void open();
 
     public void close();
 

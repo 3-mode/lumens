@@ -63,7 +63,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     }
 
     @Override
-    public void open() throws Exception {
+    public void open() {
         if (!isOpen()) {
             connector.setPropertyList(propertyList);
             connector.open();
