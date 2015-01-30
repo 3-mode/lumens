@@ -6,8 +6,6 @@ package com.lumens.scheduler.impl;
 import com.lumens.engine.TransformEngine;
 import com.lumens.scheduler.JobScheduler;
 import com.lumens.scheduler.JobTrigger;
-import com.lumens.engine.TransformProject;
-import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.dao.RelationDAO;
@@ -249,11 +247,8 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     private List<Job> loadJobFromDb() {
-        List<Job> jobList = new ArrayList();
         JobDAO jobDAO = DAOFactory.getJobDAO();
-        jobList.addAll(jobDAO.getAllJob());
-
-        return jobList;
+        return jobDAO.getAllJob();
     }
 
     private List<Project> loadProjectFromDb(long jobId) {
