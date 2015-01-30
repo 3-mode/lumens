@@ -297,18 +297,25 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         LumensLog.log("Clicked:", id);
     };
 })
-.controller("ProjectConfigCtrl", function ($scope, $element, $compile, ProjectSeqConfigModal) {
+.controller("ProjectConfigCtrl", function ($scope, $element, $compile, ProjectSeqConfigModal, StartEntryService) {
     $scope.onStartEntryListConfig = function () {
         console.log("onStartEntryListConfig");
-        if ($element.find('#projectSeqConfig').length === 0) {
-            ProjectSeqConfigModal.get(function (project_seq_config_modal_tmpl) {
-                var projectSeqConfigDialog = $element.find("#project_dialog");
-                projectSeqConfigDialog.append($compile(project_seq_config_modal_tmpl)($scope));
-                $('#projectSeqConfig').on("hidden.bs.modal", function () {
-                    projectSeqConfigDialog.empty();
-                }).modal({backdrop: "static"});
-            });
-        }
+        StartEntryService.get({project_id: $scope.projectOperator.get().projectId}, function (response) {
+            if (response.status === 'OK') {
+                $scope.startEntryList = response.content.start_entry;
+                if ($element.find('#projectSeqConfig').length === 0) {
+                    ProjectSeqConfigModal.get(function (project_seq_config_modal_tmpl) {
+                        var projectSeqConfigDialog = $element.find("#project_dialog");
+                        projectSeqConfigDialog.append($compile(project_seq_config_modal_tmpl)($scope));
+                        $('#projectSeqConfig').on("hidden.bs.modal", function () {
+                            projectSeqConfigDialog.empty();
+                        }).modal({backdrop: "static"});
+                    });
+                }
+            }
+            else
+                Notifier.message("error", "Error", response);
+        })
     }
 })
 .controller("ProjectSeqConfigCtrl", function ($scope, $element) {

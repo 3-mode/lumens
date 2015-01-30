@@ -323,6 +323,7 @@ public class ProjectService implements ServiceConstants {
                 for (StartEntry entry : project.discoverStartEntryList()) {
                     json.writeStartObject();
                     json.writeStringField("component_id", entry.getStartComponent().getId());
+                    json.writeStringField("component_name", entry.getStartComponent().getName());
                     json.writeStringField("format_name", entry.getStartFormatName());
                     json.writeEndObject();
                 }
