@@ -9,6 +9,7 @@ import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.component.instrument.DataTransformer;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -62,28 +63,40 @@ public class TransformProject {
     }
 
     public List<StartEntry> discoverStartEntryList() {
+        List<StartEntry> discoverStartList = new ArrayList<>();
         // By default the order is on created order
         for (DataTransformer dt : transformerList) {
             for (TransformRuleEntry tr : dt.getTransformRuleList())
                 if (tr.getSourceId() == null || tr.getSourceId().isEmpty() || tr.getSourceId().equals(dt.getId()))
-                    addStartEntry(new StartEntry(tr.getName(), dt));
+                    discoverStartList.add(new StartEntry(tr.getName(), dt));
         }
         for (DataSource ds : this.datasourceList) {
             Map<String, FormatEntry> inFmtList = ds.getRegisteredFormatList(Direction.IN);
             for (FormatEntry entry : ds.getRegisteredFormatList(Direction.OUT).values()) {
                 if (!inFmtList.containsKey(entry.getName()))
-                    addStartEntry(new StartEntry(entry.getName(), ds));
+                    discoverStartList.add(new StartEntry(entry.getName(), ds));
             }
         }
+
+        removeInvalidStartEntry(discoverStartList);
+        for (StartEntry startEntry : discoverStartList)
+            this.addStartEntry(startEntry);
+
         return startList;
     }
 
-    public void addStartEntry(StartEntry startEntry) {
-        for (StartEntry entry : startList) {
-            if (startEntry.getStartComponent().getId().equals(entry.getStartComponent().getId())
-                && startEntry.getStartFormatName().equals(entry.getStartFormatName()))
-                return;
+    private void removeInvalidStartEntry(List<StartEntry> discoverStartList) {
+        Iterator<StartEntry> it = startList.iterator();
+        while (it.hasNext()) {
+            StartEntry next = it.next();
+            if (!discoverStartList.contains(next))
+                it.remove();
         }
+    }
+
+    public void addStartEntry(StartEntry startEntry) {
+        if (startList.contains(startEntry))
+            return;
         startList.add(startEntry);
     }
 

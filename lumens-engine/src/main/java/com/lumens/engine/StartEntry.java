@@ -30,4 +30,23 @@ public class StartEntry {
     public String getStartFormatName() {
         return startFormatName;
     }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "StartEntry{" + "tComponent=" + tComponent.getId() + ", startFormatName=" + startFormatName + '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        final StartEntry other = (StartEntry) obj;
+        return other.getStartFormatName().equals(getStartFormatName())
+               && other.getStartComponent().getId().equals(getStartComponent().getId());
+    }
 }
