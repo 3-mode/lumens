@@ -162,7 +162,7 @@ public class ProjectJsonParser {
 
     private void readStartEntryFromJson(JsonNode startEntryJson) {
         JsonNode nameJson = startEntryJson.get("format_name");
-        JsonNode targetId = startEntryJson.get("target_id");
+        JsonNode targetId = startEntryJson.get("component_id");
         if (isNotNull(nameJson) && isNotNull(targetId)) {
             TransformComponent tComponent = tComponentCache.get(targetId.asText());
             if (tComponent != null)

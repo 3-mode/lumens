@@ -6,7 +6,7 @@ package com.lumens.engine.core;
 import com.lumens.connector.Connector;
 import com.lumens.connector.ConnectorFactory;
 import com.lumens.connector.Direction;
-import com.lumens.engine.ConnectorFactoryHolder;
+import com.lumens.engine.ConnectorFactoryManager;
 import com.lumens.engine.TransformEngineContext;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformEngine;
@@ -54,7 +54,7 @@ public class TransformEngineTest {
 
     private void mockEngeinContext() {
 
-        TransformEngineContext.start(new ConnectorFactoryHolder() {
+        TransformEngineContext.start(new ConnectorFactoryManager() {
 
             @Override
             public ConnectorFactory getFactory(String componentType) {

@@ -368,6 +368,6 @@ public class ProjectHandlerImpl implements ProjectHandler {
 
     @Override
     public void handle_start_entry(Attributes meta) throws SAXException {
-        startList.add(new StartEntry(meta.getValue("format-name"), tComponentCache.get(meta.getValue("target-id"))));
+        startList.add(new StartEntry(meta.getValue("format-name"), tComponentCache.get(meta.getValue("component-id"))));
     }
 }

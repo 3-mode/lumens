@@ -9,7 +9,7 @@ import com.lumens.connector.ConnectorFactory;
  *
  * @author shaofeng.wang
  */
-public interface ConnectorFactoryHolder {
+public interface ConnectorFactoryManager {
 
     public ConnectorFactory getFactory(String componentType);
 }

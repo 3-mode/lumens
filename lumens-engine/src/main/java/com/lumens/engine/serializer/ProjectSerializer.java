@@ -218,7 +218,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     }
 
     private void writeStartEntryToXml(StringUTF8Writer xml, StartEntry se, String indent) throws Exception {
-        xml.print(indent).print("<start-entry format-name=\"").print(se.getStartFormatName()).print("\" target-id=\"").print(se.getStartComponent().getId()).println("\"/>");
+        xml.print(indent).print("<start-entry format-name=\"").print(se.getStartFormatName()).print("\" component-id=\"").print(se.getStartComponent().getId()).println("\"/>");
     }
 
     private void writeTransformRuleList(StringUTF8Writer xml, List<TransformRuleEntry> transformRuleList, String indent) throws Exception {
@@ -406,7 +406,7 @@ public class ProjectSerializer implements XmlSerializer, JsonSerializer {
     private void writeStartEntryToJson(JsonGenerator jGenerator, StartEntry se) throws Exception {
         jGenerator.writeStartObject();
         jGenerator.writeStringField("format_name", se.getStartFormatName());
-        jGenerator.writeStringField("target_id", se.getStartComponent().getId());
+        jGenerator.writeStringField("component_id", se.getStartComponent().getId());
         jGenerator.writeEndObject();
     }
 

@@ -41,7 +41,7 @@ public class TransformEngine {
             for (File addinItemFile : addinPathFile.listFiles()) {
                 ac.installAddIn(addinItemFile.toURI().toURL()).start();
             }
-            TransformEngineContext.start(new DefaultConnectorFactoryHolder(ac));
+            TransformEngineContext.start(new DefaultConnectorFactoryManager(ac));
         } catch (MalformedURLException ex) {
             throw new LumensException(ex);
         }

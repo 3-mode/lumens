@@ -12,14 +12,14 @@ import com.lumens.connector.ConnectorFactory;
 public class TransformEngineContext {
 
     private static TransformEngineContext instance;
-    private final ConnectorFactoryHolder fHolder;
+    private final ConnectorFactoryManager fManager;
 
-    private TransformEngineContext(ConnectorFactoryHolder fHolder) {
-        this.fHolder = fHolder;
+    private TransformEngineContext(ConnectorFactoryManager fManager) {
+        this.fManager = fManager;
     }
 
-    public static void start(ConnectorFactoryHolder fHolder) {
-        instance = new TransformEngineContext(fHolder);
+    public static void start(ConnectorFactoryManager fManager) {
+        instance = new TransformEngineContext(fManager);
     }
 
     public static TransformEngineContext getContext() {
@@ -27,8 +27,8 @@ public class TransformEngineContext {
     }
 
     public ConnectorFactory getConnectorFactory(String componentType) {
-        if (fHolder != null)
-            return fHolder.getFactory(componentType);
+        if (fManager != null)
+            return fManager.getFactory(componentType);
         return null;
     }
 }
