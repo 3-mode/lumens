@@ -300,7 +300,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
 .controller("ProjectConfigCtrl", function ($scope, $element, $compile, ProjectSeqConfigModal) {
     $scope.onStartEntryListConfig = function () {
         console.log("onStartEntryListConfig");
-        $scope.startEntryList = $scope.projectOperator.discoverStartEntryList();
+        $scope.startEntryList = $scope.projectOperator.getStartEntryList();
         if ($element.find('#projectSeqConfig').length === 0) {
             ProjectSeqConfigModal.get(function (project_seq_config_modal_tmpl) {
                 var projectSeqConfigDialog = $element.find("#project_dialog");

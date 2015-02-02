@@ -64,10 +64,39 @@ Lumens.ProjectOperator = Class.$extend({
                 curComp.getCompData().target.push({id: targetComp.getCompData().id});
             });
         });
+        this.$scope.project.start_entry = this.getStartEntryList();
     },
-    discoverStartEntryList: function () {
+    containsStartEntry: function (entry, startEntryList) {
+        for (var i in startEntryList) {
+            // Check if saved start entry is valid still.
+            if (entry.component_id === startEntryList[i].component_id
+            && entry.format_name === startEntryList[i].format_name) {
+                return true;
+            }
+        }
+        return false;
+    },
+    discoverValidStartEntry: function (discoverStartEntryList) {
+        var validStartEntryList = [];
+        var projectStartEntryList = this.$scope.project.start_entry;
+        for (var i in projectStartEntryList) {
+            var entry = projectStartEntryList[i];
+            if (this.containsStartEntry(entry, discoverStartEntryList))
+                validStartEntryList.push(entry);
+        }
+        return validStartEntryList;
+    },
+    updateStartEntryListFromDiscoverStartEntryList: function (saveValidStartEntryList, discoverStartEntryList) {
+        for (var i in discoverStartEntryList) {
+            var entry = discoverStartEntryList[i];
+            if (!this.containsStartEntry(entry, saveValidStartEntryList))
+                this.saveValidStartEntryList.push(entry);
+        }
+    },
+    getStartEntryList: function () {
         var discoverStartEntryList = [];
         var componentList = this.componentPanel.getComponentList();
+        // Get all avialiable start entries
         for (var i in componentList) {
             var comp = componentList[i];
             if (comp.isTransformer()) {
@@ -95,6 +124,10 @@ Lumens.ProjectOperator = Class.$extend({
                 }
             }
         }
+        // Check loaded start entries if they are avialiable
+        var saveValidStartEntryList = this.discoverValidStartEntry(discoverStartEntryList);
+        // Add the new start entries into the start entry list
+        this.updateStartEntryListFromDiscoverStartEntryList(saveValidStartEntryList, discoverStartEntryList);
         return discoverStartEntryList;
     },
     setId: function (projectId) {
@@ -142,7 +175,7 @@ Lumens.ProjectOperator = Class.$extend({
                         return true;
                     });
                 }
-            })
+            });
         }
         this.$scope.$broadcast("InitProject");
     }
