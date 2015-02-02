@@ -297,7 +297,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         LumensLog.log("Clicked:", id);
     };
 })
-.controller("ProjectConfigCtrl", function ($scope, $element, $compile, ProjectSeqConfigModal, StartEntryService) {
+.controller("ProjectConfigCtrl", function ($scope, $element, $compile, ProjectSeqConfigModal) {
     $scope.onStartEntryListConfig = function () {
         console.log("onStartEntryListConfig");
         $scope.startEntryList = $scope.projectOperator.discoverStartEntryList();

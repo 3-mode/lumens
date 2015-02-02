@@ -39,7 +39,7 @@ Lumens.i18n = {
     id_project_name_placeholder: "Project Name",
     id_project_desc: "Description",
     id_project_config: "Configuration",
-    id_project_exec_seq: "Execute Sequence Configuration ...",
+    id_project_exec_seq: "Execute Sequence Configuration",
     id_project_seq: "Sequence",
     id_project_comp_name: "Component Name",
     id_project_format_name: "Format Name",
