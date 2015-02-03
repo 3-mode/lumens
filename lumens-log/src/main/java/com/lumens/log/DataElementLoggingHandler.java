@@ -10,7 +10,6 @@ import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.io.JsonUtility;
-import java.sql.Timestamp;
 import java.util.List;
 import org.codehaus.jackson.JsonGenerator;
 import com.lumens.io.Utils;
