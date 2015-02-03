@@ -31,4 +31,21 @@ public class InOutLogItem {
     public String data;
     @Column(name = "last_modif_time")
     public Timestamp lastModifTime;
+
+    public InOutLogItem(long logID, long componentID, String componentName,
+                        long projectID, String projectName, String direct,
+                        String targetName, String data, long time) {
+        this.logID = logID;
+        this.componentID = componentID;
+        this.componentName = componentName;
+        this.projectID = projectID;
+        this.projectName = projectName;
+        this.direction = direct;
+        this.targetName = targetName;
+        this.data = data;
+        this.lastModifTime = new Timestamp(time);
+    }
+
+    public InOutLogItem() {
+    }
 }
