@@ -3,22 +3,22 @@
     <database-access-object name="RelationDAO">
         <sql name="AllRelation">
 <![CDATA[
-SELECT job_id, project_id FROM LUNS_RELATION WHERE job_id = %d
+SELECT job_id, project_id FROM LUNS_JOB_PROJECT_RELATION WHERE job_id = %d
 ]]>
         </sql>
         <sql name="CreateRelation">
 <![CDATA[
-INSERT INTO LUNS_RELATION (job_id, project_id) VALUES (?,?)
+INSERT INTO LUNS_JOB_PROJECT_RELATION (job_id, project_id) VALUES (?,?)
 ]]>
         </sql>        
         <sql name="DeleteAllRelation">
 <![CDATA[
-DELETE FROM LUNS_RELATION WHERE job_id = %d
+DELETE FROM LUNS_JOB_PROJECT_RELATION WHERE job_id = %d
 ]]>
         </sql>
         <sql name="DeleteRelation">
 <![CDATA[
-DELETE FROM LUNS_RELATION WHERE job_id = ? and project_id = %d
+DELETE FROM LUNS_JOB_PROJECT_RELATION WHERE job_id = ? and project_id = %d
 ]]>
         </sql>        
     </database-access-object>

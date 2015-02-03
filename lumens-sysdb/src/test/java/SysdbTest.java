@@ -7,10 +7,10 @@ import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.dao.JobDAO;
-import com.lumens.sysdb.dao.RelationDAO;
+import com.lumens.sysdb.dao.JobProjectRelationDAO;
 import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.sysdb.entity.Job;
-import com.lumens.sysdb.entity.Relation;
+import com.lumens.sysdb.entity.JobProjectRelation;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.List;
@@ -27,9 +27,9 @@ public class SysdbTest {
 
     @Before
     public void testCreateJob() {
-        Job dbJob = new Job(1234, "firstJob", "This is a test job.", 1, 1, new Timestamp(System.currentTimeMillis()),new Timestamp(System.currentTimeMillis() + 2000));
+        Job dbJob = new Job(1234, "firstJob", "This is a test job.", 1, 1, System.currentTimeMillis(),System.currentTimeMillis() + 2000);
         JobDAO pDAO = DAOFactory.getJobDAO();
-        RelationDAO projectRelation = DAOFactory.getRelationDAO();
+        JobProjectRelationDAO projectRelation = DAOFactory.getRelationDAO();
         Job job = pDAO.getJob(1234);
         if (job != null) {
             pDAO.delete(job.id);            
@@ -55,10 +55,10 @@ public class SysdbTest {
         System.out.println();
         assertNotNull(job);
 
-        RelationDAO projectRelation = DAOFactory.getRelationDAO();
-        List<Relation> list = projectRelation.getAllRelation(job.id);
+        JobProjectRelationDAO projectRelation = DAOFactory.getRelationDAO();
+        List<JobProjectRelation> list = projectRelation.getAllRelation(job.id);
         System.out.println("Jobs' Project list:");
-        for (Relation relation : list) {
+        for (JobProjectRelation relation : list) {
             System.out.println("Project id = " + relation.projectId);
         }
     }
@@ -76,10 +76,10 @@ public class SysdbTest {
             System.out.println("  start time = " + job.startTime.toString());
             System.out.println("  end time = " + job.endTime.toString());            
 
-            RelationDAO projectRelation = DAOFactory.getRelationDAO();
-            List<Relation> list = projectRelation.getAllRelation(job.id);
+            JobProjectRelationDAO projectRelation = DAOFactory.getRelationDAO();
+            List<JobProjectRelation> list = projectRelation.getAllRelation(job.id);
             System.out.println("Jobs' Project list:");
-            for (Relation relation : list) {
+            for (JobProjectRelation relation : list) {
                 System.out.println("Project id = " + relation.projectId);
             }
             System.out.println();
@@ -91,7 +91,7 @@ public class SysdbTest {
     public void testDeleteJob() {
         JobDAO pDAO = DAOFactory.getJobDAO();
         pDAO.delete(1234);
-        RelationDAO projectRelation = DAOFactory.getRelationDAO();
+        JobProjectRelationDAO projectRelation = DAOFactory.getRelationDAO();
         projectRelation.deleteAllRelation(1234);
     }
 

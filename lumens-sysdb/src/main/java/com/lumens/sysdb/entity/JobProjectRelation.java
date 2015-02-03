@@ -10,19 +10,19 @@ import com.lumens.sysdb.Table;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-@Table(name = "LUNS_RELATION")
-public class Relation {
+@Table(name = "LUNS_JOB_PROJECT_RELATION")
+public class JobProjectRelation {
 
     @Column(name = "job_id")
     public long jobId;
     @Column(name = "project_id")
     public long projectId;
 
-    public Relation(long jobId, long projectId) {
+    public JobProjectRelation(long jobId, long projectId) {
         this.jobId = jobId;
         this.projectId = projectId;
     }
 
-    public Relation() {
+    public JobProjectRelation() {
     }
 }

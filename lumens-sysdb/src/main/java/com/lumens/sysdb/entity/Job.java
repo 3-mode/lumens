@@ -29,14 +29,14 @@ public class Job {
     @Column(name = "end_time")
     public Timestamp endTime;
 
-    public Job(long id, String name, String description, int repeatCount, int interval, Timestamp startTime, Timestamp endTime) {
+    public Job(long id, String name, String description, int repeatCount, int interval, long startTime, long endTime) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.repeatCount = repeatCount;
         this.interval = interval;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startTime = new Timestamp(startTime);
+        this.endTime = new Timestamp(endTime);
     }
 
     public Job() {
