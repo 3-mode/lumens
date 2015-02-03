@@ -46,21 +46,15 @@ public class DataElementLoggingHandler implements DataSourceResultHandler, Trans
                 return;
             InOutLogDAO inoutLogDAO = DAOFactory.getInOutLogDAO();
             for (Element e : eList) {
-                InOutLogItem item = new InOutLogItem();
-                item.logID = Utils.generateID();
-                item.componentID = Long.parseLong(src.getId());
-                item.componentName = src.getName();
-                item.projectID = this.projectID;
-                item.projectName = this.projectName;
-                item.direction = direction;
-                item.targetName = targetName;
-                item.lastModifTime = new Timestamp(System.currentTimeMillis());
                 JsonUtility utility = JsonUtility.createJsonUtility();
                 JsonGenerator json = utility.getGenerator();
                 json.writeStartObject();
                 new ElementSerializer(e, true).writeToJson(json);
                 json.writeEndObject();
-                item.data = utility.toUTF8String();
+                InOutLogItem item = new InOutLogItem(Utils.generateID(), Long.parseLong(src.getId()), src.getName(),
+                                                     this.projectID, this.projectName, direction, targetName,
+                                                     utility.toUTF8String(),
+                                                     System.currentTimeMillis());
                 inoutLogDAO.create(item);
             }
         } catch (Exception ex) {
