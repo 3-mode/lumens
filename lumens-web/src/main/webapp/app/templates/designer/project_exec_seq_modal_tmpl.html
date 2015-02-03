@@ -6,6 +6,10 @@
                 <h4 class="modal-title" id="myModalLabel">{{i18n.id_project_exec_seq}}</h4>
             </div>
             <div class="modal-body table-responsive">
+                <div class="lumens-button-bar">
+                    <span class="lumens-button" ng-click="onSeqConfigUp()"><i class="lumens-icon-up lumens-icon-gap"></i>{{i18n.id_up}}</span>
+                    <span class="lumens-button" ng-click="onSeqConfigDown()"><i class="lumens-icon-down lumens-icon-gap"></i>{{i18n.id_down}}</span>
+                </div>
                 <table class="table">
                     <thead>
                         <tr>
@@ -14,8 +18,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="startEntry in startEntryList" component-id="{{startEntry.component_id}}" style="cursor: pointer;"
-                            ng-class="{'lumens-h-active':selectIndex === {{$index}} }"
+                        <tr ng-repeat="startEntry in startEntryList track by $index" component-id="{{startEntry.component_id}}" style="cursor: pointer;"
+                            ng-class="{'lumens-h-active':seqSelectIndex === {{$index}} }"
                             ng-click="selectStartEntry($index)">
                             <td>{{startEntry.component_name}}</td><td>{{startEntry.format_name}}</td>
                         </tr>

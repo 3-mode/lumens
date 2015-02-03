@@ -313,9 +313,31 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
     }
 })
 .controller("ProjectSeqConfigCtrl", function ($scope, $element) {
-    $scope.onSaveSeqConfig = function () {
-        $element.modal("hide");
+    $scope.selectStartEntry = function (index) {
+        $scope.seqSelectIndex = index;
+    };
+    $scope.onSeqConfigUp = function () {
+        if ($scope.seqSelectIndex > 0) {
+            var index = $scope.seqSelectIndex;
+            $scope.seqSelectIndex = index - 1;
+            var swap = $scope.startEntryList[index - 1];
+            $scope.startEntryList[index - 1] = $scope.startEntryList[index];
+            $scope.startEntryList[index] = swap;
+        }
+    };
+    $scope.onSeqConfigDown = function () {
+        if ($scope.seqSelectIndex < ($scope.startEntryList.length - 1)) {
+            var index = $scope.seqSelectIndex;
+            $scope.seqSelectIndex = index + 1;
+            var swap = $scope.startEntryList[index + 1];
+            $scope.startEntryList[index + 1] = $scope.startEntryList[index];
+            $scope.startEntryList[index] = swap;
+        }
     }
+    $scope.onSaveSeqConfig = function () {
+        $scope.project.start_entry = $scope.startEntryList;
+        $element.modal("hide");
+    };
 })
 .controller("ProjectListCtrl", function ($scope, $element, Notifier, ProjectList, ProjectById) {
     var i18n = $scope.i18n;

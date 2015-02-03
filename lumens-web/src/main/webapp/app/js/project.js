@@ -66,31 +66,30 @@ Lumens.ProjectOperator = Class.$extend({
         });
         this.$scope.project.start_entry = this.getStartEntryList();
     },
-    containsStartEntry: function (entry, startEntryList) {
+    getContainedStartEntry: function (entry, startEntryList) {
         for (var i in startEntryList) {
             // Check if saved start entry is valid still.
             if (entry.component_id === startEntryList[i].component_id
             && entry.format_name === startEntryList[i].format_name) {
-                return true;
+                return startEntryList[i];
             }
         }
-        return false;
     },
-    discoverValidStartEntry: function (discoverStartEntryList) {
+    discoverSavedValidStartEntry: function (discoverStartEntryList) {
         var validStartEntryList = [];
         var projectStartEntryList = this.$scope.project.start_entry;
         for (var i in projectStartEntryList) {
-            var entry = projectStartEntryList[i];
-            if (this.containsStartEntry(entry, discoverStartEntryList))
+            var entry = this.getContainedStartEntry(projectStartEntryList[i], discoverStartEntryList);
+            if (entry)
                 validStartEntryList.push(entry);
         }
         return validStartEntryList;
     },
     updateStartEntryListFromDiscoverStartEntryList: function (saveValidStartEntryList, discoverStartEntryList) {
         for (var i in discoverStartEntryList) {
-            var entry = discoverStartEntryList[i];
-            if (!this.containsStartEntry(entry, saveValidStartEntryList))
-                this.saveValidStartEntryList.push(entry);
+            var entry = this.getContainedStartEntry(discoverStartEntryList[i], saveValidStartEntryList)
+            if (!entry)
+                saveValidStartEntryList.push(entry);
         }
     },
     getStartEntryList: function () {
@@ -125,10 +124,10 @@ Lumens.ProjectOperator = Class.$extend({
             }
         }
         // Check loaded start entries if they are avialiable
-        var saveValidStartEntryList = this.discoverValidStartEntry(discoverStartEntryList);
+        var saveValidStartEntryList = this.discoverSavedValidStartEntry(discoverStartEntryList);
         // Add the new start entries into the start entry list
         this.updateStartEntryListFromDiscoverStartEntryList(saveValidStartEntryList, discoverStartEntryList);
-        return discoverStartEntryList;
+        return saveValidStartEntryList;
     },
     setId: function (projectId) {
         this.projectId = projectId;

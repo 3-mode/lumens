@@ -15,7 +15,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="project in projects" project-id="{{project.id}}" style="cursor: pointer;"
+                        <tr ng-repeat="project in projects track by $index" project-id="{{project.id}}" style="cursor: pointer;"
                             ng-class="{'lumens-h-active':selectIndex === {{$index}} }"
                             ng-click="selectProject($index, $event)" ng-dblclick="openProject()">
                             <td>{{project.name}}</td><td>{{project.description}}</td>
