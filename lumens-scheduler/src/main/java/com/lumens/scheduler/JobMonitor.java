@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface JobMonitor {
     public List<String> getRunningJobIdList();
+    public List<String> getPendingJobIdList();
     public List<String> getRunningProjectIdList(long jobId);
     public String getProjectStatus(long JobId);
 }
