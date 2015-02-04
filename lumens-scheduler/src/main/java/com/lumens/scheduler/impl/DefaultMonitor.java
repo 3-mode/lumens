@@ -4,14 +4,12 @@
 package com.lumens.scheduler.impl;
 
 import com.lumens.scheduler.JobMonitor;
-import com.lumens.scheduler.JobScheduler;
 import java.util.List;
 import java.util.ArrayList;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobListener;
 import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
 
 /**
  *
@@ -44,7 +42,7 @@ public class DefaultMonitor implements JobMonitor, JobListener {
     }
 
     @Override
-    public List<String> getRunningProjectIdList(long jobId) {   
+    public List<String> getRunningProjectIdList(long jobId) {
         return null;
     }
 

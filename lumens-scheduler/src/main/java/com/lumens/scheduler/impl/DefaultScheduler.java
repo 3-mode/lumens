@@ -6,7 +6,6 @@ package com.lumens.scheduler.impl;
 import com.lumens.engine.TransformEngine;
 import com.lumens.scheduler.JobScheduler;
 import com.lumens.scheduler.JobTrigger;
-import com.lumens.scheduler.JobMonitor;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.dao.JobProjectRelationDAO;
@@ -14,7 +13,6 @@ import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.entity.JobProjectRelation;
 import com.lumens.sysdb.entity.Project;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -22,7 +20,6 @@ import java.util.HashMap;
 import static org.quartz.JobBuilder.newJob;
 import org.quartz.JobKey;
 import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
 import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -52,10 +49,10 @@ public class DefaultScheduler implements JobScheduler {
         start();
     }
 
-    public Scheduler getObject(){
+    public Scheduler getObject() {
         return sched;
     }
-    
+
     @Override
     public void setEngine(TransformEngine engine) {
         this.engine = engine;
@@ -68,8 +65,8 @@ public class DefaultScheduler implements JobScheduler {
         }
 
         Job dbJob = new Job(job.getId(), job.getName(), job.getDescription(),
-                trigger.getRepeatCount(), trigger.getRepeatInterval(),
-                trigger.getStartTime().getTime(), trigger.getEndTime().getTime());
+                            trigger.getRepeatCount(), trigger.getRepeatInterval(),
+                            trigger.getStartTime().getTime(), trigger.getEndTime().getTime());
         jobList.add(dbJob);
         long jobId = job.getId();
         jobMap.put(jobId, dbJob);
@@ -101,10 +98,10 @@ public class DefaultScheduler implements JobScheduler {
         List<Project> projectList = projectMap.get(jobId);
         for (Project proj : projectList) {
             JobDetail jobDetail = newJob(JobThread.class)
-                    .withIdentity(String.valueOf(proj.id), group)
-                    .usingJobData("ProjectData", proj.data)
-                    .usingJobData("ProjectName", proj.name)
-                    .build();
+            .withIdentity(String.valueOf(proj.id), group)
+            .usingJobData("ProjectData", proj.data)
+            .usingJobData("ProjectName", proj.name)
+            .build();
 
             jobDetail.getJobDataMap().put("EngineObject", this.engine);
             SimpleScheduleBuilder simpleBuilder = simpleSchedule();

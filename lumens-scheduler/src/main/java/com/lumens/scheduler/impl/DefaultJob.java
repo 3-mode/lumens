@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class DefaultJob  {
+public class DefaultJob {
     private final long jobId;
     private final String name;
     private final String description;
