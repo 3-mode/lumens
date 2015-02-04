@@ -18,14 +18,14 @@ import org.quartz.SchedulerException;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultMonitor implements JobMonitor, JobListener {
-
-    Scheduler sched;
+    JobScheduler sched;
     String name;
     List<String> pendingJobList = new ArrayList();
     List<String> runningJobList = new ArrayList();
 
-    public DefaultMonitor(Scheduler scheduler) {
+    public DefaultMonitor(JobScheduler scheduler) {
         this.sched = scheduler;
+        sched.registerJobListener(this);
     }
 
     @Override

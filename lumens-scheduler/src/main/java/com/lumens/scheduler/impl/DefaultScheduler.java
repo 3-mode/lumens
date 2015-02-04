@@ -38,9 +38,10 @@ import static org.quartz.TriggerBuilder.newTrigger;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultScheduler implements JobScheduler {
+
     boolean isStarted;
     Scheduler sched;
-    JobListener listener;
+    JobMonitor jobMonitor;
     List<Job> jobList = new ArrayList();
     Map<Long, Job> jobMap = new HashMap<>();
     Map<Long, List<Project>> projectMap = new HashMap<>();
@@ -52,10 +53,20 @@ public class DefaultScheduler implements JobScheduler {
         start();
     }
 
-    public Scheduler getObject(){
-        return sched;
+    @Override
+    public JobMonitor getJobMonitor(){
+        return jobMonitor;
     }
     
+    @Override
+    public void registerJobListener(JobListener listener) {
+        try {
+            sched.getListenerManager().addJobListener(listener);
+        } catch (SchedulerException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     @Override
     public void setEngine(TransformEngine engine) {
         this.engine = engine;
@@ -221,8 +232,7 @@ public class DefaultScheduler implements JobScheduler {
             if (!isStarted) {
                 sched = new org.quartz.impl.StdSchedulerFactory().getScheduler();
                 sched.start();
-                listener = new DefaultJobListener();
-                sched.getListenerManager().addJobListener(listener);
+                jobMonitor = new DefaultMonitor(this);                
             }
 
         } catch (SchedulerException ex) {
