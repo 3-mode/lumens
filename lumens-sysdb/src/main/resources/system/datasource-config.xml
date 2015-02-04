@@ -40,7 +40,7 @@
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
         <property name="transactionTemplate" ref="transactionTemplate"/>
     </bean>
-    <bean id="RelationDAO" class="com.lumens.sysdb.dao.JobProjectRelation">
+    <bean id="RelationDAO" class="com.lumens.sysdb.dao.JobProjectRelationDAO">
         <property name="sqlManager" ref="sqlManager"/>
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
         <property name="transactionTemplate" ref="transactionTemplate"/>
