@@ -52,13 +52,12 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public JobMonitor getJobMonitor() {
+    public JobMonitor getJobMonitor(){
         return jobMonitor;
     }
 
     @Override
-    public void registerJobListener(JobListener listener
-    ) {
+    public void registerJobListener(JobListener listener) {
         try {
             sched.getListenerManager().addJobListener(listener);
         } catch (SchedulerException ex) {
@@ -67,14 +66,12 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public void setEngine(TransformEngine engine
-    ) {
+    public void setEngine(TransformEngine engine) {
         this.engine = engine;
     }
 
     @Override
-    public JobScheduler addSchedule(DefaultJob job, JobTrigger trigger
-    ) {
+    public JobScheduler addSchedule(DefaultJob job, JobTrigger trigger) {
         if (jobMap.containsKey(job.getId())) {
             throw new RuntimeException("Job " + job.getId() + " already exist.");
         }
@@ -103,8 +100,7 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public void startJob(long jobId
-    ) {
+    public void startJob(long jobId) {
         Job job = jobMap.get(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before start.");
@@ -147,8 +143,7 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public void stopJob(long jobId
-    ) {
+    public void stopJob(long jobId) {
         Job job = jobMap.get(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before stop.");
@@ -167,8 +162,7 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public void saveJob(long jobId
-    ) {
+    public void saveJob(long jobId) {
         Job job = jobMap.get(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before saving.");
@@ -191,8 +185,7 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public void deleteJob(long jobId
-    ) {
+    public void deleteJob(long jobId) {
         Job job = jobMap.remove(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before deleting.");
