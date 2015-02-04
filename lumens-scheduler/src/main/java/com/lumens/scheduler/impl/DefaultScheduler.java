@@ -9,10 +9,10 @@ import com.lumens.scheduler.JobTrigger;
 import com.lumens.scheduler.JobMonitor;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobDAO;
-import com.lumens.sysdb.dao.RelationDAO;
+import com.lumens.sysdb.dao.JobProjectRelationDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.entity.Job;
-import com.lumens.sysdb.entity.Relation;
+import com.lumens.sysdb.entity.JobProjectRelation;
 import com.lumens.sysdb.entity.Project;
 import java.sql.Timestamp;
 import java.util.List;
@@ -52,6 +52,10 @@ public class DefaultScheduler implements JobScheduler {
         start();
     }
 
+    public Scheduler getObject(){
+        return sched;
+    }
+    
     @Override
     public void setEngine(TransformEngine engine) {
         this.engine = engine;
@@ -65,7 +69,7 @@ public class DefaultScheduler implements JobScheduler {
 
         Job dbJob = new Job(job.getId(), job.getName(), job.getDescription(),
                 trigger.getRepeatCount(), trigger.getRepeatInterval(),
-                new Timestamp(trigger.getStartTime().getTime()), new Timestamp(trigger.getEndTime().getTime()));
+                trigger.getStartTime().getTime(), trigger.getEndTime().getTime());
         jobList.add(dbJob);
         long jobId = job.getId();
         jobMap.put(jobId, dbJob);
@@ -156,7 +160,7 @@ public class DefaultScheduler implements JobScheduler {
         }
 
         JobDAO jobDAO = DAOFactory.getJobDAO();
-        RelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
+        JobProjectRelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
 
         if (jobDAO.getJob(jobId) == null) {
             jobDAO.create(job);
@@ -193,7 +197,7 @@ public class DefaultScheduler implements JobScheduler {
 
         // Remove from db
         JobDAO jobDAO = DAOFactory.getJobDAO();
-        RelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
+        JobProjectRelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
 
         if (jobDAO.getJob(jobId) != null) {
             jobDAO.delete(jobId);
@@ -254,10 +258,10 @@ public class DefaultScheduler implements JobScheduler {
 
     private List<Project> loadProjectFromDb(long jobId) {
         List<Project> projectList = new ArrayList();
-        RelationDAO relationDAO = DAOFactory.getRelationDAO();
+        JobProjectRelationDAO relationDAO = DAOFactory.getRelationDAO();
         ProjectDAO projectDAO = DAOFactory.getProjectDAO();
-        List<Relation> relationList = relationDAO.getAllRelation(jobId);
-        for (Relation relation : relationList) {
+        List<JobProjectRelation> relationList = relationDAO.getAllRelation(jobId);
+        for (JobProjectRelation relation : relationList) {
             projectList.add(projectDAO.getProject(relation.projectId));
         }
 
@@ -278,7 +282,7 @@ public class DefaultScheduler implements JobScheduler {
 
     public void saveToDb() {
         JobDAO jobDAO = DAOFactory.getJobDAO();
-        RelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
+        JobProjectRelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
 
         // Save a job
         for (Job dbJob : jobList) {

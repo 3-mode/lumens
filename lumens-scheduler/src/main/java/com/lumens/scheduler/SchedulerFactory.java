@@ -11,6 +11,7 @@ import com.lumens.scheduler.impl.DefaultScheduler;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class SchedulerFactory {
+    public static DefaultScheduler scheduler;
     private static final class SchedulerFactoryHolder {
         private static final SchedulerFactory instance = new SchedulerFactory();
     }
@@ -26,5 +27,9 @@ public class SchedulerFactory {
         DefaultScheduler scheduler = new DefaultScheduler();
         scheduler.setEngine(engine);
         return scheduler;
+    }
+    
+    public JobMonitor createMonitor(){
+        return null;
     }
 }

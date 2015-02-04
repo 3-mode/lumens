@@ -66,4 +66,23 @@ public class SchedulerTest {
             throw new RuntimeException(ex);
         }
     }
+
+    @Test
+    public void MonitorTest() {
+        TransformEngine engine = new TransformEngine();
+        engine.start("../dist/lumens/addin");
+        DefaultScheduler scheduler = (DefaultScheduler) SchedulerFactory.get().createScheduler(engine);
+        scheduler.start();
+        TransformProject project = new TransformProject();
+        project.setName("Test project");
+        JobTrigger trigger = new DefaultTrigger(new Date(), new Date(System.currentTimeMillis() + 10000), 1, 1);
+
+        DefaultJob realJob = new DefaultJob(1001, "job1001", "This is a sample job");
+        realJob.addProject(1421324074892L);
+        scheduler.addSchedule(realJob, trigger);
+        scheduler.stopJob(realJob.getId());
+        scheduler.startJob(realJob.getId());
+        
+        // Add monitor test
+    }
 }
