@@ -13,7 +13,7 @@ public class ProjectDAO extends BaseDAO {
     }
 
     public long create(final Project project) {
-        this.simplePrepareStatTransactionExecute(sqlManager.getSQL("ProjectDAO/CreateProject"), project.name, project.description, project.data);
+        this.simplePrepareStatTransactionExecute(sqlManager.getSQL("ProjectDAO/CreateProject"), project.id, project.name, project.description, project.data);
         return project.id;
     }
 
