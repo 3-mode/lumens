@@ -3,6 +3,7 @@
  */
 package com.lumens.scheduler;
 
+import com.lumens.sysdb.entity.Project;
 import java.util.List;
 
 /**
@@ -16,5 +17,5 @@ public interface JobMonitor {
 
     public List<String> getRunningProjectIdList(long jobId);
 
-    public String getProjectStatus(long JobId);
+    public List<Project> getProjectList(long JobId);
 }

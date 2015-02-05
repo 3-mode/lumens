@@ -4,26 +4,28 @@
 package com.lumens.scheduler.impl;
 
 import com.lumens.scheduler.JobMonitor;
+import com.lumens.scheduler.JobScheduler;
+import com.lumens.sysdb.entity.Project;
+import com.lumens.sysdb.utils.DbHelper;
 import java.util.List;
 import java.util.ArrayList;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobListener;
-import org.quartz.Scheduler;
 
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultMonitor implements JobMonitor, JobListener {
-
-    Scheduler sched;
+    JobScheduler sched;
     String name;
     List<String> pendingJobList = new ArrayList();
     List<String> runningJobList = new ArrayList();
 
-    public DefaultMonitor(Scheduler scheduler) {
+    public DefaultMonitor(JobScheduler scheduler) {
         this.sched = scheduler;
+        sched.registerJobListener(this);
     }
 
     @Override
@@ -43,12 +45,12 @@ public class DefaultMonitor implements JobMonitor, JobListener {
 
     @Override
     public List<String> getRunningProjectIdList(long jobId) {
-        return null;
+        return DbHelper.loadProjectIdFromDb(jobId);    
     }
 
     @Override
-    public String getProjectStatus(long jobId) {
-        return null;
+    public List<Project> getProjectList(long jobId) {
+        return DbHelper.loadProjectFromDb(jobId);
     }
 
     // Job listener implementation

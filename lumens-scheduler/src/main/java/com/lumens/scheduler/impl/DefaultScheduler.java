@@ -6,6 +6,7 @@ package com.lumens.scheduler.impl;
 import com.lumens.engine.TransformEngine;
 import com.lumens.scheduler.JobScheduler;
 import com.lumens.scheduler.JobTrigger;
+import com.lumens.scheduler.JobMonitor;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.dao.JobProjectRelationDAO;
@@ -13,6 +14,7 @@ import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.entity.JobProjectRelation;
 import com.lumens.sysdb.entity.Project;
+import com.lumens.sysdb.utils.DbHelper;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -35,9 +37,10 @@ import static org.quartz.TriggerBuilder.newTrigger;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultScheduler implements JobScheduler {
+
     boolean isStarted;
     Scheduler sched;
-    JobListener listener;
+    JobMonitor jobMonitor;
     List<Job> jobList = new ArrayList();
     Map<Long, Job> jobMap = new HashMap<>();
     Map<Long, List<Project>> projectMap = new HashMap<>();
@@ -49,8 +52,27 @@ public class DefaultScheduler implements JobScheduler {
         start();
     }
 
-    public Scheduler getObject() {
-        return sched;
+    @Override
+    public JobMonitor getJobMonitor() {
+        return jobMonitor;
+    }
+
+    @Override
+    public void registerJobListener(JobListener listener) {
+        try {
+            sched.getListenerManager().addJobListener(listener);
+        } catch (SchedulerException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public void unRegisterJobListener(JobListener listener) {
+        try {
+            sched.getListenerManager().removeJobListener(listener.getName());
+        } catch (SchedulerException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     @Override
@@ -65,8 +87,8 @@ public class DefaultScheduler implements JobScheduler {
         }
 
         Job dbJob = new Job(job.getId(), job.getName(), job.getDescription(),
-                            trigger.getRepeatCount(), trigger.getRepeatInterval(),
-                            trigger.getStartTime().getTime(), trigger.getEndTime().getTime());
+                trigger.getRepeatCount(), trigger.getRepeatInterval(),
+                trigger.getStartTime().getTime(), trigger.getEndTime().getTime());
         jobList.add(dbJob);
         long jobId = job.getId();
         jobMap.put(jobId, dbJob);
@@ -98,10 +120,10 @@ public class DefaultScheduler implements JobScheduler {
         List<Project> projectList = projectMap.get(jobId);
         for (Project proj : projectList) {
             JobDetail jobDetail = newJob(JobThread.class)
-            .withIdentity(String.valueOf(proj.id), group)
-            .usingJobData("ProjectData", proj.data)
-            .usingJobData("ProjectName", proj.name)
-            .build();
+                    .withIdentity(String.valueOf(proj.id), group)
+                    .usingJobData("ProjectData", proj.data)
+                    .usingJobData("ProjectName", proj.name)
+                    .build();
 
             jobDetail.getJobDataMap().put("EngineObject", this.engine);
             SimpleScheduleBuilder simpleBuilder = simpleSchedule();
@@ -218,8 +240,7 @@ public class DefaultScheduler implements JobScheduler {
             if (!isStarted) {
                 sched = new org.quartz.impl.StdSchedulerFactory().getScheduler();
                 sched.start();
-                listener = new DefaultJobListener();
-                sched.getListenerManager().addJobListener(listener);
+                jobMonitor = new DefaultMonitor(this);
             }
 
         } catch (SchedulerException ex) {
@@ -253,17 +274,6 @@ public class DefaultScheduler implements JobScheduler {
         return jobDAO.getAllJob();
     }
 
-    private List<Project> loadProjectFromDb(long jobId) {
-        List<Project> projectList = new ArrayList();
-        JobProjectRelationDAO relationDAO = DAOFactory.getRelationDAO();
-        ProjectDAO projectDAO = DAOFactory.getProjectDAO();
-        List<JobProjectRelation> relationList = relationDAO.getAllRelation(jobId);
-        for (JobProjectRelation relation : relationList) {
-            projectList.add(projectDAO.getProject(relation.projectId));
-        }
-
-        return projectList;
-    }
 
     public void loadFromDb() throws Exception {
         jobList.clear();
@@ -273,7 +283,7 @@ public class DefaultScheduler implements JobScheduler {
         for (Job dbJob : allJob) {
             jobList.add(dbJob);
             long jobId = dbJob.id;
-            projectMap.put(jobId, loadProjectFromDb(jobId));
+            projectMap.put(jobId, DbHelper.loadProjectFromDb(jobId));
         }
     }
 
