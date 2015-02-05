@@ -10,7 +10,7 @@ import com.lumens.scheduler.impl.DefaultScheduler;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class SchedulerFactory {  
+public class SchedulerFactory {
     private static final class SchedulerFactoryHolder {
         private static final SchedulerFactory instance = new SchedulerFactory();
     }

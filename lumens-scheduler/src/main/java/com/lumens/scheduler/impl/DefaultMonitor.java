@@ -6,7 +6,7 @@ package com.lumens.scheduler.impl;
 import com.lumens.scheduler.JobMonitor;
 import com.lumens.scheduler.JobScheduler;
 import com.lumens.sysdb.entity.Project;
-import com.lumens.sysdb.utils.DbHelper;
+import com.lumens.sysdb.utils.DBHelper;
 import java.util.List;
 import java.util.ArrayList;
 import org.quartz.JobExecutionContext;
@@ -45,12 +45,12 @@ public class DefaultMonitor implements JobMonitor, JobListener {
 
     @Override
     public List<String> getRunningProjectIdList(long jobId) {
-        return DbHelper.loadProjectIdFromDb(jobId);    
+        return DBHelper.loadProjectIdFromDb(jobId);    
     }
 
     @Override
     public List<Project> getProjectList(long jobId) {
-        return DbHelper.loadProjectFromDb(jobId);
+        return DBHelper.loadProjectFromDb(jobId);
     }
 
     // Job listener implementation

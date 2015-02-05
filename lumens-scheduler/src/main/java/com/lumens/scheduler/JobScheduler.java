@@ -13,8 +13,11 @@ import org.quartz.JobListener;
  */
 public interface JobScheduler {
     public JobMonitor getJobMonitor();
+
     public void registerJobListener(JobListener listener);
+
     public void unRegisterJobListener(JobListener listener);
+
     public void setEngine(TransformEngine engine);
 
     public JobScheduler addSchedule(DefaultJob job, JobTrigger trigger);

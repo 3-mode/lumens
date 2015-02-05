@@ -13,7 +13,7 @@ import com.lumens.sysdb.dao.JobProjectRelationDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.entity.Project;
-import com.lumens.sysdb.utils.DbHelper;
+import com.lumens.sysdb.utils.DBHelper;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -281,7 +281,7 @@ public class DefaultScheduler implements JobScheduler {
         for (Job dbJob : allJob) {
             jobList.add(dbJob);
             long jobId = dbJob.id;
-            projectMap.put(jobId, DbHelper.loadProjectFromDb(jobId));
+            projectMap.put(jobId, DBHelper.loadProjectFromDb(jobId));
         }
     }
 
