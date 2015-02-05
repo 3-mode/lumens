@@ -19,7 +19,7 @@ import org.apache.commons.io.IOUtils;
 
 /**
  *
- * @author shaofeng wang
+ * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
 public class DBUtils {
 
