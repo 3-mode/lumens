@@ -4,7 +4,7 @@
 package com.lumens.connector.database.client;
 
 import com.lumens.connector.database.DBConstants;
-import com.lumens.connector.database.DbUtils;
+import com.lumens.connector.database.DBUtils;
 import com.lumens.model.DataElement;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
@@ -57,7 +57,7 @@ public class DBElementBuilder {
             case STRING:
                 return new Value(ret.getString(fieldIndex));
             case BINARY:
-                return new Value(DbUtils.toByteArray(ret.getBinaryStream(fieldIndex)));
+                return new Value(DBUtils.toByteArray(ret.getBinaryStream(fieldIndex)));
             case DATE:
                 java.sql.Date date = ret.getDate(fieldIndex);
                 return new Value(date != null ? new Date(date.getTime()) : (Date) null);

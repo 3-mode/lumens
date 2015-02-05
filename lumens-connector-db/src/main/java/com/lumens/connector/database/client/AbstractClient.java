@@ -6,7 +6,7 @@ package com.lumens.connector.database.client;
 import com.lumens.connector.Direction;
 import com.lumens.connector.database.Client;
 import com.lumens.connector.database.DBConstants;
-import com.lumens.connector.database.DbUtils;
+import com.lumens.connector.database.DBUtils;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Type;
@@ -36,7 +36,7 @@ public abstract class AbstractClient implements Client, DBConstants {
     public AbstractClient(DBConnector connector, String driverClass) {
         try {
             this.connector = connector;
-            driver = (Driver) DbUtils.getInstance(connector.getOjdbcURL(), driverClass);
+            driver = (Driver) DBUtils.getInstance(connector.getOjdbcURL(), driverClass);
             this.elementBuilder = new DBElementBuilder();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
@@ -45,12 +45,12 @@ public abstract class AbstractClient implements Client, DBConstants {
 
     @Override
     public void open() {
-        conn = DbUtils.getConnection(driver, connector.getConnURL(), connector.getUser(), connector.getPassword());
+        conn = DBUtils.getConnection(driver, connector.getConnURL(), connector.getUser(), connector.getPassword());
     }
 
     @Override
     public void close() {
-        DbUtils.releaseConnection(conn);
+        DBUtils.releaseConnection(conn);
     }
 
     @Override
@@ -60,7 +60,7 @@ public abstract class AbstractClient implements Client, DBConstants {
 
     @Override
     public void commit() {
-        DbUtils.commit(conn);
+        DBUtils.commit(conn);
     }
 
     @Override
@@ -117,7 +117,7 @@ public abstract class AbstractClient implements Client, DBConstants {
         try (Statement stat = conn.createStatement()) {
             stat.execute(SQL);
         } catch (Exception e) {
-            DbUtils.rollback(conn);
+            DBUtils.rollback(conn);
             throw new RuntimeException(SQL, e);
         }
     }
