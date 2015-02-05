@@ -27,4 +27,15 @@ public class DbHelper {
 
         return projectList;
     }
+    
+    public static List<String> loadProjectIdFromDb(long jobId) {
+        List<String> projectIdList = new ArrayList();
+        JobProjectRelationDAO relationDAO = DAOFactory.getRelationDAO();        
+        List<JobProjectRelation> relationList = relationDAO.getAllRelation(jobId);
+        for (JobProjectRelation relation : relationList) {
+            projectIdList.add(String.valueOf(relation.projectId));
+        }
+
+        return projectIdList;
+    }    
 }
