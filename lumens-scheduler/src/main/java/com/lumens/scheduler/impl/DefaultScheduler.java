@@ -14,6 +14,7 @@ import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.entity.JobProjectRelation;
 import com.lumens.sysdb.entity.Project;
+import com.lumens.sysdb.utils.DbHelper;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public JobMonitor getJobMonitor(){
+    public JobMonitor getJobMonitor() {
         return jobMonitor;
     }
 
@@ -60,6 +61,15 @@ public class DefaultScheduler implements JobScheduler {
     public void registerJobListener(JobListener listener) {
         try {
             sched.getListenerManager().addJobListener(listener);
+        } catch (SchedulerException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public void unRegisterJobListener(JobListener listener) {
+        try {
+            sched.getListenerManager().removeJobListener(listener.getName());
         } catch (SchedulerException ex) {
             throw new RuntimeException(ex);
         }
@@ -264,17 +274,6 @@ public class DefaultScheduler implements JobScheduler {
         return jobDAO.getAllJob();
     }
 
-    private List<Project> loadProjectFromDb(long jobId) {
-        List<Project> projectList = new ArrayList();
-        JobProjectRelationDAO relationDAO = DAOFactory.getRelationDAO();
-        ProjectDAO projectDAO = DAOFactory.getProjectDAO();
-        List<JobProjectRelation> relationList = relationDAO.getAllRelation(jobId);
-        for (JobProjectRelation relation : relationList) {
-            projectList.add(projectDAO.getProject(relation.projectId));
-        }
-
-        return projectList;
-    }
 
     public void loadFromDb() throws Exception {
         jobList.clear();
@@ -284,7 +283,7 @@ public class DefaultScheduler implements JobScheduler {
         for (Job dbJob : allJob) {
             jobList.add(dbJob);
             long jobId = dbJob.id;
-            projectMap.put(jobId, loadProjectFromDb(jobId));
+            projectMap.put(jobId, DbHelper.loadProjectFromDb(jobId));
         }
     }
 
