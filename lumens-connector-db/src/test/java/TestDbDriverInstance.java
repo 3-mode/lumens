@@ -1,4 +1,4 @@
-import com.lumens.connector.database.DbUtils;
+import com.lumens.connector.database.DBUtils;
 
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
@@ -11,7 +11,7 @@ public class TestDbDriverInstance {
     public static void main(String[] args) throws Exception {
         for (int i = 0; i < 200; ++i) {
             System.out.println("new db driver" + i);
-            DbUtils.getInstance("file:///C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server\\jdbc\\lib\\ojdbc6.jar", "oracle.jdbc.OracleDriver");
+            DBUtils.getInstance("file:///C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server\\jdbc\\lib\\ojdbc6.jar", "oracle.jdbc.OracleDriver");
         }
     }
 }
