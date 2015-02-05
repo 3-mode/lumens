@@ -12,7 +12,6 @@ import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.dao.JobProjectRelationDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.entity.Job;
-import com.lumens.sysdb.entity.JobProjectRelation;
 import com.lumens.sysdb.entity.Project;
 import com.lumens.sysdb.utils.DbHelper;
 import java.util.List;
@@ -87,8 +86,8 @@ public class DefaultScheduler implements JobScheduler {
         }
 
         Job dbJob = new Job(job.getId(), job.getName(), job.getDescription(),
-                trigger.getRepeatCount(), trigger.getRepeatInterval(),
-                trigger.getStartTime().getTime(), trigger.getEndTime().getTime());
+                            trigger.getRepeatCount(), trigger.getRepeatInterval(),
+                            trigger.getStartTime().getTime(), trigger.getEndTime().getTime());
         jobList.add(dbJob);
         long jobId = job.getId();
         jobMap.put(jobId, dbJob);
@@ -120,10 +119,10 @@ public class DefaultScheduler implements JobScheduler {
         List<Project> projectList = projectMap.get(jobId);
         for (Project proj : projectList) {
             JobDetail jobDetail = newJob(JobThread.class)
-                    .withIdentity(String.valueOf(proj.id), group)
-                    .usingJobData("ProjectData", proj.data)
-                    .usingJobData("ProjectName", proj.name)
-                    .build();
+            .withIdentity(String.valueOf(proj.id), group)
+            .usingJobData("ProjectData", proj.data)
+            .usingJobData("ProjectName", proj.name)
+            .build();
 
             jobDetail.getJobDataMap().put("EngineObject", this.engine);
             SimpleScheduleBuilder simpleBuilder = simpleSchedule();
@@ -273,7 +272,6 @@ public class DefaultScheduler implements JobScheduler {
         JobDAO jobDAO = DAOFactory.getJobDAO();
         return jobDAO.getAllJob();
     }
-
 
     public void loadFromDb() throws Exception {
         jobList.clear();
