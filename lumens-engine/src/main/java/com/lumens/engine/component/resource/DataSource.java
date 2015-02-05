@@ -47,10 +47,9 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
         // Try to search the OSGI bundle if exist else try to instance it directly
         if (TransformEngineContext.getContext() != null) {
             ConnectorFactory factory = TransformEngineContext.getContext().getConnectorFactory(getComponentType());
-            if (factory != null)
-                connector = factory.createConnector();
-            else
+            if (factory == null)
                 throw new RuntimeException("The '" + getComponentType() + "' is not supported");
+            connector = factory.createConnector();
         }
     }
 
