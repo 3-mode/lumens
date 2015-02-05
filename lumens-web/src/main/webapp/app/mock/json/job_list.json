@@ -5,7 +5,7 @@
             "name": "Integration from Employee to EmployeeTest",
             "description": "This is a 10001 test",
             "repeat_mode": "Never",
-            "project_list": [
+            "projects": [
                 {
                     "project_id": "101",
                     "project_name": "test project 1"
@@ -20,7 +20,7 @@
             "id": "10002",
             "name": "Import CSV into EmployeeTest",
             "description": "This is a 10002 test",
-            "project_list": [
+            "projects": [
                 {
                     "project_id": "1011",
                     "project_name": "test 1 project 1"
@@ -35,7 +35,7 @@
             "id": "10003",
             "name": "Integration China Airline SOAP with DB",
             "description": "This is a 10003 test",
-            "project_list": [
+            "projects": [
                 {
                     "project_id": "1021",
                     "project_name": "test 2 project 1"

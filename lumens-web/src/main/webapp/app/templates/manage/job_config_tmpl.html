@@ -55,7 +55,7 @@
                                     <div class="lumens-bootstrap" ng-include="job_add_proj_manage_template"></div>
                                 </td>
                             </tr>
-                            <tr ng-repeat="project in job.project_list" project-id="{{project.project_id}}" style="cursor: pointer;" ng-class="{'lumens-h-active':{{$index}} === selectProjIndex}" ng-click="selectProjItem($index)">
+                            <tr ng-repeat="project in job.projects" project-id="{{project.project_id}}" style="cursor: pointer;" ng-class="{'lumens-h-active':{{$index}} === selectProjIndex}" ng-click="selectProjItem($index)">
                                 <td>{{project.project_id}}</td><td>{{project.project_name}}</td><td>Health</td><td>Edit | Delete</td>
                             </tr>
                         </tbody>
