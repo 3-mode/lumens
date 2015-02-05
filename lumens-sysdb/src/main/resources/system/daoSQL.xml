@@ -70,6 +70,11 @@ SELECT id, name, description, data FROM LUNS_PROJECT
 SELECT id, name, description FROM LUNS_PROJECT
 ]]>
         </sql>
+        <sql name="GetShortProjectByID">
+<![CDATA[
+SELECT id, name, description FROM LUNS_PROJECT WHERE id = %d
+]]>
+        </sql>
         <sql name="FindProject">
 <![CDATA[
 SELECT id, name, description, data FROM LUNS_PROJECT WHERE id = %d

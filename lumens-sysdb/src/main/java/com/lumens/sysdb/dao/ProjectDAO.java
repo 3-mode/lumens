@@ -31,6 +31,11 @@ public class ProjectDAO extends BaseDAO {
         return simpleQuery(sqlManager.getSQL("ProjectDAO/AllShortProject"), Project.class);
     }
 
+    public Project getShortProjectByID(long projectId) {
+        List<Project> pList = simpleQuery(sqlManager.getSQL("ProjectDAO/GetShortProjectByID", projectId), Project.class);
+        return pList.size() > 0 ? pList.get(0) : null;
+    }
+
     public Project getProject(long projectId) {
         List<Project> pList = simpleQuery(sqlManager.getSQL("ProjectDAO/FindProject", projectId), Project.class);
         return pList.size() > 0 ? pList.get(0) : null;
