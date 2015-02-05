@@ -7,7 +7,6 @@ import com.lumens.engine.TransformEngine;
 import com.lumens.scheduler.impl.DefaultScheduler;
 import com.lumens.scheduler.impl.DefaultTrigger;
 import com.lumens.scheduler.impl.DefaultJob;
-import com.lumens.scheduler.SchedulerFactory;
 import com.lumens.sysdb.dao.ProjectDAO;
 import java.util.Date;
 import com.lumens.engine.TransformProject;
@@ -15,8 +14,6 @@ import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.entity.Project;
 import org.junit.Test;
 import org.junit.Before;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
 /**
  *
