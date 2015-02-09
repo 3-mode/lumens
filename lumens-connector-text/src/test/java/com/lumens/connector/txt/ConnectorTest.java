@@ -12,6 +12,9 @@ import com.lumens.model.DataElement;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
+import com.lumens.processor.Processor;
+import com.lumens.processor.transform.TransformMapper;
+import com.lumens.processor.transform.TransformRule;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,11 +26,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.Before;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
 /**
  *
@@ -382,5 +385,116 @@ public class ConnectorTest implements TextConstants {
             xsdReader.initalize();
             Map<String, Format> formats = xsdReader.getFormatList(Direction.IN);
         }
+    }
+
+    //@Test
+    public void testOperation() throws Exception {
+        ConnectorFactory cntr = new TextConnectorFactory();
+        TextConnector cntrR = (TextConnector) cntr.createConnector();
+
+        Map<String, Value> propsR = new HashMap<>();
+        propsR.put(ESCAPE_CHAR, new Value("\""));
+        propsR.put(QUOTE_CHAR, new Value("\""));
+        propsR.put(FILEDELIMITER, new Value(","));
+        propsR.put(SCHEMA_PATH, new Value(schemaPath));
+        propsR.put(OPTION_MAXLINE, new Value(1000));
+        propsR.put(ENCODING, new Value("UTF-8"));
+        propsR.put(LINEDELIMITER, new Value("\n"));
+        propsR.put(OPTION_IGNORE_EMPTYLINE, new Value(true));
+        propsR.put(OPTION_MAXLINE, new Value(9));
+        propsR.put(FILE_EXTENSION, new Value("csv"));
+        propsR.put(FILE_FILTER, new Value("*.csv"));
+        propsR.put(OPTION_FORMAT_ASTITLE, new Value(true));
+        propsR.put(OPTION_FIRST_LINE_ASTITLE, new Value(false));
+        propsR.put(OPTION_IGNORE_READLINE_ERROR, new Value(true));
+        propsR.put(OPTION_TRIM_SPACE, new Value(true));
+        propsR.put(OPTION_SKIP_COMMENTS, new Value(false));
+        cntrR.setPropertyList(propsR);
+        cntrR.open();
+
+        // test getData format list
+        Map<String, Format> fmtListR = cntrR.getFormatList(Direction.IN);
+        if (fmtListR.isEmpty()) {
+            assertFalse("Fail to get source format list", true);
+        }
+
+        // test operation
+        Operation operR = cntrR.getOperation();
+        assertTrue("fail to open source text connector", cntrR.isOpen());
+
+        OperationResult resultR = null;
+
+        // Read
+        try {
+            Format fmtR = fmtListR.get("TextMessage");
+            if (fmtR == null) {
+                assertFalse("Fail to get source format", true);
+            }
+
+            // Element read            
+            Element elemRead = new DataElement(fmtR);
+            Element paramsR = elemRead.addChild(FORMAT_PARAMS);
+            paramsR.setValue(new Value(FORMAT_MESSAGE));
+            paramsR.addChild(OPERATION).setValue(new Value(OPERATION_READ));
+            paramsR.addChild(PATH).setValue(new Value(path2read));
+
+            resultR = operR.execute(new ElementChunk(Arrays.asList(elemRead)), fmtR);
+            assertTrue("Fail to executre source element read", resultR.hasData());
+            System.out.println("-----------------------------------------");
+            System.out.println("Reading single csv file:");
+            for (Element elem : resultR.getData()) {
+                StringBuilder line = new StringBuilder();
+                for (Element el : elem.getChildren()) {
+                    if (line.length() > 0) {
+                        line.append(",");
+                    }
+                    line.append(el.getValue().toString());
+                }
+                System.out.println(line);
+            }
+
+        } catch (Exception ex) {
+            assertFalse("Fail to execute source connector read: single file read.\n " + ex.getMessage(), true);
+        }
+
+        // Destination connector
+        TextConnector cntrW = (TextConnector) cntr.createConnector();
+        Map<String, Value> propsW = new HashMap<>();
+        propsW.put(ESCAPE_CHAR, new Value("\\"));
+        propsW.put(FILEDELIMITER, new Value("|"));
+        propsW.put(SCHEMA_PATH, new Value(schemaPath));
+        propsW.put(PATH, new Value(path2write));
+        propsW.put(ENCODING, new Value("UTF-8"));
+        propsW.put(LINEDELIMITER, new Value("\r\n"));
+        propsW.put(OPTION_FORMAT_ASTITLE, new Value(true));
+        propsW.put(OPTION_TRIM_SPACE, new Value(true));
+        propsW.put(OPTION_SKIP_COMMENTS, new Value(false));
+        propsW.put(OPTION_QUOTE_MODE, new Value(true));
+        propsW.put(QUOTE_CHAR, new Value("\""));
+        cntrW.setPropertyList(propsW);
+        cntrW.open();
+
+        // test getData format list
+        Map<String, Format> fmtListW = cntrW.getFormatList(Direction.OUT);
+        if (fmtListW.isEmpty()) {
+            assertFalse("Fail to get destination format list", true);
+        }
+        Format fmtW = fmtListW.get("TextMessage");
+        if (fmtW == null) {
+            assertFalse("Fail to get destination format", true);
+        }
+        TransformRule rule = new TransformRule(fmtW);
+        rule.getRuleItem("TextMessage.TextParams.OPERATION").setScript("'OPERATION_OVERWRITE'");
+        rule.getRuleItem("TextMessage.number").setScript("@TextMessage.number");
+        rule.getRuleItem("TextMessage.text").setScript("return @TextMessage.text + '-test'");
+
+        Processor transformMappter = new TransformMapper();
+        List<Element> TextMessage = new ArrayList<>();
+        List<Element> resultList = (List<Element>) transformMappter.execute(rule, resultR.getData());
+        TextMessage.addAll(resultList);
+        assertTrue(TextMessage.size() == resultR.getData().size());
+
+        cntrR.close();
+        cntrW.close();
     }
 }
