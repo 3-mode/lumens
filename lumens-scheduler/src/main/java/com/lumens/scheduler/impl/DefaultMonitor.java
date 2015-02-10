@@ -24,8 +24,9 @@ public class DefaultMonitor implements JobMonitor, JobListener {
     List<String> runningJobList = new ArrayList();
 
     public DefaultMonitor(JobScheduler scheduler) {
+        name = "Default Monitor";
         this.sched = scheduler;
-        sched.registerJobListener(this);
+        sched.registerJobListener(this);        
     }
 
     @Override
