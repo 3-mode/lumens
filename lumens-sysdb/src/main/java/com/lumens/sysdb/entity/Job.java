@@ -20,8 +20,8 @@ public class Job {
     public String name;
     @Column(name = "description")
     public String description;
-    @Column(name = "repeat_count")
-    public int repeatCount;
+    @Column(name = "repeat")
+    public int repeat;
     @Column(name = "interval")
     public int interval;    
     @Column(name = "start_time")
@@ -29,11 +29,11 @@ public class Job {
     @Column(name = "end_time")
     public Timestamp endTime;
 
-    public Job(long id, String name, String description, int repeatCount, int interval, long startTime, long endTime) {
+    public Job(long id, String name, String description, int repeat, int interval, long startTime, long endTime) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.repeatCount = repeatCount;
+        this.repeat = repeat;
         this.interval = interval;
         this.startTime = new Timestamp(startTime);
         this.endTime = new Timestamp(endTime);

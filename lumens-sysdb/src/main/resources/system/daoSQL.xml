@@ -30,22 +30,22 @@ DELETE FROM LUNS_JOB_PROJECT_RELATION WHERE job_id = ? and project_id = %d
         </sql>
         <sql name="AllJob">
 <![CDATA[
-SELECT id, name, description, repeat_count, interval, start_time, end_time FROM LUNS_JOB
+SELECT id, name, description, repeat, interval, start_time, end_time FROM LUNS_JOB
 ]]>
         </sql>
         <sql name="FindJob">
 <![CDATA[
-SELECT id, name, description, repeat_count, interval, start_time, end_time FROM LUNS_JOB WHERE id = %d
+SELECT id, name, description, repeat, interval, start_time, end_time FROM LUNS_JOB WHERE id = %d
 ]]>
         </sql>
         <sql name="CreateJob">
 <![CDATA[
-INSERT INTO LUNS_JOB (id, name, description, repeat_count, interval, start_time, end_time) VALUES (?,?,?,?,?,?,?)
+INSERT INTO LUNS_JOB (id, name, description, repeat, interval, start_time, end_time) VALUES (?,?,?,?,?,?,?)
 ]]>
         </sql>
         <sql name="UpdateJob">
 <![CDATA[
-UPDATE LUNS_JOB set name=?, description=?, repeat_count=?, interval=?, start_time=?, end_time=? WHERE id = ?
+UPDATE LUNS_JOB set name=?, description=?, repeat=?, interval=?, start_time=?, end_time=? WHERE id = ?
 ]]>
         </sql> 
         <sql name="DeleteJob">

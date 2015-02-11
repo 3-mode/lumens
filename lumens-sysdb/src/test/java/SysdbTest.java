@@ -49,7 +49,7 @@ public class SysdbTest {
         System.out.println("  id = " + job.id);
         System.out.println("  name = " + job.name);
         System.out.println("  inteveral = " + job.interval);
-        System.out.println("  repeat count = " + job.repeatCount);
+        System.out.println("  repeat count = " + job.repeat);
         System.out.println("  start time = " + job.startTime.toString());
         System.out.println("  end time = " + job.endTime.toString());
         System.out.println();
@@ -72,7 +72,7 @@ public class SysdbTest {
             System.out.println("  job id = " + job.id);
             System.out.println("  name = " + job.name);
             System.out.println("  inteveral = " + job.interval);
-            System.out.println("  repeat count = " + job.repeatCount);
+            System.out.println("  repeat count = " + job.repeat);
             System.out.println("  start time = " + job.startTime.toString());
             System.out.println("  end time = " + job.endTime.toString());            
 
