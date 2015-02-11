@@ -43,7 +43,7 @@ public class SchedulerTest {
         scheduler.start();
         TransformProject project = new TransformProject();
         project.setName("Test project");
-        JobTrigger trigger = new DefaultTrigger(new Date(), new Date(System.currentTimeMillis() + 10000), 1, 1);
+        JobTrigger trigger = new DefaultTrigger(System.currentTimeMillis(), System.currentTimeMillis() + 10000, 1, 1);
 
         DefaultJob failJob = new DefaultJob(1001, "job1001", "This is a sample job");
         failJob.addProject(1111111111111L);
@@ -72,7 +72,7 @@ public class SchedulerTest {
         scheduler.start();
         TransformProject project = new TransformProject();
         project.setName("Test project");
-        JobTrigger trigger = new DefaultTrigger(new Date(), new Date(System.currentTimeMillis() + 10000), 1, 1);
+        JobTrigger trigger = new DefaultTrigger(System.currentTimeMillis(), System.currentTimeMillis() + 10000, 1, 1);
 
         DefaultJob realJob = new DefaultJob(1001, "job1001", "This is a sample job");
         realJob.addProject(1421324074892L);

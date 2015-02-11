@@ -11,36 +11,36 @@ import java.util.Date;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultTrigger implements JobTrigger {
-    private final Date startTime;
-    private final Date endTime;
-    private final int repeatCount;
+    private final long startTime;
+    private final long endTime;
+    private final int repeat;
     private final int interval;
 
-    public DefaultTrigger(Date startTime, Date endTime, int repeatCount, int interval) {
+    public DefaultTrigger(long startTime, long endTime, int repeat, int interval) {
         this.startTime = startTime;
         this.endTime = endTime;
-        this.repeatCount = repeatCount;
+        this.repeat = repeat;
         this.interval = interval;
     }
 
     @Override
-    public int getRepeatCount() {
-        return repeatCount;
+    public int getRepeat() {
+        return repeat;
     }
 
     @Override
-    public Date getStartTime() {
+    public long getStartTime() {
         return startTime;
     }
 
     @Override
-    public Date getEndTime() {
+    public long getEndTime() {
         return endTime;
     }
 
     // In millisecond
     @Override
-    public int getRepeatInterval() {
+    public int getInterval() {
         return interval;
     }
 }

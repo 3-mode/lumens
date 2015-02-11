@@ -10,11 +10,11 @@ import java.util.Date;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public interface JobTrigger {
-    public int getRepeatCount();
+    public int getRepeat();
 
-    public Date getStartTime();
+    public long getStartTime();
 
-    public Date getEndTime();
+    public long getEndTime();
 
-    public int getRepeatInterval();
+    public int getInterval();
 }

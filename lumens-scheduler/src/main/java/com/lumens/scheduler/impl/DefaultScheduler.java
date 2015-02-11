@@ -86,8 +86,8 @@ public class DefaultScheduler implements JobScheduler {
         }
 
         Job dbJob = new Job(job.getId(), job.getName(), job.getDescription(),
-                            trigger.getRepeatCount(), trigger.getRepeatInterval(),
-                            trigger.getStartTime().getTime(), trigger.getEndTime().getTime());
+                            trigger.getRepeat(), trigger.getInterval(),
+                            trigger.getStartTime(), trigger.getEndTime());
         jobList.add(dbJob);
         long jobId = job.getId();
         jobMap.put(jobId, dbJob);
@@ -126,14 +126,14 @@ public class DefaultScheduler implements JobScheduler {
 
             jobDetail.getJobDataMap().put("EngineObject", this.engine);
             SimpleScheduleBuilder simpleBuilder = simpleSchedule();
-            int repeatCount = job.repeatCount;
-            if (repeatCount > 0) {
-                simpleBuilder.withRepeatCount(repeatCount);
-            } else if (repeatCount < 0) {
+            int repeat = job.repeat;
+            if (repeat > 0) {
+                simpleBuilder.withRepeatCount(repeat);
+            } else if (repeat < 0) {
                 simpleBuilder.repeatForever();
             }
             int repeatInterval = job.interval;
-            if (repeatCount != 0 && repeatInterval > 0) {
+            if (repeat != 0 && repeatInterval > 0) {
                 simpleBuilder.withIntervalInSeconds(repeatInterval);
             }
 
