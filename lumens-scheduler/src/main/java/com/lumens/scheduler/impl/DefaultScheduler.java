@@ -86,8 +86,8 @@ public class DefaultScheduler implements JobScheduler {
         }
 
         Job dbJob = new Job(job.getId(), job.getName(), job.getDescription(),
-                            trigger.getRepeat(), trigger.getInterval(),
-                            trigger.getStartTime(), trigger.getEndTime());
+                trigger.getRepeat(), trigger.getInterval(),
+                trigger.getStartTime(), trigger.getEndTime());
         jobList.add(dbJob);
         long jobId = job.getId();
         jobMap.put(jobId, dbJob);
@@ -119,29 +119,29 @@ public class DefaultScheduler implements JobScheduler {
         List<Project> projectList = projectMap.get(jobId);
         for (Project proj : projectList) {
             JobDetail jobDetail = newJob(JobThread.class)
-            .withIdentity(String.valueOf(proj.id), group)
-            .usingJobData("ProjectData", proj.data)
-            .usingJobData("ProjectName", proj.name)
-            .build();
+                    .withIdentity(String.valueOf(proj.id), group)
+                    .usingJobData("ProjectData", proj.data)
+                    .usingJobData("ProjectName", proj.name)
+                    .build();
 
             jobDetail.getJobDataMap().put("EngineObject", this.engine);
             SimpleScheduleBuilder simpleBuilder = simpleSchedule();
-            int repeat = job.repeat;
-            if (repeat > 0) {
-                simpleBuilder.withRepeatCount(repeat);
-            } else if (repeat < 0) {
+            int interval = job.interval;
+            if (interval > 0) {
+                simpleBuilder.withRepeatCount(interval);
+            } else if (interval < 0) {
                 simpleBuilder.repeatForever();
             }
-            int repeatInterval = job.interval;
-            if (repeat != 0 && repeatInterval > 0) {
-                simpleBuilder.withIntervalInSeconds(repeatInterval);
+            int repeat = job.repeat;
+            if (interval != 0 && repeat > 0) {
+                simpleBuilder.withIntervalInSeconds(repeat);
             }
 
             TriggerBuilder<Trigger> builder = newTrigger();
             builder.withIdentity(String.valueOf(job.id), group);
             builder.withSchedule(simpleBuilder);
             builder.startAt(job.startTime);
-            builder.endAt(job.endTime);
+            // TODO: add end time
 
             try {
                 sched.scheduleJob(jobDetail, builder.build());
