@@ -6,6 +6,7 @@ package com.lumens.scheduler.impl;
 import com.lumens.engine.TransformEngine;
 import com.lumens.scheduler.JobScheduler;
 import com.lumens.scheduler.JobTrigger;
+import com.lumens.scheduler.JobTrigger.Repeat;
 import com.lumens.scheduler.JobMonitor;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobDAO;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import org.quartz.CalendarIntervalScheduleBuilder;
 import static org.quartz.JobBuilder.newJob;
 import org.quartz.JobKey;
 import org.quartz.JobDetail;
@@ -25,8 +27,10 @@ import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
+import org.quartz.ScheduleBuilder;
 
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+import static org.quartz.CalendarIntervalScheduleBuilder.calendarIntervalSchedule;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import static org.quartz.TriggerBuilder.newTrigger;
@@ -125,21 +129,10 @@ public class DefaultScheduler implements JobScheduler {
                     .build();
 
             jobDetail.getJobDataMap().put("EngineObject", this.engine);
-            SimpleScheduleBuilder simpleBuilder = simpleSchedule();
-            int interval = job.interval;
-            if (interval > 0) {
-                simpleBuilder.withRepeatCount(interval);
-            } else if (interval < 0) {
-                simpleBuilder.repeatForever();
-            }
-            int repeat = job.repeat;
-            if (interval != 0 && repeat > 0) {
-                simpleBuilder.withIntervalInSeconds(repeat);
-            }
 
             TriggerBuilder<Trigger> builder = newTrigger();
             builder.withIdentity(String.valueOf(job.id), group);
-            builder.withSchedule(simpleBuilder);
+            builder.withSchedule(getQuartzBuilder(job.repeat, job.interval));
             builder.startAt(job.startTime);
             // TODO: add end time
 
@@ -149,6 +142,47 @@ public class DefaultScheduler implements JobScheduler {
                 throw new RuntimeException(ex);
             }
         }
+    }
+
+    private ScheduleBuilder getQuartzBuilder(int repeat, int interval) {
+        if (interval == 0) {
+            throw new RuntimeException("Illegal value: scheduler interval should not be equal to 0.");
+        }
+
+        boolean bSimpleScheduler = repeat >= Repeat.Monthly.value();
+        SimpleScheduleBuilder simpleBuilder = simpleSchedule();
+        CalendarIntervalScheduleBuilder calendarBuilder = calendarIntervalSchedule();
+
+        switch (Repeat.valueOf(repeat)) {
+            case Secondly:
+                simpleBuilder.withIntervalInSeconds(1);
+            case Minutely:
+                simpleBuilder.withIntervalInMinutes(1);
+            case Hourly:
+                simpleBuilder.withIntervalInHours(1);
+            case Daily:
+                simpleBuilder.withIntervalInHours(24);
+            case Weekly:
+                simpleBuilder.withIntervalInHours(24 * 7);
+            case Monthly:
+                calendarBuilder.withIntervalInMonths(1 * interval);
+                // TODO: add repeat 
+            case Yearly:
+                calendarBuilder.withIntervalInYears(1 * interval);
+                // TODO: add repeat 
+        }
+
+        if (interval > 0) {
+            if ( bSimpleScheduler){
+                simpleBuilder.withRepeatCount(interval);
+            }
+        } else if (interval < 0) {
+            if ( bSimpleScheduler){
+                simpleBuilder.repeatForever();
+            }
+        }
+
+        return bSimpleScheduler ? simpleBuilder:calendarBuilder;
     }
 
     @Override
