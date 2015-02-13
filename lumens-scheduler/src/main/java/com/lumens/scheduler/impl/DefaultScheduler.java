@@ -127,7 +127,6 @@ public class DefaultScheduler implements JobScheduler {
                     .usingJobData("ProjectData", proj.data)
                     .usingJobData("ProjectName", proj.name)
                     .build();
-
             jobDetail.getJobDataMap().put("EngineObject", this.engine);
 
             TriggerBuilder<Trigger> builder = newTrigger();
@@ -145,44 +144,29 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     private ScheduleBuilder getQuartzBuilder(int repeat, int interval) {
-        if (interval == 0) {
-            throw new RuntimeException("Illegal value: scheduler interval should not be equal to 0.");
+        if (interval < 0) {
+            throw new RuntimeException("Illegal value: scheduler interval should not be less than 0.");
         }
-
-        boolean bSimpleScheduler = repeat >= Repeat.Monthly.value();
-        SimpleScheduleBuilder simpleBuilder = simpleSchedule();
-        CalendarIntervalScheduleBuilder calendarBuilder = calendarIntervalSchedule();
 
         switch (Repeat.valueOf(repeat)) {
             case Secondly:
-                simpleBuilder.withIntervalInSeconds(1);
+                return simpleSchedule().withIntervalInSeconds(interval).repeatForever();
             case Minutely:
-                simpleBuilder.withIntervalInMinutes(1);
+                return simpleSchedule().withIntervalInMinutes(interval).repeatForever();
             case Hourly:
-                simpleBuilder.withIntervalInHours(1);
+                return simpleSchedule().withIntervalInHours(interval).repeatForever();
             case Daily:
-                simpleBuilder.withIntervalInHours(24);
+                return simpleSchedule().withIntervalInHours(interval).repeatForever();
             case Weekly:
-                simpleBuilder.withIntervalInHours(24 * 7);
+                return simpleSchedule().withIntervalInHours(interval).repeatForever();
             case Monthly:
-                calendarBuilder.withIntervalInMonths(1 * interval);
-                // TODO: add repeat 
+                return calendarIntervalSchedule().withIntervalInMonths(interval);
             case Yearly:
-                calendarBuilder.withIntervalInYears(1 * interval);
-                // TODO: add repeat 
-        }
-
-        if (interval > 0) {
-            if ( bSimpleScheduler){
-                simpleBuilder.withRepeatCount(interval);
-            }
-        } else if (interval < 0) {
-            if ( bSimpleScheduler){
-                simpleBuilder.repeatForever();
-            }
-        }
-
-        return bSimpleScheduler ? simpleBuilder:calendarBuilder;
+                return calendarIntervalSchedule().withIntervalInYears(interval);
+                
+            default:
+                throw new RuntimeException("Illegal value: scheduler repeat not available" + Repeat.valueOf(repeat).toString());
+        }       
     }
 
     @Override
