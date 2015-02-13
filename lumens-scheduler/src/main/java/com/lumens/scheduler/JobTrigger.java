@@ -32,7 +32,7 @@ public interface JobTrigger {
             return this.value;
         }
 
-        public Repeat valueOf(int value) {
+        public static Repeat valueOf(int value) {
             switch (value) {
                 case 1:
                     return Secondly;

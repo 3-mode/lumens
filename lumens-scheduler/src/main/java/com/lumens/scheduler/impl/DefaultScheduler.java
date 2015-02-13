@@ -163,10 +163,14 @@ public class DefaultScheduler implements JobScheduler {
                 return calendarIntervalSchedule().withIntervalInMonths(interval);
             case Yearly:
                 return calendarIntervalSchedule().withIntervalInYears(interval);
+            case Never:
+                break;
                 
             default:
                 throw new RuntimeException("Illegal value: scheduler repeat not available" + Repeat.valueOf(repeat).toString());
-        }       
+        };      
+        
+        return null;
     }
 
     @Override
