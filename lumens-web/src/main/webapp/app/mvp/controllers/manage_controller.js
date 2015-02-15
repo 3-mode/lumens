@@ -57,6 +57,7 @@ Lumens.controllers
     // Job command bar function
     $scope.onCommand = function (id_btn) {
         LumensLog.log("in Job onCommand");
+        $scope.createdJob = {};
     };
     $scope.openJobDetail = function (index, job_item, evt) {
         $scope.selectJobIndex = index;
@@ -80,19 +81,23 @@ Lumens.controllers
     // Create job function
     $scope.createJob = function () {
         LumensLog.log("in createJob");
-        LumensLog.log("Job", $scope.job);
+        LumensLog.log("Job", $scope.createdJob);
+        $scope.job = $scope.createdJob;
         $scope.job.id = $.currentTime();
-        $scope.job = {};
+        if (!$scope.jobs)
+            $scope.jobs = [];
+        $scope.jobs.push($scope.job);
     };
     JobList.get(function (result) {
-        $scope.jobs = result.jobs;
-        LumensLog.log(result);
+        $scope.jobs = result.content.jobs;
+        LumensLog.log("JobList:", result);
     });
 })
 .controller("JobConfigInitCtrl", function ($scope) {
     $scope.jobManagePanel.getPart2Element().find('.form_time')
     .datetimepicker({
         container: $scope.jobManagePanel.getPart2Element().find("#jobCofnig"),
+        format: 'yyyy-mm-dd hh:ii',
         language: 'en',
         weekStart: 1,
         todayBtn: 1,

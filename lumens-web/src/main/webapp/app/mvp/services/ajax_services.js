@@ -83,7 +83,7 @@ Lumens.services.factory('FormatList', function ($resource) {
     });
 });
 Lumens.services.factory('JobList', function ($resource) {
-    return $resource("app/mock/json/job_list.json?pagesize=:pagesize", {}, {
+    return $resource("rest/job?pagesize=:pagesize", {}, {
         get: {method: 'GET', params: {pagesize: '50'}, isArray: false}
     });
 });

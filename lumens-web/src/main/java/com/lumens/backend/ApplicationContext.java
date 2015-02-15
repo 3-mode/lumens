@@ -20,10 +20,10 @@ public class ApplicationContext {
     public static String LUMENS_JNI = "/module/manage/jni";
     private final List<String> resultCache = new ArrayList<>();
     private final String strRealPath;
+    private final JobScheduler jobScheduler;
     private TransformEngine transformEngine;
     private ProjectContext projectContext;
     private OSResourcesMonitor osResourcesMonitor;
-    private JobScheduler jobScheduler;
     private static ApplicationContext context;
 
     public static void createInstance(ClassLoader classLoader) {
