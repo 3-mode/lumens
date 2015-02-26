@@ -21,7 +21,7 @@ public class JobDAO extends BaseDAO {
     }
 
     public long update(final Job job) {
-        simplePrepareStatTransactionExecute(sqlManager.getSQL("JobDAO/UpdateJob"), job.id, job.name, job.description, job.repeat, job.interval, job.startTime, job.endTime);
+        simplePrepareStatTransactionExecute(sqlManager.getSQL("JobDAO/UpdateJob"), job.name, job.description, job.repeat, job.interval, job.startTime, job.endTime, job.id);
         return job.id;
     }
 
