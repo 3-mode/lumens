@@ -19,6 +19,7 @@ public class DateTime {
         new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"),
         new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ"),
         new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ"),
+        new SimpleDateFormat("yyyy-MM-dd HH:mm"),
         new SimpleDateFormat("yyyy-MM-dd"),
         new SimpleDateFormat("yyyy-MM-ddZZ"),
         new SimpleDateFormat("'T'HH:mm:ss"),
