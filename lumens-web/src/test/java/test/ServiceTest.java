@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import org.junit.Test;
@@ -105,6 +106,13 @@ public class ServiceTest {
 
     public void testMicrosecond() throws Exception {
         System.out.println(new Timestamp(System.currentTimeMillis()).toString());
+    }
+
+    public void testDateStringToTimeStamp() throws Exception {
+        String date = "2015-02-26 22:55";
+        Timestamp ts = new Timestamp(DateTime.DATETIME_PATTERN[4].parse(date).getTime());
+        System.out.println(ts.toString());
+        System.out.println(DateTime.DATETIME_PATTERN[4].format(new Date(ts.getTime())));
     }
 
     public void testUpdateJob() throws Exception {

@@ -50,7 +50,7 @@ public class JobService {
                 json.writeStringField("description", job.description);
                 json.writeNumberField("repeat_mode", job.repeat);
                 json.writeNumberField("interval", job.interval);
-                json.writeStringField("start_time", job.startTime.toString());
+                json.writeStringField("start_time", ServerUtils.getJobStartTimeString(job.startTime));
                 json.writeArrayFieldStart("projects");
                 List<Project> projectList = DBHelper.loadShortProjectFromDb(job.id);
                 for (Project project : projectList) {
@@ -90,7 +90,7 @@ public class JobService {
                           contentJson.get("description").getTextValue(),
                           contentJson.get("repeat_mode").getIntValue(),
                           contentJson.get("interval").getIntValue(),
-                          DateTime.parse(contentJson.get("start_time").getTextValue()).getTime(), 0L);
+                          ServerUtils.getTimestampFromString(contentJson.get("start_time").getTextValue()).getTime(), 0L);
         long saveId = jobDAO.create(job);
         try {
             JsonUtility utility = JsonUtility.createJsonUtility();
@@ -119,7 +119,7 @@ public class JobService {
                           contentJson.get("description").getTextValue(),
                           contentJson.get("repeat_mode").getIntValue(),
                           contentJson.get("interval").getIntValue(),
-                          DateTime.parse(contentJson.get("start_time").getTextValue()).getTime(), 0L);
+                          ServerUtils.getTimestampFromString(contentJson.get("start_time").getTextValue()).getTime(), 0L);
         long saveId = jobDAO.update(job);
         try {
             JsonUtility utility = JsonUtility.createJsonUtility();

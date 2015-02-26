@@ -83,24 +83,24 @@ Lumens.controllers
     $scope.addProject = function () {
         $("#projectListAddModal").find("#projectLoading").show();
     }
-    // Create job function
-    $scope.createJob = function () {
-        LumensLog.log("in createJob");
-        $scope.job.id = $.currentTime();
-        if (!$scope.jobs)
-            $scope.jobs = [];
-        $scope.jobs.push($scope.job);
-        JobService.save({content: $scope.job}, function (result) {
-            if (result.status === 'OK')
-                Notifier.message("info", "Success", "Save the job '" + $scope.job.name + "'");
-        });
-    };
-    $scope.updateJob = function () {
+    $scope.saveJob = function () {
         console.log("Saved job: ", {content: $scope.job});
-        JobService.update({id: $scope.job.id}, {content: $scope.job}, function (result) {
-            if (result.status === 'OK')
-                Notifier.message("info", "Success", "Save the job '" + $scope.job.name + "'");
-        });
+        if ($scope.job && $scope.job.id) {
+            JobService.update({id: $scope.job.id}, {content: $scope.job}, function (result) {
+                if (result.status === 'OK')
+                    Notifier.message("info", "Success", "Save the job '" + $scope.job.name + "'");
+            });
+        }
+        else if ($scope.job) {
+            $scope.job.id = $.currentTime();
+            if (!$scope.jobs)
+                $scope.jobs = [];
+            $scope.jobs.push($scope.job);
+            JobService.save({content: $scope.job}, function (result) {
+                if (result.status === 'OK')
+                    Notifier.message("info", "Success", "Save the job '" + $scope.job.name + "'");
+            });
+        }
     };
     JobService.list(function (result) {
         $scope.jobs = result.content.jobs;
