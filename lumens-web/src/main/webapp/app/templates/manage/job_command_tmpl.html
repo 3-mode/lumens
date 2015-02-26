@@ -1,8 +1,10 @@
 <div style="margin-left: 10px; margin-right:10px;">
     <div class="lumens-button-bar">
-        <a class="lumens-button" data-toggle="modal" data-target="#jobCreateModal" ng-click="onCommand('id_new')">{{i18n['id_new']}}</a>
-        <a ng-repeat="id_btn in ['id_save', 'id_start', 'id_stop']" class="lumens-button" ng-click="onCommand(id_btn)">{{i18n[id_btn]}}</a>
+        <a class="lumens-button" data-toggle="modal" data-target="#jobDetailModal" ng-click="onCommand('id_new')">{{i18n['id_new']}}</a>
+        <a class="lumens-button" data-toggle="modal" data-target="#jobDetailModal" ng-click="onCommand('id_edit')">{{i18n['id_edit']}}</a>
+        <a ng-repeat="id_btn in ['id_start', 'id_stop']" class="lumens-button" ng-click="onCommand(id_btn)">{{i18n[id_btn]}}</a>
         <a class="lumens-button lumens-button-delete" ng-click="onCommand('id_delete')">{{i18n.id_delete}}</a>
         <div class="lumens-bootstrap" ng-include="job_create_template"></div>
+        <div class="lumens-bootstrap" ng-include="job_add_proj_manage_template"></div>
     </div>
 </div>

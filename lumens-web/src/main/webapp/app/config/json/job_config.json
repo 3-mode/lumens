@@ -2,35 +2,35 @@
     "repeat_modes": [
         {
             "label_id": "id_job_repeat_never",
-            "value": "Never"
+            "value": 0
         },
         {
             "label_id": "id_job_repeat_secondly",
-            "value": "Secondly"
+            "value": 1
         },
         {
             "label_id": "id_job_repeat_minutely",
-            "value": "Minutely"
+            "value": 2
         },
         {
             "label_id": "id_job_repeat_hourly",
-            "value": "Hourly"
+            "value": 3
         },
         {
             "label_id": "id_job_repeat_daily",
-            "value": "Daily"
+            "value": 4
         },
         {
             "label_id": "id_job_repeat_weekly",
-            "value": "Weekly"
+            "value": 5
         },
         {
             "label_id": "id_job_repeat_monthly",
-            "value": "Monthly"
+            "value": 6
         },
         {
             "label_id": "id_job_repeat_yearly",
-            "value": "Yearly"
+            "value": 7
         }
     ]
 }

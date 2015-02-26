@@ -1,0 +1,104 @@
+<div id="jobDetailModal" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog modal-lg-ex">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">{{i18n['id_job_create_title']}}</h4>
+            </div>
+            <div class="modal-body table-responsive">
+                <table class="lumens-bootstrap" style="width: 90%;">
+                    <tbody>
+                        <tr>
+                            <td class="lumens-label-style lumens-must">{{i18n['id_job_name']}}</td>
+                            <td class="lumens-value-style-colspan-3" colspan="3">
+                                <input type="text" ng-model="job.name" class="form-control lumens-control"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lumens-label-style  lumens-must">{{i18n['id_job_repeat']}}</td>
+                            <td class="lumens-value-style">
+                                <select ng-model="job.repeat_mode" class="form-control lumens-control">
+                                    <option ng-if="job_config && job_config.repeat_modes" ng-repeat='repeat_item in job_config.repeat_modes' value="{{repeat_item.value}}">{{i18n[repeat_item.label_id]}}</option>
+                                </select>
+                            </td>
+                            <td class="lumens-label-style  lumens-must">{{i18n['id_job_interval_time']}}</td>
+                            <td class="lumens-value-style">
+                                <input type="number" ng-model="job.interval" class="form-control lumens-control"/>   
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lumens-label-style  lumens-must">{{i18n['id_job_start_time']}}</td>
+                            <td class="lumens-value-style" >
+                                <div id="{{job.id}}" style="width: 100%;" class="input-group date form_time" data-date="" data-date-format="hh:ii" data-link-field="dtp_input_start" data-link-format="hh:ii">
+                                    <input ng-model="job.start_time" style="height: 34px;" class="form-control lumens-control" type="text">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                                </div>
+                                <input id="dtp_input_start" type="hidden" value="">
+                            </td>
+                            <td colspan="2"><div style="display:block; width: 300px;"></div></td>
+                        </tr>
+                        <tr>
+                            <td class="lumens-label-style">{{i18n['id_job_description']}}</td>
+                            <td class="lumens-value-textarea-style-colspan-3" colspan="3">
+                                <textarea ng-model="job.description" class="form-control lumens-control" >{{job.description}}</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <div class="table-responsive" style="padding-top: 10px; padding-left: 30px;">
+                                    <!-- <div id='projectLoading'><img src='app/css/img/loading.gif'/></div> -->
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Project ID</th>
+                                                <th>Project Name</th>
+                                                <th>Status</th>
+                                                <th>Operation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="3" data-toggle="modal" data-target="#projectListAddModal" style="cursor: pointer;" ng-click="AddManageProject()">Add ...</td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                            <tr ng-repeat="project in job.projects" project-id="{{project.project_id}}" style="cursor: pointer;" ng-class="{'lumens-h-active':selectProjIndex === {{$index}}}" ng-click="selectProjItem($index)">
+                                                <td>{{project.project_id}}</td><td>{{project.project_name}}</td><td>Health</td><td>Edit | Delete</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <div id="jobCofnig" class="lumens-bootstrap" style="position: relative;"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{i18n['id_close']}}</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-if="!job || !job.id" ng-click="createJob()">{{i18n['id_create_job']}}</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-if="job && job.id" ng-click="updateJob()">{{i18n['id_save_job']}}</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+    <script type="text/javascript">
+        $(".form_time").datetimepicker({
+        container: $.find("#jobCofnig"),
+        format: 'yyyy-mm-dd hh:ii',
+        language: 'en',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 1,
+        minView: 0,
+        maxView: 1,
+        forceParse: 0,
+        pickerPosition: "bottom-left"
+        });
+    </script>
+</div>

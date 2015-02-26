@@ -12,7 +12,7 @@ Lumens.controllers
     $scope.job_bar_template = "app/templates/manage/job_command_tmpl.html";
     $scope.job_list_template = "app/templates/manage/job_list_tmpl.html";
     $scope.job_config_template = "app/templates/manage/job_config_tmpl.html";
-    $scope.job_create_template = "app/templates/manage/job_create_modal_tmpl.html";
+    $scope.job_create_template = "app/templates/manage/job_modal_tmpl.html";
     $scope.job_function_tool_template = "app/templates/manage/job_function_tool_tmpl.html";
     $scope.job_add_proj_manage_template = "app/templates/manage/job_add_proj_manage_tmpl.html";
     $scope.jobListHolder = new Lumens.List($("#jobList"));
@@ -39,7 +39,7 @@ Lumens.controllers
         });
     })
 })
-.controller("JobManagementCtrl", function ($scope, $compile, JobList, ProjectList) {
+.controller("JobManagementCtrl", function ($scope, $compile, JobService, ProjectList, Notifier) {
     var jobManagementHolder = $("#jobManagementHolder");
     $(window).resize(function (e) {
         if (e && e.target !== this)
@@ -53,16 +53,21 @@ Lumens.controllers
         part1Size: "40%"
     });
     $scope.jobManagePanel.getPart1Element().append($compile('<div ng-include="job_list_template" class="lumens-scroll-panel"></div>')($scope));
-    $scope.jobManagePanel.getPart2Element().append($compile('<div ng-include="job_config_template" class="lumens-scroll-panel"></div>')($scope));
+    //$scope.jobManagePanel.getPart2Element().append($compile('<div ng-include="job_config_template" class="lumens-scroll-panel"></div>')($scope));
     // Job command bar function
     $scope.onCommand = function (id_btn) {
         LumensLog.log("in Job onCommand");
-        $scope.createdJob = {};
+        if ('id_new' === id_btn) {
+            $scope.job = {};
+        }
+        else if ('id_edit' === id_btn) {
+            if ($scope.selectJobIndex >= 0 && $scope.jobs && $scope.jobs.length > 0)
+                $scope.job = $scope.jobs[$scope.selectJobIndex];
+        }
     };
     $scope.openJobDetail = function (index, job_item, evt) {
         $scope.selectJobIndex = index;
         LumensLog.log("Event", index, job_item, evt);
-        $scope.job = job_item;
     };
     $scope.selectProjItem = function (index) {
         $scope.selectProjIndex = index;
@@ -81,33 +86,25 @@ Lumens.controllers
     // Create job function
     $scope.createJob = function () {
         LumensLog.log("in createJob");
-        LumensLog.log("Job", $scope.createdJob);
-        $scope.job = $scope.createdJob;
         $scope.job.id = $.currentTime();
         if (!$scope.jobs)
             $scope.jobs = [];
         $scope.jobs.push($scope.job);
+        JobService.save({content: $scope.job}, function (result) {
+            if (result.status === 'OK')
+                Notifier.message("info", "Success", "Save the job '" + $scope.job.name + "'");
+        });
     };
-    JobList.get(function (result) {
+    $scope.updateJob = function () {
+        console.log("Saved job: ", {content: $scope.job});
+        JobService.update({id: $scope.job.id}, {content: $scope.job}, function (result) {
+            if (result.status === 'OK')
+                Notifier.message("info", "Success", "Save the job '" + $scope.job.name + "'");
+        });
+    };
+    JobService.list(function (result) {
         $scope.jobs = result.content.jobs;
         LumensLog.log("JobList:", result);
-    });
-})
-.controller("JobConfigInitCtrl", function ($scope) {
-    $scope.jobManagePanel.getPart2Element().find('.form_time')
-    .datetimepicker({
-        container: $scope.jobManagePanel.getPart2Element().find("#jobCofnig"),
-        format: 'yyyy-mm-dd hh:ii',
-        language: 'en',
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 1,
-        minView: 0,
-        maxView: 1,
-        forceParse: 0,
-        pickerPosition: "bottom-left"
     });
 })
 .controller("ServerMonitorCtrl", function ($scope, CpuPerc, CpuCount, MemPerc, Disk) {

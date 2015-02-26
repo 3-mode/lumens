@@ -19,6 +19,8 @@ import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.model.DateTime;
 import com.lumens.model.Element;
 import com.lumens.model.serializer.ElementSerializer;
+import com.lumens.sysdb.dao.JobDAO;
+import com.lumens.sysdb.entity.Job;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -103,6 +105,17 @@ public class ServiceTest {
 
     public void testMicrosecond() throws Exception {
         System.out.println(new Timestamp(System.currentTimeMillis()).toString());
+    }
+
+    public void testUpdateJob() throws Exception {
+        JobDAO jobDAO = DAOFactory.getJobDAO();
+        Job job = new Job(1424960575768L,
+                          "test",
+                          "Test",
+                          1,
+                          12,
+                          DateTime.parse("2015-02-26 22:45").getTime(), 0L);
+        long saveId = jobDAO.update(job);
     }
 
 }

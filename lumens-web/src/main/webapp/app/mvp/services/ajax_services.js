@@ -82,9 +82,14 @@ Lumens.services.factory('FormatList', function ($resource) {
         getOUT: {method: 'GET', params: {direction: 'OUT'}, isArray: false}
     });
 });
-Lumens.services.factory('JobList', function ($resource) {
-    return $resource("rest/job?pagesize=:pagesize", {}, {
-        get: {method: 'GET', params: {pagesize: '50'}, isArray: false}
+Lumens.services.factory('JobService', function ($resource) {
+    return $resource(
+    "rest/job/:id",
+    {id: "@id"},
+    {
+        list: {method: 'GET', isArray: false},
+        save: {method: 'PUT', isArray: false},
+        update: {method: 'POST', isArray: false}
     });
 });
 Lumens.services.factory('JobConfig', function ($resource) {
