@@ -51,20 +51,19 @@
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th>Project ID</th>
-                                                <th>Project Name</th>
-                                                <th>Status</th>
-                                                <th>Operation</th>
+                                                <th>{{i18n.id_project_name}}</th>
+                                                <th>{{i18n.id_project_desc}}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td colspan="3" data-toggle="modal" data-target="#projectListAddModal" style="cursor: pointer;" ng-click="AddManageProject()">Add ...</td>
-                                                <td>
-                                                </td>
+                                                <td colspan="3" data-toggle="modal" data-target="#projectListAddModal" style="cursor: pointer;" ng-click="listProject()">Add ...</td>
+                                                <td></td>
                                             </tr>
-                                            <tr ng-repeat="project in job.projects" project-id="{{project.project_id}}" style="cursor: pointer;" ng-class="{'lumens-h-active':selectProjIndex === {{$index}}}" ng-click="selectProjItem($index)">
-                                                <td>{{project.project_id}}</td><td>{{project.project_name}}</td><td>Health</td><td>Edit | Delete</td>
+                                            <tr ng-repeat="project in job.projects track by $index" project-id="{{project.project_id}}" style="cursor: pointer;"
+                                                ng-class="{'lumens-h-active':selectAddedProjIndex === {{$index}} }"
+                                                ng-click="selectAddedProject($index)">
+                                                <td>{{project.project_name}}</td><td>{{project.project_description}}</td>
                                             </tr>
                                         </tbody>
                                     </table>

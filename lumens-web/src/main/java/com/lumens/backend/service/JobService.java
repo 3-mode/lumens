@@ -6,12 +6,14 @@ package com.lumens.backend.service;
 import com.lumens.backend.ServerUtils;
 import static com.lumens.backend.ServiceConstants.CONTENT;
 import com.lumens.io.JsonUtility;
-import com.lumens.model.DateTime;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobDAO;
+import com.lumens.sysdb.dao.JobProjectRelationDAO;
 import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.entity.Project;
 import com.lumens.sysdb.utils.DBHelper;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -82,9 +84,13 @@ public class JobService {
     @PUT
     @Produces("application/json")
     public Response createJob(String message) {
-
+        JsonNode messageJson = JsonUtility.createJson(message);
         JobDAO jobDAO = DAOFactory.getJobDAO();
-        long saveId = jobDAO.create(getJob(message));
+        long saveId = jobDAO.create(getJob(messageJson));
+        List<Long> projectIdList = getProjectList(messageJson);
+        JobProjectRelationDAO jprDAO = DAOFactory.getRelationDAO();
+        for (long projectId : projectIdList)
+            jprDAO.create(saveId, projectId);
         try {
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
@@ -104,8 +110,14 @@ public class JobService {
     @Path("{jobId}")
     @Produces("application/json")
     public Response updateJob(@PathParam("jobId") String jobId, String message) {
+        JsonNode messageJson = JsonUtility.createJson(message);
         JobDAO jobDAO = DAOFactory.getJobDAO();
-        long saveId = jobDAO.update(getJob(message));
+        long saveId = jobDAO.update(getJob(messageJson));
+        List<Long> projectIdList = getProjectList(messageJson);
+        JobProjectRelationDAO jprDAO = DAOFactory.getRelationDAO();
+        jprDAO.deleteAllRelation(saveId);
+        for (long projectId : projectIdList)
+            jprDAO.create(saveId, projectId);
         try {
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
@@ -121,8 +133,7 @@ public class JobService {
         }
     }
 
-    private Job getJob(String message) {
-        JsonNode messageJson = JsonUtility.createJson(message);
+    private Job getJob(JsonNode messageJson) {
         JsonNode contentJson = messageJson.get(CONTENT);
         return new Job(Long.parseLong(contentJson.get("id").asText()),
                        contentJson.get("name").asText(),
@@ -130,5 +141,19 @@ public class JobService {
                        Integer.parseInt(contentJson.get("repeat_mode").asText()),
                        Integer.parseInt(contentJson.get("interval").asText()),
                        ServerUtils.getTimestampFromString(contentJson.get("start_time").asText()).getTime(), 0L);
+    }
+
+    private List<Long> getProjectList(JsonNode messageJson) {
+        List<Long> list = new ArrayList<>();
+        JsonNode contentJson = messageJson.get(CONTENT);
+        JsonNode projectsJson = contentJson.get("projects");
+        if (projectsJson != null) {
+            Iterator<JsonNode> it = projectsJson.getElements();
+            while (it.hasNext()) {
+                JsonNode project = it.next();
+                list.add(Long.parseLong(project.get("project_id").asText()));
+            }
+        }
+        return list;
     }
 }

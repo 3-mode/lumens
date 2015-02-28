@@ -9,8 +9,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="job_item in jobs" job-id="{{job_item.id}}" style="cursor: pointer;"
-                    ng-class="{'lumens-h-active':$index === selectJobIndex}" ng-click="openJobDetail($index, $event)">
+                <tr ng-repeat="job_item in jobs track by $index" job-id="{{job_item.id}}" style="cursor: pointer;"
+                    ng-class="{'lumens-h-active':selectJobIndex === {{$index}} }" ng-click="selectJob($index)">
                     <td>{{job_item.name}}</td><td>{{job_item.description}}</td>
                 </tr>
             </tbody>

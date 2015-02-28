@@ -10,12 +10,14 @@
                 <table class="table"  ng-if="projects && projects.length > 0">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Description</th>
+                            <th>{{i18n.id_project_name}}</th>
+                            <th>{{i18n.id_project_desc}}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="project in projects" project-id="{{project.id}}" style="cursor: pointer;" ng-class="{'lumens-h-active':{{$index}} === selectAddedProjIndex}" ng-click="selectAddedProject($index, $event)" ng-dblclick="addProjectToManage()">
+                        <tr ng-repeat="project in projects track by $index" project-id="{{project.id}}" style="cursor: pointer;"
+                            ng-class="{'lumens-h-active':selectProjIndex === {{$index}} }"
+                            ng-click="selectProjItem($index)">
                             <td>{{project.name}}</td><td>{{project.description}}</td>
                         </tr>
                     </tbody>

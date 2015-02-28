@@ -65,9 +65,9 @@ Lumens.controllers
                 $scope.job = $scope.jobs[$scope.selectJobIndex];
         }
     };
-    $scope.openJobDetail = function (index, job_item, evt) {
+    $scope.selectJob = function (index) {
         $scope.selectJobIndex = index;
-        LumensLog.log("Event", index, job_item, evt);
+        console.log("In select Job", index);
     };
     $scope.selectProjItem = function (index) {
         $scope.selectProjIndex = index;
@@ -75,13 +75,20 @@ Lumens.controllers
     $scope.selectAddedProject = function (index) {
         $scope.selectAddedProjIndex = index;
     };
-    $scope.AddManageProject = function () {
+    $scope.listProject = function () {
         ProjectList.get(function (projectsResponse) {
             $scope.projects = projectsResponse.content.project;
         });
     };
     $scope.addProject = function () {
-        $("#projectListAddModal").find("#projectLoading").show();
+        console.log("added project into job");
+        if ($scope.job && !$scope.job.projects)
+            $scope.job.projects = [];
+        var project = $scope.projects[$scope.selectProjIndex];
+        $scope.job.projects.push({
+            "project_id": project.id,
+            "project_name": project.name,
+            "project_description": project.description});
     }
     $scope.saveJob = function () {
         console.log("Saved job: ", {content: $scope.job});
