@@ -117,18 +117,18 @@ public class DefaultScheduler implements JobScheduler {
             throw new RuntimeException("A job must be added to scheduler before start.");
         }
 
-        String group = String.valueOf(job.id);
+        String group = Long.toString(job.id);
         List<Project> projectList = projectMap.get(jobId);
         for (Project proj : projectList) {
             JobDetail jobDetail = newJob(JobThread.class)
-            .withIdentity(String.valueOf(proj.id), group)
+            .withIdentity(Long.toString(proj.id), group)
             .usingJobData("ProjectData", proj.data)
             .usingJobData("ProjectName", proj.name)
             .build();
             jobDetail.getJobDataMap().put("EngineObject", this.engine);
 
             TriggerBuilder<Trigger> builder = newTrigger();
-            builder.withIdentity(String.valueOf(job.id), group);
+            builder.withIdentity(Long.toString(job.id), group);
             builder.withSchedule(getQuartzBuilder(job.repeat, job.interval));
             builder.startAt(job.startTime);
             // TODO: add end time
