@@ -82,16 +82,9 @@ public class JobService {
     @PUT
     @Produces("application/json")
     public Response createJob(String message) {
-        JsonNode messageJson = JsonUtility.createJson(message);
-        JsonNode contentJson = messageJson.get(CONTENT);
+
         JobDAO jobDAO = DAOFactory.getJobDAO();
-        Job job = new Job(contentJson.get("id").getLongValue(),
-                          contentJson.get("name").getTextValue(),
-                          contentJson.get("description").getTextValue(),
-                          contentJson.get("repeat_mode").getIntValue(),
-                          contentJson.get("interval").getIntValue(),
-                          ServerUtils.getTimestampFromString(contentJson.get("start_time").getTextValue()).getTime(), 0L);
-        long saveId = jobDAO.create(job);
+        long saveId = jobDAO.create(getJob(message));
         try {
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
@@ -111,16 +104,8 @@ public class JobService {
     @Path("{jobId}")
     @Produces("application/json")
     public Response updateJob(@PathParam("jobId") String jobId, String message) {
-        JsonNode messageJson = JsonUtility.createJson(message);
-        JsonNode contentJson = messageJson.get(CONTENT);
         JobDAO jobDAO = DAOFactory.getJobDAO();
-        Job job = new Job(Long.parseLong(contentJson.get("id").getTextValue()),
-                          contentJson.get("name").getTextValue(),
-                          contentJson.get("description").getTextValue(),
-                          contentJson.get("repeat_mode").getIntValue(),
-                          contentJson.get("interval").getIntValue(),
-                          ServerUtils.getTimestampFromString(contentJson.get("start_time").getTextValue()).getTime(), 0L);
-        long saveId = jobDAO.update(job);
+        long saveId = jobDAO.update(getJob(message));
         try {
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
@@ -134,5 +119,16 @@ public class JobService {
         } catch (Exception e) {
             return ServerUtils.getErrorMessageResponse(e);
         }
+    }
+
+    private Job getJob(String message) {
+        JsonNode messageJson = JsonUtility.createJson(message);
+        JsonNode contentJson = messageJson.get(CONTENT);
+        return new Job(Long.parseLong(contentJson.get("id").asText()),
+                       contentJson.get("name").asText(),
+                       contentJson.get("description").asText(),
+                       Integer.parseInt(contentJson.get("repeat_mode").asText()),
+                       Integer.parseInt(contentJson.get("interval").asText()),
+                       ServerUtils.getTimestampFromString(contentJson.get("start_time").asText()).getTime(), 0L);
     }
 }

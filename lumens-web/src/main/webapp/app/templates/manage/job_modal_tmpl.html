@@ -32,8 +32,9 @@
                                 <div id="{{job.id}}" style="width: 100%;" class="input-group date form_time" data-date="" data-date-format="hh:ii" data-link-field="dtp_input_start" data-link-format="hh:ii">
                                     <input ng-model="job.start_time" style="height: 34px;" class="form-control lumens-control" type="text">
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                                    <div id="jobCofnig" class="lumens-bootstrap" style="position: relative;"></div>
+                                    <input id="dtp_input_start" type="hidden" value="">
                                 </div>
-                                <input id="dtp_input_start" type="hidden" value="">
                             </td>
                             <td colspan="2"><div style="display:block; width: 300px;"></div></td>
                         </tr>
@@ -68,11 +69,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="4">
-                                <div id="jobCofnig" class="lumens-bootstrap" style="position: relative;"></div>
                             </td>
                         </tr>
                     </tbody>
