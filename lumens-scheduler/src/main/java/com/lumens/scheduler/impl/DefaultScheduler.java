@@ -19,14 +19,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-import org.quartz.CalendarIntervalScheduleBuilder;
 import static org.quartz.JobBuilder.newJob;
 import org.quartz.JobKey;
 import org.quartz.JobDetail;
 import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.SimpleScheduleBuilder;
 import org.quartz.ScheduleBuilder;
 
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
@@ -90,8 +88,8 @@ public class DefaultScheduler implements JobScheduler {
         }
 
         Job dbJob = new Job(job.getId(), job.getName(), job.getDescription(),
-                trigger.getRepeat(), trigger.getInterval(),
-                trigger.getStartTime(), trigger.getEndTime());
+                            trigger.getRepeat(), trigger.getInterval(),
+                            trigger.getStartTime(), trigger.getEndTime());
         jobList.add(dbJob);
         long jobId = job.getId();
         jobMap.put(jobId, dbJob);
@@ -123,10 +121,10 @@ public class DefaultScheduler implements JobScheduler {
         List<Project> projectList = projectMap.get(jobId);
         for (Project proj : projectList) {
             JobDetail jobDetail = newJob(JobThread.class)
-                    .withIdentity(String.valueOf(proj.id), group)
-                    .usingJobData("ProjectData", proj.data)
-                    .usingJobData("ProjectName", proj.name)
-                    .build();
+            .withIdentity(String.valueOf(proj.id), group)
+            .usingJobData("ProjectData", proj.data)
+            .usingJobData("ProjectName", proj.name)
+            .build();
             jobDetail.getJobDataMap().put("EngineObject", this.engine);
 
             TriggerBuilder<Trigger> builder = newTrigger();
@@ -165,11 +163,11 @@ public class DefaultScheduler implements JobScheduler {
                 return calendarIntervalSchedule().withIntervalInYears(interval);
             case Never:
                 break;
-                
+
             default:
                 throw new RuntimeException("Illegal value: scheduler repeat not available" + Repeat.valueOf(repeat).toString());
-        };      
-        
+        }
+
         return null;
     }
 
@@ -181,11 +179,11 @@ public class DefaultScheduler implements JobScheduler {
         }
 
         // Remove from map and scheduler
-        String group = String.valueOf(jobId);
+        String group = Long.toString(jobId);
         List<Project> projectList = projectMap.get(jobId);
         for (Project proj : projectList) {
             try {
-                sched.deleteJob(new JobKey(String.valueOf(proj.id), group));
+                sched.deleteJob(new JobKey(Long.toString(proj.id), group));
             } catch (SchedulerException ex) {
                 // TODO: log error 
             }
@@ -225,11 +223,11 @@ public class DefaultScheduler implements JobScheduler {
         jobList.remove(job);
 
         // Remove from map and scheduler
-        String group = String.valueOf(job.id);
+        String group = Long.toString(job.id);
         List<Project> projectList = projectMap.remove(jobId);
         for (Project proj : projectList) {
             try {
-                sched.deleteJob(new JobKey(String.valueOf(proj.id), group));
+                sched.deleteJob(new JobKey(Long.toString(proj.id), group));
             } catch (SchedulerException ex) {
                 // TODO: log error 
             }
