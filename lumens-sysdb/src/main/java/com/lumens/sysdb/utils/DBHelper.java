@@ -45,7 +45,7 @@ public class DBHelper {
         JobProjectRelationDAO relationDAO = DAOFactory.getRelationDAO();
         List<JobProjectRelation> relationList = relationDAO.getAllRelation(jobId);
         for (JobProjectRelation relation : relationList) {
-            projectIdList.add(String.valueOf(relation.projectId));
+            projectIdList.add(Long.toString(relation.projectId));
         }
 
         return projectIdList;
