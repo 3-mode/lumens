@@ -20,7 +20,7 @@ public interface JobScheduler {
 
     public void setEngine(TransformEngine engine);
 
-    public JobScheduler addSchedule(DefaultJob job, JobTrigger trigger);
+    public JobScheduler addSchedule(Job job, JobTrigger trigger);
 
     public void startJob(long jobId);
 

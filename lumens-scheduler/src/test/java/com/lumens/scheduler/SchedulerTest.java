@@ -45,13 +45,13 @@ public class SchedulerTest {
         project.setName("Test project");
         JobTrigger trigger = new DefaultTrigger(System.currentTimeMillis(), System.currentTimeMillis() + 10000, 1, 1);
 
-        DefaultJob failJob = new DefaultJob(1001, "job1001", "This is a sample job");
+        Job failJob = new DefaultJob(1001, "job1001", "This is a sample job");
         failJob.addProject(1111111111111L);
         scheduler.addSchedule(failJob, trigger);
         scheduler.saveJob(failJob.getId());
         scheduler.deleteJob(failJob.getId());
 
-        DefaultJob realJob = new DefaultJob(1001, "job1001", "This is a sample job");
+        Job realJob = new DefaultJob(1001, "job1001", "This is a sample job");
         realJob.addProject(1421324074892L);
         scheduler.addSchedule(realJob, trigger);
         scheduler.stopJob(realJob.getId());
@@ -74,7 +74,7 @@ public class SchedulerTest {
         project.setName("Test project");
         JobTrigger trigger = new DefaultTrigger(System.currentTimeMillis(), System.currentTimeMillis() + 10000, 1, 1);
 
-        DefaultJob realJob = new DefaultJob(1001, "job1001", "This is a sample job");
+        Job realJob = new DefaultJob(1001, "job1001", "This is a sample job");
         realJob.addProject(1421324074892L);
         scheduler.addSchedule(realJob, trigger);
         scheduler.stopJob(realJob.getId());

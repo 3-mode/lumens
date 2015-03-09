@@ -12,7 +12,8 @@ import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.dao.JobProjectRelationDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
-import com.lumens.sysdb.entity.Job;
+import com.lumens.scheduler.Job;
+//import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.entity.Project;
 import com.lumens.sysdb.utils.DBHelper;
 import java.util.List;
@@ -42,8 +43,8 @@ public class DefaultScheduler implements JobScheduler {
     boolean isStarted;
     Scheduler sched;
     JobMonitor jobMonitor;
-    List<Job> jobList = new ArrayList();
-    Map<Long, Job> jobMap = new HashMap<>();
+    List<com.lumens.sysdb.entity.Job> jobList = new ArrayList();
+    Map<Long, com.lumens.sysdb.entity.Job> jobMap = new HashMap<>();
     Map<Long, List<Project>> projectMap = new HashMap<>();
     TransformEngine engine;
 
@@ -82,12 +83,12 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public JobScheduler addSchedule(DefaultJob job, JobTrigger trigger) {
+    public JobScheduler addSchedule(Job job, JobTrigger trigger) {
         if (jobMap.containsKey(job.getId())) {
             throw new RuntimeException("Job " + job.getId() + " already exist.");
         }
 
-        Job dbJob = new Job(job.getId(), job.getName(), job.getDescription(),
+        com.lumens.sysdb.entity.Job dbJob = new com.lumens.sysdb.entity.Job(job.getId(), job.getName(), job.getDescription(),
                             trigger.getRepeat(), trigger.getInterval(),
                             trigger.getStartTime(), trigger.getEndTime());
         jobList.add(dbJob);
@@ -112,7 +113,7 @@ public class DefaultScheduler implements JobScheduler {
 
     @Override
     public void startJob(long jobId) {
-        Job job = jobMap.get(jobId);
+        com.lumens.sysdb.entity.Job job = jobMap.get(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before start.");
         }
@@ -173,7 +174,7 @@ public class DefaultScheduler implements JobScheduler {
 
     @Override
     public void stopJob(long jobId) {
-        Job job = jobMap.get(jobId);
+        com.lumens.sysdb.entity.Job job = jobMap.get(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before stop.");
         }
@@ -192,7 +193,7 @@ public class DefaultScheduler implements JobScheduler {
 
     @Override
     public void saveJob(long jobId) {
-        Job job = jobMap.get(jobId);
+        com.lumens.sysdb.entity.Job job = jobMap.get(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before saving.");
         }
@@ -215,7 +216,7 @@ public class DefaultScheduler implements JobScheduler {
 
     @Override
     public void deleteJob(long jobId) {
-        Job job = jobMap.remove(jobId);
+        com.lumens.sysdb.entity.Job job = jobMap.remove(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before deleting.");
         }
@@ -278,17 +279,17 @@ public class DefaultScheduler implements JobScheduler {
         }
     }
 
-    public List<Job> getJobList() {
+    public List<com.lumens.sysdb.entity.Job> getJobList() {
         return jobList;
     }
 
     private void scheduleAll() {
-        for (Job job : jobList) {
+        for (com.lumens.sysdb.entity.Job job : jobList) {
             startJob(job.id);
         }
     }
 
-    private List<Job> loadJobFromDb() {
+    private List<com.lumens.sysdb.entity.Job> loadJobFromDb() {
         JobDAO jobDAO = DAOFactory.getJobDAO();
         return jobDAO.getAllJob();
     }
@@ -297,8 +298,8 @@ public class DefaultScheduler implements JobScheduler {
         jobList.clear();
         projectMap.clear();
 
-        List<Job> allJob = loadJobFromDb();
-        for (Job dbJob : allJob) {
+        List<com.lumens.sysdb.entity.Job> allJob = loadJobFromDb();
+        for (com.lumens.sysdb.entity.Job dbJob : allJob) {
             jobList.add(dbJob);
             long jobId = dbJob.id;
             projectMap.put(jobId, DBHelper.loadProjectFromDb(jobId));
@@ -310,7 +311,7 @@ public class DefaultScheduler implements JobScheduler {
         JobProjectRelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
 
         // Save a job
-        for (Job dbJob : jobList) {
+        for (com.lumens.sysdb.entity.Job dbJob : jobList) {
             long jobId = dbJob.id;
             if (jobDAO.getJob(jobId) == null) {
                 jobDAO.create(dbJob);
