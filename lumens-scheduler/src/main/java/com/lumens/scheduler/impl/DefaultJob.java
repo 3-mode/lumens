@@ -5,12 +5,12 @@ package com.lumens.scheduler.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import com.lumens.scheduler.Job;
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class DefaultJob {
+public class DefaultJob implements Job {
     private final long jobId;
     private final String name;
     private final String description;
@@ -29,24 +29,29 @@ public class DefaultJob {
         this.description = "";
     }
 
+    @Override
     public Long getId() {
         return jobId;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
-    public DefaultJob addProject(long projectId) {
+    @Override
+    public Job addProject(long projectId) {
         projectIdList.add(projectId);
 
         return this;
     }
 
+    @Override
     public List<Long> getProjectList() {
         return projectIdList;
     }
