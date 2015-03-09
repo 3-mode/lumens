@@ -12,11 +12,11 @@ import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.dao.JobProjectRelationDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.scheduler.Job;
-//import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.entity.Project;
 import com.lumens.sysdb.utils.DBHelper;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
 import static org.quartz.JobBuilder.newJob;
@@ -42,8 +42,8 @@ public class DefaultScheduler implements JobScheduler {
     boolean isStarted;
     Scheduler sched;
     JobMonitor jobMonitor;
-    List<com.lumens.sysdb.entity.Job> jobList = new ArrayList();
-    Map<Long, com.lumens.sysdb.entity.Job> jobMap = new HashMap<>();
+    List<Job> jobList = new ArrayList();
+    Map<Long, Job> jobMap = new HashMap<>();
     Map<Long, List<Project>> projectMap = new HashMap<>();
     TransformEngine engine;
 
@@ -87,12 +87,9 @@ public class DefaultScheduler implements JobScheduler {
             throw new RuntimeException("Job " + job.getId() + " already exist.");
         }
 
-        com.lumens.sysdb.entity.Job dbJob = new com.lumens.sysdb.entity.Job(job.getId(), job.getName(), job.getDescription(),
-                job.getRepeat(), job.getInterval(),
-                job.getStartTime(), job.getEndTime());
-        jobList.add(dbJob);
+        jobList.add(job);
         long jobId = job.getId();
-        jobMap.put(jobId, dbJob);
+        jobMap.put(jobId, job);
         ProjectDAO projectDAO = DAOFactory.getProjectDAO();
         List<Project> projectList = projectMap.get(jobId);
         if (projectList == null) {
@@ -112,12 +109,12 @@ public class DefaultScheduler implements JobScheduler {
 
     @Override
     public void startJob(long jobId) {
-        com.lumens.sysdb.entity.Job job = jobMap.get(jobId);
+        Job job = jobMap.get(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before start.");
         }
 
-        String group = Long.toString(job.id);
+        String group = Long.toString(job.getId());
         List<Project> projectList = projectMap.get(jobId);
         for (Project proj : projectList) {
             JobDetail jobDetail = newJob(JobThread.class)
@@ -128,9 +125,9 @@ public class DefaultScheduler implements JobScheduler {
             jobDetail.getJobDataMap().put("EngineObject", this.engine);
 
             TriggerBuilder<Trigger> builder = newTrigger();
-            builder.withIdentity(Long.toString(job.id), group);
-            builder.withSchedule(getQuartzBuilder(job.repeat, job.interval));   
-            builder.startAt(job.startTime);
+            builder.withIdentity(Long.toString(job.getId()), group);
+            builder.withSchedule(getQuartzBuilder(job.getRepeat(), job.getInterval()));   
+            builder.startAt(new Date(job.getStartTime()));
             // TODO: add end time
 
             try {
@@ -173,7 +170,7 @@ public class DefaultScheduler implements JobScheduler {
 
     @Override
     public void stopJob(long jobId) {
-        com.lumens.sysdb.entity.Job job = jobMap.get(jobId);
+        Job job = jobMap.get(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before stop.");
         }
@@ -192,30 +189,17 @@ public class DefaultScheduler implements JobScheduler {
 
     @Override
     public void saveJob(long jobId) {
-        com.lumens.sysdb.entity.Job job = jobMap.get(jobId);
+        Job job = jobMap.get(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before saving.");
         }
-
-        JobDAO jobDAO = DAOFactory.getJobDAO();
-        JobProjectRelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
-
-        if (jobDAO.getJob(jobId) == null) {
-            jobDAO.create(job);
-        } else {
-            jobDAO.update(job);
-        }
-
-        // Delete old relation
-        projectRelationDAO.deleteAllRelation(jobId);
-        for (Project project : projectMap.get(jobId)) {
-            projectRelationDAO.create(jobId, project.id);
-        }
+        
+        // TODO: save to db via web service 
     }
 
     @Override
     public void deleteJob(long jobId) {
-        com.lumens.sysdb.entity.Job job = jobMap.remove(jobId);
+        Job job = jobMap.remove(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before deleting.");
         }
@@ -223,7 +207,7 @@ public class DefaultScheduler implements JobScheduler {
         jobList.remove(job);
 
         // Remove from map and scheduler
-        String group = Long.toString(job.id);
+        String group = Long.toString(job.getId());
         List<Project> projectList = projectMap.remove(jobId);
         for (Project proj : projectList) {
             try {
@@ -231,15 +215,6 @@ public class DefaultScheduler implements JobScheduler {
             } catch (SchedulerException ex) {
                 // TODO: log error 
             }
-        }
-
-        // Remove from db
-        JobDAO jobDAO = DAOFactory.getJobDAO();
-        JobProjectRelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
-
-        if (jobDAO.getJob(jobId) != null) {
-            jobDAO.delete(jobId);
-            projectRelationDAO.deleteAllRelation(jobId);
         }
     }
 
@@ -278,51 +253,21 @@ public class DefaultScheduler implements JobScheduler {
         }
     }
 
-    public List<com.lumens.sysdb.entity.Job> getJobList() {
+    public List<Job> getJobList() {
         return jobList;
     }
 
     private void scheduleAll() {
-        for (com.lumens.sysdb.entity.Job job : jobList) {
-            startJob(job.id);
+        for (Job job : jobList) {
+            startJob(job.getId());
         }
-    }
-
-    private List<com.lumens.sysdb.entity.Job> loadJobFromDb() {
-        JobDAO jobDAO = DAOFactory.getJobDAO();
-        return jobDAO.getAllJob();
     }
 
     public void loadFromDb() throws Exception {
         jobList.clear();
         projectMap.clear();
-
-        List<com.lumens.sysdb.entity.Job> allJob = loadJobFromDb();
-        for (com.lumens.sysdb.entity.Job dbJob : allJob) {
-            jobList.add(dbJob);
-            long jobId = dbJob.id;
-            projectMap.put(jobId, DBHelper.loadProjectFromDb(jobId));
-        }
     }
 
     public void saveToDb() {
-        JobDAO jobDAO = DAOFactory.getJobDAO();
-        JobProjectRelationDAO projectRelationDAO = DAOFactory.getRelationDAO();
-
-        // Save a job
-        for (com.lumens.sysdb.entity.Job dbJob : jobList) {
-            long jobId = dbJob.id;
-            if (jobDAO.getJob(jobId) == null) {
-                jobDAO.create(dbJob);
-            } else {
-                jobDAO.update(dbJob);
-            }
-
-            // Delete old relation
-            projectRelationDAO.deleteAllRelation(jobId);
-            for (Project project : projectMap.get(jobId)) {
-                projectRelationDAO.create(jobId, project.id);
-            }
-        }
     }
 }
