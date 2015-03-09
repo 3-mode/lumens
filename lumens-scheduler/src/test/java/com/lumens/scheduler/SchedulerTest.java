@@ -5,7 +5,7 @@ package com.lumens.scheduler;
 
 import com.lumens.engine.TransformEngine;
 import com.lumens.scheduler.impl.DefaultScheduler;
-import com.lumens.scheduler.impl.DefaultTrigger;
+import com.lumens.scheduler.impl.DefaultJobTriggerBuilder;
 import com.lumens.scheduler.impl.DefaultJobBuilder;
 import com.lumens.sysdb.dao.ProjectDAO;
 import java.util.Date;
@@ -43,12 +43,17 @@ public class SchedulerTest {
         scheduler.start();
         TransformProject project = new TransformProject();
         project.setName("Test project");
-        JobTrigger trigger = new DefaultTrigger(System.currentTimeMillis(), System.currentTimeMillis() + 10000, 1, 1);
+        JobTrigger trigger = new DefaultJobTriggerBuilder()
+                .withStartTime(System.currentTimeMillis())
+                .withEndTime(System.currentTimeMillis() + 10000)
+                .withRepeat(1)
+                .withInterval(1)
+                .build();
 
         Job failJob = new DefaultJobBuilder()
                 .withJobId(1001)
                 .withJobName("job1001")
-                .withJobDescripttion("This is a sample job")
+                .withJobDescription("This is a sample job")
                 .build();
         failJob.addProject(1111111111111L);
         scheduler.addSchedule(failJob, trigger);
@@ -58,7 +63,7 @@ public class SchedulerTest {
         Job realJob = new DefaultJobBuilder()
                 .withJobId(1001)
                 .withJobName("job1001")
-                .withJobDescripttion("This is a sample job")
+                .withJobDescription("This is a sample job")
                 .build();
         realJob.addProject(1421324074892L);
         scheduler.addSchedule(realJob, trigger);
@@ -80,18 +85,23 @@ public class SchedulerTest {
         scheduler.start();
         TransformProject project = new TransformProject();
         project.setName("Test project");
-        JobTrigger trigger = new DefaultTrigger(System.currentTimeMillis(), System.currentTimeMillis() + 10000, 1, 1);
+        JobTrigger trigger = new DefaultJobTriggerBuilder()
+                .withStartTime(System.currentTimeMillis())
+                .withEndTime(System.currentTimeMillis() + 10000)
+                .withRepeat(1)
+                .withInterval(1)
+                .build();
 
         Job realJob = new DefaultJobBuilder()
                 .withJobId(1001)
                 .withJobName("job1001")
-                .withJobDescripttion("This is a sample job")
+                .withJobDescription("This is a sample job")
                 .build();
         realJob.addProject(1421324074892L);
         scheduler.addSchedule(realJob, trigger);
         scheduler.stopJob(realJob.getId());
         scheduler.startJob(realJob.getId());
 
-        // Add monitor test
+        // TODO:Add monitor test
     }
 }

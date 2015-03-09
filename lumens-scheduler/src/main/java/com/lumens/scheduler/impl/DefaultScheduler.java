@@ -89,8 +89,8 @@ public class DefaultScheduler implements JobScheduler {
         }
 
         com.lumens.sysdb.entity.Job dbJob = new com.lumens.sysdb.entity.Job(job.getId(), job.getName(), job.getDescription(),
-                            trigger.getRepeat(), trigger.getInterval(),
-                            trigger.getStartTime(), trigger.getEndTime());
+                trigger.getRepeat(), trigger.getInterval(),
+                trigger.getStartTime(), trigger.getEndTime());
         jobList.add(dbJob);
         long jobId = job.getId();
         jobMap.put(jobId, dbJob);
@@ -122,15 +122,15 @@ public class DefaultScheduler implements JobScheduler {
         List<Project> projectList = projectMap.get(jobId);
         for (Project proj : projectList) {
             JobDetail jobDetail = newJob(JobThread.class)
-            .withIdentity(Long.toString(proj.id), group)
-            .usingJobData("ProjectData", proj.data)
-            .usingJobData("ProjectName", proj.name)
-            .build();
+                    .withIdentity(Long.toString(proj.id), group)
+                    .usingJobData("ProjectData", proj.data)
+                    .usingJobData("ProjectName", proj.name)
+                    .build();
             jobDetail.getJobDataMap().put("EngineObject", this.engine);
 
             TriggerBuilder<Trigger> builder = newTrigger();
             builder.withIdentity(Long.toString(job.id), group);
-            builder.withSchedule(getQuartzBuilder(job.repeat, job.interval));
+            builder.withSchedule(getQuartzBuilder(job.repeat, job.interval)) ;
             builder.startAt(job.startTime);
             // TODO: add end time
 

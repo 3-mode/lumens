@@ -12,5 +12,5 @@ public interface JobBuilder {
     Job build();
     JobBuilder withJobId(long jobId);
     JobBuilder withJobName(String jobName);
-    JobBuilder withJobDescripttion(String jobDescription);
+    JobBuilder withJobDescription(String jobDescription);
 }

@@ -10,13 +10,13 @@ import java.util.Date;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class DefaultTrigger implements JobTrigger {
+public class DefaultJobTrigger implements JobTrigger {
     private final long startTime;
     private final long endTime;
     private final int repeat;
     private final int interval;
 
-    public DefaultTrigger(long startTime, long endTime, int repeat, int interval) {
+    public DefaultJobTrigger(long startTime, long endTime, int repeat, int interval) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.repeat = repeat;

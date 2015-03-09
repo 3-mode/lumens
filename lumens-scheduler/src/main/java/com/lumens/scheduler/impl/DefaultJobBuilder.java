@@ -11,7 +11,6 @@ import com.lumens.scheduler.JobBuilder;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class DefaultJobBuilder implements JobBuilder {
-
     long jobId = -1;
     String jobName;
     String jobDescription;
@@ -40,7 +39,7 @@ public class DefaultJobBuilder implements JobBuilder {
     }
 
     @Override
-    public JobBuilder withJobDescripttion(String jobDescription) {
+    public JobBuilder withJobDescription(String jobDescription) {
         this.jobDescription = jobDescription;
         return this;
     }
