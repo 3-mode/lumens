@@ -5,7 +5,6 @@ package com.lumens.scheduler;
 
 import com.lumens.engine.TransformEngine;
 import com.lumens.scheduler.impl.DefaultScheduler;
-import com.lumens.scheduler.impl.DefaultJobTriggerBuilder;
 import com.lumens.scheduler.impl.DefaultJobBuilder;
 import com.lumens.sysdb.dao.ProjectDAO;
 import java.util.Date;
@@ -43,20 +42,18 @@ public class SchedulerTest {
         scheduler.start();
         TransformProject project = new TransformProject();
         project.setName("Test project");
-        JobTrigger trigger = new DefaultJobTriggerBuilder()
-                .withStartTime(System.currentTimeMillis())
-                .withEndTime(System.currentTimeMillis() + 10000)
-                .withRepeat(1)
-                .withInterval(1)
-                .build();
 
         Job failJob = new DefaultJobBuilder()
                 .withJobId(1001)
                 .withJobName("job1001")
                 .withJobDescription("This is a sample job")
+                .withStartTime(System.currentTimeMillis())
+                .withEndTime(System.currentTimeMillis() + 10000)
+                .withRepeat(1)
+                .withInterval(1)
                 .build();
         failJob.addProject(1111111111111L);
-        scheduler.addSchedule(failJob, trigger);
+        scheduler.addSchedule(failJob);
         scheduler.saveJob(failJob.getId());
         scheduler.deleteJob(failJob.getId());
 
@@ -64,9 +61,13 @@ public class SchedulerTest {
                 .withJobId(1001)
                 .withJobName("job1001")
                 .withJobDescription("This is a sample job")
+                .withStartTime(System.currentTimeMillis())
+                .withEndTime(System.currentTimeMillis() + 10000)
+                .withRepeat(1)
+                .withInterval(1)
                 .build();
         realJob.addProject(1421324074892L);
-        scheduler.addSchedule(realJob, trigger);
+        scheduler.addSchedule(realJob);
         scheduler.stopJob(realJob.getId());
         scheduler.startJob(realJob.getId());
 
@@ -85,20 +86,18 @@ public class SchedulerTest {
         scheduler.start();
         TransformProject project = new TransformProject();
         project.setName("Test project");
-        JobTrigger trigger = new DefaultJobTriggerBuilder()
-                .withStartTime(System.currentTimeMillis())
-                .withEndTime(System.currentTimeMillis() + 10000)
-                .withRepeat(1)
-                .withInterval(1)
-                .build();
 
         Job realJob = new DefaultJobBuilder()
                 .withJobId(1001)
                 .withJobName("job1001")
                 .withJobDescription("This is a sample job")
+                .withStartTime(System.currentTimeMillis())
+                .withEndTime(System.currentTimeMillis() + 10000)
+                .withRepeat(1)
+                .withInterval(1)                
                 .build();
         realJob.addProject(1421324074892L);
-        scheduler.addSchedule(realJob, trigger);
+        scheduler.addSchedule(realJob);
         scheduler.stopJob(realJob.getId());
         scheduler.startJob(realJob.getId());
 

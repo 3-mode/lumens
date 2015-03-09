@@ -4,7 +4,6 @@
 package com.lumens.scheduler;
 
 import com.lumens.engine.TransformEngine;
-import com.lumens.scheduler.impl.DefaultJob;
 import org.quartz.JobListener;
 
 /**
@@ -20,7 +19,7 @@ public interface JobScheduler {
 
     public void setEngine(TransformEngine engine);
 
-    public JobScheduler addSchedule(Job job, JobTrigger trigger);
+    public JobScheduler addSchedule(Job job);
 
     public void startJob(long jobId);
 

@@ -5,8 +5,7 @@ package com.lumens.scheduler.impl;
 
 import com.lumens.engine.TransformEngine;
 import com.lumens.scheduler.JobScheduler;
-import com.lumens.scheduler.JobTrigger;
-import com.lumens.scheduler.JobTrigger.Repeat;
+import com.lumens.scheduler.Job.Repeat;
 import com.lumens.scheduler.JobMonitor;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobDAO;
@@ -83,14 +82,14 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public JobScheduler addSchedule(Job job, JobTrigger trigger) {
+    public JobScheduler addSchedule(Job job) {
         if (jobMap.containsKey(job.getId())) {
             throw new RuntimeException("Job " + job.getId() + " already exist.");
         }
 
         com.lumens.sysdb.entity.Job dbJob = new com.lumens.sysdb.entity.Job(job.getId(), job.getName(), job.getDescription(),
-                trigger.getRepeat(), trigger.getInterval(),
-                trigger.getStartTime(), trigger.getEndTime());
+                job.getRepeat(), job.getInterval(),
+                job.getStartTime(), job.getEndTime());
         jobList.add(dbJob);
         long jobId = job.getId();
         jobMap.put(jobId, dbJob);
@@ -130,7 +129,7 @@ public class DefaultScheduler implements JobScheduler {
 
             TriggerBuilder<Trigger> builder = newTrigger();
             builder.withIdentity(Long.toString(job.id), group);
-            builder.withSchedule(getQuartzBuilder(job.repeat, job.interval)) ;
+            builder.withSchedule(getQuartzBuilder(job.repeat, job.interval));   
             builder.startAt(job.startTime);
             // TODO: add end time
 
