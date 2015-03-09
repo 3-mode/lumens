@@ -6,7 +6,7 @@ package com.lumens.scheduler;
 import com.lumens.engine.TransformEngine;
 import com.lumens.scheduler.impl.DefaultScheduler;
 import com.lumens.scheduler.impl.DefaultTrigger;
-import com.lumens.scheduler.impl.DefaultJob;
+import com.lumens.scheduler.impl.DefaultJobBuilder;
 import com.lumens.sysdb.dao.ProjectDAO;
 import java.util.Date;
 import com.lumens.engine.TransformProject;
@@ -45,13 +45,21 @@ public class SchedulerTest {
         project.setName("Test project");
         JobTrigger trigger = new DefaultTrigger(System.currentTimeMillis(), System.currentTimeMillis() + 10000, 1, 1);
 
-        Job failJob = new DefaultJob(1001, "job1001", "This is a sample job");
+        Job failJob = new DefaultJobBuilder()
+                .withJobId(1001)
+                .withJobName("job1001")
+                .withJobDescripttion("This is a sample job")
+                .build();
         failJob.addProject(1111111111111L);
         scheduler.addSchedule(failJob, trigger);
         scheduler.saveJob(failJob.getId());
         scheduler.deleteJob(failJob.getId());
 
-        Job realJob = new DefaultJob(1001, "job1001", "This is a sample job");
+        Job realJob = new DefaultJobBuilder()
+                .withJobId(1001)
+                .withJobName("job1001")
+                .withJobDescripttion("This is a sample job")
+                .build();
         realJob.addProject(1421324074892L);
         scheduler.addSchedule(realJob, trigger);
         scheduler.stopJob(realJob.getId());
@@ -74,12 +82,16 @@ public class SchedulerTest {
         project.setName("Test project");
         JobTrigger trigger = new DefaultTrigger(System.currentTimeMillis(), System.currentTimeMillis() + 10000, 1, 1);
 
-        Job realJob = new DefaultJob(1001, "job1001", "This is a sample job");
+        Job realJob = new DefaultJobBuilder()
+                .withJobId(1001)
+                .withJobName("job1001")
+                .withJobDescripttion("This is a sample job")
+                .build();
         realJob.addProject(1421324074892L);
         scheduler.addSchedule(realJob, trigger);
         scheduler.stopJob(realJob.getId());
         scheduler.startJob(realJob.getId());
-        
+
         // Add monitor test
     }
 }
