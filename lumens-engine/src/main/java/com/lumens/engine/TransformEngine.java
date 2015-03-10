@@ -33,13 +33,20 @@ public class TransformEngine {
 
     public void start(String addinPath) {
         try {
-            addinEngine = new AddinEngine(addinClassLoader);
-            addinEngine.start();
-            AddinContext ac = addinEngine.getAddinContext();
-            System.out.println("Addin path: " + addinPath);
-            File addinPathFile = new File(addinPath);
-            for (File addinItemFile : addinPathFile.listFiles()) {
-                ac.installAddIn(addinItemFile.toURI().toURL()).start();
+            AddinContext ac = null;
+            if (addinPath != null && !addinPath.isEmpty()) {
+                addinEngine = new AddinEngine(addinClassLoader);
+                addinEngine.start();
+                ac = addinEngine.getAddinContext();
+                System.out.println("Addin path: " + addinPath);
+                File addinPathFile = new File(addinPath);
+                if (addinPathFile.exists()) {
+                    for (File addinItemFile : addinPathFile.listFiles()) {
+                        ac.installAddIn(addinItemFile.toURI().toURL()).start();
+                    }
+                } else {
+                    throw new RuntimeException(String.format("Wrong addin path '%s', it doesn't exist!", addinPath));
+                }
             }
             TransformEngineContext.start(new DefaultConnectorFactoryManager(ac));
         } catch (MalformedURLException ex) {
