@@ -387,7 +387,7 @@ public class ConnectorTest implements TextConstants {
         }
     }
 
-    //@Test
+    @Test
     public void testOperation() throws Exception {
         ConnectorFactory cntr = new TextConnectorFactory();
         TextConnector cntrR = (TextConnector) cntr.createConnector();
@@ -484,7 +484,7 @@ public class ConnectorTest implements TextConstants {
             assertFalse("Fail to get destination format", true);
         }
         TransformRule rule = new TransformRule(fmtW);
-        rule.getRuleItem("TextMessage.TextParams.OPERATION").setScript("'OPERATION_OVERWRITE'");
+        rule.getRuleItem("TextMessage.TextParams.Operation").setScript("OverWrite");
         rule.getRuleItem("TextMessage.number").setScript("@TextMessage.number");
         rule.getRuleItem("TextMessage.text").setScript("return @TextMessage.text + '-test'");
 
