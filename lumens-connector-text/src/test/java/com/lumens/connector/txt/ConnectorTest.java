@@ -178,7 +178,8 @@ public class ConnectorTest implements TextConstants {
                     if (line.length() > 0) {
                         line.append(",");
                     }
-                    line.append(el.getValue().toString());
+                    Value val = el.getValue();
+                    line.append(val.isNull()  ? "" : val.toString());
                 }
                 System.out.println(line);
             }
@@ -250,7 +251,8 @@ public class ConnectorTest implements TextConstants {
                     if (line.length() > 0) {
                         line.append(",");
                     }
-                    line.append(el.getValue().toString());
+                    Value val = el.getValue();
+                    line.append(val.isNull() ? " " : val.toString());                    
                 }
                 System.out.println(line);
             }
@@ -318,7 +320,7 @@ public class ConnectorTest implements TextConstants {
                     line.append(",");
                 }
                 Value val = el.getValue();
-                line.append(val == null ? "" : val.toString());
+                line.append(val.isNull()  ? "" : val.toString());
             }
             System.out.println(line);
             System.out.println();
@@ -358,7 +360,9 @@ public class ConnectorTest implements TextConstants {
                     if (lineA.length() > 0) {
                         lineA.append(",");
                     }
-                    lineA.append(el.getValue().toString());
+
+                    Value val = el.getValue();
+                    lineA.append(val.isNull()  ? "" : val.toString());
                 }
                 System.out.println(lineA);
             }
@@ -448,7 +452,8 @@ public class ConnectorTest implements TextConstants {
                     if (line.length() > 0) {
                         line.append(",");
                     }
-                    line.append(el.getValue().toString());
+                    Value val = el.getValue();
+                    line.append(val.isNull()  ? "" : val.toString());
                 }
                 System.out.println(line);
             }
