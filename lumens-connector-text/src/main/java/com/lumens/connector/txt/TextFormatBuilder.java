@@ -68,14 +68,8 @@ public class TextFormatBuilder implements FormatBuilder, TextConstants {
 
             // This encoding is for schema file itself rather than processing encoding
             rootFmt.setProperty(SCHEMA_ENCODING, new Value(encoding));
-
-            Format params = rootFmt.addChild(FORMAT_PARAMS, Form.STRUCT);
-            params.addChild(ENCODING, Form.FIELD, Type.STRING);
+            Format params = rootFmt.addChild(FORMAT_PARAMS, Form.STRUCT);            
             params.addChild(PATH, Form.FIELD, Type.STRING);
-            params.addChild(LINEDELIMITER, Form.FIELD, Type.STRING);
-            params.addChild(FILEDELIMITER, Form.FIELD, Type.STRING);
-            params.addChild(ESCAPE_CHAR, Form.FIELD, Type.STRING);
-            params.addChild(OPTION_MAXLINE, Form.FIELD, Type.STRING);
             params.addChild(OPERATION, Form.FIELD, Type.STRING);
 
             getFormat(rootFmt, null, direction);
@@ -105,7 +99,9 @@ public class TextFormatBuilder implements FormatBuilder, TextConstants {
                     if (!attrValue.isEmpty()) {
                         if (FORMAT_NAME.equalsIgnoreCase(attrName))
                             field = format.addChild(attrValue, Form.FIELD); // Set type later
-                        else if (FORMAT_KEY.equalsIgnoreCase(attrName))
+                        if ( field == null)
+                            throw new RuntimeException("First format element must be " + FORMAT_NAME);
+                        if (FORMAT_KEY.equalsIgnoreCase(attrName))
                             field.setProperty(attrName, new Value(attrValue));
                         else if (FORMAT_TYPE.equalsIgnoreCase(attrName))
                             field.setType(Type.parseString(attrValue));
