@@ -297,12 +297,8 @@ public class ConnectorTest implements TextConstants {
             }
             Element elemWrite = new DataElement(fmtW);
             Element paramsW = elemWrite.addChild(FORMAT_PARAMS);
-            paramsW.setValue(new Value(FORMAT_MESSAGE));
             paramsW.addChild(OPERATION).setValue(new Value(OPERATION_OVERWRITE));
             paramsW.addChild(PATH).setValue(new Value(path2write));
-            paramsW.addChild(ENCODING).setValue(new Value("UTF-8"));
-            paramsW.addChild(FILEDELIMITER).setValue(new Value("|"));
-            paramsW.addChild(LINEDELIMITER).setValue(new Value("\r\n"));
 
             elemWrite.addChild("number").setValue(new Value("100"));
             elemWrite.addChild("text").setValue(new Value("测试"));
@@ -315,10 +311,14 @@ public class ConnectorTest implements TextConstants {
             System.out.println("Content to write:");
             StringBuilder line = new StringBuilder();
             for (Element el : elemWrite.getChildren()) {
+                if (el.getFormat().getName().equals(FORMAT_PARAMS)) {
+                    continue;
+                }
                 if (line.length() > 0) {
                     line.append(",");
                 }
-                line.append(el.getValue().toString());
+                Value val = el.getValue();
+                line.append(val == null ? "" : val.toString());
             }
             System.out.println(line);
             System.out.println();
@@ -339,9 +339,6 @@ public class ConnectorTest implements TextConstants {
             paramsA.setValue(new Value(FORMAT_MESSAGE));
             paramsA.addChild(OPERATION).setValue(new Value(OPERATION_APPEND));
             paramsA.addChild(PATH).setValue(new Value(path2write));
-            paramsA.addChild(ENCODING).setValue(new Value("UTF-8"));
-            paramsA.addChild(FILEDELIMITER).setValue(new Value("***"));
-            paramsA.addChild(LINEDELIMITER).setValue(new Value("\r\n"));
 
             elemAppend.addChild("number").setValue(new Value("99"));
             elemAppend.addChild("text").setValue(new Value("append"));
@@ -355,6 +352,9 @@ public class ConnectorTest implements TextConstants {
             StringBuilder lineA = new StringBuilder();
             for (Element elem : outputA) {
                 for (Element el : elem.getChildren()) {
+                    if (el.getFormat().getName().equals(FORMAT_PARAMS)) {
+                        continue;
+                    }
                     if (lineA.length() > 0) {
                         lineA.append(",");
                     }
@@ -484,7 +484,6 @@ public class ConnectorTest implements TextConstants {
             assertFalse("Fail to get destination format", true);
         }
         TransformRule rule = new TransformRule(fmtW);
-        rule.getRuleItem("TextMessage.TextParams.Operation").setScript("OverWrite");
         rule.getRuleItem("TextMessage.number").setScript("@TextMessage.number");
         rule.getRuleItem("TextMessage.text").setScript("return @TextMessage.text + '-test'");
 
