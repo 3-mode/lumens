@@ -84,12 +84,13 @@ Lumens.services.factory('FormatList', function ($resource) {
 });
 Lumens.services.factory('JobService', function ($resource) {
     return $resource(
-    "rest/job/:id",
-    {id: "@id"},
+    "rest/job/:id?action=:action",
+    {id: "@id", action: "@action"},
     {
         list: {method: 'GET', isArray: false},
         save: {method: 'PUT', isArray: false},
-        update: {method: 'POST', isArray: false}
+        update: {method: 'POST', isArray: false},
+        exec: { method: 'GET', isArray: false }
     });
 });
 Lumens.services.factory('JobConfig', function ($resource) {

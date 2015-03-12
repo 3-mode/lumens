@@ -64,6 +64,18 @@ Lumens.controllers
             if ($scope.selectJobIndex >= 0 && $scope.jobs && $scope.jobs.length > 0)
                 $scope.job = $scope.jobs[$scope.selectJobIndex];
         }
+        else if ('id_start' === id_btn) {
+            var job = $scope.jobs[$scope.selectJobIndex];
+            if (job && job.id) {
+                JobService.exec({id: job.id, action: "start"});
+            }
+        }
+        else if ('id_stop' === id_btn) {
+            var job = $scope.jobs[$scope.selectJobIndex];
+            if (job && job.id) {
+                JobService.exec({id: job.id, action: "stop"});
+            }
+        }
     };
     $scope.selectJob = function (index) {
         $scope.selectJobIndex = index;
@@ -114,7 +126,7 @@ Lumens.controllers
         LumensLog.log("JobList:", result);
     });
 })
-.controller("ServerMonitorCtrl", function ($scope, CpuPerc, CpuCount, MemPerc, Disk) {
+.controller("ServerMonitorCtrl", function ($scope, $interval, CpuPerc, CpuCount, MemPerc, Disk) {
 
     // Line charts of CPU
     function getRedrawData(historyData) {
@@ -182,9 +194,7 @@ Lumens.controllers
                 cpuHistoryList.push(cpuHistory);
                 cpuPlotList.push(cpuPolt);
             }
-            if ($scope.cpuTimer)
-                clearTimeout($scope.cpuTimer);
-            $scope.$parent.cpuTimer = setInterval(function () {
+            $scope.$parent.cpuTimer = $interval(function () {
                 CpuPerc.get(function (cpu_perc) {
                     putInfoIntoCache(cpuTotalHistory, cpu_perc.cpu_usage);
                     cpuTotalPolt.series[0].data = getRedrawData(cpuTotalHistory);
@@ -227,9 +237,8 @@ Lumens.controllers
                 }
             }
         });
-        if ($scope.memTimer)
-            clearTimeout($scope.memTimer);
-        $scope.$parent.memTimer = setInterval(function () {
+
+        $scope.$parent.memTimer = $interval(function () {
             MemPerc.get(function (memInfo) {
                 putInfoIntoCache(memTotalHistory, memInfo.memory.used);
                 memTotalPolt.series[0].data = getRedrawData(memTotalHistory);
@@ -274,6 +283,15 @@ Lumens.controllers
                 diskPlotList.push(diskPlot);
             }
         });
+    });
+
+    $scope.$on('$destory', function () {
+        console.log("on destroy");
+        if ($scope.cpuTimer)
+            clearTimeout($scope.cpuTimer);
+
+        if ($scope.memTimer)
+            clearTimeout($scope.memTimer);
     });
 
 });

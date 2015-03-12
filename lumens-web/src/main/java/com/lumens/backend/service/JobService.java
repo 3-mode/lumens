@@ -78,7 +78,20 @@ public class JobService {
     @Path("{jobId}")
     @Produces("application/json")
     public Response getOrExecuteJob(@PathParam("jobId") String jobId, @QueryParam("action") String action) {
-        return Response.ok().entity(String.format("{ 'do' : 'get or execute job by [%s], action=[%s]' }", jobId, action)).build();
+        try {
+            JsonUtility utility = JsonUtility.createJsonUtility();
+            JsonGenerator json = utility.getGenerator();
+            json.writeStartObject();
+            json.writeStringField("status", "OK");
+            json.writeObjectFieldStart("result_content");
+            json.writeStringField("do", String.format("get or execute job by [%s]", jobId));
+            json.writeStringField("action", String.format("[%s]", action));
+            json.writeEndObject();
+            json.writeEndObject();
+            return Response.ok().entity(utility.toUTF8String()).build();
+        } catch (Exception e) {
+            return ServerUtils.getErrorMessageResponse(e);
+        }
     }
 
     @PUT
