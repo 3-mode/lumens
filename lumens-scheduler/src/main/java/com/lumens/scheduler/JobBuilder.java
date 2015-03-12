@@ -9,7 +9,7 @@ package com.lumens.scheduler;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public interface JobBuilder {
-    Job build();
+    JobConfiguration build();
     JobBuilder withJobId(long jobId);
     JobBuilder withJobName(String jobName);
     JobBuilder withJobDescription(String jobDescription);

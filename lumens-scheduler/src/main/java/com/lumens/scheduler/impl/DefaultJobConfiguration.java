@@ -3,14 +3,17 @@
  */
 package com.lumens.scheduler.impl;
 
+import com.lumens.engine.TransformProject;
 import java.util.ArrayList;
 import java.util.List;
-import com.lumens.scheduler.Job;
+import com.lumens.scheduler.JobConfiguration;
+import java.sql.Timestamp;
+
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class DefaultJob implements Job {
+public class DefaultJobConfiguration implements JobConfiguration {
     private final long jobId;
     private final String name;
     private final String description;
@@ -18,10 +21,9 @@ public class DefaultJob implements Job {
     private final long endTime;
     private final int repeat;
     private final int interval;
+    private final List<TransformProject> projectList = new ArrayList();
 
-    List<Long> projectIdList = new ArrayList();
-
-    public DefaultJob(long jobId, String name, String description, long startTime, long endTime, int repeat, int interval) {
+    public DefaultJobConfiguration(long jobId, String name, String description, long startTime, long endTime, int repeat, int interval) {
         this.jobId = jobId;
         this.name = name;
         this.description = description;
@@ -31,12 +33,12 @@ public class DefaultJob implements Job {
         this.interval = interval;
     }
 
-    public DefaultJob() {
+    public DefaultJobConfiguration() {
         this.jobId = 0;
         this.name = "default";
         this.description = "";
         this.startTime = System.currentTimeMillis();
-        this.endTime = System.currentTimeMillis() + 1000;
+        this.endTime = 0;
         this.repeat = -1;
         this.interval = -1;
     }
@@ -78,14 +80,13 @@ public class DefaultJob implements Job {
     }
 
     @Override
-    public Job addProject(long projectId) {
-        projectIdList.add(projectId);
-
+    public JobConfiguration addProject(TransformProject project) {
+        projectList.add(project);
         return this;
     }
 
     @Override
-    public List<Long> getProjectList() {
-        return projectIdList;
+    public List<TransformProject> getProjectList() {
+        return projectList;
     }
 }

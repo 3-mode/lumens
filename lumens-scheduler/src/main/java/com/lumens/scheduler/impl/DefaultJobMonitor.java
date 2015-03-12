@@ -17,16 +17,16 @@ import org.quartz.JobListener;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class DefaultMonitor implements JobMonitor, JobListener {
-    JobScheduler sched;
-    String name;
-    List<String> pendingJobList = new ArrayList();
-    List<String> runningJobList = new ArrayList();
+public class DefaultJobMonitor implements JobMonitor, JobListener {
+    private final JobScheduler sched;
+    private final String name;
+    private final List<String> pendingJobList = new ArrayList();
+    private final List<String> runningJobList = new ArrayList();
 
-    public DefaultMonitor(JobScheduler scheduler) {
+    public DefaultJobMonitor(JobScheduler scheduler) {
         name = "Default Monitor";
         this.sched = scheduler;
-        sched.registerJobListener(this);        
+        sched.registerJobListener(this);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class DefaultMonitor implements JobMonitor, JobListener {
 
     @Override
     public List<String> getRunningProjectIdList(long jobId) {
-        return DBHelper.loadProjectIdFromDb(jobId);    
+        return DBHelper.loadProjectIdFromDb(jobId);
     }
 
     @Override

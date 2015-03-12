@@ -3,13 +3,14 @@
  */
 package com.lumens.scheduler;
 
+import com.lumens.engine.TransformProject;
 import java.util.List;
 
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public interface Job {
+public interface JobConfiguration {
     public enum Repeat {
         Never(0),
         Secondly(1),
@@ -66,7 +67,7 @@ public interface Job {
 
     public int getInterval();
 
-    public Job addProject(long projectId);
+    public JobConfiguration addProject(TransformProject project);
 
-    public List<Long> getProjectList();
+    public List<TransformProject> getProjectList();
 }

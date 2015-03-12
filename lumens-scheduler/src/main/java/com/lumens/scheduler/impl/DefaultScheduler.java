@@ -4,14 +4,16 @@
 package com.lumens.scheduler.impl;
 
 import com.lumens.engine.TransformEngine;
+import com.lumens.engine.TransformProject;
 import com.lumens.scheduler.JobScheduler;
-import com.lumens.scheduler.Job.Repeat;
+import com.lumens.scheduler.JobConfiguration.Repeat;
 import com.lumens.scheduler.JobMonitor;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.dao.JobProjectRelationDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
-import com.lumens.scheduler.Job;
+import com.lumens.scheduler.JobConfiguration;
+import com.lumens.scheduler.JobConstants;
 import com.lumens.sysdb.entity.Project;
 import com.lumens.sysdb.utils.DBHelper;
 import java.util.List;
@@ -39,13 +41,13 @@ import static org.quartz.TriggerBuilder.newTrigger;
  */
 public class DefaultScheduler implements JobScheduler {
 
-    boolean isStarted;
-    Scheduler sched;
-    JobMonitor jobMonitor;
-    List<Job> jobList = new ArrayList();
-    Map<Long, Job> jobMap = new HashMap<>();
-    Map<Long, List<Project>> projectMap = new HashMap<>();
-    TransformEngine engine;
+    private final boolean isStarted;
+    private Scheduler sched;
+    private JobMonitor jobMonitor;
+    private TransformEngine engine;
+    private final List<JobConfiguration> jobList = new ArrayList();
+    private final Map<Long, JobConfiguration> jobMap = new HashMap<>();
+    private final Map<Long, List<Project>> projectMap = new HashMap<>();
 
     // TODO: maintain a running job list
     public DefaultScheduler() {
@@ -82,7 +84,7 @@ public class DefaultScheduler implements JobScheduler {
     }
 
     @Override
-    public JobScheduler addSchedule(Job job) {
+    public JobScheduler addSchedule(JobConfiguration job) {
         if (jobMap.containsKey(job.getId())) {
             throw new RuntimeException("Job " + job.getId() + " already exist.");
         }
@@ -90,43 +92,28 @@ public class DefaultScheduler implements JobScheduler {
         jobList.add(job);
         long jobId = job.getId();
         jobMap.put(jobId, job);
-        ProjectDAO projectDAO = DAOFactory.getProjectDAO();
-        List<Project> projectList = projectMap.get(jobId);
-        if (projectList == null) {
-            projectList = new ArrayList();
-            projectMap.put(jobId, projectList);
-        }
-        for (long projectId : job.getProjectList()) {
-            Project dbProject = projectDAO.getProject(projectId);
-            if (dbProject == null) {
-                throw new RuntimeException("Invalid project");
-            }
-            projectList.add(dbProject);
-        }
 
         return this;
     }
 
     @Override
     public void startJob(long jobId) {
-        Job job = jobMap.get(jobId);
+        JobConfiguration job = jobMap.get(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before start.");
         }
 
         String group = Long.toString(job.getId());
-        List<Project> projectList = projectMap.get(jobId);
-        for (Project proj : projectList) {
-            JobDetail jobDetail = newJob(JobThread.class)
-                    .withIdentity(Long.toString(proj.id), group)
-                    .usingJobData("ProjectData", proj.data)
-                    .usingJobData("ProjectName", proj.name)
-                    .build();
-            jobDetail.getJobDataMap().put("EngineObject", this.engine);
+        for (TransformProject project : job.getProjectList()) {
+            JobDetail jobDetail = newJob(JobExecutor.class)
+            .withIdentity(project.getName(), group)
+            .build();
+            jobDetail.getJobDataMap().put(JobConstants.ENGINE_OBJECT, this.engine);
+            jobDetail.getJobDataMap().put(JobConstants.PROJECT_OBJECT, project);
 
             TriggerBuilder<Trigger> builder = newTrigger();
             builder.withIdentity(Long.toString(job.getId()), group);
-            builder.withSchedule(getQuartzBuilder(job.getRepeat(), job.getInterval()));   
+            builder.withSchedule(getQuartzBuilder(job.getRepeat(), job.getInterval()));
             builder.startAt(new Date(job.getStartTime()));
             // TODO: add end time
 
@@ -160,7 +147,6 @@ public class DefaultScheduler implements JobScheduler {
                 return calendarIntervalSchedule().withIntervalInYears(interval);
             case Never:
                 break;
-
             default:
                 throw new RuntimeException("Illegal value: scheduler repeat not available" + Repeat.valueOf(repeat).toString());
         }
@@ -170,7 +156,7 @@ public class DefaultScheduler implements JobScheduler {
 
     @Override
     public void stopJob(long jobId) {
-        Job job = jobMap.get(jobId);
+        JobConfiguration job = jobMap.get(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before stop.");
         }
@@ -178,9 +164,9 @@ public class DefaultScheduler implements JobScheduler {
         // Remove from map and scheduler
         String group = Long.toString(jobId);
         List<Project> projectList = projectMap.get(jobId);
-        for (Project proj : projectList) {
+        for (TransformProject proj : job.getProjectList()) {
             try {
-                sched.deleteJob(new JobKey(Long.toString(proj.id), group));
+                sched.deleteJob(new JobKey(proj.getName(), group));
             } catch (SchedulerException ex) {
                 // TODO: log error 
             }
@@ -189,17 +175,16 @@ public class DefaultScheduler implements JobScheduler {
 
     @Override
     public void saveJob(long jobId) {
-        Job job = jobMap.get(jobId);
+        JobConfiguration job = jobMap.get(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before saving.");
         }
-        
         // TODO: save to db via web service 
     }
 
     @Override
     public void deleteJob(long jobId) {
-        Job job = jobMap.remove(jobId);
+        JobConfiguration job = jobMap.remove(jobId);
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before deleting.");
         }
@@ -208,10 +193,9 @@ public class DefaultScheduler implements JobScheduler {
 
         // Remove from map and scheduler
         String group = Long.toString(job.getId());
-        List<Project> projectList = projectMap.remove(jobId);
-        for (Project proj : projectList) {
+        for (TransformProject proj : job.getProjectList()) {
             try {
-                sched.deleteJob(new JobKey(Long.toString(proj.id), group));
+                sched.deleteJob(new JobKey(proj.getName(), group));
             } catch (SchedulerException ex) {
                 // TODO: log error 
             }
@@ -234,7 +218,7 @@ public class DefaultScheduler implements JobScheduler {
             if (!isStarted) {
                 sched = new org.quartz.impl.StdSchedulerFactory().getScheduler();
                 sched.start();
-                jobMonitor = new DefaultMonitor(this);
+                jobMonitor = new DefaultJobMonitor(this);
             }
 
         } catch (SchedulerException ex) {
@@ -253,14 +237,13 @@ public class DefaultScheduler implements JobScheduler {
         }
     }
 
-    public List<Job> getJobList() {
+    public List<JobConfiguration> getJobList() {
         return jobList;
     }
 
     private void scheduleAll() {
-        for (Job job : jobList) {
+        for (JobConfiguration job : jobList)
             startJob(job.getId());
-        }
     }
 
     public void loadFromDb() throws Exception {

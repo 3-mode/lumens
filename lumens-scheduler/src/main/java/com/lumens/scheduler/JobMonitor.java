@@ -11,6 +11,7 @@ import java.util.List;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public interface JobMonitor {
+
     public List<String> getRunningJobIdList();
 
     public List<String> getPendingJobIdList();
