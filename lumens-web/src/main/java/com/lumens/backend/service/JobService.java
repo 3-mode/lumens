@@ -3,9 +3,11 @@
  */
 package com.lumens.backend.service;
 
+import com.lumens.backend.ApplicationContext;
 import com.lumens.backend.ServerUtils;
 import static com.lumens.backend.ServiceConstants.CONTENT;
 import com.lumens.io.JsonUtility;
+import com.lumens.scheduler.DefaultJobConfigurationBuilder;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.dao.JobProjectRelationDAO;
@@ -79,6 +81,18 @@ public class JobService {
     @Produces("application/json")
     public Response getOrExecuteJob(@PathParam("jobId") String jobId, @QueryParam("action") String action) {
         try {
+            if ("start".equalsIgnoreCase(action)) {
+                JobDAO jobDAO = DAOFactory.getJobDAO();
+                long lJobId = Long.parseLong(jobId);
+                Job job = jobDAO.getJob(lJobId);
+                ApplicationContext.get().getScheduler().addSchedule(DefaultJobConfigurationBuilder.build(job));
+                ApplicationContext.get().getScheduler().startJob(lJobId);
+            } else if ("stop".equalsIgnoreCase(action)) {
+                JobDAO jobDAO = DAOFactory.getJobDAO();
+                long lJobId = Long.parseLong(jobId);
+                Job job = jobDAO.getJob(lJobId);
+                ApplicationContext.get().getScheduler().stopJob(lJobId);
+            }
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
