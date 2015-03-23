@@ -7,7 +7,7 @@
 Lumens.NavToolbar = Class.$extend({
     __init__: function(containerObj) {
         this.$container = containerObj;
-        this.$toolbar = $('<div class="lumens-nav-toolbar"/>').appendTo(this.$container);
+        this.$toolbar = $('<div id="topNavBar" class="lumens-nav-toolbar"/>').appendTo(this.$container);
         this.$toolbarContent = $('<ul/>').appendTo(this.$toolbar);
         this.buttonList = {};
         var __this = this;
@@ -36,6 +36,7 @@ Lumens.NavToolbar = Class.$extend({
         }
         if (config.default_active)
             this.buttonList[config.default_active].trigger("click");
+        // this.navigation = responsiveNav("#topNavBar");
         return this;
     },
     remove: function() {
