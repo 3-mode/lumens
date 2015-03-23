@@ -3,7 +3,6 @@
  */
 package com.lumens.scheduler;
 
-import com.lumens.scheduler.JobConfiguration;
 import com.lumens.scheduler.impl.DefaultJobConfiguration;
 import com.lumens.sysdb.entity.Job;
 
