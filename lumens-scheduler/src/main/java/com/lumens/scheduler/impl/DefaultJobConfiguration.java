@@ -7,7 +7,6 @@ import com.lumens.engine.TransformProject;
 import java.util.ArrayList;
 import java.util.List;
 import com.lumens.scheduler.JobConfiguration;
-import java.sql.Timestamp;
 
 /**
  *
@@ -88,5 +87,11 @@ public class DefaultJobConfiguration implements JobConfiguration {
     @Override
     public List<TransformProject> getProjectList() {
         return projectList;
+    }
+
+    @Override
+    public JobConfiguration addProject(List<TransformProject> projects) {
+        projectList.addAll(projects);
+        return this;
     }
 }

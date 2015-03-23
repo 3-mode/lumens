@@ -69,5 +69,7 @@ public interface JobConfiguration {
 
     public JobConfiguration addProject(TransformProject project);
 
+    public JobConfiguration addProject(List<TransformProject> projects);
+
     public List<TransformProject> getProjectList();
 }
