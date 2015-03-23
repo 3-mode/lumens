@@ -129,7 +129,6 @@ public class ServiceTest {
         long saveId = jobDAO.update(job);
     }
 
-    @Test
     public void testScheduler() throws Exception {
         System.setProperty("lumens.base", "../dist/lumens");
         ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
