@@ -14,6 +14,7 @@ import com.lumens.sysdb.dao.JobProjectRelationDAO;
 import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.entity.Project;
 import com.lumens.sysdb.utils.DBHelper;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -103,7 +104,7 @@ public class JobService {
             json.writeEndObject();
             json.writeEndObject();
             return Response.ok().entity(utility.toUTF8String()).build();
-        } catch (Exception e) {
+        } catch (NumberFormatException | IOException e) {
             return ServerUtils.getErrorMessageResponse(e);
         }
     }
@@ -113,7 +114,7 @@ public class JobService {
     public Response createJob(String message) {
         JsonNode messageJson = JsonUtility.createJson(message);
         JobDAO jobDAO = DAOFactory.getJobDAO();
-        long saveId = jobDAO.create(getJob(messageJson));
+        long saveId = jobDAO.create(getJobDBEntity(messageJson));
         List<Long> projectIdList = getProjectList(messageJson);
         JobProjectRelationDAO jprDAO = DAOFactory.getRelationDAO();
         for (long projectId : projectIdList)
@@ -139,7 +140,7 @@ public class JobService {
     public Response updateJob(@PathParam("jobId") String jobId, String message) {
         JsonNode messageJson = JsonUtility.createJson(message);
         JobDAO jobDAO = DAOFactory.getJobDAO();
-        long saveId = jobDAO.update(getJob(messageJson));
+        long saveId = jobDAO.update(getJobDBEntity(messageJson));
         List<Long> projectIdList = getProjectList(messageJson);
         JobProjectRelationDAO jprDAO = DAOFactory.getRelationDAO();
         jprDAO.deleteAllRelation(saveId);
@@ -160,7 +161,7 @@ public class JobService {
         }
     }
 
-    private Job getJob(JsonNode messageJson) {
+    private Job getJobDBEntity(JsonNode messageJson) {
         JsonNode contentJson = messageJson.get(CONTENT);
         return new Job(Long.parseLong(contentJson.get("id").asText()),
                        contentJson.get("name").asText(),
