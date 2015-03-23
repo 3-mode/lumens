@@ -3,11 +3,14 @@
  */
 package com.lumens.sysdb.utils;
 
+import com.lumens.engine.TransformProject;
+import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobProjectRelationDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.entity.JobProjectRelation;
 import com.lumens.sysdb.entity.Project;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,5 +52,16 @@ public class DBHelper {
         }
 
         return projectIdList;
+    }
+
+    public static List<TransformProject> loadTransformProjectFromDb(long jobId) throws Exception {
+        List<TransformProject> transformProjectList = new ArrayList<>();
+        List<Project> projectList = loadProjectFromDb(jobId);
+        for (Project project : projectList) {
+            TransformProject projectInst = new TransformProject();
+            new ProjectSerializer(projectInst).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
+            transformProjectList.add(projectInst);
+        }
+        return transformProjectList;
     }
 }
