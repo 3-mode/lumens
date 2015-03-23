@@ -8,14 +8,9 @@ import com.lumens.engine.TransformProject;
 import com.lumens.scheduler.JobScheduler;
 import com.lumens.scheduler.JobConfiguration.Repeat;
 import com.lumens.scheduler.JobMonitor;
-import com.lumens.sysdb.DAOFactory;
-import com.lumens.sysdb.dao.JobDAO;
-import com.lumens.sysdb.dao.JobProjectRelationDAO;
-import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.scheduler.JobConfiguration;
 import com.lumens.scheduler.JobConstants;
 import com.lumens.sysdb.entity.Project;
-import com.lumens.sysdb.utils.DBHelper;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
@@ -104,6 +99,7 @@ public class DefaultScheduler implements JobScheduler {
         }
 
         String group = Long.toString(job.getId());
+        // TODO this schedule will run project in parallel
         for (TransformProject project : job.getProjectList()) {
             JobDetail jobDetail = newJob(JobExecutor.class)
             .withIdentity(project.getName(), group)
