@@ -8,6 +8,7 @@ import com.lumens.backend.ServerUtils;
 import static com.lumens.backend.ServiceConstants.CONTENT;
 import com.lumens.io.JsonUtility;
 import com.lumens.scheduler.DefaultJobConfigurationBuilder;
+import com.lumens.scheduler.JobConfiguration;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.dao.JobProjectRelationDAO;
@@ -44,7 +45,7 @@ public class JobService {
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
             json.writeStringField("status", "OK");
-            json.writeObjectFieldStart("content");
+            json.writeObjectFieldStart("result_content");
             json.writeArrayFieldStart("jobs");
             JobDAO jobDAO = DAOFactory.getJobDAO();
             List<Job> jobList = jobDAO.getAllJob();
@@ -82,29 +83,35 @@ public class JobService {
     @Produces("application/json")
     public Response getOrExecuteJob(@PathParam("jobId") String jobId, @QueryParam("action") String action) {
         try {
+            String message = "";
             if ("start".equalsIgnoreCase(action)) {
                 JobDAO jobDAO = DAOFactory.getJobDAO();
                 long lJobId = Long.parseLong(jobId);
                 Job job = jobDAO.getJob(lJobId);
-                ApplicationContext.get().getScheduler().addSchedule(DefaultJobConfigurationBuilder.build(job));
+                JobConfiguration jc = DefaultJobConfigurationBuilder.build(job);
+                jc.addProject(DBHelper.loadTransformProjectFromDb(lJobId));
+                ApplicationContext.get().getScheduler().addSchedule(jc);
                 ApplicationContext.get().getScheduler().startJob(lJobId);
+                message = "Started successfully";
             } else if ("stop".equalsIgnoreCase(action)) {
                 JobDAO jobDAO = DAOFactory.getJobDAO();
                 long lJobId = Long.parseLong(jobId);
                 Job job = jobDAO.getJob(lJobId);
                 ApplicationContext.get().getScheduler().stopJob(lJobId);
+                ApplicationContext.get().getScheduler().deleteJob(lJobId);
+                message = "Stop successfully";
             }
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
             json.writeStringField("status", "OK");
             json.writeObjectFieldStart("result_content");
-            json.writeStringField("do", String.format("get or execute job by [%s]", jobId));
+            json.writeStringField("do", message + "; " + String.format("get or execute job by [%s]", jobId));
             json.writeStringField("action", String.format("[%s]", action));
             json.writeEndObject();
             json.writeEndObject();
             return Response.ok().entity(utility.toUTF8String()).build();
-        } catch (NumberFormatException | IOException e) {
+        } catch (Exception e) {
             return ServerUtils.getErrorMessageResponse(e);
         }
     }

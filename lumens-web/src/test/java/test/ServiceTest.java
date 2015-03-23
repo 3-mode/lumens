@@ -19,8 +19,11 @@ import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.model.DateTime;
 import com.lumens.model.Element;
 import com.lumens.model.serializer.ElementSerializer;
+import com.lumens.scheduler.DefaultJobConfigurationBuilder;
+import com.lumens.scheduler.JobConfiguration;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.entity.Job;
+import com.lumens.sysdb.utils.DBHelper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -124,6 +127,21 @@ public class ServiceTest {
                           12,
                           DateTime.parse("2015-02-26 22:45").getTime(), 0L);
         long saveId = jobDAO.update(job);
+    }
+
+    @Test
+    public void testScheduler() throws Exception {
+        System.setProperty("lumens.base", "../dist/lumens");
+        ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
+        long lJobId = 1425107299173L;
+        JobDAO jDAO = DAOFactory.getJobDAO();
+        Job job = jDAO.getJob(lJobId);
+        JobConfiguration jc = DefaultJobConfigurationBuilder.build(job);
+        jc.addProject(DBHelper.loadTransformProjectFromDb(lJobId));
+        ApplicationContext.get().getScheduler().addSchedule(jc);
+        ApplicationContext.get().getScheduler().startJob(lJobId);
+        System.out.println("Job started");
+        System.in.read();
     }
 
 }

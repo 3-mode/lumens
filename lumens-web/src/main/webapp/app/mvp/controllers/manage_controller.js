@@ -67,13 +67,19 @@ Lumens.controllers
         else if ('id_start' === id_btn) {
             var job = $scope.jobs[$scope.selectJobIndex];
             if (job && job.id) {
-                JobService.exec({id: job.id, action: "start"});
+                JobService.exec({id: job.id, action: "start"}, function (result) {
+                    if (result.status === 'OK')
+                        Notifier.message("info", "Success", "Start the job '" + result.result_content.do + "'");
+                });
             }
         }
         else if ('id_stop' === id_btn) {
             var job = $scope.jobs[$scope.selectJobIndex];
             if (job && job.id) {
-                JobService.exec({id: job.id, action: "stop"});
+                JobService.exec({id: job.id, action: "stop"}, function (result) {
+                    if (result.status === 'OK')
+                        Notifier.message("info", "Success", "Stop the job '" + result.result_content.do + "'");
+                });
             }
         }
     };
@@ -122,7 +128,7 @@ Lumens.controllers
         }
     };
     JobService.list(function (result) {
-        $scope.jobs = result.content.jobs;
+        $scope.jobs = result.result_content.jobs;
         LumensLog.log("JobList:", result);
     });
 })
