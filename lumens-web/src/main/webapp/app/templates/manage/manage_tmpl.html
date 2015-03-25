@@ -38,7 +38,7 @@
         </div>
         <div id="timer" style="display: none;"></div>
     </div>
-    <div class="animate-switch" style="width: 100%; height: 100%; float: left; display: block;" ng-controller="JobManagementCtrl">
+    <div class="animate-switch" ng-switch-default style="width: 100%; height: 100%; float: left; display: block;" ng-controller="JobManagementCtrl">
         <div ng-include="job_bar_template"></div>
         <!-- TODO need to remove or hide the job panel -->
         <div id="jobManagementHolder" style="width: 100%; height: calc(100% - 47px);"></div>

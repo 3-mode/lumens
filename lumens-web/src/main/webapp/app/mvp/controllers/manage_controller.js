@@ -133,7 +133,7 @@ Lumens.controllers
     });
 })
 .controller("ServerMonitorCtrl", function ($scope, $interval, CpuPerc, CpuCount, MemPerc, Disk) {
-
+    console.log("In ServerMonitorCtrl");
     // Line charts of CPU
     function getRedrawData(historyData) {
         var data = [];
@@ -200,7 +200,12 @@ Lumens.controllers
                 cpuHistoryList.push(cpuHistory);
                 cpuPlotList.push(cpuPolt);
             }
-            $scope.$parent.cpuTimer = $interval(function () {
+            var cpuTimer = $interval(function () {
+                if (cpuTimer && $('#cpuInfoTotal').length === 0) {
+                    $interval.cancel(cpuTimer);
+                    cpuTimer = null;
+                    return;
+                }
                 CpuPerc.get(function (cpu_perc) {
                     putInfoIntoCache(cpuTotalHistory, cpu_perc.cpu_usage);
                     cpuTotalPolt.series[0].data = getRedrawData(cpuTotalHistory);
@@ -244,7 +249,13 @@ Lumens.controllers
             }
         });
 
-        $scope.$parent.memTimer = $interval(function () {
+        var memTimer = $interval(function () {
+            if (memTimer && $('#cpuInfoTotal').length === 0) {
+                $interval.cancel(memTimer);
+                memTimer = null;
+                return;
+            }
+
             MemPerc.get(function (memInfo) {
                 putInfoIntoCache(memTotalHistory, memInfo.memory.used);
                 memTotalPolt.series[0].data = getRedrawData(memTotalHistory);
@@ -290,14 +301,4 @@ Lumens.controllers
             }
         });
     });
-
-    $scope.$on('$destory', function () {
-        console.log("on destroy");
-        if ($scope.cpuTimer)
-            clearTimeout($scope.cpuTimer);
-
-        if ($scope.memTimer)
-            clearTimeout($scope.memTimer);
-    });
-
 });
