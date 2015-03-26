@@ -52,7 +52,7 @@ public class ServiceTest {
             System.setProperty("lumens.base", "../dist/lumens");
             ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
-            Project project = pDAO.getProject(1421234160179L); //1421234160179L page //1415415434544L //1421842012147L CSV
+            Project project = pDAO.getProject(1421324074892L); //1421234160179L page //1415415434544L //1421324074892L CSV
             TransformProject projectInstance = new TransformProject();
             new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
             //assertEquals(3, projectInstance.getDataTransformerList().size());
