@@ -106,10 +106,16 @@ public class TransformProject {
 
     public void open() {
         if (!isOpen()) {
-            for (DataSource ds : datasourceList)
+            for (DataSource ds : datasourceList) {
+                if (ds.isOpen())
+                    ds.close();
                 ds.open();
-            for (DataTransformer dt : transformerList)
+            }
+            for (DataTransformer dt : transformerList) {
+                if (dt.isOpen())
+                    dt.close();
                 dt.open();
+            }
             isOpen = true;
         }
     }
