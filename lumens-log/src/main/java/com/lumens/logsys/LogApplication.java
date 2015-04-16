@@ -17,8 +17,8 @@ import org.apache.logging.log4j.Logger;
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
 public class LogApplication {
-    private final Logger logger = LogManager.getLogger(LogApplication.class.getName());
-    private final Logger fileLogger = LogManager.getLogger("System");
+    private final Logger logger = LogSysFactory.getLogger(LogApplication.class.getName());
+    private final Logger fileLogger = LogSysFactory.getLogger("System");
 
     public void start() throws NamingException {
         fileLogger.info("Start to log into JMS");
@@ -39,7 +39,7 @@ public class LogApplication {
             props.load(in);
         }
         NamingManager.setInitialContextFactoryBuilder(new LogSysInitialContextFactoryBuilder(props));
-        System.setProperty("log4j.configurationFile", LogApplication.class.getResource("/conf/log4j2-console.xml").toURI().toString());
+        LogSysFactory.setMode(LogSysFactory.LOG_MODE.CONSOLE);
         LogApplication app = new LogApplication();
         app.start();
         //System.exit(0);
