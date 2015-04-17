@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="warn" name="MyApp" packages="">
+<Configuration status="warn" name="LumensLogSys" packages="">
     <Appenders>
         <Console name="LogApp" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="trace">
+        <Root level="error">
             <AppenderRef ref="LogApp"/>
         </Root>
     </Loggers>

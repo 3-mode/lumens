@@ -21,15 +21,20 @@ public class LogApplication {
     private final Logger fileLogger = LogSysFactory.getLogger("System");
 
     public void start() throws NamingException {
+        if (logger.isDebugEnabled()) {
+            System.out.println("debug ?");
+            logger.debug("debug enabled");
+        }
         fileLogger.info("Start to log into JMS");
         logger.trace("Start Log Application");
         logger.debug("Start Log Application");
         logger.info("Start Log Application");
         logger.warn("Start Log Application");
         logger.error("Start Log Application");
-        for (int i = 0; i < 100; ++i) {
-            new Test1("hello Test" + i);
-        }
+        /*
+         for (int i = 0; i < 100; ++i) {
+         new Test1("hello Test" + i);
+         }//*/
         fileLogger.info("Finish logging into JMS");
     }
 
