@@ -18,23 +18,22 @@ public class LogSysFactory {
         JMS
     }
 
-    private static LOG_MODE logMode;
-
     public static void setMode(LOG_MODE mode) {
         try {
-            logMode = mode;
             if (mode == LOG_MODE.CONSOLE)
                 System.setProperty("log4j.configurationFile", LogApplication.class.getResource("/conf/log4j2-console.xml").toURI().toString());
             else if (mode == LOG_MODE.JMS)
                 System.setProperty("log4j.configurationFile", LogApplication.class.getResource("/conf/log4j2-jms.xml").toURI().toString());
-            else
+            else if (mode == LOG_MODE.FILE)
                 System.setProperty("log4j.configurationFile", LogApplication.class.getResource("/conf/log4j2-file.xml").toURI().toString());
+            else
+                throw new RuntimeException("Unsupported log mode !");
         } catch (URISyntaxException ex) {
             throw new RuntimeException(ex);
         }
     }
 
     public static Logger getLogger(String name) {
-        return LogManager.getLogger(name + " : LUMENS");
+        return LogManager.getLogger("LUMENS" + " : " + name);
     }
 }
