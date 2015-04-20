@@ -1,8 +1,9 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.logsys;
+package com.lumens.logsys.server;
 
+import com.lumens.logsys.LogApplication;
 import java.io.InputStream;
 import java.util.Properties;
 import javax.jms.Destination;
