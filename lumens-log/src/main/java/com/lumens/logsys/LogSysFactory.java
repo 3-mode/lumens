@@ -36,4 +36,8 @@ public class LogSysFactory {
     public static Logger getLogger(String name) {
         return LogManager.getLogger("LUMENS" + " : " + name);
     }
+
+    public static Logger getLogger(Class<?> clazz) {
+        return LogManager.getLogger("LUMENS" + " : " + clazz.getName());
+    }
 }
