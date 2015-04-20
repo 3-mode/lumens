@@ -8,10 +8,12 @@ import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.component.instrument.DataTransformer;
+import com.lumens.logsys.LogSysFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -19,6 +21,7 @@ import java.util.Map;
  */
 public class TransformProject {
 
+    private final Logger log = LogSysFactory.getLogger(TransformProject.class);
     private List<DataSource> datasourceList = new ArrayList<>();
     private List<DataTransformer> transformerList = new ArrayList<>();
     private List<StartEntry> startList = new ArrayList<>();
@@ -82,6 +85,12 @@ public class TransformProject {
         for (StartEntry startEntry : discoverStartList)
             this.addStartEntry(startEntry);
 
+        if (log.isDebugEnabled()) {
+            log.debug("Get Start entry total '" + startList.size() + "'");
+            for (StartEntry startEntry : startList)
+                log.debug(startEntry.getStartComponent().getName() + "[" + startEntry.getStartFormatName() + "]");
+        }
+
         return startList;
     }
 
@@ -107,14 +116,12 @@ public class TransformProject {
     public void open() {
         if (!isOpen()) {
             for (DataSource ds : datasourceList) {
-                if (ds.isOpen())
-                    ds.close();
-                ds.open();
+                if (!ds.isOpen())
+                    ds.open();
             }
             for (DataTransformer dt : transformerList) {
-                if (dt.isOpen())
-                    dt.close();
-                dt.open();
+                if (!dt.isOpen())
+                    dt.open();
             }
             isOpen = true;
         }

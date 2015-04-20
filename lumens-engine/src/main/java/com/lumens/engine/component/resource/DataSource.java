@@ -19,6 +19,7 @@ import com.lumens.engine.TransformComponent;
 import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.handler.DataSourceResultHandler;
 import com.lumens.engine.handler.ResultHandler;
+import com.lumens.logsys.LogSysFactory;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -33,6 +35,7 @@ import java.util.Map;
  */
 public class DataSource extends AbstractTransformComponent implements RegisterFormatComponent, Resource {
 
+    private final Logger log = LogSysFactory.getLogger(DataSource.class);
     private final Map<String, FormatEntry> registerOUTFormatList;
     private final Map<String, FormatEntry> registerINFormatList;
     private Connector connector;
@@ -55,6 +58,9 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
     public void setPropertyList(Map<String, Value> propertyList) {
         this.propertyList = propertyList;
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("'%s' properties is : '%s'", this.getName(), propertyList));
+        }
     }
 
     public Map<String, Value> getPropertyList() {
@@ -67,6 +73,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             connector.setPropertyList(propertyList);
             connector.open();
             isOpen = connector.isOpen();
+            log.info(String.format("'%s' is opened", getName()));
         }
     }
 
@@ -94,6 +101,8 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     public List<ExecuteContext> execute(ExecuteContext context) {
         try {
             String targetFmtName = context.getTargetFormatName();
+            if (log.isDebugEnabled())
+                log.debug(String.format("Datasource is handling target '%s'", targetFmtName));
             FormatEntry entry = registerOUTFormatList.get(targetFmtName);
             List<ExecuteContext> exList = new ArrayList<>();
             List<Element> results = new ArrayList<>();
@@ -117,10 +126,14 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             if (opRet != null && opRet.hasData())
                 results.addAll(opRet.getData());
 
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Datasource data chunk size '%d'.", results.size()));
+            }
+
             // Cache the executeNext chunk of current data source
-            if (opRet != null && opRet.hasNext())
+            if (opRet != null && opRet.hasNext()) {
                 dataCtx = new DataContext(context, opRet.executeNext());
-            else {
+            } else {
                 // If dataCtx is null then need to return to parent node not return to sibling 
                 // because datasource can be link to multiple destination
                 dataCtx = context.getParentDataContext();
