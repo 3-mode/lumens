@@ -33,11 +33,22 @@ public class LogSysFactory {
         }
     }
 
+    private static void checkConfigureFile() {
+        try {
+            String mode = System.getProperty("log4j.configurationFile");
+            if (mode == null || mode.isEmpty())
+                System.setProperty("log4j.configurationFile", LogApplication.class.getResource("/conf/log4j2-console.xml").toURI().toString());
+        } catch (URISyntaxException ex) {
+        }
+    }
+
     public static Logger getLogger(String name) {
+        checkConfigureFile();
         return LogManager.getLogger("LUMENS" + " : " + name);
     }
 
     public static Logger getLogger(Class<?> clazz) {
+        checkConfigureFile();
         return LogManager.getLogger("LUMENS" + " : " + clazz.getName());
     }
 }
