@@ -12,6 +12,7 @@ import com.lumens.engine.component.instrument.DataTransformer;
 import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.RegisterFormatComponent;
 import com.lumens.engine.component.TransformRuleEntry;
+import com.lumens.io.JsonUtility;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
 import com.lumens.model.Type;
@@ -29,7 +30,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.NullNode;
 
 /**
  *
@@ -62,7 +62,7 @@ public class ProjectJsonParser {
     }
 
     private boolean isNotNull(JsonNode json) {
-        return json != null && json != NullNode.instance;
+        return JsonUtility.isNotNull(json);
     }
 
     private void readProjectFromJson(JsonNode projectJson) {
