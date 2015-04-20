@@ -64,10 +64,10 @@ public class JsonUtility {
     }
 
     public static boolean isNotNull(JsonNode json) {
-        return json != null;
+        return json != null && !json.isNull();
     }
 
     public static boolean isNull(JsonNode json) {
-        return json == null;
+        return json == null || json.isNull();
     }
 }
