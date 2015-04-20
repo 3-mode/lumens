@@ -11,6 +11,35 @@
     <groupId>com.lumens</groupId>
     <artifactId>lumens-log</artifactId>
     <name>lumens-log</name>
+    <properties>
+        <copyto.conf.dir>${copyto.app.dir}/conf</copyto.conf.dir>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <!-- here the phase you need -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${copyto.conf.dir}</outputDirectory>
+                            <resources>          
+                                <resource>
+                                    <directory>src/main/resources/conf</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     <dependencies>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
