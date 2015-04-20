@@ -9,19 +9,20 @@ import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.handler.ResultHandler;
+import com.lumens.logsys.LogSysFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author shaofeng wang (shaofeng.wang@outlook.com)
  */
 public class SequenceTransformExecuteJob implements Executor {
-
+    private final Logger log = LogSysFactory.getLogger(SequenceTransformExecuteJob.class);
     private TransformProject project;
-    private Thread currentThread;
     private List<ResultHandler> handlers;
 
     class SingleThreadExecuteStack extends LinkedList<ExecuteContext> {
@@ -78,11 +79,15 @@ public class SequenceTransformExecuteJob implements Executor {
 
     protected void executeTransform(TransformProject transformProject) {
         try {
+            if (log.isDebugEnabled())
+                log.debug("Starting execute the transformation");
             List<TransformComponent> componentList = this.buildComponentSequenceList(transformProject);
             this.executeStart(componentList);
             List<StartEntry> startList = transformProject.discoverStartEntryList();
             for (StartEntry entry : startList) {
                 SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
+                if(log.isDebugEnabled())
+                    log.debug(String.format("Current processing component: '%s'", entry.getStartFormatName()));
                 executorStack.push(new TransformExecuteContext(entry.getStartComponent(), entry.getStartFormatName(), handlers));
                 while (!executorStack.isEmpty()) {
                     ExecuteContext exectueCtx = executorStack.pop();
@@ -93,6 +98,8 @@ public class SequenceTransformExecuteJob implements Executor {
                 }
             }
             this.executeStop(componentList);
+            if (log.isDebugEnabled())
+                log.debug("Stopping execute the transformation");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -6,7 +6,7 @@
             {
                 "type": "PERSON",
                 "id": "1418204871170",
-                "name": "",
+                "name": "personDs",
                 "description": "",
                 "position": {
                     "x": 0,
@@ -161,7 +161,7 @@
             {
                 "type": "WAREHOUSE",
                 "id": "1418204871173",
-                "name": "",
+                "name": "warehouseDs",
                 "description": "",
                 "position": {
                     "x": 0,
@@ -331,7 +331,7 @@
             {
                 "type": "FINAL",
                 "id": "1418204871174",
-                "name": "",
+                "name": "finalDs",
                 "description": "",
                 "position": {
                     "x": 0,

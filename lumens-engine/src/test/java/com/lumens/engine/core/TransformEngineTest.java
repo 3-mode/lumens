@@ -22,6 +22,7 @@ import com.lumens.engine.handler.ResultHandler;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectJsonParser;
 import com.lumens.engine.serializer.ProjectSerializer;
+import com.lumens.logsys.LogSysFactory;
 import com.lumens.model.Element;
 import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformRule;
@@ -50,6 +51,7 @@ public class TransformEngineTest {
     }
     
     public TransformEngineTest() {
+        LogSysFactory.setMode(LogSysFactory.LOG_MODE.CONSOLE);
         transformEngine = new TransformEngine();
     }
     
@@ -108,14 +110,17 @@ public class TransformEngineTest {
     public void runSimpleTransformTask() throws Exception {
         mockEngeinContext();
         DataSource personDs = new DataSource(Mock.PERSON.name(), generateID());
+        personDs.setName("personDs");
         personDs.open();
         System.out.println(String.format("Person DS id '%s'", personDs.getId()));
         
         DataSource warehouseDs = new DataSource(Mock.WAREHOUSE.name(), generateID());
+        warehouseDs.setName("warehouseDs");
         warehouseDs.open();
         System.out.println(String.format("WareHouse DS id '%s'", warehouseDs.getId()));
         
         DataSource finalDs = new DataSource(Mock.FINAL.name(), generateID());
+        finalDs.setName("finalDs");
         finalDs.open();
         System.out.println(String.format("Final DS id '%s'", finalDs.getId()));
         
@@ -198,7 +203,7 @@ public class TransformEngineTest {
         ProjectSerializer pwriter = new ProjectSerializer(project);
         ByteArrayOutputStream baosJson = new ByteArrayOutputStream();
         pwriter.writeToJson(baosJson);
-        System.out.println(baosJson.toString());
+        //System.out.println(baosJson.toString());
         
         TransformProject projectRead = new TransformProject();
         ProjectJsonParser preader = new ProjectJsonParser(projectRead);
@@ -238,9 +243,9 @@ public class TransformEngineTest {
         ByteArrayOutputStream baosJson = new ByteArrayOutputStream();
         new ProjectSerializer(project).writeToXml(baosXML);
         new ProjectSerializer(project).writeToJson(baosJson);
-        System.out.println(baosXML.toString());
-        System.out.println(baosJson.toString());
-        System.out.println();
+        //System.out.println(baosXML.toString());
+        //System.out.println(baosJson.toString());
+        //System.out.println();
         return baosJson.toString();
     }
     
