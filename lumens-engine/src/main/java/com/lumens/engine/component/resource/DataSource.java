@@ -109,11 +109,16 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             DataContext dataCtx = null;
             OperationResult opRet = null;
             if (context instanceof DataContext) {
+                if (log.isDebugEnabled())
+                    log.debug("Get a next chunk result");
+
                 if (this != context.getTargetComponent())
                     throw new RuntimeException(String.format("Fatal logical error with target component '%s'", context.getTargetComponent().getName()));
                 opRet = ((DataContext) context).getResult();
                 context = context.getParentContext();
             } else {
+                if (log.isDebugEnabled())
+                    log.debug("Get first chunk result");
                 Format targetFormat = entry != null ? entry.getFormat() : null;
                 ElementChunk inputChunk = context.getInput();
                 // Log input data
@@ -130,8 +135,8 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 log.debug(String.format("Datasource data chunk size '%d'.", results.size()));
             }
 
-            // Cache the executeNext chunk of current data source
             if (opRet != null && opRet.hasNext()) {
+                // Cache the executeNext chunk of current data source
                 dataCtx = new DataContext(context, opRet.executeNext());
             } else {
                 // If dataCtx is null then need to return to parent node not return to sibling 

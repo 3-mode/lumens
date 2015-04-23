@@ -60,8 +60,9 @@ public class ChameleonConnector implements Connector {
                         countFinal += inputList.size();
                 }
 
-                return new OperationResult() {
-                    private int chunkSize = 5;
+                OperationResult opR = new OperationResult() {
+                    private int chunkSize = 6; // 1, 2, 3, 4, 5
+                    List<Element> resultList = new ArrayList<>();
 
                     @Override
                     public boolean hasData() {
@@ -70,22 +71,6 @@ public class ChameleonConnector implements Connector {
 
                     @Override
                     public List<Element> getData() {
-                        --chunkSize;
-                        List<Element> resultList = new ArrayList<>();
-                        if (Mock.PERSON == typeName) {
-                            DataElement personData = new DataElement(format);
-                            buildPersonData(personData);
-                            resultList.add(personData);
-                            personData = new DataElement(format);
-                            buildPersonData(personData);
-                            resultList.add(personData);
-                            personData = new DataElement(format);
-                            buildPersonData(personData);
-                            resultList.add(personData);
-                        } else if (Mock.WAREHOUSE == typeName || Mock.FINAL == typeName) {
-                            // the same data for warehouse input and output
-                            resultList.addAll(inputList);
-                        }
                         return resultList;
                     }
 
@@ -121,9 +106,23 @@ public class ChameleonConnector implements Connector {
 
                     @Override
                     public OperationResult executeNext() {
+                        --chunkSize;
+                        resultList = new ArrayList<>();
+                        if (Mock.PERSON == typeName) {
+                            for (int i = 0; i < 3; ++i) {
+                                DataElement personData = new DataElement(format);
+                                buildPersonData(personData);
+                                resultList.add(personData);
+                            }
+                        } else if (Mock.WAREHOUSE == typeName || Mock.FINAL == typeName) {
+                            // the same data for warehouse input and output
+                            resultList.addAll(inputList);
+                        }
                         return this;
                     }
                 };
+
+                return opR.executeNext();
             }
         };
     }
