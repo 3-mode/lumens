@@ -114,6 +114,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
                 if (this != context.getTargetComponent())
                     throw new RuntimeException(String.format("Fatal logical error with target component '%s'", context.getTargetComponent().getName()));
+
                 opRet = ((DataContext) context).getResult();
                 context = context.getParentContext();
             } else {
@@ -121,6 +122,10 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                     log.debug("Get first chunk result");
                 Format targetFormat = entry != null ? entry.getFormat() : null;
                 ElementChunk inputChunk = context.getInput();
+
+                if (log.isDebugEnabled())
+                    log.debug(String.format("Datasource input chunk size '%d'.", inputChunk.getData().size()));
+
                 // Log input data
                 handleInputLogging(context.getResultHandlers(), targetFmtName, inputChunk.getData());
                 // use ElementChunk.isLast
@@ -131,9 +136,11 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             if (opRet != null && opRet.hasData())
                 results.addAll(opRet.getData());
 
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Datasource data chunk size '%d'.", results.size()));
-            }
+            if (log.isDebugEnabled())
+                log.debug(String.format("Datasource result chunk size '%d'.", results.size()));
+
+            // Log output data
+            handleOutputLogging(context.getResultHandlers(), targetFmtName, results);
 
             if (opRet != null && opRet.hasNext()) {
                 // Cache the executeNext chunk of current data source
@@ -156,8 +163,6 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 if (dataCtx != null)
                     exList.add(dataCtx);
             }
-            // Log output data
-            handleOutputLogging(context.getResultHandlers(), targetFmtName, results);
 
             return exList;
         } catch (Exception ex) {
