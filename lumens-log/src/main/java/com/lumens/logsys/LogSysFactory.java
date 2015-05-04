@@ -3,9 +3,19 @@
  */
 package com.lumens.logsys;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.core.config.ConfigurationFactory;
+import org.apache.logging.log4j.core.config.ConfigurationSource;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.xml.XmlConfigurationFactory;
 
 /**
  *
@@ -17,7 +27,6 @@ public class LogSysFactory {
         FILE,
         JMS
     }
-
     public static void setMode(LOG_MODE mode) {
         try {
             if (mode == LOG_MODE.CONSOLE)
