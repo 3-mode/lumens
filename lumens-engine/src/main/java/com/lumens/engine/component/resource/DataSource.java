@@ -124,7 +124,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 ElementChunk inputChunk = context.getInput();
 
                 if (log.isDebugEnabled())
-                    log.debug(String.format("Datasource input chunk size '%d'.", inputChunk.getData().size()));
+                    log.debug(String.format("Datasource input chunk size '%d'.", inputChunk.getData() != null ? inputChunk.getData().size() : 0));
 
                 // Log input data
                 handleInputLogging(context.getResultHandlers(), targetFmtName, inputChunk.getData());
