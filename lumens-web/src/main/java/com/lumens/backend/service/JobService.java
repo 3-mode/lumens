@@ -15,10 +15,10 @@ import com.lumens.sysdb.dao.JobProjectRelationDAO;
 import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.entity.Project;
 import com.lumens.sysdb.utils.DBHelper;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -76,6 +76,13 @@ public class JobService {
         } catch (Exception e) {
             return ServerUtils.getErrorMessageResponse(e);
         }
+    }
+
+    @DELETE
+    @Path("{jobId}")
+    @Produces("application/json")
+    public Response deleteJob(@PathParam("jobId") String jobId) {
+        return Response.ok().build();
     }
 
     @GET

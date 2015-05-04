@@ -4,6 +4,7 @@
 package com.lumens.backend;
 
 import com.lumens.engine.TransformEngine;
+import com.lumens.logsys.LogSysFactory;
 import com.lumens.scheduler.*;
 import com.lumens.management.server.monitor.OSResourcesMonitor;
 import com.lumens.management.server.monitor.ServerManagementFactory;
@@ -92,6 +93,7 @@ public class ApplicationContext {
     public void start() {
         // Initialize the JNI path when starting
         System.setProperty("java.library.path", ServerUtils.getNormalizedPath(getRealPath() + LUMENS_JNI));
+        LogSysFactory.setMode(LogSysFactory.LOG_MODE.FILE);
         // Load the manage service, monitor must be created after jni path setting
         osResourcesMonitor = ServerManagementFactory.get().createOSResourcesMonitor();
         // Load the addin connectors

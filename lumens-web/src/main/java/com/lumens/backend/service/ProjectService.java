@@ -4,7 +4,6 @@
 package com.lumens.backend.service;
 
 import com.lumens.backend.ApplicationContext;
-import com.lumens.log.DataElementLoggingHandler;
 import com.lumens.connector.Direction;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.resource.DataSource;
@@ -20,7 +19,6 @@ import com.lumens.backend.ServerUtils;
 import com.lumens.backend.ServiceConstants;
 import static com.lumens.backend.ServiceConstants.ACTIVE;
 import static com.lumens.backend.ServiceConstants.DELETE;
-import com.lumens.engine.StartEntry;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
@@ -107,7 +105,6 @@ public class ProjectService implements ServiceConstants {
         new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
         // Execute all start rules to drive the ws connector
         List<ResultHandler> handlers = new ArrayList<>();
-        handlers.add(new DataElementLoggingHandler(project.id, project.name));
         ApplicationContext.get().getTransformEngine().execute(new SequenceTransformExecuteJob(projectInstance, handlers));
         // TODO to run the project job
         JsonUtility utility = JsonUtility.createJsonUtility();
