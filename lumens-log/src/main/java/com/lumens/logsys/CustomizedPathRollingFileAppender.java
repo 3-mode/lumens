@@ -28,8 +28,8 @@ import org.apache.logging.log4j.core.util.Integers;
 /**
  * Porting the RollingFile appender to customized appender in order to use the customized log path
  */
-@Plugin(name = "DefaultRollingFile", category = "Core", elementType = "appender", printObject = true)
-public final class DefaultRollingFileAppender extends AbstractOutputStreamAppender<RollingFileManager> {
+@Plugin(name = "CustomizedPathRollingFile", category = "Core", elementType = "appender", printObject = true)
+public final class CustomizedPathRollingFileAppender extends AbstractOutputStreamAppender<RollingFileManager> {
 
     private static final int DEFAULT_BUFFER_SIZE = 8192;
     private static final long serialVersionUID = 1L;
@@ -38,7 +38,7 @@ public final class DefaultRollingFileAppender extends AbstractOutputStreamAppend
     private Object advertisement;
     private final Advertiser advertiser;
 
-    private DefaultRollingFileAppender(final String name, final Layout<? extends Serializable> layout, final Filter filter,
+    private CustomizedPathRollingFileAppender(final String name, final Layout<? extends Serializable> layout, final Filter filter,
                                        final RollingFileManager manager, final String fileName, final String filePattern,
                                        final boolean ignoreExceptions, final boolean immediateFlush, final Advertiser advertiser) {
         super(name, layout, filter, ignoreExceptions, immediateFlush, manager);
@@ -114,7 +114,7 @@ public final class DefaultRollingFileAppender extends AbstractOutputStreamAppend
      * @return A RollingFileAppender.
      */
     @PluginFactory
-    public static DefaultRollingFileAppender createAppender(
+    public static CustomizedPathRollingFileAppender createAppender(
     @PluginAttribute("fileName") final String fileName,
     @PluginAttribute("filePattern") final String filePattern,
     @PluginAttribute("append") final String append,
@@ -183,7 +183,7 @@ public final class DefaultRollingFileAppender extends AbstractOutputStreamAppend
             return null;
         }
 
-        return new DefaultRollingFileAppender(name, layout, filter, manager, newFileName, filePattern,
+        return new CustomizedPathRollingFileAppender(name, layout, filter, manager, newFileName, filePattern,
                                               ignoreExceptions, isFlush, isAdvertise ? config.getAdvertiser() : null);
     }
 }
