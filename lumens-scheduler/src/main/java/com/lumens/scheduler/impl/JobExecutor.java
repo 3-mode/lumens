@@ -6,6 +6,7 @@ package com.lumens.scheduler.impl;
 import com.lumens.engine.TransformEngine;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.handler.ResultHandler;
+import com.lumens.engine.log.TransformComponentInOutLogHandler;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.logsys.LogSysFactory;
 import com.lumens.scheduler.JobConstants;
@@ -28,19 +29,19 @@ public class JobExecutor implements Job {
     @Override
     public void execute(JobExecutionContext jec) throws JobExecutionException {
         JobDetail job = jec.getJobDetail();
-        String projectId = job.getKey().getName();
-        String jobId = job.getKey().getGroup();
-        String jobName = job.getJobDataMap().getString(JobConstants.JOB_NAME);
         TransformEngine engine = (TransformEngine) job.getJobDataMap().get(JobConstants.ENGINE_OBJECT);
         TransformProject project = (TransformProject) job.getJobDataMap().get(JobConstants.PROJECT_OBJECT);
+        String projectId = job.getKey().getName();
+        String projectName = project.getName();
+        String jobId = job.getKey().getGroup();
+        String jobName = job.getJobDataMap().getString(JobConstants.JOB_NAME);
 
-        log.info(String.format("Start Job [%s:%s] to execute project [%s:%s] ", jobId, jobName, projectId, project.getName()));
+        log.info(String.format("Start Job [%s:%s] to execute project [%s:%s] ", jobId, jobName, projectId, projectName));
 
         try {
             // Execute all start rules to drive the ws connector
             List<ResultHandler> handlers = new ArrayList<>();
-            // TODO
-            // handlers.add(new DataElementLoggingHandler(Long.parseLong(projectId), projectName));
+            handlers.add(new TransformComponentInOutLogHandler());
             engine.execute(new SequenceTransformExecuteJob(project, handlers));
         } catch (Exception ex) {
             log.error(String.format("Failed on starting Job [%s:%s] to execute project [%s:%s] ", jobId, jobName, projectId, project.getName()));
