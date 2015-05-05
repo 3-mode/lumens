@@ -36,7 +36,7 @@ public class JobExecutor implements Job {
         String jobId = job.getKey().getGroup();
         String jobName = job.getJobDataMap().getString(JobConstants.JOB_NAME);
 
-        log.info(String.format("Start Job [%s:%s] to execute project [%s:%s] ", jobId, jobName, projectId, projectName));
+        log.info(String.format("**** Start Job [%s:%s] to execute project [%s:%s] ", jobId, jobName, projectId, projectName));
 
         try {
             // Execute all start rules to drive the ws connector
@@ -46,6 +46,8 @@ public class JobExecutor implements Job {
         } catch (Exception ex) {
             log.error(String.format("Failed on starting Job [%s:%s] to execute project [%s:%s] ", jobId, jobName, projectId, project.getName()));
             throw new JobExecutionException(ex);
+        } finally {
+            log.info(String.format("**** Complete Job [%s:%s] to execute project [%s:%s] ", jobId, jobName, projectId, projectName));
         }
     }
 }
