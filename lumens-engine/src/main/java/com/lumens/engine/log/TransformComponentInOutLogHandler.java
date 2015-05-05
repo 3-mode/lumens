@@ -48,7 +48,6 @@ public class TransformComponentInOutLogHandler implements DataSourceResultHandle
                     log.info(utility.toUTF8String());
                 }
             } catch (Exception ex) {
-                log.error(ex);
                 throw new RuntimeException(ex);
             }
         }
