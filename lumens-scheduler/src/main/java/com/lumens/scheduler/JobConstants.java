@@ -8,7 +8,7 @@ package com.lumens.scheduler;
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
 public interface JobConstants {
+    public String JOB_NAME = "JobName";
     public String ENGINE_OBJECT = "EngineObject";
     public String PROJECT_OBJECT = "ProjectObject";
-
 }

@@ -104,6 +104,7 @@ public class DefaultScheduler implements JobScheduler {
             JobDetail jobDetail = newJob(JobExecutor.class)
             .withIdentity(project.getName(), group)
             .build();
+            jobDetail.getJobDataMap().put(JobConstants.JOB_NAME, job.getName());
             jobDetail.getJobDataMap().put(JobConstants.ENGINE_OBJECT, this.engine);
             jobDetail.getJobDataMap().put(JobConstants.PROJECT_OBJECT, project);
 
