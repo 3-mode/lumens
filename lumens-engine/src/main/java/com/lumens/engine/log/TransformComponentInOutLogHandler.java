@@ -36,10 +36,10 @@ public class TransformComponentInOutLogHandler implements DataSourceResultHandle
         processElementList(input);
     }
 
-    private void processElementList(List<Element> output) {
-        if (TransformEngineContext.getContext().isLogElement()) {
+    private void processElementList(List<Element> eList) {
+        if (TransformEngineContext.getContext().isLogElement() && eList != null) {
             try {
-                for (Element e : output) {
+                for (Element e : eList) {
                     JsonUtility utility = JsonUtility.createJsonUtility();
                     JsonGenerator json = utility.getGenerator();
                     json.writeStartObject();

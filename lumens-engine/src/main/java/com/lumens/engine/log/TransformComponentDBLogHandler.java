@@ -45,7 +45,7 @@ public class TransformComponentDBLogHandler implements DataSourceResultHandler, 
     }
 
     private void processElementList(TransformComponent src, String targetName, Direction direction, List<Element> eList) {
-        if (TransformEngineContext.getContext().isLogElement()) {
+        if (TransformEngineContext.getContext().isLogElement() && eList != null) {
             InOutLogDAO inoutLogDAO = DAOFactory.getInOutLogDAO();
             for (Element e : eList) {
                 try {
