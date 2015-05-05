@@ -45,6 +45,7 @@ public class JobExecutor implements Job {
             engine.execute(new SequenceTransformExecuteJob(project, handlers));
         } catch (Exception ex) {
             log.error(String.format("Failed on starting Job [%s:%s] to execute project [%s:%s] ", jobId, jobName, projectId, project.getName()));
+            log.error(ex);
             throw new JobExecutionException(ex);
         } finally {
             log.info(String.format("**** Complete Job [%s:%s] to execute project [%s:%s] ", jobId, jobName, projectId, projectName));
