@@ -48,7 +48,7 @@ public class TransformEngine {
                     throw new RuntimeException(String.format("Wrong addin path '%s', it doesn't exist!", addinPath));
                 }
             }
-            TransformEngineContext.start(new DefaultConnectorFactoryManager(ac));
+            TransformEngineContext.start(new DataSourceConnectorFactoryManager(ac));
         } catch (MalformedURLException ex) {
             throw new LumensException(ex);
         }
