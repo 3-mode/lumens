@@ -25,14 +25,14 @@ public class TransformComponentInOutLogHandler implements DataSourceResultHandle
     @Override
     public void processOutput(TransformComponent src, String targetName, List<Element> output) {
         if (log.isDebugEnabled())
-            log.debug(String.format("Component '%s' output size '%d' target => '%s'", src.getName(), output.size(), targetName));
+            log.debug(String.format("Component '%s' output size '%d' target => '%s'", src.getName(), output != null ? output.size() : 0, targetName));
         processElementList(output);
     }
 
     @Override
     public void processInput(TransformComponent src, String targetName, List<Element> input) {
         if (log.isDebugEnabled())
-            log.debug(String.format("Component '%s' input size '%d' target => '%s'", src.getName(), input.size(), targetName));
+            log.debug(String.format("Component '%s' input size '%d' target => '%s'", src.getName(), input != null ? input.size() : 0, targetName));
         processElementList(input);
     }
 
