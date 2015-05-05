@@ -70,6 +70,10 @@ Lumens.controllers
                 JobService.exec({id: job.id, action: "start"}, function (result) {
                     if (result.status === 'OK')
                         Notifier.message("info", "Success", "Start the job '" + result.result_content.do + "'");
+                    else
+                        Notifier.message("info", "Success", "Start the job '" + result.error_message + "'");
+                }, function(error) {
+                     Notifier.message("error", "Error", error);
                 });
             }
         }
