@@ -13,6 +13,7 @@ public class TransformEngineContext {
 
     private static TransformEngineContext instance;
     private final ConnectorFactoryManager fManager;
+    private boolean isLogElement;
 
     private TransformEngineContext(ConnectorFactoryManager fManager) {
         this.fManager = fManager;
@@ -30,5 +31,13 @@ public class TransformEngineContext {
         if (fManager != null)
             return fManager.getFactory(componentType);
         return null;
+    }
+
+    public void setLogElement(boolean isLogElement) {
+        this.isLogElement = isLogElement;
+    }
+
+    public boolean isLogElement() {
+        return this.isLogElement;
     }
 }

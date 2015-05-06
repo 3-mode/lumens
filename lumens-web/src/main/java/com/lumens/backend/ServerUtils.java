@@ -48,10 +48,6 @@ public class ServerUtils {
     }
 
     public static Response getErrorMessageResponse(Exception ex) {
-        try {
-            return getErrorMessageResponse(ex.toString());
-        } finally {
-            throw new RuntimeException(ex);
-        }
+        return getErrorMessageResponse(ex.toString());
     }
 }

@@ -58,8 +58,7 @@ public class SequenceTransformExecuteJob implements Executor {
             comp.stop();
     }
 
-    private List<TransformComponent> buildComponentSequenceList(TransformProject transformProject) {
-        List<StartEntry> startEntryList = transformProject.discoverStartEntryList();
+    private List<TransformComponent> buildComponentSequenceList(List<StartEntry> startEntryList) {
         List<TransformComponent> startList = new LinkedList<>();
         for (StartEntry entry : startEntryList) {
             startList.add(entry.getStartComponent());
@@ -81,12 +80,12 @@ public class SequenceTransformExecuteJob implements Executor {
         try {
             if (log.isDebugEnabled())
                 log.debug("Starting execute the transformation");
-            List<TransformComponent> componentList = this.buildComponentSequenceList(transformProject);
-            this.executeStart(componentList);
             List<StartEntry> startList = transformProject.discoverStartEntryList();
+            List<TransformComponent> componentList = this.buildComponentSequenceList(startList);
+            this.executeStart(componentList);
             for (StartEntry entry : startList) {
                 SingleThreadExecuteStack executorStack = new SingleThreadExecuteStack();
-                if(log.isDebugEnabled())
+                if (log.isDebugEnabled())
                     log.debug(String.format("Current processing component: '%s'", entry.getStartFormatName()));
                 executorStack.push(new TransformExecuteContext(entry.getStartComponent(), entry.getStartFormatName(), handlers));
                 while (!executorStack.isEmpty()) {

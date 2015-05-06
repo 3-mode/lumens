@@ -109,13 +109,23 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             DataContext dataCtx = null;
             OperationResult opRet = null;
             if (context instanceof DataContext) {
+                if (log.isDebugEnabled())
+                    log.debug("Get a next chunk result");
+
                 if (this != context.getTargetComponent())
                     throw new RuntimeException(String.format("Fatal logical error with target component '%s'", context.getTargetComponent().getName()));
+
                 opRet = ((DataContext) context).getResult();
                 context = context.getParentContext();
             } else {
+                if (log.isDebugEnabled())
+                    log.debug("Get first chunk result");
                 Format targetFormat = entry != null ? entry.getFormat() : null;
                 ElementChunk inputChunk = context.getInput();
+
+                if (log.isDebugEnabled())
+                    log.debug(String.format("Datasource input chunk size '%d'.", inputChunk.getData() != null ? inputChunk.getData().size() : 0));
+
                 // Log input data
                 handleInputLogging(context.getResultHandlers(), targetFmtName, inputChunk.getData());
                 // use ElementChunk.isLast
@@ -126,12 +136,14 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             if (opRet != null && opRet.hasData())
                 results.addAll(opRet.getData());
 
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Datasource data chunk size '%d'.", results.size()));
-            }
+            if (log.isDebugEnabled())
+                log.debug(String.format("Datasource result chunk size '%d'.", results.size()));
 
-            // Cache the executeNext chunk of current data source
+            // Log output data
+            handleOutputLogging(context.getResultHandlers(), targetFmtName, results);
+
             if (opRet != null && opRet.hasNext()) {
+                // Cache the executeNext chunk of current data source
                 dataCtx = new DataContext(context, opRet.executeNext());
             } else {
                 // If dataCtx is null then need to return to parent node not return to sibling 
@@ -151,8 +163,6 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 if (dataCtx != null)
                     exList.add(dataCtx);
             }
-            // Log output data
-            handleOutputLogging(context.getResultHandlers(), targetFmtName, results);
 
             return exList;
         } catch (Exception ex) {

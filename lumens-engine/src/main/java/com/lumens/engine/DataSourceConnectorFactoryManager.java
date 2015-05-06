@@ -11,11 +11,11 @@ import com.lumens.connector.ConnectorFactory;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class DefaultConnectorFactoryManager implements ConnectorFactoryManager {
+public class DataSourceConnectorFactoryManager implements ConnectorFactoryManager {
 
     private final AddinContext addinContext;
 
-    public DefaultConnectorFactoryManager(AddinContext ac) {
+    public DataSourceConnectorFactoryManager(AddinContext ac) {
         addinContext = ac;
     }
 
