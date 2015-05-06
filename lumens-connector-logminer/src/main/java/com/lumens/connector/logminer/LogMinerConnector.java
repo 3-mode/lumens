@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.logminer;
 
+import com.lumens.connector.logminer.api.Analysis;
 import com.lumens.connector.Operation;
 import com.lumens.connector.Connector;
 import com.lumens.connector.Direction;
@@ -15,7 +16,7 @@ import java.util.HashMap;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class LogMinerConnector implements Connector, LogMinerAnalysis {
+public class LogMinerConnector implements Connector {
 
     @Override
     public boolean isOpen() {
@@ -24,7 +25,9 @@ public class LogMinerConnector implements Connector, LogMinerAnalysis {
 
     @Override
     public void open() {
-        // start build directory        
+        // start build directory       
+        // check parameter availablity
+        // check soruce db as well as minger db with sufficient priviledge 
 
     }
 
@@ -38,9 +41,11 @@ public class LogMinerConnector implements Connector, LogMinerAnalysis {
         return null;
     }
 
+    // get redo log fields from db
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
         Map<String, Format> formatList = new HashMap();
+        
 
         return formatList;
     }
@@ -53,6 +58,7 @@ public class LogMinerConnector implements Connector, LogMinerAnalysis {
     @Override
     public void start() {
         // start log analysis
+        // start processing redo log sql: query and process each sql
     }
 
     @Override
@@ -62,20 +68,5 @@ public class LogMinerConnector implements Connector, LogMinerAnalysis {
 
     @Override
     public void setPropertyList(Map<String, Value> parameters) {
-    }
-
-    @Override
-    public void build() {
-
-    }
-
-    @Override
-    public void end() {
-
-    }
-
-    @Override
-    public void query() {
-
     }
 }
