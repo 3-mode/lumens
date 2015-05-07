@@ -73,7 +73,7 @@ public class Config {
         StringBuilder option = new StringBuilder();
         if (dict_type == DICT_TYPE.ONLINE) {
             option.append("DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG");
-        } else if (dict_type == DICT_TYPE.STORE_IN_LOG) {
+        } else if (dict_type == DICT_TYPE.STORE_IN_REDO_LOG) {
             option.append("DBMS_LOGMNR.DICT_FROM_REDO_LOGS");
         }
 
@@ -97,5 +97,4 @@ public class Config {
 
         return parameter.toString();
     }
-
 }

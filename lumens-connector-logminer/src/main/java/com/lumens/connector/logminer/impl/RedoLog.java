@@ -3,7 +3,6 @@
  */
 package com.lumens.connector.logminer.impl;
 
-import com.lumens.connector.logminer.LogMinerClient;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.ArrayList;

@@ -17,7 +17,7 @@ public class LogMinerTest extends TestBase {
     public void testStoreInFileLogMinerRead() {
         Config config = new Config();
         config.setBuildType(LogMiner.BUILD_TYPE.OFFLINE);
-        config.setDictType(LogMiner.DICT_TYPE.STORE_IN_LOG);
+        config.setDictType(LogMiner.DICT_TYPE.STORE_IN_REDO_LOG);
         config.setCommittedDataOnly(true);
         config.setNoRowid(true);
         config.setStartSCN("0");

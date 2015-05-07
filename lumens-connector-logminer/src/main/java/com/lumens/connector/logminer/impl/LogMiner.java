@@ -18,13 +18,13 @@ public class LogMiner implements Analysis, Constants {
     public static enum DICT_TYPE {
 
         ONLINE,
-        STORE_IN_LOG,
+        STORE_IN_REDO_LOG,  // used for OFFLINE redo log only
         STORE_IN_FILE
     };
 
     public static enum BUILD_TYPE {
 
-        ONLINE,
+        ONLINE,  // conflict with STORE_IN_REDO_LOG
         OFFLINE
     };
 
@@ -38,8 +38,8 @@ public class LogMiner implements Analysis, Constants {
     public LogMiner(DatabaseClient dbClient, Config config) {
         this.dbClient = dbClient;
         this.config = config;
-        
-        if (config.getBuildType() == BUILD_TYPE.ONLINE && config.getDictType() == DICT_TYPE.STORE_IN_LOG){
+
+        if (config.getBuildType() == BUILD_TYPE.ONLINE && config.getDictType() == DICT_TYPE.STORE_IN_REDO_LOG) {
             throw new RuntimeException("Should not specify option DICT_FROM_REDO_LOGS to analyze online redo logs");
         }
     }
@@ -58,12 +58,13 @@ public class LogMiner implements Analysis, Constants {
             dbClient.execute(buildList + "");
 
             // checking added redo logs
-            ResultSet addedLogsResult = dbClient.executeGetResult(SQL_QUERY_LOG_INFO);
-            while (addedLogsResult.next()) {
-                log.info(addedLogsResult.getString(3));
-            }
-
-            DBUtils.releaseResultSet(addedLogsResult);
+            if (log.isDebugEnabled()) {
+                ResultSet addedLogsResult = dbClient.executeGetResult(SQL_QUERY_LOG_INFO);
+                while (addedLogsResult.next()) {
+                    log.debug(addedLogsResult.getString(3));
+                }
+                DBUtils.releaseResultSet(addedLogsResult);
+            }            
         } catch (Exception ex) {
             log.info("Fail to build log miner dictionary. Error message:");
             log.info(ex.getMessage());
