@@ -20,12 +20,10 @@ public class Dictionary implements Constants {
         this.dbClient = dbClient;
     }
 
-    public boolean createDictionary() throws Exception {
+    public void createDictionary() throws Exception {
         String path = getDictionaryPath();
         SQL_CREATE_DIECTIONARY = "BEGIN dbms_logmnr_d.build(dictionary_filename => '" + DICTIONARY_FILE +"', dictionary_location =>'" + path + "'); END;";
-        dbClient.execute(SQL_CREATE_DIECTIONARY);
-
-        return new File(path + "/" + DICTIONARY_FILE).exists();
+        dbClient.execute(SQL_CREATE_DIECTIONARY);        
     }
 
     public String getDictionaryPath() throws Exception {

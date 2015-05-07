@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class RedoLog implements Constants{
+public class RedoLog implements Constants {
 
     DatabaseClient dbClient;
 
@@ -20,7 +20,7 @@ public class RedoLog implements Constants{
         this.dbClient = dbClient;
     }
 
-    List<String> getOnlineFileList() throws Exception{
+    public List<String> getOnlineFileList() throws Exception {
         List<String> list = new ArrayList();
         ResultSet resultSet = dbClient.executeGetResult(SQL_QUERY_LOGFILE);
         while (resultSet.next()) {
@@ -29,12 +29,34 @@ public class RedoLog implements Constants{
         return list;
     }
 
-    List<String> getOfflineFileList() throws Exception{
+    public List<String> getOfflineFileList() throws Exception {
         List<String> list = new ArrayList();
         ResultSet resultSet = dbClient.executeGetResult(SQL_QUERY_ARCHIVED_LOG);
         while (resultSet.next()) {
             list.add(resultSet.getString(1));
         }
         return list;
+    }
+
+    public String buildLogMinerStringFromList(List<String> list, boolean isFirstLog) {
+        if (list.size() == 0) {
+            throw new RuntimeException("input redo log list should not be empty");
+        }
+
+        StringBuilder sbSQL = new StringBuilder();
+        sbSQL.append(" BEGIN");
+        boolean isFirst = isFirstLog;
+        for (String item : list) {
+            if (isFirst) {
+                sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'").append(item).append("', options=>dbms_logmnr.NEW);");
+                isFirst = false;
+            } else {
+                sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'").append(item).append("', options=>dbms_logmnr.ADDFILE);");
+            }
+
+        }
+        sbSQL.append(" END;");
+
+        return sbSQL.toString();
     }
 }

@@ -30,7 +30,12 @@ public class DictionaryTest {
         assertTrue(dbClient != null);
         Dictionary dict = new Dictionary(dbClient);
         assertTrue("dictionary should not be empty", !dict.getDictionaryPath().isEmpty());
-        assertTrue("Fail to create dictionary file", dict.createDictionary());
+        try {
+            dict.createDictionary();
+        } catch (Exception ex) {
+            System.out.println("Fail to create dictionary file. Error message:" );
+            System.out.println(ex.getMessage());
+        }
     }
 
     @After
