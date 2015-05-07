@@ -39,7 +39,7 @@ public class RedoLog implements Constants {
     }
 
     public String buildLogMinerStringFromList(List<String> list, boolean isFirstLog) {
-        if (list.size() == 0) {
+        if (list.isEmpty()) {
             throw new RuntimeException("input redo log list should not be empty");
         }
 

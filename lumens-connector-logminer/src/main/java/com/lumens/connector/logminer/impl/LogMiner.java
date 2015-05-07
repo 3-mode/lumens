@@ -3,22 +3,9 @@
  */
 package com.lumens.connector.logminer.impl;
 
-import com.lumens.connector.logminer.LogMinerClient;
 import com.lumens.connector.logminer.api.Analysis;
-import static com.lumens.connector.database.DBConstants.DESCRIPTION;
-import static com.lumens.connector.database.DBConstants.TYPE;
 import com.lumens.connector.database.DBUtils;
-import com.lumens.connector.database.client.AbstractClient;
-import com.lumens.connector.database.client.DBConnector;
-import com.lumens.model.DataFormat;
-import com.lumens.model.Format;
-import com.lumens.model.Type;
-import com.lumens.model.Value;
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
 import org.apache.logging.log4j.Logger;
 import com.lumens.logsys.LogSysFactory;
 
@@ -34,49 +21,52 @@ public class LogMiner implements Analysis, Constants {
         STORE_IN_LOG,
         STORE_IN_FILE
     };
-    private static String LAST_SCN = "0";
 
-    private ResultSet result = null;
-    private DICT_TYPE dict_type = null;
-    private Dictionary dict;
+    public static enum BUILD_TYPE {
+
+        ONLINE,
+        OFFLINE
+    };
 
     private final Logger log = LogSysFactory.getLogger(LogMiner.class);
+    private String LAST_SCN = "0";
+    private ResultSet result = null;
+    private Config config = null;
+    private Dictionary dict = null;
+    private DatabaseClient dbClient = null;
 
-    /**
-     * Redo log file
-     */
-    private String DATABASE_REDO_LOG_PATH; // for example "D:\\app\\oracle\\oradata\\orcl";
-
-    private DatabaseClient dbClient;
-
-    public LogMiner(DatabaseClient dbClient, DICT_TYPE type) {
+    public LogMiner(DatabaseClient dbClient, Config config) {
         this.dbClient = dbClient;
-        this.dict_type = type;
+        this.config = config;
+        
+        if (config.getBuildType() == BUILD_TYPE.ONLINE && config.getDictType() == DICT_TYPE.STORE_IN_LOG){
+            throw new RuntimeException("Should not specify option DICT_FROM_REDO_LOGS to analyze online redo logs");
+        }
     }
 
     @Override
     public void build() {
-        if (result != null) {
-            DBUtils.releaseResultSet(result);
-        }
-
         try {
-            if (dict_type == DICT_TYPE.STORE_IN_FILE) {
+            if (config.getDictType() == DICT_TYPE.STORE_IN_FILE) {
                 dict = new Dictionary(dbClient);
                 dict.createDictionary();
             }
 
             // adding redo log files to analyze
             RedoLog redolog = new RedoLog(dbClient);
-            String buildList = redolog.buildLogMinerStringFromList(redolog.getOnlineFileList(), true);
-            result = dbClient.executeGetResult(buildList + "");
+            String buildList = redolog.buildLogMinerStringFromList(config.getBuildType() == BUILD_TYPE.ONLINE ? redolog.getOnlineFileList() : redolog.getOfflineFileList(), true);
+            dbClient.execute(buildList + "");
 
             // checking added redo logs
-            ResultSet addedLogs = dbClient.executeGetResult(SQL_QUERY_LOG_INFO);
-            while (addedLogs.next()) {
-                log.info(addedLogs.getString(3));
+            ResultSet addedLogsResult = dbClient.executeGetResult(SQL_QUERY_LOG_INFO);
+            while (addedLogsResult.next()) {
+                log.info(addedLogsResult.getString(3));
             }
+
+            DBUtils.releaseResultSet(addedLogsResult);
         } catch (Exception ex) {
+            log.info("Fail to build log miner dictionary. Error message:");
+            log.info(ex.getMessage());
             throw new RuntimeException("Fail to build log miner dictionary. Error message:" + ex.getMessage());
         }
     }
@@ -84,24 +74,42 @@ public class LogMiner implements Analysis, Constants {
     @Override
     public void start() {
         try {
-            if (dict_type == DICT_TYPE.STORE_IN_FILE) {
-                dbClient.executeGetResult("BEGIN dbms_logmnr.start_logmnr(startScn=>'" + LAST_SCN + "',dictfilename=>'" + DATABASE_REDO_LOG_PATH + "\\" + dict.getDictionaryPath() + "',OPTIONS =>DBMS_LOGMNR.COMMITTED_DATA_ONLY+dbms_logmnr.NO_ROWID_IN_STMT);END;");
+            String parameter = null;
+            if (config.getDictType() == DICT_TYPE.STORE_IN_FILE) {
+                parameter = String.format(config.buildParameters(), dict.getDictionaryPath(), DICTIONARY_FILE);
+            } else {
+                parameter = config.buildParameters();
             }
+            dbClient.execute(String.format(SQL_START_LOGMINER, parameter));
         } catch (Exception ex) {
+            log.info("Fail to start log miner analysis. Error message:");
+            log.info(ex.getMessage());
             throw new RuntimeException("Fail to start log miner analysis. Error message:" + ex.getMessage());
+        }
+    }
+
+    @Override
+    public ResultSet query() {
+        if (result != null) {
+            DBUtils.releaseResultSet(result);
+        }
+        try {
+            result = dbClient.executeGetResult(SQL_QUERY_RESULT);
+            return result;
+        } catch (Exception ex) {
+            log.info("Fail to query log miner results. Error message:");
+            log.info(ex.getMessage());
+            throw new RuntimeException("Fail to query log miner results. Error message:" + ex.getMessage());
         }
     }
 
     @Override
     public void end() {
         try {
-            dbClient.executeGetResult(SQL_QUERY_RESULT_SIZE);
-        } catch (Exception ex) {            
+            dbClient.execute(SQL_END_LOGMINER);
+        } catch (Exception ex) {
+            log.info("Logminer connector end with exception:");
+            log.info(ex.getMessage());
         }
-    }
-
-    @Override
-    public void query() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -3,6 +3,8 @@
  */
 package com.lumens.connector.logminer.api;
 
+import java.sql.ResultSet;
+
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
@@ -15,5 +17,5 @@ public interface Analysis {
 
     public void end();
 
-    public void query();
+    public ResultSet query();
 }
