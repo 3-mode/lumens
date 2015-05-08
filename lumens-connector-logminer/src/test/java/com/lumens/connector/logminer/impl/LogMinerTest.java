@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.logminer.impl;
 
+import com.lumens.connector.logminer.api.Config;
 import java.sql.ResultSet;
 import org.junit.Test;
 import static org.junit.Assert.*;

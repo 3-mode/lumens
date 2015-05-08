@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.logminer.impl;
 
+import com.lumens.connector.logminer.api.Config;
 import com.lumens.connector.logminer.api.LogMiner;
 import com.lumens.connector.database.DBUtils;
 import java.sql.ResultSet;
