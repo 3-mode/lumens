@@ -16,13 +16,13 @@ public class LogMinerTest extends TestBase {
     @Test
     public void testStoreInFileLogMinerRead() {
         Config config = new Config();
-        config.setBuildType(LogMiner.BUILD_TYPE.OFFLINE);
-        config.setDictType(LogMiner.DICT_TYPE.STORE_IN_REDO_LOG);
+        config.setBuildType(LogMinerImpl.BUILD_TYPE.OFFLINE);
+        config.setDictType(LogMinerImpl.DICT_TYPE.STORE_IN_REDO_LOG);
         config.setCommittedDataOnly(true);
         config.setNoRowid(true);
         config.setStartSCN("0");
         
-        LogMiner miner = new LogMiner(dbClient, config);
+        LogMinerImpl miner = new LogMinerImpl(dbClient, config);
         miner.build();
         miner.start();
         ResultSet result = miner.query();

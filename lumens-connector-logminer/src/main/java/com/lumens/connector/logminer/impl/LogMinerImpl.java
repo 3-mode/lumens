@@ -3,7 +3,7 @@
  */
 package com.lumens.connector.logminer.impl;
 
-import com.lumens.connector.logminer.api.Analysis;
+import com.lumens.connector.logminer.api.LogMiner;
 import com.lumens.connector.database.DBUtils;
 import java.sql.ResultSet;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +13,7 @@ import com.lumens.logsys.LogSysFactory;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class LogMiner implements Analysis, Constants {
+public class LogMinerImpl implements LogMiner, Constants {
 
     public static enum DICT_TYPE {
 
@@ -28,18 +28,19 @@ public class LogMiner implements Analysis, Constants {
         OFFLINE
     };
 
-    private final Logger log = LogSysFactory.getLogger(LogMiner.class);
+    private final Logger log = LogSysFactory.getLogger(LogMinerImpl.class);
     private String LAST_SCN = "0";
     private ResultSet result = null;
     private Config config = null;
     private Dictionary dict = null;
     private DatabaseClient dbClient = null;
 
-    public LogMiner(DatabaseClient dbClient, Config config) {
+    public LogMinerImpl(DatabaseClient dbClient, Config config) {
         this.dbClient = dbClient;
         this.config = config;
 
         if (config.getBuildType() == BUILD_TYPE.ONLINE && config.getDictType() == DICT_TYPE.STORE_IN_REDO_LOG) {
+            log.error("Should not specify option DICT_FROM_REDO_LOGS to analyze online redo logs");
             throw new RuntimeException("Should not specify option DICT_FROM_REDO_LOGS to analyze online redo logs");
         }
     }
@@ -66,8 +67,8 @@ public class LogMiner implements Analysis, Constants {
                 DBUtils.releaseResultSet(addedLogsResult);
             }            
         } catch (Exception ex) {
-            log.info("Fail to build log miner dictionary. Error message:");
-            log.info(ex.getMessage());
+            log.error("Fail to build log miner dictionary. Error message:");
+            log.error(ex.getMessage());
             throw new RuntimeException("Fail to build log miner dictionary. Error message:" + ex.getMessage());
         }
     }
@@ -83,8 +84,8 @@ public class LogMiner implements Analysis, Constants {
             }
             dbClient.execute(String.format(SQL_START_LOGMINER, parameter));
         } catch (Exception ex) {
-            log.info("Fail to start log miner analysis. Error message:");
-            log.info(ex.getMessage());
+            log.error("Fail to start log miner analysis. Error message:");
+            log.error(ex.getMessage());
             throw new RuntimeException("Fail to start log miner analysis. Error message:" + ex.getMessage());
         }
     }
@@ -98,8 +99,8 @@ public class LogMiner implements Analysis, Constants {
             result = dbClient.executeGetResult(SQL_QUERY_RESULT);
             return result;
         } catch (Exception ex) {
-            log.info("Fail to query log miner results. Error message:");
-            log.info(ex.getMessage());
+            log.error("Fail to query log miner results. Error message:");
+            log.error(ex.getMessage());
             throw new RuntimeException("Fail to query log miner results. Error message:" + ex.getMessage());
         }
     }
@@ -109,8 +110,8 @@ public class LogMiner implements Analysis, Constants {
         try {
             dbClient.execute(SQL_END_LOGMINER);
         } catch (Exception ex) {
-            log.info("Logminer connector end with exception:");
-            log.info(ex.getMessage());
+            log.error("Logminer connector end with exception:");
+            log.error(ex.getMessage());
         }
     }
 }

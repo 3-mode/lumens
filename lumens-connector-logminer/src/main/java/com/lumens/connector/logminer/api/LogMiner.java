@@ -9,7 +9,7 @@ import java.sql.ResultSet;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public interface Analysis {
+public interface LogMiner {
 
     public void build();
 

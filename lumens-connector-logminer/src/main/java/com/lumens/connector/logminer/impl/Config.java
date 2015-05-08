@@ -3,8 +3,8 @@
  */
 package com.lumens.connector.logminer.impl;
 
-import com.lumens.connector.logminer.impl.LogMiner.BUILD_TYPE;
-import com.lumens.connector.logminer.impl.LogMiner.DICT_TYPE;
+import com.lumens.connector.logminer.impl.LogMinerImpl.BUILD_TYPE;
+import com.lumens.connector.logminer.impl.LogMinerImpl.DICT_TYPE;
 
 /**
  *

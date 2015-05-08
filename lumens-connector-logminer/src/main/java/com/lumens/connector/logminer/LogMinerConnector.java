@@ -3,7 +3,7 @@
  */
 package com.lumens.connector.logminer;
 
-import com.lumens.connector.logminer.api.Analysis;
+import com.lumens.connector.logminer.api.LogMiner;
 import com.lumens.connector.Operation;
 import com.lumens.connector.Connector;
 import com.lumens.connector.Direction;
@@ -18,6 +18,8 @@ import java.util.HashMap;
  */
 public class LogMinerConnector implements Connector {
 
+    boolean isOpen = false;
+    
     @Override
     public boolean isOpen() {
         return false;
@@ -29,6 +31,7 @@ public class LogMinerConnector implements Connector {
         // check parameter availablity
         // check soruce db as well as minger db with sufficient priviledge 
 
+        isOpen = true;
     }
 
     @Override
