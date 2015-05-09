@@ -5,6 +5,8 @@ package com.lumens.connector.logminer.impl;
 
 import com.lumens.connector.logminer.api.Config;
 import com.lumens.connector.logminer.api.LogMiner;
+import com.lumens.connector.logminer.api.LogMiner.BUILD_TYPE;
+import com.lumens.connector.logminer.api.LogMiner.DICT_TYPE;
 import com.lumens.connector.database.DBUtils;
 import java.sql.ResultSet;
 import org.apache.logging.log4j.Logger;
@@ -15,19 +17,6 @@ import com.lumens.logsys.LogSysFactory;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class LogMinerImpl implements LogMiner, Constants {
-
-    public static enum DICT_TYPE {
-
-        ONLINE,
-        STORE_IN_REDO_LOG,  // used for OFFLINE redo log only
-        STORE_IN_FILE
-    };
-
-    public static enum BUILD_TYPE {
-
-        ONLINE,  // conflict with STORE_IN_REDO_LOG
-        OFFLINE
-    };
 
     private final Logger log = LogSysFactory.getLogger(LogMinerImpl.class);
     private String LAST_SCN = "0";
