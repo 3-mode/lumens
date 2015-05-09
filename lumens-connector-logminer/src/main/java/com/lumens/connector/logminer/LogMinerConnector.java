@@ -10,10 +10,13 @@ import com.lumens.connector.Direction;
 import com.lumens.connector.logminer.api.LogMinerFactory;
 import com.lumens.connector.logminer.api.Config;
 import com.lumens.connector.logminer.impl.DatabaseClient;
+import com.lumens.connector.logminer.impl.LogMinerImpl;
+import com.lumens.logsys.LogSysFactory;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
 import java.util.Map;
 import java.util.HashMap;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -21,6 +24,7 @@ import java.util.HashMap;
  */
 public class LogMinerConnector implements Connector, LogMinerConstants {
 
+    private final Logger log = LogSysFactory.getLogger(LogMinerImpl.class);
     private Config config = null;
     private String dbDriver = null;
     private String dbUrl = null;
@@ -34,6 +38,11 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
 
     public LogMinerConnector() {
         config = new Config();
+        config.setBuildType(LogMiner.BUILD_TYPE.OFFLINE);
+        config.setDictType(LogMiner.DICT_TYPE.STORE_IN_REDO_LOG);
+        config.setCommittedDataOnly(true);
+        config.setNoRowid(true);
+        config.setStartSCN("0");
     }
 
     @Override
@@ -49,7 +58,8 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
 
             isOpen = true;
         } catch (Exception ex) {
-            throw new RuntimeException("Fail to open connector");
+            log.error("Fail to open LogMiner connector. Error message:" + ex.getMessage());
+            throw new RuntimeException("Fail to open LogMiner connector. Error message:" + ex.getMessage());
         }
     }
 
@@ -91,6 +101,8 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
 
     @Override
     public void setPropertyList(Map<String, Value> parameters) {
+
+        // setup connection
         if (parameters.containsKey(DATABASE_DRIVER)) {
             dbDriver = parameters.get(DATABASE_DRIVER).getString();
         }
@@ -102,6 +114,37 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
         }
         if (parameters.containsKey(DATABASE_SOURCE_PASSWORD)) {
             dbPassword = parameters.get(DATABASE_SOURCE_PASSWORD).getString();
+        }
+
+        // setup config
+        if (parameters.containsKey(BUILD_TYPE_ONLINE)) {
+            config.setBuildType(LogMiner.BUILD_TYPE.ONLINE);
+        }
+        if (parameters.containsKey(BUILD_TYPE_OFFLINE)) {
+            config.setBuildType(LogMiner.BUILD_TYPE.OFFLINE);
+        }
+
+        if (parameters.containsKey(DICT_TYPE_ONLINE)) {
+            config.setDictType(LogMiner.DICT_TYPE.ONLINE);
+        }
+        if (parameters.containsKey(DICT_TYPE_STORE_IN_REDO_LOG)) {
+            config.setDictType(LogMiner.DICT_TYPE.STORE_IN_REDO_LOG);
+        }
+        if (parameters.containsKey(DICT_TYPE_STORE_IN_FILE)) {
+            config.setDictType(LogMiner.DICT_TYPE.STORE_IN_FILE);
+        }
+
+        if (parameters.containsKey(COMMITED_DATA_ONLY)) {
+            config.setCommittedDataOnly(true);
+        }
+        if (parameters.containsKey(NO_ROWID)) {
+            config.setNoRowid(parameters.get(NO_ROWID).getBoolean());
+        }
+        if (parameters.containsKey(START_SCN)) {
+            config.setStartSCN(parameters.get(START_SCN).getString());
+        }
+        if (parameters.containsKey(END_SCN)) {
+            config.setStartSCN(parameters.get(END_SCN).getString());
         }
     }
 }
