@@ -7,13 +7,19 @@ import com.lumens.connector.logminer.api.LogMiner;
 import com.lumens.connector.Operation;
 import com.lumens.connector.Connector;
 import com.lumens.connector.Direction;
+import static com.lumens.connector.database.DBConstants.DATA_LENGTH;
+import static com.lumens.connector.database.DBConstants.DATA_TYPE;
 import com.lumens.connector.logminer.api.LogMinerFactory;
 import com.lumens.connector.logminer.api.Config;
 import com.lumens.connector.logminer.impl.DatabaseClient;
 import com.lumens.connector.logminer.impl.LogMinerImpl;
 import com.lumens.logsys.LogSysFactory;
+import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
+import com.lumens.model.Format.Form;
+import com.lumens.model.Type;
 import com.lumens.model.Value;
+import java.sql.ResultSet;
 import java.util.Map;
 import java.util.HashMap;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +38,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     private String dbPassword = null;
 
     private LogMiner miner = null;
-    private DatabaseClient dbConnection = null;
+    private DatabaseClient dbClient = null;
 
     boolean isOpen = false;
 
@@ -53,8 +59,8 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     @Override
     public void open() {
         try {
-            dbConnection = new DatabaseClient(dbDriver, dbUrl, dbUserName, dbPassword);
-            miner = LogMinerFactory.createLogMiner(dbConnection, config);
+            dbClient = new DatabaseClient(dbDriver, dbUrl, dbUserName, dbPassword);
+            miner = LogMinerFactory.createLogMiner(dbClient, config);
 
             isOpen = true;
         } catch (Exception ex) {
@@ -77,22 +83,37 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
         Map<String, Format> formatList = new HashMap();
+        Format rootFmt = new DataFormat("RedoLog", Form.STRUCT);
+        formatList.put("RedoLog", rootFmt);
+        getFormat(rootFmt, null, direction);
 
         return formatList;
     }
 
     @Override
     public Format getFormat(Format format, String path, Direction direction) {
+        try {
+            ResultSet columns = dbClient.executeGetResult(SQL_QUERY_COLUMNS);
+            while (columns.next()) {
+                String columnName = columns.getString(1);
+                String dataType = columns.getString(2);
+                String dataLength = columns.getString(3);
+                Format field = format.addChild(columnName, Format.Form.FIELD, toType(dataType));
+                field.setProperty(DATA_TYPE, new Value(dataType));
+                field.setProperty(DATA_LENGTH, new Value(dataLength));
+            }
+        } catch (Exception ex) {
+            log.error("Fail to get format. Error message:" + ex.getMessage());
+            throw new RuntimeException(ex);
+        }
+
         return null;
     }
 
     @Override
     public void start() {
-        // start build directory       
-        // check parameter availablity
-        // check soruce db as well as minger db with sufficient priviledge 
-        // start log analysis
-        // start processing redo log sql: query and process each sql
+        miner.build(); // start build directory if specifying FILE type
+        miner.start();           
     }
 
     @Override
@@ -146,5 +167,23 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
         if (parameters.containsKey(END_SCN)) {
             config.setStartSCN(parameters.get(END_SCN).getString());
         }
+    }
+
+    private Type toType(String dataType) {
+        if (CHAR.equalsIgnoreCase(dataType)
+                || CLOB.equalsIgnoreCase(dataType)
+                || dataType.startsWith(VARCHAR2)
+                || dataType.startsWith(NVARCHAR2)) {
+            return Type.STRING;
+        } else if (DATE.equalsIgnoreCase(dataType)) {
+            return Type.DATE;
+        } else if (BLOB.equalsIgnoreCase(dataType)) {
+            return Type.BINARY;
+        } else if (dataType.startsWith(NUMBERIC)) {
+            return Type.DOUBLE;
+        } else if (dataType.startsWith(NUMBER)) {
+            return Type.INTEGER;
+        }
+        return Type.NONE;
     }
 }
