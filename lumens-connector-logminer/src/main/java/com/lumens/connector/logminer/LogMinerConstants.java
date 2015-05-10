@@ -9,6 +9,7 @@ package com.lumens.connector.logminer;
  */
 public interface LogMinerConstants {
 
+    public String FORMAT_NAME = "RedoLog";
     public String DATABASE_DRIVER = "databaseDriver";
     public String DATABASE_SOURCE_URL = "databaseSourceUrl";
     public String DATABASE_SOURCE_USERNAME = "databaseSourceUserName";

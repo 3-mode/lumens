@@ -53,7 +53,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
 
     @Override
     public boolean isOpen() {
-        return false;
+        return isOpen;
     }
 
     @Override
@@ -83,8 +83,8 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
         Map<String, Format> formatList = new HashMap();
-        Format rootFmt = new DataFormat("RedoLog", Form.STRUCT);
-        formatList.put("RedoLog", rootFmt);
+        Format rootFmt = new DataFormat(FORMAT_NAME, Form.STRUCT);
+        formatList.put(FORMAT_NAME, rootFmt);
         getFormat(rootFmt, null, direction);
 
         return formatList;
@@ -92,28 +92,32 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
 
     @Override
     public Format getFormat(Format format, String path, Direction direction) {
-        try {
-            ResultSet columns = dbClient.executeGetResult(SQL_QUERY_COLUMNS);
-            while (columns.next()) {
-                String columnName = columns.getString(1);
-                String dataType = columns.getString(2);
-                String dataLength = columns.getString(3);
-                Format field = format.addChild(columnName, Format.Form.FIELD, toType(dataType));
-                field.setProperty(DATA_TYPE, new Value(dataType));
-                field.setProperty(DATA_LENGTH, new Value(dataLength));
+        if (direction == Direction.IN) {
+            try {
+                ResultSet columns = dbClient.executeGetResult(SQL_QUERY_COLUMNS);
+                while (columns.next()) {
+                    String columnName = columns.getString(1);
+                    String dataType = columns.getString(2);
+                    String dataLength = columns.getString(3);
+                    Format field = format.addChild(columnName, Format.Form.FIELD, toType(dataType));
+                    field.setProperty(DATA_TYPE, new Value(dataType));
+                    field.setProperty(DATA_LENGTH, new Value(dataLength));
+                }
+            } catch (Exception ex) {
+                log.error("Fail to get format. Error message:" + ex.getMessage());
+                throw new RuntimeException(ex);
             }
-        } catch (Exception ex) {
-            log.error("Fail to get format. Error message:" + ex.getMessage());
-            throw new RuntimeException(ex);
+        }else{
+            
         }
-
-        return null;
+        
+        return format;
     }
 
     @Override
     public void start() {
         miner.build(); // start build directory if specifying FILE type
-        miner.start();           
+        miner.start();
     }
 
     @Override
@@ -138,25 +142,23 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
         }
 
         // setup config
+        // Warning: those parameters should only specify one time or will introduce bugs
         if (parameters.containsKey(BUILD_TYPE_ONLINE)) {
             config.setBuildType(LogMiner.BUILD_TYPE.ONLINE);
-        }
-        if (parameters.containsKey(BUILD_TYPE_OFFLINE)) {
+        } else if (parameters.containsKey(BUILD_TYPE_OFFLINE)) {
             config.setBuildType(LogMiner.BUILD_TYPE.OFFLINE);
         }
 
         if (parameters.containsKey(DICT_TYPE_ONLINE)) {
             config.setDictType(LogMiner.DICT_TYPE.ONLINE);
-        }
-        if (parameters.containsKey(DICT_TYPE_STORE_IN_REDO_LOG)) {
+        } else if (parameters.containsKey(DICT_TYPE_STORE_IN_REDO_LOG)) {
             config.setDictType(LogMiner.DICT_TYPE.STORE_IN_REDO_LOG);
-        }
-        if (parameters.containsKey(DICT_TYPE_STORE_IN_FILE)) {
+        } else if (parameters.containsKey(DICT_TYPE_STORE_IN_FILE)) {
             config.setDictType(LogMiner.DICT_TYPE.STORE_IN_FILE);
         }
 
         if (parameters.containsKey(COMMITED_DATA_ONLY)) {
-            config.setCommittedDataOnly(true);
+            config.setCommittedDataOnly(parameters.get(COMMITED_DATA_ONLY).getBoolean());
         }
         if (parameters.containsKey(NO_ROWID)) {
             config.setNoRowid(parameters.get(NO_ROWID).getBoolean());
