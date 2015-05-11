@@ -23,3 +23,5 @@
 /lumens-management/target/
 /lumens-sysdb/target/
 lumens-web/target/
+/lumens-web/nb-configuration.xml
+/lumens-logsys/target/

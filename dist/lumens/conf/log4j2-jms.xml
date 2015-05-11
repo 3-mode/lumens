@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="MyApp" packages="">
+    <Appenders>
+        <JMSQueue name="jmsQueue" 
+                  queueBindingName="MyQueue"
+                  factoryBindingName="ConnectionFactory">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </JMSQueue>
+    </Appenders>
+    <Loggers>
+        <Root level="trace">
+            <AppenderRef ref="jmsQueue"/>
+        </Root>
+    </Loggers>
+</Configuration>

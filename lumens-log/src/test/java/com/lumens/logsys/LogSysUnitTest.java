@@ -20,7 +20,7 @@ public class LogSysUnitTest {
     }
 
     public LogSysUnitTest() {
-        log.debug("in LogSysUnitTest");
+        log.debug("in LogSysUnitTest 你好");
     }
 
     // TODO add test methods here.

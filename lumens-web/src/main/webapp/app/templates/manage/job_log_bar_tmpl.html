@@ -1,0 +1,7 @@
+<div style="margin-left: 10px; margin-right:10px;">
+    <div class="lumens-button-bar">
+        <a class="lumens-button" data-toggle="modal" ng-click="onCommand('id_exec_log_refresh')"><i class="lumens-icon2-refresh lumens-icon-gap"></i>{{i18n.id_exec_log_refresh}}</a>
+        <a class="lumens-button" data-toggle="modal" data-target="#jobDetailModal" ng-click="onCommand('id_detail')"><i class="lumens-icon-detail lumens-icon-gap"></i>{{i18n['id_detail']}}</a>
+        <div class="lumens-bootstrap" ng-include="job_create_template"></div>
+    </div>
+</div>

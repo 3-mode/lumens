@@ -1,0 +1,13 @@
+<div class="lumens-bootstrap">
+    <div class="table-responsive">
+        <!-- <div id='projectLoading'><img src='app/css/img/loading.gif'/></div> -->
+        <table class="table">
+            <tbody>
+                <tr ng-repeat="jobLogItem in jobLogItems track by $index" job-id="{{jobLogItem.id}}" style="cursor: pointer;"
+                    ng-class="{'lumens-h-active':selectJobLogItemIndex === {{$index}} }" ng-click="selectJobLogItem($index)">
+                    <td>{{jobLogItem.message}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

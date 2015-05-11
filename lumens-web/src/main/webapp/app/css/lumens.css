@@ -804,6 +804,10 @@ svg path {
     font-size: 16px;
     content: "\e6f2";
 }
+.lumens .lumens-icon-detail:before {
+    font-size: 16px;
+    content: "\e6c3";
+}
 /*Form component Styles*/
 .lumens .lumens-window-title {
     float: left;

@@ -90,7 +90,15 @@ Lumens.services.factory('JobService', function ($resource) {
         list: {method: 'GET', isArray: false},
         save: {method: 'PUT', isArray: false},
         update: {method: 'POST', isArray: false},
-        exec: { method: 'GET', isArray: false }
+        exec: {method: 'GET', isArray: false}
+    });
+});
+Lumens.services.factory('LogService', function ($resource) {
+    return $resource(
+    "rest/log?more=:more&offset=:offset",
+    {more: "@more", offset: "@offset"},
+    {
+        log: {method: 'GET', isArray: false}
     });
 });
 Lumens.services.factory('JobConfig', function ($resource) {

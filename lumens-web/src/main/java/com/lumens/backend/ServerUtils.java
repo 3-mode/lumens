@@ -48,6 +48,7 @@ public class ServerUtils {
     }
 
     public static Response getErrorMessageResponse(Exception ex) {
+        System.err.print(ex);
         return getErrorMessageResponse(ex.toString());
     }
 }
