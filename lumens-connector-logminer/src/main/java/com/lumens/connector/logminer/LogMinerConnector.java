@@ -20,6 +20,7 @@ import com.lumens.model.Format.Form;
 import com.lumens.model.Type;
 import com.lumens.model.Value;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.HashMap;
 import org.apache.logging.log4j.Logger;
@@ -95,15 +96,19 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
         if (direction == Direction.IN) {
             try {
                 ResultSet columns = dbClient.executeGetResult(SQL_QUERY_COLUMNS);
-                while (columns.next()) {
+                if (!columns.next()){
+                    log.error("Insuffucient priviledga to access table 'user_tab_columns'");
+                    throw new RuntimeException("Insuffucient privilege to access table 'user_tab_columns' ");
+                }
+                do {
                     String columnName = columns.getString(1);
                     String dataType = columns.getString(2);
                     String dataLength = columns.getString(3);
                     Format field = format.addChild(columnName, Format.Form.FIELD, toType(dataType));
                     field.setProperty(DATA_TYPE, new Value(dataType));
                     field.setProperty(DATA_LENGTH, new Value(dataLength));
-                }
-            } catch (Exception ex) {
+                }while (columns.next());
+            } catch (SQLException | RuntimeException ex) {
                 log.error("Fail to get format. Error message:" + ex.getMessage());
                 throw new RuntimeException(ex);
             }
