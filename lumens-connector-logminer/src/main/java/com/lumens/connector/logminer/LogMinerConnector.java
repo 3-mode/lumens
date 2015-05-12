@@ -76,8 +76,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     }
 
     @Override
-    public void close() {
-        miner.end();
+    public void close() {        
     }
 
     @Override
@@ -139,6 +138,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
 
     @Override
     public void stop() {
+        miner.end();
     }
 
     @Override

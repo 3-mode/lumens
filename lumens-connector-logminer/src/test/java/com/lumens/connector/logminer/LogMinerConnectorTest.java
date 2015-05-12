@@ -7,7 +7,12 @@ import com.lumens.connector.ConnectorFactory;
 import com.lumens.connector.Direction;
 import com.lumens.connector.Operation;
 import com.lumens.model.Format;
+import com.lumens.model.Format.Form;
 import com.lumens.model.Value;
+import com.lumens.model.DataElement;
+import com.lumens.model.DataFormat;
+import com.lumens.model.Element;
+import com.lumens.model.Type;
 import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -17,11 +22,12 @@ import com.lumens.connector.OperationResult;
 import static com.lumens.connector.database.DBConstants.ACTION;
 import static com.lumens.connector.database.DBConstants.DATA_LENGTH;
 import static com.lumens.connector.database.DBConstants.DATA_TYPE;
+import static com.lumens.connector.database.DBConstants.GROUPBY;
+import static com.lumens.connector.database.DBConstants.ORDERBY;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
+import static com.lumens.connector.database.DBConstants.WHERE;
 import com.lumens.connector.logminer.impl.Constants;
 import com.lumens.connector.logminer.impl.TestBase;
-import com.lumens.model.DataElement;
-import com.lumens.model.Element;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -61,17 +67,31 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
 
         miner.start();
         Operation operation = miner.getOperation();
-        Element select = new DataElement(fmt);
+        Format selectFmt = new DataFormat(FORMAT_NAME, Format.Form.STRUCT);
+        Format SQLParams = selectFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
+        SQLParams.addChild(ACTION, Form.FIELD, Type.STRING);
+        SQLParams.addChild(WHERE, Form.FIELD, Type.STRING);
+        SQLParams.addChild(ORDERBY, Form.FIELD, Type.STRING);
+        SQLParams.addChild(GROUPBY, Form.FIELD, Type.STRING);
+        selectFmt.addChild(COLUMN_REDO, Form.FIELD, Type.STRING);
+
+        Element select = new DataElement(selectFmt);
         select.addChild(SQLPARAMS).addChild(ACTION).setValue("SELECT");
         try {
-            OperationResult result = operation.execute(new ElementChunk(Arrays.asList(select)), fmt);
-            while (result.hasData()) {
+            OperationResult result = operation.execute(new ElementChunk(Arrays.asList(select)), selectFmt);
+            if (result.hasData()) {
                 List<Element> redologs = result.getData();
+                int max = 100;
+                log.info("Reading redo log:");
                 for (Element elem : redologs) {
-                    System.out.println(elem.getChildByPath(FORMAT_NAME + "/" + COLUMN_REDO));
+                    System.out.println(elem.getChildByPath(COLUMN_REDO).getValue().toString());
+                    if (--max < 0) {
+                        break;
+                    }
                 }
             }
         } catch (Exception ex) {
+            throw new RuntimeException(ex);
             //assertTrue("Fail to execute log miner query.", false);
         }
         miner.stop();

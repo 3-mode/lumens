@@ -13,6 +13,7 @@ import static com.lumens.connector.database.DBConstants.SELECT;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.UPDATE_ONLY;
 import com.lumens.connector.database.client.DBQueryResult;
+import com.lumens.connector.logminer.LogMinerQuerySQLBuilder;
 import com.lumens.connector.database.client.DBElementBuilder;
 import com.lumens.connector.logminer.api.LogMiner;
 import com.lumens.model.Element;
@@ -51,9 +52,8 @@ public class LogMinerOperation implements Operation {
                 String strOper = Utils.isNullValue(action) ? null : action.getValue().getString();
                 if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
                     // TODO: implementing paging
-                    ResultSet result = miner.query(Utils.isNullValue(where) ? "" : where.getValue().getString());
+                    ResultSet result = miner.query(new LogMinerQuerySQLBuilder(output).generateSelectSQL(elem));
                     resultList.addAll(new DBElementBuilder().buildElement(output, result));
-                   
                 } else {
                     throw new RuntimeException("Not supported now");
                 }
