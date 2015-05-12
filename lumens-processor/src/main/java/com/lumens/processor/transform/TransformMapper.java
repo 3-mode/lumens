@@ -56,7 +56,8 @@ public class TransformMapper extends AbstractProcessor {
         throw new RuntimeException("Unsupported input data !");
     }
 
-    private void processRootForeachList(MapperContext ctx, List<Element> results, List<TransformForeach> rootForeachList,
+    private void processRootForeachList(MapperContext ctx, List<Element> results,
+                                        List<TransformForeach> rootForeachList,
                                         int foreachLevel, int foreachLevelDepth) {
         TransformForeach rootForeach = rootForeachList.get(foreachLevel);
         if (rootForeach != null && rootForeach.hasSourcePath()) {
@@ -81,8 +82,9 @@ public class TransformMapper extends AbstractProcessor {
         }
     }
 
-    private void processForeachList(MapperContext ctx, Element parentResultElement, List<TransformRuleItem> ruleItems,
-                                    List<TransformForeach> foreachList, int foreachLevel, int foreachLevelDepth) {
+    private void processForeachList(MapperContext ctx, Element parentResultElement,
+                                    List<TransformRuleItem> ruleItems, List<TransformForeach> foreachList,
+                                    int foreachLevel, int foreachLevelDepth) {
         TransformForeach currentForeach = foreachList.get(foreachLevel);
         Path foreachSourcePath = new AccessPath(currentForeach.getSourcePath());
         Element foreachSourceElement = ScriptUtils.getStartElement(ctx);
