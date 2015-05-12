@@ -17,6 +17,7 @@ public class LogSysFactory {
         FILE,
         JMS
     }
+
     public static void setMode(LOG_MODE mode) {
         try {
             if (mode == LOG_MODE.CONSOLE)
