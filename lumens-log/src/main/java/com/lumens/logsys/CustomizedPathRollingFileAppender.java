@@ -131,12 +131,14 @@ public final class CustomizedPathRollingFileAppender extends AbstractOutputStrea
     @PluginAttribute("advertiseURI") final String advertiseURI,
     @PluginConfiguration final Configuration config) {
         String newFileName = fileName;
+        String newFilePattern = filePattern;
         String base = System.getProperty("lumens.base");
         if (base != null && !base.isEmpty()) {
             if (!base.endsWith(File.separator))
                 base = base + File.separator;
             newFileName = base + fileName;
-            System.out.println("new file name is '" + newFileName + "'");
+            newFilePattern = base + filePattern;
+            System.out.println("new file name is '" + newFileName + "', '" + newFilePattern + "'");
         }
 
         final boolean isAppend = Booleans.parseBoolean(append, true);
@@ -177,13 +179,13 @@ public final class CustomizedPathRollingFileAppender extends AbstractOutputStrea
             layout = PatternLayout.createDefaultLayout();
         }
 
-        final RollingFileManager manager = RollingFileManager.getFileManager(newFileName, filePattern, isAppend,
+        final RollingFileManager manager = RollingFileManager.getFileManager(newFileName, newFilePattern, isAppend,
                                                                              isBuffered, policy, strategy, advertiseURI, layout, bufferSize);
         if (manager == null) {
             return null;
         }
 
-        return new CustomizedPathRollingFileAppender(name, layout, filter, manager, newFileName, filePattern,
+        return new CustomizedPathRollingFileAppender(name, layout, filter, manager, newFileName, newFilePattern,
                                               ignoreExceptions, isFlush, isAdvertise ? config.getAdvertiser() : null);
     }
 }

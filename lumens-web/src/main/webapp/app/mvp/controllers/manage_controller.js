@@ -11,12 +11,13 @@ Lumens.controllers
     $scope.manage_side_bar_template = "app/templates/manage/manage_side_bar_tmpl.html";
     $scope.job_bar_template = "app/templates/manage/job_command_tmpl.html";
     $scope.job_list_template = "app/templates/manage/job_list_tmpl.html";
-    $scope.job_config_template = "app/templates/manage/job_config_tmpl.html";
+    $scope.job_log_bar_template = "app/templates/manage/job_log_bar_tmpl.html";
+    $scope.job_list_log_template = "app/templates/manage/job_log_list_tmpl.html";
     $scope.job_create_template = "app/templates/manage/job_modal_tmpl.html";
     $scope.job_function_tool_template = "app/templates/manage/job_function_tool_tmpl.html";
     $scope.job_add_proj_manage_template = "app/templates/manage/job_add_proj_manage_tmpl.html";
     $scope.jobListHolder = new Lumens.List($("#jobList"));
-    $scope.job_config = SyncGet.get("app/config/json/job_config.json", "text/json");
+    $scope.job_config = SyncGet.get("app/config/json/job_config.json", "application/json");
     $scope.job = {};
     ManageNavMenu.get(function (menu) {
         var manageMavMenu = $("#manageNavMenu");
@@ -39,7 +40,7 @@ Lumens.controllers
         });
     })
 })
-.controller("JobManagementCtrl", function ($scope, $compile, JobService, ProjectList, Notifier) {
+.controller("JobManagementCtrl", function ($scope, $compile, JobService, LogService, ProjectList, Notifier) {
     var jobManagementHolder = $("#jobManagementHolder");
     $(window).resize(function (e) {
         if (e && e.target !== this)
@@ -53,7 +54,24 @@ Lumens.controllers
         part1Size: "40%"
     });
     $scope.jobManagePanel.getPart1Element().append($compile('<div ng-include="job_list_template" class="lumens-scroll-panel"></div>')($scope));
-    //$scope.jobManagePanel.getPart2Element().append($compile('<div ng-include="job_config_template" class="lumens-scroll-panel"></div>')($scope));
+    $scope.jobLogBar = new Lumens.SplitLayout($scope.jobManagePanel.getPart2Element()).configure({
+        mode: "vertical",
+        part1Size: 48
+    });
+    $scope.jobLogBar.getPart1Element().append($compile('<div ng-include="job_log_bar_template"></div>')($scope));
+    $scope.jobLogBar.getPart2Element().append($compile('<div ng-include="job_list_log_template" style="overflow: auto; position: relative; width: 100%; height: 100%;"></div>')($scope));
+    LogService.log(function (result) {
+        if (result.status === 'OK') {
+            $("#jobLogLoading").hide();
+            $scope.jobLogItems = result.result_content.logs;
+        } else {
+            Notifier.message("error", "Error", "Start the job '" + result.error_message + "'");
+            $("#jobLogLoading").hide();
+        }
+    }, function (error) {
+        Notifier.message("error", "Error", error);
+        $("#jobLogLoading").hide();
+    });
     // Job command bar function
     $scope.onCommand = function (id_btn) {
         LumensLog.log("in Job onCommand");
@@ -71,9 +89,9 @@ Lumens.controllers
                     if (result.status === 'OK')
                         Notifier.message("info", "Success", "Start the job '" + result.result_content.do + "'");
                     else
-                        Notifier.message("info", "Success", "Start the job '" + result.error_message + "'");
-                }, function(error) {
-                     Notifier.message("error", "Error", error);
+                        Notifier.message("error", "Error", "Start the job '" + result.error_message + "'");
+                }, function (error) {
+                    Notifier.message("error", "Error", error);
                 });
             }
         }
@@ -83,8 +101,28 @@ Lumens.controllers
                 JobService.exec({id: job.id, action: "stop"}, function (result) {
                     if (result.status === 'OK')
                         Notifier.message("info", "Success", "Stop the job '" + result.result_content.do + "'");
+                    else
+                        Notifier.message("error", "Error", "Start the job '" + result.error_message + "'");
+                }, function (error) {
+                    Notifier.message("error", "Error", error);
                 });
             }
+        }
+        else if ("id_exec_log_refresh" === id_btn) {
+            $scope.jobLogItems = null;
+            $("#jobLogLoading").show();
+            LogService.log(function (result) {
+                if (result.status === 'OK') {
+                    $("#jobLogLoading").hide();
+                    $scope.jobLogItems = result.result_content.logs;
+                } else {
+                    Notifier.message("error", "Error", "Start the job '" + result.error_message + "'");
+                    $("#jobLogLoading").hide();
+                }
+            }, function (error) {
+                Notifier.message("error", "Error", error);
+                $("#jobLogLoading").hide();
+            })
         }
     };
     $scope.selectJob = function (index) {
