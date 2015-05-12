@@ -4,11 +4,12 @@
 package com.lumens.backend.service;
 
 import com.lumens.backend.ApplicationContext;
-import com.lumens.backend.ServerUtils;
 import com.lumens.io.JsonUtility;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -27,36 +28,14 @@ public class LogService {
     @GET
     @Produces("application/json")
     public Response listLogItem(@PathParam("more") boolean more, @PathParam("offset") int offset, @PathParam("size") int size) {
+        // TODO need handle offset, more, size
         try {
-
-            List<String> logItems = new ArrayList<>(500);
+            long startTime = System.currentTimeMillis();
+            String[] strLines = null;
             if (more) {
 
             } else {
-                String filePath = ApplicationContext.getLogPath();
-                RandomAccessFile file = new RandomAccessFile(filePath, "r");
-                System.out.println("Log file: " + filePath);
-                int lines = 0;
-                StringBuilder builder = new StringBuilder();
-                long length = file.length();
-                length--;
-                file.seek(length);
-                for (long seek = length; seek >= 0; --seek) {
-                    file.seek(seek);
-                    char c = (char) file.read();
-                    if (c == '\n') {
-                        builder = builder.reverse();
-                        if (builder.length() > 0)
-                            logItems.add(builder.toString());
-                        lines++;
-                        builder = null;
-                        builder = new StringBuilder();
-                        if (lines == 500) {
-                            break;
-                        }
-                    } else
-                        builder.append(c);
-                }
+                strLines = discoverLastLogLines();
             }
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
@@ -64,18 +43,52 @@ public class LogService {
             json.writeStringField("status", "OK");
             json.writeObjectFieldStart("result_content");
             json.writeArrayFieldStart("logs");
-            int length = logItems.size();
-            while (--length >= 0) {
+            for (String strLine : strLines) {
                 json.writeStartObject();
-                json.writeStringField("message", logItems.get(length));
+                json.writeStringField("message", strLine);
                 json.writeEndObject();
             }
             json.writeEndArray();
             json.writeEndObject();
             json.writeEndObject();
+            if ((System.currentTimeMillis() - startTime) < 3000) {
+                Thread.sleep(2000);
+            }
             return Response.ok().entity(utility.toUTF8String()).build();
-        } catch (IOException e) {
-            return ServerUtils.getErrorMessageResponse(e);
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+            //return ServerUtils.getErrorMessageResponse(e);
+        }
+    }
+
+    private String[] discoverLastLogLines() throws FileNotFoundException, IOException {
+        String filePath = ApplicationContext.getLogPath();
+        try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
+            System.out.println("Log file: " + filePath);
+            int lines = 0;
+            long length = file.length();
+            length--;
+            file.seek(length);
+            long seek = length;
+            List<Byte> byteList = new ArrayList<>();
+            for (; seek >= 0; --seek) {
+                file.seek(seek);
+                byte b = file.readByte();
+                if ((char) b == '\n' && lines++ == 500) {
+                    break;
+                }
+                byteList.add(b);
+            }
+            Collections.reverse(byteList);
+            byte[] bs = new byte[byteList.size()];
+            int i = 0;
+            for (byte b : byteList)
+                bs[i++] = b;
+            String strContent = new String(bs, "UTF-8");
+            if (strContent == null && strContent.isEmpty())
+                return null;
+            String[] strLines = strContent.split("\n");
+            return strLines;
         }
     }
 }

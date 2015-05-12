@@ -1,6 +1,6 @@
 <div class="lumens-bootstrap">
-    <div class="table-responsive">
-        <!-- <div id='projectLoading'><img src='app/css/img/loading.gif'/></div> -->
+    <div class="table-responsive" style="width: 100%; height: 100%;">
+        <div id='jobLogLoading' style="alignment-adjust: central;"><img src='app/css/img/loading.gif' alt="{{i18n.id_loading}}"/></div>
         <table class="table">
             <tbody>
                 <tr ng-repeat="jobLogItem in jobLogItems track by $index" job-id="{{jobLogItem.id}}" style="cursor: pointer;"

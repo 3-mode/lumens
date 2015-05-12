@@ -4,6 +4,7 @@
 package test;
 
 import com.lumens.backend.ApplicationContext;
+import com.lumens.backend.service.LogService;
 import com.lumens.backend.service.ProjectService;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.InOutLogDAO;
@@ -141,6 +142,16 @@ public class ServiceTest {
         ApplicationContext.get().getScheduler().startJob(lJobId);
         System.out.println("Job started");
         System.in.read();
+    }
+
+    public void testLog() {
+        System.setProperty("lumens.base", "../dist/lumens");
+        ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
+        ApplicationContext.get().start();
+        LogService ls = new LogService();
+        Response resp = ls.listLogItem(false, 0, 0);
+        String str = resp.getEntity().toString();
+        System.out.println("logs:" + str);
     }
 
 }

@@ -62,11 +62,15 @@ Lumens.controllers
     $scope.jobLogBar.getPart2Element().append($compile('<div ng-include="job_list_log_template" style="overflow: auto; position: relative; width: 100%; height: 100%;"></div>')($scope));
     LogService.log(function (result) {
         if (result.status === 'OK') {
+            $("#jobLogLoading").hide();
             $scope.jobLogItems = result.result_content.logs;
-        } else
+        } else {
             Notifier.message("error", "Error", "Start the job '" + result.error_message + "'");
+            $("#jobLogLoading").hide();
+        }
     }, function (error) {
         Notifier.message("error", "Error", error);
+        $("#jobLogLoading").hide();
     });
     // Job command bar function
     $scope.onCommand = function (id_btn) {
@@ -105,13 +109,19 @@ Lumens.controllers
             }
         }
         else if ("id_exec_log_refresh" === id_btn) {
+            $scope.jobLogItems = null;
+            $("#jobLogLoading").show();
             LogService.log(function (result) {
                 if (result.status === 'OK') {
+                    $("#jobLogLoading").hide();
                     $scope.jobLogItems = result.result_content.logs;
-                } else
+                } else {
                     Notifier.message("error", "Error", "Start the job '" + result.error_message + "'");
+                    $("#jobLogLoading").hide();
+                }
             }, function (error) {
                 Notifier.message("error", "Error", error);
+                $("#jobLogLoading").hide();
             })
         }
     };
