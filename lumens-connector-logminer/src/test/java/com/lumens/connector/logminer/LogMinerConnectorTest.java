@@ -62,7 +62,7 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
         Format fmt = formatList.get(FORMAT_NAME);
         System.out.println("Redo log format name:" + fmt.getName());
         for (Format column : fmt.getChildren()) {
-            System.out.println("Column: name= " + column.getName() + " type=" + column.getProperty(DATA_TYPE) + " length=" + column.getProperty(DATA_LENGTH));
+            System.out.println("    Column: name= " + column.getName() + " type=" + column.getProperty(DATA_TYPE) + " length=" + column.getProperty(DATA_LENGTH));
         }
 
         miner.start();
@@ -81,18 +81,17 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
             OperationResult result = operation.execute(new ElementChunk(Arrays.asList(select)), selectFmt);
             if (result.hasData()) {
                 List<Element> redologs = result.getData();
-                int max = 100;
+                int max = 1000;
                 log.info("Reading redo log:");
                 for (Element elem : redologs) {
-                    System.out.println(elem.getChildByPath(COLUMN_REDO).getValue().toString());
+                    System.out.println("    " + elem.getChildByPath(COLUMN_REDO).getValue().toString());
                     if (--max < 0) {
                         break;
                     }
                 }
             }
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
-            //assertTrue("Fail to execute log miner query.", false);
+            assertTrue("Fail to execute log miner query:" + ex.getMessage(), false);                      
         }
         miner.stop();
         miner.close();
