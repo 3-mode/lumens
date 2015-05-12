@@ -9,6 +9,7 @@ import com.lumens.connector.Direction;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.connector.ElementChunk;
+import com.lumens.engine.DataSourceException;
 import com.lumens.engine.TransformEngineContext;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.component.AbstractTransformComponent;
@@ -166,7 +167,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
             return exList;
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            throw new DataSourceException(ex);
         }
     }
 

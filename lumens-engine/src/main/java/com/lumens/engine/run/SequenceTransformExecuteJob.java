@@ -89,9 +89,9 @@ public class SequenceTransformExecuteJob implements Executor {
                     log.debug(String.format("Current processing component: '%s'", entry.getStartFormatName()));
                 executorStack.push(new TransformExecuteContext(entry.getStartComponent(), entry.getStartFormatName(), handlers));
                 while (!executorStack.isEmpty()) {
-                    ExecuteContext exectueCtx = executorStack.pop();
-                    TransformComponent exeComponent = exectueCtx.getTargetComponent();
-                    List<ExecuteContext> exList = exeComponent.execute(exectueCtx);
+                    ExecuteContext currentExecCtx = executorStack.pop();
+                    TransformComponent exeComponent = currentExecCtx.getTargetComponent();
+                    List<ExecuteContext> exList = exeComponent.execute(currentExecCtx);
                     if (!exList.isEmpty())
                         executorStack.push(exList);
                 }
