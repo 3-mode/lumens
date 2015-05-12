@@ -14,7 +14,7 @@ import org.junit.Before;
  */
 public class TestBase {
 
-    private final Logger log = LogSysFactory.getLogger(LogMinerImpl.class);
+    protected final Logger log = LogSysFactory.getLogger(LogMinerImpl.class);
     
     protected static final String DATABASE_DRIVER_VAL = "file:///D:/app/oracle/11.2.0/dbhome/jdbc/lib/ojdbc6.jar";
     protected static final String DATABASE_SOURCE_URL_VAL = "jdbc:oracle:thin:@127.0.0.1:1521:orcl";

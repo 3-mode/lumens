@@ -27,7 +27,7 @@ public class LogMinerTest extends TestBase {
         LogMinerImpl miner = new LogMinerImpl(dbClient, config);
         miner.build();
         miner.start();
-        ResultSet result = miner.query();
+        ResultSet result = miner.query("");
         try {
             System.out.println("Querying redo log:");
             while (result.next()) {                

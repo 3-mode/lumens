@@ -7,8 +7,13 @@ import com.lumens.connector.logminer.api.LogMiner;
 import com.lumens.connector.Operation;
 import com.lumens.connector.Connector;
 import com.lumens.connector.Direction;
+import static com.lumens.connector.database.DBConstants.ACTION;
 import static com.lumens.connector.database.DBConstants.DATA_LENGTH;
 import static com.lumens.connector.database.DBConstants.DATA_TYPE;
+import static com.lumens.connector.database.DBConstants.GROUPBY;
+import static com.lumens.connector.database.DBConstants.ORDERBY;
+import static com.lumens.connector.database.DBConstants.SQLPARAMS;
+import static com.lumens.connector.database.DBConstants.WHERE;
 import com.lumens.connector.logminer.api.LogMinerFactory;
 import com.lumens.connector.logminer.api.Config;
 import com.lumens.connector.logminer.impl.DatabaseClient;
@@ -71,8 +76,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     }
 
     @Override
-    public void close() {
-        miner.end();
+    public void close() {        
     }
 
     @Override
@@ -85,6 +89,13 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     public Map<String, Format> getFormatList(Direction direction) {
         Map<String, Format> formatList = new HashMap();
         Format rootFmt = new DataFormat(FORMAT_NAME, Form.STRUCT);
+        if (direction == Direction.IN) {
+            Format SQLParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
+            SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
+            SQLParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
+            SQLParams.addChild(ORDERBY, Format.Form.FIELD, Type.STRING);
+            SQLParams.addChild(GROUPBY, Format.Form.FIELD, Type.STRING);
+        }
         formatList.put(FORMAT_NAME, rootFmt);
         getFormat(rootFmt, null, direction);
 
@@ -96,7 +107,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
         if (direction == Direction.IN) {
             try {
                 ResultSet columns = dbClient.executeGetResult(SQL_QUERY_COLUMNS);
-                if (!columns.next()){
+                if (!columns.next()) {
                     log.error("Insuffucient priviledga to access table 'user_tab_columns'");
                     throw new RuntimeException("Insuffucient privilege to access table 'user_tab_columns' ");
                 }
@@ -107,15 +118,15 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
                     Format field = format.addChild(columnName, Format.Form.FIELD, toType(dataType));
                     field.setProperty(DATA_TYPE, new Value(dataType));
                     field.setProperty(DATA_LENGTH, new Value(dataLength));
-                }while (columns.next());
+                } while (columns.next());
             } catch (SQLException | RuntimeException ex) {
                 log.error("Fail to get format. Error message:" + ex.getMessage());
                 throw new RuntimeException(ex);
             }
-        }else{
-            
+        } else {
+
         }
-        
+
         return format;
     }
 
@@ -127,6 +138,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
 
     @Override
     public void stop() {
+        miner.end();
     }
 
     @Override

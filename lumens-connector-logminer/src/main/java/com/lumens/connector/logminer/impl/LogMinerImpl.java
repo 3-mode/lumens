@@ -81,12 +81,13 @@ public class LogMinerImpl implements LogMiner, Constants {
     }
 
     @Override
-    public ResultSet query() {
+    public ResultSet query(String sql) {
         if (result != null) {
             DBUtils.releaseResultSet(result);
         }
         try {
-            result = dbClient.executeGetResult(SQL_QUERY_RESULT);
+            //String defaultCondition = " WHERE seg_type_name='TABLE' AND operation !='SELECT_FOR_UPDATE'";
+            result = dbClient.executeGetResult(sql);
             return result;
         } catch (Exception ex) {
             log.error("Fail to query log miner results. Error message:");

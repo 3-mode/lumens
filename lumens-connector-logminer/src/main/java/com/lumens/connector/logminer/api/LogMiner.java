@@ -30,5 +30,5 @@ public interface LogMiner {
 
     public void end();
 
-    public ResultSet query();
+    public ResultSet query(String sql);
 }
