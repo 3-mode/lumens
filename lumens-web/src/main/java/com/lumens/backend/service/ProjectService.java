@@ -7,7 +7,7 @@ import com.lumens.backend.ApplicationContext;
 import com.lumens.connector.Direction;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.component.resource.DataSource;
-import com.lumens.engine.handler.InspectionHander;
+import com.lumens.engine.handler.InspectionHandler;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.io.JsonUtility;
@@ -105,7 +105,7 @@ public class ProjectService implements ServiceConstants {
         TransformProject projectInstance = new TransformProject();
         new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
         // Execute all start rules to drive the ws connector
-        List<InspectionHander> handlers = new ArrayList<>();
+        List<InspectionHandler> handlers = new ArrayList<>();
         handlers.add(new TransformComponentDBLogHandler(project.id, project.name));
         ApplicationContext.get().getTransformEngine().execute(new SequenceTransformExecuteJob(projectInstance, handlers));
         // TODO to run the project job
