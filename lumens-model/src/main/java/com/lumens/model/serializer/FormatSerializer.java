@@ -4,6 +4,7 @@
 package com.lumens.model.serializer;
 
 import com.lumens.io.JsonSerializer;
+import com.lumens.io.JsonUtility;
 import com.lumens.io.StringUTF8Writer;
 import com.lumens.io.XmlSerializer;
 import com.lumens.model.Format;
@@ -192,7 +193,7 @@ public class FormatSerializer implements XmlSerializer, JsonSerializer {
     }
 
     private boolean isNotNull(JsonNode json) {
-        return json != null && json != NullNode.instance;
+        return JsonUtility.isNotNull(json);
     }
 
     private void readPropertyFromJson(Format currentFormat, JsonNode propertyListJson) {
