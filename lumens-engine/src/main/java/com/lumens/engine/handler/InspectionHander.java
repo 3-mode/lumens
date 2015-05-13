@@ -7,7 +7,12 @@ import com.lumens.engine.TransformComponent;
 import com.lumens.model.Element;
 import java.util.List;
 
-public interface ResultHandler {
+/**
+ *
+ * @author Shaofeng Wang <shaofeng.wang@outlook.com>
+ */
+
+public interface InspectionHander {
 
     public void processOutput(TransformComponent src, String targetName, List<Element> output);
 

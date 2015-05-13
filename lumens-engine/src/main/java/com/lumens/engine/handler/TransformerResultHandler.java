@@ -7,6 +7,6 @@ package com.lumens.engine.handler;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public interface TransformerResultHandler extends ResultHandler {
+public interface TransformerResultHandler extends InspectionHander {
 
 }

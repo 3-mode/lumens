@@ -36,24 +36,30 @@ public class TransformMapper extends AbstractProcessor {
                 if (result != null)
                     results.add(result);
             } else {
-                for (Element rootSourceElement : input) {
-                    List<TransformForeach> rootForeachList = rootRuleItem.getTransformForeach();
-                    if (!rootForeachList.isEmpty()) {
-                        int foreachLevelDepth = rootForeachList.size() - 1;
-                        checkForeachDepthCount(foreachLevelDepth);
-                        MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
-                        processRootForeachList(ctx, results, rootForeachList, 0, foreachLevelDepth);
-                    } else {
-                        MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
-                        Element result = processTransformItem(null, ctx);
-                        if (result != null)
-                            results.add(result);
+                Element currentElement = null;
+                try {
+                    for (Element rootSourceElement : input) {
+                        currentElement = rootSourceElement;
+                        List<TransformForeach> rootForeachList = rootRuleItem.getTransformForeach();
+                        if (!rootForeachList.isEmpty()) {
+                            int foreachLevelDepth = rootForeachList.size() - 1;
+                            checkForeachDepthCount(foreachLevelDepth);
+                            MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
+                            processRootForeachList(ctx, results, rootForeachList, 0, foreachLevelDepth);
+                        } else {
+                            MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
+                            Element result = processTransformItem(null, ctx);
+                            if (result != null)
+                                results.add(result);
+                        }
                     }
+                } catch (Exception e) {
+                    throw new MapperException(e, currentElement);
                 }
+                return results;
             }
-            return results;
         }
-        throw new RuntimeException("Unsupported input data !");
+        throw new MapperException("Unsupported input data !");
     }
 
     private void processRootForeachList(MapperContext ctx, List<Element> results,

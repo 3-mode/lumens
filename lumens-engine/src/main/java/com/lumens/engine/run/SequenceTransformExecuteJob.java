@@ -3,13 +3,16 @@
  */
 package com.lumens.engine.run;
 
+import com.lumens.engine.DataSourceException;
 import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
+import com.lumens.engine.TransformException;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.TransformProject;
-import com.lumens.engine.handler.ResultHandler;
+import com.lumens.engine.handler.InspectionHander;
 import com.lumens.logsys.LogSysFactory;
+import com.lumens.processor.transform.MapperException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -23,7 +26,7 @@ import org.apache.logging.log4j.Logger;
 public class SequenceTransformExecuteJob implements Executor {
     private final Logger log = LogSysFactory.getLogger(SequenceTransformExecuteJob.class);
     private TransformProject project;
-    private List<ResultHandler> handlers;
+    private List<InspectionHander> handlers;
 
     class SingleThreadExecuteStack extends LinkedList<ExecuteContext> {
 
@@ -32,13 +35,13 @@ public class SequenceTransformExecuteJob implements Executor {
         }
     }
 
-    public SequenceTransformExecuteJob(TransformProject project, List<ResultHandler> handlers) {
+    public SequenceTransformExecuteJob(TransformProject project, List<InspectionHander> handlers) {
         this.project = project;
         this.handlers = handlers;
     }
 
     public SequenceTransformExecuteJob(TransformProject project) {
-        this(project, new ArrayList<ResultHandler>(1));
+        this(project, new ArrayList<InspectionHander>(1));
     }
 
     @Override
@@ -100,7 +103,20 @@ public class SequenceTransformExecuteJob implements Executor {
             if (log.isDebugEnabled())
                 log.debug("Stopping execute the transformation");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            handleTransformException(e);
         }
+    }
+
+    private void handleTransformException(Exception e) {
+        if (e instanceof TransformException) {
+            // TODO Log it
+            Throwable cause = e.getCause();
+            if (cause instanceof MapperException) {
+                // TODO Log it
+            }
+        } else if (e instanceof DataSourceException) {
+            // TODO Log it
+        }
+        throw new RuntimeException(e);
     }
 }

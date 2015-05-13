@@ -13,11 +13,12 @@ import com.lumens.engine.component.RuleComponent;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.TransformException;
-import com.lumens.engine.handler.ResultHandler;
+import com.lumens.engine.handler.InspectionHander;
 import com.lumens.engine.handler.TransformerResultHandler;
 import com.lumens.logsys.LogSysFactory;
 import com.lumens.model.Element;
 import com.lumens.processor.Processor;
+import com.lumens.processor.transform.MapperException;
 import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
 import java.util.ArrayList;
@@ -87,48 +88,44 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
 
     @Override
     public List<ExecuteContext> execute(ExecuteContext context) {
-        try {
-            List<ExecuteContext> exList = new ArrayList<>();
-            String targetFmtName = context.getTargetFormatName();
-            List<TransformRuleEntry> rules = ruleFindList.get(targetFmtName);
-            ElementChunk inputChunk = context.getInput();
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Transform '%s' is handling target '%s'", getName(), targetFmtName));
-                log.debug(String.format("Transform '%s' input chunk size '%d'.", getName(), inputChunk.getData() != null ? inputChunk.getData().size() : 0));
-            }
-            handleInputLogging(context.getResultHandlers(), targetFmtName, inputChunk.getData());
-            // TODO in current design, only one target rule can be found
-            for (TransformRuleEntry rule : rules) {
-                List<Element> results = new ArrayList<>();
-                List<Element> result = (List<Element>) processor.execute(rule.getRule(), inputChunk.getData());
-                if (!result.isEmpty())
-                    results.addAll(result);
-
-                if (!results.isEmpty() && this.hasTarget()) {
-                    for (TransformComponent target : this.getTargetList().values())
-                        if (!result.isEmpty() && target.accept(rule.getTargetFormatName()))
-                            exList.add(new TransformExecuteContext(context, new ElementChunk(inputChunk.isLast(), results), target, rule.getTargetFormatName(), context.getResultHandlers()));
-                }
-
-                if (log.isDebugEnabled())
-                    log.debug(String.format("Transform '%s' result chunk size '%d'.", getName(), results.size()));
-
-                handleOutputLogging(context.getResultHandlers(), rule.getTargetFormatName(), results);
-            }
-            return exList;
-        } catch (Exception ex) {
-            throw new TransformException(ex);
+        List<ExecuteContext> exList = new ArrayList<>();
+        String targetFmtName = context.getTargetFormatName();
+        List<TransformRuleEntry> rules = ruleFindList.get(targetFmtName);
+        ElementChunk inputChunk = context.getInput();
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Transform '%s' is handling target '%s'", getName(), targetFmtName));
+            log.debug(String.format("Transform '%s' input chunk size '%d'.", getName(), inputChunk.getData() != null ? inputChunk.getData().size() : 0));
         }
+        handleInputLogging(context.getInspectionHandlers(), targetFmtName, inputChunk.getData());
+        // TODO in current design, only one target rule can be found
+        for (TransformRuleEntry rule : rules) {
+            List<Element> results = new ArrayList<>();
+            List<Element> result = (List<Element>) processor.execute(rule.getRule(), inputChunk.getData());
+            if (!result.isEmpty())
+                results.addAll(result);
+
+            if (!results.isEmpty() && this.hasTarget()) {
+                for (TransformComponent target : this.getTargetList().values())
+                    if (!result.isEmpty() && target.accept(rule.getTargetFormatName()))
+                        exList.add(new TransformExecuteContext(context, new ElementChunk(inputChunk.isLast(), results), target, rule.getTargetFormatName(), context.getInspectionHandlers()));
+            }
+
+            if (log.isDebugEnabled())
+                log.debug(String.format("Transform '%s' result chunk size '%d'.", getName(), results.size()));
+
+            handleOutputLogging(context.getInspectionHandlers(), rule.getTargetFormatName(), results);
+        }
+        return exList;
     }
 
-    private void handleInputLogging(List<ResultHandler> handlers, String targetName, List<Element> input) {
-        for (ResultHandler handler : handlers)
+    private void handleInputLogging(List<InspectionHander> handlers, String targetName, List<Element> input) {
+        for (InspectionHander handler : handlers)
             if (handler instanceof TransformerResultHandler)
                 handler.processInput(this, targetName, input);
     }
 
-    private void handleOutputLogging(List<ResultHandler> handlers, String targetName, List<Element> input) {
-        for (ResultHandler handler : handlers)
+    private void handleOutputLogging(List<InspectionHander> handlers, String targetName, List<Element> input) {
+        for (InspectionHander handler : handlers)
             if (handler instanceof TransformerResultHandler)
                 handler.processOutput(this, targetName, input);
     }

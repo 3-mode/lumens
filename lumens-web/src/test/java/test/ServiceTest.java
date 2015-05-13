@@ -13,7 +13,7 @@ import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.sysdb.entity.Project;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
-import com.lumens.engine.handler.ResultHandler;
+import com.lumens.engine.handler.InspectionHander;
 import com.lumens.engine.handler.TransformerResultHandler;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
@@ -73,7 +73,7 @@ public class ServiceTest {
                 public void processInput(TransformComponent src, String targetName, List<Element> input) {
                 }
             }
-            List<ResultHandler> handlers = new ArrayList<>();
+            List<InspectionHander> handlers = new ArrayList<>();
             //handlers.addAll(Arrays.asList(new DataElementLoggingHandler(project.id, project.name)));
             for (int i = 0; i < 1000; ++i) {
                 System.out.println("Transform: " + i);

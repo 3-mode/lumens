@@ -3,5 +3,10 @@
  */
 package com.lumens.engine.handler;
 
-public interface LastResultHandler extends ResultHandler {
+/**
+ *
+ * @author Shaofeng Wang <shaofeng.wang@outlook.com>
+ */
+
+public interface LastResultHandler extends InspectionHander {
 }

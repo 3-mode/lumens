@@ -18,7 +18,7 @@ import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.connector.ChameleonConnector;
 import com.lumens.engine.connector.Mock;
 import com.lumens.engine.handler.DataSourceResultHandler;
-import com.lumens.engine.handler.ResultHandler;
+import com.lumens.engine.handler.InspectionHander;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectJsonParser;
 import com.lumens.engine.serializer.ProjectSerializer;
@@ -180,7 +180,7 @@ public class TransformEngineTest {
         project.getDataTransformerList().add(final_transformator);
 
         long start = System.currentTimeMillis();
-        ResultHandler log = new DataSourceResultHandler() {
+        InspectionHander log = new DataSourceResultHandler() {
 
             @Override
             public void processOutput(TransformComponent src, String targetName, List<Element> output) {
