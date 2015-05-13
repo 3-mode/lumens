@@ -6,6 +6,7 @@ package com.lumens.connector.database.client;
 import com.lumens.connector.database.DBConstants;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
+import com.lumens.model.ModelUtils;
 
 /**
  *
@@ -44,13 +45,13 @@ public abstract class DBQuerySQLBuilder extends DBSQLBuilder implements DBConsta
             Element sqlParams = input.getChild(SQLPARAMS);
             if (sqlParams != null) {
                 Element whereElem = sqlParams.getChild(WHERE);
-                if (whereElem != null)
+                if (ModelUtils.isNotNullValue(whereElem))
                     strWhere = whereElem.getValue().getString();
                 Element orderByElem = sqlParams.getChild(ORDERBY);
-                if (orderByElem != null)
+                if (ModelUtils.isNotNullValue(orderByElem))
                     strOrderBy = orderByElem.getValue().getString();
                 Element groupByElem = sqlParams.getChild(GROUPBY);
-                if (groupByElem != null)
+                if (ModelUtils.isNotNullValue(groupByElem))
                     strOrderBy = groupByElem.getValue().getString();
             }
         }

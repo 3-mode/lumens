@@ -3,7 +3,7 @@
  */
 package com.lumens.connector.database.client;
 
-import com.lumens.model.Utils;
+import com.lumens.model.ModelUtils;
 import com.lumens.connector.ElementChunk;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +36,7 @@ public abstract class DBOperation implements Operation, DBConstants {
             for (int i = input.getStart(); i < dataList.size(); ++i) {
                 Element elem = dataList.get(i);
                 Element action = elem.getChild(SQLPARAMS).getChild(ACTION);
-                String strOper = Utils.isNullValue(action) ? null : action.getValue().getString();
+                String strOper = ModelUtils.isNullValue(action) ? null : action.getValue().getString();
                 if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
                     // If i < input.getStart then there are some input handled as update or insert need to commit before
                     // exeute the executeNext query, use this way to handle the mixed operation with select, update or insert

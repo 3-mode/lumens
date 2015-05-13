@@ -4,7 +4,7 @@
 package com.lumens.connector.database.client;
 
 import com.lumens.connector.database.DBConstants;
-import com.lumens.model.Utils;
+import com.lumens.model.ModelUtils;
 import com.lumens.model.Element;
 import com.lumens.model.Value;
 import org.apache.commons.lang.StringUtils;
@@ -62,7 +62,7 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
         sql.append("UPDATE ").append(tableName).append(" SET ").append(values.toString());
         if (input != null) {
             Element whereElem = input.getChild(DBConstants.WHERE);
-            if (!Utils.isNullValue(whereElem)) {
+            if (!ModelUtils.isNullValue(whereElem)) {
                 String strWhere = whereElem.getValue().getString();
                 if (StringUtils.isNotEmpty(strWhere) && StringUtils.isNotBlank(strWhere)) {
                     sql.append(' ').append(strWhere);
