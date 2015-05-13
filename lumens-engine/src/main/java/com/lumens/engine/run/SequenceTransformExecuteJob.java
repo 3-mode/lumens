@@ -10,7 +10,8 @@ import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformException;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.TransformProject;
-import com.lumens.engine.handler.InspectionHander;
+import com.lumens.engine.handler.ExceptionHandler;
+import com.lumens.engine.handler.InspectionHandler;
 import com.lumens.logsys.LogSysFactory;
 import com.lumens.processor.transform.MapperException;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import org.apache.logging.log4j.Logger;
 public class SequenceTransformExecuteJob implements Executor {
     private final Logger log = LogSysFactory.getLogger(SequenceTransformExecuteJob.class);
     private TransformProject project;
-    private List<InspectionHander> handlers;
+    private List<InspectionHandler> handlers;
 
     class SingleThreadExecuteStack extends LinkedList<ExecuteContext> {
 
@@ -35,13 +36,13 @@ public class SequenceTransformExecuteJob implements Executor {
         }
     }
 
-    public SequenceTransformExecuteJob(TransformProject project, List<InspectionHander> handlers) {
+    public SequenceTransformExecuteJob(TransformProject project, List<InspectionHandler> handlers) {
         this.project = project;
         this.handlers = handlers;
     }
 
     public SequenceTransformExecuteJob(TransformProject project) {
-        this(project, new ArrayList<InspectionHander>(1));
+        this(project, new ArrayList<InspectionHandler>(1));
     }
 
     @Override
@@ -116,6 +117,12 @@ public class SequenceTransformExecuteJob implements Executor {
             }
         } else if (e instanceof DataSourceException) {
             // TODO Log it
+        }
+
+        for (InspectionHandler handler : handlers) {
+            if (handler instanceof ExceptionHandler) {
+                // TODO log exception to database
+            }
         }
         throw new RuntimeException(e);
     }

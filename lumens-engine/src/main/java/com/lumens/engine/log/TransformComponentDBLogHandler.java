@@ -6,8 +6,7 @@ package com.lumens.engine.log;
 import com.lumens.connector.Direction;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformEngineContext;
-import com.lumens.engine.handler.DataSourceResultHandler;
-import com.lumens.engine.handler.TransformerResultHandler;
+import com.lumens.engine.handler.InputOutputInspectionHandler;
 import com.lumens.io.JsonUtility;
 import com.lumens.io.Utils;
 import com.lumens.logsys.LogSysFactory;
@@ -24,7 +23,7 @@ import org.codehaus.jackson.JsonGenerator;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class TransformComponentDBLogHandler implements DataSourceResultHandler, TransformerResultHandler {
+public class TransformComponentDBLogHandler implements InputOutputInspectionHandler {
     private final Logger log = LogSysFactory.getLogger(TransformComponent.class);
     private final long projectID;
     private final String projectName;

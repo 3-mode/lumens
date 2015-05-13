@@ -18,8 +18,8 @@ import com.lumens.engine.component.RegisterFormatComponent;
 import com.lumens.engine.Resource;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.ExecuteContext;
-import com.lumens.engine.handler.DataSourceResultHandler;
-import com.lumens.engine.handler.InspectionHander;
+import com.lumens.engine.handler.InputOutputInspectionHandler;
+import com.lumens.engine.handler.InspectionHandler;
 import com.lumens.logsys.LogSysFactory;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
@@ -172,16 +172,16 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
     }
 
-    private void handleInputLogging(List<InspectionHander> handlers, String targetName, List<Element> input) {
-        for (InspectionHander handler : handlers)
-            if (handler instanceof DataSourceResultHandler)
-                handler.processInput(this, targetName, input);
+    private void handleInputLogging(List<InspectionHandler> handlers, String targetName, List<Element> input) {
+        for (InspectionHandler handler : handlers)
+            if (handler instanceof InputOutputInspectionHandler)
+                ((InputOutputInspectionHandler) handler).processInput(this, targetName, input);
     }
 
-    private void handleOutputLogging(List<InspectionHander> handlers, String targetName, List<Element> input) {
-        for (InspectionHander handler : handlers)
-            if (handler instanceof DataSourceResultHandler)
-                handler.processOutput(this, targetName, input);
+    private void handleOutputLogging(List<InspectionHandler> handlers, String targetName, List<Element> input) {
+        for (InspectionHandler handler : handlers)
+            if (handler instanceof InputOutputInspectionHandler)
+                ((InputOutputInspectionHandler) handler).processOutput(this, targetName, input);
     }
 
     public Connector getConnector() {

@@ -12,13 +12,11 @@ import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.RuleComponent;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.ExecuteContext;
-import com.lumens.engine.TransformException;
-import com.lumens.engine.handler.InspectionHander;
-import com.lumens.engine.handler.TransformerResultHandler;
+import com.lumens.engine.handler.InputOutputInspectionHandler;
+import com.lumens.engine.handler.InspectionHandler;
 import com.lumens.logsys.LogSysFactory;
 import com.lumens.model.Element;
 import com.lumens.processor.Processor;
-import com.lumens.processor.transform.MapperException;
 import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
 import java.util.ArrayList;
@@ -118,16 +116,16 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
         return exList;
     }
 
-    private void handleInputLogging(List<InspectionHander> handlers, String targetName, List<Element> input) {
-        for (InspectionHander handler : handlers)
-            if (handler instanceof TransformerResultHandler)
-                handler.processInput(this, targetName, input);
+    private void handleInputLogging(List<InspectionHandler> handlers, String targetName, List<Element> input) {
+        for (InspectionHandler handler : handlers)
+            if (handler instanceof InputOutputInspectionHandler)
+                ((InputOutputInspectionHandler) handler).processInput(this, targetName, input);
     }
 
-    private void handleOutputLogging(List<InspectionHander> handlers, String targetName, List<Element> input) {
-        for (InspectionHander handler : handlers)
-            if (handler instanceof TransformerResultHandler)
-                handler.processOutput(this, targetName, input);
+    private void handleOutputLogging(List<InspectionHandler> handlers, String targetName, List<Element> input) {
+        for (InspectionHandler handler : handlers)
+            if (handler instanceof InputOutputInspectionHandler)
+                ((InputOutputInspectionHandler) handler).processOutput(this, targetName, input);
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.lumens.connector.OperationResult;
 import com.lumens.connector.ElementChunk;
 import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.TransformComponent;
-import com.lumens.engine.handler.InspectionHander;
+import com.lumens.engine.handler.InspectionHandler;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class DataContext implements ExecuteContext {
     }
 
     @Override
-    public List<InspectionHander> getInspectionHandlers() {
+    public List<InspectionHandler> getInspectionHandlers() {
         return parentCtx.getInspectionHandlers();
     }
 

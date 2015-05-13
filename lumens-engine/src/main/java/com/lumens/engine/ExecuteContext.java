@@ -5,7 +5,7 @@ package com.lumens.engine;
 
 import com.lumens.connector.ElementChunk;
 import com.lumens.engine.component.resource.DataContext;
-import com.lumens.engine.handler.InspectionHander;
+import com.lumens.engine.handler.InspectionHandler;
 import java.util.List;
 
 /**
@@ -18,7 +18,7 @@ public interface ExecuteContext {
 
     public ElementChunk getInput();
 
-    public List<InspectionHander> getInspectionHandlers();
+    public List<InspectionHandler> getInspectionHandlers();
 
     public TransformComponent getTargetComponent();
 
