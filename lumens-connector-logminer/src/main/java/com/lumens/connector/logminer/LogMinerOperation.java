@@ -18,7 +18,7 @@ import com.lumens.connector.database.client.DBElementBuilder;
 import com.lumens.connector.logminer.api.LogMiner;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
-import com.lumens.model.Utils;
+import com.lumens.model.ModelUtils;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class LogMinerOperation implements Operation {
                 Element elem = dataList.get(i);
                 Element action = elem.getChild(SQLPARAMS).getChild(ACTION);
                 Element where = elem.getChild(SQLPARAMS).getChild(WHERE);
-                String strOper = Utils.isNullValue(action) ? null : action.getValue().getString();
+                String strOper = ModelUtils.isNullValue(action) ? null : action.getValue().getString();
                 if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
                     // TODO: implementing paging
                     ResultSet result = miner.query(new LogMinerQuerySQLBuilder(output).generateSelectSQL(elem));
