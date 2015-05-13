@@ -11,4 +11,8 @@ public class Utils {
     public static boolean isNullValue(Element value) {
         return value == null || value.getValue() == null;
     }
+
+    public static boolean isNotNullValue(Element value) {
+        return !isNullValue(value);
+    }
 }
