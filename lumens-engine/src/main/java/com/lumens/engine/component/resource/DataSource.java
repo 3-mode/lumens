@@ -103,7 +103,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
         try {
             String targetFmtName = context.getTargetFormatName();
             if (log.isDebugEnabled())
-                log.debug(String.format("Datasource is handling target '%s'", targetFmtName));
+                log.debug(String.format("Datasource '%s' is handling target '%s'", getName(), targetFmtName));
             FormatEntry entry = registerOUTFormatList.get(targetFmtName);
             List<ExecuteContext> exList = new ArrayList<>();
             List<Element> results = new ArrayList<>();
@@ -125,7 +125,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 ElementChunk inputChunk = context.getInput();
 
                 if (log.isDebugEnabled())
-                    log.debug(String.format("Datasource input chunk size '%d'.", inputChunk.getData() != null ? inputChunk.getData().size() : 0));
+                    log.debug(String.format("Datasource '%s' input chunk size '%d'.", getName(), inputChunk.getData() != null ? inputChunk.getData().size() : 0));
 
                 // Log input data
                 handleInputLogging(context.getResultHandlers(), targetFmtName, inputChunk.getData());
@@ -138,7 +138,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
                 results.addAll(opRet.getData());
 
             if (log.isDebugEnabled())
-                log.debug(String.format("Datasource result chunk size '%d'.", results.size()));
+                log.debug(String.format("Datasource '%s' result chunk size '%d'.", getName(), results.size()));
 
             // Log output data
             handleOutputLogging(context.getResultHandlers(), targetFmtName, results);
