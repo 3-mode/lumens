@@ -25,7 +25,6 @@ import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.NullNode;
 import org.xml.sax.InputSource;
 
 /**
