@@ -3,13 +3,17 @@
  */
 package com.lumens.engine.run;
 
+import com.lumens.engine.DataSourceException;
 import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
+import com.lumens.engine.TransformException;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.TransformProject;
-import com.lumens.engine.handler.ResultHandler;
+import com.lumens.engine.handler.ExceptionHandler;
+import com.lumens.engine.handler.InspectionHandler;
 import com.lumens.logsys.LogSysFactory;
+import com.lumens.processor.transform.MapperException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -23,7 +27,7 @@ import org.apache.logging.log4j.Logger;
 public class SequenceTransformExecuteJob implements Executor {
     private final Logger log = LogSysFactory.getLogger(SequenceTransformExecuteJob.class);
     private TransformProject project;
-    private List<ResultHandler> handlers;
+    private List<InspectionHandler> handlers;
 
     class SingleThreadExecuteStack extends LinkedList<ExecuteContext> {
 
@@ -32,13 +36,13 @@ public class SequenceTransformExecuteJob implements Executor {
         }
     }
 
-    public SequenceTransformExecuteJob(TransformProject project, List<ResultHandler> handlers) {
+    public SequenceTransformExecuteJob(TransformProject project, List<InspectionHandler> handlers) {
         this.project = project;
         this.handlers = handlers;
     }
 
     public SequenceTransformExecuteJob(TransformProject project) {
-        this(project, new ArrayList<ResultHandler>(1));
+        this(project, new ArrayList<InspectionHandler>(1));
     }
 
     @Override
@@ -89,9 +93,9 @@ public class SequenceTransformExecuteJob implements Executor {
                     log.debug(String.format("Current processing component: '%s'", entry.getStartFormatName()));
                 executorStack.push(new TransformExecuteContext(entry.getStartComponent(), entry.getStartFormatName(), handlers));
                 while (!executorStack.isEmpty()) {
-                    ExecuteContext exectueCtx = executorStack.pop();
-                    TransformComponent exeComponent = exectueCtx.getTargetComponent();
-                    List<ExecuteContext> exList = exeComponent.execute(exectueCtx);
+                    ExecuteContext currentExecCtx = executorStack.pop();
+                    TransformComponent exeComponent = currentExecCtx.getTargetComponent();
+                    List<ExecuteContext> exList = exeComponent.execute(currentExecCtx);
                     if (!exList.isEmpty())
                         executorStack.push(exList);
                 }
@@ -100,7 +104,26 @@ public class SequenceTransformExecuteJob implements Executor {
             if (log.isDebugEnabled())
                 log.debug("Stopping execute the transformation");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            handleTransformException(e);
         }
+    }
+
+    private void handleTransformException(Exception e) {
+        if (e instanceof TransformException) {
+            // TODO Log it
+            Throwable cause = e.getCause();
+            if (cause instanceof MapperException) {
+                // TODO Log it
+            }
+        } else if (e instanceof DataSourceException) {
+            // TODO Log it
+        }
+
+        for (InspectionHandler handler : handlers) {
+            if (handler instanceof ExceptionHandler) {
+                // TODO log exception to database
+            }
+        }
+        throw new RuntimeException(e);
     }
 }

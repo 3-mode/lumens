@@ -11,26 +11,24 @@ import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.sysdb.entity.Project;
-import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformProject;
-import com.lumens.engine.handler.ResultHandler;
-import com.lumens.engine.handler.TransformerResultHandler;
+import com.lumens.engine.handler.InspectionHandler;
+import com.lumens.engine.log.TransformComponentInOutLogHandler;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
+import com.lumens.logsys.LogSysFactory;
 import com.lumens.model.DateTime;
-import com.lumens.model.Element;
-import com.lumens.model.serializer.ElementSerializer;
 import com.lumens.scheduler.DefaultJobConfigurationBuilder;
 import com.lumens.scheduler.JobConfiguration;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.utils.DBHelper;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.ws.rs.core.Response;
@@ -58,23 +56,8 @@ public class ServiceTest {
             new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
             //assertEquals(3, projectInstance.getDataTransformerList().size());
             //assertEquals(4, projectInstance.getDatasourceList().size());
-            class MyResultHandler implements TransformerResultHandler {
-                @Override
-                public void processOutput(TransformComponent src, String targetName, List<Element> output) {
-                    try {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        new ElementSerializer(output.get(0), true).writeToJson(baos);
-                        System.out.println(baos.toString());
-                    } catch (Exception ex) {
-                    }
-                }
-
-                @Override
-                public void processInput(TransformComponent src, String targetName, List<Element> input) {
-                }
-            }
-            List<ResultHandler> handlers = new ArrayList<>();
-            //handlers.addAll(Arrays.asList(new DataElementLoggingHandler(project.id, project.name)));
+            List<InspectionHandler> handlers = new ArrayList<>();
+            handlers.addAll(Arrays.asList(new TransformComponentInOutLogHandler()));
             for (int i = 0; i < 1000; ++i) {
                 System.out.println("Transform: " + i);
                 new SequenceTransformExecuteJob(projectInstance, handlers).execute();
@@ -147,7 +130,6 @@ public class ServiceTest {
     public void testLog() {
         System.setProperty("lumens.base", "../dist/lumens");
         ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
-        ApplicationContext.get().start();
         LogService ls = new LogService();
         Response resp = ls.listLogItem(false, 0, 0);
         String str = resp.getEntity().toString();

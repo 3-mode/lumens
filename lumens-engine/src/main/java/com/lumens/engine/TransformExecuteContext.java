@@ -5,7 +5,7 @@ package com.lumens.engine;
 
 import com.lumens.connector.ElementChunk;
 import com.lumens.engine.component.resource.DataContext;
-import com.lumens.engine.handler.ResultHandler;
+import com.lumens.engine.handler.InspectionHandler;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class TransformExecuteContext implements ExecuteContext {
 
-    private List<ResultHandler> handlers;
+    private List<InspectionHandler> handlers;
     private final TransformComponent target;
     private final String targetFmtName;
     private final ExecuteContext parentCtx;
@@ -23,14 +23,14 @@ public class TransformExecuteContext implements ExecuteContext {
     private final ElementChunk chunk;
 
     public TransformExecuteContext(String targetName) {
-        this(null, targetName, new ArrayList<ResultHandler>(1));
+        this(null, targetName, new ArrayList<InspectionHandler>(1));
     }
 
-    public TransformExecuteContext(TransformComponent target, String targetFmtName, List<ResultHandler> handlers) {
+    public TransformExecuteContext(TransformComponent target, String targetFmtName, List<InspectionHandler> handlers) {
         this(null, null, target, targetFmtName, handlers);
     }
 
-    public TransformExecuteContext(ExecuteContext parentCtx, ElementChunk chunk, TransformComponent target, String targetFmtName, List<ResultHandler> handlers) {
+    public TransformExecuteContext(ExecuteContext parentCtx, ElementChunk chunk, TransformComponent target, String targetFmtName, List<InspectionHandler> handlers) {
         this.parentCtx = parentCtx;
         this.chunk = chunk;
         this.target = target;
@@ -49,11 +49,11 @@ public class TransformExecuteContext implements ExecuteContext {
     }
 
     @Override
-    public List<ResultHandler> getResultHandlers() {
+    public List<InspectionHandler> getInspectionHandlers() {
         return this.handlers;
     }
 
-    public TransformExecuteContext addHandler(ResultHandler handler) {
+    public TransformExecuteContext addHandler(InspectionHandler handler) {
         this.handlers.add(handler);
         return this;
     }

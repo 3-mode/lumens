@@ -12,8 +12,9 @@ import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.RuleComponent;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.ExecuteContext;
-import com.lumens.engine.handler.ResultHandler;
-import com.lumens.engine.handler.TransformerResultHandler;
+import com.lumens.engine.handler.InputOutputInspectionHandler;
+import com.lumens.engine.handler.InspectionHandler;
+import com.lumens.logsys.LogSysFactory;
 import com.lumens.model.Element;
 import com.lumens.processor.Processor;
 import com.lumens.processor.transform.TransformMapper;
@@ -24,13 +25,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class DataTransformer extends AbstractTransformComponent implements RuleComponent, Instrument {
-
+    private final Logger log = LogSysFactory.getLogger(DataTransformer.class);
     private String name;
     private final Processor processor;
     private final List<TransformRuleEntry> ruleList = new ArrayList<>();
@@ -88,7 +90,12 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
         String targetFmtName = context.getTargetFormatName();
         List<TransformRuleEntry> rules = ruleFindList.get(targetFmtName);
         ElementChunk inputChunk = context.getInput();
-        handleInputLogging(context.getResultHandlers(), targetFmtName, inputChunk.getData());
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Transform '%s' is handling target '%s'", getName(), targetFmtName));
+            log.debug(String.format("Transform '%s' input chunk size '%d'.", getName(), inputChunk.getData() != null ? inputChunk.getData().size() : 0));
+        }
+        handleInputLogging(context.getInspectionHandlers(), targetFmtName, inputChunk.getData());
+        // TODO in current design, only one target rule can be found
         for (TransformRuleEntry rule : rules) {
             List<Element> results = new ArrayList<>();
             List<Element> result = (List<Element>) processor.execute(rule.getRule(), inputChunk.getData());
@@ -98,23 +105,27 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
             if (!results.isEmpty() && this.hasTarget()) {
                 for (TransformComponent target : this.getTargetList().values())
                     if (!result.isEmpty() && target.accept(rule.getTargetFormatName()))
-                        exList.add(new TransformExecuteContext(context, new ElementChunk(inputChunk.isLast(), results), target, rule.getTargetFormatName(), context.getResultHandlers()));
+                        exList.add(new TransformExecuteContext(context, new ElementChunk(inputChunk.isLast(), results), target, rule.getTargetFormatName(), context.getInspectionHandlers()));
             }
-            handleOutputLogging(context.getResultHandlers(), rule.getTargetFormatName(), results);
+
+            if (log.isDebugEnabled())
+                log.debug(String.format("Transform '%s' result chunk size '%d'.", getName(), results.size()));
+
+            handleOutputLogging(context.getInspectionHandlers(), rule.getTargetFormatName(), results);
         }
         return exList;
     }
 
-    private void handleInputLogging(List<ResultHandler> handlers, String targetName, List<Element> input) {
-        for (ResultHandler handler : handlers)
-            if (handler instanceof TransformerResultHandler)
-                handler.processInput(this, targetName, input);
+    private void handleInputLogging(List<InspectionHandler> handlers, String targetName, List<Element> input) {
+        for (InspectionHandler handler : handlers)
+            if (handler instanceof InputOutputInspectionHandler)
+                ((InputOutputInspectionHandler) handler).processInput(this, targetName, input);
     }
 
-    private void handleOutputLogging(List<ResultHandler> handlers, String targetName, List<Element> input) {
-        for (ResultHandler handler : handlers)
-            if (handler instanceof TransformerResultHandler)
-                handler.processOutput(this, targetName, input);
+    private void handleOutputLogging(List<InspectionHandler> handlers, String targetName, List<Element> input) {
+        for (InspectionHandler handler : handlers)
+            if (handler instanceof InputOutputInspectionHandler)
+                ((InputOutputInspectionHandler) handler).processOutput(this, targetName, input);
     }
 
     @Override
