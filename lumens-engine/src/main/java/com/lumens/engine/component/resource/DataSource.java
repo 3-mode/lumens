@@ -9,7 +9,6 @@ import com.lumens.connector.Direction;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.connector.ElementChunk;
-import com.lumens.engine.DataSourceException;
 import com.lumens.engine.TransformEngineContext;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.component.AbstractTransformComponent;
@@ -18,6 +17,7 @@ import com.lumens.engine.component.RegisterFormatComponent;
 import com.lumens.engine.Resource;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.ExecuteContext;
+import com.lumens.engine.TransformException;
 import com.lumens.engine.handler.InputOutputInspectionHandler;
 import com.lumens.engine.handler.InspectionHandler;
 import com.lumens.logsys.LogSysFactory;
@@ -133,7 +133,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             try {
                 opRet = operation.execute(inputChunk, targetFormat);
             } catch (Exception ex) {
-                throw new DataSourceException(ex);
+                throw new TransformException(this, ex);
             }
         }
 

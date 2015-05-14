@@ -3,17 +3,14 @@
  */
 package com.lumens.engine.run;
 
-import com.lumens.engine.DataSourceException;
 import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
-import com.lumens.engine.TransformException;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.TransformProject;
-import com.lumens.engine.handler.ExceptionHandler;
 import com.lumens.engine.handler.InspectionHandler;
+import com.lumens.engine.log.ElementExceptionDBHandler;
 import com.lumens.logsys.LogSysFactory;
-import com.lumens.processor.transform.MapperException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -109,21 +106,10 @@ public class SequenceTransformExecuteJob implements Executor {
     }
 
     private void handleTransformException(Exception e) {
-        if (e instanceof TransformException) {
-            // TODO Log it
-            Throwable cause = e.getCause();
-            if (cause instanceof MapperException) {
-                // TODO Log it
-            }
-        } else if (e instanceof DataSourceException) {
-            // TODO Log it
-        }
-
-        for (InspectionHandler handler : handlers) {
-            if (handler instanceof ExceptionHandler) {
-                // TODO log exception to database
-            }
-        }
+        for (InspectionHandler handler : handlers)
+            if (handler instanceof ElementExceptionDBHandler)
+                ((ElementExceptionDBHandler) handler).handleExceptionOnElement(e);
+        log.error(e);
         throw new RuntimeException(e);
     }
 }

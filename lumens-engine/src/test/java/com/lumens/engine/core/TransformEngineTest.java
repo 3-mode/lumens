@@ -19,6 +19,7 @@ import com.lumens.engine.connector.ChameleonConnector;
 import com.lumens.engine.connector.Mock;
 import com.lumens.engine.handler.InputOutputInspectionHandler;
 import com.lumens.engine.handler.InspectionHandler;
+import com.lumens.engine.log.ElementExceptionDBHandler;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectJsonParser;
 import com.lumens.engine.serializer.ProjectSerializer;
@@ -130,8 +131,8 @@ public class TransformEngineTest {
         FormatEntry w22 = warehouseDs.registerFormat("PutWareHouse", warehouseDs.getFormatList(Direction.OUT).get("WareHouse"), Direction.OUT);
         FormatEntry f31 = finalDs.registerFormat("LogFinal", finalDs.getFormatList(Direction.IN).get("Final"), Direction.IN);
 
-        DataTransformer person_warehouse_transformator = new DataTransformer(generateID());
-        DataTransformer final_transformator = new DataTransformer(generateID());
+        DataTransformer person_warehouse_transformator = new DataTransformer(generateID(), "person_warehouse_transformator");
+        DataTransformer final_transformator = new DataTransformer(generateID(), "final_transformator");
 
         // Person --> transformator
         personDs.getTargetList().put(person_warehouse_transformator.getId(), person_warehouse_transformator);
@@ -169,7 +170,7 @@ public class TransformEngineTest {
         TransformRule rule_warehouse_final = final_transformator.registerRule(w22, f31);
         rule_warehouse_final.getRuleItem("Final.name").setScript("@WareHouse.name");
         rule_warehouse_final.getRuleItem("Final.value").addTransformForeach(new TransformForeach("WareHouse.asset", "Asset", "index"));
-        rule_warehouse_final.getRuleItem("Final.value").setScript("var id = @WareHouse.asset[index].id; \n //logInfo('assetId of final:' + index + '-' + id); \n return id;");
+        rule_warehouse_final.getRuleItem("Final.value").setScript("var id = @WareHouse.asset[index].id;\n //logInfo('assetId of final:' + index + '-' + id);\n return id;");
 
         //**********************************************************************
         TransformProject project = new TransformProject();
@@ -193,7 +194,15 @@ public class TransformEngineTest {
         };
         // Add a sake start entry, it should be removed automaticly
         project.addStartEntry(new StartEntry("aaaa", personDs));
-        new SequenceTransformExecuteJob(project, Arrays.asList(log)).execute();
+        new SequenceTransformExecuteJob(project, Arrays.asList(log, new ElementExceptionDBHandler(0, 0, "test"))).execute();
+
+        try {
+            rule_warehouse_final.getRuleItem("Final.value").setScript("var id = @WareHouse.asset[index].id; \n //logInfo('assetId of final:' + index + '-' + id);\n throw \"mapper exception test\"; \n return id;");
+            new SequenceTransformExecuteJob(project, Arrays.asList(log, new ElementExceptionDBHandler(0, 0, "test"))).execute();
+            fail("exception testing should not run to here !");
+        } catch (Exception e) {
+            assertTrue(e.getMessage().contains("mapper exception test"));
+        }
         //**********************************************************************
         System.out.println("Checking result, source: " + ChameleonConnector.countFinal);
         assertTrue(ChameleonConnector.countFinal == 150);
