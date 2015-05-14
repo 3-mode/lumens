@@ -170,7 +170,7 @@ public class TransformMapper extends AbstractProcessor {
             }
         } catch (Exception e) {
             String errorPath = ctx.getCurrentRuleItem().getFormat().getFullPath().toString();
-            throw new MapperException(String.format("\nError on '%s' script\n {\n%s\n}\n%s", errorPath, script.getScriptText(), e.fillInStackTrace()));
+            throw new MapperException(String.format("\nError on \"%s\" script\n {\n%s\n}\n%s", errorPath, script.getScriptText(), e.fillInStackTrace()));
         }
         return result;
     }
