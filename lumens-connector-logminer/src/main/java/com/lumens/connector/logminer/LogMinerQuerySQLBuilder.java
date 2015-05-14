@@ -18,6 +18,16 @@ public class LogMinerQuerySQLBuilder extends DBQuerySQLBuilder {
         super(output);
     }
 
+    protected String generateSyncSQL(Format table) {
+        // deal with last scn
+        // deal with username replacement
+        // deal with ddl trigging dictionary rebuild
+        
+        StringBuilder syncSQL = new StringBuilder();
+        
+        return syncSQL.toString();
+    }
+
     @Override
     protected String generatePageSQL(Format table, String fields, String strWhere, String strOrderBy, String strGroupBy) {
         StringBuilder innerQuerySQL = new StringBuilder();
