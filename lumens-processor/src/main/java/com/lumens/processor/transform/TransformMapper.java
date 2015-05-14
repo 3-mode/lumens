@@ -56,8 +56,8 @@ public class TransformMapper extends AbstractProcessor {
                 } catch (Exception e) {
                     throw new MapperException(e, currentElement);
                 }
-                return results;
             }
+            return results;
         }
         throw new MapperException("Unsupported input data !");
     }
