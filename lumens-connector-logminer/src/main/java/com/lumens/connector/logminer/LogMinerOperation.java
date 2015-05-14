@@ -47,15 +47,14 @@ public class LogMinerOperation implements Operation {
         if (dataList != null && !dataList.isEmpty()) {
             for (int i = input.getStart(); i < dataList.size(); i++) {
                 Element elem = dataList.get(i);
-                Element action = elem.getChild(SQLPARAMS).getChild(ACTION);
-                Element where = elem.getChild(SQLPARAMS).getChild(WHERE);
+                Element action = elem.getChild(SQLPARAMS).getChild(ACTION);                
                 String strOper = ModelUtils.isNullValue(action) ? null : action.getValue().getString();
                 if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
                     // TODO: implementing paging
                     ResultSet result = miner.query(new LogMinerQuerySQLBuilder(output).generateSelectSQL(elem));
                     resultList.addAll(new DBElementBuilder().buildElement(output, result));
-                } else {
-                    throw new RuntimeException("Not supported now");
+                } else {  // sync here
+                    miner.sync(new LogMinerQuerySQLBuilder(output).generateSyncSQL(output));
                 }
             }
             return new LogMinerResult(resultList);
