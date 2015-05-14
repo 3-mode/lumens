@@ -35,13 +35,22 @@ public class LogMinerImpl implements LogMiner, Constants {
         }
     }
 
-    @Override
-    public void build() {
+    private void buildDictionary() {
         try {
             if (config.getDictType() == DICT_TYPE.STORE_IN_FILE) {
                 dict = new Dictionary(dbClient);
                 dict.createDictionary();
             }
+        } catch (Exception ex) {
+            log.error("Fail to build log miner dictionary. Error message:");
+            log.error(ex.getMessage());
+            throw new RuntimeException("Fail to build log miner dictionary. Error message:" + ex.getMessage());
+        }
+    }
+
+    @Override
+    public void build() {
+        try {
 
             // adding redo log files to analyze
             RedoLog redolog = new RedoLog(dbClient);
@@ -55,11 +64,11 @@ public class LogMinerImpl implements LogMiner, Constants {
                     log.debug(addedLogsResult.getString(3));
                 }
                 DBUtils.releaseResultSet(addedLogsResult);
-            }            
+            }
         } catch (Exception ex) {
-            log.error("Fail to build log miner dictionary. Error message:");
+            log.error("Fail to build log miner. Error message:");
             log.error(ex.getMessage());
-            throw new RuntimeException("Fail to build log miner dictionary. Error message:" + ex.getMessage());
+            throw new RuntimeException("Fail to build log miner. Error message:" + ex.getMessage());
         }
     }
 
@@ -103,6 +112,17 @@ public class LogMinerImpl implements LogMiner, Constants {
         } catch (Exception ex) {
             log.error("Logminer connector end with exception:");
             log.error(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void sync(String sql) throws Exception {
+        try {
+            dbClient.execute(sql);
+        } catch (Exception ex) {
+            log.error("Fail to query log miner results. Error message:");
+            log.error(ex.getMessage());
+            throw new RuntimeException("Fail to query log miner results. Error message:" + ex.getMessage());
         }
     }
 }
