@@ -20,8 +20,15 @@
 
     <!-- Configurer that replaces ${...} placeholders with values from a properties file -->
     <!-- (in this case, JDBC-related settings for the dataSource definition below) -->
-    <context:property-placeholder location="classpath:system/data-access.properties" system-properties-mode="OVERRIDE"/>
-
+    <!-- 
+    <context:property-placeholder order="1" location="classpath:conf/data-access.properties" system-properties-mode="OVERRIDE"/>
+    <context:property-placeholder order="2" location="classpath:system/data-access.properties" system-properties-mode="OVERRIDE" ignore-unresolvable="false"/>
+    -->
+    <bean class="com.lumens.sysdb.config.DBPropertyPlaceHolderConfigurer">
+        <property name="location">
+            <value>classpath:system/data-access.properties</value>
+        </property>
+    </bean>
     <!-- DataSource configuration for the tomcat jdbc connection pool 
     See here for more details on commons-dbcp versus tomcat-jdbc: 
     http://blog.ippon.fr/2013/03/13/improving-the-performance-of-the-spring-petclinic-sample-application-part-3-of-5/-->

@@ -2,7 +2,6 @@
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 
-import com.lumens.model.DateTime;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.ElementExceptionDAO;
 import com.lumens.sysdb.dao.InOutLogDAO;
@@ -14,7 +13,6 @@ import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.entity.JobProjectRelation;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;

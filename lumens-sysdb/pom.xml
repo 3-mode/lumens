@@ -9,6 +9,9 @@
     <artifactId>lumens-sysdb</artifactId>
     <packaging>jar</packaging>
     <name>lumens-sysdb</name>
+    <properties>
+        <copyto.conf.dir>${copyto.app.dir}/conf</copyto.conf.dir>
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -17,6 +20,31 @@
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
+            </plugin> 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <!-- here the phase you need -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${copyto.conf.dir}</outputDirectory>
+                            <resources>          
+                                <resource>
+                                    <directory>src/main/resources/system/</directory>
+                                    <includes>
+                                        <include>data-access.properties</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -27,9 +55,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jdbc-core</artifactId>
-            <version>1.0.0.RELEASE</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>4.1.5.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
@@ -56,6 +84,16 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>lumens-engine</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>4.1.5.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>4.1.5.RELEASE</version>
         </dependency>
     </dependencies>
 </project>

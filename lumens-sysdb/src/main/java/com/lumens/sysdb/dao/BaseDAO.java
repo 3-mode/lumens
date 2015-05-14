@@ -2,7 +2,6 @@ package com.lumens.sysdb.dao;
 
 import com.lumens.sysdb.EntityFactory;
 import com.lumens.sysdb.SQLManager;
-import com.lumens.sysdb.entity.Project;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
