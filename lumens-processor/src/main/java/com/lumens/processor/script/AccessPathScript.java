@@ -42,4 +42,9 @@ public class AccessPathScript implements Script {
 
         return null;
     }
+
+    @Override
+    public String getScriptText() {
+        return path.toString();
+    }
 }

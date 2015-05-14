@@ -159,13 +159,17 @@ public class TransformMapper extends AbstractProcessor {
         if (ignoreScriptOnArray && result.isArray())
             return result;
         Script script = ctx.getCurrentRuleItem().getScript();
-        if (script != null) {
-            Object value = script.execute(ctx);
-            // If the type is not NONE but the result must be not array and 
-            if (value != null
-                && (result.getFormat().getType() != Type.NONE
-                    && (!result.isArray() || result.isArrayItem())))
-                result.setValue(value);
+        try {
+            if (script != null) {
+                Object value = script.execute(ctx);
+                // If the type is not NONE but the result must be not array and 
+                if (value != null
+                    && (result.getFormat().getType() != Type.NONE
+                        && (!result.isArray() || result.isArrayItem())))
+                    result.setValue(value);
+            }
+        } catch (Exception e) {
+            throw new MapperException(String.format("Error on script '%s'", script.getScriptText()));
         }
         return result;
     }

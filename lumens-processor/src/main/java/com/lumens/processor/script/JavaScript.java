@@ -35,6 +35,11 @@ public class JavaScript implements Script {
     }
 
     @Override
+    public String getScriptText() {
+        return orignalScriptText;
+    }
+
+    @Override
     protected void finalize() throws Throwable {
         try {
             super.finalize();
