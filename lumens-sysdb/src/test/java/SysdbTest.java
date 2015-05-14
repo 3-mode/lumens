@@ -4,10 +4,12 @@
 
 import com.lumens.model.DateTime;
 import com.lumens.sysdb.DAOFactory;
+import com.lumens.sysdb.dao.ElementExceptionDAO;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.dao.JobProjectRelationDAO;
+import com.lumens.sysdb.entity.ElementExceptionLog;
 import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.sysdb.entity.Job;
 import com.lumens.sysdb.entity.JobProjectRelation;
@@ -27,12 +29,12 @@ public class SysdbTest {
 
     @Before
     public void testCreateJob() {
-        Job dbJob = new Job(1234, "firstJob", "This is a test job.", 1, 1, System.currentTimeMillis(),System.currentTimeMillis() + 2000);
+        Job dbJob = new Job(1234, "firstJob", "This is a test job.", 1, 1, System.currentTimeMillis(), System.currentTimeMillis() + 2000);
         JobDAO pDAO = DAOFactory.getJobDAO();
         JobProjectRelationDAO projectRelation = DAOFactory.getRelationDAO();
         Job job = pDAO.getJob(1234);
         if (job != null) {
-            pDAO.delete(job.id);            
+            pDAO.delete(job.id);
         }
         pDAO.create(dbJob);
         projectRelation.deleteAllRelation(1234);
@@ -74,7 +76,7 @@ public class SysdbTest {
             System.out.println("  inteveral = " + job.interval);
             System.out.println("  repeat count = " + job.repeat);
             System.out.println("  start time = " + job.startTime.toString());
-            System.out.println("  end time = " + job.endTime.toString());            
+            System.out.println("  end time = " + job.endTime.toString());
 
             JobProjectRelationDAO projectRelation = DAOFactory.getRelationDAO();
             List<JobProjectRelation> list = projectRelation.getAllRelation(job.id);
@@ -115,8 +117,20 @@ public class SysdbTest {
         item.projectID = 1234;
         item.projectName = "project1";
         item.data = "test";
-        DateFormat sf = DateTime.DATETIME_PATTERN[0];
         item.lastModifTime = new Timestamp(System.currentTimeMillis());
         inoutLogDAO.create(item);
+    }
+
+    public static void main(String[] args) {
+        ElementExceptionDAO eeDAO = DAOFactory.getElementExceptionDAO();
+        ElementExceptionLog eeLog = new ElementExceptionLog();
+        eeLog.logID = 1L;
+        eeLog.jobID = 100L;
+        eeLog.excepMessage = "test message";
+        eeLog.projectID = 101L;
+        eeLog.data = "test data";
+        eeLog.lastModifTime = new Timestamp(System.currentTimeMillis());
+        eeDAO.create(eeLog);
+        System.out.println("size: " + eeDAO.getLogList(100L, 101L).size());
     }
 }

@@ -30,6 +30,11 @@
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
         <property name="transactionTemplate" ref="transactionTemplate"/>
     </bean>
+    <bean id="elementExceptionDAO" class="com.lumens.sysdb.dao.ElementExceptionDAO">
+        <property name="sqlManager" ref="sqlManager"/>
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="transactionTemplate" ref="transactionTemplate"/>
+    </bean>
     <bean id="inputLogDAO" class="com.lumens.sysdb.dao.InOutLogDAO">
         <property name="sqlManager" ref="sqlManager"/>
         <property name="jdbcTemplate" ref="jdbcTemplate"/>

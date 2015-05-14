@@ -118,4 +118,22 @@ DELETE FROM lUNS_INOUTLOG WHERE project_id = %d
 ]]>
         </sql>
     </database-access-object>
+    <database-access-object name="ElementExceptionDAO">
+        <sql name="GetLogByJobProject">
+<![CDATA[
+SELECT * FROM LUNS_ELEM_EXCEPTION_LOG WHERE JOB_ID = %d AND PROJECT_ID = %d
+]]>
+        </sql>
+        <sql name="PutLog">
+<![CDATA[
+INSERT INTO LUNS_ELEM_EXCEPTION_LOG (LOG_ID, JOB_ID, EXCEP_MESSAGE, COMPONENT_ID, COMPONENT_NAME, PROJECT_ID, PROJECT_NAME, DIRECTION, TARGET_NAME, DATA, LAST_MODIF_TIME)
+                             VALUES (%d, %d, '%s', %d, '%s', %d, '%s', '%s', '%s', '%s', '%s')
+]]>
+        </sql>
+        <sql name="ClearLog">
+<![CDATA[
+DELETE FROM LUNS_ELEM_EXCEPTION_LOG WHERE job_id = %d
+]]>
+        </sql>
+    </database-access-object>
 </database-access-objects>

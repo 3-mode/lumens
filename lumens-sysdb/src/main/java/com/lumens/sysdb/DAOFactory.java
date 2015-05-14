@@ -1,5 +1,6 @@
 package com.lumens.sysdb;
 
+import com.lumens.sysdb.dao.ElementExceptionDAO;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.dao.JobDAO;
@@ -18,13 +19,20 @@ public class DAOFactory {
     public static ProjectDAO getProjectDAO() {
         return (ProjectDAO) context.getBean("projectDAO");
     }
+
     public static JobDAO getJobDAO() {
         return (JobDAO) context.getBean("JobDAO");
     }
+
     public static JobProjectRelationDAO getRelationDAO() {
         return (JobProjectRelationDAO) context.getBean("RelationDAO");
-    }    
+    }
+
     public static InOutLogDAO getInOutLogDAO() {
         return (InOutLogDAO) context.getBean("inputLogDAO");
+    }
+
+    public static ElementExceptionDAO getElementExceptionDAO() {
+        return (ElementExceptionDAO) context.getBean("elementExceptionDAO");
     }
 }
