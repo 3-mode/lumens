@@ -7,6 +7,7 @@ import com.lumens.connector.Direction;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformException;
 import com.lumens.engine.handler.ExceptionHandler;
+import com.lumens.engine.handler.ProjectInspectionHandler;
 import com.lumens.io.JsonUtility;
 import com.lumens.io.Utils;
 import com.lumens.model.Element;
@@ -24,13 +25,23 @@ import org.codehaus.jackson.JsonGenerator;
  */
 public class ElementExceptionDBHandler implements ExceptionHandler {
     private final long jobID;
-    private final long projectID;
-    private final String projectName;
+    private long projectID;
+    private String projectName;
 
-    public ElementExceptionDBHandler(long jobID, long projectID, String projectName) {
+    public ElementExceptionDBHandler(long jobID) {
         this.jobID = jobID;
+    }
+
+    @Override
+    public ProjectInspectionHandler withProjectID(long projectID) {
         this.projectID = projectID;
+        return this;
+    }
+
+    @Override
+    public ProjectInspectionHandler withProjectName(String projectName) {
         this.projectName = projectName;
+        return this;
     }
 
     public void handleExceptionOnElement(Exception e) {

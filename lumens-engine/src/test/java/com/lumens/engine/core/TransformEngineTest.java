@@ -194,11 +194,11 @@ public class TransformEngineTest {
         };
         // Add a sake start entry, it should be removed automaticly
         project.addStartEntry(new StartEntry("aaaa", personDs));
-        new SequenceTransformExecuteJob(project, Arrays.asList(log, new ElementExceptionDBHandler(0, 0, "test"))).execute();
+        new SequenceTransformExecuteJob(project, Arrays.asList(log, new ElementExceptionDBHandler(0).withProjectName("test project"))).execute();
 
         try {
             rule_warehouse_final.getRuleItem("Final.value").setScript("var id = @WareHouse.asset[index].id; \n //logInfo('assetId of final:' + index + '-' + id);\n throw \"mapper exception test\"; \n return id;");
-            new SequenceTransformExecuteJob(project, Arrays.asList(log, new ElementExceptionDBHandler(0, 0, "test"))).execute();
+            new SequenceTransformExecuteJob(project, Arrays.asList(log, new ElementExceptionDBHandler(0).withProjectName("test project"))).execute();
             fail("exception testing should not run to here !");
         } catch (Exception e) {
             assertTrue(e.getMessage().contains("mapper exception test"));
