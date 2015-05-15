@@ -116,7 +116,11 @@ public class LogMinerImpl implements LogMiner, Constants {
     }
 
     @Override
-    public void sync(String sql) throws Exception {
+    public void sync(String scn, String sql) throws Exception {
+        if (Integer.parseInt(scn) < Integer.parseInt(LAST_SCN)) {
+            return;
+        }
+        
         try {
             dbClient.execute(sql);
         } catch (Exception ex) {

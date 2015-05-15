@@ -5,6 +5,7 @@ package com.lumens.connector.logminer;
 
 import static com.lumens.connector.database.DBConstants.PAGEQUERY_TABLEALIAS;
 import com.lumens.connector.database.client.DBQuerySQLBuilder;
+import static com.lumens.connector.logminer.impl.Constants.COLUMN_REDO;
 import com.lumens.model.Format;
 import org.apache.commons.lang.StringUtils;
 
@@ -16,16 +17,6 @@ public class LogMinerQuerySQLBuilder extends DBQuerySQLBuilder {
 
     public LogMinerQuerySQLBuilder(Format output) {
         super(output);
-    }
-
-    protected String generateSyncSQL(Format table) {
-        // deal with last scn
-        // deal with username replacement
-        // deal with ddl trigging dictionary rebuild
-        
-        StringBuilder syncSQL = new StringBuilder();
-        
-        return syncSQL.toString();
     }
 
     @Override
