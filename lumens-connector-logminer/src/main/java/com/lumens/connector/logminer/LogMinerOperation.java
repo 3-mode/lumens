@@ -11,8 +11,6 @@ import static com.lumens.connector.database.DBConstants.SELECT;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import com.lumens.connector.database.client.DBElementBuilder;
 import com.lumens.connector.logminer.api.LogMiner;
-import static com.lumens.connector.logminer.impl.Constants.COLUMN_REDO;
-import static com.lumens.connector.logminer.impl.Constants.COLUMN_SCN;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.ModelUtils;
@@ -24,7 +22,7 @@ import java.util.ArrayList;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class LogMinerOperation implements Operation {
+public class LogMinerOperation implements Operation, LogMinerConstants {
 
     private LogMiner miner = null;
 

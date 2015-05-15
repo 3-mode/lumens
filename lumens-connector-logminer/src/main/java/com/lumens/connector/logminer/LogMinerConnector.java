@@ -76,7 +76,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     }
 
     @Override
-    public void close() {        
+    public void close() {
     }
 
     @Override
@@ -95,6 +95,9 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
             SQLParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
             SQLParams.addChild(ORDERBY, Format.Form.FIELD, Type.STRING);
             SQLParams.addChild(GROUPBY, Format.Form.FIELD, Type.STRING);
+        } else if (direction == Direction.OUT) {
+            Format SQLParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
+            SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
         }
         formatList.put(FORMAT_NAME, rootFmt);
         getFormat(rootFmt, null, direction);
@@ -123,8 +126,14 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
                 log.error("Fail to get format. Error message:" + ex.getMessage());
                 throw new RuntimeException(ex);
             }
-        } else {
-
+        } else if (direction == Direction.OUT) {
+            Format scnField = format.addChild(COLUMN_SCN, Format.Form.FIELD, Type.STRING);            
+            scnField.setProperty(DATA_TYPE, new Value(NUMBER));
+            scnField.setProperty(DATA_LENGTH, new Value(COLUMN_SCN_LENGTH));
+            
+            Format redoField = format.addChild(COLUMN_SCN, Format.Form.FIELD, Type.STRING);
+            redoField.setProperty(DATA_TYPE, new Value(NVARCHAR2));
+            redoField.setProperty(DATA_LENGTH, new Value(COLUMN_REDO_LENGTH));
         }
 
         return format;
@@ -148,14 +157,14 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
         if (parameters.containsKey(DATABASE_DRIVER)) {
             dbDriver = parameters.get(DATABASE_DRIVER).getString();
         }
-        if (parameters.containsKey(DATABASE_SOURCE_URL)) {
-            dbUrl = parameters.get(DATABASE_SOURCE_URL).getString();
+        if (parameters.containsKey(DATABASE_CONNECTION_URL)) {
+            dbUrl = parameters.get(DATABASE_CONNECTION_URL).getString();
         }
-        if (parameters.containsKey(DATABASE_SOURCE_USERNAME)) {
-            dbUserName = parameters.get(DATABASE_SOURCE_USERNAME).getString();
+        if (parameters.containsKey(DATABASE_CONNECTION_USERNAME)) {
+            dbUserName = parameters.get(DATABASE_CONNECTION_USERNAME).getString();
         }
-        if (parameters.containsKey(DATABASE_SOURCE_PASSWORD)) {
-            dbPassword = parameters.get(DATABASE_SOURCE_PASSWORD).getString();
+        if (parameters.containsKey(DATABASE_CONNECTION_PASSWORD)) {
+            dbPassword = parameters.get(DATABASE_CONNECTION_PASSWORD).getString();
         }
 
         // setup config

@@ -39,25 +39,35 @@ import java.util.List;
 public class LogMinerConnectorTest extends TestBase implements LogMinerConstants, Constants {
 
     @Test
-    public void testConnectorRead() {
+    public void testConnectorReadSync() {
         Map<String, Value> propsR = new HashMap<>();
         propsR.put(DATABASE_DRIVER, new Value(DATABASE_DRIVER_VAL));
-        propsR.put(DATABASE_SOURCE_URL, new Value(DATABASE_SOURCE_URL_VAL));
-        propsR.put(DATABASE_SOURCE_USERNAME, new Value(DATABASE_SOURCE_USERNAME_VAL));
-        propsR.put(DATABASE_SOURCE_PASSWORD, new Value(DATABASE_SOURCE_PASSWORD_VAL));
+        propsR.put(DATABASE_CONNECTION_URL, new Value(DATABASE_SOURCE_URL_VAL));
+        propsR.put(DATABASE_CONNECTION_USERNAME, new Value(DATABASE_SOURCE_USERNAME_VAL));
+        propsR.put(DATABASE_CONNECTION_PASSWORD, new Value(DATABASE_SOURCE_PASSWORD_VAL));
         propsR.put(BUILD_TYPE_ONLINE, new Value(BUILD_TYPE_ONLINE));
         propsR.put(DICT_TYPE_ONLINE, new Value(DICT_TYPE_ONLINE));
         propsR.put(COMMITED_DATA_ONLY, new Value(true));
         propsR.put(NO_ROWID, new Value(true));
         propsR.put(START_SCN, new Value("0"));
 
-        ConnectorFactory cntr = new LogMinerConnectorFactory();
-        Connector miner = cntr.createConnector();
-        miner.setPropertyList(propsR);
-        miner.open();
-        assertTrue(miner.isOpen());
-
-        Map<String, Format> formatList = miner.getFormatList(Direction.IN);
+        Map<String, Value> propsSync = new HashMap<>();
+        propsSync.put(DATABASE_DRIVER, new Value(DATABASE_DRIVER_VAL));
+        propsSync.put(DATABASE_CONNECTION_URL, new Value(DATABASE_DESTINATION_URL_VAL));
+        propsSync.put(DATABASE_CONNECTION_USERNAME, new Value(DATABASE_DESTINATION_USERNAME_VAL));
+        propsSync.put(DATABASE_CONNECTION_PASSWORD, new Value(DATABASE_DESTINATION_PASSWORD_VAL));
+        
+        ConnectorFactory connectorFactory = new LogMinerConnectorFactory();
+        Connector minerRead = connectorFactory.createConnector();
+        minerRead.setPropertyList(propsR);
+        minerRead.open();
+        assertTrue(minerRead.isOpen());
+        Connector minerSync = connectorFactory.createConnector();
+        minerSync.setPropertyList(propsSync);
+        minerSync.open();
+        assertTrue(minerSync.isOpen());
+        
+        Map<String, Format> formatList = minerRead.getFormatList(Direction.IN);
         assertNotNull(formatList);
         Format fmt = formatList.get(FORMAT_NAME);
         System.out.println("Redo log format name:" + fmt.getName());
@@ -65,8 +75,8 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
             System.out.println("    Column: name= " + column.getName() + " type=" + column.getProperty(DATA_TYPE) + " length=" + column.getProperty(DATA_LENGTH));
         }
 
-        miner.start();
-        Operation operation = miner.getOperation();
+        minerRead.start();
+        Operation operation = minerRead.getOperation();
         Format selectFmt = new DataFormat(FORMAT_NAME, Format.Form.STRUCT);
         Format SQLParams = selectFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
         SQLParams.addChild(ACTION, Form.FIELD, Type.STRING);
@@ -91,9 +101,10 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
                 }
             }
         } catch (Exception ex) {
-            assertTrue("Fail to execute log miner query:" + ex.getMessage(), false);                      
+            assertTrue("Fail to execute log miner query:" + ex.getMessage(), false);
         }
-        miner.stop();
-        miner.close();
+
+        minerRead.stop();
+        minerRead.close();
     }
 }

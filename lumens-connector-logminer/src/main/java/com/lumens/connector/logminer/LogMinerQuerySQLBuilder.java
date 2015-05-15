@@ -5,7 +5,6 @@ package com.lumens.connector.logminer;
 
 import static com.lumens.connector.database.DBConstants.PAGEQUERY_TABLEALIAS;
 import com.lumens.connector.database.client.DBQuerySQLBuilder;
-import static com.lumens.connector.logminer.impl.Constants.COLUMN_REDO;
 import com.lumens.model.Format;
 import org.apache.commons.lang.StringUtils;
 
@@ -13,7 +12,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class LogMinerQuerySQLBuilder extends DBQuerySQLBuilder {
+public class LogMinerQuerySQLBuilder extends DBQuerySQLBuilder implements LogMinerConstants {
 
     public LogMinerQuerySQLBuilder(Format output) {
         super(output);

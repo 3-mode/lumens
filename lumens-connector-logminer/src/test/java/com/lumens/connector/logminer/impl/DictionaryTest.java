@@ -14,8 +14,8 @@ public class DictionaryTest extends TestBase {
 
     @Test
     public void testDictionary() throws Exception {
-        assertTrue(dbClient != null);
-        Dictionary dict = new Dictionary(dbClient);
+        assertTrue(sourceDatabase != null);
+        Dictionary dict = new Dictionary(sourceDatabase);
         assertTrue("dictionary should not be empty", !dict.getDictionaryPath().isEmpty());
         try {
             dict.createDictionary();

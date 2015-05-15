@@ -15,8 +15,8 @@ public class RedoLogTest extends TestBase {
 
     @Test
     public void testGetOnlineFileList() throws Exception {
-        assertTrue(dbClient != null);
-        RedoLog redoLog = new RedoLog(dbClient);
+        assertTrue(sourceDatabase != null);
+        RedoLog redoLog = new RedoLog(sourceDatabase);
         List<String> onlineList = redoLog.getOnlineFileList();
         assertTrue("online redo log should not be empty", onlineList.size() > 0);
         System.out.println("Online redo log list:");
