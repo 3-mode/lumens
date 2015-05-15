@@ -25,16 +25,16 @@ public class TransformProject {
     private List<DataSource> datasourceList = new ArrayList<>();
     private List<DataTransformer> transformerList = new ArrayList<>();
     private List<StartEntry> startList = new ArrayList<>();
+    private long ID;
     private String name;
-    private String ID;
     private String description;
     private boolean isOpen;
 
-    public String getID() {
+    public long getID() {
         return ID;
     }
 
-    public void setID(String ID) {
+    public void setID(long ID) {
         this.ID = ID;
     }
 

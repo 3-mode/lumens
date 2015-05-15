@@ -78,4 +78,6 @@ public interface JobConfiguration {
     public void setInspectionHandlers(List<InspectionHandler> handlers);
 
     public List<InspectionHandler> getInspectionHandlers();
+
+    public List<InspectionHandler> getInspectionHandlers(TransformProject project);
 }

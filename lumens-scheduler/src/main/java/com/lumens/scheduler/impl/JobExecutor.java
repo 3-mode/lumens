@@ -38,7 +38,7 @@ public class JobExecutor implements Job {
         try {
             while (itr.hasNext()) {
                 project = itr.next();
-                engine.execute(new SequenceTransformExecuteJob(project, jobConfig.getInspectionHandlers()));
+                engine.execute(new SequenceTransformExecuteJob(project, jobConfig.getInspectionHandlers(project)));
             }
         } catch (Exception ex) {
             if (project != null)

@@ -5,6 +5,7 @@ package com.lumens.scheduler.impl;
 
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.handler.InspectionHandler;
+import com.lumens.engine.handler.ProjectInspectionHandler;
 import java.util.ArrayList;
 import java.util.List;
 import com.lumens.scheduler.JobConfiguration;
@@ -104,6 +105,15 @@ public class DefaultJobConfiguration implements JobConfiguration {
 
     @Override
     public List<InspectionHandler> getInspectionHandlers() {
+        return this.inspectionHandlers;
+    }
+
+    @Override
+    public List<InspectionHandler> getInspectionHandlers(TransformProject project) {
+        // Attach the handlers to current executable project
+        for (InspectionHandler handler : getInspectionHandlers())
+            if (handler instanceof ProjectInspectionHandler)
+                ((ProjectInspectionHandler) handler).withProjectID(project.getID()).withProjectName(project.getName());
         return this.inspectionHandlers;
     }
 }
