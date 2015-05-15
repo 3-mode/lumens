@@ -16,6 +16,7 @@ import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.WHERE;
 import com.lumens.connector.logminer.api.LogMinerFactory;
 import com.lumens.connector.logminer.api.Config;
+import com.lumens.connector.logminer.api.ConfigFactory;
 import com.lumens.connector.logminer.impl.DatabaseClient;
 import com.lumens.connector.logminer.impl.LogMinerImpl;
 import com.lumens.logsys.LogSysFactory;
@@ -49,12 +50,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     boolean isOpen = false;
 
     public LogMinerConnector() {
-        config = new Config();
-        config.setBuildType(LogMiner.BUILD_TYPE.OFFLINE);
-        config.setDictType(LogMiner.DICT_TYPE.STORE_IN_REDO_LOG);
-        config.setCommittedDataOnly(true);
-        config.setNoRowid(true);
-        config.setStartSCN("0");
+        config = ConfigFactory.createDefaultConfig();
     }
 
     @Override
