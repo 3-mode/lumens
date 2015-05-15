@@ -22,7 +22,7 @@ public class DefaultJobConfiguration implements JobConfiguration {
     private final int repeat;
     private final int interval;
     private final List<TransformProject> projectList = new ArrayList();
-    private List<InspectionHandler> inspectionHandlers;
+    private List<InspectionHandler> inspectionHandlers = new ArrayList();
 
     public DefaultJobConfiguration(long jobId, String name, String description, long startTime, long endTime, int repeat, int interval) {
         this.jobId = jobId;
