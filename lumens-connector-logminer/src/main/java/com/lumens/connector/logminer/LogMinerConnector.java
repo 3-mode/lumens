@@ -38,6 +38,9 @@ import org.apache.logging.log4j.Logger;
 public class LogMinerConnector implements Connector, LogMinerConstants {
 
     private final Logger log = LogSysFactory.getLogger(LogMinerImpl.class);
+
+    protected Map<String, Format> inFormat;
+    protected Map<String, Format> outFormat;
     private Config config = null;
     private String dbDriver = null;
     private String dbUrl = null;
@@ -73,6 +76,16 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
 
     @Override
     public void close() {
+        if (miner != null) {
+            miner = null;
+        }
+        if (dbClient != null) {
+            dbClient.release();
+            dbClient = null;
+        }
+        isOpen = false;
+        inFormat = null;
+        outFormat = null;
     }
 
     @Override
@@ -123,10 +136,10 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
                 throw new RuntimeException(ex);
             }
         } else if (direction == Direction.OUT) {
-            Format scnField = format.addChild(COLUMN_SCN, Format.Form.FIELD, Type.STRING);            
+            Format scnField = format.addChild(COLUMN_SCN, Format.Form.FIELD, Type.STRING);
             scnField.setProperty(DATA_TYPE, new Value(NUMBER));
             scnField.setProperty(DATA_LENGTH, new Value(COLUMN_SCN_LENGTH));
-            
+
             Format redoField = format.addChild(COLUMN_SCN, Format.Form.FIELD, Type.STRING);
             redoField.setProperty(DATA_TYPE, new Value(NVARCHAR2));
             redoField.setProperty(DATA_LENGTH, new Value(COLUMN_REDO_LENGTH));
