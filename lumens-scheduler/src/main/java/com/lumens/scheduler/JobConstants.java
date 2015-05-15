@@ -9,6 +9,6 @@ package com.lumens.scheduler;
  */
 public interface JobConstants {
     public String JOB_NAME = "JobName";
-    public String ENGINE_OBJECT = "EngineObject";
-    public String PROJECT_OBJECT = "ProjectObject";
+    public String JOB_CONFIG = "JobConfiguration";
+    public String TRNASFORM_ENGINE = "TransformEngine";
 }

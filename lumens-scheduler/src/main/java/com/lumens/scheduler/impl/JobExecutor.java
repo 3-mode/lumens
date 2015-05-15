@@ -5,13 +5,11 @@ package com.lumens.scheduler.impl;
 
 import com.lumens.engine.TransformEngine;
 import com.lumens.engine.TransformProject;
-import com.lumens.engine.handler.ResultHandler;
-import com.lumens.engine.log.TransformComponentInOutLogHandler;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.logsys.LogSysFactory;
+import com.lumens.scheduler.JobConfiguration;
 import com.lumens.scheduler.JobConstants;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobDetail;
@@ -29,26 +27,26 @@ public class JobExecutor implements Job {
     @Override
     public void execute(JobExecutionContext jec) throws JobExecutionException {
         JobDetail job = jec.getJobDetail();
-        TransformEngine engine = (TransformEngine) job.getJobDataMap().get(JobConstants.ENGINE_OBJECT);
-        TransformProject project = (TransformProject) job.getJobDataMap().get(JobConstants.PROJECT_OBJECT);
-        String projectId = job.getKey().getName();
-        String projectName = project.getName();
-        String jobId = job.getKey().getGroup();
-        String jobName = job.getJobDataMap().getString(JobConstants.JOB_NAME);
+        JobConfiguration jobConfig = (JobConfiguration) job.getJobDataMap().get(JobConstants.JOB_CONFIG);
+        TransformEngine engine = (TransformEngine) job.getJobDataMap().get(JobConstants.TRNASFORM_ENGINE);
+        String jobId = Long.toString(jobConfig.getId());
+        String jobName = jobConfig.getName();
 
-        log.info(String.format("**** Start Job [%s:%s] to execute project [%s:%s] ", jobId, jobName, projectId, projectName));
-
+        log.info(String.format("**** Start Job [%s:%s] ", jobId, jobName));
+        Iterator<TransformProject> itr = jobConfig.getProjectList().iterator();
+        TransformProject project = null;
         try {
-            // Execute all start rules to drive the ws connector
-            List<ResultHandler> handlers = new ArrayList<>();
-            handlers.add(new TransformComponentInOutLogHandler());
-            engine.execute(new SequenceTransformExecuteJob(project, handlers));
+            while (itr.hasNext()) {
+                project = itr.next();
+                engine.execute(new SequenceTransformExecuteJob(project, jobConfig.getInspectionHandlers()));
+            }
         } catch (Exception ex) {
-            log.error(String.format("Failed on starting Job [%s:%s] to execute project [%s:%s] ", jobId, jobName, projectId, project.getName()));
+            if (project != null)
+                log.error(String.format("Failed on starting Job [%s:%s] to execute project [%s] ", jobId, jobName, project.getName()));
             log.error(ex);
             throw new JobExecutionException(ex);
         } finally {
-            log.info(String.format("**** Complete Job [%s:%s] to execute project [%s:%s] ", jobId, jobName, projectId, projectName));
+            log.info(String.format("**** Complete Job [%s:%s]", jobId, jobName));
         }
     }
 }

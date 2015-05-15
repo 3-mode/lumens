@@ -5,6 +5,7 @@ package com.lumens.scheduler.impl;
 
 import com.lumens.engine.TransformEngine;
 import com.lumens.engine.TransformProject;
+import com.lumens.logsys.LogSysFactory;
 import com.lumens.scheduler.JobScheduler;
 import com.lumens.scheduler.JobConfiguration.Repeat;
 import com.lumens.scheduler.JobMonitor;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
+import org.apache.logging.log4j.Logger;
 import static org.quartz.JobBuilder.newJob;
 import org.quartz.JobKey;
 import org.quartz.JobDetail;
@@ -36,6 +38,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
  */
 public class DefaultScheduler implements JobScheduler {
 
+    private final Logger log = LogSysFactory.getLogger(DefaultScheduler.class);
     private final boolean isStarted;
     private Scheduler sched;
     private JobMonitor jobMonitor;
@@ -97,28 +100,22 @@ public class DefaultScheduler implements JobScheduler {
         if (job == null) {
             throw new RuntimeException("A job must be added to scheduler before start.");
         }
-
-        String group = Long.toString(job.getId());
-        // TODO this schedule will run project in parallel
-        for (TransformProject project : job.getProjectList()) {
+        try {
+            String group = Long.toString(job.getId());
             JobDetail jobDetail = newJob(JobExecutor.class)
-            .withIdentity(project.getName(), group)
+            .withIdentity(job.getName(), group)
             .build();
-            jobDetail.getJobDataMap().put(JobConstants.JOB_NAME, job.getName());
-            jobDetail.getJobDataMap().put(JobConstants.ENGINE_OBJECT, this.engine);
-            jobDetail.getJobDataMap().put(JobConstants.PROJECT_OBJECT, project);
+            jobDetail.getJobDataMap().put(JobConstants.JOB_CONFIG, job);
+            jobDetail.getJobDataMap().put(JobConstants.TRNASFORM_ENGINE, this.engine);
 
             TriggerBuilder<Trigger> builder = newTrigger();
             builder.withIdentity(Long.toString(job.getId()), group);
             builder.withSchedule(getQuartzBuilder(job.getRepeat(), job.getInterval()));
             builder.startAt(new Date(job.getStartTime()));
-            // TODO: add end time
 
-            try {
-                sched.scheduleJob(jobDetail, builder.build());
-            } catch (SchedulerException ex) {
-                throw new RuntimeException(ex);
-            }
+            sched.scheduleJob(jobDetail, builder.build());
+        } catch (SchedulerException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
@@ -160,13 +157,10 @@ public class DefaultScheduler implements JobScheduler {
 
         // Remove from map and scheduler
         String group = Long.toString(jobId);
-        List<Project> projectList = projectMap.get(jobId);
-        for (TransformProject proj : job.getProjectList()) {
-            try {
-                sched.deleteJob(new JobKey(proj.getName(), group));
-            } catch (SchedulerException ex) {
-                // TODO: log error 
-            }
+        try {
+            sched.deleteJob(new JobKey(job.getName(), group));
+        } catch (SchedulerException ex) {
+            log.error(ex);
         }
     }
 

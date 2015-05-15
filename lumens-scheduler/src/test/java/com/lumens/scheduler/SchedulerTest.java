@@ -64,7 +64,7 @@ public class SchedulerTest {
     }
 
     @Test
-    public void MonitorTest() {
+    public void MonitorTest() throws InterruptedException {
         TransformEngine engine = new TransformEngine();
         engine.start("../dist/lumens/addin");
         DefaultScheduler scheduler = (DefaultScheduler) SchedulerFactory.get().createScheduler(engine);
@@ -78,7 +78,6 @@ public class SchedulerTest {
         scheduler.addSchedule(realJob);
         scheduler.stopJob(realJob.getId());
         scheduler.startJob(realJob.getId());
-
         // TODO:Add monitor test
     }
 }

@@ -4,6 +4,8 @@
 package com.lumens.scheduler;
 
 import com.lumens.engine.TransformProject;
+import com.lumens.engine.handler.InspectionHandler;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,4 +74,8 @@ public interface JobConfiguration {
     public JobConfiguration addProject(List<TransformProject> projects);
 
     public List<TransformProject> getProjectList();
+
+    public void setInspectionHandlers(List<InspectionHandler> handlers);
+
+    public List<InspectionHandler> getInspectionHandlers();
 }

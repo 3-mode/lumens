@@ -4,6 +4,7 @@
 package com.lumens.scheduler.impl;
 
 import com.lumens.engine.TransformProject;
+import com.lumens.engine.handler.InspectionHandler;
 import java.util.ArrayList;
 import java.util.List;
 import com.lumens.scheduler.JobConfiguration;
@@ -21,6 +22,7 @@ public class DefaultJobConfiguration implements JobConfiguration {
     private final int repeat;
     private final int interval;
     private final List<TransformProject> projectList = new ArrayList();
+    private List<InspectionHandler> inspectionHandlers = new ArrayList();
 
     public DefaultJobConfiguration(long jobId, String name, String description, long startTime, long endTime, int repeat, int interval) {
         this.jobId = jobId;
@@ -93,5 +95,15 @@ public class DefaultJobConfiguration implements JobConfiguration {
     public JobConfiguration addProject(List<TransformProject> projects) {
         projectList.addAll(projects);
         return this;
+    }
+
+    @Override
+    public void setInspectionHandlers(List<InspectionHandler> handlers) {
+        this.inspectionHandlers = handlers;
+    }
+
+    @Override
+    public List<InspectionHandler> getInspectionHandlers() {
+        return this.inspectionHandlers;
     }
 }
