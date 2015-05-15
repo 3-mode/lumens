@@ -7,15 +7,12 @@ import com.lumens.connector.ElementChunk;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import static com.lumens.connector.database.DBConstants.ACTION;
-import static com.lumens.connector.database.DBConstants.WHERE;
-import static com.lumens.connector.database.DBConstants.INSERT_ONLY;
 import static com.lumens.connector.database.DBConstants.SELECT;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
-import static com.lumens.connector.database.DBConstants.UPDATE_ONLY;
-import com.lumens.connector.database.client.DBQueryResult;
-import com.lumens.connector.logminer.LogMinerQuerySQLBuilder;
 import com.lumens.connector.database.client.DBElementBuilder;
 import com.lumens.connector.logminer.api.LogMiner;
+import static com.lumens.connector.logminer.impl.Constants.COLUMN_REDO;
+import static com.lumens.connector.logminer.impl.Constants.COLUMN_SCN;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.ModelUtils;
@@ -54,7 +51,9 @@ public class LogMinerOperation implements Operation {
                     ResultSet result = miner.query(new LogMinerQuerySQLBuilder(output).generateSelectSQL(elem));
                     resultList.addAll(new DBElementBuilder().buildElement(output, result));
                 } else {  // sync here
-                    miner.sync(new LogMinerQuerySQLBuilder(output).generateSyncSQL(output));
+                    String scn = elem.getChildByPath(COLUMN_SCN).getValue().toString();
+                    String redo = elem.getChildByPath(COLUMN_REDO).getValue().toString();
+                    miner.sync(scn, redo);
                 }
             }
             return new LogMinerResult(resultList);

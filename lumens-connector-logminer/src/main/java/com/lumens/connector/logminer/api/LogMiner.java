@@ -32,5 +32,5 @@ public interface LogMiner {
 
     public ResultSet query(String sql);
     
-    public void sync(String sql) throws Exception;
+    public void sync(String scn, String sql) throws Exception;
 }
