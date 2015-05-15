@@ -26,8 +26,17 @@ public class TransformProject {
     private List<DataTransformer> transformerList = new ArrayList<>();
     private List<StartEntry> startList = new ArrayList<>();
     private String name;
+    private String ID;
     private String description;
     private boolean isOpen;
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
 
     public String getName() {
         return name;
