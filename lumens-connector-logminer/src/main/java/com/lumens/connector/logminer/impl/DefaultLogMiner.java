@@ -16,16 +16,16 @@ import com.lumens.logsys.LogSysFactory;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class LogMinerImpl implements LogMiner, Constants {
+public class DefaultLogMiner implements LogMiner, Constants {
 
-    private final Logger log = LogSysFactory.getLogger(LogMinerImpl.class);
+    private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
     private String LAST_SCN = "0";
     private ResultSet result = null;
     private Config config = null;
     private Dictionary dict = null;
     private DatabaseClient dbClient = null;
 
-    public LogMinerImpl(DatabaseClient dbClient, Config config) {
+    public DefaultLogMiner(DatabaseClient dbClient, Config config) {
         this.dbClient = dbClient;
         this.config = config;
 
@@ -123,10 +123,11 @@ public class LogMinerImpl implements LogMiner, Constants {
         
         try {
             dbClient.execute(sql);
+            LAST_SCN = scn;
         } catch (Exception ex) {
-            log.error("Fail to query log miner results. Error message:");
+            log.error("Fail to sync to destination. Error message:");
             log.error(ex.getMessage());
-            throw new RuntimeException("Fail to query log miner results. Error message:" + ex.getMessage());
+            throw new RuntimeException("Fail to sync to destination. Error message:" + ex.getMessage());
         }
     }
 }

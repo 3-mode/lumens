@@ -18,7 +18,7 @@ import com.lumens.connector.logminer.api.LogMinerFactory;
 import com.lumens.connector.logminer.api.Config;
 import com.lumens.connector.logminer.api.ConfigFactory;
 import com.lumens.connector.logminer.impl.DatabaseClient;
-import com.lumens.connector.logminer.impl.LogMinerImpl;
+import com.lumens.connector.logminer.impl.DefaultLogMiner;
 import com.lumens.logsys.LogSysFactory;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
@@ -37,7 +37,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class LogMinerConnector implements Connector, LogMinerConstants {
 
-    private final Logger log = LogSysFactory.getLogger(LogMinerImpl.class);
+    private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
 
     protected Map<String, Format> inFormat;
     protected Map<String, Format> outFormat;
@@ -75,6 +75,21 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     }
 
     @Override
+    public void start() {
+        if (inFormat != null) {
+            miner.build(); // start build directory if specifying FILE type
+            miner.start();
+        }
+    }
+
+    @Override
+    public void stop() {
+        if (inFormat != null) {
+            miner.end();
+        }
+    }
+
+    @Override
     public void close() {
         if (miner != null) {
             miner = null;
@@ -96,6 +111,12 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     // get redo log fields from db
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
+        if (inFormat != null && Direction.IN == direction) {
+            return inFormat;
+        } else if (outFormat != null && Direction.OUT == direction) {
+            return outFormat;
+        }
+
         Map<String, Format> formatList = new HashMap();
         Format rootFmt = new DataFormat(FORMAT_NAME, Form.STRUCT);
         if (direction == Direction.IN) {
@@ -104,9 +125,11 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
             SQLParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
             SQLParams.addChild(ORDERBY, Format.Form.FIELD, Type.STRING);
             SQLParams.addChild(GROUPBY, Format.Form.FIELD, Type.STRING);
+            inFormat = formatList;
         } else if (direction == Direction.OUT) {
             Format SQLParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
             SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
+            outFormat = formatList;
         }
         formatList.put(FORMAT_NAME, rootFmt);
         getFormat(rootFmt, null, direction);
@@ -146,17 +169,6 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
         }
 
         return format;
-    }
-
-    @Override
-    public void start() {
-        miner.build(); // start build directory if specifying FILE type
-        miner.start();
-    }
-
-    @Override
-    public void stop() {
-        miner.end();
     }
 
     @Override

@@ -44,14 +44,16 @@ public class LogMinerOperation implements Operation, LogMinerConstants {
                 Element elem = dataList.get(i);
                 Element action = elem.getChild(SQLPARAMS).getChild(ACTION);                
                 String strOper = ModelUtils.isNullValue(action) ? null : action.getValue().getString();
-                if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
+                if (strOper == null || QUERY.equalsIgnoreCase(strOper)) {
                     // TODO: implementing paging
                     ResultSet result = miner.query(new LogMinerQuerySQLBuilder(output).generateSelectSQL(elem));
                     resultList.addAll(new DBElementBuilder().buildElement(output, result));
-                } else {  // sync here
+                } else if (SYNC.equalsIgnoreCase(strOper)) { // sync here
                     String scn = elem.getChildByPath(COLUMN_SCN).getValue().toString();
                     String redo = elem.getChildByPath(COLUMN_REDO).getValue().toString();
                     miner.sync(scn, redo);
+                }else{
+                    throw new UnsupportedOperationException("Error, not supported action : " + strOper);
                 }
             }
             return new LogMinerResult(resultList);

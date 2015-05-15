@@ -3,17 +3,21 @@
  */
 package com.lumens.connector.logminer;
 
+import com.lumens.connector.database.DBConstants;
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public interface LogMinerConstants {
+public interface LogMinerConstants extends DBConstants{
 
     public String FORMAT_NAME = "v$logmnr_contents";
     public String DATABASE_DRIVER = "databaseDriver";
     public String DATABASE_CONNECTION_URL = "databaseConnectionUrl";
     public String DATABASE_CONNECTION_USERNAME = "databaseSourceUserName";
     public String DATABASE_CONNECTION_PASSWORD = "databaseSourcePassword";
+    
+    public String QUERY = "QUERY";
+    public String SYNC = "SYNC";
 
     public String SQL_QUERY_COLUMNS = "select t.COLUMN_NAME, t.DATA_TYPE, t.DATA_LENGTH from user_tab_columns t where t.TABLE_NAME = 'V_$LOGMNR_CONTENTS'";
 
