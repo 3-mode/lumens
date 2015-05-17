@@ -31,6 +31,7 @@ import com.lumens.connector.logminer.impl.TestBase;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -39,25 +40,35 @@ import java.util.List;
 public class LogMinerConnectorTest extends TestBase implements LogMinerConstants, Constants {
 
     @Test
-    public void testConnectorRead() {
+    public void testConnectorReadSync() {
         Map<String, Value> propsR = new HashMap<>();
         propsR.put(DATABASE_DRIVER, new Value(DATABASE_DRIVER_VAL));
-        propsR.put(DATABASE_SOURCE_URL, new Value(DATABASE_SOURCE_URL_VAL));
-        propsR.put(DATABASE_SOURCE_USERNAME, new Value(DATABASE_SOURCE_USERNAME_VAL));
-        propsR.put(DATABASE_SOURCE_PASSWORD, new Value(DATABASE_SOURCE_PASSWORD_VAL));
+        propsR.put(DATABASE_CONNECTION_URL, new Value(DATABASE_SOURCE_URL_VAL));
+        propsR.put(DATABASE_CONNECTION_USERNAME, new Value(DATABASE_SOURCE_USERNAME_VAL));
+        propsR.put(DATABASE_CONNECTION_PASSWORD, new Value(DATABASE_SOURCE_PASSWORD_VAL));
         propsR.put(BUILD_TYPE_ONLINE, new Value(BUILD_TYPE_ONLINE));
         propsR.put(DICT_TYPE_ONLINE, new Value(DICT_TYPE_ONLINE));
         propsR.put(COMMITED_DATA_ONLY, new Value(true));
         propsR.put(NO_ROWID, new Value(true));
         propsR.put(START_SCN, new Value("0"));
 
-        ConnectorFactory cntr = new LogMinerConnectorFactory();
-        Connector miner = cntr.createConnector();
-        miner.setPropertyList(propsR);
-        miner.open();
-        assertTrue(miner.isOpen());
+        Map<String, Value> propsSync = new HashMap<>();
+        propsSync.put(DATABASE_DRIVER, new Value(DATABASE_DRIVER_VAL));
+        propsSync.put(DATABASE_CONNECTION_URL, new Value(DATABASE_DESTINATION_URL_VAL));
+        propsSync.put(DATABASE_CONNECTION_USERNAME, new Value(DATABASE_DESTINATION_USERNAME_VAL));
+        propsSync.put(DATABASE_CONNECTION_PASSWORD, new Value(DATABASE_DESTINATION_PASSWORD_VAL));
 
-        Map<String, Format> formatList = miner.getFormatList(Direction.IN);
+        ConnectorFactory connectorFactory = new LogMinerConnectorFactory();
+        Connector minerRead = connectorFactory.createConnector();
+        minerRead.setPropertyList(propsR);
+        minerRead.open();
+        assertTrue(minerRead.isOpen());
+        Connector minerSync = connectorFactory.createConnector();
+        minerSync.setPropertyList(propsSync);
+        minerSync.open();
+        assertTrue(minerSync.isOpen());
+
+        Map<String, Format> formatList = minerRead.getFormatList(Direction.IN);
         assertNotNull(formatList);
         Format fmt = formatList.get(FORMAT_NAME);
         System.out.println("Redo log format name:" + fmt.getName());
@@ -65,35 +76,66 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
             System.out.println("    Column: name= " + column.getName() + " type=" + column.getProperty(DATA_TYPE) + " length=" + column.getProperty(DATA_LENGTH));
         }
 
-        miner.start();
-        Operation operation = miner.getOperation();
+        // query format
+        minerRead.start();
+        Operation queryOperation = minerRead.getOperation();
         Format selectFmt = new DataFormat(FORMAT_NAME, Format.Form.STRUCT);
-        Format SQLParams = selectFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
-        SQLParams.addChild(ACTION, Form.FIELD, Type.STRING);
-        SQLParams.addChild(WHERE, Form.FIELD, Type.STRING);
-        SQLParams.addChild(ORDERBY, Form.FIELD, Type.STRING);
-        SQLParams.addChild(GROUPBY, Form.FIELD, Type.STRING);
+        Format selectSQLParams = selectFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
+        selectSQLParams.addChild(ACTION, Form.FIELD, Type.STRING);
+        selectSQLParams.addChild(WHERE, Form.FIELD, Type.STRING);
+        selectSQLParams.addChild(ORDERBY, Form.FIELD, Type.STRING);
+        selectSQLParams.addChild(GROUPBY, Form.FIELD, Type.STRING);
         selectFmt.addChild(COLUMN_REDO, Form.FIELD, Type.STRING);
+        selectFmt.addChild(COLUMN_SCN, Form.FIELD, Type.INTEGER);
 
-        Element select = new DataElement(selectFmt);
-        select.addChild(SQLPARAMS).addChild(ACTION).setValue("SELECT");
+        Element query = new DataElement(selectFmt);
+        query.addChild(SQLPARAMS).addChild(ACTION).setValue(QUERY);
+
+        // sync format
+        minerSync.start();
+        Operation syncOperation = minerSync.getOperation();
+        Format syncFmt = new DataFormat(FORMAT_NAME, Format.Form.STRUCT);
+        Format syncSQLParams = syncFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
+        syncSQLParams.addChild(ACTION, Form.FIELD, Type.STRING);
+        syncFmt.addChild(COLUMN_REDO, Form.FIELD, Type.STRING);
+        syncFmt.addChild(COLUMN_SCN, Form.FIELD, Type.INTEGER);
+
+        List<Element> syncChunk = new ArrayList();
+
         try {
-            OperationResult result = operation.execute(new ElementChunk(Arrays.asList(select)), selectFmt);
+            OperationResult result = queryOperation.execute(new ElementChunk(Arrays.asList(query)), selectFmt);
             if (result.hasData()) {
                 List<Element> redologs = result.getData();
                 int max = 1000;
-                log.info("Reading redo log:");
+                System.out.println("          SCN | REDO SQL -----------------------------------------");
                 for (Element elem : redologs) {
-                    System.out.println("    " + elem.getChildByPath(COLUMN_REDO).getValue().toString());
+                    String scn = elem.getChildByPath(COLUMN_SCN).getValue().toString();
+                    String redo = elem.getChildByPath(COLUMN_REDO).getValue().toString();
+                    System.out.println("    " + scn + "  | " + redo);
+
+                    // add data to sync
+                    Element sync = new DataElement(syncFmt);
+                    sync.addChild(SQLPARAMS).addChild(ACTION).setValue(SYNC);
+                    sync.addChild(COLUMN_REDO).setValue(new Value(redo));
+                    sync.addChild(COLUMN_SCN).setValue(new Value(scn));;
+                    syncChunk.add(sync);
+
                     if (--max < 0) {
                         break;
                     }
                 }
             }
+            
+            if (syncChunk.size() > 0){
+                //syncOperation.execute(new ElementChunk(syncChunk), syncFmt);
+            }
         } catch (Exception ex) {
-            assertTrue("Fail to execute log miner query:" + ex.getMessage(), false);                      
+            assertTrue("Fail to execute log miner query:" + ex.getMessage(), false);
         }
-        miner.stop();
-        miner.close();
+
+        minerRead.stop();
+        minerRead.close();
+        minerSync.stop();
+        minerSync.close();
     }
 }

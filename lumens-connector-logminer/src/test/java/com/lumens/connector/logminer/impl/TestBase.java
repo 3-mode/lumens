@@ -14,21 +14,27 @@ import org.junit.Before;
  */
 public class TestBase {
 
-    protected final Logger log = LogSysFactory.getLogger(LogMinerImpl.class);
-    
+    protected final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
+
     protected static final String DATABASE_DRIVER_VAL = "file:///D:/app/oracle/11.2.0/dbhome/jdbc/lib/ojdbc6.jar";
     protected static final String DATABASE_SOURCE_URL_VAL = "jdbc:oracle:thin:@127.0.0.1:1521:orcl";
     protected static final String DATABASE_SOURCE_USERNAME_VAL = "lumens as sysdba";
     protected static final String DATABASE_SOURCE_PASSWORD_VAL = "lumens";
-    protected DatabaseClient dbClient = null;
+    protected static final String DATABASE_DESTINATION_URL_VAL = "jdbc:oracle:thin:@127.0.0.1:1521:logminer";
+    protected static final String DATABASE_DESTINATION_USERNAME_VAL = "lumens as sysdba";
+    protected static final String DATABASE_DESTINATION_PASSWORD_VAL = "lumens";
+    protected DatabaseClient sourceDatabase = null;
+    protected DatabaseClient destinationDatabase = null;
 
     @Before
     public void setUp() throws Exception {
-        dbClient = new DatabaseClient(DATABASE_DRIVER_VAL, DATABASE_SOURCE_URL_VAL, DATABASE_SOURCE_USERNAME_VAL, DATABASE_SOURCE_PASSWORD_VAL);
+        sourceDatabase = new DatabaseClient(DATABASE_DRIVER_VAL, DATABASE_SOURCE_URL_VAL, DATABASE_SOURCE_USERNAME_VAL, DATABASE_SOURCE_PASSWORD_VAL);
+        destinationDatabase = new DatabaseClient(DATABASE_DRIVER_VAL, DATABASE_DESTINATION_URL_VAL, DATABASE_DESTINATION_USERNAME_VAL, DATABASE_DESTINATION_PASSWORD_VAL);
     }
 
     @After
     public void tearDown() {
-        dbClient.release();
+        sourceDatabase.release();
+        destinationDatabase.release();
     }
 }

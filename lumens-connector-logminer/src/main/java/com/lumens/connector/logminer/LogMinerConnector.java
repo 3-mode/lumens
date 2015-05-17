@@ -16,8 +16,9 @@ import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.WHERE;
 import com.lumens.connector.logminer.api.LogMinerFactory;
 import com.lumens.connector.logminer.api.Config;
+import com.lumens.connector.logminer.api.ConfigFactory;
 import com.lumens.connector.logminer.impl.DatabaseClient;
-import com.lumens.connector.logminer.impl.LogMinerImpl;
+import com.lumens.connector.logminer.impl.DefaultLogMiner;
 import com.lumens.logsys.LogSysFactory;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
@@ -36,7 +37,10 @@ import org.apache.logging.log4j.Logger;
  */
 public class LogMinerConnector implements Connector, LogMinerConstants {
 
-    private final Logger log = LogSysFactory.getLogger(LogMinerImpl.class);
+    private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
+
+    protected Map<String, Format> inFormat;
+    protected Map<String, Format> outFormat;
     private Config config = null;
     private String dbDriver = null;
     private String dbUrl = null;
@@ -49,12 +53,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     boolean isOpen = false;
 
     public LogMinerConnector() {
-        config = new Config();
-        config.setBuildType(LogMiner.BUILD_TYPE.OFFLINE);
-        config.setDictType(LogMiner.DICT_TYPE.STORE_IN_REDO_LOG);
-        config.setCommittedDataOnly(true);
-        config.setNoRowid(true);
-        config.setStartSCN("0");
+        config = ConfigFactory.createDefaultConfig();
     }
 
     @Override
@@ -76,7 +75,32 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     }
 
     @Override
-    public void close() {        
+    public void start() {
+        if (inFormat != null) {
+            miner.build(); // start build directory if specifying FILE type
+            miner.start();
+        }
+    }
+
+    @Override
+    public void stop() {
+        if (inFormat != null) {
+            miner.end();
+        }
+    }
+
+    @Override
+    public void close() {
+        if (miner != null) {
+            miner = null;
+        }
+        if (dbClient != null) {
+            dbClient.release();
+            dbClient = null;
+        }
+        isOpen = false;
+        inFormat = null;
+        outFormat = null;
     }
 
     @Override
@@ -87,6 +111,12 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     // get redo log fields from db
     @Override
     public Map<String, Format> getFormatList(Direction direction) {
+        if (inFormat != null && Direction.IN == direction) {
+            return inFormat;
+        } else if (outFormat != null && Direction.OUT == direction) {
+            return outFormat;
+        }
+
         Map<String, Format> formatList = new HashMap();
         Format rootFmt = new DataFormat(FORMAT_NAME, Form.STRUCT);
         if (direction == Direction.IN) {
@@ -95,6 +125,11 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
             SQLParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
             SQLParams.addChild(ORDERBY, Format.Form.FIELD, Type.STRING);
             SQLParams.addChild(GROUPBY, Format.Form.FIELD, Type.STRING);
+            inFormat = formatList;
+        } else if (direction == Direction.OUT) {
+            Format SQLParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
+            SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
+            outFormat = formatList;
         }
         formatList.put(FORMAT_NAME, rootFmt);
         getFormat(rootFmt, null, direction);
@@ -123,22 +158,17 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
                 log.error("Fail to get format. Error message:" + ex.getMessage());
                 throw new RuntimeException(ex);
             }
-        } else {
+        } else if (direction == Direction.OUT) {
+            Format scnField = format.addChild(COLUMN_SCN, Format.Form.FIELD, Type.STRING);
+            scnField.setProperty(DATA_TYPE, new Value(NUMBER));
+            scnField.setProperty(DATA_LENGTH, new Value(COLUMN_SCN_LENGTH));
 
+            Format redoField = format.addChild(COLUMN_SCN, Format.Form.FIELD, Type.STRING);
+            redoField.setProperty(DATA_TYPE, new Value(NVARCHAR2));
+            redoField.setProperty(DATA_LENGTH, new Value(COLUMN_REDO_LENGTH));
         }
 
         return format;
-    }
-
-    @Override
-    public void start() {
-        miner.build(); // start build directory if specifying FILE type
-        miner.start();
-    }
-
-    @Override
-    public void stop() {
-        miner.end();
     }
 
     @Override
@@ -148,14 +178,14 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
         if (parameters.containsKey(DATABASE_DRIVER)) {
             dbDriver = parameters.get(DATABASE_DRIVER).getString();
         }
-        if (parameters.containsKey(DATABASE_SOURCE_URL)) {
-            dbUrl = parameters.get(DATABASE_SOURCE_URL).getString();
+        if (parameters.containsKey(DATABASE_CONNECTION_URL)) {
+            dbUrl = parameters.get(DATABASE_CONNECTION_URL).getString();
         }
-        if (parameters.containsKey(DATABASE_SOURCE_USERNAME)) {
-            dbUserName = parameters.get(DATABASE_SOURCE_USERNAME).getString();
+        if (parameters.containsKey(DATABASE_CONNECTION_USERNAME)) {
+            dbUserName = parameters.get(DATABASE_CONNECTION_USERNAME).getString();
         }
-        if (parameters.containsKey(DATABASE_SOURCE_PASSWORD)) {
-            dbPassword = parameters.get(DATABASE_SOURCE_PASSWORD).getString();
+        if (parameters.containsKey(DATABASE_CONNECTION_PASSWORD)) {
+            dbPassword = parameters.get(DATABASE_CONNECTION_PASSWORD).getString();
         }
 
         // setup config
