@@ -53,6 +53,7 @@ public abstract class DBOperation implements Operation, DBConstants {
                     // TODO UPDATE_OR_INSERT.equalsIgnoreCase(operation)
                     throw new RuntimeException("Not supported now");
                 }
+                input.setStart(i);
             }
             if (input.isLast())
                 client.commit();
