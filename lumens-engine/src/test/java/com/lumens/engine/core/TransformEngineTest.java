@@ -52,7 +52,7 @@ public class TransformEngineTest {
     }
 
     public TransformEngineTest() {
-        LogSysFactory.setMode(LogSysFactory.LOG_MODE.CONSOLE);
+        LogSysFactory.start("console", null);
         transformEngine = new TransformEngine();
     }
 

@@ -14,6 +14,7 @@ Lumens.i18n = {
     id_stop: "Stop",
     id_edit: "Edit",
     id_detail: "Detail",
+    id_more: "More",
     id_job_desc_placeholder: "Input the description for a new job",
     id_create_job: "Create",
     id_save_job: "Save",

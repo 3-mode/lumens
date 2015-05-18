@@ -16,7 +16,6 @@ import com.lumens.engine.handler.InspectionHandler;
 import com.lumens.engine.log.TransformComponentInOutLogHandler;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
-import com.lumens.logsys.LogSysFactory;
 import com.lumens.model.DateTime;
 import com.lumens.scheduler.DefaultJobConfigurationBuilder;
 import com.lumens.scheduler.JobConfiguration;

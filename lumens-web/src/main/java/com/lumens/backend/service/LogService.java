@@ -5,6 +5,7 @@ package com.lumens.backend.service;
 
 import com.lumens.backend.ApplicationContext;
 import com.lumens.io.JsonUtility;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -25,28 +26,37 @@ import org.codehaus.jackson.JsonGenerator;
 @Path("/log")
 public class LogService {
 
+    protected static class DiscoverFileLog {
+        public long offset;
+        public String[] messages;
+
+        public DiscoverFileLog() {
+            this(0);
+        }
+
+        public DiscoverFileLog(long offset) {
+            this.offset = offset;
+            messages = new String[0];
+        }
+    }
+
     @GET
+    @Path("/file")
     @Produces("application/json")
-    public Response listLogItem(@PathParam("more") boolean more, @PathParam("offset") int offset, @PathParam("size") int size) {
+    public Response listLogItem(@PathParam("more") boolean more, @PathParam("offset") long offset, @PathParam("size") long size) {
         // TODO need handle offset, more, size
         try {
             long startTime = System.currentTimeMillis();
-            String[] strLines = null;
-            if (more) {
-
-            } else {
-                strLines = discoverLastLogLines();
-            }
+            DiscoverFileLog fileLog = discoverLastLogLines(new DiscoverFileLog(offset), more);
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
             json.writeStringField("status", "OK");
             json.writeObjectFieldStart("result_content");
-            json.writeArrayFieldStart("logs");
-            for (String strLine : strLines) {
-                json.writeStartObject();
-                json.writeStringField("message", strLine);
-                json.writeEndObject();
+            json.writeNumberField("offset", fileLog.offset);
+            json.writeArrayFieldStart("messages");
+            for (String strLine : fileLog.messages) {
+                json.writeString(strLine);
             }
             json.writeEndArray();
             json.writeEndObject();
@@ -61,34 +71,42 @@ public class LogService {
         }
     }
 
-    private String[] discoverLastLogLines() throws FileNotFoundException, IOException {
+    private DiscoverFileLog discoverLastLogLines(DiscoverFileLog fileLog, boolean more) throws FileNotFoundException, IOException {
         String filePath = ApplicationContext.getLogPath();
-        try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
-            System.out.println("Log file: " + filePath);
-            int lines = 0;
-            long length = file.length();
-            length--;
-            file.seek(length);
-            long seek = length;
-            List<Byte> byteList = new ArrayList<>();
-            for (; seek >= 0; --seek) {
-                file.seek(seek);
-                byte b = file.readByte();
-                if ((char) b == '\n' && lines++ == 500) {
-                    break;
+        if (new File(filePath).exists()) {
+            try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
+                System.out.println("Log file: " + filePath);
+                int lines = 0;
+                long length = file.length();
+                if (length > 0) {
+                    length--;
+                    if (more && length > fileLog.offset) {
+                        length = fileLog.offset;
+                    }
+                    file.seek(length);
+                    long seek = length;
+                    List<Byte> byteList = new ArrayList<>();
+                    for (; seek >= 0; --seek) {
+                        fileLog.offset = seek;
+                        file.seek(seek);
+                        byte b = file.readByte();
+                        if ((char) b == '\n' && lines++ == 100) {
+                            break;
+                        }
+                        byteList.add(b);
+                    }
+                    Collections.reverse(byteList);
+                    byte[] bs = new byte[byteList.size()];
+                    int i = 0;
+                    for (byte b : byteList)
+                        bs[i++] = b;
+                    String strContent = new String(bs, "UTF-8");
+                    if (strContent == null && strContent.isEmpty())
+                        return null;
+                    fileLog.messages = strContent.split("\n");
                 }
-                byteList.add(b);
             }
-            Collections.reverse(byteList);
-            byte[] bs = new byte[byteList.size()];
-            int i = 0;
-            for (byte b : byteList)
-                bs[i++] = b;
-            String strContent = new String(bs, "UTF-8");
-            if (strContent == null && strContent.isEmpty())
-                return null;
-            String[] strLines = strContent.split("\n");
-            return strLines;
         }
+        return fileLog;
     }
 }

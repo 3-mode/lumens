@@ -108,7 +108,6 @@ public class JobService {
             } else if ("stop".equalsIgnoreCase(action)) {
                 JobDAO jobDAO = DAOFactory.getJobDAO();
                 long lJobId = Long.parseLong(jobId);
-                Job job = jobDAO.getJob(lJobId);
                 ApplicationContext.get().getScheduler().stopJob(lJobId);
                 ApplicationContext.get().getScheduler().deleteJob(lJobId);
                 message = "Stop successfully";

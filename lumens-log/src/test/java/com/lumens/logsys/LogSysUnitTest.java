@@ -16,7 +16,7 @@ public class LogSysUnitTest {
     private final Logger log = LogSysFactory.getLogger(LogSysUnitTest.class);
 
     static {
-        LogSysFactory.setMode(LogSysFactory.LOG_MODE.FILE);
+        LogSysFactory.start("console", null);
     }
 
     public LogSysUnitTest() {
