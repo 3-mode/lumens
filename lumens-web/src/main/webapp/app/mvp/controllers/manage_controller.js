@@ -40,7 +40,7 @@ Lumens.controllers
         });
     })
 })
-.controller("JobManagementCtrl", function ($scope, $compile, JobService, LogService, ProjectList, Notifier) {
+.controller("JobManagementCtrl", function ($scope, $compile, JobService, LogFileService, ProjectList, Notifier) {
     var jobManagementHolder = $("#jobManagementHolder");
     $(window).resize(function (e) {
         if (e && e.target !== this)
@@ -60,10 +60,11 @@ Lumens.controllers
     });
     $scope.jobLogBar.getPart1Element().append($compile('<div ng-include="job_log_bar_template"></div>')($scope));
     $scope.jobLogBar.getPart2Element().append($compile('<div ng-include="job_list_log_template" style="overflow: auto; position: relative; width: 100%; height: 100%;"></div>')($scope));
-    LogService.log(function (result) {
+    LogFileService.log(function (result) {
+        $scope.jobLogContent = null;
         if (result.status === 'OK') {
             $("#jobLogLoading").hide();
-            $scope.jobLogItems = result.result_content.logs;
+            $scope.jobLogContent = result.result_content;
         } else {
             Notifier.message("error", "Error", "Start the job '" + result.error_message + "'");
             $("#jobLogLoading").hide();
@@ -109,12 +110,12 @@ Lumens.controllers
             }
         }
         else if ("id_exec_log_refresh" === id_btn) {
-            $scope.jobLogItems = null;
+            $scope.jobLogContent = null;
             $("#jobLogLoading").show();
-            LogService.log(function (result) {
+            LogFileService.log(function (result) {
                 if (result.status === 'OK') {
                     $("#jobLogLoading").hide();
-                    $scope.jobLogItems = result.result_content.logs;
+                    $scope.jobLogContent = result.result_content;
                 } else {
                     Notifier.message("error", "Error", "Start the job '" + result.error_message + "'");
                     $("#jobLogLoading").hide();
@@ -123,6 +124,9 @@ Lumens.controllers
                 Notifier.message("error", "Error", error);
                 $("#jobLogLoading").hide();
             })
+        }
+        else if("id_more" === id_btn) {
+            
         }
     };
     $scope.selectJob = function (index) {

@@ -133,6 +133,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             try {
                 opRet = operation.execute(inputChunk, targetFormat);
             } catch (Exception ex) {
+                // TODO if ignore element exception
                 throw new TransformException(this, ex);
             }
         }

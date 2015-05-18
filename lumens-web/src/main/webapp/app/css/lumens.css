@@ -796,6 +796,10 @@ svg path {
     font-size: 16px;
     content: "\e791";
 }
+.lumens .lumens-icon2-more:before {
+    font-size: 16px;
+    content: "\e8bf";
+}
 .lumens .lumens-icon-up:before {
     font-size: 16px;
     content: "\e6f3";

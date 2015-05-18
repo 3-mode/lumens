@@ -93,9 +93,9 @@ Lumens.services.factory('JobService', function ($resource) {
         exec: {method: 'GET', isArray: false}
     });
 });
-Lumens.services.factory('LogService', function ($resource) {
+Lumens.services.factory('LogFileService', function ($resource) {
     return $resource(
-    "rest/log?more=:more&offset=:offset",
+    "rest/log/file?more=:more&offset=:offset",
     {more: "@more", offset: "@offset"},
     {
         log: {method: 'GET', isArray: false}

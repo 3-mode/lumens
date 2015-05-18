@@ -19,6 +19,8 @@ import java.util.List;
 public class ApplicationContext {
 
     public static String LUMENS_BASE = System.getProperty("lumens.base", System.getProperty("user.dir"));
+    public static String LUMENS_LOG = System.getProperty("lumens.log", "console");
+    static { LogSysFactory.start(LUMENS_LOG, LUMENS_BASE); }
     public static String LUMENS_ADDIN = "/addin";
     public static String LUMENS_JNI = "/module/manage/jni";
     private final List<String> resultCache = new ArrayList<>();
@@ -99,7 +101,6 @@ public class ApplicationContext {
     public void start() {
         // Initialize the JNI path when starting
         System.setProperty("java.library.path", ServerUtils.getNormalizedPath(getRealPath() + LUMENS_JNI));
-        LogSysFactory.setMode(LogSysFactory.LOG_MODE.FILE);
         // Load the manage service, monitor must be created after jni path setting
         osResourcesMonitor = ServerManagementFactory.get().createOSResourcesMonitor();
         // Load the addin connectors

@@ -115,6 +115,7 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
                             exList.add(new TransformExecuteContext(context, new ElementChunk(inputChunk.isLast(), results), target, rule.getTargetFormatName(), context.getInspectionHandlers()));
                 }
             } catch (Exception e) {
+                // TODO If ignore error then continue
                 throw new TransformException(this, e);
             }
 

@@ -44,7 +44,7 @@ public class LogApplication {
             props.load(in);
         }
         NamingManager.setInitialContextFactoryBuilder(new LogSysInitialContextFactoryBuilder(props));
-        LogSysFactory.setMode(LogSysFactory.LOG_MODE.CONSOLE);
+        LogSysFactory.start("console", null);
         LogApplication app = new LogApplication();
         app.start();
         //System.exit(0);

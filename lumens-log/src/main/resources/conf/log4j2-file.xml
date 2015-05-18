@@ -4,7 +4,7 @@
         <CustomizedPathRollingFile name="LogApp" fileName="logs/lumens.log"
                                    filePattern="logs/$${date:yyyy-MM}/lumens-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
-                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
+                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{1} - %msg%n</Pattern>
                 <Charset>UTF-8</Charset>
             </PatternLayout>
             <Policies>
