@@ -15,6 +15,8 @@ public interface Constants {//extends DBConstants {
 
     public String DICTIONARY_FILE = "dictionary.ora";
     public String SQL_GEG_VERSION = "select * from sys.v$instance";
+    public String SQL_CHECK_SUPPLEMENTAL_LOG = "SELECT SUPPLEMENTAL_LOG_DATA_MIN FROM V$DATABASE;";
+    public String SQL_ENABLE_SUPPLEMENTAL_LOG = "ALTER DATABASE ADD SUPPLEMENTAL LOG DATA;";
     public String SQL_START_LOGMINER = "BEGIN sys.dbms_logmnr.start_logmnr(%s);END;";
     public String SQL_END_LOGMINER = "BEGIN sys.dbms_logmnr.end_logmnr();END;";
     public String SQL_QUERY_DIRECTORY_PATH = "select DIRECTORY_PATH from sys.dba_directories where DIRECTORY_NAME='UTL_FILE_DIR'";
