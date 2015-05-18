@@ -87,6 +87,7 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
         selectSQLParams.addChild(GROUPBY, Form.FIELD, Type.STRING);
         selectFmt.addChild(COLUMN_REDO, Form.FIELD, Type.STRING);
         selectFmt.addChild(COLUMN_SCN, Form.FIELD, Type.INTEGER);
+        selectFmt.addChild(COLUMN_OPERATION, Form.FIELD, Type.STRING);
 
         Element query = new DataElement(selectFmt);
         query.addChild(SQLPARAMS).addChild(ACTION).setValue(QUERY);
