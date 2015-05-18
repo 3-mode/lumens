@@ -24,7 +24,6 @@ public class DatabaseClient implements Constants {
     protected Driver driverObj;
     public Connection conn = null;
     public String version = null;
-    public Boolean isSupplementalLog = null;
 
     public DatabaseClient(String driver, String url, String username, String password) throws SQLException {
         try {
@@ -42,32 +41,6 @@ public class DatabaseClient implements Constants {
 
     public ResultSet executeGetResult(String sql) throws SQLException {
         return conn.createStatement().executeQuery(sql);
-    }
-
-    public boolean isSupplementalLogEnabled() {
-        if (isSupplementalLog = null) {
-            try {
-                ResultSet result = executeGetResult(SQL_CHECK_SUPPLEMENTAL_LOG);
-                if (result.next()) {
-                    isSupplementalLog = result.getBoolean(1);
-                }
-            } catch (Exception ex) {
-                log.error("Fail to get Oracle supplemental log. Error message: " + ex.getMessage());
-            }
-        }
-        return isSupplementalLog.booleanValue();
-    }
-
-    public boolean enableSupplementalLog() {
-        boolean bSuccess = false;
-        try {
-            execute(SQL_ENABLE_SUPPLEMENTAL_LOG);
-            bSuccess = true;
-        } catch (Exception ex) {
-            log.error("Fail to enable Oracle supplemental log. Error message: " + ex.getMessage());
-        }
-        
-        return bSuccess;
     }
 
     public String getVersion() {

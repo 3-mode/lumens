@@ -3,9 +3,11 @@
  */
 package com.lumens.connector.logminer.impl;
 
+import com.lumens.logsys.LogSysFactory;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.ArrayList;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -13,7 +15,9 @@ import java.util.ArrayList;
  */
 public class RedoLog implements Constants {
 
+    private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
     DatabaseClient dbClient;
+    public Boolean isSupplementalLog = null;
 
     public RedoLog(DatabaseClient dbClient) {
         this.dbClient = dbClient;
@@ -58,4 +62,31 @@ public class RedoLog implements Constants {
 
         return sbSQL.toString();
     }
+
+    public boolean isSupplementalLogEnabled() {
+        if (isSupplementalLog = null) {
+            try {
+                ResultSet result = dbClient.executeGetResult(SQL_CHECK_SUPPLEMENTAL_LOG);
+                if (result.next()) {
+                    isSupplementalLog = result.getBoolean(1);
+                }
+            } catch (Exception ex) {
+                log.error("Fail to get Oracle supplemental log. Error message: " + ex.getMessage());
+            }
+        }
+        return isSupplementalLog.booleanValue();
+    }
+
+    public boolean enableSupplementalLog() {
+        boolean bSuccess = false;
+        try {
+            dbClient.execute(SQL_ENABLE_SUPPLEMENTAL_LOG);
+            bSuccess = true;
+        } catch (Exception ex) {
+            log.error("Fail to enable Oracle supplemental log. Error message: " + ex.getMessage());
+        }
+
+        return bSuccess;
+    }
+
 }
