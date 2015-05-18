@@ -14,6 +14,7 @@ public interface Constants {//extends DBConstants {
     public String ORACLE_CLASS = "oracle.jdbc.OracleDriver";
 
     public String DICTIONARY_FILE = "dictionary.ora";
+    public String SQL_GEG_VERSION = "select * from V$INSTANCE";
     public String SQL_START_LOGMINER = "BEGIN dbms_logmnr.start_logmnr(%s);END;";
     public String SQL_END_LOGMINER = "BEGIN dbms_logmnr.end_logmnr();END;";
     public String SQL_QUERY_DIRECTORY_PATH = "select DIRECTORY_PATH from dba_directories where DIRECTORY_NAME='UTL_FILE_DIR'";

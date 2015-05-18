@@ -4,12 +4,14 @@
 package com.lumens.connector.logminer.impl;
 
 import com.lumens.connector.database.DBUtils;
+import com.lumens.logsys.LogSysFactory;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -17,8 +19,11 @@ import java.sql.SQLException;
  */
 public class DatabaseClient implements Constants {
 
+    private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
+
     protected Driver driverObj;
     public Connection conn = null;
+    public String version = null;
 
     public DatabaseClient(String driver, String url, String username, String password) throws SQLException {
         try {
@@ -37,8 +42,24 @@ public class DatabaseClient implements Constants {
     public ResultSet executeGetResult(String sql) throws SQLException {
         return conn.createStatement().executeQuery(sql);
     }
-    
-    public void release(){
+
+    public String getVersion() {
+        if (version != null) {
+            return version;
+        }
+        try {
+            ResultSet result = executeGetResult(SQL_GEG_VERSION);
+            if (result.next()) {
+                version = result.getString(1);
+            }
+        } catch (Exception ex) {
+            log.error("Fail to get Oracle version. Error message: " + ex.getMessage());
+        }
+
+        return version;
+    }
+
+    public void release() {
         DBUtils.releaseConnection(conn);
     }
 }
