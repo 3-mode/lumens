@@ -18,6 +18,7 @@ public class RedoLog implements Constants {
     private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
     DatabaseClient dbClient;
     public Boolean isSupplementalLog = null;
+    public Boolean isArchivedLogMode = null;
 
     public RedoLog(DatabaseClient dbClient) {
         this.dbClient = dbClient;
@@ -61,6 +62,21 @@ public class RedoLog implements Constants {
         sbSQL.append(" END;");
 
         return sbSQL.toString();
+    }
+
+    public boolean isArchivedLogModeEnabled() {
+        if (isArchivedLogMode == null) {
+            try {
+                ResultSet result = dbClient.executeGetResult(SQL_CHECK_LOG_MODE);
+                if (result.next()) {
+                    isArchivedLogMode = result.getString(1).compareToIgnoreCase("ARCHIVELOG") == 0;
+                }
+            } catch (Exception ex) {
+                log.error("Fail to get Oracle supplemental log. Error message: " + ex.getMessage());
+            }
+        }
+
+        return isArchivedLogMode.booleanValue();
     }
 
     public boolean isSupplementalLogEnabled() {
