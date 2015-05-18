@@ -34,6 +34,7 @@ public interface LogMinerConstants extends DBConstants{
 
     public String COLUMN_REDO = "SQL_REDO";
     public String COLUMN_SCN = "SCN";
+    public String COLUMN_OPERATION= "OPERATION";
     public int COLUMN_SCN_LENGTH = 22;
     public int COLUMN_REDO_LENGTH = 4000;
 

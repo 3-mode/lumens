@@ -69,7 +69,7 @@ public class RedoLog implements Constants {
             try {
                 ResultSet result = dbClient.executeGetResult(SQL_CHECK_LOG_MODE);
                 if (result.next()) {
-                    isArchivedLogMode = result.getString(1).compareToIgnoreCase("ARCHIVELOG") == 0;
+                    isArchivedLogMode = result.getString(1).equalsIgnoreCase("archivelog");
                 }
             } catch (Exception ex) {
                 log.error("Fail to get Oracle supplemental log. Error message: " + ex.getMessage());
@@ -80,11 +80,12 @@ public class RedoLog implements Constants {
     }
 
     public boolean isSupplementalLogEnabled() {
-        if (isSupplementalLog = null) {
+        if (isSupplementalLog == null) {
             try {
                 ResultSet result = dbClient.executeGetResult(SQL_CHECK_SUPPLEMENTAL_LOG);
                 if (result.next()) {
-                    isSupplementalLog = result.getBoolean(1);
+                    String res = result.getString(1);
+                    isSupplementalLog = res.equalsIgnoreCase("yes") || res.equalsIgnoreCase("implicit");
                 }
             } catch (Exception ex) {
                 log.error("Fail to get Oracle supplemental log. Error message: " + ex.getMessage());

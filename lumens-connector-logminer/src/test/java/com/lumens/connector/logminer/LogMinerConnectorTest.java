@@ -99,6 +99,7 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
         syncSQLParams.addChild(ACTION, Form.FIELD, Type.STRING);
         syncFmt.addChild(COLUMN_REDO, Form.FIELD, Type.STRING);
         syncFmt.addChild(COLUMN_SCN, Form.FIELD, Type.INTEGER);
+        syncFmt.addChild(COLUMN_OPERATION, Form.FIELD, Type.STRING);
 
         List<Element> syncChunk = new ArrayList();
 
@@ -107,17 +108,19 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
             if (result.hasData()) {
                 List<Element> redologs = result.getData();
                 int max = 1000;
-                System.out.println("          SCN | REDO SQL -----------------------------------------");
+                System.out.println("          SCN | OPERATION | REDO SQL -----------------------------------------");
                 for (Element elem : redologs) {
                     String scn = elem.getChildByPath(COLUMN_SCN).getValue().toString();
                     String redo = elem.getChildByPath(COLUMN_REDO).getValue().toString();
-                    System.out.println("    " + scn + "  | " + redo);
+                    String operation = elem.getChildByPath(COLUMN_OPERATION).getValue().toString();
+                    System.out.println("    " + scn + "  | " + operation + "  | " + redo);
 
                     // add data to sync
                     Element sync = new DataElement(syncFmt);
                     sync.addChild(SQLPARAMS).addChild(ACTION).setValue(SYNC);
                     sync.addChild(COLUMN_REDO).setValue(new Value(redo));
                     sync.addChild(COLUMN_SCN).setValue(new Value(scn));;
+                    sync.addChild(COLUMN_OPERATION).setValue(new Value(operation));;
                     syncChunk.add(sync);
 
                     if (--max < 0) {

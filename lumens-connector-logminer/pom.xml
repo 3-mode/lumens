@@ -30,5 +30,10 @@
             <artifactId>lumens-addin</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.lumens</groupId>
+            <artifactId>lumens-model</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>

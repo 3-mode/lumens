@@ -131,11 +131,15 @@ public class DefaultLogMiner implements LogMiner, Constants {
     }
 
     @Override
-    public void sync(String scn, String sql) throws Exception {
+    public void sync(String operation, String scn, String sql) throws Exception {
         if (Integer.parseInt(scn) < Integer.parseInt(LAST_SCN)) {
             return;
         }
 
+        // Dictionary was changed, need to rebuild 
+        if(operation.equalsIgnoreCase("DDL")){
+            buildDictionary();
+        }
         try {
             dbClient.execute(sql);
             LAST_SCN = scn;
