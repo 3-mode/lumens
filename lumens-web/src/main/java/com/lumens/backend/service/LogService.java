@@ -31,7 +31,11 @@ public class LogService {
         public String[] messages;
 
         public DiscoverFileLog() {
-            offset = 0;
+            this(0);
+        }
+
+        public DiscoverFileLog(long offset) {
+            this.offset = offset;
             messages = new String[0];
         }
     }
@@ -39,16 +43,11 @@ public class LogService {
     @GET
     @Path("/file")
     @Produces("application/json")
-    public Response listLogItem(@PathParam("more") boolean more, @PathParam("offset") int offset, @PathParam("size") int size) {
+    public Response listLogItem(@PathParam("more") boolean more, @PathParam("offset") long offset, @PathParam("size") long size) {
         // TODO need handle offset, more, size
         try {
             long startTime = System.currentTimeMillis();
-            DiscoverFileLog fileLog = null;
-            if (more) {
-
-            } else {
-                fileLog = discoverLastLogLines();
-            }
+            DiscoverFileLog fileLog = discoverLastLogLines(new DiscoverFileLog(offset), more);
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
@@ -72,8 +71,7 @@ public class LogService {
         }
     }
 
-    private DiscoverFileLog discoverLastLogLines() throws FileNotFoundException, IOException {
-        DiscoverFileLog fileLog = new DiscoverFileLog();
+    private DiscoverFileLog discoverLastLogLines(DiscoverFileLog fileLog, boolean more) throws FileNotFoundException, IOException {
         String filePath = ApplicationContext.getLogPath();
         if (new File(filePath).exists()) {
             try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
@@ -82,6 +80,9 @@ public class LogService {
                 long length = file.length();
                 if (length > 0) {
                     length--;
+                    if (more && length > fileLog.offset) {
+                        length = fileLog.offset;
+                    }
                     file.seek(length);
                     long seek = length;
                     List<Byte> byteList = new ArrayList<>();

@@ -123,10 +123,31 @@ Lumens.controllers
             }, function (error) {
                 Notifier.message("error", "Error", error);
                 $("#jobLogLoading").hide();
-            })
+            });
         }
-        else if("id_more" === id_btn) {
-            
+        else if ("id_more" === id_btn) {
+            $("#jobLogLoading").show();
+            LogFileService.log({
+                more: true, offset: $scope.jobLogContent.offset
+            },
+            function (result) {
+                if (result.status === 'OK') {
+                    $("#jobLogLoading").hide();
+                    if ($scope.jobLogContent.messages) {
+                        $scope.jobLogContent.offset = result.result_content.offset;
+                        $scope.jobLogContent.messages = $scope.jobLogContent.messages.concat(result.result_content.messages);
+                    }
+                    else {
+                        $scope.jobLogContent = result.result_content;
+                    }
+                } else {
+                    Notifier.message("error", "Error", "Start the job '" + result.error_message + "'");
+                    $("#jobLogLoading").hide();
+                }
+            }, function (error) {
+                Notifier.message("error", "Error", error);
+                $("#jobLogLoading").hide();
+            })
         }
     };
     $scope.selectJob = function (index) {
