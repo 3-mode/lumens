@@ -24,6 +24,8 @@ public interface LogMiner {
         OFFLINE
     };
 
+    public void buildDictionary();
+
     public void build();
 
     public void start();
@@ -31,6 +33,6 @@ public interface LogMiner {
     public void end();
 
     public ResultSet query(String sql);
-    
+
     public void sync(String scn, String sql) throws Exception;
 }

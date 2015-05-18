@@ -17,8 +17,8 @@ public class RedoLog implements Constants {
 
     private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
     DatabaseClient dbClient;
-    public Boolean isSupplementalLog = null;
-    public Boolean isArchivedLogMode = null;
+    private Boolean isSupplementalLog = null;
+    private Boolean isArchivedLogMode = null;
 
     public RedoLog(DatabaseClient dbClient) {
         this.dbClient = dbClient;

@@ -35,7 +35,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
         }
     }
 
-    private void buildDictionary() {
+    public void buildDictionary() {
         try {
             if (config.getDictType() == DICT_TYPE.STORE_IN_FILE) {
                 dict = new Dictionary(dbClient);
@@ -54,6 +54,20 @@ public class DefaultLogMiner implements LogMiner, Constants {
 
             // adding redo log files to analyze
             RedoLog redolog = new RedoLog(dbClient);
+            if (config.getDictType() == DICT_TYPE.STORE_IN_REDO_LOG && !redolog.isArchivedLogModeEnabled()) {
+                log.error("Fail to build log miner dictionary. Error message: Archived log should be enabled with STORE_IN_REDO_LOG enabled");
+                throw new RuntimeException("Fail to build log miner dictionary. Error message: Archived log should be enabled with STORE_IN_REDO_LOG enabled");
+            }
+            if (!redolog.isSupplementalLogEnabled()) {
+                log.info("Tryinng to enable Suplemental Log Mode.");
+                if (config.isEnabledSupplementalLogMode() && redolog.enableSupplementalLog()) {
+                    log.info("Succeed enabled Suplemental Log Mode.");
+                }
+                if (!redolog.isSupplementalLogEnabled()) {
+                    log.error("Fail to build log miner dictionary. Error message: Supplemental Log Mode should be enabled priot to start LogMiner build");
+                    throw new RuntimeException("Fail to build log miner dictionary. Error message: Supplemental Log Mode should be enabled priot to start LogMiner build");
+                }
+            }
             String buildList = redolog.buildLogMinerStringFromList(config.getBuildType() == BUILD_TYPE.ONLINE ? redolog.getOnlineFileList() : redolog.getOfflineFileList(), true);
             dbClient.execute(buildList + "");
 
@@ -90,7 +104,8 @@ public class DefaultLogMiner implements LogMiner, Constants {
     }
 
     @Override
-    public ResultSet query(String sql) {
+    public ResultSet query(String sql
+    ) {
         if (result != null) {
             DBUtils.releaseResultSet(result);
         }
@@ -120,7 +135,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
         if (Integer.parseInt(scn) < Integer.parseInt(LAST_SCN)) {
             return;
         }
-        
+
         try {
             dbClient.execute(sql);
             LAST_SCN = scn;

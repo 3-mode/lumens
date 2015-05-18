@@ -77,6 +77,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     @Override
     public void start() {
         if (inFormat != null) {
+            miner.buildDictionary();
             miner.build(); // start build directory if specifying FILE type
             miner.start();
         }

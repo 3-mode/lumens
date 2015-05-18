@@ -17,6 +17,7 @@ public class Config {
     private boolean isNoRowid = true;
     private String startSCN = "0";
     private String endSCN = null;
+    private boolean isSupplementalLogMode = false;
 
     public DICT_TYPE getDictType() {
         return dict_type;
@@ -24,6 +25,14 @@ public class Config {
 
     public BUILD_TYPE getBuildType() {
         return build_type;
+    }
+
+    public void setEnabledSupplementalLogMode() {
+        isSupplementalLogMode = true;
+    }
+
+    public boolean isEnabledSupplementalLogMode() {
+        return isSupplementalLogMode;
     }
 
     public void setDictType(DICT_TYPE dictType) {
@@ -91,7 +100,7 @@ public class Config {
         }
 
         if (option.length() > 0) {
-            parameter.append(", OPTIONS => ").append(option);           
+            parameter.append(", OPTIONS => ").append(option);
         }
 
         return parameter.toString();
