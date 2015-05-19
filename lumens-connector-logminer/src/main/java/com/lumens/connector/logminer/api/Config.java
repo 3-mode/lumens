@@ -27,11 +27,11 @@ public class Config {
         return build_type;
     }
 
-    public void setEnabledSupplementalLogMode() {
+    public void setEnabledSupplementalLog() {
         isSupplementalLogMode = true;
     }
 
-    public boolean isEnabledSupplementalLogMode() {
+    public boolean isSupplementalLogEnabled() {
         return isSupplementalLogMode;
     }
 

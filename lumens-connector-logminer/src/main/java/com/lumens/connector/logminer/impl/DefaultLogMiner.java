@@ -25,10 +25,12 @@ public class DefaultLogMiner implements LogMiner, Constants {
     private Config config = null;
     private Dictionary dict = null;
     private DatabaseClient dbClient = null;
+    private Metadata meta = null;
 
     public DefaultLogMiner(DatabaseClient dbClient, Config config) {
         this.dbClient = dbClient;
         this.config = config;
+        meta = new Metadata(dbClient);
 
         if (config.getBuildType() == BUILD_TYPE.ONLINE && config.getDictType() == DICT_TYPE.STORE_IN_REDO_LOG) {
             log.error("Should not specify option DICT_FROM_REDO_LOGS to analyze online redo logs");
@@ -63,7 +65,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
             }
             if (!redolog.isSupplementalLogEnabled()) {
                 log.info("Tryinng to enable Suplemental Log Mode.");
-                if (config.isEnabledSupplementalLogMode() && redolog.enableSupplementalLog()) {
+                if (config.isSupplementalLogEnabled() && redolog.enableSupplementalLog()) {
                     log.info("Succeed enabled Suplemental Log Mode.");
                 }
                 if (!redolog.isSupplementalLogEnabled()) {
@@ -143,13 +145,37 @@ public class DefaultLogMiner implements LogMiner, Constants {
         if (value.OPERATION.equalsIgnoreCase("DDL")) {
             buildDictionary();
         }
-        try {
-            dbClient.execute(value.SQL_REDO);
-            LAST_SCN = value.SCN;
-        } catch (Exception ex) {
-            log.error("Fail to sync to destination. Error message:");
-            log.error(ex.getMessage());
-            throw new RuntimeException("Fail to sync to destination. Error message:" + ex.getMessage());
-        }
+        boolean doAgain = false;
+        do {
+            try {
+                dbClient.execute(value.SQL_REDO);
+                LAST_SCN = value.SCN;
+            } catch (Exception ex) {
+                log.error("Fail to sync to destination. Error message:");
+                log.error(ex.getMessage());
+                log.info("Failed on statement:" + value.SQL_REDO);
+                log.info("Trying to find out failure reason...");
+                
+                if(!meta.checkTableExist(value.SEG_OWNER, value.TABLE_NAME) ){
+                    log.info(String.format("Table %s not exist.", value.TABLE_NAME));
+                    if(!value.OPERATION.equalsIgnoreCase("delete")){
+                        log.info("Skip sync for 'delete' operation.");                       
+                        break;
+                    }
+                    if(meta.createTable(value.SEG_OWNER, value.TABLE_NAME)){
+                        log.info(String.format("Table %s created. Try to sync again...", value.TABLE_NAME));
+                        doAgain = true;
+                        continue;
+                    }                    
+                }
+                
+                if(!meta.checkRecordExist(value.SQL_REDO)){
+                    log.info(String.format("Record not exist. Ignore error and continue."));                    
+                    break;
+                }
+                
+                throw new RuntimeException("Fail to sync to destination. Error message:" + ex.getMessage());
+            }
+        } while (doAgain);
     }
 }
