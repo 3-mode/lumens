@@ -24,8 +24,9 @@ public class LogMinerTest extends TestBase {
         config.setNoRowid(true);
         config.setStartSCN("0");
         
-        DefaultLogMiner miner = new DefaultLogMiner(sourceDatabase, config);
-        miner.build();
+        DefaultLogMiner miner = new DefaultLogMiner(sourceDatabase, config);        
+        miner.buildDictionary();
+        miner.build();                
         miner.start();
         ResultSet result = miner.query("");
         try {

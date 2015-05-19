@@ -11,6 +11,7 @@ import static com.lumens.connector.database.DBConstants.SELECT;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import com.lumens.connector.database.client.DBElementBuilder;
 import com.lumens.connector.logminer.api.LogMiner;
+import com.lumens.connector.logminer.api.RedoValue;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.ModelUtils;
@@ -49,13 +50,17 @@ public class LogMinerOperation implements Operation, LogMinerConstants {
                     ResultSet result = miner.query(new LogMinerQuerySQLBuilder(output).generateSelectSQL(elem));
                     resultList.addAll(new DBElementBuilder().buildElement(output, result));
                 } else if (SYNC.equalsIgnoreCase(strOper)) { // sync here
-                    String scn = elem.getChildByPath(COLUMN_SCN).getValue().toString();
+                    int scn = elem.getChildByPath(COLUMN_SCN).getValue().getInt();
                     String redo = elem.getChildByPath(COLUMN_REDO).getValue().toString();
                     String operation = elem.getChildByPath(COLUMN_OPERATION).getValue().toString();
-                    if(operation.equalsIgnoreCase("DDL")){
+                    if (operation.equalsIgnoreCase("DDL")) {
                         miner.buildDictionary();
                     }
-                    miner.sync(operation, scn, redo);
+                    RedoValue value = new RedoValue();
+                    value.SCN = scn;
+                    value.SQL_REDO = redo;
+                    value.OPERATION = operation;
+                    miner.sync(value);
                 } else {
                     throw new UnsupportedOperationException("Error, not supported action : " + strOper);
                 }

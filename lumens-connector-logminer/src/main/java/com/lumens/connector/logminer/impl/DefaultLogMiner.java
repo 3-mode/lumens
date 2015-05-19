@@ -8,6 +8,7 @@ import com.lumens.connector.logminer.api.LogMiner;
 import com.lumens.connector.logminer.api.LogMiner.BUILD_TYPE;
 import com.lumens.connector.logminer.api.LogMiner.DICT_TYPE;
 import com.lumens.connector.database.DBUtils;
+import com.lumens.connector.logminer.api.RedoValue;
 import java.sql.ResultSet;
 import org.apache.logging.log4j.Logger;
 import com.lumens.logsys.LogSysFactory;
@@ -19,7 +20,7 @@ import com.lumens.logsys.LogSysFactory;
 public class DefaultLogMiner implements LogMiner, Constants {
 
     private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
-    private String LAST_SCN = "0";
+    private int LAST_SCN = 0;
     private ResultSet result = null;
     private Config config = null;
     private Dictionary dict = null;
@@ -133,18 +134,18 @@ public class DefaultLogMiner implements LogMiner, Constants {
     }
 
     @Override
-    public void sync(String operation, String scn, String sql) throws Exception {
-        if (Integer.parseInt(scn) < Integer.parseInt(LAST_SCN)) {
+    public void sync(RedoValue value) throws Exception {
+        if (value.SCN < LAST_SCN) {
             return;
         }
 
         // Dictionary was changed, need to rebuild 
-        if (operation.equalsIgnoreCase("DDL")) {
+        if (value.OPERATION.equalsIgnoreCase("DDL")) {
             buildDictionary();
         }
         try {
-            dbClient.execute(sql);
-            LAST_SCN = scn;
+            dbClient.execute(value.SQL_REDO);
+            LAST_SCN = value.SCN;
         } catch (Exception ex) {
             log.error("Fail to sync to destination. Error message:");
             log.error(ex.getMessage());
