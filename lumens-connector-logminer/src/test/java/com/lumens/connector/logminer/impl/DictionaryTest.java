@@ -18,7 +18,7 @@ public class DictionaryTest extends TestBase {
         Dictionary dict = new Dictionary(sourceDatabase);
         assertTrue("dictionary should not be empty", !dict.getDictionaryPath().isEmpty());
         try {
-            dict.createDictionary();
+            dict.build();
         } catch (Exception ex) {
             System.out.println("Fail to create dictionary file. Error message:" );
             System.out.println(ex.getMessage());

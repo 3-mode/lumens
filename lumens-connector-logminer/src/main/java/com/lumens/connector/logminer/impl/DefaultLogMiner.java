@@ -38,8 +38,10 @@ public class DefaultLogMiner implements LogMiner, Constants {
     public void buildDictionary() {
         try {
             if (config.getDictType() == DICT_TYPE.STORE_IN_FILE) {
-                dict = new Dictionary(dbClient);
-                dict.createDictionary();
+                if (dict == null) {
+                    dict = new Dictionary(dbClient);
+                }
+                dict.build();
             }
         } catch (Exception ex) {
             log.error("Fail to build log miner dictionary. Error message:");
@@ -137,7 +139,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
         }
 
         // Dictionary was changed, need to rebuild 
-        if(operation.equalsIgnoreCase("DDL")){
+        if (operation.equalsIgnoreCase("DDL")) {
             buildDictionary();
         }
         try {

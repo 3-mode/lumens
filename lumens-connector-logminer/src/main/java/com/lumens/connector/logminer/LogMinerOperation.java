@@ -52,6 +52,9 @@ public class LogMinerOperation implements Operation, LogMinerConstants {
                     String scn = elem.getChildByPath(COLUMN_SCN).getValue().toString();
                     String redo = elem.getChildByPath(COLUMN_REDO).getValue().toString();
                     String operation = elem.getChildByPath(COLUMN_OPERATION).getValue().toString();
+                    if(operation.equalsIgnoreCase("DDL")){
+                        miner.buildDictionary();
+                    }
                     miner.sync(operation, scn, redo);
                 } else {
                     throw new UnsupportedOperationException("Error, not supported action : " + strOper);

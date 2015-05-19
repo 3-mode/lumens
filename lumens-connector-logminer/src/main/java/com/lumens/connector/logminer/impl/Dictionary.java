@@ -18,7 +18,7 @@ public class Dictionary implements Constants {
         this.dbClient = dbClient;
     }
 
-    public void createDictionary() throws Exception {
+    public void build() throws Exception {
         String path = getDictionaryPath();
         SQL_CREATE_DIECTIONARY = "BEGIN dbms_logmnr_d.build(dictionary_filename => '" + DICTIONARY_FILE +"', dictionary_location =>'" + path + "'); END;";
         dbClient.execute(SQL_CREATE_DIECTIONARY);        
