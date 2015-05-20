@@ -155,25 +155,25 @@ public class DefaultLogMiner implements LogMiner, Constants {
                 log.error(ex.getMessage());
                 log.info("Failed on statement:" + value.SQL_REDO);
                 log.info("Trying to find out failure reason...");
-                
-                if(!meta.checkTableExist(value.SEG_OWNER, value.TABLE_NAME) ){
+
+                if (!meta.checkTableExist(value.SEG_OWNER, value.TABLE_NAME)) {
                     log.info(String.format("Table %s not exist.", value.TABLE_NAME));
-                    if(!value.OPERATION.equalsIgnoreCase("delete")){
-                        log.info("Skip sync for 'delete' operation.");                       
+                    if (!value.OPERATION.equalsIgnoreCase("delete")) {
+                        log.info("Skip sync for 'delete' operation.");
                         break;
                     }
-                    if(meta.createTable(value.SEG_OWNER, value.TABLE_NAME)){
+                    if (meta.createTable(value.SEG_OWNER, value.TABLE_NAME)) {
                         log.info(String.format("Table %s created. Try to sync again...", value.TABLE_NAME));
                         doAgain = true;
                         continue;
-                    }                    
+                    }
                 }
-                
-                if(!meta.checkRecordExist(value.SQL_REDO)){
-                    log.info(String.format("Record not exist. Ignore error and continue."));                    
+
+                if ((value.OPERATION.equalsIgnoreCase("update") || value.OPERATION.equalsIgnoreCase("delete")) && !meta.checkRecordExist(value.SQL_REDO)) {
+                    log.info(String.format("Record not exist. Ignore error and continue."));
                     break;
                 }
-                
+
                 throw new RuntimeException("Fail to sync to destination. Error message:" + ex.getMessage());
             }
         } while (doAgain);
