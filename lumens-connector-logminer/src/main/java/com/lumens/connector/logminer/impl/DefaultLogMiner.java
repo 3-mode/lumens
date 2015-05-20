@@ -158,7 +158,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
 
                 if (!meta.checkTableExist(value.SEG_OWNER, value.TABLE_NAME)) {
                     log.info(String.format("Table %s not exist.", value.TABLE_NAME));
-                    if (!value.OPERATION.equalsIgnoreCase("delete")) {
+                    if (value.OPERATION.equalsIgnoreCase("delete")) {
                         log.info("Skip sync for 'delete' operation.");
                         break;
                     }

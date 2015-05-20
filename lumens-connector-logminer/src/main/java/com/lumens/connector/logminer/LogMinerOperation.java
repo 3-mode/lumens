@@ -50,16 +50,16 @@ public class LogMinerOperation implements Operation, LogMinerConstants {
                     ResultSet result = miner.query(new LogMinerQuerySQLBuilder(output).generateSelectSQL(elem));
                     resultList.addAll(new DBElementBuilder().buildElement(output, result));
                 } else if (SYNC.equalsIgnoreCase(strOper)) { // sync here
-                    int scn = elem.getChildByPath(COLUMN_SCN).getValue().getInt();
-                    String redo = elem.getChildByPath(COLUMN_REDO).getValue().toString();
-                    String operation = elem.getChildByPath(COLUMN_OPERATION).getValue().toString();
-                    if (operation.equalsIgnoreCase("DDL")) {
+                    RedoValue value = new RedoValue();
+                    value.SCN = elem.getChildByPath(COLUMN_SCN).getValue().getInt();
+                    value.SQL_REDO = elem.getChildByPath(COLUMN_REDO).getValue().toString();
+                    value.OPERATION = elem.getChildByPath(COLUMN_OPERATION).getValue().toString();
+                    value.SEG_OWNER = elem.getChildByPath(COLUMN_SEG_OWNER).getValue().toString();
+                    value.TABLE_NAME = elem.getChildByPath(COLUMN_TABLE_NAME).getValue().toString();
+                    if (value.OPERATION.equalsIgnoreCase("DDL")) {
                         miner.buildDictionary();
                     }
-                    RedoValue value = new RedoValue();
-                    value.SCN = scn;
-                    value.SQL_REDO = redo;
-                    value.OPERATION = operation;
+
                     miner.sync(value);
                 } else {
                     throw new UnsupportedOperationException("Error, not supported action : " + strOper);
