@@ -17,8 +17,8 @@ import org.apache.logging.log4j.Logger;
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
 public class LogApplication {
-    private final Logger logger = LogSysFactory.getLogger(LogApplication.class.getName());
-    private final Logger fileLogger = LogSysFactory.getLogger("System");
+    private final Logger logger = SysLogFactory.getLogger(LogApplication.class.getName());
+    private final Logger fileLogger = SysLogFactory.getLogger("System");
 
     public void start() throws NamingException {
         if (logger.isDebugEnabled()) {
@@ -44,7 +44,7 @@ public class LogApplication {
             props.load(in);
         }
         NamingManager.setInitialContextFactoryBuilder(new LogSysInitialContextFactoryBuilder(props));
-        LogSysFactory.start("console", null);
+        SysLogFactory.start("console", null);
         LogApplication app = new LogApplication();
         app.start();
         //System.exit(0);

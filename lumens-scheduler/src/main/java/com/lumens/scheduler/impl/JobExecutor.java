@@ -6,7 +6,7 @@ package com.lumens.scheduler.impl;
 import com.lumens.engine.TransformEngine;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.scheduler.JobConfiguration;
 import com.lumens.scheduler.JobConstants;
 import java.util.Iterator;
@@ -22,7 +22,7 @@ import org.quartz.JobExecutionException;
  */
 public class JobExecutor implements Job {
 
-    private final Logger log = LogSysFactory.getLogger(JobExecutor.class);
+    private final Logger log = SysLogFactory.getLogger(JobExecutor.class);
 
     @Override
     public void execute(JobExecutionContext jec) throws JobExecutionException {

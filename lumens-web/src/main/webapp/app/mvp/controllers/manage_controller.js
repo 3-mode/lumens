@@ -60,6 +60,7 @@ Lumens.controllers
     });
     $scope.jobLogBar.getPart1Element().append($compile('<div ng-include="job_log_bar_template"></div>')($scope));
     $scope.jobLogBar.getPart2Element().append($compile('<div ng-include="job_list_log_template" style="overflow: auto; position: relative; width: 100%; height: 100%;"></div>')($scope));
+    $scope.currentLogType = "id_server_log";
     LogFileService.log(function (result) {
         $scope.jobLogContent = null;
         if (result.status === 'OK') {
@@ -148,6 +149,14 @@ Lumens.controllers
                 Notifier.message("error", "Error", error);
                 $("#jobLogLoading").hide();
             })
+        }
+        else if ("id_server_log" === id_btn) {
+            $scope.currentLogType = id_btn;
+            Notifier.message("info", "Success", "Server Log display is used");
+        }
+        else if ("id_job_log" === id_btn) {
+            $scope.currentLogType = id_btn;
+            Notifier.message("info", "Success", "Job Log display is used");
         }
     };
     $scope.selectJob = function (index) {

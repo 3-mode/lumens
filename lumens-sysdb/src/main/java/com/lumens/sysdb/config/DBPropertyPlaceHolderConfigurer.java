@@ -3,7 +3,7 @@
  */
 package com.lumens.sysdb.config;
 
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.core.io.PathResource;
@@ -15,7 +15,7 @@ import org.springframework.core.io.Resource;
  */
 public class DBPropertyPlaceHolderConfigurer extends PropertyPlaceholderConfigurer {
 
-    private final Logger log = LogSysFactory.getLogger(DBPropertyPlaceHolderConfigurer.class);
+    private final Logger log = SysLogFactory.getLogger(DBPropertyPlaceHolderConfigurer.class);
 
     @Override
     public void setLocation(Resource location) {

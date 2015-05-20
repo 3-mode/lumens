@@ -3,7 +3,7 @@
  */
 package com.lumens.connector.logminer.impl;
 
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class RedoLog implements Constants {
 
-    private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
+    private final Logger log = SysLogFactory.getLogger(DefaultLogMiner.class);
     DatabaseClient dbClient;
     private Boolean isSupplementalLog = null;
     private Boolean isArchivedLogMode = null;

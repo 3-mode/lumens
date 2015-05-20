@@ -9,7 +9,7 @@ import com.lumens.engine.TransformEngineContext;
 import com.lumens.engine.handler.InputOutputInspectionHandler;
 import com.lumens.io.JsonUtility;
 import com.lumens.io.Utils;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.model.Element;
 import com.lumens.model.serializer.ElementSerializer;
 import com.lumens.sysdb.DAOFactory;
@@ -24,7 +24,7 @@ import org.codehaus.jackson.JsonGenerator;
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
 public class TransformComponentDBLogHandler implements InputOutputInspectionHandler {
-    private final Logger log = LogSysFactory.getLogger(TransformComponent.class);
+    private final Logger log = SysLogFactory.getLogger(TransformComponent.class);
     private final long projectID;
     private final String projectName;
 

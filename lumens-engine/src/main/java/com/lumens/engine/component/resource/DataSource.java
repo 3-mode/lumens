@@ -20,7 +20,7 @@ import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.TransformException;
 import com.lumens.engine.handler.InputOutputInspectionHandler;
 import com.lumens.engine.handler.InspectionHandler;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
@@ -36,7 +36,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class DataSource extends AbstractTransformComponent implements RegisterFormatComponent, Resource {
 
-    private final Logger log = LogSysFactory.getLogger(DataSource.class);
+    private final Logger log = SysLogFactory.getLogger(DataSource.class);
     private final Map<String, FormatEntry> registerOUTFormatList;
     private final Map<String, FormatEntry> registerINFormatList;
     private Connector connector;

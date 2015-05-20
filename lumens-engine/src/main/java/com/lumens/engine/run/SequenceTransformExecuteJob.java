@@ -10,7 +10,7 @@ import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.handler.InspectionHandler;
 import com.lumens.engine.log.ElementExceptionDBHandler;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
  * @author shaofeng wang (shaofeng.wang@outlook.com)
  */
 public class SequenceTransformExecuteJob implements Executor {
-    private final Logger log = LogSysFactory.getLogger(SequenceTransformExecuteJob.class);
+    private final Logger log = SysLogFactory.getLogger(SequenceTransformExecuteJob.class);
     private TransformProject project;
     private List<InspectionHandler> handlers;
 

@@ -4,7 +4,7 @@
 package com.lumens.connector.logminer.impl;
 
 import com.lumens.connector.database.DBUtils;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class DatabaseClient implements Constants {
 
-    private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
+    private final Logger log = SysLogFactory.getLogger(DefaultLogMiner.class);
 
     protected Driver driverObj;
     public Connection conn = null;

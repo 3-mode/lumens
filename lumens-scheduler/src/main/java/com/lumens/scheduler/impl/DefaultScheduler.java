@@ -5,7 +5,7 @@ package com.lumens.scheduler.impl;
 
 import com.lumens.engine.TransformEngine;
 import com.lumens.engine.TransformProject;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.scheduler.JobScheduler;
 import com.lumens.scheduler.JobConfiguration.Repeat;
 import com.lumens.scheduler.JobMonitor;
@@ -38,7 +38,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
  */
 public class DefaultScheduler implements JobScheduler {
 
-    private final Logger log = LogSysFactory.getLogger(DefaultScheduler.class);
+    private final Logger log = SysLogFactory.getLogger(DefaultScheduler.class);
     private final boolean isStarted;
     private Scheduler sched;
     private JobMonitor jobMonitor;

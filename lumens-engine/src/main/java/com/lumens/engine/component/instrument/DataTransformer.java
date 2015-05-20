@@ -15,7 +15,7 @@ import com.lumens.engine.ExecuteContext;
 import com.lumens.engine.TransformException;
 import com.lumens.engine.handler.InputOutputInspectionHandler;
 import com.lumens.engine.handler.InspectionHandler;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.model.Element;
 import com.lumens.processor.Processor;
 import com.lumens.processor.transform.TransformMapper;
@@ -33,7 +33,7 @@ import org.apache.logging.log4j.Logger;
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
 public class DataTransformer extends AbstractTransformComponent implements RuleComponent, Instrument {
-    private final Logger log = LogSysFactory.getLogger(DataTransformer.class);
+    private final Logger log = SysLogFactory.getLogger(DataTransformer.class);
     private String name;
     private final Processor processor;
     private final List<TransformRuleEntry> ruleList = new ArrayList<>();

@@ -8,7 +8,7 @@ import com.lumens.engine.component.FormatEntry;
 import com.lumens.engine.component.TransformRuleEntry;
 import com.lumens.engine.component.resource.DataSource;
 import com.lumens.engine.component.instrument.DataTransformer;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class TransformProject {
 
-    private final Logger log = LogSysFactory.getLogger(TransformProject.class);
+    private final Logger log = SysLogFactory.getLogger(TransformProject.class);
     private List<DataSource> datasourceList = new ArrayList<>();
     private List<DataTransformer> transformerList = new ArrayList<>();
     private List<StartEntry> startList = new ArrayList<>();

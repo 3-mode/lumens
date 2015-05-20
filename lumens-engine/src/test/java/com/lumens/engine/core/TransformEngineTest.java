@@ -23,7 +23,7 @@ import com.lumens.engine.log.ElementExceptionDBHandler;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectJsonParser;
 import com.lumens.engine.serializer.ProjectSerializer;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.model.Element;
 import com.lumens.processor.transform.TransformForeach;
 import com.lumens.processor.transform.TransformRule;
@@ -52,7 +52,7 @@ public class TransformEngineTest {
     }
 
     public TransformEngineTest() {
-        LogSysFactory.start("console", null);
+        SysLogFactory.start("console", null);
         transformEngine = new TransformEngine();
     }
 

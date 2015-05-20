@@ -3,7 +3,7 @@
  */
 package com.lumens.connector.logminer.impl;
 
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -14,7 +14,7 @@ import org.junit.Before;
  */
 public class TestBase {
 
-    protected final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
+    protected final Logger log = SysLogFactory.getLogger(DefaultLogMiner.class);
 
     protected static final String DATABASE_DRIVER_VAL = "file:///D:/app/oracle/11.2.0/dbhome/jdbc/lib/ojdbc6.jar";
     protected static final String DATABASE_SOURCE_URL_VAL = "jdbc:oracle:thin:@127.0.0.1:1521:orcl";
