@@ -6,7 +6,7 @@ package com.lumens.scheduler.impl;
 import com.lumens.scheduler.JobMonitor;
 import com.lumens.scheduler.JobScheduler;
 import com.lumens.sysdb.entity.Project;
-import com.lumens.sysdb.utils.DBHelper;
+import com.lumens.engine.DBHelper;
 import java.util.List;
 import java.util.ArrayList;
 import org.quartz.JobExecutionContext;
@@ -17,16 +17,16 @@ import org.quartz.JobListener;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class DefaultJobMonitor implements JobMonitor, JobListener {
-    private final JobScheduler sched;
+public class ScheduleJobMonitor implements JobMonitor, JobListener {
+    private final JobScheduler scheduler;
     private final String name;
     private final List<String> pendingJobList = new ArrayList();
     private final List<String> runningJobList = new ArrayList();
 
-    public DefaultJobMonitor(JobScheduler scheduler) {
+    public ScheduleJobMonitor(JobScheduler scheduler) {
         name = "Default Monitor";
-        this.sched = scheduler;
-        sched.registerJobListener(this);
+        this.scheduler = scheduler;
+        scheduler.registerJobListener(this);
     }
 
     @Override

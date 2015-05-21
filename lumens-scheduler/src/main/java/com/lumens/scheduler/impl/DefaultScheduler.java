@@ -40,7 +40,7 @@ public class DefaultScheduler implements JobScheduler {
 
     private final Logger log = SysLogFactory.getLogger(DefaultScheduler.class);
     private final boolean isStarted;
-    private Scheduler sched;
+    private Scheduler schdulerDelegation;
     private JobMonitor jobMonitor;
     private TransformEngine engine;
     private final List<JobConfiguration> jobList = new ArrayList();
@@ -61,7 +61,7 @@ public class DefaultScheduler implements JobScheduler {
     @Override
     public void registerJobListener(JobListener listener) {
         try {
-            sched.getListenerManager().addJobListener(listener);
+            schdulerDelegation.getListenerManager().addJobListener(listener);
         } catch (SchedulerException ex) {
             throw new RuntimeException(ex);
         }
@@ -70,7 +70,7 @@ public class DefaultScheduler implements JobScheduler {
     @Override
     public void unRegisterJobListener(JobListener listener) {
         try {
-            sched.getListenerManager().removeJobListener(listener.getName());
+            schdulerDelegation.getListenerManager().removeJobListener(listener.getName());
         } catch (SchedulerException ex) {
             throw new RuntimeException(ex);
         }
@@ -113,7 +113,7 @@ public class DefaultScheduler implements JobScheduler {
             builder.withSchedule(getQuartzBuilder(job.getRepeat(), job.getInterval()));
             builder.startAt(new Date(job.getStartTime()));
 
-            sched.scheduleJob(jobDetail, builder.build());
+            schdulerDelegation.scheduleJob(jobDetail, builder.build());
         } catch (SchedulerException ex) {
             throw new RuntimeException(ex);
         }
@@ -158,7 +158,7 @@ public class DefaultScheduler implements JobScheduler {
         // Remove from map and scheduler
         String group = Long.toString(jobId);
         try {
-            sched.deleteJob(new JobKey(job.getName(), group));
+            schdulerDelegation.deleteJob(new JobKey(job.getName(), group));
         } catch (SchedulerException ex) {
             log.error(ex);
         }
@@ -186,7 +186,7 @@ public class DefaultScheduler implements JobScheduler {
         String group = Long.toString(job.getId());
         for (TransformProject proj : job.getProjectList()) {
             try {
-                sched.deleteJob(new JobKey(proj.getName(), group));
+                schdulerDelegation.deleteJob(new JobKey(proj.getName(), group));
             } catch (SchedulerException ex) {
                 // TODO: log error 
             }
@@ -207,9 +207,9 @@ public class DefaultScheduler implements JobScheduler {
     public final void start() {
         try {
             if (!isStarted) {
-                sched = new org.quartz.impl.StdSchedulerFactory().getScheduler();
-                sched.start();
-                jobMonitor = new DefaultJobMonitor(this);
+                schdulerDelegation = new org.quartz.impl.StdSchedulerFactory().getScheduler();
+                schdulerDelegation.start();
+                jobMonitor = new ScheduleJobMonitor(this);
             }
 
         } catch (SchedulerException ex) {
@@ -221,7 +221,7 @@ public class DefaultScheduler implements JobScheduler {
     public void stop() {
         try {
             if (isStarted) {
-                sched.shutdown(false);  // no wait of tasks finished
+                schdulerDelegation.shutdown(false);  // no wait of tasks finished
             }
         } catch (SchedulerException ex) {
             // TODO: Print log

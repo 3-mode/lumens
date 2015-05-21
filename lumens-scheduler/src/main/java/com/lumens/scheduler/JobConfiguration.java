@@ -80,4 +80,6 @@ public interface JobConfiguration {
     public List<InspectionHandler> getInspectionHandlers();
 
     public List<InspectionHandler> getInspectionHandlers(TransformProject project);
+
+    public void verfiyAssociatedProjects();
 }
