@@ -16,6 +16,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.codehaus.jackson.JsonGenerator;
 
@@ -42,7 +43,7 @@ public class LogService {
 
     @GET
     @Path("/file")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response listLogItem(@QueryParam("job_id") long jobID, @QueryParam("more") boolean more, @QueryParam("offset") long offset) {
         // TODO need handle offset, more, size
         System.out.println("[" + jobID + ";" + more + ";" + offset + "]");

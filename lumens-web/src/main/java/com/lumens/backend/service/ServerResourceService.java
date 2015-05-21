@@ -11,6 +11,7 @@ import com.lumens.management.server.monitor.OSResourcesMonitor;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -20,16 +21,16 @@ import javax.ws.rs.core.Response;
 @Path("/server_resources")
 public class ServerResourceService {
     @GET
-    @Produces("application/json")
     @Path("/cpu_count")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response listCpuCount() {
         OSResourcesMonitor osMonitor = ApplicationContext.get().getOSResourcesMonitor();
         return Response.ok().entity(String.format("{ \"cpu_count\" : %d }", osMonitor.getCpuCount())).build();
     }
 
     @GET
-    @Produces("application/json")
     @Path("/cpu_perc")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response listCpuPerc() {
         OSResourcesMonitor osMonitor = ApplicationContext.get().getOSResourcesMonitor();
         int cpuCount = osMonitor.getCpuCount();
@@ -48,8 +49,8 @@ public class ServerResourceService {
     }
 
     @GET
-    @Produces("application/json")
     @Path("/mem_perc")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getMemPerc() {
         OSResourcesMonitor osMonitor = ApplicationContext.get().getOSResourcesMonitor();
         Memory mem = osMonitor.getMemPerc();
@@ -61,8 +62,8 @@ public class ServerResourceService {
     }
 
     @GET
-    @Produces("application/json")
     @Path("/disk")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getDiskInfo() {
         OSResourcesMonitor osMonitor = ApplicationContext.get().getOSResourcesMonitor();
         Disk[] diskList = osMonitor.getDiskList();

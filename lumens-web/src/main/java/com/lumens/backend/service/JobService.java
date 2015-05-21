@@ -6,8 +6,6 @@ package com.lumens.backend.service;
 import com.lumens.backend.ApplicationContext;
 import com.lumens.backend.ServerUtils;
 import static com.lumens.backend.ServiceConstants.CONTENT;
-import com.lumens.engine.handler.InspectionHandler;
-import com.lumens.engine.log.ElementExceptionDBHandler;
 import com.lumens.io.JsonUtility;
 import com.lumens.scheduler.JobConfigurationBuilder;
 import com.lumens.scheduler.JobConfiguration;
@@ -19,7 +17,6 @@ import com.lumens.sysdb.entity.Project;
 import com.lumens.engine.DBHelper;
 import com.lumens.logsys.JobLogFactory;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import javax.ws.rs.DELETE;
@@ -30,6 +27,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonNode;
@@ -42,7 +40,7 @@ import org.codehaus.jackson.JsonNode;
 public class JobService {
 
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response listJob() {
         try {
             JsonUtility utility = JsonUtility.createJsonUtility();
@@ -84,14 +82,14 @@ public class JobService {
 
     @DELETE
     @Path("{jobId}")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteJob(@PathParam("jobId") String jobId) {
         return Response.ok().build();
     }
 
     @GET
     @Path("{jobId}")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getOrExecuteJob(@PathParam("jobId") String jobId, @QueryParam("action") String action) {
         try {
             String message = "";
@@ -127,7 +125,7 @@ public class JobService {
     }
 
     @PUT
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createJob(String message) {
         JsonNode messageJson = JsonUtility.createJson(message);
         JobDAO jobDAO = DAOFactory.getJobDAO();
@@ -153,7 +151,7 @@ public class JobService {
 
     @POST
     @Path("{jobId}")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response updateJob(@PathParam("jobId") String jobId, String message) {
         JsonNode messageJson = JsonUtility.createJson(message);
         JobDAO jobDAO = DAOFactory.getJobDAO();
