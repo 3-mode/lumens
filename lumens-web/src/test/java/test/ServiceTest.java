@@ -126,11 +126,12 @@ public class ServiceTest {
         System.in.read();
     }
 
+    @Test
     public void testLog() {
         System.setProperty("lumens.base", "../dist/lumens");
         ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
         LogService ls = new LogService();
-        Response resp = ls.listLogItem(false, 0, 0);
+        Response resp = ls.listLogItem(0, true, 454716);
         String str = resp.getEntity().toString();
         System.out.println("logs:" + str);
     }
