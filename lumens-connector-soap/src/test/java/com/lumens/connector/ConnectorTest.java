@@ -107,8 +107,8 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         System.out.println(envelope);
 
         props.put(WSDL, new Value(getClass().getResource("/wsdl/ChinaOpenFundWS.asmx").toString()));
-        //props.put(PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
-        //props.put(PROXY_PORT, new Value(8080));
+        props.put(PROXY_ADDR, new Value("web-proxy.atl.hp.com"));
+        props.put(PROXY_PORT, new Value(8080));
         connector.setPropertyList(props);
         connector.open();
         services = connector.getFormatList(Direction.IN);

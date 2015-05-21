@@ -5,8 +5,8 @@ package com.lumens.scheduler;
 
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.handler.InspectionHandler;
-import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -82,4 +82,10 @@ public interface JobConfiguration {
     public List<InspectionHandler> getInspectionHandlers(TransformProject project);
 
     public void verfiyAssociatedProjects();
+
+    public void stop();
+
+    public Logger getLogger();
+
+    public boolean hasLogger();
 }

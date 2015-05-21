@@ -70,7 +70,7 @@ public class ConnectorTest implements OracleConstants {
         }
     }
 
-    @Test
+    // TODO need to mock db ENV
     public void testOracleSQLBuilder() throws Exception {
         // Test select SQL generating
         Format employeeFmt = new DataFormat("Testtable", Form.STRUCT);
@@ -130,7 +130,7 @@ public class ConnectorTest implements OracleConstants {
         System.out.println("Generated select SQL: " + sqlTest.generatePageSQL(sqlSelect, 1, 100));
 
         OracleClient client = new OracleClient(new MockOracleConnector("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar",
-                                                                       "jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr", "alter session set NLS_DATE_FORMAT='yyyy-mm-dd'", 50));
+                                                                       "jdbc:oracle:thin:@localhost:1521:orcl", "hr", "hr", "alter session set NLS_DATE_FORMAT='yyyy-mm-dd'", 50));
         client.open();
         client.getFormatList(Direction.IN, true);
         OracleOperation oo = new OracleOperation(client);

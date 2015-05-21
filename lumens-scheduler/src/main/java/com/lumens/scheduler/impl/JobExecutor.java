@@ -28,11 +28,10 @@ public class JobExecutor implements Job {
     public void execute(JobExecutionContext jec) throws JobExecutionException {
         JobDetail job = jec.getJobDetail();
         JobConfiguration jobConfig = (JobConfiguration) job.getJobDataMap().get(JobConstants.JOB_CONFIG);
-        TransformEngine engine = (TransformEngine) job.getJobDataMap().get(JobConstants.TRNASFORM_ENGINE);
+        TransformEngine engine = (TransformEngine) job.getJobDataMap().get(JobConstants.TRANSFORM_ENGINE);
         String jobId = Long.toString(jobConfig.getId());
         String jobName = jobConfig.getName();
-
-        log.info(String.format("**** Start Job [%s:%s] ", jobId, jobName));
+        logInfo(jobConfig, String.format("**** Start Job [%s:%s] ", jobId, jobName));
         Iterator<TransformProject> itr = jobConfig.getProjectList().iterator();
         TransformProject project = null;
         try {
@@ -41,12 +40,25 @@ public class JobExecutor implements Job {
                 engine.execute(new SequenceTransformExecuteJob(project, jobConfig.getInspectionHandlers(project)));
             }
         } catch (Exception ex) {
-            if (project != null)
-                log.error(String.format("Failed on starting Job [%s:%s] to execute project [%s] ", jobId, jobName, project.getName()));
-            log.error(ex);
+            if (project != null) {
+                logError(jobConfig, String.format("Failed on starting Job [%s:%s] to execute project [%s] ", jobId, jobName, project.getName()));
+            }
+            logError(jobConfig, ex.toString());
             throw new JobExecutionException(ex);
         } finally {
-            log.info(String.format("**** Complete Job [%s:%s]", jobId, jobName));
+            logInfo(jobConfig, String.format("**** Complete Job [%s:%s]", jobId, jobName));
         }
+    }
+
+    private void logError(JobConfiguration jobConfig, String message) {
+        if (jobConfig.hasLogger())
+            jobConfig.getLogger().error(message);
+        log.error(message);
+    }
+
+    private void logInfo(JobConfiguration jobConfig, String message) {
+        if (jobConfig.hasLogger())
+            jobConfig.getLogger().info(message);
+        log.info(message);
     }
 }

@@ -106,7 +106,7 @@ public class DefaultScheduler implements JobScheduler {
             .withIdentity(job.getName(), group)
             .build();
             jobDetail.getJobDataMap().put(JobConstants.JOB_CONFIG, job);
-            jobDetail.getJobDataMap().put(JobConstants.TRNASFORM_ENGINE, this.engine);
+            jobDetail.getJobDataMap().put(JobConstants.TRANSFORM_ENGINE, this.engine);
 
             TriggerBuilder<Trigger> builder = newTrigger();
             builder.withIdentity(Long.toString(job.getId()), group);
@@ -158,6 +158,7 @@ public class DefaultScheduler implements JobScheduler {
         // Remove from map and scheduler
         String group = Long.toString(jobId);
         try {
+            job.stop();
             schdulerDelegation.deleteJob(new JobKey(job.getName(), group));
         } catch (SchedulerException ex) {
             log.error(ex);

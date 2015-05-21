@@ -38,7 +38,7 @@ public class ApplicationContext {
         context.start();
     }
 
-    public static String getLogPath() {
+    public static String getServerLogPath() {
         return LUMENS_BASE + File.separator + "logs" + File.separator + "lumens.log";
     }
 

@@ -42,8 +42,8 @@ public class JobLogFactory implements LogFactory {
         final Configuration config = ctx.getConfiguration();
         Layout layout = PatternLayout.createLayout(PatternLayout.SIMPLE_CONVERSION_PATTERN, config, null, null, true, false, null, null);
         TriggeringPolicy tp = SizeBasedTriggeringPolicy.createPolicy("10MB");
-        Appender appender = RollingFileAppender.createAppender(String.format("%s/lumens-job-%s.log", lumensBase, jobID),
-                                                               lumensBase + "/logs/$${date:yyyy-MM}/lumens-job-" + jobID + "-%d{MM-dd-yyyy}-%i.log.gz",
+        Appender appender = RollingFileAppender.createAppender(String.format("%s/logs/lumens-job-%s.log", lumensBase, jobID),
+                                                               lumensBase + "/logs/" + jobID + "/lumens-job-" + jobID + ".log.gz",
                                                                "true", jobID, null, null, null, tp, null, layout, null,
                                                                null, null, null, config);
 
@@ -51,7 +51,7 @@ public class JobLogFactory implements LogFactory {
         config.addAppender(appender);
         AppenderRef ref = AppenderRef.createAppenderRef(jobID, null, null);
         AppenderRef[] refs = new AppenderRef[]{ref};
-        LoggerConfig loggerConfig = LoggerConfig.createLogger("false", Level.INFO, "org.apache.logging.log4j",
+        LoggerConfig loggerConfig = LoggerConfig.createLogger("false", Level.DEBUG, jobID,
                                                               "true", refs, null, config, null);
         loggerConfig.addAppender(appender, null, null);
         config.addLogger(jobID, loggerConfig);

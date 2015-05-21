@@ -72,7 +72,7 @@ public class LogService {
     }
 
     private DiscoverFileLog discoverLastLogLines(DiscoverFileLog fileLog, boolean more) throws FileNotFoundException, IOException {
-        String filePath = ApplicationContext.getLogPath();
+        String filePath = ApplicationContext.getServerLogPath();
         if (new File(filePath).exists()) {
             try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
                 System.out.println("Log file: " + filePath);
