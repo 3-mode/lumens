@@ -136,4 +136,31 @@ DELETE FROM LUNS_ELEM_EXCEPTION_LOG WHERE job_id = %d
 ]]>
         </sql>
     </database-access-object>
+    <database-access-object name="ConfigDAO">
+        <sql name="AllConfig">
+<![CDATA[
+SELECT * FROM LUNS_CONFIGURATION
+]]>
+        </sql>
+        <sql name="FindConfig">
+<![CDATA[
+SELECT * FROM LUNS_CONFIGURATION WHERE ID = %d
+]]>
+        </sql>
+        <sql name="CreateConfig">
+<![CDATA[
+INSERT INTO LUNS_CONFIGURATION (ID, CONFIG_NAME, DESCRIPTION, CONFIGURATION) VALUES (?, ?, ?, ?)
+]]>
+        </sql>
+        <sql name="UpdateConfig">
+<![CDATA[
+UPDATE LUNS_CONFIGURATION SET CONFIG_NAME=?, DESCRIPTION=?, CONFIGURATION=? WHERE ID=?
+]]>
+        </sql>
+        <sql name="DeleteConfig">
+<![CDATA[
+DELETE FROM LUNS_CONFIGURATION WHERE ID = %d
+]]>
+        </sql>
+    </database-access-object>
 </database-access-objects>
