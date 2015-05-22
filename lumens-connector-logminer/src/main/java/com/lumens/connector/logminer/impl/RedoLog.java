@@ -99,6 +99,7 @@ public class RedoLog implements Constants {
         try {
             dbClient.execute(SQL_ENABLE_SUPPLEMENTAL_LOG);
             bSuccess = true;
+            isSupplementalLog = true;
         } catch (Exception ex) {
             log.error("Fail to enable Oracle supplemental log. Error message: " + ex.getMessage());
         }

@@ -17,7 +17,7 @@ public interface Constants {//extends DBConstants {
     public String SQL_GEG_VERSION = "SELECT version FROM sys.v$instance";  // need sys privelege
     public String SQL_CHECK_SUPPLEMENTAL_LOG = "SELECT supplemental_log_data_min FROM sys.v_$database";  // need sys priveledge
     public String SQL_CHECK_LOG_MODE = "SELECT log_mode FROM sys.v_$database";
-    public String SQL_ENABLE_SUPPLEMENTAL_LOG = "ALTER DATABASE ADD SUPPLEMENTAL LOG DATA;";
+    public String SQL_ENABLE_SUPPLEMENTAL_LOG = "ALTER DATABASE ADD SUPPLEMENTAL LOG DATA";
     public String SQL_START_LOGMINER = "BEGIN sys.dbms_logmnr.start_logmnr(%s);END;";
     public String SQL_END_LOGMINER = "BEGIN sys.dbms_logmnr.end_logmnr();END;";
     public String SQL_QUERY_DIRECTORY_PATH = "SELECT directory_path FROM sys.dba_directories WHERE DIRECTORY_NAME='UTL_FILE_DIR'";

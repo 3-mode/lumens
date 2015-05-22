@@ -65,7 +65,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
             }
             if (!redolog.isSupplementalLogEnabled()) {
                 log.info("Tryinng to enable Suplemental Log Mode.");
-                if (config.isSupplementalLogEnabled() && redolog.enableSupplementalLog()) {
+                if (redolog.enableSupplementalLog()) {
                     log.info("Succeed enabled Suplemental Log Mode.");
                 }
                 if (!redolog.isSupplementalLogEnabled()) {
