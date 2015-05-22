@@ -178,10 +178,16 @@ Lumens.controllers
             $scope.onCommand("id_exec_log_refresh");
         }
         else if ("id_job_log" === id_btn) {
-            $scope.currentLogType = id_btn;
-            sessionStorage.local_log_storage = angular.toJson({current_log_type: $scope.currentLogType});
-            Notifier.message("info", "Success", "Job Log display is used");
-            $scope.onCommand("id_exec_log_refresh");
+            if ($scope.selectJobIndex > 0) {
+                $scope.currentLogType = id_btn;
+                sessionStorage.local_log_storage = angular.toJson({current_log_type: $scope.currentLogType});
+                Notifier.message("info", "Success", "Job Log display is used");
+                $scope.onCommand("id_exec_log_refresh");
+            }
+            else {
+                delete $scope.jobLogContent;
+                Notifier.message("warn", "Warning", "No job is selected !");
+            }
         }
     };
     $scope.selectJob = function (index) {

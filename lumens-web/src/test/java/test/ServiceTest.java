@@ -45,22 +45,20 @@ public class ServiceTest {
     // The methods must be annotated with annotation @Test. For example:
     //
 
-    public void testDBProject() throws Exception {
+    public void testDBProject(long projectID) throws Exception {
         if (true) {
             System.setProperty("lumens.base", "../dist/lumens");
             ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
-            Project project = pDAO.getProject(1421324074892L); //1421234160179L page //1415415434544L //1421324074892L CSV
+            Project project = pDAO.getProject(projectID); //1421234160179L page //1415415434544L //1421324074892L CSV
             TransformProject projectInstance = new TransformProject();
             new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
             //assertEquals(3, projectInstance.getDataTransformerList().size());
             //assertEquals(4, projectInstance.getDatasourceList().size());
             List<InspectionHandler> handlers = new ArrayList<>();
             handlers.addAll(Arrays.asList(new TransformComponentInOutLogHandler()));
-            for (int i = 0; i < 1000; ++i) {
-                System.out.println("Transform: " + i);
+            for (int i = 0; i < 100; ++i)
                 new SequenceTransformExecuteJob(projectInstance, handlers).execute();
-            }
             //ApplicationContext.get().getTransformEngine().execute(new SequenceTransformExecuteJob(projectInstance, handlers));
         }
     }
@@ -126,7 +124,6 @@ public class ServiceTest {
         System.in.read();
     }
 
-    @Test
     public void testLog() {
         System.setProperty("lumens.base", "../dist/lumens");
         ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
@@ -134,6 +131,10 @@ public class ServiceTest {
         Response resp = ls.listLogItem(0, true, 454716);
         String str = resp.getEntity().toString();
         System.out.println("logs:" + str);
+    }
+
+    public void testCSVProjectMemoryLeak() throws Exception {
+        testDBProject(1421842012147L);
     }
 
 }
