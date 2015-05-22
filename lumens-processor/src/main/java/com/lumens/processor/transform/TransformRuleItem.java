@@ -17,15 +17,16 @@ import java.util.List;
  * @author shaofeng wang
  */
 public class TransformRuleItem {
-
+    private final TransformRule rule;
     private final Format format;
-    private TransformRuleItem parent;
     private final List<TransformForeach> foreachList = new ArrayList<>();
+    private TransformRuleItem parent;
     private List<TransformRuleItem> children;
-    private Script script;
     private String orignalScriptText;
+    private Script script;
 
-    TransformRuleItem(Format format) {
+    TransformRuleItem(TransformRule rule, Format format) {
+        this.rule = rule;
         this.format = format;
     }
 
@@ -35,7 +36,7 @@ public class TransformRuleItem {
         if (ProcessorUtils.isPathFormat(trimedScriptText)) {
             this.script = new AccessPathScript(ProcessorUtils.getAccessPath(trimedScriptText));
         } else {
-            this.script = new JavaScript(format.getFullPath().toString(), trimedScriptText);
+            this.script = new JavaScript(rule.getJavaScriptContext(), format.getFullPath().toString(), trimedScriptText);
         }
     }
 
@@ -95,7 +96,7 @@ public class TransformRuleItem {
         if (child == null) {
             throw new IllegalArgumentException("The child format \"" + name + "\" does not exist");
         }
-        TransformRuleItem item = new TransformRuleItem(child);
+        TransformRuleItem item = new TransformRuleItem(rule, child);
         item.parent = this;
         children.add(item);
         return item;

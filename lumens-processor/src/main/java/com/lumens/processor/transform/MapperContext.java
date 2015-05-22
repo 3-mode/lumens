@@ -52,4 +52,10 @@ public class MapperContext implements Context {
         if (getParent() != null)
             getParent().declareVariables(scope);
     }
+
+    @Override
+    public void removeVariables(Scriptable scope) {
+        if (getParent() != null)
+            getParent().removeVariables(scope);
+    }
 }

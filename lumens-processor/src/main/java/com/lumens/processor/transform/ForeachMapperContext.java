@@ -53,4 +53,10 @@ public class ForeachMapperContext extends MapperContext {
         scope.put(getForeach().getIndexName(), scope, getCurrentIndex());
     }
 
+    @Override
+    public void removeVariables(Scriptable scope) {
+        if (getParent() != null)
+            getParent().declareVariables(scope);
+        scope.delete(getForeach().getIndexName());
+    }
 }

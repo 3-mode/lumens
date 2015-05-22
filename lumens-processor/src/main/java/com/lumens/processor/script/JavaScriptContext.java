@@ -12,6 +12,7 @@ import org.mozilla.javascript.ScriptableObject;
 public class JavaScriptContext {
 
     private ScriptableObject globalScope;
+    private boolean isStarted;
 
     public ScriptableObject getGlobalScope() {
         return globalScope;
@@ -22,6 +23,7 @@ public class JavaScriptContext {
             org.mozilla.javascript.Context ctx = org.mozilla.javascript.Context.enter();
             globalScope = ctx.initStandardObjects();
             ctx.evaluateString(globalScope, ScriptUtils.loadJS("com/lumens/processor/script/build-in.js"), "build-in", 1, null);
+            isStarted = true;
             return this;
         } catch (Exception e) {
             // TODO Process the log4j
@@ -30,7 +32,9 @@ public class JavaScriptContext {
     }
 
     public void stop() {
-        org.mozilla.javascript.Context.exit();
+        if (isStarted)
+            org.mozilla.javascript.Context.exit();
+        isStarted = false;
     }
 
     public static JavaScriptContext createInstance() {

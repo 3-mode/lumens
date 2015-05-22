@@ -11,9 +11,12 @@ import org.mozilla.javascript.Scriptable;
  * @author shaofeng wang
  */
 public interface Context {
+
     public Element getRootSourceElement();
 
     public Context getParent();
 
     public void declareVariables(Scriptable scope);
+
+    public void removeVariables(Scriptable scope);
 }
