@@ -12,22 +12,23 @@ import org.mozilla.javascript.ScriptableObject;
 public class JavaScript implements Script {
 
     private final JavaScriptBuilder builder = new JavaScriptBuilder();
-    private final JavaScriptContext jsContext;
     private final ScriptableObject globalScope;
     private final String sourceName;
     private final String orignalScriptText;
     private final Function jsFunction;
+    private JavaScriptContext selfJsContext;
 
     public JavaScript(String script) throws Exception {
         this("script" + System.currentTimeMillis(), script);
     }
 
     public JavaScript(String sourceName, String scriptText) throws Exception {
-        this(JavaScriptContext.createInstance().start(), sourceName, scriptText);
+        this(null, sourceName, scriptText);
     }
 
     public JavaScript(JavaScriptContext jsContext, String sourceName, String scriptText) throws Exception {
-        this.jsContext = jsContext;
+        if (jsContext == null)
+            selfJsContext = jsContext = JavaScriptContext.createInstance().start();
         this.sourceName = sourceName;
         this.orignalScriptText = scriptText;
         org.mozilla.javascript.Context jsCtx = org.mozilla.javascript.Context.enter();
@@ -45,7 +46,8 @@ public class JavaScript implements Script {
         try {
             super.finalize();
         } finally {
-            jsContext.stop();
+            if (selfJsContext != null)
+                selfJsContext.stop();
             org.mozilla.javascript.Context.exit();
         }
     }

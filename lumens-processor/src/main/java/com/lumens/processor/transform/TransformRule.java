@@ -27,6 +27,13 @@ public class TransformRule implements Rule {
         this.root = new TransformRuleItem(this, dstFmt);
     }
 
+    @Override
+    public void finalize() throws Throwable {
+        super.finalize();
+        if (jsContext != null)
+            jsContext.stop();
+    }
+
     public JavaScriptContext getJavaScriptContext() {
         return this.jsContext;
     }
