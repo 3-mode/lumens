@@ -23,7 +23,6 @@ public class JavaScriptContext {
             org.mozilla.javascript.Context ctx = org.mozilla.javascript.Context.enter();
             globalScope = ctx.initStandardObjects();
             ctx.evaluateString(globalScope, ScriptUtils.loadJS("com/lumens/processor/script/build-in.js"), "build-in", 1, null);
-            isStarted = true;
             return this;
         } catch (Exception e) {
             // TODO Process the log4j
@@ -32,9 +31,7 @@ public class JavaScriptContext {
     }
 
     public void stop() {
-        if (isStarted)
-            org.mozilla.javascript.Context.exit();
-        isStarted = false;
+        org.mozilla.javascript.Context.exit();
     }
 
     public static JavaScriptContext createInstance() {

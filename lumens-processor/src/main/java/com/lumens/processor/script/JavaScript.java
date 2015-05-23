@@ -46,9 +46,9 @@ public class JavaScript implements Script {
         try {
             super.finalize();
         } finally {
+            org.mozilla.javascript.Context.exit();
             if (selfJsContext != null)
                 selfJsContext.stop();
-            org.mozilla.javascript.Context.exit();
         }
     }
 
