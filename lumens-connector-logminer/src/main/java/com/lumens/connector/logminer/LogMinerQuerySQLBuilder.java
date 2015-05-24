@@ -28,10 +28,10 @@ public class LogMinerQuerySQLBuilder extends DBQuerySQLBuilder implements LogMin
         }
 
         if (StringUtils.isNotEmpty(strOrderBy) && StringUtils.isNotBlank(strOrderBy)) {
-            innerQuerySQL.append(" ORDER BY (").append(strOrderBy.trim()).append(")");
+            innerQuerySQL.append(" ORDER BY ").append(strOrderBy.trim());
         }
         if (StringUtils.isNotEmpty(strGroupBy) && StringUtils.isNotBlank(strGroupBy)) {
-            innerQuerySQL.append(" GROUP BY (").append(strGroupBy.trim()).append(")");
+            innerQuerySQL.append(" GROUP BY ").append(strGroupBy.trim());
         }
 
         return innerQuerySQL.toString();

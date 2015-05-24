@@ -92,7 +92,9 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
         selectFmt.addChild(COLUMN_TABLE_NAME, Form.FIELD, Type.STRING);
 
         Element query = new DataElement(selectFmt);
-        query.addChild(SQLPARAMS).addChild(ACTION).setValue(QUERY);
+        Element sqlParams = query.addChild(SQLPARAMS);
+        sqlParams.addChild(ACTION).setValue(QUERY);
+        sqlParams.addChild(ORDERBY).setValue("SCN ASC");
 
         // sync format
         minerSync.start();
@@ -137,8 +139,8 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
                     }
                 }
             }
-            
-            if (syncChunk.size() > 0){
+
+            if (syncChunk.size() > 0) {
                 syncOperation.execute(new ElementChunk(syncChunk), syncFmt);
             }
         } catch (Exception ex) {

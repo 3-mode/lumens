@@ -109,8 +109,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
     }
 
     @Override
-    public ResultSet query(String sql
-    ) {
+    public ResultSet query(String sql) {
         if (result != null) {
             DBUtils.releaseResultSet(result);
         }
@@ -144,6 +143,8 @@ public class DefaultLogMiner implements LogMiner, Constants {
             log.warn("Unsupported operation: SCN is " + value.SCN + ", OPERATION is " + value.OPERATION);
             return;
         }
+        // JDBC Driver bug: invalid character exception while SQL end with comma
+        String SQL = value.SQL_REDO.replaceAll(";", "");
 
         // Dictionary was changed, need to rebuild 
         if (value.OPERATION.equalsIgnoreCase("DDL")) {
@@ -153,7 +154,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
         boolean doAgain = false;
         do {
             try {
-                dbClient.execute(value.SQL_REDO);
+                dbClient.execute(SQL);
                 LAST_SCN = value.SCN;
             } catch (Exception ex) {
                 log.error("Fail to sync to destination. Error message:");
