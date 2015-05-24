@@ -7,7 +7,6 @@ import com.lumens.connector.ElementChunk;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import static com.lumens.connector.database.DBConstants.ACTION;
-import static com.lumens.connector.database.DBConstants.SELECT;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import com.lumens.connector.database.client.DBElementBuilder;
 import com.lumens.connector.logminer.api.LogMiner;
@@ -30,7 +29,7 @@ public class LogMinerOperation implements Operation, LogMinerConstants {
     public LogMinerOperation(LogMiner miner) {
         this.miner = miner;
     }
-
+   
     @Override
     public OperationResult execute(ElementChunk input, Format output) throws Exception {
         // check parameter availablity

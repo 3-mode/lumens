@@ -23,15 +23,15 @@ public class LogMinerTest extends TestBase {
         config.setCommittedDataOnly(true);
         config.setNoRowid(true);
         config.setStartSCN("0");
-        
-        DefaultLogMiner miner = new DefaultLogMiner(sourceDatabase, config);        
+
+        DefaultLogMiner miner = new DefaultLogMiner(sourceDatabase, config);
         miner.buildDictionary();
-        miner.build();                
+        miner.build();
         miner.start();
         ResultSet result = miner.query("");
         try {
             System.out.println("Querying redo log:");
-            while (result.next()) {                
+            while (result.next()) {
                 System.out.println(result.getString(5));
             }
         } catch (Exception ex) {

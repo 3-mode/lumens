@@ -140,11 +140,16 @@ public class DefaultLogMiner implements LogMiner, Constants {
         if (value.SCN < LAST_SCN) {
             return;
         }
+        if (!isSupportedOperation(value.OPERATION)) {
+            log.warn("Unsupported operation: SCN is " + value.SCN + ", OPERATION is " + value.OPERATION);
+            return;
+        }
 
         // Dictionary was changed, need to rebuild 
         if (value.OPERATION.equalsIgnoreCase("DDL")) {
             buildDictionary();
         }
+
         boolean doAgain = false;
         do {
             try {
@@ -167,15 +172,32 @@ public class DefaultLogMiner implements LogMiner, Constants {
                         doAgain = true;
                         continue;
                     }
+                    else{
+                        log.error(String.format("Fail to create table %s. SCN:%s, SEG_NAME:%s, SEG_TYPE:%s, SQL_REDO: %s", value.TABLE_NAME, value.SCN, value.SEG_NAME, value.SEG_TYPE, value.SQL_REDO));
+                        break;
+                    }
                 }
 
                 if ((value.OPERATION.equalsIgnoreCase("update") || value.OPERATION.equalsIgnoreCase("delete")) && !meta.checkRecordExist(value.SQL_REDO)) {
-                    log.info(String.format("Record not exist. Ignore error and continue."));
+                    log.info("Record not exist. Ignore error and continue.");
                     break;
                 }
 
+                log.error(String.format("Fail to sync to destination. Fail on : SCN = %s, REDO = %s", value.SCN, value.SQL_REDO));
                 throw new RuntimeException("Fail to sync to destination. Error message:" + ex.getMessage());
             }
         } while (doAgain);
+    }
+
+    private boolean isSupportedOperation(String operation) {
+        boolean isSupport = false;
+        try {
+            OPERATION.valueOf(operation);
+            isSupport = true;
+        } catch (Exception ex) {
+
+        }
+
+        return isSupport;
     }
 }

@@ -24,6 +24,14 @@ public interface LogMiner {
         OFFLINE
     };
 
+    public static enum OPERATION {
+
+        UPDATE,
+        DELETE,
+        INSERT,
+        DDL
+    }
+
     public void buildDictionary();
 
     public void build();

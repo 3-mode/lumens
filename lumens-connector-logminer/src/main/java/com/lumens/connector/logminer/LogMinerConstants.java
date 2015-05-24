@@ -4,18 +4,19 @@
 package com.lumens.connector.logminer;
 
 import com.lumens.connector.database.DBConstants;
+
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public interface LogMinerConstants extends DBConstants{
+public interface LogMinerConstants extends DBConstants {
 
     public String FORMAT_NAME = "v$logmnr_contents";
     public String DATABASE_DRIVER = "databaseDriver";
     public String DATABASE_CONNECTION_URL = "databaseConnectionUrl";
     public String DATABASE_CONNECTION_USERNAME = "databaseSourceUserName";
     public String DATABASE_CONNECTION_PASSWORD = "databaseSourcePassword";
-    
+
     public String QUERY = "QUERY";
     public String SYNC = "SYNC";
 
@@ -34,9 +35,9 @@ public interface LogMinerConstants extends DBConstants{
 
     public String COLUMN_REDO = "SQL_REDO";
     public String COLUMN_SCN = "SCN";
-    public String COLUMN_OPERATION= "OPERATION";
-    public String COLUMN_SEG_OWNER= "SEG_OWNER";
-    public String COLUMN_TABLE_NAME= "TABLE_NAME";
+    public String COLUMN_OPERATION = "OPERATION";
+    public String COLUMN_SEG_OWNER = "SEG_OWNER";
+    public String COLUMN_TABLE_NAME = "TABLE_NAME";
     public int COLUMN_SCN_LENGTH = 22;
     public int COLUMN_REDO_LENGTH = 4000;
 
