@@ -3,11 +3,13 @@
  */
 
 import com.lumens.sysdb.DAOFactory;
+import com.lumens.sysdb.dao.ConfigurationDAO;
 import com.lumens.sysdb.dao.ElementExceptionDAO;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.dao.JobProjectRelationDAO;
+import com.lumens.sysdb.entity.Configuration;
 import com.lumens.sysdb.entity.ElementExceptionLog;
 import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.sysdb.entity.Job;
@@ -119,7 +121,7 @@ public class SysdbTest {
         inoutLogDAO.create(item);
     }
 
-    public static void main(String[] args) {
+    private static void createElementExceptionLog() {
         ElementExceptionDAO eeDAO = DAOFactory.getElementExceptionDAO();
         ElementExceptionLog eeLog = new ElementExceptionLog();
         eeLog.logID = 1L;
@@ -130,5 +132,12 @@ public class SysdbTest {
         eeLog.lastModifTime = new Timestamp(System.currentTimeMillis());
         eeDAO.create(eeLog);
         System.out.println("size: " + eeDAO.getLogList(100L, 101L).size());
+    }
+
+    public static void main(String[] args) {
+        ConfigurationDAO cDAO = DAOFactory.getConfigurationDAO();
+        //cDAO.create(new Configuration(101, "test", "test", "test"));
+        cDAO.getAllConfig();
+        cDAO.getConfiguration(101);
     }
 }

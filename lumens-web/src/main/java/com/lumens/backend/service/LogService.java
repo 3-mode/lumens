@@ -14,8 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.codehaus.jackson.JsonGenerator;
 
@@ -42,12 +43,13 @@ public class LogService {
 
     @GET
     @Path("/file")
-    @Produces("application/json")
-    public Response listLogItem(@PathParam("more") boolean more, @PathParam("offset") long offset, @PathParam("size") long size) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listLogItem(@QueryParam("job_id") long jobID, @QueryParam("more") boolean more, @QueryParam("offset") long offset) {
         // TODO need handle offset, more, size
+        System.out.println("[" + jobID + ";" + more + ";" + offset + "]");
         try {
             long startTime = System.currentTimeMillis();
-            DiscoverFileLog fileLog = discoverLastLogLines(new DiscoverFileLog(offset), more);
+            DiscoverFileLog fileLog = discoverLastLogLines(new DiscoverFileLog(offset), jobID, more);
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
@@ -61,8 +63,8 @@ public class LogService {
             json.writeEndArray();
             json.writeEndObject();
             json.writeEndObject();
-            if ((System.currentTimeMillis() - startTime) < 3000) {
-                Thread.sleep(2000);
+            if ((System.currentTimeMillis() - startTime) < 2000) {
+                Thread.sleep(1000);
             }
             return Response.ok().entity(utility.toUTF8String()).build();
         } catch (IOException | InterruptedException e) {
@@ -71,26 +73,28 @@ public class LogService {
         }
     }
 
-    private DiscoverFileLog discoverLastLogLines(DiscoverFileLog fileLog, boolean more) throws FileNotFoundException, IOException {
-        String filePath = ApplicationContext.getLogPath();
+    private DiscoverFileLog discoverLastLogLines(DiscoverFileLog fileLog, long jobID, boolean more) throws FileNotFoundException, IOException {
+        String filePath = null;
+        if (jobID == 0) {
+            filePath = ApplicationContext.getServerLogPath();
+        } else {
+            filePath = String.format("%s/logs/lumens-job-%s.log", ApplicationContext.get().getRealPath(), Long.toString(jobID));
+        }
         if (new File(filePath).exists()) {
             try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
-                System.out.println("Log file: " + filePath);
+                System.out.println("Log file: " + filePath + "; offset: " + fileLog.offset + "; more: " + more);
                 int lines = 0;
-                long length = file.length();
-                if (length > 0) {
-                    length--;
-                    if (more && length > fileLog.offset) {
-                        length = fileLog.offset;
-                    }
-                    file.seek(length);
-                    long seek = length;
+                long seek = file.length();
+                if (seek > 0) {
+                    if (more && seek > fileLog.offset && fileLog.offset > 0)
+                        seek = fileLog.offset;
+                    --seek;
                     List<Byte> byteList = new ArrayList<>();
                     for (; seek >= 0; --seek) {
                         fileLog.offset = seek;
                         file.seek(seek);
                         byte b = file.readByte();
-                        if ((char) b == '\n' && lines++ == 100) {
+                        if ((char) b == '\n' && lines++ == 50) {
                             break;
                         }
                         byteList.add(b);

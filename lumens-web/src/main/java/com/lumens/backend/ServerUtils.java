@@ -4,6 +4,7 @@
 package com.lumens.backend;
 
 import com.lumens.io.JsonUtility;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.model.DateTime;
 import java.io.File;
 import java.nio.file.Paths;
@@ -11,9 +12,11 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
 import javax.ws.rs.core.Response;
+import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.JsonGenerator;
 
 public class ServerUtils {
+    private static Logger log = SysLogFactory.getLogger(ServerUtils.class);
 
     public static Timestamp getTimestampFromString(String date) {
         try {
@@ -49,6 +52,7 @@ public class ServerUtils {
 
     public static Response getErrorMessageResponse(Exception ex) {
         System.err.print(ex);
+        log.error(ex);
         return getErrorMessageResponse(ex.toString());
     }
 }

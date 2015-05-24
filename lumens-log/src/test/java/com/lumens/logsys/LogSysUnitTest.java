@@ -13,14 +13,10 @@ import static org.junit.Assert.*;
  */
 public class LogSysUnitTest {
 
-    private final Logger log = LogSysFactory.getLogger(LogSysUnitTest.class);
+    private final Logger log = SysLogFactory.getLogger(LogSysUnitTest.class);
 
     static {
-        LogSysFactory.start("console", null);
-    }
-
-    public LogSysUnitTest() {
-        log.debug("in LogSysUnitTest 你好");
+        SysLogFactory.start("console", "X:/PRODUCT/3MODE/lumens/dist/lumens");
     }
 
     // TODO add test methods here.
@@ -28,8 +24,19 @@ public class LogSysUnitTest {
     //
     @Test
     public void testDebugConsole() {
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug("this is a unit testing info");
-        assertTrue(true);
+            assertTrue(true);
+        } else {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testNewLogger() {
+        JobLogFactory factory = JobLogFactory.create(null, 1000);
+        factory.start();
+        factory.getLogger().info("Testing testing testing 2");
+        factory.stop();
     }
 }

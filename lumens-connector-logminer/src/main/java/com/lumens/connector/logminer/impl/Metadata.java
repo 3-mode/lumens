@@ -3,7 +3,7 @@
  */
 package com.lumens.connector.logminer.impl;
 
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import java.sql.ResultSet;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class Metadata implements Constants {
 
-    private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
+    private final Logger log = SysLogFactory.getLogger(DefaultLogMiner.class);
     private DatabaseClient db;
 
     public Metadata(DatabaseClient db) {

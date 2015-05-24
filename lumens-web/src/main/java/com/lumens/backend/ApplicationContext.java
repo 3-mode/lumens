@@ -5,7 +5,7 @@ package com.lumens.backend;
 
 import com.lumens.engine.TransformEngine;
 import com.lumens.engine.TransformEngineContext;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.scheduler.*;
 import com.lumens.management.server.monitor.OSResourcesMonitor;
 import com.lumens.management.server.monitor.ServerManagementFactory;
@@ -20,7 +20,7 @@ public class ApplicationContext {
 
     public static String LUMENS_BASE = System.getProperty("lumens.base", System.getProperty("user.dir"));
     public static String LUMENS_LOG = System.getProperty("lumens.log", "console");
-    static { LogSysFactory.start(LUMENS_LOG, LUMENS_BASE); }
+    static { SysLogFactory.start(LUMENS_LOG, LUMENS_BASE); }
     public static String LUMENS_ADDIN = "/addin";
     public static String LUMENS_JNI = "/module/manage/jni";
     private final List<String> resultCache = new ArrayList<>();
@@ -38,7 +38,7 @@ public class ApplicationContext {
         context.start();
     }
 
-    public static String getLogPath() {
+    public static String getServerLogPath() {
         return LUMENS_BASE + File.separator + "logs" + File.separator + "lumens.log";
     }
 

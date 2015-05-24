@@ -35,6 +35,9 @@ Lumens.i18n = {
     id_job_repeat_yearly: "Yearly",
     id_up: "Up",
     id_down: "Down",
+    // Log
+    id_server_log: "Server Log",
+    id_job_log: "Job Log",
     // Project
     id_project_catalog: "Project Catalog",
     id_project_new_title: "New Project",

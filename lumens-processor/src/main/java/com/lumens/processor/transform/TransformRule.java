@@ -8,6 +8,7 @@ import com.lumens.model.Format;
 import com.lumens.model.Path;
 import com.lumens.model.PathToken;
 import com.lumens.processor.Rule;
+import com.lumens.processor.script.JavaScriptContext;
 import java.util.Iterator;
 
 /**
@@ -18,10 +19,23 @@ public class TransformRule implements Rule {
 
     private final Format dstFmt;
     private final TransformRuleItem root;
+    private final JavaScriptContext jsContext;
 
     public TransformRule(Format dest) {
         this.dstFmt = dest;
-        this.root = new TransformRuleItem(dstFmt);
+        this.jsContext = JavaScriptContext.createInstance().start();
+        this.root = new TransformRuleItem(this, dstFmt);
+    }
+
+    @Override
+    public void finalize() throws Throwable {
+        super.finalize();
+        if (jsContext != null)
+            jsContext.stop();
+    }
+
+    public JavaScriptContext getJavaScriptContext() {
+        return this.jsContext;
     }
 
     public TransformRuleItem getRootRuleItem() {

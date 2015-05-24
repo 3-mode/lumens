@@ -42,14 +42,14 @@ public class SchedulerTest {
         TransformProject project = new TransformProject();
         project.setName("Test project");
 
-        JobConfiguration failJob = DefaultJobConfigurationBuilder.build(
+        JobConfiguration failJob = JobConfigurationBuilder.build(
         new Job(1001, "job1001", "this is a sample job", 1, 1, System.currentTimeMillis(), System.currentTimeMillis() + 10000));
         //failJob.addProject(1111111111111L);
         scheduler.addSchedule(failJob);
         scheduler.saveJob(failJob.getId());
         scheduler.deleteJob(failJob.getId());
 
-        JobConfiguration realJob = DefaultJobConfigurationBuilder.build(
+        JobConfiguration realJob = JobConfigurationBuilder.build(
         new Job(1001, "job1001", "this is a sample job", 1, 1, System.currentTimeMillis(), System.currentTimeMillis() + 10000));
         //realJob.addProject(1421324074892L);
         scheduler.addSchedule(realJob);
@@ -72,7 +72,7 @@ public class SchedulerTest {
         TransformProject project = new TransformProject();
         project.setName("Test project");
 
-        JobConfiguration realJob = DefaultJobConfigurationBuilder.build(
+        JobConfiguration realJob = JobConfigurationBuilder.build(
         new Job(1001, "job1001", "this is a sample job", 1, 1, System.currentTimeMillis(), System.currentTimeMillis() + 10000));
         //realJob.addProject(1421324074892L);
         scheduler.addSchedule(realJob);

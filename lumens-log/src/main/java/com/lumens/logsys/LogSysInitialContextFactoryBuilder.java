@@ -3,7 +3,6 @@
  */
 package com.lumens.logsys;
 
-import java.util.Hashtable;
 import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -22,7 +21,7 @@ public class LogSysInitialContextFactoryBuilder implements InitialContextFactory
     }
 
     @Override
-    public InitialContextFactory createInitialContextFactory(@SuppressWarnings("UseOfObsoleteCollectionType") Hashtable<?, ?> environment) throws NamingException {
+    public InitialContextFactory createInitialContextFactory(@SuppressWarnings("UseOfObsoleteCollectionType") java.util.Hashtable<?, ?> environment) throws NamingException {
         return new LogSysInitialContextFactory(initialCtx);
     }
 

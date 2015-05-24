@@ -8,16 +8,20 @@ import com.lumens.model.DataFormat;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Type;
+import com.lumens.processor.script.JavaScript;
+import java.util.ArrayList;
+import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 import org.junit.Test;
+import org.mozilla.javascript.Scriptable;
 
 /**
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class AccessPathScriptTest {
+public class ScriptTest {
 
-    public AccessPathScriptTest() {
+    public ScriptTest() {
     }
 
     @Test
@@ -50,6 +54,37 @@ public class AccessPathScriptTest {
 
         Element assetFind = personData.getChildByPath("asset");
         assertEquals(2, assetFind.getChildren().size());
+    }
 
+    public void testJavaScriptMemLeak() throws Exception {
+        List<JavaScript> scripts = new ArrayList<>();
+        for (int i = 0; i < 50; ++i)
+            scripts.add(new JavaScript("function f" + i + "() { var i = now(); return i; }"));
+        for (int i = 0; i < 40000; ++i) {
+            for (JavaScript script : scripts) {
+                Object v = script.execute(new Context() {
+
+                    @Override
+                    public Element getRootSourceElement() {
+                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    }
+
+                    @Override
+                    public Context getParent() {
+                        return null;
+                    }
+
+                    @Override
+                    public void declareVariables(Scriptable scope) {
+                    }
+
+                    @Override
+                    public void removeVariables(Scriptable scope) {
+                    }
+
+                });
+                System.out.println(v);
+            }
+        }
     }
 }

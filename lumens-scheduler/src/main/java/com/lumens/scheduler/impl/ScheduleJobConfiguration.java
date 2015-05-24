@@ -6,15 +6,18 @@ package com.lumens.scheduler.impl;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.handler.InspectionHandler;
 import com.lumens.engine.handler.ProjectInspectionHandler;
+import com.lumens.engine.log.FileJobLogHandler;
+import com.lumens.logsys.JobLogFactory;
 import java.util.ArrayList;
 import java.util.List;
 import com.lumens.scheduler.JobConfiguration;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class DefaultJobConfiguration implements JobConfiguration {
+public class ScheduleJobConfiguration implements JobConfiguration {
     private final long jobId;
     private final String name;
     private final String description;
@@ -24,8 +27,11 @@ public class DefaultJobConfiguration implements JobConfiguration {
     private final int interval;
     private final List<TransformProject> projectList = new ArrayList();
     private List<InspectionHandler> inspectionHandlers = new ArrayList();
+    private JobLogFactory jobLogFactory;
+    private Logger log;
 
-    public DefaultJobConfiguration(long jobId, String name, String description, long startTime, long endTime, int repeat, int interval) {
+    public ScheduleJobConfiguration(JobLogFactory jobLogFactory, long jobId, String name, String description, long startTime, long endTime, int repeat, int interval) {
+        this.jobLogFactory = jobLogFactory;
         this.jobId = jobId;
         this.name = name;
         this.description = description;
@@ -33,9 +39,13 @@ public class DefaultJobConfiguration implements JobConfiguration {
         this.endTime = endTime;
         this.repeat = repeat;
         this.interval = interval;
+        if (jobLogFactory != null) {
+            this.log = jobLogFactory.getLogger();
+            inspectionHandlers.add(new FileJobLogHandler(this.log));
+        }
     }
 
-    public DefaultJobConfiguration() {
+    public ScheduleJobConfiguration() {
         this.jobId = 0;
         this.name = "default";
         this.description = "";
@@ -115,5 +125,29 @@ public class DefaultJobConfiguration implements JobConfiguration {
             if (handler instanceof ProjectInspectionHandler)
                 ((ProjectInspectionHandler) handler).withProjectID(project.getID()).withProjectName(project.getName());
         return this.inspectionHandlers;
+    }
+
+    @Override
+    public void verfiyAssociatedProjects() {
+        for (TransformProject project : this.getProjectList()) {
+            project.open();
+            project.close();
+        }
+    }
+
+    @Override
+    public void stop() {
+        if (jobLogFactory != null)
+            jobLogFactory.stop();
+    }
+
+    @Override
+    public Logger getLogger() {
+        return this.log;
+    }
+
+    @Override
+    public boolean hasLogger() {
+        return this.log != null;
     }
 }

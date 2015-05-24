@@ -11,7 +11,7 @@ import com.lumens.connector.database.DBUtils;
 import com.lumens.connector.logminer.api.RedoValue;
 import java.sql.ResultSet;
 import org.apache.logging.log4j.Logger;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 
 /**
  *
@@ -19,7 +19,7 @@ import com.lumens.logsys.LogSysFactory;
  */
 public class DefaultLogMiner implements LogMiner, Constants {
 
-    private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
+    private final Logger log = SysLogFactory.getLogger(DefaultLogMiner.class);
     private int LAST_SCN = 0;
     private ResultSet result = null;
     private Config config = null;
@@ -38,6 +38,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
         }
     }
 
+    @Override
     public void buildDictionary() {
         try {
             if (config.getDictType() == DICT_TYPE.STORE_IN_FILE) {

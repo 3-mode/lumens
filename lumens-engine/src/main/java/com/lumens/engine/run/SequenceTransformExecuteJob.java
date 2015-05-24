@@ -8,9 +8,9 @@ import com.lumens.engine.StartEntry;
 import com.lumens.engine.TransformComponent;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.TransformProject;
+import com.lumens.engine.handler.ExceptionHandler;
 import com.lumens.engine.handler.InspectionHandler;
-import com.lumens.engine.log.ElementExceptionDBHandler;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
  * @author shaofeng wang (shaofeng.wang@outlook.com)
  */
 public class SequenceTransformExecuteJob implements Executor {
-    private final Logger log = LogSysFactory.getLogger(SequenceTransformExecuteJob.class);
+    private final Logger log = SysLogFactory.getLogger(SequenceTransformExecuteJob.class);
     private TransformProject project;
     private List<InspectionHandler> handlers;
 
@@ -45,7 +45,7 @@ public class SequenceTransformExecuteJob implements Executor {
     @Override
     public void execute() {
         project.open();
-        this.executeTransform(project);
+        this.executeTransformation(project);
         project.close();
     }
 
@@ -77,7 +77,7 @@ public class SequenceTransformExecuteJob implements Executor {
         }
     }
 
-    protected void executeTransform(TransformProject transformProject) {
+    protected void executeTransformation(TransformProject transformProject) {
         try {
             if (log.isDebugEnabled())
                 log.debug("Starting execute the transformation");
@@ -107,8 +107,8 @@ public class SequenceTransformExecuteJob implements Executor {
 
     private void handleTransformException(Exception e) {
         for (InspectionHandler handler : handlers)
-            if (handler instanceof ElementExceptionDBHandler)
-                ((ElementExceptionDBHandler) handler).handleExceptionOnElement(e);
+            if (handler instanceof ExceptionHandler)
+                ((ExceptionHandler) handler).handleExceptionOnElement(e);
         log.error(e);
         throw new RuntimeException(e);
     }

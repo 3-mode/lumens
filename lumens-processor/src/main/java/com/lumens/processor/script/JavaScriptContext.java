@@ -12,6 +12,7 @@ import org.mozilla.javascript.ScriptableObject;
 public class JavaScriptContext {
 
     private ScriptableObject globalScope;
+    private boolean isStarted;
 
     public ScriptableObject getGlobalScope() {
         return globalScope;

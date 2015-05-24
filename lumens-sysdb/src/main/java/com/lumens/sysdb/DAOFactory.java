@@ -1,5 +1,6 @@
 package com.lumens.sysdb;
 
+import com.lumens.sysdb.dao.ConfigurationDAO;
 import com.lumens.sysdb.dao.ElementExceptionDAO;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
@@ -34,5 +35,9 @@ public class DAOFactory {
 
     public static ElementExceptionDAO getElementExceptionDAO() {
         return (ElementExceptionDAO) context.getBean("elementExceptionDAO");
+    }
+
+    public static ConfigurationDAO getConfigurationDAO() {
+        return (ConfigurationDAO) context.getBean("configDAO");
     }
 }

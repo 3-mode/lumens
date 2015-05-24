@@ -17,11 +17,11 @@ import com.lumens.engine.log.TransformComponentInOutLogHandler;
 import com.lumens.engine.run.SequenceTransformExecuteJob;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.model.DateTime;
-import com.lumens.scheduler.DefaultJobConfigurationBuilder;
+import com.lumens.scheduler.JobConfigurationBuilder;
 import com.lumens.scheduler.JobConfiguration;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.entity.Job;
-import com.lumens.sysdb.utils.DBHelper;
+import com.lumens.engine.DBHelper;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -45,22 +45,20 @@ public class ServiceTest {
     // The methods must be annotated with annotation @Test. For example:
     //
 
-    public void testDBProject() throws Exception {
+    public void testDBProject(long projectID) throws Exception {
         if (true) {
             System.setProperty("lumens.base", "../dist/lumens");
             ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
-            Project project = pDAO.getProject(1421324074892L); //1421234160179L page //1415415434544L //1421324074892L CSV
+            Project project = pDAO.getProject(projectID); //1421234160179L page //1415415434544L //1421324074892L CSV
             TransformProject projectInstance = new TransformProject();
             new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
             //assertEquals(3, projectInstance.getDataTransformerList().size());
             //assertEquals(4, projectInstance.getDatasourceList().size());
             List<InspectionHandler> handlers = new ArrayList<>();
             handlers.addAll(Arrays.asList(new TransformComponentInOutLogHandler()));
-            for (int i = 0; i < 1000; ++i) {
-                System.out.println("Transform: " + i);
+            for (int i = 0; i < 100; ++i)
                 new SequenceTransformExecuteJob(projectInstance, handlers).execute();
-            }
             //ApplicationContext.get().getTransformEngine().execute(new SequenceTransformExecuteJob(projectInstance, handlers));
         }
     }
@@ -118,7 +116,7 @@ public class ServiceTest {
         long lJobId = 1425107299173L;
         JobDAO jDAO = DAOFactory.getJobDAO();
         Job job = jDAO.getJob(lJobId);
-        JobConfiguration jc = DefaultJobConfigurationBuilder.build(job);
+        JobConfiguration jc = JobConfigurationBuilder.build(job);
         jc.addProject(DBHelper.loadTransformProjectFromDb(lJobId));
         ApplicationContext.get().getScheduler().addSchedule(jc);
         ApplicationContext.get().getScheduler().startJob(lJobId);
@@ -130,9 +128,13 @@ public class ServiceTest {
         System.setProperty("lumens.base", "../dist/lumens");
         ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
         LogService ls = new LogService();
-        Response resp = ls.listLogItem(false, 0, 0);
+        Response resp = ls.listLogItem(0, true, 454716);
         String str = resp.getEntity().toString();
         System.out.println("logs:" + str);
+    }
+
+    public void testCSVProjectMemoryLeak() throws Exception {
+        testDBProject(1421842012147L);
     }
 
 }

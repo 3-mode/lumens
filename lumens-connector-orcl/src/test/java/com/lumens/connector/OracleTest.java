@@ -36,7 +36,7 @@ public class OracleTest {
         System.out.println(Arrays.toString(se.getPropertList().entrySet().toArray()));
     }
 
-    @Test
+    // TODO need to mock DB ENV
     public void testFormatList() throws Exception {
         StringBuilder alterSession = new StringBuilder();
         alterSession.append("alter session set NLS_DATE_FORMAT='yyyy-mm-dd'");

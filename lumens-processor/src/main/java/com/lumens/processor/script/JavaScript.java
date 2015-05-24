@@ -7,31 +7,33 @@ import com.lumens.processor.Context;
 import com.lumens.processor.Script;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeJavaObject;
-import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 public class JavaScript implements Script {
 
     private final JavaScriptBuilder builder = new JavaScriptBuilder();
-    private final JavaScriptContext jsContext;
     private final ScriptableObject globalScope;
     private final String sourceName;
     private final String orignalScriptText;
-    private final Scriptable funcScope;
-    private Function jsFunction;
+    private final Function jsFunction;
+    private JavaScriptContext selfJsContext;
 
     public JavaScript(String script) throws Exception {
         this("script" + System.currentTimeMillis(), script);
     }
 
     public JavaScript(String sourceName, String scriptText) throws Exception {
+        this(null, sourceName, scriptText);
+    }
+
+    public JavaScript(JavaScriptContext jsContext, String sourceName, String scriptText) throws Exception {
+        if (jsContext == null)
+            selfJsContext = jsContext = JavaScriptContext.createInstance().start();
         this.sourceName = sourceName;
         this.orignalScriptText = scriptText;
         org.mozilla.javascript.Context jsCtx = org.mozilla.javascript.Context.enter();
-        jsContext = JavaScriptContext.createInstance().start();
         this.globalScope = jsContext.getGlobalScope();
-        funcScope = jsCtx.newObject(globalScope);
-        jsFunction = jsCtx.compileFunction(funcScope, builder.build(orignalScriptText), this.sourceName, 1, null);
+        jsFunction = jsCtx.compileFunction(globalScope, builder.build(orignalScriptText), this.sourceName, 1, null);
     }
 
     @Override
@@ -44,28 +46,27 @@ public class JavaScript implements Script {
         try {
             super.finalize();
         } finally {
-            jsContext.stop();
             org.mozilla.javascript.Context.exit();
+            if (selfJsContext != null)
+                selfJsContext.stop();
         }
     }
 
     @Override
     public Object execute(Context ctx) {
         try {
-            Object[] args = {
-                ctx
-            };
-            // Enter a new context for current execution thread to invoke the function
+            Object[] args = {ctx};
+            // *** It is must to enter a new javascript context for current execution thread to invoke the function
             org.mozilla.javascript.Context jsCtx = org.mozilla.javascript.Context.enter();
-            Scriptable scope = jsCtx.initStandardObjects(globalScope);
-            ctx.declareVariables(scope);
-            Object result = jsFunction.call(jsCtx, scope, scope, args);
+            ctx.declareVariables(globalScope);
+            Object result = jsFunction.call(jsCtx, globalScope, jsFunction, args);
             if (result instanceof NativeJavaObject) {
                 NativeJavaObject nativeObj = (NativeJavaObject) result;
                 return nativeObj.unwrap();
             }
             return result;
         } finally {
+            ctx.removeVariables(globalScope);
             org.mozilla.javascript.Context.exit();
         }
     }

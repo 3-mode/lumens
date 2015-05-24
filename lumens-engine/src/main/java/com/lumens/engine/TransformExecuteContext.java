@@ -19,7 +19,6 @@ public class TransformExecuteContext implements ExecuteContext {
     private final TransformComponent target;
     private final String targetFmtName;
     private final ExecuteContext parentCtx;
-    private final List<ExecuteContext> children = new ArrayList<>();
     private final ElementChunk chunk;
 
     public TransformExecuteContext(String targetName) {

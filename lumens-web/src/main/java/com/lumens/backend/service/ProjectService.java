@@ -43,6 +43,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonNode;
@@ -55,8 +56,8 @@ public class ProjectService implements ServiceConstants {
 
     @POST
     @Path("{projectID}")
-    @Consumes("application/json")
-    @Produces("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response processProject(@PathParam("projectID") long projectID, String message, @Context HttpServletRequest req) {
         try {
             JsonNode messageJson = JsonUtility.createJson(message);
@@ -86,7 +87,7 @@ public class ProjectService implements ServiceConstants {
     }
 
     @POST
-    @Consumes("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response createProject(String message, @Context HttpServletRequest req) throws Exception {
         JsonNode messageJson = JsonUtility.createJson(message);
         JsonNode contentJson = messageJson.get(CONTENT);
@@ -190,7 +191,7 @@ public class ProjectService implements ServiceConstants {
 
     @GET
     @Path("/testexec/log")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getProjectExecutionResults(@QueryParam("project_id") long projectID, @QueryParam("component_id") long componentID) throws IOException {
         try {
             return this.getProjectTestExecResult(projectID, componentID);
@@ -201,7 +202,7 @@ public class ProjectService implements ServiceConstants {
 
     @DELETE
     @Path("/testexec/log")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteProjectExecutionResults(@QueryParam("project_id") long projectID) throws IOException {
         try {
             InOutLogDAO inoutLogDAO = DAOFactory.getInOutLogDAO();
@@ -218,7 +219,7 @@ public class ProjectService implements ServiceConstants {
     }
 
     @GET
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response listProject(@QueryParam("page") int page, @Context HttpServletRequest req) throws IOException {
         try {
             // TODO test loading icon
@@ -249,7 +250,7 @@ public class ProjectService implements ServiceConstants {
 
     @GET
     @Path("{projectID}")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getProject(@PathParam("projectID") long projectID, @Context HttpServletRequest req) throws IOException {
         JsonUtility utility = JsonUtility.createJsonUtility();
         JsonGenerator json = utility.getGenerator();
@@ -285,7 +286,7 @@ public class ProjectService implements ServiceConstants {
 
     @GET
     @Path("{projectID}/format")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getFormatFromComponent(@PathParam("projectID") long projectID,
                                            @QueryParam("component_id") String componentId,
                                            @QueryParam("format_name") String formatName,

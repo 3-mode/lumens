@@ -19,7 +19,7 @@ import com.lumens.connector.logminer.api.Config;
 import com.lumens.connector.logminer.api.ConfigFactory;
 import com.lumens.connector.logminer.impl.DatabaseClient;
 import com.lumens.connector.logminer.impl.DefaultLogMiner;
-import com.lumens.logsys.LogSysFactory;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
 import com.lumens.model.Format.Form;
@@ -37,7 +37,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class LogMinerConnector implements Connector, LogMinerConstants {
 
-    private final Logger log = LogSysFactory.getLogger(DefaultLogMiner.class);
+    private final Logger log = SysLogFactory.getLogger(DefaultLogMiner.class);
 
     protected Map<String, Format> inFormat;
     protected Map<String, Format> outFormat;
