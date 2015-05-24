@@ -71,6 +71,7 @@
         <module>lumens-management</module>
         <module>lumens-scheduler</module>
         <module>lumens-sysdb</module>
+        <module>lumens-connector-logminer</module>
     </modules>
     <dependencies>
         <dependency>
