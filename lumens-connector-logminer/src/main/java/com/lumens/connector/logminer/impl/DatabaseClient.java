@@ -39,9 +39,9 @@ public class DatabaseClient implements Constants {
     public void execute(String sql) throws SQLException {
         try (CallableStatement callableStatement = conn.prepareCall(sql)) {
             callableStatement.execute();
-        } catch (Exception e) {
+        } catch (Exception ex) {
             DBUtils.rollback(conn);
-            throw new RuntimeException(sql, e);
+            throw new RuntimeException(ex);
         }
     }
 
