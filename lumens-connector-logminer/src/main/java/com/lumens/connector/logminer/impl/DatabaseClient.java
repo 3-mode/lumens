@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -35,12 +36,20 @@ public class DatabaseClient implements Constants {
     }
 
     public void execute(String sql) throws SQLException {
-        CallableStatement callableStatement = conn.prepareCall(sql);
-        callableStatement.execute();
+        try (CallableStatement callableStatement = conn.prepareCall(sql)) {
+            callableStatement.execute();
+        } catch (Exception e) {
+            DBUtils.rollback(conn);
+            throw new RuntimeException(sql, e);
+        }
     }
 
     public ResultSet executeGetResult(String sql) throws SQLException {
-        return conn.createStatement().executeQuery(sql);
+        try (Statement stat = conn.createStatement()) {
+            return stat.executeQuery(sql);
+        } catch (Exception e) {
+            throw new RuntimeException(sql, e);
+        }
     }
 
     public String getVersion() {
