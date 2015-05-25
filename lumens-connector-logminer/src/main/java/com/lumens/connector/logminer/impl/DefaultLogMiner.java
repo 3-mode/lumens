@@ -84,6 +84,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
                     log.debug(addedLogsResult.getString(3));
                 }
                 DBUtils.releaseResultSet(addedLogsResult);
+                dbClient.releaseStatement();
             }
         } catch (Exception ex) {
             log.error("Fail to build log miner. Error message:");

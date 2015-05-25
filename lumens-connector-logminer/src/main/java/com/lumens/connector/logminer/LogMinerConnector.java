@@ -14,6 +14,7 @@ import static com.lumens.connector.database.DBConstants.GROUPBY;
 import static com.lumens.connector.database.DBConstants.ORDERBY;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.WHERE;
+import com.lumens.connector.database.DBUtils;
 import com.lumens.connector.logminer.api.LogMinerFactory;
 import com.lumens.connector.logminer.api.Config;
 import com.lumens.connector.logminer.api.ConfigFactory;
@@ -141,8 +142,9 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
     @Override
     public Format getFormat(Format format, String path, Direction direction) {
         if (direction == Direction.IN) {
+            ResultSet columns = null;
             try {
-                ResultSet columns = dbClient.executeGetResult(SQL_QUERY_COLUMNS);
+                columns = dbClient.executeGetResult(SQL_QUERY_COLUMNS);
                 if (!columns.next()) {
                     log.error("Insuffucient priviledga to access table 'user_tab_columns'");
                     throw new RuntimeException("Insuffucient privilege to access table 'user_tab_columns' ");
@@ -158,6 +160,9 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
             } catch (SQLException | RuntimeException ex) {
                 log.error("Fail to get format. Error message:" + ex.getMessage());
                 throw new RuntimeException(ex);
+            } finally {
+                DBUtils.releaseResultSet(columns);
+                dbClient.releaseStatement();
             }
         } else if (direction == Direction.OUT) {
             Format scnField = format.addChild(COLUMN_SCN, Format.Form.FIELD, Type.STRING);
