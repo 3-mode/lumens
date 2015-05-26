@@ -23,6 +23,8 @@ public interface Constants {//extends DBConstants {
     public String SQL_QUERY_DIRECTORY_PATH = "SELECT directory_path FROM sys.dba_directories WHERE DIRECTORY_NAME='UTL_FILE_DIR'";
     public String SQL_QUERY_LOG_INFO = "SELECT db_name, thread_sqn, filename FROM sys.v$logmnr_logs";
     public String SQL_QUERY_TABLE_DDL = "SELECT DBMS_METADATA.GET_DDL(UPPER('%s'),UPPER('%s'),UPPER('%s')) FROM DUAL";
+    public String SQL_DROP_TABLE_DDL = "DROP TABLE %s.%s";
+    public String SQL_CREATE_TABLE_DDL = "CREATE TABLE %s.%s";
     public String SQL_QUERY_TABLE_EXIST = "SELECT * FROM sys.all_tab_comments t WHERE t.owner=UPPER('%s') AND t.table_name=UPPER('%s')";
 
     //public String SQL_QUERY_RESULT = "SELECT scn,operation,timestamp,status,sql_redo FROM v$logmnr_contents WHERE seg_owner='" + Constants.DATABASE_SOURCE_CLIENT_USERNAME + "' AND seg_type_name='TABLE' AND operation !='SELECT_FOR_UPDATE'";

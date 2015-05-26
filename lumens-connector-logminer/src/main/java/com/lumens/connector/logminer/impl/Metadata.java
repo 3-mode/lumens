@@ -57,6 +57,18 @@ public class Metadata implements Constants {
         return false;
     }
 
+    public boolean dropTable(String schema, String table) {
+        try {
+            db.execute(String.format(SQL_DROP_TABLE_DDL, schema, table));
+            return true;
+        } catch (Exception ex) {
+            log.error("Fail to drop table. Error message:");
+            log.error(ex.getMessage());
+        }
+        
+        return false;
+    }
+
     public boolean checkRecordExist(String updateORdeleteFromSQL) {
         boolean isExist = false;
         String upper = updateORdeleteFromSQL.toUpperCase().trim();
