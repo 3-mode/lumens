@@ -84,6 +84,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
                     log.debug(addedLogsResult.getString(3));
                 }
                 DBUtils.releaseResultSet(addedLogsResult);
+                dbClient.releaseStatement();
             }
         } catch (Exception ex) {
             log.error("Fail to build log miner. Error message:");
@@ -160,7 +161,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
             } catch (Exception ex) {
                 log.error("Fail to sync to destination. Error message:");
                 log.error(ex.getMessage());
-                log.info("Failed on statement:" + value.SQL_REDO);
+                log.error("Failed on statement:" + value.SQL_REDO);
                 log.info("Trying to find out failure reason...");
 
                 if (!meta.checkTableExist(value.SEG_OWNER, value.TABLE_NAME)) {
@@ -181,12 +182,12 @@ public class DefaultLogMiner implements LogMiner, Constants {
                 }
 
                 if ((value.OPERATION.equalsIgnoreCase("update") || value.OPERATION.equalsIgnoreCase("delete")) && !meta.checkRecordExist(value.SQL_REDO)) {
-                    log.info("Record not exist. Ignore error and continue.");
+                    log.error("Record not exist. Ignore error and continue.");
                     break;
                 }
 
                 log.error(String.format("Fail to sync to destination. Fail on : SCN = %s, REDO = %s", value.SCN, value.SQL_REDO));
-                throw new RuntimeException("Fail to sync to destination. Error message:" + ex.getMessage());
+                throw new RuntimeException("Fail to sync to destination. Error message:" + ex);
             }
         } while (doAgain);
     }

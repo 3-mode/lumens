@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.logminer.impl;
 
+import com.lumens.connector.database.DBUtils;
 import com.lumens.logsys.SysLogFactory;
 import java.sql.ResultSet;
 import org.apache.logging.log4j.Logger;
@@ -23,8 +24,9 @@ public class Metadata implements Constants {
     public String getTableDDL(String schema, String table) {
         String ddl = null;
         String queryDDL = String.format(SQL_QUERY_TABLE_DDL, "TABLE", table, schema);
+        ResultSet result = null;
         try {
-            ResultSet result = db.executeGetResult(queryDDL);
+            result = db.executeGetResult(queryDDL);
             if (result.next()) {
                 ddl = result.getString(1);
             }
@@ -32,6 +34,9 @@ public class Metadata implements Constants {
             log.error("Fail to get table DDL. Error message:");
             log.error(ex.getMessage());
             log.info("Failure sql:" + queryDDL);
+        } finally {
+            DBUtils.releaseResultSet(result);
+            db.releaseStatement();
         }
 
         return ddl;
@@ -52,43 +57,65 @@ public class Metadata implements Constants {
         return false;
     }
 
+    public boolean dropTable(String schema, String table) {
+        try {
+            db.execute(String.format(SQL_DROP_TABLE_DDL, schema, table));
+            return true;
+        } catch (Exception ex) {
+            log.error("Fail to drop table. Error message:");
+            log.error(ex.getMessage());
+        }
+        
+        return false;
+    }
+
     public boolean checkRecordExist(String updateORdeleteFromSQL) {
+        boolean isExist = false;
         String upper = updateORdeleteFromSQL.toUpperCase().trim();
         String select = null;
         if (upper.startsWith("UPDATE")) {
             select = upper.split("SET")[0].replaceAll("UPDATE", "SELECT * FROM ");
-        }else if(upper.startsWith("DELETE FROM")){
+        } else if (upper.startsWith("DELETE FROM")) {
             select = upper.split("WHERE")[0].replaceAll("DELETE FROM", "SELECT * FROM ");
-        }else{
+        } else {
             log.error("Fail to check table record. Not a update or delete from statement:" + upper);
             return false;
         }
-        
+
         String where = upper.split("WHERE")[1].replaceAll(";", "");  // remove end ; as JAVA JDBC driver does not support
         String full = select + " WHERE " + where;
+        ResultSet result = null;
         try {
-            ResultSet result = db.executeGetResult(full);
-            return result.next();
+            result = db.executeGetResult(full);
+            isExist = result.next();
         } catch (Exception ex) {
             log.error("Fail to check table record. Error message:");
             log.error(ex.getMessage());
             log.info("Failure sql:" + full);
+        } finally {
+            DBUtils.releaseResultSet(result);
+            db.releaseStatement();
         }
 
-        return false;
+        return isExist;
     }
 
     public boolean checkTableExist(String schema, String table) {
+        boolean isExist = false;
         String check = String.format(SQL_QUERY_TABLE_EXIST, schema, table);
+        ResultSet result = null;
         try {
-            ResultSet result = db.executeGetResult(check);
-            return result.next();
+            result = db.executeGetResult(check);
+            isExist = result.next();
         } catch (Exception ex) {
             log.error("Fail to check table exist. Error message:");
             log.error(ex.getMessage());
             log.info("Failure sql:" + check);
+        } finally {
+            DBUtils.releaseResultSet(result);
+            db.releaseStatement();
         }
 
-        return false;
+        return isExist;
     }
 }

@@ -20,15 +20,18 @@ public class Dictionary implements Constants {
 
     public void build() throws Exception {
         String path = getDictionaryPath();
-        SQL_CREATE_DIECTIONARY = "BEGIN dbms_logmnr_d.build(dictionary_filename => '" + DICTIONARY_FILE +"', dictionary_location =>'" + path + "'); END;";
-        dbClient.execute(SQL_CREATE_DIECTIONARY);        
+        SQL_CREATE_DIECTIONARY = "BEGIN dbms_logmnr_d.build(dictionary_filename => '" + DICTIONARY_FILE + "', dictionary_location =>'" + path + "'); END;";
+        dbClient.execute(SQL_CREATE_DIECTIONARY);
     }
 
     public String getDictionaryPath() throws Exception {
-        ResultSet resultSet = dbClient.executeGetResult(SQL_QUERY_DIRECTORY_PATH);
-        if (!resultSet.next()) {
-            throw new RuntimeException("Dictionary path has not set.");
+        try (ResultSet resultSet = dbClient.executeGetResult(SQL_QUERY_DIRECTORY_PATH)) {
+            if (!resultSet.next()) {
+                throw new RuntimeException("Dictionary path has not set.");
+            }
+            return resultSet.getString(1);
+        } finally {
+            dbClient.releaseStatement();
         }
-        return resultSet.getString(1);
     }
 }

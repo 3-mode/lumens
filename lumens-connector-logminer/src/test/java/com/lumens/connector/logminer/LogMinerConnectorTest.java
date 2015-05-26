@@ -15,6 +15,7 @@ import com.lumens.model.Element;
 import com.lumens.model.Type;
 import java.util.Map;
 import org.junit.Test;
+import org.junit.Before;
 import static org.junit.Assert.*;
 import com.lumens.connector.Connector;
 import com.lumens.connector.ElementChunk;
@@ -26,6 +27,7 @@ import static com.lumens.connector.database.DBConstants.GROUPBY;
 import static com.lumens.connector.database.DBConstants.ORDERBY;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.WHERE;
+import com.lumens.connector.logminer.impl.Metadata;
 import com.lumens.connector.logminer.impl.Constants;
 import com.lumens.connector.logminer.impl.TestBase;
 import java.util.Arrays;
@@ -38,6 +40,26 @@ import java.util.ArrayList;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class LogMinerConnectorTest extends TestBase implements LogMinerConstants, Constants {
+
+    @Before
+    public void prepareTestTable() {
+        // drop target table
+        Metadata target = new Metadata(destinationDatabase);
+        String schema = "LUMENS";
+        String table = "TEST";
+        if (target.checkTableExist(schema, table)) {
+            target.dropTable(schema, table);
+        }
+
+        // create test table
+        Metadata source = new Metadata(sourceDatabase);
+        if (!source.checkTableExist(schema, table)) {
+            try {
+                sourceDatabase.execute("CREATE TABLE TEST NAME VARCHAR2(20))");
+            } catch (Exception ex) {
+            }
+        }
+    }
 
     @Test
     public void testConnectorReadSync() {
@@ -94,6 +116,7 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
         Element query = new DataElement(selectFmt);
         Element sqlParams = query.addChild(SQLPARAMS);
         sqlParams.addChild(ACTION).setValue(QUERY);
+        sqlParams.addChild(WHERE).setValue("SEG_OWNER='LUMENS'");
         sqlParams.addChild(ORDERBY).setValue("SCN ASC");
 
         // sync format

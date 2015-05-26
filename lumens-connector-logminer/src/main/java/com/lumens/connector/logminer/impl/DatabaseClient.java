@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -22,8 +23,9 @@ public class DatabaseClient implements Constants {
     private final Logger log = SysLogFactory.getLogger(DefaultLogMiner.class);
 
     protected Driver driverObj;
-    public Connection conn = null;
-    public String version = null;
+    private Connection conn = null;
+    private String version = null;
+    private Statement stat = null;
 
     public DatabaseClient(String driver, String url, String username, String password) throws SQLException {
         try {
@@ -35,31 +37,45 @@ public class DatabaseClient implements Constants {
     }
 
     public void execute(String sql) throws SQLException {
-        CallableStatement callableStatement = conn.prepareCall(sql);
-        callableStatement.execute();
+        try (CallableStatement callableStatement = conn.prepareCall(sql)) {
+            callableStatement.execute();
+        } catch (Exception ex) {
+            DBUtils.rollback(conn);
+            throw new RuntimeException(ex);
+        }
     }
 
     public ResultSet executeGetResult(String sql) throws SQLException {
-        return conn.createStatement().executeQuery(sql);
+        if (stat == null) {
+            stat = conn.createStatement();
+        }
+        return stat.executeQuery(sql);
     }
 
     public String getVersion() {
         if (version != null) {
             return version;
         }
-        try {
-            ResultSet result = executeGetResult(SQL_GEG_VERSION);
+        try (ResultSet result = executeGetResult(SQL_GEG_VERSION)) {
             if (result.next()) {
                 version = result.getString(1);
             }
         } catch (Exception ex) {
             log.error("Fail to get Oracle version. Error message: " + ex.getMessage());
+        } finally {
+            releaseStatement();
         }
 
         return version;
     }
 
+    public void releaseStatement() {
+        DBUtils.releaseStatement(stat);
+        stat = null;
+    }
+
     public void release() {
         DBUtils.releaseConnection(conn);
+        conn = null;
     }
 }
