@@ -83,8 +83,19 @@ public class JobService {
     @DELETE
     @Path("{jobId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteJob(@PathParam("jobId") String jobId) {
-        return Response.ok().build();
+    public Response deleteJob(@PathParam("jobId") long jobId) {
+        try {
+            JobDAO jobDAO = DAOFactory.getJobDAO();
+            jobDAO.delete(jobId);
+            JsonUtility utility = JsonUtility.createJsonUtility();
+            JsonGenerator json = utility.getGenerator();
+            json.writeStartObject();
+            json.writeStringField("status", "OK");
+            json.writeEndObject();
+            return Response.ok().entity(utility.toUTF8String()).build();
+        } catch (Exception e) {
+            return ServerUtils.getErrorMessageResponse(e);
+        }
     }
 
     @GET

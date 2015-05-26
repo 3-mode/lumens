@@ -9,7 +9,7 @@ Lumens.controllers.controller("MainViewCtrl", function ($scope, $route, $http, $
         mode: "vertical",
         part1Size: 52
     });
-    Lumens.system.sysHeader = new Lumens.Header(Lumens.system.theLayout.getPart1Element()).setSysTitle("LUMENS");
+    Lumens.system.sysHeader = new Lumens.Header(Lumens.system.theLayout.getPart1Element());
     Lumens.system.navToolbar = new Lumens.NavToolbar(Lumens.system.sysHeader.getElement()).configure(Lumens.SysToolbar_Config);
     Lumens.system.theLayout.getPart2Element().append($compile('<div ng-view id="theWorkspaceContainer" style="width: 100%;"/>')($scope));
 });

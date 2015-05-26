@@ -40,7 +40,7 @@ Lumens.controllers
         });
     })
 })
-.controller("JobManagementCtrl", function ($scope, $compile, JobService, LogFileService, ProjectList, Notifier) {
+.controller("JobManagementCtrl", function ($scope, $compile, TemplateService, JobService, LogFileService, ProjectList, Notifier) {
     if (sessionStorage.local_log_storage) {
         var local_log_storage = angular.fromJson(sessionStorage.local_log_storage);
         $scope.currentLogType = local_log_storage.current_log_type;
@@ -50,13 +50,35 @@ Lumens.controllers
     }
     if (sessionStorage.local_select_job_index_storage)
         $scope.selectJobIndex = angular.fromJson(sessionStorage.local_select_job_index_storage).current_job_index;
+    else
+        $scope.selectJobIndex = 0;
 
+    if (sessionStorage.local_log_count_storate)
+        $scope.logItemCount = 0 + angular.fromJson(sessionStorage.local_log_count_storate).log_count;
+    else
+        $scope.logItemCount = 50;
+
+    $scope.$watch('logItemCount', function (newValue, oldValue) {
+        console.log("newValue: " + newValue + "; oldValue: " + oldValue);
+    });
+
+    function buildQueryLogParam() {
+        console.log("Log count: ", $scope.logItemCount);
+        if ($scope.currentLogType === "id_job_log" && $scope.selectJobIndex >= 0 && $scope.selectJobIndex < $scope.jobs.length)
+            return {
+                job_id: $scope.jobs[$scope.selectJobIndex].id, count: $scope.logItemCount
+            };
+        else
+            return {
+                count: $scope.logItemCount
+            };
+    }
     var jobManagementHolder = $("#jobManagementHolder");
     $(window).resize(function (e) {
         if (e && e.target !== this)
             return;
         jobManagementHolder.trigger("resize");
-    })
+    });
     $scope.jobManagePanel = new Lumens.ResizableVSplitLayoutExt(jobManagementHolder)
     .configure({
         mode: "vertical",
@@ -68,18 +90,8 @@ Lumens.controllers
         mode: "vertical",
         part1Size: 48
     });
-    $scope.jobLogBar.getPart1Element().append($compile('<div ng-include="job_log_bar_template"></div>')($scope));
+    $scope.jobLogBar.getPart1Element().append($compile(TemplateService.get($scope.job_log_bar_template))($scope));
     $scope.jobLogBar.getPart2Element().append($compile('<div ng-include="job_list_log_template" style="overflow: auto; position: relative; width: 100%; height: 100%;"></div>')($scope));
-    function buildQueryLogParam() {
-        if ($scope.currentLogType === "id_job_log" && $scope.selectJobIndex >= 0 && $scope.selectJobIndex < $scope.jobs.length)
-            return {
-                job_id: $scope.jobs[$scope.selectJobIndex].id, more: false, offset: 0
-            };
-        else
-            return {
-                more: false, offset: 0
-            };
-    }
     JobService.list(function (result) {
         $scope.jobs = result.result_content.jobs;
         LumensLog.log("JobList:", result);
@@ -102,6 +114,19 @@ Lumens.controllers
         LumensLog.log("in Job onCommand");
         if ('id_new' === id_btn) {
             $scope.job = {};
+        }
+        else if ('id_delete' === id_btn) {
+            var job = $scope.jobs[$scope.selectJobIndex];
+            JobService.delete({id: job.id}, function (result) {
+                if (result.status === 'OK') {
+                    $scope.jobs.splice($scope.selectJobIndex, 1);
+                    Notifier.message("info", "Success", "Deleted the job");
+                }
+                else
+                    Notifier.message("error", "Error", "Failed to delete the job '" + result.error_message + "'");
+            }, function (error) {
+                Notifier.message("error", "Error", error);
+            });
         }
         else if ('id_edit' === id_btn) {
             if ($scope.selectJobIndex >= 0 && $scope.jobs && $scope.jobs.length > 0)
@@ -148,28 +173,7 @@ Lumens.controllers
                 Notifier.message("error", "Error", error);
                 $("#jobLogLoading").hide();
             });
-        }
-        else if ("id_more" === id_btn) {
-            $("#jobLogLoading").show();
-            LogFileService.log(buildQueryLogParam(),
-            function (result) {
-                if (result.status === 'OK') {
-                    $("#jobLogLoading").hide();
-                    if ($scope.jobLogContent.messages) {
-                        $scope.jobLogContent.offset = result.result_content.offset;
-                        $scope.jobLogContent.messages = result.result_content.messages.concat($scope.jobLogContent.messages);
-                    }
-                    else {
-                        $scope.jobLogContent = result.result_content;
-                    }
-                } else {
-                    Notifier.message("error", "Error", "Start the job '" + result.error_message + "'");
-                    $("#jobLogLoading").hide();
-                }
-            }, function (error) {
-                Notifier.message("error", "Error", error);
-                $("#jobLogLoading").hide();
-            })
+            sessionStorage.local_log_count_storate = angular.toJson({log_count: $scope.logItemCount});
         }
         else if ("id_server_log" === id_btn) {
             $scope.currentLogType = id_btn;

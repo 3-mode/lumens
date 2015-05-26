@@ -1,9 +1,11 @@
 <div style="margin-left: 10px; margin-right:10px;">
     <div class="lumens-button-bar">
         <!-- Single button -->
+        <div class="lumens-bootstrap lumens-ctrl-pos form-group" style="width: 100px;">
+            <input class="form-control" type="number" ng-model="logItemCount" />
+        </div>
         <a class="lumens-button" ng-click="onCommand('id_exec_log_refresh')"><i class="lumens-icon2-refresh lumens-icon-gap"></i>{{i18n.id_exec_log_refresh}}</a>
-        <a class="lumens-button" ng-click="onCommand('id_more')"><i class="lumens-icon2-more lumens-icon-gap"></i>{{i18n['id_more']}}</a>
-        <a class="lumens-button" data-toggle="modal" data-target="#jobDetailModal" ng-click="onCommand('id_detail')"><i class="lumens-icon-detail lumens-icon-gap"></i>{{i18n['id_detail']}}</a>
+        <!--<a class="lumens-button" data-toggle="modal" data-target="#jobDetailModal" ng-click="onCommand('id_detail')"><i class="lumens-icon-detail lumens-icon-gap"></i>{{i18n['id_detail']}}</a> -->
         <div class="lumens-bootstrap">
             <div class="btn-group" style="padding-left: 8px; padding-top: 7px;">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">

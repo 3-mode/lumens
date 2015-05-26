@@ -90,13 +90,14 @@ Lumens.services.factory('JobService', function ($resource) {
         list: {method: 'GET', isArray: false},
         save: {method: 'PUT', isArray: false},
         update: {method: 'POST', isArray: false},
-        exec: {method: 'GET', isArray: false}
+        exec: {method: 'GET', isArray: false},
+        delete: {method: 'DELETE', isArray: false }
     });
 });
 Lumens.services.factory('LogFileService', function ($resource) {
     return $resource(
-    "rest/log/file?more=:more&offset=:offset",
-    {more: "@more", offset: "@offset"},
+    "rest/log/file?count=:count",
+    {count: "count"},
     {
         log: {method: 'GET', isArray: false}
     });
