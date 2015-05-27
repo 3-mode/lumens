@@ -168,11 +168,12 @@ a, a:focus, a:hover {
     right:0px;
 }
 .lumens .lumens-logo {
-    background-image: url(images/lumens.png);
+    background-image: url(img/infomota.png);
     background-repeat: no-repeat;
-    margin-left: 10px;
-    width: 50px;
-    height: 50px;
+    margin-left: 20px;
+    margin-top: 13px;
+    width: 178px;
+    height: 28px;
 }
 .lumens .lumens-title-layout {
     float: left;
@@ -841,6 +842,12 @@ svg path {
 }
 .lumens .lumens-max:before {
     content: url(img/max.png);
+}
+.lumens .lumens-ctrl-pos {
+    margin-top: 8px;
+    margin-left: 10px;
+    float: left;
+    font-size: 15px !important;
 }
 .lumens .lumens-button-bar {
     height: 46px;

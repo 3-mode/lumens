@@ -28,15 +28,15 @@ import org.codehaus.jackson.JsonGenerator;
 public class LogService {
 
     protected static class DiscoverFileLog {
-        public long offset;
+        public long count;
         public String[] messages;
 
         public DiscoverFileLog() {
             this(0);
         }
 
-        public DiscoverFileLog(long offset) {
-            this.offset = offset;
+        public DiscoverFileLog(long count) {
+            this.count = count;
             messages = new String[0];
         }
     }
@@ -44,18 +44,17 @@ public class LogService {
     @GET
     @Path("/file")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listLogItem(@QueryParam("job_id") long jobID, @QueryParam("more") boolean more, @QueryParam("offset") long offset) {
+    public Response listLogItem(@QueryParam("job_id") long jobID, @QueryParam("count") long count) {
         // TODO need handle offset, more, size
-        System.out.println("[" + jobID + ";" + more + ";" + offset + "]");
+        System.out.println("[" + jobID + ";" + count + ";" + count + "]");
         try {
             long startTime = System.currentTimeMillis();
-            DiscoverFileLog fileLog = discoverLastLogLines(new DiscoverFileLog(offset), jobID, more);
+            DiscoverFileLog fileLog = discoverLastLogLines(new DiscoverFileLog(count), jobID);
             JsonUtility utility = JsonUtility.createJsonUtility();
             JsonGenerator json = utility.getGenerator();
             json.writeStartObject();
             json.writeStringField("status", "OK");
             json.writeObjectFieldStart("result_content");
-            json.writeNumberField("offset", fileLog.offset);
             json.writeArrayFieldStart("messages");
             for (String strLine : fileLog.messages) {
                 json.writeString(strLine);
@@ -73,7 +72,7 @@ public class LogService {
         }
     }
 
-    private DiscoverFileLog discoverLastLogLines(DiscoverFileLog fileLog, long jobID, boolean more) throws FileNotFoundException, IOException {
+    private DiscoverFileLog discoverLastLogLines(DiscoverFileLog fileLog, long jobID) throws FileNotFoundException, IOException {
         String filePath = null;
         if (jobID == 0) {
             filePath = ApplicationContext.getServerLogPath();
@@ -82,19 +81,16 @@ public class LogService {
         }
         if (new File(filePath).exists()) {
             try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
-                System.out.println("Log file: " + filePath + "; offset: " + fileLog.offset + "; more: " + more);
+                System.out.println("Log file: " + filePath + "; offset: " + fileLog.count);
                 int lines = 0;
                 long seek = file.length();
                 if (seek > 0) {
-                    if (more && seek > fileLog.offset && fileLog.offset > 0)
-                        seek = fileLog.offset;
                     --seek;
                     List<Byte> byteList = new ArrayList<>();
                     for (; seek >= 0; --seek) {
-                        fileLog.offset = seek;
                         file.seek(seek);
                         byte b = file.readByte();
-                        if ((char) b == '\n' && lines++ == 50) {
+                        if ((char) b == '\n' && lines++ == fileLog.count) {
                             break;
                         }
                         byteList.add(b);
