@@ -1,7 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.logminer.impl;
+package com.lumens.connector.redolog.impl;
 
 import com.lumens.connector.redolog.impl.RedoLog;
 import java.util.List;

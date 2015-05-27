@@ -1,7 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.logminer;
+package com.lumens.connector.redolog;
 
 import com.lumens.connector.redolog.RedoLogConstants;
 import com.lumens.connector.redolog.RedoLogConnectorFactory;
@@ -31,7 +31,7 @@ import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.WHERE;
 import com.lumens.connector.redolog.impl.Metadata;
 import com.lumens.connector.redolog.impl.Constants;
-import com.lumens.connector.logminer.impl.TestBase;
+import com.lumens.connector.redolog.impl.TestBase;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +41,7 @@ import java.util.ArrayList;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class LogMinerConnectorTest extends TestBase implements RedoLogConstants, Constants {
+public class RedoLogConnectorTest extends TestBase implements RedoLogConstants, Constants {
 
     @Before
     public void prepareTestTable() {
