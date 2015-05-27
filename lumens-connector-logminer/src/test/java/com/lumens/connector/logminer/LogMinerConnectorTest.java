@@ -3,6 +3,8 @@
  */
 package com.lumens.connector.logminer;
 
+import com.lumens.connector.redolog.RedoLogConstants;
+import com.lumens.connector.redolog.RedoLogConnectorFactory;
 import com.lumens.connector.ConnectorFactory;
 import com.lumens.connector.Direction;
 import com.lumens.connector.Operation;
@@ -27,8 +29,8 @@ import static com.lumens.connector.database.DBConstants.GROUPBY;
 import static com.lumens.connector.database.DBConstants.ORDERBY;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.WHERE;
-import com.lumens.connector.logminer.impl.Metadata;
-import com.lumens.connector.logminer.impl.Constants;
+import com.lumens.connector.redolog.impl.Metadata;
+import com.lumens.connector.redolog.impl.Constants;
 import com.lumens.connector.logminer.impl.TestBase;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,7 +41,7 @@ import java.util.ArrayList;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class LogMinerConnectorTest extends TestBase implements LogMinerConstants, Constants {
+public class LogMinerConnectorTest extends TestBase implements RedoLogConstants, Constants {
 
     @Before
     public void prepareTestTable() {
@@ -85,7 +87,7 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
         propsSync.put(DATABASE_CONNECTION_USERNAME, new Value(DATABASE_DESTINATION_USERNAME_VAL));
         propsSync.put(DATABASE_CONNECTION_PASSWORD, new Value(DATABASE_DESTINATION_PASSWORD_VAL));
 
-        ConnectorFactory connectorFactory = new LogMinerConnectorFactory();
+        ConnectorFactory connectorFactory = new RedoLogConnectorFactory();
         Connector minerRead = connectorFactory.createConnector();
         minerRead.setPropertyList(propsR);
         minerRead.open();

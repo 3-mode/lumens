@@ -1,7 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.logminer;
+package com.lumens.connector.redolog;
 
 import static com.lumens.connector.database.DBConstants.PAGEQUERY_TABLEALIAS;
 import com.lumens.connector.database.client.DBQuerySQLBuilder;
@@ -12,9 +12,9 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class LogMinerQuerySQLBuilder extends DBQuerySQLBuilder implements LogMinerConstants {
+public class RedoLogQuerySQLBuilder extends DBQuerySQLBuilder implements RedoLogConstants {
 
-    public LogMinerQuerySQLBuilder(Format output) {
+    public RedoLogQuerySQLBuilder(Format output) {
         super(output);
     }
 

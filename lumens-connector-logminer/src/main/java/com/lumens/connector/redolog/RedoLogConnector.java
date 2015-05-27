@@ -1,9 +1,9 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.logminer;
+package com.lumens.connector.redolog;
 
-import com.lumens.connector.logminer.api.LogMiner;
+import com.lumens.connector.redolog.api.LogMiner;
 import com.lumens.connector.Operation;
 import com.lumens.connector.Connector;
 import com.lumens.connector.Direction;
@@ -15,11 +15,11 @@ import static com.lumens.connector.database.DBConstants.ORDERBY;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.WHERE;
 import com.lumens.connector.database.DBUtils;
-import com.lumens.connector.logminer.api.LogMinerFactory;
-import com.lumens.connector.logminer.api.Config;
-import com.lumens.connector.logminer.api.ConfigFactory;
-import com.lumens.connector.logminer.impl.DatabaseClient;
-import com.lumens.connector.logminer.impl.DefaultLogMiner;
+import com.lumens.connector.redolog.api.LogMinerFactory;
+import com.lumens.connector.redolog.api.Config;
+import com.lumens.connector.redolog.api.ConfigFactory;
+import com.lumens.connector.redolog.impl.DatabaseClient;
+import com.lumens.connector.redolog.impl.DefaultLogMiner;
 import com.lumens.logsys.SysLogFactory;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
@@ -36,7 +36,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class LogMinerConnector implements Connector, LogMinerConstants {
+public class RedoLogConnector implements Connector, RedoLogConstants {
 
     private final Logger log = SysLogFactory.getLogger(DefaultLogMiner.class);
 
@@ -53,7 +53,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
 
     boolean isOpen = false;
 
-    public LogMinerConnector() {
+    public RedoLogConnector() {
         config = ConfigFactory.createDefaultConfig();
     }
 
@@ -107,7 +107,7 @@ public class LogMinerConnector implements Connector, LogMinerConstants {
 
     @Override
     public Operation getOperation() {
-        return new LogMinerOperation(miner);
+        return new RedoLogOperation(miner);
     }
 
     // get redo log fields from db

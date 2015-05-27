@@ -1,14 +1,14 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.logminer.impl;
+package com.lumens.connector.redolog.impl;
 
-import com.lumens.connector.logminer.api.Config;
-import com.lumens.connector.logminer.api.LogMiner;
-import com.lumens.connector.logminer.api.LogMiner.BUILD_TYPE;
-import com.lumens.connector.logminer.api.LogMiner.DICT_TYPE;
+import com.lumens.connector.redolog.api.Config;
+import com.lumens.connector.redolog.api.LogMiner;
+import com.lumens.connector.redolog.api.LogMiner.BUILD_TYPE;
+import com.lumens.connector.redolog.api.LogMiner.DICT_TYPE;
 import com.lumens.connector.database.DBUtils;
-import com.lumens.connector.logminer.api.RedoValue;
+import com.lumens.connector.redolog.api.RedoValue;
 import java.sql.ResultSet;
 import org.apache.logging.log4j.Logger;
 import com.lumens.logsys.SysLogFactory;

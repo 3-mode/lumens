@@ -1,7 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.logminer;
+package com.lumens.connector.redolog;
 
 import com.lumens.connector.OperationResult;
 import com.lumens.model.Element;
@@ -11,12 +11,12 @@ import java.util.List;
  *
  * @author shaofeng wang (shaofeng.cjpw@gmail.com)
  */
-public class LogMinerResult implements OperationResult {
+public class RedoLogResult implements OperationResult {
 
     private final List<Element> result;
     private boolean hasResultData;
 
-    public LogMinerResult(List<Element> result) {
+    public RedoLogResult(List<Element> result) {
         this.hasResultData = result != null && !result.isEmpty();
         this.result = result;
     }

@@ -1,7 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.logminer.api;
+package com.lumens.connector.redolog.api;
 
 import java.util.Date;
 

@@ -3,6 +3,8 @@
  */
 package com.lumens.connector.logminer.impl;
 
+import com.lumens.connector.redolog.impl.DefaultLogMiner;
+import com.lumens.connector.redolog.impl.DatabaseClient;
 import com.lumens.logsys.SysLogFactory;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;

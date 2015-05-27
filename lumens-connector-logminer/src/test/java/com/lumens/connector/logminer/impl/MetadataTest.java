@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.logminer.impl;
 
+import com.lumens.connector.redolog.impl.Metadata;
 import org.junit.Test;
 import static org.junit.Assert.*;
 /**

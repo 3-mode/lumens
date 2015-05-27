@@ -1,7 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.logminer;
+package com.lumens.connector.redolog;
 
 import com.lumens.connector.Connector;
 import com.lumens.connector.ConnectorFactory;
@@ -10,7 +10,7 @@ import com.lumens.connector.ConnectorFactory;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class LogMinerConnectorFactory implements ConnectorFactory {
+public class RedoLogConnectorFactory implements ConnectorFactory {
 
     @Override
     public String getComponentType() {
@@ -19,6 +19,6 @@ public class LogMinerConnectorFactory implements ConnectorFactory {
 
     @Override
     public Connector createConnector() {
-        return new LogMinerConnector();
+        return new RedoLogConnector();
     }
 }

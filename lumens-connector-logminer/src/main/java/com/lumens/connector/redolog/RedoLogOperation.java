@@ -1,7 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.logminer;
+package com.lumens.connector.redolog;
 
 import com.lumens.connector.ElementChunk;
 import com.lumens.connector.Operation;
@@ -9,8 +9,8 @@ import com.lumens.connector.OperationResult;
 import static com.lumens.connector.database.DBConstants.ACTION;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import com.lumens.connector.database.client.DBElementBuilder;
-import com.lumens.connector.logminer.api.LogMiner;
-import com.lumens.connector.logminer.api.RedoValue;
+import com.lumens.connector.redolog.api.LogMiner;
+import com.lumens.connector.redolog.api.RedoValue;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.ModelUtils;
@@ -22,11 +22,11 @@ import java.util.ArrayList;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public class LogMinerOperation implements Operation, LogMinerConstants {
+public class RedoLogOperation implements Operation, RedoLogConstants {
 
     private LogMiner miner = null;
 
-    public LogMinerOperation(LogMiner miner) {
+    public RedoLogOperation(LogMiner miner) {
         this.miner = miner;
     }
    
@@ -46,7 +46,7 @@ public class LogMinerOperation implements Operation, LogMinerConstants {
                 String strOper = ModelUtils.isNullValue(action) ? null : action.getValue().getString();
                 if (strOper == null || QUERY.equalsIgnoreCase(strOper)) {
                     // TODO: implementing paging
-                    ResultSet result = miner.query(new LogMinerQuerySQLBuilder(output).generateSelectSQL(elem));
+                    ResultSet result = miner.query(new RedoLogQuerySQLBuilder(output).generateSelectSQL(elem));
                     resultList.addAll(new DBElementBuilder().buildElement(output, result));
                 } else if (SYNC.equalsIgnoreCase(strOper)) { // sync here
                     RedoValue value = new RedoValue();
@@ -64,7 +64,7 @@ public class LogMinerOperation implements Operation, LogMinerConstants {
                     throw new UnsupportedOperationException("Error, not supported action : " + strOper);
                 }
             }
-            return new LogMinerResult(resultList);
+            return new RedoLogResult(resultList);
         }
         throw new UnsupportedOperationException("Error, the input data can not be empty !");
     }

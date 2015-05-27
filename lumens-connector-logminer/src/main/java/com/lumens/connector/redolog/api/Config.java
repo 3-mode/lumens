@@ -1,10 +1,10 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.logminer.api;
+package com.lumens.connector.redolog.api;
 
-import com.lumens.connector.logminer.api.LogMiner.BUILD_TYPE;
-import com.lumens.connector.logminer.api.LogMiner.DICT_TYPE;
+import com.lumens.connector.redolog.api.LogMiner.BUILD_TYPE;
+import com.lumens.connector.redolog.api.LogMiner.DICT_TYPE;
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)

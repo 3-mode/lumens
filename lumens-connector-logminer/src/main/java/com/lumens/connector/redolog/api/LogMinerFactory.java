@@ -1,10 +1,10 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.logminer.api;
+package com.lumens.connector.redolog.api;
 
-import com.lumens.connector.logminer.impl.DefaultLogMiner;
-import com.lumens.connector.logminer.impl.DatabaseClient;
+import com.lumens.connector.redolog.impl.DefaultLogMiner;
+import com.lumens.connector.redolog.impl.DatabaseClient;
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)

@@ -1,7 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.logminer;
+package com.lumens.connector.redolog;
 
 import com.lumens.connector.database.DBConstants;
 
@@ -9,7 +9,7 @@ import com.lumens.connector.database.DBConstants;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public interface LogMinerConstants extends DBConstants {
+public interface RedoLogConstants extends DBConstants {
 
     public String FORMAT_NAME = "v$logmnr_contents";
     public String DATABASE_DRIVER = "databaseDriver";
