@@ -55,8 +55,13 @@ public class LogMinerConnectorTest extends TestBase implements LogMinerConstants
         Metadata source = new Metadata(sourceDatabase);
         if (!source.checkTableExist(schema, table)) {
             try {
-                sourceDatabase.execute("CREATE TABLE TEST NAME VARCHAR2(20))");
+                sourceDatabase.execute(String.format("CREATE TABLE %s.%s( NAME VARCHAR2(20))", schema, table));
+                sourceDatabase.execute(String.format("INSERT INTO \"%s\".\"%s\" (NAME) VALUES ('wisper')", schema, table));
+                sourceDatabase.execute(String.format("INSERT INTO \"%s\".\"%s\" (NAME) VALUES ('shaofeng')", schema, table));
+                sourceDatabase.execute(String.format("INSERT INTO \"%s\".\"%s\" (NAME) VALUES ('oliver')", schema, table));
+                sourceDatabase.execute("commit");
             } catch (Exception ex) {
+                log.error(String.format("Fail to prepare table %s.%s",schema, table));
             }
         }
     }

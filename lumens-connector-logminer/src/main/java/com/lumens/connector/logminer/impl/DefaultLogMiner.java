@@ -170,15 +170,20 @@ public class DefaultLogMiner implements LogMiner, Constants {
                         log.info("Skip sync for 'delete' operation.");
                         break;
                     }
-                    if (meta.createTable(value.SEG_OWNER, value.TABLE_NAME)) {
-                        log.info(String.format("Table %s created. Try to sync again...", value.TABLE_NAME));
-                        doAgain = true;
-                        continue;
-                    }
-                    else{
-                        log.error(String.format("Fail to create table %s. SCN:%s, SEG_NAME:%s, SEG_TYPE:%s, SQL_REDO: %s", value.TABLE_NAME, value.SCN, value.SEG_NAME, value.SEG_TYPE, value.SQL_REDO));
+                    if (value.OPERATION.equalsIgnoreCase("ddl")) {
+                        log.info("Skip sync for 'delete' operation.");
                         break;
                     }
+                    // Not a valid statement, CREATION DDL should get from source db
+                    //if (meta.createTable(value.SEG_OWNER, value.TABLE_NAME)) {
+                    //    log.info(String.format("Table %s created. Try to sync again...", value.TABLE_NAME));
+                    //    doAgain = true;
+                    //    continue;
+                    //}
+                    //else{
+                    //    log.error(String.format("Fail to create table %s. SCN:%s, SEG_NAME:%s, SEG_TYPE:%s, SQL_REDO: %s", value.TABLE_NAME, value.SCN, value.SEG_NAME, value.SEG_TYPE, value.SQL_REDO));
+                    //    break;
+                    //}
                 }
 
                 if ((value.OPERATION.equalsIgnoreCase("update") || value.OPERATION.equalsIgnoreCase("delete")) && !meta.checkRecordExist(value.SQL_REDO)) {
