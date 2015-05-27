@@ -171,8 +171,14 @@ public class DefaultLogMiner implements LogMiner, Constants {
                         break;
                     }
                     if (value.OPERATION.equalsIgnoreCase("ddl")) {
-                        log.info("Skip sync for 'delete' operation.");
-                        break;
+                        if (value.SQL_REDO.toLowerCase().trim().startsWith("drop table")) {
+                            log.info("Skip sync for 'drop table' operation.");
+                            break;
+                        }
+                        if (value.SQL_REDO.toLowerCase().trim().startsWith("alter table")) {
+                            log.info("Skip sync for 'alter table' operation.");
+                            break;
+                        }
                     }
                     // Not a valid statement, CREATION DDL should get from source db
                     //if (meta.createTable(value.SEG_OWNER, value.TABLE_NAME)) {
