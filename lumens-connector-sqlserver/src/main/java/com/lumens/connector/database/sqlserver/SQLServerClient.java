@@ -24,7 +24,11 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
 
     @Override
     protected Type toType(String dataType) {
-        // TODO
+        if (dataType.contains("int"))
+            return Type.INTEGER;
+        else if (dataType.contains("char") || dataType.contains("text"))
+            return Type.STRING;
+
         return Type.STRING;
     }
 
