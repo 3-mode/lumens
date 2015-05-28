@@ -18,7 +18,7 @@ detected.
   <!--  + contextPath                                                  -->
   <!--  + war OR resourceBase                                          -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-  <Set name="contextPath">/lumens</Set>
+  <Set name="contextPath">/infomota</Set>
   <Set name="war"><Property name="jetty.webapps" default="."/>/lumens-web-1.0.war</Set>
 
 </Configure>
