@@ -7,6 +7,8 @@ Lumens.i18n = {
     id_deploy: "Deploy",
     id_execute: "Execute",
     id_save: "Save",
+    id_import: "Import",
+    id_export: "Export",
     id_active: "Active",
     id_close: "Close",
     id_delete: "Delete",
@@ -39,6 +41,7 @@ Lumens.i18n = {
     id_server_log: "Server Log",
     id_job_log: "Job Log",
     // Project
+    id_project_import: "Project Import",
     id_project_catalog: "Project Catalog",
     id_project_new_title: "New Project",
     id_project_name: "Name",
