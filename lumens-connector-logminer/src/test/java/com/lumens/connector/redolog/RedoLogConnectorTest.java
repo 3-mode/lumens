@@ -45,15 +45,10 @@ public class RedoLogConnectorTest extends TestBase implements RedoLogConstants, 
 
     @Before
     public void prepareTestTable() {
-        // drop target table
-        Metadata target = new Metadata(destinationDatabase);
-        String schema = "LUMENS";
-        String table = "TEST";
-        if (target.checkTableExist(schema, table)) {
-            target.dropTable(schema, table);
-        }
-
         // create test table
+        String schema = "LUMENS";
+        String table = "FULL_SYNC";
+
         Metadata source = new Metadata(sourceDatabase);
         if (!source.checkTableExist(schema, table)) {
             try {
@@ -63,8 +58,17 @@ public class RedoLogConnectorTest extends TestBase implements RedoLogConstants, 
                 sourceDatabase.execute(String.format("INSERT INTO \"%s\".\"%s\" (NAME) VALUES ('oliver')", schema, table));
                 sourceDatabase.execute("commit");
             } catch (Exception ex) {
-                log.error(String.format("Fail to prepare table %s.%s",schema, table));
+                log.error(String.format("Fail to prepare table %s.%s", schema, table));
             }
+        }
+
+        // drop target table
+        Metadata target = new Metadata(destinationDatabase);
+        if (target.checkTableExist(schema, table)) {
+            target.emptyTable(schema, table);
+        } else {
+            String createDDL = source.getTableDDL(schema, table);
+            target.createTable(createDDL);
         }
     }
 

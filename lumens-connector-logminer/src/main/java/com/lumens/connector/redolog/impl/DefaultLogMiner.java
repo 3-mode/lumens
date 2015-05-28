@@ -158,6 +158,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
             try {
                 dbClient.execute(SQL);
                 LAST_SCN = value.SCN;
+                log.info(String.format("SCN %s synced", LAST_SCN));
             } catch (Exception ex) {
                 log.error("Fail to sync to destination. Error message:");
                 log.error(ex.getMessage());

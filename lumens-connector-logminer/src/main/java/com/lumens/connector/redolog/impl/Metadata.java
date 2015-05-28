@@ -42,12 +42,11 @@ public class Metadata implements Constants {
         return ddl;
     }
 
-    public boolean createTable(String schema, String table) {
-        String ddl = getTableDDL(schema, table);
+    public boolean createTable(String ddl) {        
         if (ddl != null) {
             try {
                 db.execute(ddl);
-                return checkTableExist(schema, table);
+                return true;
             } catch (Exception ex) {
                 log.error("Fail to create table. Error message:");
                 log.error(ex.getMessage());
@@ -63,6 +62,18 @@ public class Metadata implements Constants {
             return true;
         } catch (Exception ex) {
             log.error("Fail to drop table. Error message:");
+            log.error(ex.getMessage());
+        }
+        
+        return false;
+    }
+    
+    public boolean emptyTable(String schema, String table) {
+        try {
+            db.execute(String.format(SQL_EMPTY_TABLE_DDL, schema, table));
+            return true;
+        } catch (Exception ex) {
+            log.error("Fail to truncate table. Error message:");
             log.error(ex.getMessage());
         }
         
