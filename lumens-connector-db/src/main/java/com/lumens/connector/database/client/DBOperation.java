@@ -35,7 +35,10 @@ public abstract class DBOperation implements Operation, DBConstants {
         if (dataList != null && !dataList.isEmpty()) {
             for (int i = input.getStart(); i < dataList.size(); ++i) {
                 Element elem = dataList.get(i);
-                Element action = elem.getChild(SQLPARAMS).getChild(ACTION);
+                Element sqlParams = elem.getChild(SQLPARAMS);
+                Element action = null;
+                if (sqlParams != null)
+                    action = sqlParams.getChild(ACTION);
                 String strOper = ModelUtils.isNullValue(action) ? null : action.getValue().getString();
                 if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
                     // If i < input.getStart then there are some input handled as update or insert need to commit before
