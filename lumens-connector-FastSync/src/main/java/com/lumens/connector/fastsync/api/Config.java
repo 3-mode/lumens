@@ -5,6 +5,7 @@ package com.lumens.connector.fastsync.api;
 
 import com.lumens.connector.fastsync.api.LogMiner.BUILD_TYPE;
 import com.lumens.connector.fastsync.api.LogMiner.DICT_TYPE;
+
 /**
  *
  * @author Xiaoxin(whiskeyfly@163.com)
@@ -18,6 +19,8 @@ public class Config {
     private String startSCN = "0";
     private String endSCN = null;
     private boolean isSupplementalLogMode = false;
+    private boolean isNoSQLDelimiter = true;
+    private boolean isContinuousMine = true;
 
     public DICT_TYPE getDictType() {
         return dict_type;
@@ -45,6 +48,14 @@ public class Config {
 
     public void setNoRowid(boolean isNoRowid) {
         this.isNoRowid = isNoRowid;
+    }
+
+    public void setNoSQLDelimiter(boolean isNoDelimiter) {
+        this.isNoSQLDelimiter = isNoDelimiter;
+    }
+
+    public void setContinuousMine(boolean isContinuousMine) {
+        this.isContinuousMine = isContinuousMine;
     }
 
     public void setCommittedDataOnly(boolean isCommittedOnly) {
@@ -86,6 +97,20 @@ public class Config {
         }
 
         // Optional 
+        if (isContinuousMine) {
+            if (option.length() > 0) {
+                option.append(" + ");
+            }
+            option.append("DBMS_LOGMNR.CONTINUOUS_MINE");
+        }
+
+        if (isNoSQLDelimiter) {
+            if (option.length() > 0) {
+                option.append(" + ");
+            }
+            option.append("DBMS_LOGMNR.NO_SQL_DELIMITER");
+        }
+        
         if (isCommittedDataOnly) {
             if (option.length() > 0) {
                 option.append(" + ");
