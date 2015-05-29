@@ -9,6 +9,7 @@
     <groupId>com.mycompany</groupId>
     <artifactId>lumens-connector-fastsync</artifactId>
     <packaging>jar</packaging>
+    <name>lumens-connector-fastsync</name>
     <dependencies>
         <dependency>
             <groupId>com.lumens</groupId>
@@ -36,5 +37,4 @@
             <version>1.0</version>
         </dependency>
     </dependencies>
-    <name>lumens-connector-fastsync</name>
 </project>
