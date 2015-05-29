@@ -3,7 +3,7 @@
  */
 
 Lumens.controllers.controller("DesignViewCtrl", function ($scope, $route, $http, $compile,
-DesignNavMenu, SuccessTemplate, WarningTemplate, ErrorTemplate, PropFormTemplate, TransformListTemplate,
+DesignNavMenu, Notifier, PropFormTemplate, TransformListTemplate,
 DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectById) {
     Lumens.system.switchTo(Lumens.system.NormalView);
     // Set the default page view as dashboard view
@@ -23,10 +23,13 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
     // Init variable
     $scope.categoryInfo = {name: "to select"};
     $scope.componentProps = {Name: {value: "to select"}};
+    $scope.projectChanged = false;
     // Load templates
-    $scope.messageBox = new Lumens.Message({success: SuccessTemplate, warning: WarningTemplate, error: ErrorTemplate});
     TransformListTemplate.get(function (templ) {
         $scope.transformListTemplate = templ;
+    });
+    $scope.$on("ProjectChanged", function (evt, value) {
+        $scope.projectChanged = value;
     });
     $scope.onApplyProperty = function (event) {
         LumensLog.log("Apply:", event);
@@ -36,6 +39,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         applyProperty($scope.componentProps, $scope.currentUIComponent);
         $scope.currentUIComponent.setShortDescription($scope.componentProps.Name.value);
         $scope.$broadcast("ApplyProperty", {UI: $scope.currentUIComponent});
+        $scope.$broadcast("ProjectChanged", true);
     };
 
     // Load menu category
@@ -93,11 +97,10 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                     onBeforeComponentAdd: function () {
                         if ($scope.project)
                             return true;
-                        $scope.messageBox.showWarning(i18n.id_no_project_warning, desgin.designPanel.getElement());
+                        Notifier.message("warn", "Warning", i18n.id_no_project_warning);
                         return false;
                     },
                     onAfterComponentAdd: function (component) {
-                        LumensLog.log("Added compnoent:", component);
                         $scope.projectOperator.add(component);
                     }
                 });
@@ -129,7 +132,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                 });
 
                 // Create info form panel
-                var nameTmpl = '<span class="lumens-icon-project lumens-icon-gap"></span><b>{{project.name}}</b>';
+                var nameTmpl = '<span class="lumens-icon-project lumens-icon-gap"></span><b>{{project.name}}</b><b ng-if="projectChanged">*</b>';
                 desgin.designAndInfoPanel.getTitleElement().append($compile(nameTmpl)($scope));
                 desgin.tabsContainer = new Lumens.Panel(desgin.designAndInfoPanel.getPart2Element())
                 .configure({
@@ -252,6 +255,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                     if (response.status === "OK") {
                         var project = response.result_content.project[0];
                         projectOperator.setId(project.id);
+                        $scope.$emit('ProjectChanged', false);
                         Notifier.message("info", "Success", i18n.id_save_project.format(project.name));
                     }
                     else
@@ -321,8 +325,10 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         }
         else if ("id_delete" === id) {
             ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'delete'}, function (response) {
-                if (response.status === "OK")
+                if (response.status === "OK") {
                     projectOperator.close();
+                    delete sessionStorage.local_project_storage;
+                }
                 Message(response);
             });
         }
@@ -411,6 +417,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         if ($scope.projectName) {
             projectOperator.create($scope.projectName, $scope.projectDescription);
             $element.modal("hide");
+            $scope.$emit('ProjectChanged', true);
             Notifier.message("info", "Success", "Created a new project '" + $scope.projectName + "'");
         }
         else

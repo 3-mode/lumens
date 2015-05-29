@@ -5,6 +5,7 @@ package com.lumens.connector.database.client.oracle;
 
 import static com.lumens.connector.database.DBConstants.DESCRIPTION;
 import static com.lumens.connector.database.DBConstants.TYPE;
+import com.lumens.connector.database.DBUtils;
 import com.lumens.connector.database.client.AbstractClient;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Format;
@@ -36,8 +37,9 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                     if (!alter.isEmpty())
                         stat.execute(alter.trim());
                 }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+                DBUtils.commit(conn);
+            } catch (SQLException e) {
+                throw new RuntimeException(e.getMessage(), e);
             }
         }
     }

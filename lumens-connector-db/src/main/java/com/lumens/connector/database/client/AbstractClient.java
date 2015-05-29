@@ -86,8 +86,9 @@ public abstract class AbstractClient implements Client, DBConstants {
                 }
             }
             return tables;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            DBUtils.rollback(conn);
+            throw new RuntimeException("[" + e.getMessage() + "]", e);
         }
     }
 
@@ -116,9 +117,9 @@ public abstract class AbstractClient implements Client, DBConstants {
     public void execute(String SQL) {
         try (Statement stat = conn.createStatement()) {
             stat.execute(SQL);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             DBUtils.rollback(conn);
-            throw new RuntimeException(SQL, e);
+            throw new RuntimeException("[" + e.getMessage() + "] : " + SQL, e);
         }
     }
 
@@ -128,7 +129,8 @@ public abstract class AbstractClient implements Client, DBConstants {
              ResultSet ret = stat.executeQuery(SQL)) {
             return elementBuilder.buildElement(output, ret);
         } catch (Exception e) {
-            throw new RuntimeException(SQL, e);
+            DBUtils.rollback(conn);
+            throw new RuntimeException("[" + e.getMessage() + "] : " + SQL, e);
         }
     }
 

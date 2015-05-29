@@ -104,7 +104,7 @@ Lumens.Component = Class.$extend({
         }).data("data-comp", this);
         this.$elem.find(".data-comp-stauts").dblclick(function () {
             if (__this.statusCallback) {
-                var statOK = __this.statusCallback(this);
+                var statOK = __this.statusCallback(__this);
                 var bActive = $(this).attrBoolean("is-active");
                 if (statOK && !bActive) {
                     $(this).attr("src", "app/css/img/ds/Active.png");
@@ -196,7 +196,8 @@ Lumens.Component = Class.$extend({
     },
     changeStatus: function (callback) {
         this.statusCallback = callback;
-    }, hasFrom: function () {
+    },
+    hasFrom: function () {
         return this.getFromCount() > 0;
     },
     getFromCount: function () {

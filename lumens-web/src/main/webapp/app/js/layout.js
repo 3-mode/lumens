@@ -3,13 +3,13 @@
  */
 
 Lumens.RootLayout = Class.$extend({
-    __init__: function(container) {
+    __init__: function (container) {
         this.$parentContainer = container ? container : $('body');
         this.$theLayout = Lumens.Id($('<div class="lumens-root-layout"></div>').appendTo(this.$parentContainer));
     },
-    configure: function() {
+    configure: function () {
         var __this = this;
-        this.layout = function(e) {
+        this.layout = function (e) {
             if (e.target !== this)
                 return;
             __this.$theLayout.trigger("resize");
@@ -17,10 +17,10 @@ Lumens.RootLayout = Class.$extend({
         $(window).bind("resize", this.layout);
         return this;
     },
-    getElement: function() {
+    getElement: function () {
         return this.$theLayout;
     },
-    remove: function() {
+    remove: function () {
         this.$theLayout.unbind();
         this.$theLayout.remove();
         $(window).unbind("resize", this.layout);
@@ -38,11 +38,11 @@ Lumens.RootLayout = Class.$extend({
  * }
  */
 Lumens.SplitLayout = Class.$extend({
-    __init__: function(container) {
+    __init__: function (container) {
         this.$parentContainer = container.getElement ? container.getElement() : container;
         this.$theLayout = Lumens.Id($('<div class="lumens-layout"></div>').appendTo(this.$parentContainer));
     },
-    computePartsLayoutSize: function(layoutConfig) {
+    computePartsLayoutSize: function (layoutConfig) {
         if (layoutConfig)
             this.layoutConfig = layoutConfig;
 
@@ -108,9 +108,9 @@ Lumens.SplitLayout = Class.$extend({
             }
         }
     },
-    configure: function(config) {
+    configure: function (config) {
         var __this = this;
-        this.layout = function(e) {
+        this.layout = function (e) {
             if (e && e.target !== this)
                 return;
             if (!config.width)
@@ -147,16 +147,16 @@ Lumens.SplitLayout = Class.$extend({
         }
         return this;
     },
-    getPart1Element: function() {
+    getPart1Element: function () {
         return  this.part1Layout;
     },
-    getPart2Element: function() {
+    getPart2Element: function () {
         return  this.part2Layout;
     },
-    getElement: function() {
+    getElement: function () {
         return  this.$theLayout;
     },
-    remove: function() {
+    remove: function () {
         if (this.part1Layout)
             this.part1Layout.unbind();
         if (this.part2Layout)
@@ -165,24 +165,24 @@ Lumens.SplitLayout = Class.$extend({
         this.$theLayout.remove();
         this.$parentContainer.unbind("resize", this.layout);
     },
-    hide: function() {
+    hide: function () {
         this.$theLayout.hide();
     },
-    show: function() {
+    show: function () {
         this.$theLayout.show();
         this.$theLayout.trigger("resize");
     }
 });
 
 Lumens.Panel = Class.$extend({
-    __init__: function(container) {
+    __init__: function (container) {
         this.$parentContainer = container;
         this.$thePanel = Lumens.Id($('<div class="lumens-panel"></div>').appendTo(this.$parentContainer));
         this.size = {};
     },
-    configure: function(config) {
+    configure: function (config) {
         var __this = this;
-        this.layout = function(e) {
+        this.layout = function (e) {
             if (e && e.target !== this)
                 return;
             if (__this.size.width)
@@ -209,10 +209,10 @@ Lumens.Panel = Class.$extend({
         }
         return this;
     },
-    getElement: function() {
+    getElement: function () {
         return this.$thePanel;
     },
-    remove: function() {
+    remove: function () {
         this.$thePanel.unbind();
         this.$thePanel.remove();
         this.$parentContainer.unbind("resize", this.layout);
@@ -220,11 +220,11 @@ Lumens.Panel = Class.$extend({
 });
 
 Lumens.ComponentPanel = Lumens.Panel.$extend({
-    __init__: function(container) {
+    __init__: function (container) {
         this.$super(container);
         this.componentList = [];
     },
-    configure: function(config) {
+    configure: function (config) {
         var __this = this;
         this.onComponentDblclick = config.onComponentDblclick;
         this.onBeforeComponentAdd = config.onBeforeComponentAdd;
@@ -232,7 +232,7 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
         this.getElement().attr("id", "id-data-comp-container")
         .droppable({
             accept: ".data-comp-node",
-            drop: function(event, ui) {
+            drop: function (event, ui) {
                 event.preventDefault();
                 var category_info = $.data(ui.draggable.get(0), "item-data");
                 // TODO create component object in $scope
@@ -252,10 +252,10 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
         });
         return this;
     },
-    getComponentList: function() {
+    getComponentList: function () {
         return this.componentList;
     },
-    addComponent: function(position, category_info, component_info) {
+    addComponent: function (position, category_info, component_info) {
         component_info = this.initComponentInfo(category_info, component_info);
         var component = new Lumens.DataComponent(this.getElement(), {
             x: position.x, y: position.y,
@@ -267,11 +267,11 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
         this.componentList.push(component);
         return component;
     },
-    emptyComponent: function() {
+    emptyComponent: function () {
         this.getElement().empty();
         this.componentList = [];
     },
-    initComponentInfo: function(category_info, component_info) {
+    initComponentInfo: function (category_info, component_info) {
         if (component_info)
             return component_info
         component_info = {
@@ -302,10 +302,10 @@ Lumens.ComponentPanel = Lumens.Panel.$extend({
  * }
  */
 Lumens.ResizableSplitLayout = Lumens.SplitLayout.$extend({
-    __init__: function(container) {
+    __init__: function (container) {
         this.$super(container);
     },
-    configure: function(config) {
+    configure: function (config) {
         var __this = this;
         this.$super(config);
         this.resizablePanel = new Lumens.SplitLayout(this.getPart2Element())
@@ -318,12 +318,12 @@ Lumens.ResizableSplitLayout = Lumens.SplitLayout.$extend({
         .append('<div class="lumens-v-resize-grip-border"><span class="lumens-v-resize-grip-button"/></div>')
         .draggable({
             axis: "horizontal" === config.mode ? "x" : "y",
-            start: function() {
+            start: function () {
                 __this.resizeStart();
             },
-            stop: "horizontal" === config.mode ? function() {
+            stop: "horizontal" === config.mode ? function () {
                 // TODO change other parts width value here
-            } : function() {
+            } : function () {
                 if (__this.layoutConfig.useRatio) {
                     __this.layoutConfig.part1Ratio = Math.abs(__this.layoutConfig.part1Size + $(this).cssFloat("top")) / __this.getElement().height();
                     var maxRatio = 1 - __this.getOffset() / __this.getElement().height();
@@ -345,18 +345,18 @@ Lumens.ResizableSplitLayout = Lumens.SplitLayout.$extend({
         });
         return this;
     },
-    resizeStart: function() {
+    resizeStart: function () {
         if (this.resizablePanel)
             this.resizablePanel.getPart1Element().toggleClass("lumens-v-drag-border");
     },
-    resizeStop: function() {
+    resizeStop: function () {
         if (this.resizablePanel)
             this.resizablePanel.getPart1Element().toggleClass("lumens-v-drag-border");
     },
-    getOffset: function() {
+    getOffset: function () {
         return 12;
     },
-    getPart2Element: function() {
+    getPart2Element: function () {
         if (this.resizablePanel)
             return this.resizablePanel.getPart2Element();
         return this.$super();
@@ -364,10 +364,10 @@ Lumens.ResizableSplitLayout = Lumens.SplitLayout.$extend({
 });
 
 Lumens.ResizableVSplitLayoutExt = Lumens.ResizableSplitLayout.$extend({
-    __init__: function(container) {
+    __init__: function (container) {
         this.$super(container);
     },
-    configure: function(config) {
+    configure: function (config) {
         if (!config.useRatio)
             throw "Ratio mode must be used";
 
@@ -392,7 +392,7 @@ Lumens.ResizableVSplitLayoutExt = Lumens.ResizableSplitLayout.$extend({
             __this.layoutConfig.part1Ratio = undefined;
             __this.layoutConfig.part2Ratio = undefined;
         }
-        this.$titleBar.find(".lumens-min").click(function() {
+        this.$titleBar.find(".lumens-min").click(function () {
             initBeforeMinMidMax();
             __this.isMin = true;
             // Min size
@@ -400,13 +400,13 @@ Lumens.ResizableVSplitLayoutExt = Lumens.ResizableSplitLayout.$extend({
             __this.getElement().trigger("resize");
 
         });
-        this.$titleBar.find(".lumens-mid").click(function() {
+        this.$titleBar.find(".lumens-mid").click(function () {
             initBeforeMinMidMax();
             __this.layoutConfig.useRatio = true;
             __this.layoutConfig.part1Ratio = 0.60;
             __this.getElement().trigger("resize");
         });
-        this.$titleBar.find(".lumens-max").click(function() {
+        this.$titleBar.find(".lumens-max").click(function () {
             initBeforeMinMidMax();
             __this.layoutConfig.useRatio = true;
             __this.layoutConfig.part1Ratio = 0.15;
@@ -414,7 +414,7 @@ Lumens.ResizableVSplitLayoutExt = Lumens.ResizableSplitLayout.$extend({
         });
         return this;
     },
-    resizeStart: function() {
+    resizeStart: function () {
         if (this.isMin) {
             this.layoutConfig.useRatio = true;
             this.layoutConfig.part1Size = this.getElement().height() - this.layoutConfig.part2Size;
@@ -425,13 +425,13 @@ Lumens.ResizableVSplitLayoutExt = Lumens.ResizableSplitLayout.$extend({
         }
         this.$super();
     },
-    getTitleElement: function() {
+    getTitleElement: function () {
         return this.$titleBar.find('#id-title');
     },
-    getOffset: function() {
+    getOffset: function () {
         return this.$super() + 22;
     },
-    getPart2Element: function() {
+    getPart2Element: function () {
         if (this.$contentPanel)
             return this.$contentPanel.getPart2Element();
         return this.$super();

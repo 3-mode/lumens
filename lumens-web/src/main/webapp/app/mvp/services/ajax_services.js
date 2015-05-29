@@ -12,18 +12,6 @@ Lumens.services.factory('DesignNavMenu', function ($resource) {
 Lumens.services.factory('DesignButtons', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/design_command_tmpl.html");
 });
-Lumens.services.factory('ErrorTemplate', function ($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/error_tmpl.html");
-});
-Lumens.services.factory('WarningTemplate', function ($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/warning_tmpl.html");
-});
-Lumens.services.factory('SuccessTemplate', function ($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/success_tmpl.html");
-});
-Lumens.services.factory('SmallMessageTmplate', function ($http, $q) {
-    return createGetTemplateObject($http, $q, "app/templates/small_message_tmpl.html");
-});
 Lumens.services.factory('PropFormTemplate', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/property_form_tmpl.html");
 });

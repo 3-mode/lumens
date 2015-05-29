@@ -3,7 +3,6 @@
  */
 package com.lumens.engine;
 
-import com.lumens.engine.TransformProject;
 import com.lumens.engine.serializer.ProjectSerializer;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.JobProjectRelationDAO;
@@ -37,7 +36,9 @@ public class DBHelper {
         ProjectDAO projectDAO = DAOFactory.getProjectDAO();
         List<JobProjectRelation> relationList = relationDAO.getAllRelation(jobId);
         for (JobProjectRelation relation : relationList) {
-            projectList.add(projectDAO.getShortProjectByID(relation.projectId));
+            Project proj = projectDAO.getShortProjectByID(relation.projectId);
+            if (proj != null)
+                projectList.add(proj);
         }
 
         return projectList;

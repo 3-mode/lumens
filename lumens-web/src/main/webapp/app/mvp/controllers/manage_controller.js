@@ -93,8 +93,14 @@ Lumens.controllers
     $scope.jobLogBar.getPart1Element().append($compile(TemplateService.get($scope.job_log_bar_template))($scope));
     $scope.jobLogBar.getPart2Element().append($compile('<div ng-include="job_list_log_template" style="overflow: auto; position: relative; width: 100%; height: 100%;"></div>')($scope));
     JobService.list(function (result) {
-        $scope.jobs = result.result_content.jobs;
-        LumensLog.log("JobList:", result);
+        if (result.status === 'OK') {
+            $("#jobLoading").hide();
+            $scope.jobs = result.result_content.jobs;
+            LumensLog.log("JobList:", result);
+        } else {
+            $("#jobLoading").hide();
+            Notifier.message("error", "Error", "Failed to get jobs '" + result.error_message + "'");
+        }
         LogFileService.log(buildQueryLogParam(), function (result) {
             $scope.jobLogContent = null;
             if (result.status === 'OK') {

@@ -14,10 +14,11 @@ Lumens.ProjectOperator = Class.$extend({
     close: function () {
         this.componentPanel.emptyComponent();
         this.projectId = undefined;
-        this.$scope.componentForm = undefined;
         this.$scope.componentProps = {Name: {value: "to select"}};
         this.$scope.categoryInfo = {name: "to select"};
         this.$scope.currentComponent = {name: "to select"};
+        this.$scope.project = undefined;
+        this.$scope.componentForm = undefined;
     },
     create: function (name, description) {
         this.componentPanel.emptyComponent();
@@ -167,14 +168,14 @@ Lumens.ProjectOperator = Class.$extend({
             });
 
             var compList = __this.componentPanel.getComponentList();
-            $.each(compList, function () {
-                if (this.isDataSource()) {
-                    this.changeStatus(function () {
-                        console.log("open or close");
-                        return true;
-                    });
-                }
-            });
+            for (var i in compList) {
+                compList[i].changeStatus(function (comp) {
+                    if (comp.isDataSource()) {
+                        console.log("open or close it from server side");
+                    }
+                    return true;
+                });
+            }
         }
         this.$scope.$broadcast("InitProject");
     }

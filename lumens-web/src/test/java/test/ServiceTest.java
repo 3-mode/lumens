@@ -10,7 +10,6 @@ import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.entity.InOutLogItem;
-import com.lumens.sysdb.entity.Project;
 import com.lumens.engine.TransformProject;
 import com.lumens.engine.handler.InspectionHandler;
 import com.lumens.engine.log.TransformComponentInOutLogHandler;
@@ -22,8 +21,8 @@ import com.lumens.scheduler.JobConfiguration;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.entity.Job;
 import com.lumens.engine.DBHelper;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -41,24 +40,29 @@ public class ServiceTest {
 
     public ServiceTest() {
     }
+
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
+    public void testCase() throws Exception {
+        testProject("/projects/oracle_2_oracle.mota");
+    }
 
-    public void testDBProject(long projectID) throws Exception {
+    public void testProject(String projectPath) throws Exception {
         if (true) {
             System.setProperty("lumens.base", "../dist/lumens");
             ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
-            ProjectDAO pDAO = DAOFactory.getProjectDAO();
-            Project project = pDAO.getProject(projectID); //1421234160179L page //1415415434544L //1421324074892L CSV
             TransformProject projectInstance = new TransformProject();
-            new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
+            try (InputStream in = ServiceTest.class.getResourceAsStream(projectPath)) {
+                new ProjectSerializer(projectInstance).readFromJson(in);
+            }
             //assertEquals(3, projectInstance.getDataTransformerList().size());
             //assertEquals(4, projectInstance.getDatasourceList().size());
             List<InspectionHandler> handlers = new ArrayList<>();
             handlers.addAll(Arrays.asList(new TransformComponentInOutLogHandler()));
-            for (int i = 0; i < 100; ++i)
-                new SequenceTransformExecuteJob(projectInstance, handlers).execute();
+            new SequenceTransformExecuteJob(projectInstance, handlers).execute();
+            //for (int i = 0; i < 100; ++i)
+            //    new SequenceTransformExecuteJob(projectInstance, handlers).execute();
             //ApplicationContext.get().getTransformEngine().execute(new SequenceTransformExecuteJob(projectInstance, handlers));
         }
     }
@@ -131,10 +135,6 @@ public class ServiceTest {
         Response resp = ls.listLogItem(0, 10);
         String str = resp.getEntity().toString();
         System.out.println("logs:" + str);
-    }
-
-    public void testCSVProjectMemoryLeak() throws Exception {
-        testDBProject(1421842012147L);
     }
 
 }
