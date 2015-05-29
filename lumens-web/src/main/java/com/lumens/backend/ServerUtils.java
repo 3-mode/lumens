@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.codehaus.jackson.JsonGenerator;
 
 public class ServerUtils {
-    private static Logger log = SysLogFactory.getLogger(ServerUtils.class);
+    private static final Logger log = SysLogFactory.getLogger(ServerUtils.class);
 
     public static Timestamp getTimestampFromString(String date) {
         try {

@@ -735,6 +735,14 @@ svg path {
     cursor: pointer;
     margin-top: 5px;
 }
+.lumens .lumens-icon-export:before {
+    font-size: 16px;
+    content: "\e641";
+}
+.lumens .lumens-icon-import:before {
+    font-size: 16px;
+    content: "\e74f";
+}
 .lumens .lumens-icon-foreach-del:hover {
     color: #4c4c4c !important;
 }

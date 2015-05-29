@@ -20,15 +20,16 @@ import com.lumens.backend.ServiceConstants;
 import static com.lumens.backend.ServiceConstants.ACTIVE;
 import static com.lumens.backend.ServiceConstants.DELETE;
 import com.lumens.engine.log.TransformComponentDBLogHandler;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
 import com.lumens.sysdb.entity.InOutLogItem;
 import com.lumens.sysdb.entity.Project;
-import com.sun.jersey.api.client.ClientResponse.Status;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,12 +48,52 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonNode;
+import com.sun.jersey.multipart.FormDataParam;
+import javax.ws.rs.core.Response.Status;
+import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.Logger;
 
 @Path("/project")
 public class ProjectService implements ServiceConstants {
 
+    private static final Logger log = SysLogFactory.getLogger(ProjectService.class);
+
     @Context
     private ServletContext context;
+
+    @GET
+    @Path("/export/{projectID}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response exportProject(@PathParam("projectID") long projectID) {
+        try {
+            ProjectDAO pDAO = DAOFactory.getProjectDAO();
+            Project project = pDAO.getProject(projectID);
+            TransformProject projectInstance = new TransformProject();
+            new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
+            return Response.ok()
+            .header("Content-Disposition", String.format("attachment; filename=%s.%s", Long.toString(projectID), "mota"))
+            .header("Set-Cookie", "fileDownload=true; Path=/").entity(project.data.getBytes()).build();
+        } catch (Exception ex) {
+            return ServerUtils.getErrorMessageResponse(ex);
+        }
+    }
+
+    @POST
+    @Path("/import")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response importProject(@FormDataParam("project") InputStream fileInputStream) {
+        String message = null;
+        try {
+            message = IOUtils.toString(fileInputStream, "UTF-8");
+            if (log.isDebugEnabled())
+                log.debug("Project json content is: " + message);
+            return this.createProject(message);
+        } catch (Exception ex) {
+            if (message != null)
+                log.error("Wrong request to import project: " + message);
+            return ServerUtils.getErrorMessageResponse(ex);
+        }
+    }
 
     @POST
     @Path("{projectID}")
@@ -120,12 +161,16 @@ public class ProjectService implements ServiceConstants {
     }
 
     private Response createProject(JsonNode contentJson) throws Exception {
-        ByteArrayInputStream bais = new ByteArrayInputStream(contentJson.asText().getBytes(UTF_8));
+        return createProject(contentJson.asText());
+    }
+
+    private Response createProject(String strProject) throws Exception {
+        ByteArrayInputStream bais = new ByteArrayInputStream(strProject.getBytes(UTF_8));
         TransformProject project = new TransformProject();
         // Load it first to verify the project
         new ProjectSerializer(project).readFromJson(bais);
         ProjectDAO pDAO = DAOFactory.getProjectDAO();
-        long projectId = pDAO.create(new Project(Utils.generateID(), project.getName(), project.getDescription(), contentJson.asText()));
+        long projectId = pDAO.create(new Project(Utils.generateID(), project.getName(), project.getDescription(), strProject));
         JsonUtility utility = JsonUtility.createJsonUtility();
         JsonGenerator json = utility.getGenerator();
         json.writeStartObject();

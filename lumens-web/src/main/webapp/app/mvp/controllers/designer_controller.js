@@ -207,7 +207,7 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
     });
     // <******* Design View ------------------------------------------------------------
 })
-.controller("DesginCmdCtrl", function ($scope, $element, $compile, Notifier, ProjectListModal, ProjectCreateModal, ProjectService, ProjectById) {
+.controller("DesginCmdCtrl", function ($scope, $element, $compile, Notifier, ProjectListModal, ProjectCreateModal, ProjectImportModal, ProjectService, ProjectById) {
     // Handle desgin command button event
     LumensLog.log("In DesginCmdCtrl", $element);
     var i18n = $scope.i18n;
@@ -258,6 +258,38 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                         Notifier.message("error", "Error", i18n.id_save_project.format(project.name));
                 });
             }
+        }
+        else if ('id_import' === id) {
+            ProjectImportModal.get(function (project_import_modal_tmpl) {
+                var projectImportDialog = $element.find("#project_import");
+                projectImportDialog.append($compile(project_import_modal_tmpl)($scope));
+                $("#singleProjectImport").uploadFile({
+                    url: "rest/project/import",
+                    allowedTypes: "mota",
+                    fileName: "project",
+                    onSuccess: function (files, data, xhr) {
+                        var result = angular.fromJson(data);
+                        if (result.status === "OK")
+                            Notifier.message("info", "Success", "Import succesfully");
+                        else
+                            Notifier.message("error", "Error", result.error_message);
+                    }
+                });
+                $('#projectImportModal').on("hidden.bs.modal", function () {
+                    projectImportDialog.empty();
+                }).modal({backdrop: "static"});
+            });
+        }
+        else if ('id_export' === id) {
+            // construct data - replace with your own
+            $.fileDownload('rest/project/export/' + projectOperator.get().projectId, {
+                successCallback: function (url) {
+                    Notifier.message("info", "Success", "You exported the project as '" + projectOperator.get().projectId + ".mota'");
+                },
+                failCallback: function (html, url) {
+                    Notifier.message("error", "Error", html);
+                }
+            });
         }
         else if ("id_active" === id) {
             ProjectById.operate({project_id: projectOperator.get().projectId}, {action: 'active'}, function (response) {
