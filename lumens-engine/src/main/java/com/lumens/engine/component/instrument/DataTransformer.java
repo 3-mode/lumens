@@ -62,7 +62,9 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
             if (r.getName().equals(rule.getName()))
                 return r.getRule();
         ruleList.add(rule);
-        String findFormatName = StringUtils.isEmpty(rule.getSourceFormatName()) ? rule.getName() : rule.getSourceFormatName();
+        String findFormatName = (StringUtils.isEmpty(rule.getSourceId())
+                                 || StringUtils.isEmpty(rule.getSourceFormatName()))
+                                ? rule.getName() : rule.getSourceFormatName();
         List<TransformRuleEntry> rules = ruleFindList.get(findFormatName);
         if (rules == null) {
             rules = new ArrayList<>();
