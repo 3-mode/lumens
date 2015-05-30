@@ -68,9 +68,10 @@
         <module>lumens-connector-db</module>
         <module>lumens-connector-sqlserver</module>
         <module>lumens-connector-text</module>
+        <module>lumens-connector-rapsync</module>
         <module>lumens-management</module>
         <module>lumens-scheduler</module>
-        <module>lumens-sysdb</module>
+        <module>lumens-sysdb</module>        
     </modules>
     <dependencies>
         <dependency>
