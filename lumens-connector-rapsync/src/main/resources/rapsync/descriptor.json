@@ -1,0 +1,40 @@
+{
+    "type-oracle-jdbc": {
+        "name": "RapSyncName",
+        "class_type": "datasource",
+        "item_icon": "img/RapSync24x24.png",
+        "instance_icon": "img/RapSync64x64.png",
+        "html_url": "html/rapsync.html",
+        "i18n": "i18n/rapsync.json",
+        "property": [
+            {
+                "name": "OJDBC",
+                "type": "String"
+            },
+            {
+                "name": "ConnectionURL",
+                "type": "String"
+            },
+            {
+                "name": "User",
+                "type": "String"
+            },
+            {
+                "name": "Password",
+                "type": "String"
+            },
+            {
+                "name": "PageSize",
+                "type": "Integer"
+            },
+            {
+                "name": "SessionAlter",
+                "type": "String"
+            },
+            {
+                "name": "FullLoad",
+                "type": "Boolean"
+            }
+        ]
+    }
+}

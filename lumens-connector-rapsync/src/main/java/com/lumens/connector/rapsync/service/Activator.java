@@ -21,7 +21,7 @@ public class Activator implements AddinActivator {
     public void start(AddinContext context) {
         addinContext = context;
         ConnectorFactory factory = new RapSyncConnectorFactory();
-        addinContext.registerService(factory.getComponentType(), factory, DescriptorUtils.processDescriptor(Activator.class, "rapidsync", factory.getComponentType()));
+        addinContext.registerService(factory.getComponentType(), factory, DescriptorUtils.processDescriptor(Activator.class, "rapsync", factory.getComponentType()));
     }
 
     @Override

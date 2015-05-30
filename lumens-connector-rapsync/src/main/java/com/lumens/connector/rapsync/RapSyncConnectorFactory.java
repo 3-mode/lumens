@@ -14,7 +14,7 @@ public class RapSyncConnectorFactory implements ConnectorFactory {
 
     @Override
     public String getComponentType() {
-        return "type-logminer";
+        return "type-rapsync";
     }
 
     @Override

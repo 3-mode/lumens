@@ -20,7 +20,7 @@ public interface RapSyncConstants extends DBConstants {
     public String QUERY = "QUERY";
     public String SYNC = "SYNC";
 
-    public String SQL_QUERY_COLUMNS = "select t.COLUMN_NAME, t.DATA_TYPE, t.DATA_LENGTH from user_tab_columns t where t.TABLE_NAME = 'V_$LOGMNR_CONTENTS'";
+    public String SQL_QUERY_COLUMNS = "select t.COLUMN_NAME, t.DATA_TYPE, t.DATA_LENGTH from all_tab_columns t where t.TABLE_NAME = 'V_$LOGMNR_CONTENTS'";
 
     public String BUILD_TYPE_ONLINE = "buildTypeOnline";
     public String BUILD_TYPE_OFFLINE = "buildTypeOffline";
