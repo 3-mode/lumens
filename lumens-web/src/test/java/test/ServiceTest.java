@@ -44,8 +44,9 @@ public class ServiceTest {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
+    @Test
     public void testCase() throws Exception {
-        testProject("/projects/oracle_2_oracle.mota");
+        testProject("/projects/oracle_2_csv.mota");
     }
 
     public void testProject(String projectPath) throws Exception {
