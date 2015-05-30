@@ -8,7 +8,7 @@ Lumens.$ngApp = angular.module("lumens-app", ["lumens-directives", "lumens-servi
 Lumens.$ngApp.config(function ($routeProvider) {
     $routeProvider
     .when("/id-dashboard-view", {
-        template: '<div font-size: 18px;">DashboardViewCtrl</div>',
+        templateUrl: "app/templates/dashboard/dashboard_tmpl.html",
         controller: "DashboardViewCtrl"
     })
     .when("/id-management-view", {
