@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.lumens</groupId>
+        <artifactId>lumens</artifactId>
+        <version>1.0</version>
+    </parent>
+    <groupId>com.mycompany</groupId>
+    <artifactId>lumens-connector-rapidsync</artifactId>
+    <packaging>jar</packaging>
+    <name>lumens-connector-rapidsync</name>
+    <dependencies>
+        <dependency>
+            <groupId>com.lumens</groupId>
+            <artifactId>lumens-connector</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lumens</groupId>
+            <artifactId>lumens-connector-db</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lumens</groupId>
+            <artifactId>lumens-log</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lumens</groupId>
+            <artifactId>lumens-addin</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lumens</groupId>
+            <artifactId>lumens-model</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
+</project>
