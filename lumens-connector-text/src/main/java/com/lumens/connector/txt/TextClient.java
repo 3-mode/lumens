@@ -144,7 +144,7 @@ public class TextClient implements TextConstants {
 
             writer.write(line.toString());
 
-            if (linedelimiter.isEmpty())
+            if (linedelimiter == null || linedelimiter.isEmpty())
                 writer.newLine();
             else
                 writer.write(linedelimiter);
