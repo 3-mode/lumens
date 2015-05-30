@@ -73,7 +73,7 @@ public class RedoLog implements Constants {
         sbSQL.append(" END;");
 
         if (log.isDebugEnabled()) {
-            log.debug(String.format("Redolog build list: ", sbSQL.toString()));
+            log.debug(String.format("Redolog build list: %s", sbSQL.toString()));
         }
         return sbSQL.toString();
     }

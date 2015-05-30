@@ -41,7 +41,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
     @Override
     public void buildDictionary() {
         try {
-            if (config.getDictType() == DICT_TYPE.STORE_IN_FILE) {
+            if (config.getDictType() == DICT_TYPE.STORE_IN_FILE ) {
                 if (dict == null) {
                     dict = new Dictionary(dbClient);
                 }

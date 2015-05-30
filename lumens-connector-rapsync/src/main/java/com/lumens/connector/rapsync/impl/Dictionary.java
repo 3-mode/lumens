@@ -25,7 +25,7 @@ public class Dictionary implements Constants {
         String path = getDictionaryPath();
         SQL_CREATE_DIECTIONARY = "BEGIN dbms_logmnr_d.build(dictionary_filename => '" + DICTIONARY_FILE + "', dictionary_location =>'" + path + "'); END;";
         if(log.isDebugEnabled()){
-            log.debug(String.format("Dictionary build options: ", SQL_CREATE_DIECTIONARY));
+            log.debug(String.format("Dictionary build options: %s", SQL_CREATE_DIECTIONARY));
         }
         dbClient.execute(SQL_CREATE_DIECTIONARY);
     }

@@ -133,7 +133,7 @@ public class Config {
         }
 
         if (log.isDebugEnabled()) {
-            log.debug(String.format("Config parameters: ", parameter.toString()));
+            log.debug(String.format("Config parameters: %s", parameter.toString()));
         }
         return parameter.toString();
     }
