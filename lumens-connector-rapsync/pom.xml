@@ -6,7 +6,7 @@
         <artifactId>lumens</artifactId>
         <version>1.0</version>
     </parent>
-    <groupId>com.mycompany</groupId>
+    <groupId>com.lumens</groupId>
     <artifactId>lumens-connector-rapsync</artifactId>
     <packaging>jar</packaging>
     <name>lumens-connector-rapsync</name>
