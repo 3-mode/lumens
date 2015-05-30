@@ -5,6 +5,9 @@ package com.lumens.connector.rapsync.api;
 
 import com.lumens.connector.rapsync.api.LogMiner.BUILD_TYPE;
 import com.lumens.connector.rapsync.api.LogMiner.DICT_TYPE;
+import com.lumens.connector.rapsync.impl.Metadata;
+import com.lumens.logsys.SysLogFactory;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -12,6 +15,7 @@ import com.lumens.connector.rapsync.api.LogMiner.DICT_TYPE;
  */
 public class Config {
 
+    private final Logger log = SysLogFactory.getLogger(Config.class);
     private DICT_TYPE dict_type = DICT_TYPE.ONLINE;
     private BUILD_TYPE build_type = BUILD_TYPE.ONLINE;
     private boolean isCommittedDataOnly = true;
@@ -110,7 +114,7 @@ public class Config {
             }
             option.append("DBMS_LOGMNR.NO_SQL_DELIMITER");
         }
-        
+
         if (isCommittedDataOnly) {
             if (option.length() > 0) {
                 option.append(" + ");
@@ -128,6 +132,9 @@ public class Config {
             parameter.append(", OPTIONS => ").append(option);
         }
 
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Config parameters: ", parameter.toString()));
+        }
         return parameter.toString();
     }
 }
