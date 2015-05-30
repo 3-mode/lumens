@@ -20,7 +20,7 @@ public class Config {
     private String endSCN = null;
     private boolean isSupplementalLogMode = false;
     private boolean isNoSQLDelimiter = true;
-    private boolean isContinuousMine = true;
+    private boolean isContinuousMine = false;
 
     public DICT_TYPE getDictType() {
         return dict_type;
