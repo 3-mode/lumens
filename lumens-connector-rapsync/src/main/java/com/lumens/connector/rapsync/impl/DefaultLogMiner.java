@@ -158,7 +158,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
             try {
                 dbClient.execute(SQL);
                 LAST_SCN = value.SCN;
-                log.info(String.format("SCN %s synced", LAST_SCN));
+                log.info(String.format("SCN %s synced : %s", LAST_SCN, SQL));
             } catch (Exception ex) {
                 log.error("Fail to sync to destination. Error message:");
                 log.error(ex.getMessage());
@@ -168,16 +168,16 @@ public class DefaultLogMiner implements LogMiner, Constants {
                 if (!meta.checkTableExist(value.SEG_OWNER, value.TABLE_NAME)) {
                     log.info(String.format("Table %s not exist.", value.TABLE_NAME));
                     if (value.OPERATION.equalsIgnoreCase("delete")) {
-                        log.info("Skip sync for 'delete' operation.");
+                        log.warn("Skip sync for 'delete' operation.");
                         break;
                     }
                     if (value.OPERATION.equalsIgnoreCase("ddl")) {
                         if (value.SQL_REDO.toLowerCase().trim().startsWith("drop table")) {
-                            log.info("Skip sync for 'drop table' operation.");
+                            log.warn("Skip sync for 'drop table' operation.");
                             break;
                         }
                         if (value.SQL_REDO.toLowerCase().trim().startsWith("alter table")) {
-                            log.info("Skip sync for 'alter table' operation.");
+                            log.warn("Skip sync for 'alter table' operation.");
                             break;
                         }
                     }
@@ -191,10 +191,13 @@ public class DefaultLogMiner implements LogMiner, Constants {
                     //    log.error(String.format("Fail to create table %s. SCN:%s, SEG_NAME:%s, SEG_TYPE:%s, SQL_REDO: %s", value.TABLE_NAME, value.SCN, value.SEG_NAME, value.SEG_TYPE, value.SQL_REDO));
                     //    break;
                     //}
-                }
+                }else if (value.OPERATION.equalsIgnoreCase("ddl") && value.SQL_REDO.toLowerCase().trim().startsWith("create table")) {
+                    log.warn("Table exist. Skip sync for 'create table' operation.");
+                    break;
+                }       
 
                 if ((value.OPERATION.equalsIgnoreCase("update") || value.OPERATION.equalsIgnoreCase("delete")) && !meta.checkRecordExist(value.SQL_REDO)) {
-                    log.error("Record not exist. Ignore error and continue.");
+                    log.warn(String.format("Record not exist. Skip sync for ''%s", value.OPERATION));
                     break;
                 }
 

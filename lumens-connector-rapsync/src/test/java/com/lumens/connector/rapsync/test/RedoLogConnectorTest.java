@@ -59,7 +59,7 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
                 sourceDatabase.execute(String.format("INSERT INTO \"%s\".\"%s\" (NAME) VALUES ('oliver')", schema, table));
                 sourceDatabase.execute("commit");
             } catch (Exception ex) {
-                log.error(String.format("Fail to prepare table %s.%s", schema, table));
+                log.error(String.format("Fail to prepare table %s.%s. Error: %s", schema, table, ex.getMessage()));
             }
         }
 
