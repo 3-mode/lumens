@@ -63,7 +63,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
     @Override
     public void open() {
-        try {            
+        try {
             dbClient = new DatabaseClient(dbDriver, dbUrl, dbUserName, dbPassword);
             miner = LogMinerFactory.createLogMiner(dbClient, config);
 
@@ -77,18 +77,14 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
     @Override
     public void start() {
-        if (inFormat != null) {
-            miner.buildDictionary();
-            miner.build(); // start build directory if specifying FILE type
-            miner.start();
-        }
+        miner.buildDictionary();
+        miner.build(); // start build directory if specifying FILE type
+        miner.start();
     }
 
     @Override
     public void stop() {
-        if (inFormat != null) {
-            miner.end();
-        }
+        miner.end();
     }
 
     @Override
@@ -169,7 +165,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
             scnField.setProperty(DATA_TYPE, new Value(NUMBER));
             scnField.setProperty(DATA_LENGTH, new Value(COLUMN_SCN_LENGTH));
 
-            Format redoField = format.addChild(COLUMN_SCN, Format.Form.FIELD, Type.STRING);
+            Format redoField = format.addChild(COLUMN_REDO, Format.Form.FIELD, Type.STRING);
             redoField.setProperty(DATA_TYPE, new Value(NVARCHAR2));
             redoField.setProperty(DATA_LENGTH, new Value(COLUMN_REDO_LENGTH));
         }
@@ -226,9 +222,9 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
     private Type toType(String dataType) {
         if (CHAR.equalsIgnoreCase(dataType)
-                || CLOB.equalsIgnoreCase(dataType)
-                || dataType.startsWith(VARCHAR2)
-                || dataType.startsWith(NVARCHAR2)) {
+            || CLOB.equalsIgnoreCase(dataType)
+            || dataType.startsWith(VARCHAR2)
+            || dataType.startsWith(NVARCHAR2)) {
             return Type.STRING;
         } else if (DATE.equalsIgnoreCase(dataType)) {
             return Type.DATE;

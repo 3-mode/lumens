@@ -11,8 +11,8 @@ public class ConfigFactory {
 
     public static Config createDefaultConfig() {
         Config config = new Config();
-        config.setBuildType(LogMiner.BUILD_TYPE.OFFLINE);
-        config.setDictType(LogMiner.DICT_TYPE.STORE_IN_REDO_LOG);
+        config.setBuildType(LogMiner.BUILD_TYPE.ONLINE);
+        config.setDictType(LogMiner.DICT_TYPE.ONLINE);
         config.setCommittedDataOnly(true);
         config.setNoRowid(true);
         config.setStartSCN("0");

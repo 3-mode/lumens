@@ -41,7 +41,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
     @Override
     public void buildDictionary() {
         try {
-            if (config.getDictType() == DICT_TYPE.STORE_IN_FILE ) {
+            if (config.getDictType() == DICT_TYPE.STORE_IN_FILE) {
                 if (dict == null) {
                     dict = new Dictionary(dbClient);
                 }
@@ -74,7 +74,8 @@ public class DefaultLogMiner implements LogMiner, Constants {
                     throw new RuntimeException("Fail to build log miner dictionary. Error message: Supplemental Log Mode should be enabled priot to start LogMiner build");
                 }
             }
-            String buildList = redolog.buildLogMinerStringFromList(config.getBuildType() == BUILD_TYPE.ONLINE ? redolog.getOnlineFileList() : redolog.getOfflineFileList(), true);
+            String buildList = redolog.buildLogMinerStringFromList(config.getBuildType() == BUILD_TYPE.ONLINE
+                                                                   ? redolog.getOnlineFileList() : redolog.getOfflineFileList(), true);
             dbClient.execute(buildList + "");
 
             // checking added redo logs
@@ -191,10 +192,10 @@ public class DefaultLogMiner implements LogMiner, Constants {
                     //    log.error(String.format("Fail to create table %s. SCN:%s, SEG_NAME:%s, SEG_TYPE:%s, SQL_REDO: %s", value.TABLE_NAME, value.SCN, value.SEG_NAME, value.SEG_TYPE, value.SQL_REDO));
                     //    break;
                     //}
-                }else if (value.OPERATION.equalsIgnoreCase("ddl") && value.SQL_REDO.toLowerCase().trim().startsWith("create table")) {
+                } else if (value.OPERATION.equalsIgnoreCase("ddl") && value.SQL_REDO.toLowerCase().trim().startsWith("create table")) {
                     log.warn("Table exist. Skip sync for 'create table' operation.");
                     break;
-                }       
+                }
 
                 if ((value.OPERATION.equalsIgnoreCase("update") || value.OPERATION.equalsIgnoreCase("delete")) && !meta.checkRecordExist(value.SQL_REDO)) {
                     log.warn(String.format("Record not exist. Skip sync for ''%s", value.OPERATION));

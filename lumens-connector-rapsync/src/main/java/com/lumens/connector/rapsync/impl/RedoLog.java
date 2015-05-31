@@ -107,7 +107,7 @@ public class RedoLog implements Constants {
                 dbClient.releaseStatement();
             }
         }
-        return isSupplementalLog.booleanValue();
+        return isSupplementalLog;
     }
 
     public boolean enableSupplementalLog() {
