@@ -1,5 +1,5 @@
 {
-    "type-oracle-jdbc": {
+    "type-rapsync": {
         "name": "RapSyncName",
         "class_type": "datasource",
         "item_icon": "img/RapSync24x24.png",
