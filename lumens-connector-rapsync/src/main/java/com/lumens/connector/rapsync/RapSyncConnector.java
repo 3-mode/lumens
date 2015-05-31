@@ -63,12 +63,13 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
     @Override
     public void open() {
-        try {
+        try {            
             dbClient = new DatabaseClient(dbDriver, dbUrl, dbUserName, dbPassword);
             miner = LogMinerFactory.createLogMiner(dbClient, config);
 
             isOpen = true;
         } catch (Exception ex) {
+            log.error(String.format("DB connection driver: %s, url: %s, username:%s, password: %s", dbDriver, dbUrl, dbUserName, dbPassword));
             log.error("Fail to open RapSync connector. Error message:" + ex.getMessage());
             throw new RuntimeException("Fail to open RapSync connector. Error message:" + ex.getMessage());
         }

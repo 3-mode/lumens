@@ -8,19 +8,19 @@
         "i18n": "i18n/rapsync.json",
         "property": [
             {
-                "name": "OJDBC",
+                "name": "databaseDriver",
                 "type": "String"
             },
             {
-                "name": "ConnectionURL",
+                "name": "databaseConnectionUrl",
                 "type": "String"
             },
             {
-                "name": "User",
+                "name": "databaseSourceUserName",
                 "type": "String"
             },
             {
-                "name": "Password",
+                "name": "databaseSourcePassword",
                 "type": "String"
             },
             {
