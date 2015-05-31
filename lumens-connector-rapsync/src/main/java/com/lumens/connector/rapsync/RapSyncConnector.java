@@ -69,8 +69,8 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
             isOpen = true;
         } catch (Exception ex) {
-            log.error("Fail to open LogMiner connector. Error message:" + ex.getMessage());
-            throw new RuntimeException("Fail to open LogMiner connector. Error message:" + ex.getMessage());
+            log.error("Fail to open RapSync connector. Error message:" + ex.getMessage());
+            throw new RuntimeException("Fail to open RapSync connector. Error message:" + ex.getMessage());
         }
     }
 

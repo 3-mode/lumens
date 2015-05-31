@@ -3,8 +3,6 @@
  */
 package com.lumens.connector.rapsync.test;
 
-import com.lumens.connector.rapsync.RapSyncConstants;
-import com.lumens.connector.rapsync.RapSyncConnectorFactory;
 import com.lumens.connector.ConnectorFactory;
 import com.lumens.connector.Direction;
 import com.lumens.connector.Operation;
