@@ -22,7 +22,7 @@ public class LogMinerTest extends RapSyncTestBase {
     //@Test
     public void testStoreInFileLogMinerRead() {
         Config config = new Config();
-        config.setBuildType(LogMiner.BUILD_TYPE.OFFLINE);
+        config.setBuildType(LogMiner.LOG_TYPE.OFFLINE);
         config.setDictType(LogMiner.DICT_TYPE.STORE_IN_REDO_LOG);
         config.setCommittedDataOnly(true);
         config.setNoRowid(true);

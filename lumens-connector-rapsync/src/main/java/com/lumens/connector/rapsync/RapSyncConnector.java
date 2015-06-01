@@ -193,9 +193,9 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
         // setup config
         // Warning: those parameters should only specify one time or will introduce bugs
         if (parameters.containsKey(BUILD_TYPE_ONLINE)) {
-            config.setBuildType(LogMiner.BUILD_TYPE.ONLINE);
+            config.setBuildType(LogMiner.LOG_TYPE.ONLINE);
         } else if (parameters.containsKey(BUILD_TYPE_OFFLINE)) {
-            config.setBuildType(LogMiner.BUILD_TYPE.OFFLINE);
+            config.setBuildType(LogMiner.LOG_TYPE.OFFLINE);
         }
 
         if (parameters.containsKey(DICT_TYPE_ONLINE)) {

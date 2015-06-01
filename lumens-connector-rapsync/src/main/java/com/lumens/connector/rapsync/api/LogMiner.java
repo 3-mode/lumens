@@ -11,6 +11,7 @@ import java.sql.ResultSet;
  */
 public interface LogMiner {
 
+    // Indicate using online dictionary or store dictionary into log/file
     public static enum DICT_TYPE {
 
         ONLINE,
@@ -18,7 +19,8 @@ public interface LogMiner {
         STORE_IN_FILE
     };
 
-    public static enum BUILD_TYPE {
+    // Indicate to build online log or archived log files
+    public static enum LOG_TYPE {
 
         ONLINE, // conflict with STORE_IN_REDO_LOG
         OFFLINE
