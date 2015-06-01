@@ -59,8 +59,6 @@ public class ServiceTest {
             try (InputStream in = ServiceTest.class.getResourceAsStream(projectPath)) {
                 new ProjectSerializer(projectInstance).readFromJson(in);
             }
-            projectInstance.open();
-            Map<String, Format> formatINList = projectInstance.getDatasourceList().get(0).getFormatList(Direction.IN);
             //assertEquals(3, projectInstance.getDataTransformerList().size());
             //assertEquals(4, projectInstance.getDatasourceList().size());
             List<InspectionHandler> handlers = new ArrayList<>();
