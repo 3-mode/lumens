@@ -11,7 +11,7 @@ public class ConfigFactory {
 
     public static Config createDefaultConfig() {
         Config config = new Config();
-        config.setBuildType(LogMiner.BUILD_TYPE.ONLINE);
+        config.setBuildType(LogMiner.LOG_TYPE.ONLINE);
         config.setDictType(LogMiner.DICT_TYPE.ONLINE);
         config.setCommittedDataOnly(true);
         config.setNoRowid(true);

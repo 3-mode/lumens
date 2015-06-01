@@ -3,7 +3,7 @@
  */
 package com.lumens.connector.rapsync.api;
 
-import com.lumens.connector.rapsync.api.LogMiner.BUILD_TYPE;
+import com.lumens.connector.rapsync.api.LogMiner.LOG_TYPE;
 import com.lumens.connector.rapsync.api.LogMiner.DICT_TYPE;
 import com.lumens.connector.rapsync.impl.Metadata;
 import com.lumens.logsys.SysLogFactory;
@@ -17,7 +17,7 @@ public class Config {
 
     private final Logger log = SysLogFactory.getLogger(Config.class);
     private DICT_TYPE dict_type = DICT_TYPE.ONLINE;
-    private BUILD_TYPE build_type = BUILD_TYPE.ONLINE;
+    private LOG_TYPE build_type = LOG_TYPE.ONLINE;
     private boolean isCommittedDataOnly = true;
     private boolean isNoRowid = true;
     private String startSCN = "0";
@@ -30,7 +30,7 @@ public class Config {
         return dict_type;
     }
 
-    public BUILD_TYPE getBuildType() {
+    public LOG_TYPE getBuildType() {
         return build_type;
     }
 
@@ -46,7 +46,7 @@ public class Config {
         this.dict_type = dictType;
     }
 
-    public void setBuildType(BUILD_TYPE buildType) {
+    public void setBuildType(LOG_TYPE buildType) {
         this.build_type = buildType;
     }
 
@@ -71,6 +71,7 @@ public class Config {
             Double.parseDouble(scn);
             this.startSCN = scn;
         } catch (Exception ex) {
+            log.warn(String.format("Not a valid SCN: %s, ignore parameter",scn));
         }
     }
 
@@ -79,6 +80,7 @@ public class Config {
             Double.parseDouble(scn);
             this.endSCN = scn;
         } catch (Exception ex) {
+            log.warn(String.format("Not a valid SCN: %s, ignore parameter",scn));
         }
     }
 
