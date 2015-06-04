@@ -4,9 +4,11 @@
 package com.lumens.connector.database.client;
 
 import com.lumens.connector.Direction;
+import com.lumens.connector.StatusUtils;
 import com.lumens.connector.database.Client;
 import com.lumens.connector.database.DBConstants;
 import com.lumens.connector.database.DBUtils;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Type;
@@ -20,12 +22,14 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author shaofeng wang
  */
 public abstract class AbstractClient implements Client, DBConstants {
+    private final Logger log = SysLogFactory.getLogger(AbstractClient.class);
 
     protected URLClassLoader driverLoader;
     protected Driver driver;
@@ -81,7 +85,7 @@ public abstract class AbstractClient implements Client, DBConstants {
                         SQLParams.addChild(GROUPBY, Format.Form.FIELD, Type.STRING);
                     }
                     if (fullLoad) {
-                        getFormat(table);
+                        getFormat(table, direction);
                     }
                 }
             }
@@ -93,19 +97,26 @@ public abstract class AbstractClient implements Client, DBConstants {
     }
 
     @Override
-    public Format getFormat(Format format) {
+    public Format getFormat(Format format, Direction direction) {
         try (Statement stat = conn.createStatement();
              ResultSet ret = stat.executeQuery(String.format(getTableColumnQuerySQL(), format.getName()))) {
-            Format fields = format;
-            if (fields != null) {
+            if (format != null) {
                 while (ret.next()) {
                     String columnName = ret.getString(1);
                     String dataType = ret.getString(2);
                     String dataLength = ret.getString(3);
-                    Format field = fields.addChild(columnName, Format.Form.FIELD, toType(dataType));
-                    field.setProperty(DATA_TYPE, new Value(dataType));
-                    field.setProperty(DATA_LENGTH, new Value(dataLength));
+                    if (format.getChild(columnName) == null) {
+                        Format field = format.addChild(columnName, Format.Form.FIELD, toType(dataType));
+                        field.setProperty(DATA_TYPE, new Value(dataType));
+                        field.setProperty(DATA_LENGTH, new Value(dataLength));
+                    }
+                    else {
+                        log.warn(String.format("Duplicate field '%s'", columnName));
+                    }
                 }
+
+                if (direction == Direction.OUT)
+                    StatusUtils.buildStautsFormat(format);
             }
             return format;
         } catch (Exception e) {

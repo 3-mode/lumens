@@ -86,7 +86,7 @@ public abstract class DBConnector implements Connector, DBConstants {
 
     @Override
     public Format getFormat(Format format, String path, Direction direction) {
-        return dbClient.getFormat(format);
+        return dbClient.getFormat(format, direction);
     }
 
     @Override
