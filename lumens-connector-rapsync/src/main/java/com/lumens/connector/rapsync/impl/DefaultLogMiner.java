@@ -40,6 +40,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
 
     @Override
     public void buildDictionary() {
+        log.debug("Building dictionary.");
         try {
             if (config.getDictType() == DICT_TYPE.STORE_IN_FILE) {
                 if (dict == null) {
@@ -56,8 +57,8 @@ public class DefaultLogMiner implements LogMiner, Constants {
 
     @Override
     public void build() {
+        log.debug("Building dictionary.");
         try {
-
             // adding redo log files to analyze
             RedoLog redolog = new RedoLog(dbClient);
             if (config.getDictType() == DICT_TYPE.STORE_IN_REDO_LOG && !redolog.isArchivedLogModeEnabled()) {
@@ -96,6 +97,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
 
     @Override
     public void start() {
+        log.debug("Start redolog analysis.");
         try {
             String parameter = null;
             if (config.getDictType() == DICT_TYPE.STORE_IN_FILE) {
@@ -113,12 +115,13 @@ public class DefaultLogMiner implements LogMiner, Constants {
 
     @Override
     public ResultSet query(String sql) {
+        log.debug("Start redolog query.");
         if (result != null) {
             DBUtils.releaseResultSet(result);
         }
         try {
             //String defaultCondition = " WHERE seg_type_name='TABLE' AND operation !='SELECT_FOR_UPDATE'";
-            result = dbClient.executeGetResult(sql);
+            result = dbClient.executeGetResult(sql);            
             return result;
         } catch (Exception ex) {
             log.error("Fail to query log miner results. Error message:");
@@ -129,6 +132,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
 
     @Override
     public void end() {
+        log.debug("End redolog analysis.");
         try {
             dbClient.execute(SQL_END_LOGMINER);
         } catch (Exception ex) {

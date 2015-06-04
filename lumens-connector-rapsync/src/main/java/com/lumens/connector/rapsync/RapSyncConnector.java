@@ -29,6 +29,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -39,6 +41,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
     private final Logger log = SysLogFactory.getLogger(RapSyncConnector.class);
 
+    private List<String> enforceFormatList = new ArrayList();
     protected Map<String, Format> inFormat;
     protected Map<String, Format> outFormat;
     private Config config = null;
@@ -117,17 +120,13 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
         Map<String, Format> formatList = new HashMap();
         Format rootFmt = new DataFormat(FORMAT_NAME, Form.STRUCT);
-        if (direction == Direction.IN) {
-            Format SQLParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
-            SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
-            SQLParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
-            SQLParams.addChild(ORDERBY, Format.Form.FIELD, Type.STRING);
-            SQLParams.addChild(GROUPBY, Format.Form.FIELD, Type.STRING);
-            inFormat = formatList;
-        } else if (direction == Direction.OUT) {
-            Format SQLParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
-            SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
+        Format SQLParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
+        SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
+        SQLParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
+        if (direction == Direction.OUT) {
             outFormat = formatList;
+        } else if (direction == Direction.IN) {
+            inFormat = formatList;
         }
         formatList.put(FORMAT_NAME, rootFmt);
         getFormat(rootFmt, null, direction);
@@ -135,40 +134,56 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
         return formatList;
     }
 
+    // TODO: read from file
+    public void buildFormatEnforcementList() {
+        String formatList = "SQL_REDO,TABLE_NAME,SEG_OWNER,OPERATION,SCN,SQL_UNTO, STATUS, ROW_ID,TABLE_SPACE,SEG_TYPE,SEG_NAME,TIMESTAMP,COMMIT_TIMESTAMP,COMMIT_SCN,CSCN,START_SCN";
+        enforceFormatList.clear();
+        for (String item : formatList.split(",")) {
+            enforceFormatList.add(item.trim());
+        }
+    }
+
+    public boolean checkFormatEnforcement(String format) {
+        return enforceFormatList.contains(format);
+    }
+
     @Override
     public Format getFormat(Format format, String path, Direction direction) {
-        if (direction == Direction.IN) {
-            ResultSet columns = null;
-            try {
-                columns = dbClient.executeGetResult(SQL_QUERY_COLUMNS);
-                if (!columns.next()) {
-                    log.error("Insuffucient priviledga to access table 'user_tab_columns'");
-                    throw new RuntimeException("Insuffucient privilege to access table 'user_tab_columns' ");
-                }
-                do {
-                    String columnName = columns.getString(1);
-                    String dataType = columns.getString(2);
-                    String dataLength = columns.getString(3);
-                    Format field = format.addChild(columnName, Format.Form.FIELD, toType(dataType));
-                    field.setProperty(DATA_TYPE, new Value(dataType));
-                    field.setProperty(DATA_LENGTH, new Value(dataLength));
-                } while (columns.next());
-            } catch (SQLException | RuntimeException ex) {
-                log.error("Fail to get format. Error message:" + ex.getMessage());
-                throw new RuntimeException(ex);
-            } finally {
-                DBUtils.releaseResultSet(columns);
-                dbClient.releaseStatement();
+        //if (direction == Direction.OUT) {
+        ResultSet columns = null;
+        try {
+            columns = dbClient.executeGetResult(SQL_QUERY_COLUMNS);
+            if (!columns.next()) {
+                log.error("Insuffucient priviledga to access table 'all_tab_columns'");
+                throw new RuntimeException("Insuffucient privilege to access table 'all_tab_columns' ");
             }
-        } else if (direction == Direction.OUT) {
-            Format scnField = format.addChild(COLUMN_SCN, Format.Form.FIELD, Type.STRING);
-            scnField.setProperty(DATA_TYPE, new Value(NUMBER));
-            scnField.setProperty(DATA_LENGTH, new Value(COLUMN_SCN_LENGTH));
-
-            Format redoField = format.addChild(COLUMN_REDO, Format.Form.FIELD, Type.STRING);
-            redoField.setProperty(DATA_TYPE, new Value(NVARCHAR2));
-            redoField.setProperty(DATA_LENGTH, new Value(COLUMN_REDO_LENGTH));
+            do {
+                String columnName = columns.getString(1);
+                String dataType = columns.getString(2);
+                if (dataType.equalsIgnoreCase("raw") || !checkFormatEnforcement(columnName)) {
+                    continue;   // TODO: support raw datatype 
+                }
+                String dataLength = columns.getString(3);
+                Format field = format.addChild(columnName, Format.Form.FIELD, toType(dataType));
+                field.setProperty(DATA_TYPE, new Value(dataType));
+                field.setProperty(DATA_LENGTH, new Value(dataLength));
+            } while (columns.next());
+        } catch (SQLException | RuntimeException ex) {
+            log.error("Fail to get format. Error message:" + ex.getMessage());
+            throw new RuntimeException(ex);
+        } finally {
+            DBUtils.releaseResultSet(columns);
+            dbClient.releaseStatement();
         }
+        /*} else if (direction == Direction.IN) {
+         Format scnField = format.addChild(COLUMN_SCN, Format.Form.FIELD, Type.STRING);
+         scnField.setProperty(DATA_TYPE, new Value(NUMBER));
+         scnField.setProperty(DATA_LENGTH, new Value(COLUMN_SCN_LENGTH));
+
+         Format redoField = format.addChild(COLUMN_REDO, Format.Form.FIELD, Type.STRING);
+         redoField.setProperty(DATA_TYPE, new Value(NVARCHAR2));
+         redoField.setProperty(DATA_LENGTH, new Value(COLUMN_REDO_LENGTH));
+         }*/
 
         return format;
     }
@@ -222,9 +237,9 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
     private Type toType(String dataType) {
         if (CHAR.equalsIgnoreCase(dataType)
-            || CLOB.equalsIgnoreCase(dataType)
-            || dataType.startsWith(VARCHAR2)
-            || dataType.startsWith(NVARCHAR2)) {
+                || CLOB.equalsIgnoreCase(dataType)
+                || dataType.startsWith(VARCHAR2)
+                || dataType.startsWith(NVARCHAR2)) {
             return Type.STRING;
         } else if (DATE.equalsIgnoreCase(dataType)) {
             return Type.DATE;
