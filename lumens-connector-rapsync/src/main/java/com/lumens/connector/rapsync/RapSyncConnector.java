@@ -29,6 +29,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -39,6 +41,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
     private final Logger log = SysLogFactory.getLogger(RapSyncConnector.class);
 
+    private List<String> enforceFormatList = new ArrayList();
     protected Map<String, Format> inFormat;
     protected Map<String, Format> outFormat;
     private Config config = null;
@@ -120,7 +123,6 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
         Format SQLParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
         SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
         SQLParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
-        SQLParams.addChild(ORDERBY, Format.Form.FIELD, Type.STRING);
         if (direction == Direction.OUT) {
             outFormat = formatList;
         } else if (direction == Direction.IN) {
@@ -132,6 +134,19 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
         return formatList;
     }
 
+    // TODO: read from file
+    public void buildFormatEnforcementList() {
+        String formatList = "SQL_REDO,TABLE_NAME,SEG_OWNER,OPERATION,SCN,SQL_UNTO, STATUS, ROW_ID,TABLE_SPACE,SEG_TYPE,SEG_NAME,TIMESTAMP,COMMIT_TIMESTAMP,COMMIT_SCN,CSCN,START_SCN";
+        enforceFormatList.clear();
+        for (String item : formatList.split(",")) {
+            enforceFormatList.add(item.trim());
+        }
+    }
+
+    public boolean checkFormatEnforcement(String format) {
+        return enforceFormatList.contains(format);
+    }
+
     @Override
     public Format getFormat(Format format, String path, Direction direction) {
         //if (direction == Direction.OUT) {
@@ -139,13 +154,13 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
         try {
             columns = dbClient.executeGetResult(SQL_QUERY_COLUMNS);
             if (!columns.next()) {
-                log.error("Insuffucient priviledga to access table 'user_tab_columns'");
-                throw new RuntimeException("Insuffucient privilege to access table 'user_tab_columns' ");
+                log.error("Insuffucient priviledga to access table 'all_tab_columns'");
+                throw new RuntimeException("Insuffucient privilege to access table 'all_tab_columns' ");
             }
             do {
                 String columnName = columns.getString(1);
                 String dataType = columns.getString(2);
-                if(dataType.equalsIgnoreCase("raw")){
+                if (dataType.equalsIgnoreCase("raw") || !checkFormatEnforcement(columnName)) {
                     continue;   // TODO: support raw datatype 
                 }
                 String dataLength = columns.getString(3);
