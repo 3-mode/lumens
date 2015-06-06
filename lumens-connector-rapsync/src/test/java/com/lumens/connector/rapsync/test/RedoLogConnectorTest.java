@@ -72,6 +72,35 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
     }
 
     @Test
+    public void testFormat() {
+        Map<String, Value> propsR = new HashMap<>();
+        propsR.put(DATABASE_DRIVER, new Value(DATABASE_DRIVER_VAL));
+        propsR.put(DATABASE_CONNECTION_URL, new Value(DATABASE_SOURCE_URL_VAL));
+        propsR.put(DATABASE_CONNECTION_USERNAME, new Value(DATABASE_SOURCE_USERNAME_VAL));
+        propsR.put(DATABASE_CONNECTION_PASSWORD, new Value(DATABASE_SOURCE_PASSWORD_VAL));
+        propsR.put(BUILD_TYPE_ONLINE, new Value(BUILD_TYPE_ONLINE));
+        propsR.put(DICT_TYPE_ONLINE, new Value(DICT_TYPE_ONLINE));
+        propsR.put(COMMITED_DATA_ONLY, new Value(true));
+        propsR.put(NO_ROWID, new Value(true));
+        propsR.put(START_SCN, new Value("0"));
+
+        Map<String, Value> propsSync = new HashMap<>();
+        propsSync.put(DATABASE_DRIVER, new Value(DATABASE_DRIVER_VAL));
+        propsSync.put(DATABASE_CONNECTION_URL, new Value(DATABASE_DESTINATION_URL_VAL));
+        propsSync.put(DATABASE_CONNECTION_USERNAME, new Value(DATABASE_DESTINATION_USERNAME_VAL));
+        propsSync.put(DATABASE_CONNECTION_PASSWORD, new Value(DATABASE_DESTINATION_PASSWORD_VAL));
+
+        ConnectorFactory connectorFactory = new RapSyncConnectorFactory();
+        Connector minerRead = connectorFactory.createConnector();
+        minerRead.setPropertyList(propsR);
+        minerRead.open();
+        assertTrue(minerRead.isOpen());
+        Map<String, Format> formatList = minerRead.getFormatList(Direction.IN);
+        assertNotNull(formatList);
+        minerRead.close();
+    }
+
+    @Test
     public void testConnectorReadSync() {
         Map<String, Value> propsR = new HashMap<>();
         propsR.put(DATABASE_DRIVER, new Value(DATABASE_DRIVER_VAL));
@@ -126,8 +155,7 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
         Element query = new DataElement(selectFmt);
         Element sqlParams = query.addChild(SQLPARAMS);
         sqlParams.addChild(ACTION).setValue(QUERY);
-        sqlParams.addChild(WHERE).setValue("SEG_OWNER='LUMENS'");
-        sqlParams.addChild(ORDERBY).setValue("SCN ASC");
+        sqlParams.addChild(WHERE).setValue("SEG_OWNER='LUMENS'");        
 
         // sync format
         minerSync.start();

@@ -20,19 +20,14 @@ public class RapSyncQuerySQLBuilder extends DBQuerySQLBuilder implements RapSync
     @Override
     protected String generatePageSQL(Format table, String fields, String strWhere, String strOrderBy, String strGroupBy) {
         StringBuilder innerQuerySQL = new StringBuilder();
-        innerQuerySQL.append("SELECT ").append(fields).append(" FROM ").append(table.getName());
+        innerQuerySQL.append("SELECT ").append(fields).append(" FROM ").append("V_$LOGMNR_CONTENTS");
         innerQuerySQL.append(" WHERE ( seg_type_name='TABLE' AND operation !='SELECT_FOR_UPDATE') ");
         if (StringUtils.isNotEmpty(strWhere) && StringUtils.isNotBlank(strWhere)) {
             innerQuerySQL.append(" AND ( ").append(strWhere.trim()).append(") ");
         }
-
-        if (StringUtils.isNotEmpty(strOrderBy) && StringUtils.isNotBlank(strOrderBy)) {
-            innerQuerySQL.append(" ORDER BY ").append(strOrderBy.trim());
-        }
-        if (StringUtils.isNotEmpty(strGroupBy) && StringUtils.isNotBlank(strGroupBy)) {
-            innerQuerySQL.append(" GROUP BY ").append(strGroupBy.trim());
-        }
-
+        
+        innerQuerySQL.append(" ORDER BY SCN ASC");  // Enforce to order by SCN as Oracle does not order by default        
+        
         return innerQuerySQL.toString();
     }
 

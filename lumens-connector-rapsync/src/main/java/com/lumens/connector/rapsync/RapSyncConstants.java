@@ -11,7 +11,7 @@ import com.lumens.connector.database.DBConstants;
  */
 public interface RapSyncConstants extends DBConstants {
 
-    public String FORMAT_NAME = "v$logmnr_contents";
+    public String FORMAT_NAME = "SYNC";
     public String DATABASE_DRIVER = "databaseDriver";
     public String DATABASE_CONNECTION_URL = "databaseConnectionUrl";
     public String DATABASE_CONNECTION_USERNAME = "databaseSourceUserName";
