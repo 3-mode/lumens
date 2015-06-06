@@ -110,8 +110,8 @@ public class TextConnector implements Connector, TextConstants {
             path = props.get(PATH).getString();
         if (props.containsKey(FILE_FILTER))
             filter = props.get(FILE_FILTER).getString();
-        if (props.containsKey(FILEDELIMITER))
-            delimiter = props.get(FILEDELIMITER).getString();
+        if (props.containsKey(FIELDELIMITER))
+            delimiter = props.get(FIELDELIMITER).getString();
         if (props.containsKey(LINEDELIMITER))
             linedelimiter = props.get(LINEDELIMITER).getString();
         if (props.containsKey(ESCAPE_CHAR))

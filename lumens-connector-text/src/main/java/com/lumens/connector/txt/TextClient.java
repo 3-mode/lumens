@@ -55,7 +55,7 @@ public class TextClient implements TextConstants {
         CSVHelper helper = new CSVHelper()
         .setOption(ESCAPE_CHAR, new Value(connector.getEncoding()))
         .setOption(QUOTE_CHAR, new Value(connector.getQuote()))
-        .setOption(FILEDELIMITER, new Value(connector.getDelimiter()))
+        .setOption(FIELDELIMITER, new Value(connector.getDelimiter()))
         .setOption(LINEDELIMITER, new Value(connector.getLinedelimiter()))
         .setOption(OPTION_IGNORE_EMPTYLINE, new Value(connector.isIgnoreEmptyLine()))
         .setOption(OPTION_SKIP_COMMENTS, new Value(connector.isSkipComments()))

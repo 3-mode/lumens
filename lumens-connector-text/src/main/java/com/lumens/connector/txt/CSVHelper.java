@@ -144,7 +144,7 @@ public class CSVHelper implements TextConstants {
     // Private methods
     private void initOption() {
         options.put(QUOTE_CHAR, new Value("\""));
-        options.put(FILEDELIMITER, new Value(","));
+        options.put(FIELDELIMITER, new Value(","));
         options.put(LINEDELIMITER, new Value("\\r\\n"));
         options.put(OPTION_IGNORE_EMPTYLINE, new Value(false));
         options.put(OPTION_SKIP_COMMENTS, new Value(false));
@@ -155,7 +155,7 @@ public class CSVHelper implements TextConstants {
 
     private CsvPreference createPreperence() {
         char quoteChar = options.get(QUOTE_CHAR).getString().charAt(0);
-        char delimiterChar = options.get(FILEDELIMITER).getString().charAt(0);
+        char delimiterChar = options.get(FIELDELIMITER).getString().charAt(0);
         String endOfLineSymbols = options.get(LINEDELIMITER).getString();
         boolean ignoreEmptyLines = options.get(OPTION_IGNORE_EMPTYLINE).getBoolean();
         boolean skipComments = options.get(OPTION_SKIP_COMMENTS).getBoolean();
