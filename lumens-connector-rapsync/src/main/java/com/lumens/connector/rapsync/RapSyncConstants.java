@@ -16,6 +16,7 @@ public interface RapSyncConstants extends DBConstants {
     public String DATABASE_CONNECTION_URL = "databaseConnectionUrl";
     public String DATABASE_CONNECTION_USERNAME = "databaseSourceUserName";
     public String DATABASE_CONNECTION_PASSWORD = "databaseSourcePassword";
+    public String SESSION_ALTER = "SessionAlter";
 
     public String QUERY = "QUERY";
     public String SYNC = "SYNC";
@@ -40,6 +41,7 @@ public interface RapSyncConstants extends DBConstants {
     public String COLUMN_OPERATION = "OPERATION";
     public String COLUMN_SEG_OWNER = "SEG_OWNER";
     public String COLUMN_TABLE_NAME = "TABLE_NAME";
+    public String COLUMN_TIMESTAMP = "TIMESTAMP";
     public int COLUMN_SCN_LENGTH = 22;
     public int COLUMN_REDO_LENGTH = 4000;
 

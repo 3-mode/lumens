@@ -83,6 +83,7 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
         propsR.put(COMMITED_DATA_ONLY, new Value(true));
         propsR.put(NO_ROWID, new Value(true));
         propsR.put(START_SCN, new Value("0"));
+        propsR.put(SESSION_ALTER, new Value("alter session set NLS_DATE_FORMAT='DD-MON-YYYY HH24:MI:SS'\nalter session set nls_date_language='american' "));
 
         Map<String, Value> propsSync = new HashMap<>();
         propsSync.put(DATABASE_DRIVER, new Value(DATABASE_DRIVER_VAL));
@@ -112,6 +113,7 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
         propsR.put(COMMITED_DATA_ONLY, new Value(true));
         propsR.put(NO_ROWID, new Value(true));
         propsR.put(START_SCN, new Value("0"));
+        propsR.put(SESSION_ALTER, new Value("alter session set NLS_DATE_FORMAT='DD-MON-YYYY HH24:MI:SS'\nalter session set nls_date_language='american' "));
 
         Map<String, Value> propsSync = new HashMap<>();
         propsSync.put(DATABASE_DRIVER, new Value(DATABASE_DRIVER_VAL));
@@ -151,11 +153,15 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
         selectFmt.addChild(COLUMN_OPERATION, Form.FIELD, Type.STRING);
         selectFmt.addChild(COLUMN_SEG_OWNER, Form.FIELD, Type.STRING);
         selectFmt.addChild(COLUMN_TABLE_NAME, Form.FIELD, Type.STRING);
+        selectFmt.addChild(COLUMN_TIMESTAMP, Form.FIELD, Type.DATE);
 
         Element query = new DataElement(selectFmt);
         Element sqlParams = query.addChild(SQLPARAMS);
-        sqlParams.addChild(ACTION).setValue(QUERY);           
+        sqlParams.addChild(ACTION).setValue(QUERY);
+        sqlParams.addChild(WHERE).setValue("TABLE_NAME='FULL_SYNC'");
         query.addChild(COLUMN_SEG_OWNER).setValue("='LUMENS'");
+        query.addChild(COLUMN_TIMESTAMP).setValue("='06-JUN-2015 01:00:00'");
+        query.addChild(COLUMN_SCN).setValue(">1664831");
 
         // sync format
         minerSync.start();

@@ -10,8 +10,6 @@ import com.lumens.connector.Direction;
 import static com.lumens.connector.database.DBConstants.ACTION;
 import static com.lumens.connector.database.DBConstants.DATA_LENGTH;
 import static com.lumens.connector.database.DBConstants.DATA_TYPE;
-import static com.lumens.connector.database.DBConstants.GROUPBY;
-import static com.lumens.connector.database.DBConstants.ORDERBY;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.WHERE;
 import com.lumens.connector.database.DBUtils;
@@ -27,6 +25,7 @@ import com.lumens.model.Type;
 import com.lumens.model.Value;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +48,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
     private String dbUrl = null;
     private String dbUserName = null;
     private String dbPassword = null;
+    private String sessionAlter = null;
 
     private LogMiner miner = null;
     private DatabaseClient dbClient = null;
@@ -69,6 +69,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
     public void open() {
         try {
             dbClient = new DatabaseClient(dbDriver, dbUrl, dbUserName, dbPassword);
+            PrepareDatabase();
             miner = LogMinerFactory.createLogMiner(dbClient, config);
 
             isOpen = true;
@@ -76,6 +77,22 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
             log.error(String.format("DB connection driver: %s, url: %s, username:%s, password: %s", dbDriver, dbUrl, dbUserName, dbPassword));
             log.error("Fail to open RapSync connector. Error message:" + ex.getMessage());
             throw new RuntimeException("Fail to open RapSync connector. Error message:" + ex.getMessage());
+        }
+    }
+
+    private void PrepareDatabase() {
+        if (sessionAlter != null && !sessionAlter.isEmpty() && dbClient != null) {
+            try {
+                String[] alterList = sessionAlter.split("\n");
+                for (String alter : alterList) {
+                    alter = alter.trim();
+                    if (!alter.isEmpty()) {
+                        dbClient.execute(alter.trim());
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
         }
     }
 
@@ -121,7 +138,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
         Map<String, Format> formatList = new HashMap();
         Format rootFmt = new DataFormat(FORMAT_NAME, Form.STRUCT);
-                
+
         if (direction == Direction.OUT) {
             outFormat = formatList;
         } else if (direction == Direction.IN) {
@@ -137,7 +154,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
     }
 
     // TODO: read from file
-    public void buildFormatEnforcementList() {        
+    public void buildFormatEnforcementList() {
         enforceFormatList.clear();
         for (String item : DISPLAY_FIELDS.split(",")) {
             enforceFormatList.add(item.trim());
@@ -149,7 +166,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
     }
 
     @Override
-    public Format getFormat(Format format, String path, Direction direction) {       
+    public Format getFormat(Format format, String path, Direction direction) {
         ResultSet columns = null;
         try {
             columns = dbClient.executeGetResult(SQL_QUERY_COLUMNS);
@@ -194,6 +211,9 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
         }
         if (parameters.containsKey(DATABASE_CONNECTION_PASSWORD)) {
             dbPassword = parameters.get(DATABASE_CONNECTION_PASSWORD).getString();
+        }
+        if (parameters.containsKey(SESSION_ALTER)) {
+            sessionAlter = parameters.get(SESSION_ALTER).getString();
         }
 
         // setup config

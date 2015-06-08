@@ -5,12 +5,16 @@ package com.lumens.connector.rapsync;
 
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.WHERE;
+import com.lumens.connector.rapsync.impl.DefaultLogMiner;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.ModelUtils;
 import com.lumens.model.Value;
 import org.apache.commons.lang.StringUtils;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -19,6 +23,7 @@ import java.util.regex.Pattern;
 public class RapSyncQuerySQLBuilder implements RapSyncConstants {
 
     private final Format output;
+    private final Logger log = SysLogFactory.getLogger(RapSyncQuerySQLBuilder.class);
 
     public RapSyncQuerySQLBuilder(Format output) {
         this.output = output;
@@ -26,7 +31,6 @@ public class RapSyncQuerySQLBuilder implements RapSyncConstants {
 
     public String generateSelectSQL(Element input) {
         StringBuilder queryFields = new StringBuilder();
-        String strWhere = "", strOrderBy = null, strGroupBy = null;
         if (output != null) {
             for (Format child : output.getChildren()) {
                 if (SQLPARAMS.equals(child.getName())) {
@@ -37,32 +41,45 @@ public class RapSyncQuerySQLBuilder implements RapSyncConstants {
                 }
                 queryFields.append(child.getName());
             }
-            for (Element condition : input.getChildren()) {
-                String formatName = condition.getFormat().getName();
-                if (SQLPARAMS.equals(formatName)) {
-                    continue;
-                }
-                Value value = condition.getValue();
-                if (value != null) {
-                    if (!strWhere.isEmpty()) {
-                        strWhere += ",";
-                    }
-                    strWhere += formatName + value.toString();
-                }
-            }
         } else {
             throw new RuntimeException("Error no output format");
         }
 
+        String strWhere = "", strOrderBy = null, strGroupBy = null;
         if (input != null) {
-            Element sqlParams = input.getChild(SQLPARAMS);
-            if (sqlParams != null) {
-                Element whereElem = sqlParams.getChild(WHERE);
-                if (ModelUtils.isNotNullValue(whereElem)) {
-                    if (!strWhere.isEmpty()) {
-                        strWhere += ",";
+            for (Element condition : input.getChildren()) {
+                String formatName = condition.getFormat().getName();
+                if (SQLPARAMS.equals(formatName)) {
+                    Element whereElem = condition.getChild(WHERE);
+                    if (ModelUtils.isNotNullValue(whereElem)) {
+                        if (!strWhere.isEmpty()) {
+                            strWhere += " AND ";
+                        }
+                        strWhere += whereElem.getValue().getString();
+                    };
+                } else {
+                    Value value = condition.getValue();
+                    if (value != null) {
+                        String valueString = value.toString();
+                        Matcher matcher = Pattern.compile("(=|>=|<=|<|>)(.*)").matcher(valueString);                        
+                        String oper = null;
+                        if (matcher.matches()) {
+                            oper = matcher.group(1);
+                            valueString = matcher.group(2);
+                        } else {
+                            log.warn("Missing oper in value: %s. Suggested usage:[<|<=|=|>|>=]'value'. Changed to default format: =%s. ", valueString, valueString);
+                            oper = "=";
+                        }
+
+                        if (!strWhere.isEmpty()) {
+                            strWhere += " AND ";
+                        }
+                        if (formatName.equalsIgnoreCase("TIMESTAMP")) {
+                            strWhere += String.format(" SCN %s TIMESTAMP_TO_SCN(%s)", oper, valueString);
+                        } else {
+                            strWhere += String.format(" %s %s %s", formatName, oper, valueString);
+                        }
                     }
-                    strWhere += whereElem.getValue().getString();
                 }
             }
         }
