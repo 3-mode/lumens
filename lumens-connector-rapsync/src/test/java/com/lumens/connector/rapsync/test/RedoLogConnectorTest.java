@@ -154,8 +154,8 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
 
         Element query = new DataElement(selectFmt);
         Element sqlParams = query.addChild(SQLPARAMS);
-        sqlParams.addChild(ACTION).setValue(QUERY);
-        sqlParams.addChild(WHERE).setValue("SEG_OWNER='LUMENS'");        
+        sqlParams.addChild(ACTION).setValue(QUERY);           
+        query.addChild(COLUMN_SEG_OWNER).setValue("SEG_OWNER='LUMENS'");
 
         // sync format
         minerSync.start();

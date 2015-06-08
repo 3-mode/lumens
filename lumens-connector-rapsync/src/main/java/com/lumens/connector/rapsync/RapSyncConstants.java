@@ -21,6 +21,8 @@ public interface RapSyncConstants extends DBConstants {
     public String SYNC = "SYNC";
 
     public String SQL_QUERY_COLUMNS = "select t.COLUMN_NAME, t.DATA_TYPE, t.DATA_LENGTH from all_tab_columns t where t.TABLE_NAME = 'V_$LOGMNR_CONTENTS'";
+    public String ENFORCE_FIELDS = "SQL_REDO,TABLE_NAME,SEG_OWNER,OPERATION,SCN";
+    public String DISPLAY_FIELDS = ENFORCE_FIELDS + ",SQL_UNTO, STATUS, ROW_ID,TABLE_SPACE,SEG_TYPE,SEG_NAME,TIMESTAMP,COMMIT_TIMESTAMP,COMMIT_SCN,CSCN,START_SCN";
 
     public String BUILD_TYPE_ONLINE = "buildTypeOnline";
     public String BUILD_TYPE_OFFLINE = "buildTypeOffline";

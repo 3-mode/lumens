@@ -122,5 +122,4 @@ public class RedoLog implements Constants {
 
         return bSuccess;
     }
-
 }

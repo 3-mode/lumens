@@ -137,10 +137,9 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
     }
 
     // TODO: read from file
-    public void buildFormatEnforcementList() {
-        String formatList = "SQL_REDO,TABLE_NAME,SEG_OWNER,OPERATION,SCN,SQL_UNTO, STATUS, ROW_ID,TABLE_SPACE,SEG_TYPE,SEG_NAME,TIMESTAMP,COMMIT_TIMESTAMP,COMMIT_SCN,CSCN,START_SCN";
+    public void buildFormatEnforcementList() {        
         enforceFormatList.clear();
-        for (String item : formatList.split(",")) {
+        for (String item : DISPLAY_FIELDS.split(",")) {
             enforceFormatList.add(item.trim());
         }
     }
