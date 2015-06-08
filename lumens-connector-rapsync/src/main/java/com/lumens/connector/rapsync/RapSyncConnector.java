@@ -145,6 +145,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
             Format SQLParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
             SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
             SQLParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
+            SQLParams.addChild(TABLE_LIST, Format.Form.FIELD, Type.STRING);
             inFormat = formatList;
         }
         formatList.put(FORMAT_NAME, rootFmt);

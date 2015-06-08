@@ -146,8 +146,8 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
         Format selectSQLParams = selectFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
         selectSQLParams.addChild(ACTION, Form.FIELD, Type.STRING);
         selectSQLParams.addChild(WHERE, Form.FIELD, Type.STRING);
-        selectSQLParams.addChild(ORDERBY, Form.FIELD, Type.STRING);
-        selectSQLParams.addChild(GROUPBY, Form.FIELD, Type.STRING);
+        selectSQLParams.addChild(TABLE_LIST, Form.FIELD, Type.STRING);
+
         selectFmt.addChild(COLUMN_REDO, Form.FIELD, Type.STRING);
         selectFmt.addChild(COLUMN_SCN, Form.FIELD, Type.INTEGER);
         selectFmt.addChild(COLUMN_OPERATION, Form.FIELD, Type.STRING);
@@ -158,7 +158,7 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
         Element query = new DataElement(selectFmt);
         Element sqlParams = query.addChild(SQLPARAMS);
         sqlParams.addChild(ACTION).setValue(QUERY);
-        sqlParams.addChild(WHERE).setValue("TABLE_NAME='FULL_SYNC'");
+        sqlParams.addChild(TABLE_LIST).setValue("FULL_SYNC,TEST");
         query.addChild(COLUMN_SEG_OWNER).setValue("='LUMENS'");
         query.addChild(COLUMN_TIMESTAMP).setValue("='06-JUN-2015 01:00:00'");
         query.addChild(COLUMN_SCN).setValue(">1664831");

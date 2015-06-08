@@ -57,11 +57,34 @@ public class RapSyncQuerySQLBuilder implements RapSyncConstants {
                         }
                         strWhere += whereElem.getValue().getString();
                     };
+                    Element tableListElem = condition.getChild(TABLE_LIST);
+                    if (ModelUtils.isNotNullValue(tableListElem)) {
+                        String tableList = "";
+                        for (String table : tableListElem.getValue().getString().split(",")) {
+                            if (!tableList.isEmpty()) {
+                                tableList += " OR ";
+                            }
+                            String name = table.trim().replaceAll("\"", "'");
+                            if(!name.startsWith("'")){
+                                name = "'" + name;
+                            }
+                            if(!name.endsWith("'")){
+                                name = name + "'";
+                            }                            
+                            tableList += String.format("TABLE_NAME=%s", name);
+                        }
+                        if (!tableList.isEmpty()) {
+                            if (!strWhere.isEmpty()) {
+                                strWhere += " AND ";
+                            }
+                            strWhere += String.format("(%s)", tableList);
+                        }
+                    };
                 } else {
                     Value value = condition.getValue();
                     if (value != null) {
                         String valueString = value.toString();
-                        Matcher matcher = Pattern.compile("(=|>=|<=|<|>)(.*)").matcher(valueString);                        
+                        Matcher matcher = Pattern.compile("(=|>=|<=|<|>)(.*)").matcher(valueString);
                         String oper = null;
                         if (matcher.matches()) {
                             oper = matcher.group(1);

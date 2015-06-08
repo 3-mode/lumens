@@ -20,6 +20,7 @@ public interface RapSyncConstants extends DBConstants {
 
     public String QUERY = "QUERY";
     public String SYNC = "SYNC";
+    public String TABLE_LIST = "tablelist";  
 
     public String SQL_QUERY_COLUMNS = "select t.COLUMN_NAME, t.DATA_TYPE, t.DATA_LENGTH from all_tab_columns t where t.TABLE_NAME = 'V_$LOGMNR_CONTENTS'";
     public String ENFORCE_FIELDS = "SQL_REDO,TABLE_NAME,SEG_OWNER,OPERATION,SCN";
