@@ -37,8 +37,9 @@ public class RapSyncQuerySQLBuilder implements RapSyncConstants {
                 }
                 queryFields.append(child.getName());
             }
-             for (Element condition : input.getChildren()) {
-                if (SQLPARAMS.equals(condition.getFormat().getName())) {
+            for (Element condition : input.getChildren()) {
+                String formatName = condition.getFormat().getName();
+                if (SQLPARAMS.equals(formatName)) {
                     continue;
                 }
                 Value value = condition.getValue();
@@ -46,7 +47,7 @@ public class RapSyncQuerySQLBuilder implements RapSyncConstants {
                     if (!strWhere.isEmpty()) {
                         strWhere += ",";
                     }
-                    strWhere += value.toString();
+                    strWhere += formatName + value.toString();
                 }
             }
         } else {
@@ -74,7 +75,7 @@ public class RapSyncQuerySQLBuilder implements RapSyncConstants {
 
         // add enforce fields                
         for (String field : ENFORCE_FIELDS.split(",")) {
-            Pattern pattern = Pattern.compile(String.format("%s,|%s$", field, field));           
+            Pattern pattern = Pattern.compile(String.format("%s,|%s$", field, field));
             if (!pattern.matcher(fields).find()) {
                 if (innerQuerySQL.length() > 0) {
                     innerQuerySQL.append(", ");
