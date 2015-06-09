@@ -5,7 +5,6 @@ package com.lumens.connector.rapsync;
 
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.WHERE;
-import com.lumens.connector.rapsync.impl.DefaultLogMiner;
 import com.lumens.logsys.SysLogFactory;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
@@ -56,7 +55,7 @@ public class RapSyncQuerySQLBuilder implements RapSyncConstants {
                             strWhere += " AND ";
                         }
                         strWhere += whereElem.getValue().getString();
-                    };
+                    }
                     Element tableListElem = condition.getChild(TABLE_LIST);
                     if (ModelUtils.isNotNullValue(tableListElem)) {
                         String tableList = "";
@@ -79,13 +78,13 @@ public class RapSyncQuerySQLBuilder implements RapSyncConstants {
                             }
                             strWhere += String.format("(%s)", tableList);
                         }
-                    };
+                    }
                 } else {
                     Value value = condition.getValue();
                     if (value != null) {
                         String valueString = value.toString();
                         Matcher matcher = Pattern.compile("(=|>=|<=|<|>)(.*)").matcher(valueString);
-                        String oper = null;
+                        String oper;
                         if (matcher.matches()) {
                             oper = matcher.group(1);
                             valueString = matcher.group(2);

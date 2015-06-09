@@ -29,7 +29,7 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
     public RapSyncOperation(LogMiner miner) {
         this.miner = miner;
     }
-   
+
     @Override
     public OperationResult execute(ElementChunk input, Format output) throws Exception {
         // check parameter availablity
@@ -39,7 +39,7 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
 
         List<Element> dataList = input == null ? null : input.getData();
         List<Element> resultList = new ArrayList();
-        if (dataList != null && !dataList.isEmpty()) {
+        if (dataList != null && !dataList.isEmpty() && input != null) {
             for (int i = input.getStart(); i < dataList.size(); i++) {
                 Element elem = dataList.get(i);
                 Element action = elem.getChild(SQLPARAMS).getChild(ACTION);

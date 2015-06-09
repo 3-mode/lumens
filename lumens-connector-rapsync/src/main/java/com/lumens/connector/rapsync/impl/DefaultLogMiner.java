@@ -99,7 +99,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
     public void start() {
         log.debug("Start redolog analysis.");
         try {
-            String parameter = null;
+            String parameter;
             if (config.getDictType() == DICT_TYPE.STORE_IN_FILE) {
                 parameter = String.format(config.buildParameters(), dict.getDictionaryPath(), DICTIONARY_FILE);
             } else {

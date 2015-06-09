@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 public class Metadata implements Constants {
 
     private final Logger log = SysLogFactory.getLogger(Metadata.class);
-    private DatabaseClient db;
+    private final DatabaseClient db;
 
     public Metadata(DatabaseClient db) {
         this.db = db;
@@ -83,7 +83,7 @@ public class Metadata implements Constants {
     public boolean checkRecordExist(String updateORdeleteFromSQL) {
         boolean isExist = false;
         String upper = updateORdeleteFromSQL.toUpperCase().trim();
-        String select = null;
+        String select;
         if (upper.startsWith("UPDATE")) {
             select = upper.split("SET")[0].replaceAll("UPDATE", "SELECT * FROM ");
         } else if (upper.startsWith("DELETE FROM")) {

@@ -25,8 +25,6 @@ import com.lumens.connector.rapsync.RapSyncConstants;
 import static com.lumens.connector.database.DBConstants.ACTION;
 import static com.lumens.connector.database.DBConstants.DATA_LENGTH;
 import static com.lumens.connector.database.DBConstants.DATA_TYPE;
-import static com.lumens.connector.database.DBConstants.GROUPBY;
-import static com.lumens.connector.database.DBConstants.ORDERBY;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.WHERE;
 import com.lumens.connector.rapsync.impl.Metadata;
@@ -195,7 +193,7 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
                     Element sync = new DataElement(syncFmt);
                     sync.addChild(SQLPARAMS).addChild(ACTION).setValue(SYNC);
                     sync.addChild(COLUMN_REDO).setValue(new Value(redo));
-                    sync.addChild(COLUMN_SCN).setValue(new Value(scn));;
+                    sync.addChild(COLUMN_SCN).setValue(new Value(scn));
                     sync.addChild(COLUMN_OPERATION).setValue(new Value(operation));
                     sync.addChild(COLUMN_SEG_OWNER).setValue(new Value(owner));
                     sync.addChild(COLUMN_TABLE_NAME).setValue(new Value(table));
