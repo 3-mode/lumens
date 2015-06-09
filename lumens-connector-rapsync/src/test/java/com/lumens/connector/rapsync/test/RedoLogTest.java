@@ -36,14 +36,14 @@ public class RedoLogTest extends RapSyncTestBase {
         RedoLog redoLog = new RedoLog(sourceDatabase);
 
         // test get mnin scn
-        String minScn = redoLog.getMinSCN();
+        String minScn = redoLog.getMinSCNInPast120Hour();
         assertTrue("Fail to get min SCN. ", minScn != null);
         if (minScn != null) {
             System.out.println("Min scn is " + minScn);
         }
 
         // Test valid scn
-        boolean valid = redoLog.isValidSCN(minScn);
+        boolean valid = redoLog.isPast120HourSCN(minScn);
         if (valid) {
             System.out.println(String.format("%s is not a valid scn", minScn));
         }

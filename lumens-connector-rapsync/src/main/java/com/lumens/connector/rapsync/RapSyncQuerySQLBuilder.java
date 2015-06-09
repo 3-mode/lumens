@@ -65,12 +65,12 @@ public class RapSyncQuerySQLBuilder implements RapSyncConstants {
                                 tableList += " OR ";
                             }
                             String name = table.trim().replaceAll("\"", "'");
-                            if(!name.startsWith("'")){
+                            if (!name.startsWith("'")) {
                                 name = "'" + name;
                             }
-                            if(!name.endsWith("'")){
+                            if (!name.endsWith("'")) {
                                 name = name + "'";
-                            }                            
+                            }
                             tableList += String.format("TABLE_NAME=%s", name);
                         }
                         if (!tableList.isEmpty()) {
@@ -97,11 +97,8 @@ public class RapSyncQuerySQLBuilder implements RapSyncConstants {
                         if (!strWhere.isEmpty()) {
                             strWhere += " AND ";
                         }
-                        if (formatName.equalsIgnoreCase("TIMESTAMP")) {
-                            strWhere += String.format(" SCN %s TIMESTAMP_TO_SCN(%s)", oper, valueString);
-                        } else {
-                            strWhere += String.format(" %s %s %s", formatName, oper, valueString);
-                        }
+
+                        strWhere += String.format(" %s %s %s", formatName, oper, valueString);
                     }
                 }
             }

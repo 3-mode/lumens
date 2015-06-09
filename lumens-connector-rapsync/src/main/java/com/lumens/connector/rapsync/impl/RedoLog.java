@@ -140,14 +140,14 @@ public class RedoLog implements Constants {
         return current;
     }
 
-    public boolean isValidSCN(String scn) {
+    // smon_scn_time table stores records only for 120 hours 
+    public boolean isPast120HourSCN(String scn) {
         boolean isValid = false;
         try (ResultSet result = dbClient.executeGetResult(String.format(SQL_QUERY_VALID_SCN, scn))) {
             isValid = result.next();
         } catch (Exception ex) {
             String msg = String.format("%s is not a valid SCN. Error message:%s ", scn, ex.getMessage());
-            log.error(msg);
-            throw new RuntimeException(msg);
+            log.error(msg);           
         } finally {
             dbClient.releaseStatement();
         }
@@ -155,7 +155,8 @@ public class RedoLog implements Constants {
         return isValid;
     }
 
-    public String getMinSCN() {
+    // smon_scn_time table stores records only for 120 hours
+    public String getMinSCNInPast120Hour() {
         if (minScn == null) {
             try (ResultSet result = dbClient.executeGetResult(SQL_QUERY_MIN_SCN)) {
                 if (result.next()) {
@@ -173,7 +174,7 @@ public class RedoLog implements Constants {
         return minScn;
     }
 
-    public String getScnFromTimestampString(String timestamp) {
+    public String getSCNInPast120Hour(String timestamp) {
         String scn = null;
         try (ResultSet result = dbClient.executeGetResult(String.format(SQL_QUERY_TIMESTAMP_TO_SCN, timestamp))) {
             if (result.next()) {
