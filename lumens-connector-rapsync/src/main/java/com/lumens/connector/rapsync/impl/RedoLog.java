@@ -19,6 +19,7 @@ public class RedoLog implements Constants {
     DatabaseClient dbClient;
     private Boolean isSupplementalLog = null;
     private Boolean isArchivedLogMode = null;
+    private String minScn = null;
 
     public RedoLog(DatabaseClient dbClient) {
         this.dbClient = dbClient;
@@ -68,7 +69,6 @@ public class RedoLog implements Constants {
             } else {
                 sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'").append(item).append("', options=>dbms_logmnr.ADDFILE);");
             }
-
         }
         sbSQL.append(" END;");
 
@@ -118,8 +118,75 @@ public class RedoLog implements Constants {
             isSupplementalLog = true;
         } catch (Exception ex) {
             log.error("Fail to enable Oracle supplemental log. Error message: " + ex.getMessage());
-        }
+        } 
 
         return bSuccess;
+    }
+
+    public String getCurrentSCN() {
+        String current = null;
+        try (ResultSet result = dbClient.executeGetResult(SQL_QUERY_CURRENT_SCN)) {
+            if (result.next()) {
+                current = result.getString(1);
+            }
+        } catch (Exception ex) {
+            String msg = String.format("Fail to get Current SCN. Error message:%s ", ex.getMessage());
+            log.error(msg);
+            throw new RuntimeException(msg);
+        } finally {
+            dbClient.releaseStatement();
+        }
+
+        return current;
+    }
+
+    public boolean isValidSCN(String scn) {
+        boolean isValid = false;
+        try (ResultSet result = dbClient.executeGetResult(String.format(SQL_QUERY_VALID_SCN, scn))) {
+            isValid = result.next();
+        } catch (Exception ex) {
+            String msg = String.format("%s is not a valid SCN. Error message:%s ", scn, ex.getMessage());
+            log.error(msg);
+            throw new RuntimeException(msg);
+        } finally {
+            dbClient.releaseStatement();
+        }
+
+        return isValid;
+    }
+
+    public String getMinSCN() {
+        if (minScn == null) {
+            try (ResultSet result = dbClient.executeGetResult(SQL_QUERY_MIN_SCN)) {
+                if (result.next()) {
+                    minScn = result.getString(1);
+                }
+            } catch (Exception ex) {
+                String msg = String.format("Fail to get Min SCN. Error message:%s ", ex.getMessage());
+                log.error(msg);
+                throw new RuntimeException(msg);
+            } finally {
+                dbClient.releaseStatement();
+            }
+        }
+
+        return minScn;
+    }
+
+    public String getScnFromTimestampString(String timestamp) {
+        String scn = null;
+        try (ResultSet result = dbClient.executeGetResult(String.format(SQL_QUERY_TIMESTAMP_TO_SCN, timestamp))) {
+            if (result.next()) {
+                scn = result.getString(1);
+            }
+        } catch (Exception ex) {
+            String msg = String.format("Fail to get SCN from timestamp string: %s. Error message:%s ", timestamp, ex.getMessage());
+            log.error(msg);
+            throw new RuntimeException(msg);
+        } finally {
+            dbClient.releaseStatement();
+        }
+
+        return scn;
     }
 }

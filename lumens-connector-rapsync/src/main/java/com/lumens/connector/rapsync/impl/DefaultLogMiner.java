@@ -38,54 +38,6 @@ public class DefaultLogMiner implements LogMiner, Constants {
         }
     }
 
-    private String getCurrentSCN() {
-        String current = null;
-        try {
-            ResultSet result = dbClient.executeGetResult(SQL_QUERY_CURRENT_SCN);
-            if (result.next()) {
-                current = result.getString(1);
-            }
-        } catch (Exception ex) {
-            String msg = String.format("Fail to get Current SCN. Error message:%s ", ex.getMessage());
-            log.error(msg);
-            throw new RuntimeException(msg);
-        }
-
-        return current;
-    }
-    
-        private String getMinSCN() {
-        String min = null;
-        try {
-            ResultSet result = dbClient.executeGetResult(SQL_QUERY_MIN_SCN);
-            if (result.next()) {
-                min = result.getString(1);
-            }
-        } catch (Exception ex) {
-            String msg = String.format("Fail to get Min SCN. Error message:%s ", ex.getMessage());
-            log.error(msg);
-            throw new RuntimeException(msg);
-        }
-
-        return min;
-    }
-
-    private String getScnFromTimestampString(String timestamp) {
-        String scn = null;
-        try {
-            ResultSet result = dbClient.executeGetResult(String.format(SQL_QUERY_TIMESTAMP_TO_SCN, timestamp));
-            if (result.next()) {
-                scn = result.getString(1);
-            }
-        } catch (Exception ex) {
-            String msg = String.format("Fail to get SCN from timestamp string: %s. Error message:%s ", timestamp, ex.getMessage());
-            log.error(msg);
-            throw new RuntimeException(msg);
-        }
-
-        return scn;
-    }
-
     @Override
     public void buildDictionary() {
         log.debug("Building dictionary.");
@@ -234,16 +186,6 @@ public class DefaultLogMiner implements LogMiner, Constants {
                             break;
                         }
                     }
-                    // Not a valid statement, CREATION DDL should get from source db
-                    //if (meta.createTable(value.SEG_OWNER, value.TABLE_NAME)) {
-                    //    log.info(String.format("Table %s created. Try to sync again...", value.TABLE_NAME));
-                    //    doAgain = true;
-                    //    continue;
-                    //}
-                    //else{
-                    //    log.error(String.format("Fail to create table %s. SCN:%s, SEG_NAME:%s, SEG_TYPE:%s, SQL_REDO: %s", value.TABLE_NAME, value.SCN, value.SEG_NAME, value.SEG_TYPE, value.SQL_REDO));
-                    //    break;
-                    //}
                 } else if (value.OPERATION.equalsIgnoreCase("ddl") && value.SQL_REDO.toLowerCase().trim().startsWith("create table")) {
                     log.warn("Table exist. Skip sync for 'create table' operation.");
                     break;
