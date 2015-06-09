@@ -38,6 +38,54 @@ public class DefaultLogMiner implements LogMiner, Constants {
         }
     }
 
+    private String getCurrentSCN() {
+        String current = null;
+        try {
+            ResultSet result = dbClient.executeGetResult(SQL_QUERY_CURRENT_SCN);
+            if (result.next()) {
+                current = result.getString(1);
+            }
+        } catch (Exception ex) {
+            String msg = String.format("Fail to get Current SCN. Error message:%s ", ex.getMessage());
+            log.error(msg);
+            throw new RuntimeException(msg);
+        }
+
+        return current;
+    }
+    
+        private String getMinSCN() {
+        String min = null;
+        try {
+            ResultSet result = dbClient.executeGetResult(SQL_QUERY_MIN_SCN);
+            if (result.next()) {
+                min = result.getString(1);
+            }
+        } catch (Exception ex) {
+            String msg = String.format("Fail to get Min SCN. Error message:%s ", ex.getMessage());
+            log.error(msg);
+            throw new RuntimeException(msg);
+        }
+
+        return min;
+    }
+
+    private String getScnFromTimestampString(String timestamp) {
+        String scn = null;
+        try {
+            ResultSet result = dbClient.executeGetResult(String.format(SQL_QUERY_TIMESTAMP_TO_SCN, timestamp));
+            if (result.next()) {
+                scn = result.getString(1);
+            }
+        } catch (Exception ex) {
+            String msg = String.format("Fail to get SCN from timestamp string: %s. Error message:%s ", timestamp, ex.getMessage());
+            log.error(msg);
+            throw new RuntimeException(msg);
+        }
+
+        return scn;
+    }
+
     @Override
     public void buildDictionary() {
         log.debug("Building dictionary.");
@@ -71,8 +119,8 @@ public class DefaultLogMiner implements LogMiner, Constants {
                     log.info("Succeed enabled Suplemental Log Mode.");
                 }
                 if (!redolog.isSupplementalLogEnabled()) {
-                    log.error("Fail to build log miner dictionary. Error message: Supplemental Log Mode should be enabled priot to start LogMiner build");
-                    throw new RuntimeException("Fail to build log miner dictionary. Error message: Supplemental Log Mode should be enabled priot to start LogMiner build");
+                    log.error("Fail to build log miner dictionary. Error message: Supplemental Log Mode should be enabled prior to start LogMiner build");
+                    throw new RuntimeException("Fail to build log miner dictionary. Error message: Supplemental Log Mode should be enabled prior to start LogMiner build");
                 }
             }
             String buildList = redolog.buildLogMinerStringFromList(config.getBuildType() == LOG_TYPE.ONLINE
@@ -121,7 +169,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
         }
         try {
             //String defaultCondition = " WHERE seg_type_name='TABLE' AND operation !='SELECT_FOR_UPDATE'";
-            result = dbClient.executeGetResult(sql);            
+            result = dbClient.executeGetResult(sql);
             return result;
         } catch (Exception ex) {
             log.error("Fail to query log miner results. Error message:");

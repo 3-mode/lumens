@@ -19,6 +19,9 @@ public interface Constants {//extends DBConstants {
     public String SQL_CHECK_LOG_MODE = "SELECT log_mode FROM sys.v_$database";
     public String SQL_ENABLE_SUPPLEMENTAL_LOG = "ALTER DATABASE ADD SUPPLEMENTAL LOG DATA";
     public String SQL_START_LOGMINER = "BEGIN sys.dbms_logmnr.start_logmnr(%s);END;";
+    public String SQL_QUERY_CURRENT_SCN = "SELECT current_scn FROM v$database";
+    public String SQL_QUERY_MIN_SCN = "SELECT * FROM SYS.SMON_SCN_TIME WHERE TIME_MP=(SELECT MIN(TIME_MP) FROM SYS.SMON_SCN_TIME)";
+    public String SQL_QUERY_TIMESTAMP_TO_SCN = "SELECT timestamp_to_scn(%s) from dual";
     public String SQL_END_LOGMINER = "BEGIN sys.dbms_logmnr.end_logmnr();END;";
     public String SQL_QUERY_DIRECTORY_PATH = "SELECT directory_path FROM sys.dba_directories WHERE DIRECTORY_NAME='UTL_FILE_DIR'";
     public String SQL_QUERY_LOG_INFO = "SELECT db_name, thread_sqn, filename FROM sys.v$logmnr_logs";
