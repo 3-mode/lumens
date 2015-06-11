@@ -7,6 +7,6 @@
     "databaseSourcePassword": "Password",
     "PageSize": "Page Size",
     "SessionAlter": "Session Alter",
-    "FullLoad": "Load all table fields",
+    "LogType": "Log Type",
     "Description": "Description"
 }

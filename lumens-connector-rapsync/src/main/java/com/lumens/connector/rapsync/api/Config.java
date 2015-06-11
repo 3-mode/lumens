@@ -5,7 +5,6 @@ package com.lumens.connector.rapsync.api;
 
 import com.lumens.connector.rapsync.api.LogMiner.LOG_TYPE;
 import com.lumens.connector.rapsync.api.LogMiner.DICT_TYPE;
-import com.lumens.connector.rapsync.impl.Metadata;
 import com.lumens.logsys.SysLogFactory;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +24,16 @@ public class Config {
     private boolean isSupplementalLogMode = false;
     private boolean isNoSQLDelimiter = true;
     private boolean isContinuousMine = false;
+    private int pageSize = 1000;
 
+    public void setPageSize(int size){
+      this.pageSize = size;    
+    }
+    
+    public int getPageSize(){
+        return pageSize;
+    }
+    
     public DICT_TYPE getDictType() {
         return dict_type;
     }

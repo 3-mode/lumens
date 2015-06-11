@@ -32,7 +32,7 @@
                 "type": "String"
             },
             {
-                "name": "FullLoad",
+                "name": "LogType",
                 "type": "Boolean"
             }
         ]

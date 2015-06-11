@@ -76,7 +76,7 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
         propsR.put(DATABASE_CONNECTION_URL, new Value(DATABASE_SOURCE_URL_VAL));
         propsR.put(DATABASE_CONNECTION_USERNAME, new Value(DATABASE_SOURCE_USERNAME_VAL));
         propsR.put(DATABASE_CONNECTION_PASSWORD, new Value(DATABASE_SOURCE_PASSWORD_VAL));
-        propsR.put(BUILD_TYPE_ONLINE, new Value(BUILD_TYPE_ONLINE));
+        propsR.put(REDOLOG_TYPE_ONLINE, new Value(REDOLOG_TYPE_ONLINE));
         propsR.put(DICT_TYPE_ONLINE, new Value(DICT_TYPE_ONLINE));
         propsR.put(COMMITED_DATA_ONLY, new Value(true));
         propsR.put(NO_ROWID, new Value(true));
@@ -106,7 +106,7 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
         propsR.put(DATABASE_CONNECTION_URL, new Value(DATABASE_SOURCE_URL_VAL));
         propsR.put(DATABASE_CONNECTION_USERNAME, new Value(DATABASE_SOURCE_USERNAME_VAL));
         propsR.put(DATABASE_CONNECTION_PASSWORD, new Value(DATABASE_SOURCE_PASSWORD_VAL));
-        propsR.put(BUILD_TYPE_ONLINE, new Value(BUILD_TYPE_ONLINE));
+        propsR.put(REDOLOG_TYPE_ONLINE, new Value(REDOLOG_TYPE_ONLINE));
         propsR.put(DICT_TYPE_ONLINE, new Value(DICT_TYPE_ONLINE));
         propsR.put(COMMITED_DATA_ONLY, new Value(true));
         propsR.put(NO_ROWID, new Value(true));

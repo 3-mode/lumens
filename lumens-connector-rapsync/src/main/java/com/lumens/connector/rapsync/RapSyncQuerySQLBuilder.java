@@ -120,15 +120,20 @@ public class RapSyncQuerySQLBuilder implements RapSyncConstants {
             }
         }
 
-        innerQuerySQL.append(" FROM V_$LOGMNR_CONTENTS");
-        innerQuerySQL.append(" WHERE ( seg_type_name='TABLE' AND operation !='SELECT_FOR_UPDATE') ");
+        innerQuerySQL.append(" ,ROWNUM AS rowno FROM V_$LOGMNR_CONTENTS");
+        innerQuerySQL.append(" WHERE ( ROWNUM < %d AND seg_type_name='TABLE' AND operation !='SELECT_FOR_UPDATE') ");
         if (StringUtils.isNotEmpty(strWhere) && StringUtils.isNotBlank(strWhere)) {
             innerQuerySQL.append(" AND ( ").append(strWhere.trim()).append(") ");
         }
 
         innerQuerySQL.append(" ORDER BY SCN ASC");  // Enforce to order by SCN as Oracle does not order by default        
 
-        return innerQuerySQL.toString();
+        // Build final paging query SQL
+        StringBuilder finalSQL = new StringBuilder();
+        finalSQL.append("SELECT * FROM (").append(innerQuerySQL.toString()).append(") ").append(PAGEQUERY_TABLEALIAS)
+                .append(" WHERE ").append(PAGEQUERY_TABLEALIAS).append(".rowno >= %d");
+
+        return finalSQL.toString();
     }
 
     public String generatePageSQL(String SQL, int start, int page) {

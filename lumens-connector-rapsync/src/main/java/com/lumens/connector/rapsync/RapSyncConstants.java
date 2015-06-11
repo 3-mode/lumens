@@ -16,7 +16,7 @@ public interface RapSyncConstants extends DBConstants {
     public String DATABASE_CONNECTION_URL = "databaseConnectionUrl";
     public String DATABASE_CONNECTION_USERNAME = "databaseSourceUserName";
     public String DATABASE_CONNECTION_PASSWORD = "databaseSourcePassword";
-    public String SESSION_ALTER = "SessionAlter";
+    public String LOG_TYPE = "LogType";
 
     public String QUERY = "QUERY";
     public String SYNC = "SYNC";
@@ -26,8 +26,8 @@ public interface RapSyncConstants extends DBConstants {
     public String ENFORCE_FIELDS = "SQL_REDO,TABLE_NAME,SEG_OWNER,OPERATION,SCN";
     public String DISPLAY_FIELDS = ENFORCE_FIELDS + ",SQL_UNTO, STATUS, ROW_ID,TABLE_SPACE,SEG_TYPE,SEG_NAME,TIMESTAMP,COMMIT_TIMESTAMP,COMMIT_SCN,CSCN,START_SCN";
 
-    public String BUILD_TYPE_ONLINE = "buildTypeOnline";
-    public String BUILD_TYPE_OFFLINE = "buildTypeOffline";
+    public String REDOLOG_TYPE_ONLINE = "online";
+    public String REDOLOG_TYPE_OFFLINE = "offline";
     public String DICT_TYPE_ONLINE = "dictTypeOnline";
     public String DICT_TYPE_STORE_IN_REDO_LOG = "dictTypesToreInRedoLog";
     public String DICT_TYPE_STORE_IN_FILE = "dictTypeStoreInFile";

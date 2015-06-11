@@ -218,19 +218,24 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
         }
 
         // setup config
-        // Warning: those parameters should only specify one time or will introduce bugs
-        if (parameters.containsKey(BUILD_TYPE_ONLINE)) {
-            config.setBuildType(LogMiner.LOG_TYPE.ONLINE);
-        } else if (parameters.containsKey(BUILD_TYPE_OFFLINE)) {
-            config.setBuildType(LogMiner.LOG_TYPE.OFFLINE);
+        if (parameters.containsKey(PAGE_SIZE)) {
+            config.setPageSize(parameters.get(PAGE_SIZE).getInt());
         }
 
-        if (parameters.containsKey(DICT_TYPE_ONLINE)) {
-            config.setDictType(LogMiner.DICT_TYPE.ONLINE);
-        } else if (parameters.containsKey(DICT_TYPE_STORE_IN_REDO_LOG)) {
+        // Warning: those parameters should only specify one time or will introduce bugs
+        if (parameters.containsKey(LOG_TYPE) && parameters.get(LOG_TYPE).getString().equalsIgnoreCase(REDOLOG_TYPE_OFFLINE)) {
+            config.setBuildType(LogMiner.LOG_TYPE.OFFLINE);
+        } else {
+            config.setBuildType(LogMiner.LOG_TYPE.ONLINE);  // default online for incremental sync
+        }
+        //TODO: transit to online while offline redo log files finish
+
+        if (parameters.containsKey(DICT_TYPE_STORE_IN_REDO_LOG)) {
             config.setDictType(LogMiner.DICT_TYPE.STORE_IN_REDO_LOG);
         } else if (parameters.containsKey(DICT_TYPE_STORE_IN_FILE)) {
             config.setDictType(LogMiner.DICT_TYPE.STORE_IN_FILE);
+        } else {
+            config.setDictType(LogMiner.DICT_TYPE.ONLINE);  // default online for performance
         }
 
         if (parameters.containsKey(COMMITED_DATA_ONLY)) {

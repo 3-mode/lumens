@@ -38,7 +38,6 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
         // start processing redo log sql: query and process each sql
 
         List<Element> dataList = input == null ? null : input.getData();
-        List<Element> resultList = new ArrayList();
         if (dataList != null && !dataList.isEmpty() && input != null) {
             for (int i = input.getStart(); i < dataList.size(); i++) {
                 Element elem = dataList.get(i);
@@ -46,8 +45,8 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
                 String strOper = ModelUtils.isNullValue(action) ? null : action.getValue().getString();
                 if (strOper == null || QUERY.equalsIgnoreCase(strOper)) {
                     // TODO: implementing paging
-                    ResultSet result = miner.query(new RapSyncQuerySQLBuilder(output).generateSelectSQL(elem));
-                    resultList.addAll(new DBElementBuilder().buildElement(output, result));
+                    ResultSet result = miner.query(new RapSyncQuerySQLBuilder(output).generateSelectSQL(elem));                    
+                    return new RapSyncResult(new DBElementBuilder().buildElement(output, result));
                 } else if (SYNC.equalsIgnoreCase(strOper)) { // sync here
                     RedoValue value = new RedoValue();
                     value.SCN = elem.getChildByPath(COLUMN_SCN).getValue().getInt();
@@ -63,8 +62,7 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
                 } else {
                     throw new UnsupportedOperationException("Error, not supported action : " + strOper);
                 }
-            }
-            return new RapSyncResult(resultList);
+            }            
         }
         throw new UnsupportedOperationException("Error, the input data can not be empty !");
     }
