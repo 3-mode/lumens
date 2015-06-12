@@ -23,9 +23,23 @@ public class RapSyncQuerySQLBuilder implements RapSyncConstants {
 
     private final Format output;
     private final Logger log = SysLogFactory.getLogger(RapSyncQuerySQLBuilder.class);
+    private int pageSize = 1000;
 
     public RapSyncQuerySQLBuilder(Format output) {
         this.output = output;
+    }
+
+    public RapSyncQuerySQLBuilder setPageSize(int size) {
+        this.pageSize = size;
+        return this;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public Format getFormat() {
+        return output;
     }
 
     public String generateSelectSQL(Element input) {

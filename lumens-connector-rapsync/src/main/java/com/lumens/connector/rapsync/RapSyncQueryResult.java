@@ -6,8 +6,10 @@ package com.lumens.connector.rapsync;
 import com.lumens.connector.ElementChunk;
 import com.lumens.connector.OperationResult;
 import com.lumens.connector.rapsync.api.LogMiner;
+import com.lumens.connector.database.client.DBElementBuilder;
 import com.lumens.model.Element;
 import java.util.List;
+import java.sql.ResultSet;
 
 /**
  *
@@ -18,10 +20,20 @@ public class RapSyncQueryResult implements OperationResult {
     private List<Element> result;
     private final ElementChunk input;
     private final LogMiner miner;
+    private final RapSyncQuerySQLBuilder builder;
+    private final RapSyncOperation operation;
+    private int pageStart;
 
-    public RapSyncQueryResult(LogMiner miner, ElementChunk input) {
+    public RapSyncQueryResult(RapSyncOperation operation, LogMiner miner, RapSyncQuerySQLBuilder builder, ElementChunk input) throws Exception {
         this.input = input;
         this.miner = miner;
+        this.operation = operation;
+        this.pageStart = input.getStart();
+        this.builder = builder;
+
+        String sql = String.format(builder.generateSelectSQL(input.getData().get(input.getStart())), builder.getPageSize(), 1);
+        ResultSet resultSet = miner.query(sql);
+        this.result = new DBElementBuilder().buildElement(builder.getFormat(), resultSet);
     }
 
     @Override
@@ -42,7 +54,25 @@ public class RapSyncQueryResult implements OperationResult {
 
     @Override
     public OperationResult executeNext() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (hasNext() && result.size() < builder.getPageSize()) {
+            try {
+                this.input.setStart(input.getStart() + 1);
+                return operation.execute(input, builder.getFormat());
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        } else if (hasNext() && result.size() == builder.getPageSize()) {
+            String sql = String.format(builder.generateSelectSQL(input.getData().get(input.getStart())), builder.getPageSize() + pageStart, pageStart);
+            ResultSet resultSet = miner.query(sql);
+            try {
+                this.result = new DBElementBuilder().buildElement(builder.getFormat(), resultSet);
+                pageStart += builder.getPageSize();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        } else {
+            result = null;
+        }
+        return this;
     }
-
 }
