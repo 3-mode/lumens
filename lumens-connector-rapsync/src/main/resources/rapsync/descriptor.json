@@ -33,7 +33,7 @@
             },
             {
                 "name": "LogType",
-                "type": "Boolean"
+                "type": "String"
             }
         ]
     }
