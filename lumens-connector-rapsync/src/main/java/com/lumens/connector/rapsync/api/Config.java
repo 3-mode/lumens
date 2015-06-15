@@ -24,16 +24,17 @@ public class Config {
     private boolean isSupplementalLogMode = false;
     private boolean isNoSQLDelimiter = true;
     private boolean isContinuousMine = false;
+    private boolean isSkipCorruption = true;
     private int pageSize = 1000;
 
-    public void setPageSize(int size){
-      this.pageSize = size;    
+    public void setPageSize(int size) {
+        this.pageSize = size;
     }
-    
-    public int getPageSize(){
+
+    public int getPageSize() {
         return pageSize;
     }
-    
+
     public DICT_TYPE getDictType() {
         return dict_type;
     }
@@ -79,7 +80,7 @@ public class Config {
             Double.parseDouble(scn);
             this.startSCN = scn;
         } catch (Exception ex) {
-            log.warn(String.format("Not a valid SCN: %s, ignore parameter",scn));
+            log.warn(String.format("Not a valid SCN: %s, ignore parameter", scn));
         }
     }
 
@@ -88,13 +89,15 @@ public class Config {
             Double.parseDouble(scn);
             this.endSCN = scn;
         } catch (Exception ex) {
-            log.warn(String.format("Not a valid SCN: %s, ignore parameter",scn));
+            log.warn(String.format("Not a valid SCN: %s, ignore parameter", scn));
         }
     }
 
     public String buildParameters() {
         StringBuilder parameter = new StringBuilder();
-        parameter.append(String.format("STARTSCN =>%s", startSCN));
+        if (startSCN != null) {
+            parameter.append(String.format("STARTSCN =>%s", startSCN));
+        }
         if (endSCN != null) {
             parameter.append(String.format(",ENDSCN =>%s", endSCN));
         }
@@ -137,7 +140,18 @@ public class Config {
             }
             option.append("DBMS_LOGMNR.NO_ROWID_IN_STMT");
         }
-
+        if (isSkipCorruption) {
+            if (option.length() > 0) {
+                option.append(" + ");
+            }
+            option.append("DBMS_LOGMNR.SKIP_CORRUPTION");
+        }
+        if (startSCN != null && endSCN != null) {
+            if (option.length() > 0) {
+                option.append(" + ");
+            }
+            option.append("DBMS_LOGMNR.CONTINUOUS_MINE");
+        }
         if (option.length() > 0) {
             parameter.append(", OPTIONS => ").append(option);
         }

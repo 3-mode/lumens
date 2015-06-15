@@ -154,8 +154,12 @@ public class DefaultLogMiner implements LogMiner, Constants {
         String SQL = value.SQL_REDO.replaceAll(";", "");
 
         // Dictionary was changed, need to rebuild 
-        if (value.OPERATION.equalsIgnoreCase("DDL")) {
+        if (value.OPERATION.equalsIgnoreCase("ddl")) {
             buildDictionary();
+        }
+        if(value.OPERATION.equalsIgnoreCase("corrupted_blocks") || value.STATUS == 1343){
+            log.warn("Skip corruption data: SCN is %s, SQL is ", value.SCN, value.SQL_REDO);
+            return;
         }
 
         boolean doAgain = false;
