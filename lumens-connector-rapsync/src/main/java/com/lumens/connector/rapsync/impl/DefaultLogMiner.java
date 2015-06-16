@@ -26,6 +26,8 @@ public class DefaultLogMiner implements LogMiner, Constants {
     private Dictionary dict = null;
     private DatabaseClient dbClient = null;
     private Metadata meta = null;
+    private boolean isFirstBuild = true;
+    private RedoLog redolog = null;
 
     public DefaultLogMiner(DatabaseClient dbClient, Config config) {
         this.dbClient = dbClient;
@@ -36,6 +38,8 @@ public class DefaultLogMiner implements LogMiner, Constants {
             log.error("Should not specify option DICT_FROM_REDO_LOGS to analyze online redo logs");
             throw new RuntimeException("Should not specify option DICT_FROM_REDO_LOGS to analyze online redo logs");
         }
+
+        redolog = new RedoLog(dbClient);  // TODO: changed to cached redo log
     }
 
     @Override
@@ -60,19 +64,20 @@ public class DefaultLogMiner implements LogMiner, Constants {
         log.debug("Building dictionary.");
         try {
             // adding redo log files to analyze
-            RedoLog redolog = new RedoLog(dbClient);
-            if (config.getDictType() == DICT_TYPE.STORE_IN_REDO_LOG && !redolog.isArchivedLogModeEnabled()) {
-                log.error("Fail to build log miner dictionary. Error message: Archived log should be enabled with STORE_IN_REDO_LOG enabled");
-                throw new RuntimeException("Fail to build log miner dictionary. Error message: Archived log should be enabled with STORE_IN_REDO_LOG enabled");
-            }
-            if (!redolog.isSupplementalLogEnabled()) {
-                log.info("Tryinng to enable Suplemental Log Mode.");
-                if (redolog.enableSupplementalLog()) {
-                    log.info("Succeed enabled Suplemental Log Mode.");
+            if (isFirstBuild) {
+                if (config.getDictType() == DICT_TYPE.STORE_IN_REDO_LOG && !redolog.isArchivedLogModeEnabled()) {
+                    log.error("Fail to build log miner dictionary. Error message: Archived log should be enabled with STORE_IN_REDO_LOG enabled");
+                    throw new RuntimeException("Fail to build log miner dictionary. Error message: Archived log should be enabled with STORE_IN_REDO_LOG enabled");
                 }
                 if (!redolog.isSupplementalLogEnabled()) {
-                    log.error("Fail to build log miner dictionary. Error message: Supplemental Log Mode should be enabled prior to start LogMiner build");
-                    throw new RuntimeException("Fail to build log miner dictionary. Error message: Supplemental Log Mode should be enabled prior to start LogMiner build");
+                    log.info("Tryinng to enable Suplemental Log Mode.");
+                    if (redolog.enableSupplementalLog()) {
+                        log.info("Succeed enabled Suplemental Log Mode.");
+                    }
+                    if (!redolog.isSupplementalLogEnabled()) {
+                        log.error("Fail to build log miner dictionary. Error message: Supplemental Log Mode should be enabled prior to start LogMiner build");
+                        throw new RuntimeException("Fail to build log miner dictionary. Error message: Supplemental Log Mode should be enabled prior to start LogMiner build");
+                    }
                 }
             }
             String buildList = redolog.buildLogMinerStringFromList(config.getLogType() == LOG_TYPE.ONLINE
@@ -88,6 +93,8 @@ public class DefaultLogMiner implements LogMiner, Constants {
                 DBUtils.releaseResultSet(addedLogsResult);
                 dbClient.releaseStatement();
             }
+
+            isFirstBuild = false;
         } catch (Exception ex) {
             log.error("Fail to build log miner. Error message:");
             log.error(ex.getMessage());
@@ -157,7 +164,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
         if (value.OPERATION.equalsIgnoreCase("ddl")) {
             buildDictionary();
         }
-        if(value.OPERATION.equalsIgnoreCase("corrupted_blocks") || value.STATUS == 1343){
+        if (value.OPERATION.equalsIgnoreCase("corrupted_blocks") || value.STATUS == 1343) {
             log.warn("Skip corruption data: SCN is %s, SQL is ", value.SCN, value.SQL_REDO);
             return;
         }
