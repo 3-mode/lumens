@@ -44,7 +44,13 @@ public class RedoLog implements Constants {
         List<String> list = new ArrayList();
         try (ResultSet resultSet = dbClient.executeGetResult(SQL_QUERY_ARCHIVED_LOG)) {
             while (resultSet.next()) {
-                list.add(resultSet.getString(1));
+                String name = resultSet.getString(1);
+                String status = resultSet.getString(2);
+                if (status.equalsIgnoreCase("a")) {
+                    list.add(name);
+                } else {
+                    log.warn(String.format("Invalid redo log file '%s' with status = '%s'", name, status));
+                }
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
@@ -118,7 +124,7 @@ public class RedoLog implements Constants {
             isSupplementalLog = true;
         } catch (Exception ex) {
             log.error("Fail to enable Oracle supplemental log. Error message: " + ex.getMessage());
-        } 
+        }
 
         return bSuccess;
     }
@@ -147,7 +153,7 @@ public class RedoLog implements Constants {
             isValid = result.next();
         } catch (Exception ex) {
             String msg = String.format("%s is not a valid SCN. Error message:%s ", scn, ex.getMessage());
-            log.error(msg);           
+            log.error(msg);
         } finally {
             dbClient.releaseStatement();
         }
