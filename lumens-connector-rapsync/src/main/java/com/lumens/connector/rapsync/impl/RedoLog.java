@@ -25,6 +25,16 @@ public class RedoLog implements Constants {
         this.dbClient = dbClient;
     }
 
+    public int getValidArchivedLogSize() {
+        try (ResultSet resultSet = dbClient.executeGetResult(SQL_QUERY_ARCHIVED_LOG_SIZE)) {
+            return resultSet.getInt(1);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            dbClient.releaseStatement();
+        }
+    }
+
     public List<String> getOnlineFileList() throws Exception {
         List<String> list = new ArrayList();
 
