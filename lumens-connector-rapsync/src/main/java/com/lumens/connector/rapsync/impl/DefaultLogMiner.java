@@ -32,7 +32,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
         this.config = config;
         meta = new Metadata(dbClient);
 
-        if (config.getBuildType() == LOG_TYPE.ONLINE && config.getDictType() == DICT_TYPE.STORE_IN_REDO_LOG) {
+        if (config.getLogType() == LOG_TYPE.ONLINE && config.getDictType() == DICT_TYPE.STORE_IN_REDO_LOG) {
             log.error("Should not specify option DICT_FROM_REDO_LOGS to analyze online redo logs");
             throw new RuntimeException("Should not specify option DICT_FROM_REDO_LOGS to analyze online redo logs");
         }
@@ -75,7 +75,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
                     throw new RuntimeException("Fail to build log miner dictionary. Error message: Supplemental Log Mode should be enabled prior to start LogMiner build");
                 }
             }
-            String buildList = redolog.buildLogMinerStringFromList(config.getBuildType() == LOG_TYPE.ONLINE
+            String buildList = redolog.buildLogMinerStringFromList(config.getLogType() == LOG_TYPE.ONLINE
                     ? redolog.getOnlineFileList() : redolog.getOfflineFileList(), true);
             dbClient.execute(buildList + "");
 

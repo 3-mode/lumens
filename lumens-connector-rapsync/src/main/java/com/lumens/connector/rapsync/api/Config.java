@@ -39,7 +39,7 @@ public class Config {
         return dict_type;
     }
 
-    public LOG_TYPE getBuildType() {
+    public LOG_TYPE getLogType() {
         return build_type;
     }
 

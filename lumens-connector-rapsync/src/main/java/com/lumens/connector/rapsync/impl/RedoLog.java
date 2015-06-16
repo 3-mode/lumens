@@ -15,11 +15,11 @@ import org.apache.logging.log4j.Logger;
  */
 public class RedoLog implements Constants {
 
-    private final Logger log = SysLogFactory.getLogger(RedoLog.class);
-    DatabaseClient dbClient;
-    private Boolean isSupplementalLog = null;
-    private Boolean isArchivedLogMode = null;
-    private String minScn = null;
+    protected final Logger log = SysLogFactory.getLogger(RedoLog.class);
+    protected DatabaseClient dbClient;
+    protected Boolean isSupplementalLog = null;
+    protected Boolean isArchivedLogMode = null;
+    protected String minScn = null;
 
     public RedoLog(DatabaseClient dbClient) {
         this.dbClient = dbClient;
