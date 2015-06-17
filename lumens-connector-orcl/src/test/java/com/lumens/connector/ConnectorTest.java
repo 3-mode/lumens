@@ -72,7 +72,6 @@ public class ConnectorTest implements OracleConstants {
     }
     
     // TODO need to mock db ENV
-    @Test
     public void testOracleSQLBuilder() throws Exception {
         // Test select SQL generating
         Format employeeFmt = new DataFormat("Testtable", Form.STRUCT);
