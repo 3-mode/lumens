@@ -22,7 +22,6 @@ public interface OracleConstants extends DBConstants {
     public String NUMBERIC = "NUMBERIC";
     public String BLOB = "BLOB";
     // Oracle SQL to query tables information
-    // ALL_TAB_COMMENTS displays comments on the tables and views accessible to the current user.
-    public String TABLENAMES = "select t.table_name,t.comments, t.TABLE_TYPE from all_tab_comments t";
-    public String TABLECOLUMNS = "select t.COLUMN_NAME, t.DATA_TYPE, t.DATA_LENGTH from all_tab_comments t where t.TABLE_NAME = '%s'";
+    public String TABLENAMES = "select t.table_name,t.comments, t.TABLE_TYPE from user_tab_comments t";
+    public String TABLECOLUMNS = "select t.COLUMN_NAME, t.DATA_TYPE, t.DATA_LENGTH from user_tab_comments t where t.TABLE_NAME = '%s'";
 }
