@@ -12,7 +12,7 @@
                 "type": "String"
             },
             {
-                "name": "FiledDelimiter",
+                "name": "FieldDelimiter",
                 "type": "String"
             },
             {

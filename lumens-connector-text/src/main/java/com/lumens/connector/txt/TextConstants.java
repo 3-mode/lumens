@@ -15,7 +15,7 @@ public interface TextConstants {
     public static final String ENCODING = "Encoding";
     public static final String PATH = "Path";
     public static final String LINEDELIMITER = "LineDelimiter";
-    public static final String FILEDELIMITER = "FiledDelimiter";
+    public static final String FIELDELIMITER = "FieldDelimiter";
     public static final String ESCAPE_CHAR = "EscapeChar";
     public static final String QUOTE_CHAR = "EscapeChar";
     public static final String FILE_EXTENSION = "FileExtension";

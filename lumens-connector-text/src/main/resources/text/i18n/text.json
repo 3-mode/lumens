@@ -2,7 +2,7 @@
     "Name": "Name",
     "TextName": "CSV",
     "EscapeChar": "Escape Char",
-    "FiledDelimiter": "File Delimiter",
+    "FieldDelimiter": "Field Delimiter",
     "SchemaPath": "Schema Path",
     "Path": "Path",
     "Encoding": "Code Page",

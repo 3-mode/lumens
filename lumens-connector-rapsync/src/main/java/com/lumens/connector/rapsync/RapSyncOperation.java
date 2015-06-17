@@ -8,15 +8,12 @@ import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import static com.lumens.connector.database.DBConstants.ACTION;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
-import com.lumens.connector.database.client.DBElementBuilder;
 import com.lumens.connector.rapsync.api.LogMiner;
 import com.lumens.connector.rapsync.api.RedoValue;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.ModelUtils;
-import java.sql.ResultSet;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  *
@@ -29,7 +26,7 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
     public RapSyncOperation(LogMiner miner) {
         this.miner = miner;
     }
-   
+
     @Override
     public OperationResult execute(ElementChunk input, Format output) throws Exception {
         // check parameter availablity
@@ -38,16 +35,19 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
         // start processing redo log sql: query and process each sql
 
         List<Element> dataList = input == null ? null : input.getData();
-        List<Element> resultList = new ArrayList();
-        if (dataList != null && !dataList.isEmpty()) {
+        if (dataList != null && !dataList.isEmpty() && input != null) {
             for (int i = input.getStart(); i < dataList.size(); i++) {
                 Element elem = dataList.get(i);
                 Element action = elem.getChild(SQLPARAMS).getChild(ACTION);
                 String strOper = ModelUtils.isNullValue(action) ? null : action.getValue().getString();
                 if (strOper == null || QUERY.equalsIgnoreCase(strOper)) {
-                    // TODO: implementing paging
-                    ResultSet result = miner.query(new RapSyncQuerySQLBuilder(output).generateSelectSQL(elem));
-                    resultList.addAll(new DBElementBuilder().buildElement(output, result));
+                    if (input.getStart() < i) {
+                        input.setStart(i);
+                    }                   
+
+                    return new RapSyncQueryResult(this, miner, new RapSyncQuerySQLBuilder(output), input);
+                    //ResultSet result = miner.query(new RapSyncQuerySQLBuilder(output).generateSelectSQL(elem));
+                    //return new RapSyncResult(new DBElementBuilder().buildElement(output, result));
                 } else if (SYNC.equalsIgnoreCase(strOper)) { // sync here
                     RedoValue value = new RedoValue();
                     value.SCN = elem.getChildByPath(COLUMN_SCN).getValue().getInt();
@@ -64,7 +64,6 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
                     throw new UnsupportedOperationException("Error, not supported action : " + strOper);
                 }
             }
-            return new RapSyncResult(resultList);
         }
         throw new UnsupportedOperationException("Error, the input data can not be empty !");
     }

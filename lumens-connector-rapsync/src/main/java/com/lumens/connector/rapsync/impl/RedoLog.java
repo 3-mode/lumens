@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.rapsync.impl;
 
+import com.lumens.connector.rapsync.api.LogMiner.LOG_TYPE;
 import com.lumens.logsys.SysLogFactory;
 import java.sql.ResultSet;
 import java.util.List;
@@ -15,13 +16,50 @@ import org.apache.logging.log4j.Logger;
  */
 public class RedoLog implements Constants {
 
-    private final Logger log = SysLogFactory.getLogger(RedoLog.class);
-    DatabaseClient dbClient;
-    private Boolean isSupplementalLog = null;
-    private Boolean isArchivedLogMode = null;
+    protected final Logger log = SysLogFactory.getLogger(RedoLog.class);
+    protected DatabaseClient dbClient;
+    protected Boolean isSupplementalLog = null;
+    protected Boolean isArchivedLogMode = null;
+    protected String minScn = null;
+    protected LOG_TYPE logType = LOG_TYPE.ONLINE;
 
     public RedoLog(DatabaseClient dbClient) {
         this.dbClient = dbClient;
+    }
+
+    public RedoLog setLogType(LOG_TYPE logType) {
+        this.logType = logType;
+        return this;
+    }
+
+    public int getValidArchivedLogSize() {
+        try (ResultSet resultSet = dbClient.executeGetResult(SQL_QUERY_ARCHIVED_LOG_SIZE)) {
+            int size = 0;
+            if (resultSet.next()) {
+                size = resultSet.getInt(1);
+            }
+            return size;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            dbClient.releaseStatement();
+        }
+    }
+
+    public int getLogCount() {
+        String query = logType == LOG_TYPE.ONLINE ? SQL_QUERY_ONLINE_LOG_COUNT : SQL_QUERY_ARCHIVED_LOG_COUNT;
+        try (ResultSet resultSet = dbClient.executeGetResult(query)) {
+            int count = 0;
+            if (resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+
+            return count;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            dbClient.releaseStatement();
+        }
     }
 
     public List<String> getOnlineFileList() throws Exception {
@@ -43,7 +81,13 @@ public class RedoLog implements Constants {
         List<String> list = new ArrayList();
         try (ResultSet resultSet = dbClient.executeGetResult(SQL_QUERY_ARCHIVED_LOG)) {
             while (resultSet.next()) {
-                list.add(resultSet.getString(1));
+                String name = resultSet.getString(1);
+                String status = resultSet.getString(2);
+                if (status.equalsIgnoreCase("a")) {
+                    list.add(name);
+                } else {
+                    log.warn(String.format("Invalid redo log file '%s' with status = '%s'", name, status));
+                }
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
@@ -68,7 +112,6 @@ public class RedoLog implements Constants {
             } else {
                 sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'").append(item).append("', options=>dbms_logmnr.ADDFILE);");
             }
-
         }
         sbSQL.append(" END;");
 
@@ -123,4 +166,71 @@ public class RedoLog implements Constants {
         return bSuccess;
     }
 
+    public String getCurrentSCN() {
+        String current = null;
+        try (ResultSet result = dbClient.executeGetResult(SQL_QUERY_CURRENT_SCN)) {
+            if (result.next()) {
+                current = result.getString(1);
+            }
+        } catch (Exception ex) {
+            String msg = String.format("Fail to get Current SCN. Error message:%s ", ex.getMessage());
+            log.error(msg);
+            throw new RuntimeException(msg);
+        } finally {
+            dbClient.releaseStatement();
+        }
+
+        return current;
+    }
+
+    // smon_scn_time table stores records only for 120 hours 
+    public boolean isPast120HourSCN(String scn) {
+        boolean isValid = false;
+        try (ResultSet result = dbClient.executeGetResult(String.format(SQL_QUERY_VALID_SCN, scn))) {
+            isValid = result.next();
+        } catch (Exception ex) {
+            String msg = String.format("%s is not a valid SCN. Error message:%s ", scn, ex.getMessage());
+            log.error(msg);
+        } finally {
+            dbClient.releaseStatement();
+        }
+
+        return isValid;
+    }
+
+    // smon_scn_time table stores records only for 120 hours
+    public String getMinSCNInPast120Hour() {
+        if (minScn == null) {
+            try (ResultSet result = dbClient.executeGetResult(SQL_QUERY_MIN_SCN)) {
+                if (result.next()) {
+                    minScn = result.getString(1);
+                }
+            } catch (Exception ex) {
+                String msg = String.format("Fail to get Min SCN. Error message:%s ", ex.getMessage());
+                log.error(msg);
+                throw new RuntimeException(msg);
+            } finally {
+                dbClient.releaseStatement();
+            }
+        }
+
+        return minScn;
+    }
+
+    public String getSCNInPast120Hour(String timestamp) {
+        String scn = null;
+        try (ResultSet result = dbClient.executeGetResult(String.format(SQL_QUERY_TIMESTAMP_TO_SCN, timestamp))) {
+            if (result.next()) {
+                scn = result.getString(1);
+            }
+        } catch (Exception ex) {
+            String msg = String.format("Fail to get SCN from timestamp string: %s. Error message:%s ", timestamp, ex.getMessage());
+            log.error(msg);
+            throw new RuntimeException(msg);
+        } finally {
+            dbClient.releaseStatement();
+        }
+
+        return scn;
+    }
 }

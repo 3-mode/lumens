@@ -10,8 +10,6 @@ import com.lumens.connector.Direction;
 import static com.lumens.connector.database.DBConstants.ACTION;
 import static com.lumens.connector.database.DBConstants.DATA_LENGTH;
 import static com.lumens.connector.database.DBConstants.DATA_TYPE;
-import static com.lumens.connector.database.DBConstants.GROUPBY;
-import static com.lumens.connector.database.DBConstants.ORDERBY;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
 import static com.lumens.connector.database.DBConstants.WHERE;
 import com.lumens.connector.database.DBUtils;
@@ -27,6 +25,7 @@ import com.lumens.model.Type;
 import com.lumens.model.Value;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +48,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
     private String dbUrl = null;
     private String dbUserName = null;
     private String dbPassword = null;
+    private String sessionAlter = null;
 
     private LogMiner miner = null;
     private DatabaseClient dbClient = null;
@@ -57,6 +57,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
     public RapSyncConnector() {
         config = ConfigFactory.createDefaultConfig();
+        buildFormatEnforcementList();
     }
 
     @Override
@@ -68,6 +69,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
     public void open() {
         try {
             dbClient = new DatabaseClient(dbDriver, dbUrl, dbUserName, dbPassword);
+            PrepareDatabase();
             miner = LogMinerFactory.createLogMiner(dbClient, config);
 
             isOpen = true;
@@ -75,6 +77,22 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
             log.error(String.format("DB connection driver: %s, url: %s, username:%s, password: %s", dbDriver, dbUrl, dbUserName, dbPassword));
             log.error("Fail to open RapSync connector. Error message:" + ex.getMessage());
             throw new RuntimeException("Fail to open RapSync connector. Error message:" + ex.getMessage());
+        }
+    }
+
+    private void PrepareDatabase() {
+        if (sessionAlter != null && !sessionAlter.isEmpty() && dbClient != null) {
+            try {
+                String[] alterList = sessionAlter.split("\n");
+                for (String alter : alterList) {
+                    alter = alter.trim();
+                    if (!alter.isEmpty()) {
+                        dbClient.execute(alter.trim());
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
         }
     }
 
@@ -120,12 +138,14 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
         Map<String, Format> formatList = new HashMap();
         Format rootFmt = new DataFormat(FORMAT_NAME, Form.STRUCT);
-        Format SQLParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
-        SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
-        SQLParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
+
         if (direction == Direction.OUT) {
             outFormat = formatList;
         } else if (direction == Direction.IN) {
+            Format SQLParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
+            SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
+            SQLParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
+            SQLParams.addChild(TABLE_LIST, Format.Form.FIELD, Type.STRING);
             inFormat = formatList;
         }
         formatList.put(FORMAT_NAME, rootFmt);
@@ -136,20 +156,18 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
     // TODO: read from file
     public void buildFormatEnforcementList() {
-        String formatList = "SQL_REDO,TABLE_NAME,SEG_OWNER,OPERATION,SCN,SQL_UNTO, STATUS, ROW_ID,TABLE_SPACE,SEG_TYPE,SEG_NAME,TIMESTAMP,COMMIT_TIMESTAMP,COMMIT_SCN,CSCN,START_SCN";
         enforceFormatList.clear();
-        for (String item : formatList.split(",")) {
+        for (String item : DISPLAY_FIELDS.split(",")) {
             enforceFormatList.add(item.trim());
         }
     }
 
     public boolean checkFormatEnforcement(String format) {
-        return enforceFormatList.contains(format);
+        return enforceFormatList.contains(format.trim());
     }
 
     @Override
     public Format getFormat(Format format, String path, Direction direction) {
-        //if (direction == Direction.OUT) {
         ResultSet columns = null;
         try {
             columns = dbClient.executeGetResult(SQL_QUERY_COLUMNS);
@@ -175,15 +193,6 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
             DBUtils.releaseResultSet(columns);
             dbClient.releaseStatement();
         }
-        /*} else if (direction == Direction.IN) {
-         Format scnField = format.addChild(COLUMN_SCN, Format.Form.FIELD, Type.STRING);
-         scnField.setProperty(DATA_TYPE, new Value(NUMBER));
-         scnField.setProperty(DATA_LENGTH, new Value(COLUMN_SCN_LENGTH));
-
-         Format redoField = format.addChild(COLUMN_REDO, Format.Form.FIELD, Type.STRING);
-         redoField.setProperty(DATA_TYPE, new Value(NVARCHAR2));
-         redoField.setProperty(DATA_LENGTH, new Value(COLUMN_REDO_LENGTH));
-         }*/
 
         return format;
     }
@@ -204,21 +213,29 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
         if (parameters.containsKey(DATABASE_CONNECTION_PASSWORD)) {
             dbPassword = parameters.get(DATABASE_CONNECTION_PASSWORD).getString();
         }
-
-        // setup config
-        // Warning: those parameters should only specify one time or will introduce bugs
-        if (parameters.containsKey(BUILD_TYPE_ONLINE)) {
-            config.setBuildType(LogMiner.LOG_TYPE.ONLINE);
-        } else if (parameters.containsKey(BUILD_TYPE_OFFLINE)) {
-            config.setBuildType(LogMiner.LOG_TYPE.OFFLINE);
+        if (parameters.containsKey(SESSION_ALTER)) {
+            sessionAlter = parameters.get(SESSION_ALTER).getString();
         }
 
-        if (parameters.containsKey(DICT_TYPE_ONLINE)) {
-            config.setDictType(LogMiner.DICT_TYPE.ONLINE);
-        } else if (parameters.containsKey(DICT_TYPE_STORE_IN_REDO_LOG)) {
+        // setup config
+        if (parameters.containsKey(PAGE_SIZE)) {
+            config.setPageSize(parameters.get(PAGE_SIZE).getInt());
+        }
+
+        // Warning: those parameters should only specify one time or will introduce bugs
+        if (parameters.containsKey(LOG_TYPE) && parameters.get(LOG_TYPE).getString().equalsIgnoreCase(REDOLOG_TYPE_OFFLINE)) {
+            config.setBuildType(LogMiner.LOG_TYPE.OFFLINE);
+        } else {
+            config.setBuildType(LogMiner.LOG_TYPE.ONLINE);  // default online for incremental sync
+        }
+        //TODO: transit to online while offline redo log files finish
+
+        if (parameters.containsKey(DICT_TYPE_STORE_IN_REDO_LOG)) {
             config.setDictType(LogMiner.DICT_TYPE.STORE_IN_REDO_LOG);
         } else if (parameters.containsKey(DICT_TYPE_STORE_IN_FILE)) {
             config.setDictType(LogMiner.DICT_TYPE.STORE_IN_FILE);
+        } else {
+            config.setDictType(LogMiner.DICT_TYPE.ONLINE);  // default online for performance
         }
 
         if (parameters.containsKey(COMMITED_DATA_ONLY)) {

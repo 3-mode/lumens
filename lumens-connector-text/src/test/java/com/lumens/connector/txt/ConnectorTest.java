@@ -128,7 +128,7 @@ public class ConnectorTest implements TextConstants {
         Map<String, Value> propsR = new HashMap<>();
         propsR.put(ESCAPE_CHAR, new Value("\""));
         propsR.put(QUOTE_CHAR, new Value("\""));
-        propsR.put(FILEDELIMITER, new Value(","));
+        propsR.put(FIELDELIMITER, new Value(","));
         propsR.put(SCHEMA_PATH, new Value(folderSchemaPath));
         propsR.put(OPTION_MAXLINE, new Value(1000));
         propsR.put(ENCODING, new Value("utf-8"));
@@ -199,7 +199,7 @@ public class ConnectorTest implements TextConstants {
         Map<String, Value> propsR = new HashMap<>();
         propsR.put(ESCAPE_CHAR, new Value("\""));
         propsR.put(QUOTE_CHAR, new Value("\""));
-        propsR.put(FILEDELIMITER, new Value(","));
+        propsR.put(FIELDELIMITER, new Value(","));
         propsR.put(SCHEMA_PATH, new Value(schemaPath));
         propsR.put(OPTION_MAXLINE, new Value(1000));
         propsR.put(ENCODING, new Value("UTF-8"));
@@ -271,7 +271,7 @@ public class ConnectorTest implements TextConstants {
 
         Map<String, Value> propsW = new HashMap<>();
         propsW.put(ESCAPE_CHAR, new Value("\\"));
-        propsW.put(FILEDELIMITER, new Value("|"));
+        propsW.put(FIELDELIMITER, new Value("|"));
         propsW.put(SCHEMA_PATH, new Value(schemaPath));
         propsW.put(PATH, new Value(path2write));
         propsW.put(ENCODING, new Value("UTF-8"));
@@ -381,7 +381,7 @@ public class ConnectorTest implements TextConstants {
         Map<String, Value> propList = new HashMap<>();
         propList.put(ENCODING, new Value("UTF-8"));
         propList.put(ESCAPE_CHAR, new Value("\\"));
-        propList.put(FILEDELIMITER, new Value(","));
+        propList.put(FIELDELIMITER, new Value(","));
         propList.put(SCHEMA_PATH, new Value(schemaPath));
         propList.put(OPTION_MAXLINE, new Value(1000));
         propList.put(ENCODING, new Value("UTF-8"));
@@ -400,7 +400,7 @@ public class ConnectorTest implements TextConstants {
         Map<String, Value> propsR = new HashMap<>();
         propsR.put(ESCAPE_CHAR, new Value("\""));
         propsR.put(QUOTE_CHAR, new Value("\""));
-        propsR.put(FILEDELIMITER, new Value(","));
+        propsR.put(FIELDELIMITER, new Value(","));
         propsR.put(SCHEMA_PATH, new Value(schemaPath));
         propsR.put(OPTION_MAXLINE, new Value(1000));
         propsR.put(ENCODING, new Value("UTF-8"));
@@ -467,7 +467,7 @@ public class ConnectorTest implements TextConstants {
         TextConnector cntrW = (TextConnector) cntr.createConnector();
         Map<String, Value> propsW = new HashMap<>();
         propsW.put(ESCAPE_CHAR, new Value("\\"));
-        propsW.put(FILEDELIMITER, new Value("|"));
+        propsW.put(FIELDELIMITER, new Value("|"));
         propsW.put(SCHEMA_PATH, new Value(schemaPath));
         propsW.put(PATH, new Value(path2write));
         propsW.put(ENCODING, new Value("UTF-8"));
