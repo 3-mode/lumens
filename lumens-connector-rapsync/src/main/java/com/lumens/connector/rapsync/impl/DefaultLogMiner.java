@@ -27,7 +27,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
     private DatabaseClient dbClient = null;
     private Metadata meta = null;
     private boolean isFirstBuild = true;
-    private RedoLog redolog = null;
+    private CachedRedoLog redolog = null;
 
     public DefaultLogMiner(DatabaseClient dbClient, Config config) {
         this.dbClient = dbClient;
@@ -39,7 +39,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
             throw new RuntimeException("Should not specify option DICT_FROM_REDO_LOGS to analyze online redo logs");
         }
 
-        redolog = new RedoLog(dbClient);  // TODO: changed to cached redo log
+        redolog = new CachedRedoLog(dbClient);  // TODO: changed to cached redo log
     }
 
     @Override
@@ -80,8 +80,12 @@ public class DefaultLogMiner implements LogMiner, Constants {
                     }
                 }
             }
-            String buildList = redolog.buildLogMinerStringFromList(config.getLogType() == LOG_TYPE.ONLINE
-                    ? redolog.getOnlineFileList() : redolog.getOfflineFileList(), true);
+            redolog.setLogType(config.getLogType());
+            RedoLogQuery query = redolog.getQuery();
+            if (!query.hasNext()) {
+                return;
+            }
+            String buildList = redolog.buildLogMinerStringFromList(query.next(), true);
             dbClient.execute(buildList + "");
 
             // checking added redo logs

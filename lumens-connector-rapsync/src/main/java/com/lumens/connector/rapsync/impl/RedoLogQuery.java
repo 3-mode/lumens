@@ -9,7 +9,9 @@ import java.util.List;
  *
  * @author Xiaoxin(whiskeyfly@163.com)
  */
-public interface CachedRedoLogQuery {
+public interface RedoLogQuery {
+
     boolean hasNext();
-    List<String> getNext();
+
+    List<String> next();
 }

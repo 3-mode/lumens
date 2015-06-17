@@ -3,6 +3,7 @@
  */
 package com.lumens.connector.rapsync.impl;
 
+import com.lumens.connector.rapsync.api.LogMiner.LOG_TYPE;
 import com.lumens.logsys.SysLogFactory;
 import java.sql.ResultSet;
 import java.util.List;
@@ -20,14 +21,40 @@ public class RedoLog implements Constants {
     protected Boolean isSupplementalLog = null;
     protected Boolean isArchivedLogMode = null;
     protected String minScn = null;
+    protected LOG_TYPE logType = LOG_TYPE.ONLINE;
 
     public RedoLog(DatabaseClient dbClient) {
         this.dbClient = dbClient;
     }
 
+    public RedoLog setLogType(LOG_TYPE logType) {
+        this.logType = logType;
+        return this;
+    }
+
     public int getValidArchivedLogSize() {
         try (ResultSet resultSet = dbClient.executeGetResult(SQL_QUERY_ARCHIVED_LOG_SIZE)) {
-            return resultSet.getInt(1);
+            int size = 0;
+            if (resultSet.next()) {
+                size = resultSet.getInt(1);
+            }
+            return size;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            dbClient.releaseStatement();
+        }
+    }
+
+    public int getLogCount() {
+        String query = logType == LOG_TYPE.ONLINE ? SQL_QUERY_ONLINE_LOG_COUNT : SQL_QUERY_ARCHIVED_LOG_COUNT;
+        try (ResultSet resultSet = dbClient.executeGetResult(query)) {
+            int count = 0;
+            if (resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+
+            return count;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         } finally {

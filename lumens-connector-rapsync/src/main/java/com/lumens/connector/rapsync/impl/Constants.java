@@ -34,9 +34,11 @@ public interface Constants {//extends DBConstants {
 
     //public String SQL_QUERY_RESULT = "SELECT scn,operation,timestamp,status,sql_redo FROM v$logmnr_contents WHERE seg_owner='" + Constants.DATABASE_SOURCE_CLIENT_USERNAME + "' AND seg_type_name='TABLE' AND operation !='SELECT_FOR_UPDATE'";
     public String SQL_QUERY_RESULT = "SELECT %s FROM sys.v$logmnr_contents";
-    public String SQL_QUERY_ARCHIVED_LOG = "SELECT name, status FROM sys.v$archived_log order by sequence# asc";
+    public String SQL_QUERY_ARCHIVED_LOG = "SELECT name, status FROM sys.v$archived_log WHERE DELETED='NO' ORDER BY sequence# asc";
     public String SQL_QUERY_LOGFILE = "SELECT member FROM sys.v$logfile order BY member asc";
-    public String SQL_QUERY_ARCHIVED_LOG_SIZE = "SELECT SUM(BLOCKS*BLOCK_SIZE)/1024/1024 ARCHIVED_LOG_SIZE FROM V$ARCHIVED_LOG WHERE DELETED='NO'";
+    public String SQL_QUERY_ARCHIVED_LOG_SIZE = "SELECT SUM(BLOCKS*BLOCK_SIZE)/1024/1024 ARCHIVED_LOG_SIZE FROM V$ARCHIVED_LOG WHERE DELETED='NO' ORDER BY sequence# asc";
+    public String SQL_QUERY_ARCHIVED_LOG_COUNT = "SELECT COUNT(*) FROM V$ARCHIVED_LOG WHERE DELETED='NO'";
+    public String SQL_QUERY_ONLINE_LOG_COUNT = "SELECT COUNT(*) FROM V$LOGFILE";
     public String SQL_QUERY_LOG_HISTORY = "SELECT * FROM sys.v$log_history";
     public String SQL_QUERY_LOG = "SELECT * FROM sys.v$log";
     public String SQL_QUERY_RESULT_SIZE = "SELECT count(sql_redo) FROM sys.v$logmnr_contents";
