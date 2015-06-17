@@ -4,7 +4,6 @@
 package com.lumens.connector.database.client;
 
 import com.lumens.connector.Direction;
-import com.lumens.connector.StatusUtils;
 import com.lumens.connector.database.Client;
 import com.lumens.connector.database.DBConstants;
 import com.lumens.connector.database.DBUtils;
@@ -109,14 +108,13 @@ public abstract class AbstractClient implements Client, DBConstants {
                         Format field = format.addChild(columnName, Format.Form.FIELD, toType(dataType));
                         field.setProperty(DATA_TYPE, new Value(dataType));
                         field.setProperty(DATA_LENGTH, new Value(dataLength));
-                    }
-                    else {
+                    } else {
                         log.warn(String.format("Duplicate field '%s'", columnName));
                     }
                 }
 
                 if (direction == Direction.OUT)
-                    StatusUtils.buildStautsFormat(format);
+                    format.createStatus();
             }
             return format;
         } catch (Exception e) {

@@ -18,6 +18,8 @@ import com.lumens.engine.handler.InspectionHandler;
 import com.lumens.logsys.SysLogFactory;
 import com.lumens.model.Element;
 import com.lumens.processor.Processor;
+import com.lumens.processor.ProcessorContext;
+import com.lumens.processor.ProcessorExecutionContext;
 import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
 import java.util.ArrayList;
@@ -94,51 +96,53 @@ public class DataTransformer extends AbstractTransformComponent implements RuleC
 
     @Override
     public List<ExecuteContext> execute(ExecuteContext context) {
-        List<ExecuteContext> exList = new ArrayList<>();
         String targetFmtName = context.getTargetFormatName();
-        List<TransformRuleEntry> rules = ruleFindList.get(targetFmtName);
         ElementChunk inputChunk = context.getInput();
-        if (log.isDebugEnabled()) {
-            log.debug(String.format("Transform '%s' is handling target '%s'", getName(), targetFmtName));
-            log.debug(String.format("Transform '%s' input chunk size '%d'.", getName(), inputChunk.getData() != null ? inputChunk.getData().size() : 0));
-        }
+        List<TransformRuleEntry> rules = ruleFindList.get(targetFmtName);
+        List<ExecuteContext> exList = new ArrayList<>();
         handleInputLogging(context.getInspectionHandlers(), targetFmtName, inputChunk.getData());
         // TODO in current design, only one target rule can be found
         for (TransformRuleEntry rule : rules) {
-            List<Element> results = new ArrayList<>();
-            try {
-                List<Element> result = (List<Element>) processor.execute(rule.getRule(), inputChunk.getData());
-                if (!result.isEmpty())
-                    results.addAll(result);
-                // Push the result to target components
-                if (!results.isEmpty() && this.hasTarget()) {
-                    for (TransformComponent target : this.getTargetList().values())
-                        if (!result.isEmpty() && target.accept(rule.getTargetFormatName()))
-                            exList.add(new TransformExecuteContext(context, new ElementChunk(inputChunk.isLast(), results), target, rule.getTargetFormatName(), context.getInspectionHandlers()));
-                }
-            } catch (Exception e) {
-                // TODO If ignore error then continue
-                throw new TransformException(this, e);
-            }
-
-            if (log.isDebugEnabled())
-                log.debug(String.format("Transform '%s' result chunk size '%d'.", getName(), results.size()));
-
+            List<Element> results = executeTransform(context, rule, inputChunk, exList);
             handleOutputLogging(context.getInspectionHandlers(), rule.getTargetFormatName(), results);
         }
         return exList;
     }
 
-    private void handleInputLogging(List<InspectionHandler> handlers, String targetName, List<Element> input) {
-        for (InspectionHandler handler : handlers)
-            if (handler instanceof InputOutputInspectionHandler)
-                ((InputOutputInspectionHandler) handler).processInput(this, targetName, input);
+    private List<Element> executeTransform(ExecuteContext context, TransformRuleEntry rule, ElementChunk inputChunk, List<ExecuteContext> exList) {
+        try {
+            ProcessorContext pCtx = new ProcessorExecutionContext(rule.getRule(), inputChunk.getData());
+            List<Element> results = (List<Element>) processor.execute(pCtx);
+            // Push the result to target components
+            if (!results.isEmpty() && this.hasTarget()) {
+                for (TransformComponent target : this.getTargetList().values())
+                    if (!results.isEmpty() && target.accept(rule.getTargetFormatName()))
+                        exList.add(new TransformExecuteContext(context,
+                                                               new ElementChunk(inputChunk.isLast(), results),
+                                                               target, rule.getTargetFormatName(),
+                                                               context.getInspectionHandlers()));
+            }
+            return results;
+        } catch (Exception e) {
+            // TODO If ignore error then continue
+            throw new TransformException(this, e);
+        }
     }
 
-    private void handleOutputLogging(List<InspectionHandler> handlers, String targetName, List<Element> input) {
+    private void handleInputLogging(List<InspectionHandler> handlers, String targetFmtName, List<Element> input) {
+        if (log.isDebugEnabled())
+            log.debug(String.format("Transform '%s', target format is '%s', input chunk size '%d'.", getName(), targetFmtName, input != null ? input.size() : 0));
         for (InspectionHandler handler : handlers)
             if (handler instanceof InputOutputInspectionHandler)
-                ((InputOutputInspectionHandler) handler).processOutput(this, targetName, input);
+                ((InputOutputInspectionHandler) handler).processInput(this, targetFmtName, input);
+    }
+
+    private void handleOutputLogging(List<InspectionHandler> handlers, String targetName, List<Element> results) {
+        if (log.isDebugEnabled())
+            log.debug(String.format("Transform '%s' result chunk size '%d'.", getName(), results.size()));
+        for (InspectionHandler handler : handlers)
+            if (handler instanceof InputOutputInspectionHandler)
+                ((InputOutputInspectionHandler) handler).processOutput(this, targetName, results);
     }
 
     @Override

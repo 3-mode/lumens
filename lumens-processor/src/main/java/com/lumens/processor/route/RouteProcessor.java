@@ -3,11 +3,9 @@
  */
 package com.lumens.processor.route;
 
-import com.lumens.model.Element;
 import com.lumens.processor.AbstractProcessor;
 import com.lumens.processor.Processor;
-import com.lumens.processor.Rule;
-import java.util.List;
+import com.lumens.processor.ProcessorContext;
 
 public class RouteProcessor extends AbstractProcessor {
 
@@ -15,7 +13,7 @@ public class RouteProcessor extends AbstractProcessor {
     }
 
     @Override
-    public Object execute(Rule rule, List<Element> element) {
+    public Object execute(ProcessorContext processorCtx) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

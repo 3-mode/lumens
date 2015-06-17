@@ -13,6 +13,7 @@ import com.lumens.model.Value;
 import com.lumens.model.serializer.ElementSerializer;
 import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.Processor;
+import com.lumens.processor.ProcessorExecutionContext;
 import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
 import java.util.Arrays;
@@ -63,7 +64,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         rule.getRuleItem("Search.Search.assetSearchCriteria.Filter.Expression.ExpressionOperator").setScript("\"EqualTo\"");
         rule.getRuleItem("Search.Search.assetSearchCriteria.Filter.Expression.ExpressionValue").setScript("\"sparta\\\\am01\"");
         Processor transformProcessor = new TransformMapper();
-        List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
+        List<Element> result = (List<Element>) transformProcessor.execute(new ProcessorExecutionContext(rule, null));
         new ElementSerializer(result.get(0), true).writeToXml(System.out);
         connector.close();
         SoapMessageBuilder soapBuilder = new SoapMessageBuilder();
@@ -99,7 +100,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         rule.getRuleItem("RetrieveIncident.RetrieveIncidentRequest.model.instance.AssigneeName").setScript("\'test\'");
         rule.getRuleItem("RetrieveIncident.RetrieveIncidentRequest.model.instance.ClosedTime").setScript("dateToString(now(), \"yyyy-MM-dd HH:mm:ss\")");
         Processor transformProcessor = new TransformMapper();
-        List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
+        List<Element> result = (List<Element>) transformProcessor.execute(new ProcessorExecutionContext(rule, null));
         new ElementSerializer(result.get(0), true).writeToXml(System.out);
         connector.close();
         SoapMessageBuilder soapBuilder = new SoapMessageBuilder();
@@ -117,7 +118,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         rule = new TransformRule(getOpenFundString);
         rule.getRuleItem("getOpenFundString.getOpenFundString.userID").setScript("\"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\"");
         transformProcessor = new TransformMapper();
-        result = (List<Element>) transformProcessor.execute(rule, null);
+        result = (List<Element>) transformProcessor.execute(new ProcessorExecutionContext(rule, null));
         new ElementSerializer(result.get(0), true).writeToXml(System.out);
         new FormatSerializer(getOpenFundString).writeToXml(System.out);
 
@@ -148,7 +149,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         TransformRule rule = new TransformRule(getRequests);
         rule.getRuleItem("getRequests.requestIds.id").setScript("\"30392\"");
         TransformMapper transformProcessor = new TransformMapper();
-        List<Element> result = (List<Element>) transformProcessor.execute(rule, null);
+        List<Element> result = (List<Element>) transformProcessor.execute(new ProcessorExecutionContext(rule, null));
         new ElementSerializer(result.get(0), true).writeToXml(System.out);
         Operation op = connector.getOperation();
         services = connector.getFormatList(Direction.OUT);

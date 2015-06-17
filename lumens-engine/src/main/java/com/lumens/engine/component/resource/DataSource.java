@@ -101,19 +101,21 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     @Override
     public List<ExecuteContext> execute(ExecuteContext context) {
         String targetFmtName = context.getTargetFormatName();
-        if (log.isDebugEnabled())
-            log.debug(String.format("Datasource '%s' is handling target '%s'", getName(), targetFmtName));
         FormatEntry entry = registerOUTFormatList.get(targetFmtName);
-        List<ExecuteContext> exList = new ArrayList<>();
-        List<Element> results = new ArrayList<>();
+        List<Element> results = null;
         DataContext dataCtx = null;
         OperationResult opRet = null;
+
+        if (log.isDebugEnabled())
+            log.debug(String.format("Datasource '%s' is handling target '%s'", getName(), targetFmtName));
+
         if (context instanceof DataContext) {
             if (log.isDebugEnabled())
                 log.debug("Get a next chunk result");
 
             if (this != context.getTargetComponent())
-                throw new RuntimeException(String.format("Fatal logical error with target component '%s'", context.getTargetComponent().getName()));
+                throw new RuntimeException(String.format("Fatal logical error with target component '%s'",
+                                                         context.getTargetComponent().getName()));
 
             opRet = ((DataContext) context).getResult();
             context = context.getParentContext();
@@ -124,7 +126,8 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             ElementChunk inputChunk = context.getInput();
 
             if (log.isDebugEnabled())
-                log.debug(String.format("Datasource '%s' input chunk size '%d'.", getName(), inputChunk.getData() != null ? inputChunk.getData().size() : 0));
+                log.debug(String.format("Datasource '%s' input chunk size '%d'.",
+                                        getName(), inputChunk.getData() != null ? inputChunk.getData().size() : 0));
 
             // Log input data
             handleInputLogging(context.getInspectionHandlers(), targetFmtName, inputChunk.getData());
@@ -138,8 +141,8 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             }
         }
 
-        if (opRet != null && opRet.hasData())
-            results.addAll(opRet.getData());
+        // Get the transform results
+        results = (opRet != null && opRet.hasData()) ? opRet.getData(): new ArrayList<Element>();
 
         if (log.isDebugEnabled())
             log.debug(String.format("Datasource '%s' result chunk size '%d'.", getName(), results.size()));
@@ -156,10 +159,13 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
             dataCtx = context.getParentDataContext();
         }
 
+        List<ExecuteContext> exList = new ArrayList<>();
         if (opRet != null && !results.isEmpty() && this.hasTarget()) {
             for (TransformComponent target : this.getTargetList().values()) {
                 if (!results.isEmpty() && entry != null && target.accept(entry.getName()))
-                    exList.add(new TransformExecuteContext(dataCtx, new ElementChunk(!opRet.hasNext(), results), target, entry.getName(), context.getInspectionHandlers()));
+                    exList.add(new TransformExecuteContext(dataCtx,
+                                                           new ElementChunk(!opRet.hasNext(), results),
+                                                           target, entry.getName(), context.getInspectionHandlers()));
             }
         }
 

@@ -3,7 +3,7 @@
  */
 package com.lumens.processor.script;
 
-import com.lumens.processor.Context;
+import com.lumens.processor.transform.MapperContext;
 import com.lumens.processor.Script;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeJavaObject;
@@ -53,7 +53,7 @@ public class JavaScript implements Script {
     }
 
     @Override
-    public Object execute(Context ctx) {
+    public Object execute(MapperContext ctx) {
         try {
             Object[] args = {ctx};
             // *** It is must to enter a new javascript context for current execution thread to invoke the function

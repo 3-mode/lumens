@@ -42,6 +42,11 @@ public class DataFormat implements Format {
         this.type = type;
     }
 
+    @Override
+    public Format createStatus() {
+        return FormatUtils.buildStautsFormat(this);
+    }
+
     protected Format copy() {
         DataFormat copied = new DataFormat(getName(), getForm(), getType());
         if (propertyList != null) {
