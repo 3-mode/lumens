@@ -23,7 +23,7 @@ public interface Client {
 
     public Map<String, Format> getFormatList(Direction direction, boolean fullLoad);
 
-    public Format getFormat(Format format, Direction direction);
+    public Format getFormat(Format format);
 
     public void execute(String SQL);
 
