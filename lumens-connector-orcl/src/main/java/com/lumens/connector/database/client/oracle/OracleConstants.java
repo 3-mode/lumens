@@ -23,5 +23,5 @@ public interface OracleConstants extends DBConstants {
     public String BLOB = "BLOB";
     // Oracle SQL to query tables information
     public String TABLENAMES = "select t.table_name,t.comments, t.TABLE_TYPE from user_tab_comments t";
-    public String TABLECOLUMNS = "select t.COLUMN_NAME, t.DATA_TYPE, t.DATA_LENGTH from user_tab_comments t where t.TABLE_NAME = '%s'";
+    public String TABLECOLUMNS = "select t.COLUMN_NAME, t.DATA_TYPE, t.DATA_LENGTH from user_tab_columns t where t.TABLE_NAME = '%s'";
 }
