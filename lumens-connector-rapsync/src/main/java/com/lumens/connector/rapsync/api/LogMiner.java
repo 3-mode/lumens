@@ -38,6 +38,8 @@ public interface LogMiner {
 
     public void build();
 
+    boolean hasNextBuild();
+
     public void start();
 
     public void end();

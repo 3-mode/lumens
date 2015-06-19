@@ -48,7 +48,7 @@ public class RapSyncQueryResult implements OperationResult {
 
     @Override
     public boolean hasNext() {
-        return (result != null && result.size() == 1000)
+        return (result != null && result.size() == operation.getPageSize())
                 || (input.getStart() < input.getData().size());
     }
 
@@ -56,8 +56,17 @@ public class RapSyncQueryResult implements OperationResult {
     public OperationResult executeNext() {
         if (hasNext() && result.size() < builder.getPageSize()) {
             try {
-                this.input.setStart(input.getStart() + 1);
-                return operation.execute(input, builder.getFormat());
+                // Build next query from redo log list
+                if (miner.hasNextBuild()) {
+                    miner.build();
+                    String sql = String.format(builder.generateSelectSQL(input.getData().get(input.getStart())), builder.getPageSize(), 1);
+                    ResultSet resultSet = miner.query(sql);
+                    this.result = new DBElementBuilder().buildElement(builder.getFormat(), resultSet);
+                } else {
+                    // Get next query condition
+                    this.input.setStart(input.getStart() + 1);
+                    return operation.execute(input, builder.getFormat());
+                }
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }

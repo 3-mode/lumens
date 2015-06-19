@@ -22,9 +22,20 @@ import java.util.List;
 public class RapSyncOperation implements Operation, RapSyncConstants {
 
     private LogMiner miner = null;
+    private int pageSize = 1000;
 
     public RapSyncOperation(LogMiner miner) {
         this.miner = miner;
+    }
+
+    public Operation setPageSize(int size) {
+        pageSize = size;
+
+        return this;
+    }
+
+    public int getPageSize() {
+        return pageSize;
     }
 
     @Override
@@ -43,11 +54,9 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
                 if (strOper == null || QUERY.equalsIgnoreCase(strOper)) {
                     if (input.getStart() < i) {
                         input.setStart(i);
-                    }                   
+                    }
 
                     return new RapSyncQueryResult(this, miner, new RapSyncQuerySQLBuilder(output), input);
-                    //ResultSet result = miner.query(new RapSyncQuerySQLBuilder(output).generateSelectSQL(elem));
-                    //return new RapSyncResult(new DBElementBuilder().buildElement(output, result));
                 } else if (SYNC.equalsIgnoreCase(strOper)) { // sync here
                     RedoValue value = new RedoValue();
                     value.SCN = elem.getChildByPath(COLUMN_SCN).getValue().getInt();
@@ -55,7 +64,7 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
                     value.OPERATION = elem.getChildByPath(COLUMN_OPERATION).getValue().toString();
                     value.SEG_OWNER = elem.getChildByPath(COLUMN_SEG_OWNER).getValue().toString();
                     value.TABLE_NAME = elem.getChildByPath(COLUMN_TABLE_NAME).getValue().toString();
-                    if (value.OPERATION.equalsIgnoreCase("DDL")) {
+                    if (value.OPERATION.equalsIgnoreCase("ddl")) {
                         miner.buildDictionary();
                     }
 

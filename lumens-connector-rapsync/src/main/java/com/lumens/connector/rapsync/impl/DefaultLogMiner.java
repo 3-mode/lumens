@@ -83,11 +83,11 @@ public class DefaultLogMiner implements LogMiner, Constants {
             redolog.setLogType(config.getLogType());
             RedoLogQuery query = redolog.getQuery();
             if (!query.hasNext()) {
+                log.info("No more log files to analyze.");
                 return;
             }
             String buildList = redolog.buildLogMinerStringFromList(query.next(), true);
-            dbClient.execute(buildList + "");
-
+            
             // checking added redo logs
             if (log.isDebugEnabled()) {
                 ResultSet addedLogsResult = dbClient.executeGetResult(SQL_QUERY_LOG_INFO);
@@ -98,6 +98,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
                 dbClient.releaseStatement();
             }
 
+            dbClient.execute(buildList);
             isFirstBuild = false;
         } catch (Exception ex) {
             log.error("Fail to build log miner. Error message:");
@@ -106,6 +107,11 @@ public class DefaultLogMiner implements LogMiner, Constants {
         }
     }
 
+    @Override
+    public boolean hasNextBuild(){
+        return redolog.getQuery().hasNext();
+    }
+    
     @Override
     public void start() {
         log.debug("Start redolog analysis.");

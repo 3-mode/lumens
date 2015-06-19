@@ -13,37 +13,42 @@ import java.util.List;
 public class CachedRedoLog extends RedoLog {
 
     private List<String> logList = null;
-    private int size = 0;
+    private int logCount = 0;
     private int index = 0;
+    private int queryPageSize = 10;
 
     public CachedRedoLog(DatabaseClient dbClient) {
         super(dbClient);
     }
 
+    public void setPageSize(int page){
+        queryPageSize = page;
+    }
+    
     private class RedoLogQueryImpl implements RedoLogQuery {
 
         @Override
         public boolean hasNext() {
-            if (size == 0) {
-                size = CachedRedoLog.this.getLogCount();
+            if (logCount == 0) {
+                logCount = getLogCount();
             }
             if (logList == null) {
                 try {
-                    logList = CachedRedoLog.this.logType == LOG_TYPE.ONLINE ? CachedRedoLog.this.getOnlineFileList() : CachedRedoLog.this.getOfflineFileList();
+                    logList = logType == LOG_TYPE.ONLINE ? getOnlineFileList() : getOfflineFileList();
                 } catch (Exception ex) {
                     log.error("Fail to get redo log list. Error message:%s" + ex.getMessage());
                 }
-                return CachedRedoLog.this.index < CachedRedoLog.this.size;
+                return CachedRedoLog.this.index < CachedRedoLog.this.logCount;
             }
 
-            return index < size;
+            return index < logCount;
         }
 
         @Override
         public List<String> next() {
-            int last = index + 10;
-            if (last > size) {
-                last = size;
+            int last = index + queryPageSize;
+            if (last > logCount) {
+                last = logCount;
             }
             List<String> list = logList.subList(index, last);
             index += last;
