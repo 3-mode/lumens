@@ -4,58 +4,19 @@
 package com.lumens.processor.transform;
 
 import com.lumens.model.Element;
-import com.lumens.processor.Context;
 import org.mozilla.javascript.Scriptable;
 
 /**
  *
- * @author Shaofeng Wang <shaofeng.wang@outlook.com>
+ * @author shaofeng wang
  */
-public class MapperContext implements Context {
-    private final TransformRuleItem rootRuleItem;
-    private final Element rootSourceElement;
-    private TransformRuleItem currentRuleItem;
-    protected MapperContext parent;
+public interface MapperContext {
 
-    public MapperContext(MapperContext parent, TransformRuleItem currentRuleItem) {
-        this.parent = parent;
-        this.rootRuleItem = parent.getRootRuleItem();
-        this.rootSourceElement = parent.getRootSourceElement();
-        this.currentRuleItem = currentRuleItem;
-    }
+    public Element getRootSourceElement();
 
-    public MapperContext(TransformRuleItem rootRuleItem, Element rootSrcElement) {
-        this.rootRuleItem = rootRuleItem;
-        this.rootSourceElement = rootSrcElement;
-    }
+    public MapperContext getParent();
 
-    @Override
-    public Context getParent() {
-        return this.parent;
-    }
+    public void declareVariables(Scriptable scope);
 
-    public TransformRuleItem getRootRuleItem() {
-        return rootRuleItem;
-    }
-
-    @Override
-    public Element getRootSourceElement() {
-        return this.rootSourceElement;
-    }
-
-    public TransformRuleItem getCurrentRuleItem() {
-        return currentRuleItem != null ? currentRuleItem : getRootRuleItem();
-    }
-
-    @Override
-    public void declareVariables(Scriptable scope) {
-        if (getParent() != null)
-            getParent().declareVariables(scope);
-    }
-
-    @Override
-    public void removeVariables(Scriptable scope) {
-        if (getParent() != null)
-            getParent().removeVariables(scope);
-    }
+    public void removeVariables(Scriptable scope);
 }

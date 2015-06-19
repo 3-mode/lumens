@@ -53,6 +53,7 @@ public abstract class DBOperation implements Operation, DBConstants {
                 } else if (UPDATE_ONLY.equalsIgnoreCase(strOper)) {
                     client.execute(getWriteSQLBuilder().generateUpdateSQL(elem));
                 } else {
+                    // TODO rollback
                     // TODO UPDATE_OR_INSERT.equalsIgnoreCase(operation)
                     throw new RuntimeException("Not supported now");
                 }

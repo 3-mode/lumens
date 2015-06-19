@@ -84,4 +84,6 @@ public interface Format {
     public boolean isArrayOfStruct();
 
     public Format depthCopy();
+
+    public Format createStatus();
 }

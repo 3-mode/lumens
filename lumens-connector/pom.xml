@@ -12,6 +12,11 @@
     <name>lumens-connector</name>
     <dependencies>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-log</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.lumens</groupId>
             <artifactId>lumens-model</artifactId>
             <version>${project.version}</version>

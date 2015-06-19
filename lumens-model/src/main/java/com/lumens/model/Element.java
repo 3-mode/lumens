@@ -37,7 +37,7 @@ public interface Element {
     public Element getChildByPath(Path path);
 
     public List<Element> getChildren();
-    
+
     public boolean hasChildren();
 
     public Format getFormat();
@@ -63,4 +63,10 @@ public interface Element {
     public boolean isArrayOfStruct();
 
     public boolean isArrayItem();
+
+    public boolean supportAccessory();
+
+    public Value getAccessory(String name);
+
+    public Object setAccessory(String name, Object value);
 }

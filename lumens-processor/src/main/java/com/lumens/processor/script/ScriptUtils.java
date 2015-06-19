@@ -4,7 +4,7 @@
 package com.lumens.processor.script;
 
 import com.lumens.model.Element;
-import com.lumens.processor.Context;
+import com.lumens.processor.transform.MapperContext;
 import com.lumens.processor.transform.ForeachMapperContext;
 import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
@@ -24,18 +24,28 @@ public class ScriptUtils {
         }
     }
 
-    public static Object getElement(Context ctx, String path) {
+    public static Object getElement(MapperContext ctx, String path) {
         AccessPathScript script = new AccessPathScript(path);
         return script.execute(ctx);
+    }
+
+    public static Object getSourceInputElement(MapperContext ctx, String compName, String path) {
+        Element rootSrc = ctx.getRootSourceElement();
+        return null;
+    }
+
+    public static Object getSourceOutputElement(MapperContext ctx,  String compName, String path) {
+        Element rootSrc = ctx.getRootSourceElement();
+        return null;
     }
 
     private static InputStream getInputStream(String name) throws Exception {
         return ScriptUtils.class.getClassLoader().getResourceAsStream(name);
     }
 
-    public static Element getStartElement(Context ctx) {
+    public static Element getStartElement(MapperContext ctx) {
         Element rootSrcElement;
-        Context currentCtx = ctx;
+        MapperContext currentCtx = ctx;
         // Search the parent for each context from current node
         while (currentCtx != null) {
             if (currentCtx instanceof ForeachMapperContext) {

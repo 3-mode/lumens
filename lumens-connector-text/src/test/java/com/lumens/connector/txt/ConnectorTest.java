@@ -13,6 +13,7 @@ import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
 import com.lumens.processor.Processor;
+import com.lumens.processor.ProcessorExecutionContext;
 import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
 import java.io.BufferedReader;
@@ -179,7 +180,7 @@ public class ConnectorTest implements TextConstants {
                         line.append(",");
                     }
                     Value val = el.getValue();
-                    line.append(val.isNull()  ? "" : val.toString());
+                    line.append(val.isNull() ? "" : val.toString());
                 }
                 System.out.println(line);
             }
@@ -252,7 +253,7 @@ public class ConnectorTest implements TextConstants {
                         line.append(",");
                     }
                     Value val = el.getValue();
-                    line.append(val.isNull() ? " " : val.toString());                    
+                    line.append(val.isNull() ? " " : val.toString());
                 }
                 System.out.println(line);
             }
@@ -320,7 +321,7 @@ public class ConnectorTest implements TextConstants {
                     line.append(",");
                 }
                 Value val = el.getValue();
-                line.append(val.isNull()  ? "" : val.toString());
+                line.append(val.isNull() ? "" : val.toString());
             }
             System.out.println(line);
             System.out.println();
@@ -362,7 +363,7 @@ public class ConnectorTest implements TextConstants {
                     }
 
                     Value val = el.getValue();
-                    lineA.append(val.isNull()  ? "" : val.toString());
+                    lineA.append(val.isNull() ? "" : val.toString());
                 }
                 System.out.println(lineA);
             }
@@ -453,7 +454,7 @@ public class ConnectorTest implements TextConstants {
                         line.append(",");
                     }
                     Value val = el.getValue();
-                    line.append(val.isNull()  ? "" : val.toString());
+                    line.append(val.isNull() ? "" : val.toString());
                 }
                 System.out.println(line);
             }
@@ -494,7 +495,7 @@ public class ConnectorTest implements TextConstants {
 
         Processor transformMappter = new TransformMapper();
         List<Element> TextMessage = new ArrayList<>();
-        List<Element> resultList = (List<Element>) transformMappter.execute(rule, resultR.getData());
+        List<Element> resultList = (List<Element>) transformMappter.execute(new ProcessorExecutionContext(rule, resultR.getData()));
         TextMessage.addAll(resultList);
         assertTrue(TextMessage.size() == resultR.getData().size());
 

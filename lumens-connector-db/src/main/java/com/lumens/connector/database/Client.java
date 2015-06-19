@@ -21,9 +21,9 @@ public interface Client {
 
     public void close();
 
-    public Map<String, Format> getFormatList(Direction direction, boolean fullLoad);
+    public Format getFormat(Format format, Direction direction);
 
-    public Format getFormat(Format format);
+    public Map<String, Format> getFormatList(Direction direction, boolean fullLoad);
 
     public void execute(String SQL);
 

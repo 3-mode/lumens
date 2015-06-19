@@ -83,6 +83,10 @@ public final class Value {
         this.value = value;
     }
 
+    public Value(Object value) {
+        this.set(value);
+    }
+
     public void set(Object value) {
         if ((isBoolean() && value instanceof Boolean)
             || (isByte() && value instanceof Byte)

@@ -3,6 +3,7 @@
  */
 package com.lumens.processor;
 
+import com.lumens.processor.transform.MapperContext;
 import com.lumens.model.DataElement;
 import com.lumens.model.DataFormat;
 import com.lumens.model.Element;
@@ -62,7 +63,7 @@ public class ScriptTest {
             scripts.add(new JavaScript("function f" + i + "() { var i = now(); return i; }"));
         for (int i = 0; i < 40000; ++i) {
             for (JavaScript script : scripts) {
-                Object v = script.execute(new Context() {
+                Object v = script.execute(new MapperContext() {
 
                     @Override
                     public Element getRootSourceElement() {
@@ -70,7 +71,7 @@ public class ScriptTest {
                     }
 
                     @Override
-                    public Context getParent() {
+                    public MapperContext getParent() {
                         return null;
                     }
 

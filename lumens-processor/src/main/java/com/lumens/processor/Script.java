@@ -3,9 +3,11 @@
  */
 package com.lumens.processor;
 
+import com.lumens.processor.transform.MapperContext;
+
 public interface Script {
 
-    public Object execute(Context ctx);
+    public Object execute(MapperContext ctx);
     
     public String getScriptText();
 }

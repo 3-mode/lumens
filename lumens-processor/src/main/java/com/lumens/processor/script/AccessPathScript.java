@@ -7,7 +7,7 @@ import com.lumens.model.AccessPath;
 import com.lumens.model.Element;
 import com.lumens.model.Path;
 import com.lumens.model.Type;
-import com.lumens.processor.Context;
+import com.lumens.processor.transform.MapperContext;
 import com.lumens.processor.Script;
 
 // TODO need to refine the package path, if it is correct to put the class into
@@ -21,7 +21,7 @@ public class AccessPathScript implements Script {
     }
 
     @Override
-    public Object execute(Context ctx) {
+    public Object execute(MapperContext ctx) {
         Element srcElement = null;
         Element startSrcElement = ScriptUtils.getStartElement(ctx);
         Path startfullPath = startSrcElement.getFormat().getFullPath();

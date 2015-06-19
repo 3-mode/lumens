@@ -10,12 +10,12 @@ import org.mozilla.javascript.Scriptable;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class ForeachMapperContext extends MapperContext {
+public class ForeachMapperContext extends TransformMapperContext {
     private final TransformForeach foreach;
     private final Element sourceElement;
     private int currentIndex;
 
-    public ForeachMapperContext(MapperContext ctx, TransformForeach foreach, int currentIndex, Element sourceElement) {
+    public ForeachMapperContext(TransformMapperContext ctx, TransformForeach foreach, int currentIndex, Element sourceElement) {
         super(ctx.getRootRuleItem(), ctx.getRootSourceElement());
         this.parent = ctx;
         this.foreach = foreach;

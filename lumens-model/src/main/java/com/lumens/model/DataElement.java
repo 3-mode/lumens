@@ -16,6 +16,7 @@ import java.util.Map;
 public class DataElement implements Element {
 
     protected Map<String, Element> children;
+    protected AccessoryManager accessoryMgr;
     protected List<Element> childrenList;
     protected List<Element> arrayItems;
     protected Format format;
@@ -26,6 +27,15 @@ public class DataElement implements Element {
 
     public DataElement(Format format) {
         this.format = format;
+    }
+
+    public DataElement(Format format, AccessoryManager accessoryMgr) {
+        this.format = format;
+        this.accessoryMgr = accessoryMgr;
+    }
+
+    public static Element createRootElement(Format format) {
+        return new DataElement(format, new AccessoryManager());
     }
 
     @Override
@@ -228,5 +238,20 @@ public class DataElement implements Element {
     @Override
     public boolean isNull() {
         return value == null || value.isNull();
+    }
+
+    @Override
+    public Value getAccessory(String name) {
+        return supportAccessory() ? accessoryMgr.getValue(name) : null;
+    }
+
+    @Override
+    public Object setAccessory(String name, Object value) {
+        return supportAccessory() ? accessoryMgr.setValue(name, value) : null;
+    }
+
+    @Override
+    public boolean supportAccessory() {
+        return accessoryMgr != null;
     }
 }

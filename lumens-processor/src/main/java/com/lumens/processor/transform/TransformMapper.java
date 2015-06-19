@@ -9,6 +9,7 @@ import com.lumens.model.Element;
 import com.lumens.model.Path;
 import com.lumens.model.Type;
 import com.lumens.processor.AbstractProcessor;
+import com.lumens.processor.ProcessorContext;
 import com.lumens.processor.Rule;
 import com.lumens.processor.Script;
 import com.lumens.processor.script.ScriptUtils;
@@ -25,36 +26,38 @@ public class TransformMapper extends AbstractProcessor {
     private final boolean ignoreScriptOnArray = true;
 
     @Override
-    public Object execute(Rule rule, List<Element> input) {
+    public Object execute(ProcessorContext processorCtx) {
+        Rule rule = processorCtx.getRule();
+        List<Element> input = processorCtx.getInput();
         if (rule instanceof TransformRule) {
             TransformRule transformRule = (TransformRule) rule;
             TransformRuleItem rootRuleItem = transformRule.getRootRuleItem();
             List<Element> results = new ArrayList<>();
             if (input == null) {
-                MapperContext ctx = new MapperContext(rootRuleItem, null);
+                TransformMapperContext ctx = new TransformMapperContext(rootRuleItem, null);
                 Element result = processTransformItem(null, ctx);
                 if (result != null)
                     results.add(result);
             } else {
                 Element currentElement = null;
-                try {
-                    for (Element rootSourceElement : input) {
+                for (Element rootSourceElement : input) {
+                    try {
                         currentElement = rootSourceElement;
                         List<TransformForeach> rootForeachList = rootRuleItem.getTransformForeach();
                         if (!rootForeachList.isEmpty()) {
                             int foreachLevelDepth = rootForeachList.size() - 1;
                             checkForeachDepthCount(foreachLevelDepth);
-                            MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
+                            TransformMapperContext ctx = new TransformMapperContext(rootRuleItem, rootSourceElement);
                             processRootForeachList(ctx, results, rootForeachList, 0, foreachLevelDepth);
                         } else {
-                            MapperContext ctx = new MapperContext(rootRuleItem, rootSourceElement);
+                            TransformMapperContext ctx = new TransformMapperContext(rootRuleItem, rootSourceElement);
                             Element result = processTransformItem(null, ctx);
                             if (result != null)
                                 results.add(result);
                         }
+                    } catch (Exception e) {
+                        throw new MapperException(e, currentElement);
                     }
-                } catch (Exception e) {
-                    throw new MapperException(e, currentElement);
                 }
             }
             return results;
@@ -62,7 +65,7 @@ public class TransformMapper extends AbstractProcessor {
         throw new MapperException("Unsupported input data !");
     }
 
-    private void processRootForeachList(MapperContext ctx, List<Element> results,
+    private void processRootForeachList(TransformMapperContext ctx, List<Element> results,
                                         List<TransformForeach> rootForeachList,
                                         int foreachLevel, int foreachLevelDepth) {
         TransformForeach rootForeach = rootForeachList.get(foreachLevel);
@@ -88,7 +91,7 @@ public class TransformMapper extends AbstractProcessor {
         }
     }
 
-    private void processForeachList(MapperContext ctx, Element parentResultElement,
+    private void processForeachList(TransformMapperContext ctx, Element parentResultElement,
                                     List<TransformRuleItem> ruleItems, List<TransformForeach> foreachList,
                                     int foreachLevel, int foreachLevelDepth) {
         TransformForeach currentForeach = foreachList.get(foreachLevel);
@@ -107,14 +110,14 @@ public class TransformMapper extends AbstractProcessor {
             } else if (foreachLevel == foreachLevelDepth) {
                 // Execute the children script, don't execute array item script that already processed by array.
                 if (parentResultElement.isArrayOfField())
-                    executeTransformRule(new MapperContext(foreachCtx, ruleItems.get(0)), parentResultElement.addArrayItem());
+                    executeTransformRule(new TransformMapperContext(foreachCtx, ruleItems.get(0)), parentResultElement.addArrayItem());
                 else
                     processChildRuleItem(foreachCtx, parentResultElement.addArrayItem(), ruleItems);
             }
         }
     }
 
-    private Element processTransformItem(Element parentElement, MapperContext ctx) {
+    private Element processTransformItem(Element parentElement, TransformMapperContext ctx) {
         TransformRuleItem currentRuleItem = ctx.getCurrentRuleItem();
         Element currentResultElement = parentElement == null
                                        ? new DataElement(currentRuleItem.getFormat())
@@ -147,15 +150,15 @@ public class TransformMapper extends AbstractProcessor {
         return currentResultElement;
     }
 
-    private void processChildRuleItem(MapperContext parentCtx, Element parentResult, List<TransformRuleItem> children) {
+    private void processChildRuleItem(TransformMapperContext parentCtx, Element parentResult, List<TransformRuleItem> children) {
         for (TransformRuleItem child : children) {
-            Element childResult = processTransformItem(parentResult, new MapperContext(parentCtx, child));
+            Element childResult = processTransformItem(parentResult, new TransformMapperContext(parentCtx, child));
             if (childResult != null)
                 parentResult.addChild(childResult);
         }
     }
 
-    private Element executeTransformRule(MapperContext ctx, Element result) {
+    private Element executeTransformRule(TransformMapperContext ctx, Element result) {
         if (ignoreScriptOnArray && result.isArray())
             return result;
         Script script = ctx.getCurrentRuleItem().getScript();

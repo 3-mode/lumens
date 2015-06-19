@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.junit.Test;
@@ -174,6 +175,10 @@ public class TransformEngineTest {
         rule_warehouse_final.getRuleItem("Final.value").addTransformForeach(new TransformForeach("WareHouse.asset", "Asset", "index"));
         rule_warehouse_final.getRuleItem("Final.value").setScript("var id = @WareHouse.asset[index].id;\n //logInfo('assetId of final:' + index + '-' + id);\n return id;");
 
+        /*
+         var value = SourceInput('Query', 'Employee.fields')
+         var value = SourceOutput('Query', 'Employee.fields')
+         //*/
         //**********************************************************************
         TransformProject project = new TransformProject();
         project.getDatasourceList().add(personDs);
@@ -207,7 +212,7 @@ public class TransformEngineTest {
         }
         //**********************************************************************
         System.out.println("Checking result, source: " + ChameleonConnector.countFinal);
-        assertTrue(ChameleonConnector.countFinal == 150);
+        assertEquals(ChameleonConnector.countFinal, 150);
 
         System.out.println("Final size: " + ChameleonConnector.countFinal);
         System.out.println("Cost: " + (System.currentTimeMillis() - start));
@@ -265,5 +270,10 @@ public class TransformEngineTest {
         try (InputStream in = TransformEngineTest.class.getResourceAsStream(url)) {
             return new ByteArrayInputStream(IOUtils.toByteArray(in));
         }
+    }
+
+    @Test
+    public void testUUID() {
+        System.out.println(UUID.randomUUID().toString());
     }
 }

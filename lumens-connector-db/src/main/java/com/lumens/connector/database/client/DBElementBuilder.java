@@ -24,7 +24,7 @@ public class DBElementBuilder {
         List<Element> result = new ArrayList<>();
         if (output != null && !ret.isClosed()) {
             while (ret.next()) {
-                DataElement data = new DataElement(output);
+                Element data = DataElement.createRootElement(output);
                 buildFieldList(data, ret);
                 result.add(data);
             }

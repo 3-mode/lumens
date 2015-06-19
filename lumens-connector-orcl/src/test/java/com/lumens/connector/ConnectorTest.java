@@ -16,6 +16,7 @@ import com.lumens.model.Type;
 import com.lumens.model.Value;
 import com.lumens.model.serializer.FormatSerializer;
 import com.lumens.processor.Processor;
+import com.lumens.processor.ProcessorExecutionContext;
 import com.lumens.processor.transform.TransformMapper;
 import com.lumens.processor.transform.TransformRule;
 import java.io.ByteArrayOutputStream;
@@ -69,7 +70,7 @@ public class ConnectorTest implements OracleConstants {
             cntr.close();
         }
     }
-
+    
     // TODO need to mock db ENV
     public void testOracleSQLBuilder() throws Exception {
         // Test select SQL generating
@@ -91,6 +92,7 @@ public class ConnectorTest implements OracleConstants {
 
         String sqlSelect = sql.generateSelectSQL(employeeQuery);
         System.out.println("Generated select SQL: " + sql.generatePageSQL(sqlSelect, 0, 100));
+        System.out.println("Generated select SQL: " + sql.generatePageSQL(sqlSelect, 100, 200));
         //assertTrue("SELECT Id, name, job_title, department FROM Testtable where (Id = 'E10001') order by Id group by department".equalsIgnoreCase(String.format(sqlSelect, 0, 100)));
 
         // Test insert SQL generating
@@ -205,7 +207,7 @@ public class ConnectorTest implements OracleConstants {
 
         Processor transformMappter = new TransformMapper();
         List<Element> employeeTest = new ArrayList<>();
-        List<Element> resultList = (List<Element>) transformMappter.execute(rule, result.getData());
+        List<Element> resultList = (List<Element>) transformMappter.execute(new ProcessorExecutionContext(rule, result.getData()));
         employeeTest.addAll(resultList);
         assertTrue(employeeTest.size() == result.getData().size());
         //oo.execute(new ElementChunk(employeeTest), null);
