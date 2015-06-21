@@ -5,6 +5,7 @@ package com.lumens.connector.database.client;
 
 import com.lumens.connector.ElementChunk;
 import com.lumens.connector.OperationResult;
+import com.lumens.connector.SupportAccessory;
 import com.lumens.model.Element;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class DBQueryResult implements OperationResult {
+public class DBQueryResult implements OperationResult, SupportAccessory {
 
     private final DBOperation operation;
     private final DBQuerySQLBuilder sqlBuilder;
@@ -30,6 +31,11 @@ public class DBQueryResult implements OperationResult {
         this.pageSize = operation.getClient().getPageSize();
         this.SQL = sqlBuilder.generateSelectSQL(input.getData().get(input.getStart()));
         this.result = operation.getClient().executeQuery(sqlBuilder.generatePageSQL(SQL, 1, pageSize), sqlBuilder.getFormat());
+    }
+
+    @Override
+    public ElementChunk getInput() {
+        return input;
     }
 
     @Override
@@ -65,5 +71,10 @@ public class DBQueryResult implements OperationResult {
             result = null;
         }
         return this;
+    }
+
+    @Override
+    public boolean isQuery() {
+        return true;
     }
 }

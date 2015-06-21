@@ -67,6 +67,11 @@ public abstract class AbstractClient implements Client, DBConstants {
     }
 
     @Override
+    public void rollback() {
+        DBUtils.rollback(conn);
+    }
+
+    @Override
     public Map<String, Format> getFormatList(Direction direction, boolean fullLoad) {
         Map<String, Format> tables = new HashMap<>();
         try (Statement stat = conn.createStatement();

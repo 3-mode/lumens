@@ -64,9 +64,9 @@ public interface Element {
 
     public boolean isArrayItem();
 
-    public boolean supportAccessory();
+    public AccessoryManager getAccessoryManager();
 
-    public Value getAccessory(String name);
+    public void createAccessory();
 
-    public Object setAccessory(String name, Object value);
+    public void passAccessory(Element srcElement);
 }

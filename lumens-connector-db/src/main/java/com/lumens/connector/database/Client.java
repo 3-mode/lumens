@@ -30,4 +30,6 @@ public interface Client {
     public List<Element> executeQuery(String generatePageSQL, Format output);
 
     public void commit();
+    
+    public void rollback();
 }

@@ -11,8 +11,10 @@ import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.connector.database.Client;
 import com.lumens.connector.database.DBConstants;
+import com.lumens.model.DataElement;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 
@@ -33,38 +35,47 @@ public abstract class DBOperation implements Operation, DBConstants {
     public OperationResult execute(ElementChunk input, Format output) throws Exception {
         List<Element> dataList = input == null ? null : input.getData();
         if (dataList != null && !dataList.isEmpty()) {
-            for (int i = input.getStart(); i < dataList.size(); ++i) {
-                Element elem = dataList.get(i);
-                Element sqlParams = elem.getChild(SQLPARAMS);
-                Element action = null;
-                if (sqlParams != null)
-                    action = sqlParams.getChild(ACTION);
-                String strOper = ModelUtils.isNullValue(action) ? null : action.getValue().getString();
-                if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
-                    // If i < input.getStart then there are some input handled as update or insert need to commit before
-                    // exeute the executeNext query, use this way to handle the mixed operation with select, update or insert
-                    if (input.getStart() < i) {
-                        client.commit();
-                        input.setStart(i);
-                    }
-                    return new DBQueryResult(this, getQuerySQLBuilder(output), input);
-                } else if (INSERT_ONLY.equalsIgnoreCase(strOper)) {
-                    client.execute(getWriteSQLBuilder().generateInsertSQL(elem));
-                } else if (UPDATE_ONLY.equalsIgnoreCase(strOper)) {
-                    client.execute(getWriteSQLBuilder().generateUpdateSQL(elem));
-                } else {
-                    // TODO rollback
-                    // TODO UPDATE_OR_INSERT.equalsIgnoreCase(operation)
-                    throw new RuntimeException("Not supported now");
+            String strOper = getSQLAction(dataList.get(input.getStart()));
+            if (strOper == null || SELECT.equalsIgnoreCase(strOper))
+                return new DBQueryResult(this, getQuerySQLBuilder(output), input);
+            else if (INSERT_ONLY.equalsIgnoreCase(strOper) || UPDATE_ONLY.equalsIgnoreCase(strOper)) {
+                List<Element> outList = new ArrayList<>();
+                for (Element elem : dataList) {
+                    processWrite(elem);
+                    outList.add(new DataElement(output));
                 }
-                input.setStart(i);
+                if (input.isLast())
+                    client.commit();
+                // Except query, for update, delete no result for output
+                return new DBWriteResult(input, outList);
             }
-            if (input.isLast())
-                client.commit();
-            // Except query, for update, delete no result for output
-            return null;
         }
         throw new UnsupportedOperationException("Error, the input data can not be empty !");
+    }
+
+    private void processWrite(Element elem) {
+        String strOper = getSQLAction(elem);
+        if (INSERT_ONLY.equalsIgnoreCase(strOper)) {
+            client.execute(getWriteSQLBuilder().generateInsertSQL(elem));
+        } else if (UPDATE_ONLY.equalsIgnoreCase(strOper)) {
+            client.execute(getWriteSQLBuilder().generateUpdateSQL(elem));
+        } else if (UPDATE_OR_INSERT.equalsIgnoreCase(strOper) || DELETE_ONLY.equalsIgnoreCase(strOper)) {
+            client.rollback();
+            throw new RuntimeException("'Update_Or_Insert' and 'Delete_Only' are not supported now!");
+        } else if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
+            // If i < input.getStart then there are some input alreadly handled as update or insert
+            // No such useful business logic for this behavior so rollback and throw exception
+            client.rollback();
+            throw new RuntimeException("Not supported behavior, the 'Query' can't be mixed with 'Insert' or 'Update'");
+        }
+    }
+
+    private String getSQLAction(Element elem) {
+        Element sqlParams = elem.getChild(SQLPARAMS);
+        Element action = null;
+        if (sqlParams != null)
+            action = sqlParams.getChild(ACTION);
+        return ModelUtils.isNullValue(action) ? null : action.getValue().getString();
     }
 
     protected DBWriteSQLBuilder getWriteSQLBuilder() {
@@ -72,5 +83,4 @@ public abstract class DBOperation implements Operation, DBConstants {
     }
 
     protected abstract DBQuerySQLBuilder getQuerySQLBuilder(Format output);
-
 }

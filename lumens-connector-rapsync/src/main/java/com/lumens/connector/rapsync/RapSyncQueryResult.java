@@ -49,7 +49,7 @@ public class RapSyncQueryResult implements OperationResult {
     @Override
     public boolean hasNext() {
         return (result != null && result.size() == operation.getPageSize())
-                || (input.getStart() < input.getData().size());
+               || (input.getStart() < input.getData().size());
     }
 
     @Override

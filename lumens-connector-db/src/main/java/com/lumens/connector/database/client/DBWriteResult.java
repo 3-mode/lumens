@@ -3,7 +3,9 @@
  */
 package com.lumens.connector.database.client;
 
+import com.lumens.connector.ElementChunk;
 import com.lumens.connector.OperationResult;
+import com.lumens.connector.SupportAccessory;
 import com.lumens.model.Element;
 import java.util.List;
 
@@ -11,11 +13,13 @@ import java.util.List;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class DBWriteResult implements OperationResult {
+public class DBWriteResult implements OperationResult, SupportAccessory {
     private final List<Element> result;
+    private final ElementChunk input;
 
-    public DBWriteResult(List<Element> result) {
-        this.result = result;
+    public DBWriteResult(ElementChunk input, List<Element> outList) {
+        this.input = input;
+        this.result = outList;
     }
 
     @Override
@@ -36,5 +40,15 @@ public class DBWriteResult implements OperationResult {
     @Override
     public OperationResult executeNext() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ElementChunk getInput() {
+        return input;
+    }
+
+    @Override
+    public boolean isQuery() {
+        return false;
     }
 }

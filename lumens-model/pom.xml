@@ -22,11 +22,6 @@
             <version>1.4</version>
         </dependency>
         <dependency>
-            <groupId>com.lumens</groupId>
-            <artifactId>lumens-commons</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
             <version>1.9.12</version>
@@ -35,6 +30,16 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lumens</groupId>
+            <artifactId>lumens-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lumens-log</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

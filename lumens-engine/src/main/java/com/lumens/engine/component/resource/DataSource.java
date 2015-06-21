@@ -9,6 +9,7 @@ import com.lumens.connector.Direction;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.connector.ElementChunk;
+import com.lumens.connector.SupportAccessory;
 import com.lumens.engine.TransformEngineContext;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.component.AbstractTransformComponent;
@@ -131,7 +132,6 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
             // Log input data
             handleInputLogging(context.getInspectionHandlers(), targetFmtName, inputChunk.getData());
-            // use ElementChunk.isLast
             Operation operation = connector.getOperation();
             try {
                 opRet = operation.execute(inputChunk, targetFormat);
@@ -142,7 +142,8 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
         }
 
         // Get the transform results
-        results = (opRet != null && opRet.hasData()) ? opRet.getData(): new ArrayList<Element>();
+        results = (opRet != null && opRet.hasData()) ? opRet.getData() : new ArrayList<Element>();
+        passAccessories(opRet, results);
 
         if (log.isDebugEnabled())
             log.debug(String.format("Datasource '%s' result chunk size '%d'.", getName(), results.size()));
@@ -177,6 +178,26 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
         return exList;
 
+    }
+
+    private void passAccessories(OperationResult opRet, List<Element> results) {
+        if (opRet != null && opRet instanceof SupportAccessory) {
+            SupportAccessory sa = (SupportAccessory) opRet;
+            ElementChunk inChunk = sa.getInput();
+            if (sa.isQuery()) {
+                if (inChunk != null && inChunk.getData() != null) {
+                    Element inElem = inChunk.getData().get(inChunk.getStart());
+                    for (Element outElem : results)
+                        outElem.passAccessory(inElem);
+                }
+            } else {
+                List<Element> inList = inChunk.getData();
+                if (inList.size() != results.size())
+                    throw new RuntimeException("Error logic, the input and output size is not matched for writing operation!");
+                for (int i = 0; i < inList.size(); ++i)
+                    results.get(i).passAccessory(inList.get(i));
+            }
+        }
     }
 
     private void handleInputLogging(List<InspectionHandler> handlers, String targetName, List<Element> input) {

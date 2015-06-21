@@ -20,6 +20,7 @@ public interface DBConstants {
     public String SELECT = "SELECT";
     public String INSERT_ONLY = "INSERT_ONLY";
     public String UPDATE_ONLY = "UPDATE_ONLY";
+    public String DELETE_ONLY = "DELETE_ONLY";
     public String UPDATE_OR_INSERT = "UPDATE_OR_INSERT";
     // Constants node names
     public String SQLPARAMS = "SQLParams";

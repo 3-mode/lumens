@@ -52,7 +52,7 @@ public class ChameleonConnector implements Connector {
 
             @Override
             public OperationResult execute(ElementChunk input, Format output) throws Exception {
-
+                final ElementChunk theInput = input;
                 final List<Element> inputList = input.getData();
                 final Format format = output;
                 if (inputList != null && !inputList.isEmpty()) {
@@ -120,6 +120,7 @@ public class ChameleonConnector implements Connector {
                         }
                         return this;
                     }
+
                 };
 
                 return opR.executeNext();
