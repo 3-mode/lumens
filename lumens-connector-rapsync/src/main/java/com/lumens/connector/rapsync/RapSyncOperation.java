@@ -68,11 +68,12 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
                         miner.buildDictionary();
                     }
 
-                    miner.sync(value);
+                    miner.sync(value);   
                 } else {
                     throw new UnsupportedOperationException("Error, not supported action : " + strOper);
                 }
             }
+            return null;
         }
         throw new UnsupportedOperationException("Error, the input data can not be empty !");
     }

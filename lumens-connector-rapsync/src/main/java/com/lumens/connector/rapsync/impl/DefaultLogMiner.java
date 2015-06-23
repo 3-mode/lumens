@@ -61,7 +61,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
 
     @Override
     public void build() {
-        log.debug("Building dictionary.");
+        log.debug("Building REDO Log files.");
         try {
             // adding redo log files to analyze
             if (isFirstBuild) {

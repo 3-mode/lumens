@@ -39,30 +39,31 @@ import java.util.ArrayList;
  * @author Xiaoxin(whiskeyfly@163.com)
  */
 public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncConstants, Constants {
-
-    @Before
+    
     public void prepareTestTable() {
         // create test table
         String schema = "LUMENS";
         String table = "FULL_SYNC";
 
         Metadata source = new Metadata(sourceDatabase);
-        if (!source.checkTableExist(schema, table)) {
-            try {
+
+        try {
+            if (!source.checkTableExist(schema, table)) {
                 sourceDatabase.execute(String.format("CREATE TABLE %s.%s( NAME VARCHAR2(20))", schema, table));
-                sourceDatabase.execute(String.format("INSERT INTO \"%s\".\"%s\" (NAME) VALUES ('wisper')", schema, table));
-                sourceDatabase.execute(String.format("INSERT INTO \"%s\".\"%s\" (NAME) VALUES ('shaofeng')", schema, table));
-                sourceDatabase.execute(String.format("INSERT INTO \"%s\".\"%s\" (NAME) VALUES ('oliver')", schema, table));
-                sourceDatabase.execute("commit");
-            } catch (Exception ex) {
-                log.error(String.format("Fail to prepare table %s.%s. Error: %s", schema, table, ex.getMessage()));
             }
+            source.emptyTable(schema, table);
+            sourceDatabase.execute(String.format("INSERT INTO \"%s\".\"%s\" (NAME) VALUES ('wisper')", schema, table));
+            sourceDatabase.execute(String.format("INSERT INTO \"%s\".\"%s\" (NAME) VALUES ('shaofeng')", schema, table));
+            sourceDatabase.execute(String.format("INSERT INTO \"%s\".\"%s\" (NAME) VALUES ('oliver')", schema, table));
+            sourceDatabase.execute("commit");
+        } catch (Exception ex) {
+            log.error(String.format("Fail to prepare table %s.%s. Error: %s", schema, table, ex.getMessage()));
         }
 
         // drop target table
         Metadata target = new Metadata(destinationDatabase);
         if (target.checkTableExist(schema, table)) {
-            target.emptyTable(schema, table);
+            //target.emptyTable(schema, table);
         } else {
             String createDDL = source.getTableDDL(schema, table);
             target.createTable(createDDL);
@@ -101,6 +102,7 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
 
     @Test
     public void testConnectorReadSync() {
+        prepareTestTable();
         Map<String, Value> propsR = new HashMap<>();
         propsR.put(DATABASE_DRIVER, new Value(DATABASE_DRIVER_VAL));
         propsR.put(DATABASE_CONNECTION_URL, new Value(DATABASE_SOURCE_URL_VAL));
@@ -158,8 +160,8 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
         sqlParams.addChild(ACTION).setValue(QUERY);
         sqlParams.addChild(TABLE_LIST).setValue("FULL_SYNC,TEST");
         query.addChild(COLUMN_SEG_OWNER).setValue("='LUMENS'");
-        query.addChild(COLUMN_TIMESTAMP).setValue("='06-JUN-2015 01:00:00'");
-        query.addChild(COLUMN_SCN).setValue(">1664831");
+        //query.addChild(COLUMN_TIMESTAMP).setValue("='06-JUN-2015 01:00:00'");
+        //query.addChild(COLUMN_SCN).setValue(">1664831");
 
         // sync format
         minerSync.start();
@@ -175,42 +177,45 @@ public class RedoLogConnectorTest extends RapSyncTestBase implements RapSyncCons
 
         List<Element> syncChunk = new ArrayList();
 
-        try {
-            OperationResult result = queryOperation.execute(new ElementChunk(Arrays.asList(query)), selectFmt);
-            if (result.hasData()) {
-                List<Element> redologs = result.getData();
-                int max = 1000;
-                System.out.println("          SCN | OPERATION | REDO SQL -----------------------------------------");
-                for (Element elem : redologs) {
-                    int scn = elem.getChildByPath(COLUMN_SCN).getValue().getInt();
-                    String redo = elem.getChildByPath(COLUMN_REDO).getValue().toString();
-                    String operation = elem.getChildByPath(COLUMN_OPERATION).getValue().toString();
-                    String owner = elem.getChildByPath(COLUMN_SEG_OWNER).getValue().toString();
-                    String table = elem.getChildByPath(COLUMN_TABLE_NAME).getValue().toString();
-                    System.out.println("    " + scn + "  | " + operation + "  | " + redo);
+        OperationResult result = null;
+        do {
+            try {
+                result = queryOperation.execute(new ElementChunk(Arrays.asList(query)), selectFmt);
+                if (result.hasData()) {
+                    List<Element> redologs = result.getData();
+                    int max = 1000;
+                    System.out.println("          SCN | OPERATION | REDO SQL -----------------------------------------");
+                    for (Element elem : redologs) {
+                        int scn = elem.getChildByPath(COLUMN_SCN).getValue().getInt();
+                        String redo = elem.getChildByPath(COLUMN_REDO).getValue().toString();
+                        String operation = elem.getChildByPath(COLUMN_OPERATION).getValue().toString();
+                        String owner = elem.getChildByPath(COLUMN_SEG_OWNER).getValue().toString();
+                        String table = elem.getChildByPath(COLUMN_TABLE_NAME).getValue().toString();
+                        System.out.println("    " + scn + "  | " + operation + "  | " + redo);
 
-                    // add data to sync
-                    Element sync = new DataElement(syncFmt);
-                    sync.addChild(SQLPARAMS).addChild(ACTION).setValue(SYNC);
-                    sync.addChild(COLUMN_REDO).setValue(new Value(redo));
-                    sync.addChild(COLUMN_SCN).setValue(new Value(scn));
-                    sync.addChild(COLUMN_OPERATION).setValue(new Value(operation));
-                    sync.addChild(COLUMN_SEG_OWNER).setValue(new Value(owner));
-                    sync.addChild(COLUMN_TABLE_NAME).setValue(new Value(table));
-                    syncChunk.add(sync);
+                        // add data to sync
+                        Element sync = new DataElement(syncFmt);
+                        sync.addChild(SQLPARAMS).addChild(ACTION).setValue(SYNC);
+                        sync.addChild(COLUMN_REDO).setValue(new Value(redo));
+                        sync.addChild(COLUMN_SCN).setValue(new Value(scn));
+                        sync.addChild(COLUMN_OPERATION).setValue(new Value(operation));
+                        sync.addChild(COLUMN_SEG_OWNER).setValue(new Value(owner));
+                        sync.addChild(COLUMN_TABLE_NAME).setValue(new Value(table));
+                        syncChunk.add(sync);
 
-                    if (--max < 0) {
-                        break;
+                        if (--max < 0) {
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (syncChunk.size() > 0) {
-                syncOperation.execute(new ElementChunk(syncChunk), syncFmt);
+                if (syncChunk.size() > 0) {
+                    syncOperation.execute(new ElementChunk(syncChunk), syncFmt);
+                }
+            } catch (Exception ex) {
+                assertTrue("Fail to execute log miner query:" + ex.getMessage(), false);
             }
-        } catch (Exception ex) {
-            assertTrue("Fail to execute log miner query:" + ex.getMessage(), false);
-        }
+        } while (result.hasNext() && (result = result.executeNext()) != null);
 
         minerRead.stop();
         minerRead.close();
