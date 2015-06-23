@@ -40,6 +40,10 @@ public class AccessoryManager {
         return values.put(name, new Value(value));
     }
 
+    public Object remove(String name) {
+        return values.remove(name);
+    }
+
     public boolean isEmpty() {
         return values.isEmpty();
     }

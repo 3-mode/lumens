@@ -10,6 +10,7 @@ public class JavaScriptBuilder {
 
     private final String functionPrefix = "function fLumensScript_";
     private final String pathEnding = "+-*/ &|!<>\n\r\t^%=;:?,";
+    private final String[] functions = {"$GetAccessory", "$SetAccessory", "$RemoveAccessory"};
 
     public String build(String script) {
         // TODO prepare the script and convert it to javascript function
@@ -31,6 +32,7 @@ public class JavaScriptBuilder {
                 if (line.startsWith("//"))
                     continue;
                 line = addElementAccessor(line);
+                line = addContext(line);
                 scriptWithoutComments.append(line).append('\n');
                 ++lineCount;
             }
@@ -79,4 +81,12 @@ public class JavaScriptBuilder {
 
         return builder.toString();
     }
+
+    public String addContext(String line) {
+        for (String func : functions) {
+            line = line.replace(func + "(", func + "(ctx,");
+        }
+        return line;
+    }
+
 }

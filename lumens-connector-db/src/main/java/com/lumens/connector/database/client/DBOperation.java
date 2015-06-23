@@ -39,11 +39,7 @@ public abstract class DBOperation implements Operation, DBConstants {
             if (strOper == null || SELECT.equalsIgnoreCase(strOper))
                 return new DBQueryResult(this, getQuerySQLBuilder(output), input);
             else if (INSERT_ONLY.equalsIgnoreCase(strOper) || UPDATE_ONLY.equalsIgnoreCase(strOper)) {
-                List<Element> outList = new ArrayList<>();
-                for (Element elem : dataList) {
-                    processWrite(elem);
-                    outList.add(new DataElement(output));
-                }
+                List<Element> outList = processWrite(dataList, output);
                 if (input.isLast())
                     client.commit();
                 // Except query, for update, delete no result for output
@@ -53,21 +49,26 @@ public abstract class DBOperation implements Operation, DBConstants {
         throw new UnsupportedOperationException("Error, the input data can not be empty !");
     }
 
-    private void processWrite(Element elem) {
-        String strOper = getSQLAction(elem);
-        if (INSERT_ONLY.equalsIgnoreCase(strOper)) {
-            client.execute(getWriteSQLBuilder().generateInsertSQL(elem));
-        } else if (UPDATE_ONLY.equalsIgnoreCase(strOper)) {
-            client.execute(getWriteSQLBuilder().generateUpdateSQL(elem));
-        } else if (UPDATE_OR_INSERT.equalsIgnoreCase(strOper) || DELETE_ONLY.equalsIgnoreCase(strOper)) {
-            client.rollback();
-            throw new RuntimeException("'Update_Or_Insert' and 'Delete_Only' are not supported now!");
-        } else if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
-            // If i < input.getStart then there are some input alreadly handled as update or insert
-            // No such useful business logic for this behavior so rollback and throw exception
-            client.rollback();
-            throw new RuntimeException("Not supported behavior, the 'Query' can't be mixed with 'Insert' or 'Update'");
+    private List<Element> processWrite(List<Element> inList, Format output) {
+        List<Element> outList = new ArrayList<>();
+        for (Element elem : inList) {
+            String strOper = getSQLAction(elem);
+            if (INSERT_ONLY.equalsIgnoreCase(strOper)) {
+                client.execute(getWriteSQLBuilder().generateInsertSQL(elem));
+            } else if (UPDATE_ONLY.equalsIgnoreCase(strOper)) {
+                client.execute(getWriteSQLBuilder().generateUpdateSQL(elem));
+            } else if (UPDATE_OR_INSERT.equalsIgnoreCase(strOper) || DELETE_ONLY.equalsIgnoreCase(strOper)) {
+                client.rollback();
+                throw new RuntimeException("'Update_Or_Insert' and 'Delete_Only' are not supported now!");
+            } else if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
+                // If i < input.getStart then there are some input alreadly handled as update or insert
+                // No such useful business logic for this behavior so rollback and throw exception
+                client.rollback();
+                throw new RuntimeException("Not supported behavior, the 'Query' can't be mixed with 'Insert' or 'Update'");
+            }
+            outList.add(new DataElement(output));
         }
+        return outList;
     }
 
     private String getSQLAction(Element elem) {

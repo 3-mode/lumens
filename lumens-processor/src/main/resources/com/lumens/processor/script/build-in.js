@@ -32,13 +32,12 @@ function $StringToDate(string, format) {
     return dateFormat.parse(string);
 }
 
-function $Accessory(ctx, name, data) {
-    if (data === undefined) {
-        // Get data
-    }
-    else {
-        // Put data
-    }
+function $GetAccessory(ctx, name) {
+    // Get data
+}
+
+function $SetAccessory(ctx, name, data) {
+    // Put data
 }
 
 function $RemoveAccessory(ctx, name) {
