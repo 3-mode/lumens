@@ -3,6 +3,7 @@
  */
 package com.lumens.processor;
 
+import com.lumens.model.AccessoryManager;
 import com.lumens.processor.transform.MapperContext;
 import com.lumens.model.DataElement;
 import com.lumens.model.DataFormat;
@@ -10,6 +11,7 @@ import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.Type;
 import com.lumens.processor.script.JavaScript;
+import com.lumens.processor.script.JavaScriptBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import static junit.framework.TestCase.assertEquals;
@@ -83,9 +85,25 @@ public class ScriptTest {
                     public void removeVariables(Scriptable scope) {
                     }
 
+                    @Override
+                    public MapperContext getRoot() {
+                        return this;
+                    }
+
+                    @Override
+                    public AccessoryManager getAccessoryManager() {
+                        return null;
+                    }
+
                 });
                 System.out.println(v);
             }
         }
+    }
+
+    @Test
+    public void testAddContext() {
+        String script = "$GetAccessory(\"Hello\") + $GetAccessory(\"World\")";
+        System.out.println(new JavaScriptBuilder().build(script));
     }
 }
