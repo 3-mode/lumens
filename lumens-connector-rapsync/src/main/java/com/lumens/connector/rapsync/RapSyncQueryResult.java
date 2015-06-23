@@ -5,6 +5,7 @@ package com.lumens.connector.rapsync;
 
 import com.lumens.connector.ElementChunk;
 import com.lumens.connector.OperationResult;
+import com.lumens.connector.SupportAccessory;
 import com.lumens.connector.rapsync.api.LogMiner;
 import com.lumens.connector.database.client.DBElementBuilder;
 import com.lumens.model.Element;
@@ -15,7 +16,7 @@ import java.sql.ResultSet;
  *
  * @author Xiaoxin
  */
-public class RapSyncQueryResult implements OperationResult {
+public class RapSyncQueryResult implements OperationResult, SupportAccessory {
 
     private List<Element> result;
     private final ElementChunk input;
@@ -75,7 +76,7 @@ public class RapSyncQueryResult implements OperationResult {
             String sql = String.format(builder.generateSelectSQL(input.getData().get(input.getStart())), builder.getPageSize() + pageStart, pageStart);
             ResultSet resultSet = miner.query(sql);
             try {
-                this.result = new DBElementBuilder().buildElement(builder.getFormat(), resultSet);                
+                this.result = new DBElementBuilder().buildElement(builder.getFormat(), resultSet);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -83,5 +84,15 @@ public class RapSyncQueryResult implements OperationResult {
             result = null;
         }
         return this;
+    }
+
+    @Override
+    public boolean isQuery() {
+        return true;
+    }
+
+    @Override
+    public ElementChunk getInput() {
+        return input;
     }
 }
