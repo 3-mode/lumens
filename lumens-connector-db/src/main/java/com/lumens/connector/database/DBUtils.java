@@ -3,6 +3,11 @@
  */
 package com.lumens.connector.database;
 
+import static com.lumens.connector.database.DBConstants.DELETE_ONLY;
+import static com.lumens.connector.database.DBConstants.INSERT_ONLY;
+import static com.lumens.connector.database.DBConstants.SELECT;
+import static com.lumens.connector.database.DBConstants.UPDATE_ONLY;
+import static com.lumens.connector.database.DBConstants.UPDATE_OR_INSERT;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -107,5 +112,32 @@ public class DBUtils {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static boolean isQuery(String strAction) {
+        return strAction == null || SELECT.equalsIgnoreCase(strAction);
+    }
+
+    public static boolean isWrite(String strAction) {
+        return INSERT_ONLY.equalsIgnoreCase(strAction)
+               || UPDATE_ONLY.equalsIgnoreCase(strAction)
+               || UPDATE_OR_INSERT.equalsIgnoreCase(strAction)
+               || DELETE_ONLY.equalsIgnoreCase(strAction);
+    }
+
+    public static boolean isInsert(String strAction) {
+        return INSERT_ONLY.equalsIgnoreCase(strAction);
+    }
+
+    public static boolean isUpdate(String strAction) {
+        return UPDATE_ONLY.equalsIgnoreCase(strAction);
+    }
+
+    public static boolean isInsertOrUpdate(String strAction) {
+        return UPDATE_OR_INSERT.equalsIgnoreCase(strAction);
+    }
+
+    public static boolean isDelete(String strAction) {
+        return DELETE_ONLY.equalsIgnoreCase(strAction);
     }
 }

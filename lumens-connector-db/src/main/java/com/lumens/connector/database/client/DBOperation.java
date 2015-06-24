@@ -11,6 +11,7 @@ import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.connector.database.Client;
 import com.lumens.connector.database.DBConstants;
+import com.lumens.connector.database.DBUtils;
 import com.lumens.model.DataElement;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
@@ -35,10 +36,10 @@ public abstract class DBOperation implements Operation, DBConstants {
     public OperationResult execute(ElementChunk input, Format output) throws Exception {
         List<Element> dataList = input == null ? null : input.getData();
         if (dataList != null && !dataList.isEmpty()) {
-            String strOper = getSQLAction(dataList.get(input.getStart()));
-            if (strOper == null || SELECT.equalsIgnoreCase(strOper))
+            String strAction = getSQLAction(dataList.get(input.getStart()));
+            if (DBUtils.isQuery(strAction))
                 return new DBQueryResult(this, getQuerySQLBuilder(output), input);
-            else if (INSERT_ONLY.equalsIgnoreCase(strOper) || UPDATE_ONLY.equalsIgnoreCase(strOper)) {
+            else if (DBUtils.isWrite(strAction)) {
                 List<Element> outList = processWrite(dataList, output);
                 if (input.isLast())
                     client.commit();
@@ -52,19 +53,19 @@ public abstract class DBOperation implements Operation, DBConstants {
     private List<Element> processWrite(List<Element> inList, Format output) {
         List<Element> outList = new ArrayList<>();
         for (Element elem : inList) {
-            String strOper = getSQLAction(elem);
-            if (INSERT_ONLY.equalsIgnoreCase(strOper)) {
+            String strAction = getSQLAction(elem);
+            if (DBUtils.isInsert(strAction)) {
                 client.execute(getWriteSQLBuilder().generateInsertSQL(elem));
-            } else if (UPDATE_ONLY.equalsIgnoreCase(strOper)) {
+            } else if (DBUtils.isUpdate(strAction)) {
                 client.execute(getWriteSQLBuilder().generateUpdateSQL(elem));
-            } else if (UPDATE_OR_INSERT.equalsIgnoreCase(strOper) || DELETE_ONLY.equalsIgnoreCase(strOper)) {
-                client.rollback();
-                throw new RuntimeException("'Update_Or_Insert' and 'Delete_Only' are not supported now!");
-            } else if (strOper == null || SELECT.equalsIgnoreCase(strOper)) {
+            } else if (DBUtils.isQuery(strAction)) {
                 // If i < input.getStart then there are some input alreadly handled as update or insert
                 // No such useful business logic for this behavior so rollback and throw exception
                 client.rollback();
                 throw new RuntimeException("Not supported behavior, the 'Query' can't be mixed with 'Insert' or 'Update'");
+            } else {
+                client.rollback();
+                throw new RuntimeException("'Update_Or_Insert' and 'Delete_Only' are not supported now!");
             }
             outList.add(new DataElement(output));
         }

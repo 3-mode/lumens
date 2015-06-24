@@ -33,13 +33,13 @@ function $StringToDate(string, format) {
 }
 
 function $GetAccessory(ctx, name) {
-    // Get data
+    return ScriptUtils.getAccessory(ctx, name);
 }
 
 function $SetAccessory(ctx, name, data) {
-    // Put data
+    ScriptUtils.setAccessory(ctx, name);
 }
 
 function $RemoveAccessory(ctx, name) {
-
+    return ScriptUtils.removeAccessory(ctx, name);
 }

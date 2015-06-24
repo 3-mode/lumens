@@ -168,7 +168,7 @@ public class MapperTest {
         rule_For_ForeachListResult.getRuleItem("WareHouse.name").setScript("@Department.Person[0].name");
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset").addTransformForeach(new TransformForeach("Department.Person", "Person", "index"));
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset").addTransformForeach(new TransformForeach("Department.Person.Asset", "Asset", "indexAsset"));
-        rule_For_ForeachListResult.getRuleItem("WareHouse.asset.id").setScript("var id = 'ASSET_' + index + '_' + indexAsset; \n logInfo(id); \n return id;");
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset.id").setScript("var id = 'ASSET_' + index + '_' + indexAsset; \n $LogInfo(id); \n return id;");
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset.name").setScript("@Department.Person[index].Asset[indexAsset].name");
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset.price").setScript("@Department.Person[index].Asset[indexAsset].price");
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset.vendor.name").setScript("@Department.Person[index].Asset[indexAsset].Vendor.name");
@@ -181,7 +181,7 @@ public class MapperTest {
         rule_For_ForeachListResult.getRuleItem("WareHouse").addTransformForeach(new TransformForeach("Department.Person", "Person", "index"));
         rule_For_ForeachListResult.getRuleItem("WareHouse").addTransformForeach(new TransformForeach("Department.Person.Asset", "Asset", "indexAsset"));
         rule_For_ForeachListResult.getRuleItem("WareHouse.name").setScript("@Department.Person[0].name");
-        rule_For_ForeachListResult.getRuleItem("WareHouse.asset.id").setScript("var id = 'ASSET_' + index + '_' + indexAsset; \n logInfo(id); \n return id;");
+        rule_For_ForeachListResult.getRuleItem("WareHouse.asset.id").setScript("var id = 'ASSET_' + index + '_' + indexAsset; \n $LogInfo(id); \n return id;");
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset.name").setScript("@Department.Person[0].Asset[0].name");
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset.price").setScript("@Department.Person[0].Asset[0].price");
         rule_For_ForeachListResult.getRuleItem("WareHouse.asset.vendor.name").setScript("@Department.Person[0].Asset[0].Vendor.name");

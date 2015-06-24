@@ -74,7 +74,7 @@ public class DBQueryResult implements OperationResult, SupportAccessory {
     }
 
     @Override
-    public boolean isQuery() {
-        return true;
+    public boolean isOneToOneForInOut() {
+        return false;
     }
 }

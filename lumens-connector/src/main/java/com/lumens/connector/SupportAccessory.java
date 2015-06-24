@@ -9,7 +9,7 @@ package com.lumens.connector;
  */
 public interface SupportAccessory {
 
-    public boolean isQuery();
+    public boolean isOneToOneForInOut();
 
     public ElementChunk getInput();
 }

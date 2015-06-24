@@ -184,18 +184,18 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
         if (opRet != null && opRet instanceof SupportAccessory) {
             SupportAccessory sa = (SupportAccessory) opRet;
             ElementChunk inChunk = sa.getInput();
-            if (sa.isQuery()) {
-                if (inChunk != null && inChunk.getData() != null) {
-                    Element inElem = inChunk.getData().get(inChunk.getStart());
-                    for (Element outElem : results)
-                        outElem.passAccessory(inElem);
-                }
-            } else {
+            if (sa.isOneToOneForInOut()) {
                 List<Element> inList = inChunk.getData();
                 if (inList.size() != results.size())
                     throw new RuntimeException("Error logic, the input and output size is not matched for writing operation!");
                 for (int i = 0; i < inList.size(); ++i)
                     results.get(i).passAccessory(inList.get(i));
+            } else {
+                if (inChunk != null && inChunk.getData() != null) {
+                    Element inElem = inChunk.getData().get(inChunk.getStart());
+                    for (Element outElem : results)
+                        outElem.passAccessory(inElem);
+                }
             }
         }
     }

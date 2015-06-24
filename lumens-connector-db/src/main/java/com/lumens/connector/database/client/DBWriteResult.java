@@ -48,7 +48,7 @@ public class DBWriteResult implements OperationResult, SupportAccessory {
     }
 
     @Override
-    public boolean isQuery() {
-        return false;
+    public boolean isOneToOneForInOut() {
+        return true;
     }
 }

@@ -29,16 +29,6 @@ public class ScriptUtils {
         return script.execute(ctx);
     }
 
-    public static Object getSourceInputElement(MapperContext ctx, String compName, String path) {
-        Element rootSrc = ctx.getRootSourceElement();
-        return null;
-    }
-
-    public static Object getSourceOutputElement(MapperContext ctx,  String compName, String path) {
-        Element rootSrc = ctx.getRootSourceElement();
-        return null;
-    }
-
     private static InputStream getInputStream(String name) throws Exception {
         return ScriptUtils.class.getClassLoader().getResourceAsStream(name);
     }
@@ -56,5 +46,20 @@ public class ScriptUtils {
             currentCtx = currentCtx.getParent();
         }
         return ctx.getRootSourceElement();
+    }
+
+    public static Object getAccessory(MapperContext ctx, String name) {
+        ctx = ctx.getRoot();
+        return ctx.getAccessoryManager().getValue(name);
+    }
+
+    public static Object setAccessory(MapperContext ctx, String name, Object value) {
+        ctx = ctx.getRoot();
+        return ctx.getAccessoryManager().setValue(name, value);
+    }
+
+    public static Object removeAccessory(MapperContext ctx, String name, Object value) {
+        ctx = ctx.getRoot();
+        return ctx.getAccessoryManager().remove(name);
     }
 }

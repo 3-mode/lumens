@@ -17,27 +17,27 @@ import org.apache.logging.log4j.Logger;
 public class AccessoryManager {
 
     private final Logger log = SysLogFactory.getLogger(AccessoryManager.class);
-    private final Map<String, Value> values = new HashMap<>();
+    private final Map<String, Object> values = new HashMap<>();
 
     public void pass(AccessoryManager mgr) {
         if (mgr == null)
             return;
-        Iterator<Entry<String, Value>> it = mgr.iterator();
+        Iterator<Entry<String, Object>> it = mgr.iterator();
         while (it.hasNext()) {
-            Entry<String, Value> en = it.next();
-            Value old = values.get(en.getKey());
+            Entry<String, Object> en = it.next();
+            Object old = values.get(en.getKey());
             if (old != null)
-                log.warn(String.format("Duplicate accessory! New value[%s:%s], Old value[%s:%s].", en.getKey(), en.getValue(), en.getKey(), old.getString()));
+                log.warn(String.format("Duplicate accessory! New value[%s:%s], Old value[%s:%s].", en.getKey(), en.getValue(), en.getKey(), old.toString()));
             values.put(en.getKey(), en.getValue());
         }
     }
 
-    public Value getValue(String name) {
+    public Object getValue(String name) {
         return values.get(name);
     }
 
     public Object setValue(String name, Object value) {
-        return values.put(name, new Value(value));
+        return values.put(name, value);
     }
 
     public Object remove(String name) {
@@ -48,7 +48,7 @@ public class AccessoryManager {
         return values.isEmpty();
     }
 
-    public Iterator<Entry<String, Value>> iterator() {
+    public Iterator<Entry<String, Object>> iterator() {
         return values.entrySet().iterator();
     }
 }

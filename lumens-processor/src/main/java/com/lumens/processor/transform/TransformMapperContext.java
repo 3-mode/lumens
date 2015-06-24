@@ -34,8 +34,8 @@ public class TransformMapperContext implements MapperContext {
     @Override
     public MapperContext getRoot() {
         MapperContext root = this;
-        while (getParent() != null) {
-            root = getParent();
+        while (root.getParent() != null && root.getParent() != this) {
+            root = root.getParent();
         }
         return root;
     }

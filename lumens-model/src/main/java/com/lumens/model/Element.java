@@ -69,4 +69,6 @@ public interface Element {
     public void createAccessory();
 
     public void passAccessory(Element srcElement);
+    
+    public void passAccessory(AccessoryManager mgr);
 }

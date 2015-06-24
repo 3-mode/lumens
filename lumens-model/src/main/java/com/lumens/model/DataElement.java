@@ -30,11 +30,16 @@ public class DataElement implements Element {
     }
 
     @Override
-    public void passAccessory(Element srcElement) {
+    public void passAccessory(AccessoryManager mgr) {
         if (accessoryMgr == null)
-            accessoryMgr = srcElement.getAccessoryManager();
+            accessoryMgr = mgr;
         else
-            accessoryMgr.pass(srcElement.getAccessoryManager());
+            accessoryMgr.pass(mgr);
+    }
+
+    @Override
+    public void passAccessory(Element srcElement) {
+        passAccessory(srcElement.getAccessoryManager());
     }
 
     @Override
