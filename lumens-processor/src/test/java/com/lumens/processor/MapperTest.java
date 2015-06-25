@@ -121,7 +121,7 @@ public class MapperTest {
         Format finalFmt = finalRoot.getChild("Final");
         finalFmt.setParent(null);
         TransformRule rule_Final = new TransformRule(finalFmt);
-        rule_Final.getRuleItem("Final.name").setScript("$LogInfo('Test accessory value: ' + $GetAccessory('test'));\n@WareHouse.name");
+        rule_Final.getRuleItem("Final.name").setScript("$LogInfo('Test accessory value: ' + $GetAccessory('test'));\n if(!$GetAccessory('test')) throw 'No accessory for test';\n@WareHouse.name");
         rule_Final.getRuleItem("Final.value").addTransformForeach(new TransformForeach("WareHouse.asset", "Asset", "index"));
         rule_Final.getRuleItem("Final.value").setScript("@WareHouse.asset[index].id");
         rule_Final.getRuleItem("Final.Vendor.value").addTransformForeach(new TransformForeach("WareHouse.asset", "Asset", "index"));
