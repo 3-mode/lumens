@@ -33,7 +33,7 @@ public class DataElement implements Element {
     public void passAccessory(AccessoryManager mgr) {
         if (accessoryMgr == null)
             accessoryMgr = mgr;
-        else
+        else if (accessoryMgr != mgr)
             accessoryMgr.pass(mgr);
     }
 

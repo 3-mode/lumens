@@ -68,8 +68,6 @@ public class TransformMapper extends AbstractProcessor {
     }
 
     private void transformAccessoryToTarget(MapperContext ctx, Element rootDst) {
-        Element rootSrc = ScriptUtils.getStartElement(ctx);
-        rootDst.passAccessory(rootSrc);
         rootDst.passAccessory(ctx.getRoot().getAccessoryManager());
     }
 

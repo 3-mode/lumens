@@ -71,7 +71,7 @@ public class MapperTest {
 
         //******* Test the array mapping when the parent and the current for each are configured.
         // Configure For each to iterate the array source elements
-        rule.getRuleItem("WareHouse.name").setScript("@Person.name");
+        rule.getRuleItem("WareHouse.name").setScript("$SetAccessory('test', 'hello accessory');\n@Person.name");
         rule.getRuleItem("WareHouse.asset").addTransformForeach(new TransformForeach("Person.Asset", "Asset", "index"));
         rule.getRuleItem("WareHouse.asset.id").setScript("'ASSET_' + index");
         rule.getRuleItem("WareHouse.asset.name").setScript("@Person.Asset[index].name");
@@ -121,7 +121,7 @@ public class MapperTest {
         Format finalFmt = finalRoot.getChild("Final");
         finalFmt.setParent(null);
         TransformRule rule_Final = new TransformRule(finalFmt);
-        rule_Final.getRuleItem("Final.name").setScript("@WareHouse.name");
+        rule_Final.getRuleItem("Final.name").setScript("$LogInfo('Test accessory value: ' + $GetAccessory('test'));\n@WareHouse.name");
         rule_Final.getRuleItem("Final.value").addTransformForeach(new TransformForeach("WareHouse.asset", "Asset", "index"));
         rule_Final.getRuleItem("Final.value").setScript("@WareHouse.asset[index].id");
         rule_Final.getRuleItem("Final.Vendor.value").addTransformForeach(new TransformForeach("WareHouse.asset", "Asset", "index"));

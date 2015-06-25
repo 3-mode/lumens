@@ -36,8 +36,8 @@ function $GetAccessory(ctx, name) {
     return ScriptUtils.getAccessory(ctx, name);
 }
 
-function $SetAccessory(ctx, name, data) {
-    ScriptUtils.setAccessory(ctx, name);
+function $SetAccessory(ctx, name, value) {
+    ScriptUtils.setAccessory(ctx, name, value);
 }
 
 function $RemoveAccessory(ctx, name) {

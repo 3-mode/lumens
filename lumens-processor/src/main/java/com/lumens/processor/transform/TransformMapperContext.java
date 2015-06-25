@@ -28,7 +28,8 @@ public class TransformMapperContext implements MapperContext {
     public TransformMapperContext(TransformRuleItem rootRuleItem, Element rootSrcElement) {
         this.rootRuleItem = rootRuleItem;
         this.rootSourceElement = rootSrcElement;
-        this.accessoryMgr = new AccessoryManager();
+        this.accessoryMgr = (rootSrcElement != null && rootSrcElement.getAccessoryManager() != null)
+                            ? rootSrcElement.getAccessoryManager() : new AccessoryManager();
     }
 
     @Override
