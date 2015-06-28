@@ -103,6 +103,8 @@ Lumens.services.factory('RuleTreeService', ['FormatService', function (FormatSer
                     throw "Wrong transform rule configruation it must equal 1";
                 var rootRuleItemNode = entryList.map[childKeys[0]];
                 var rootRuleItem = {format_name: rootRuleItemNode.data.name};
+                if(rootRuleItemNode.getScript())
+                  rootRuleItem.script = rootRuleItemNode.getScript();
                 // Build child item rules
                 var transform_rule_item = this.buildTransformRuleTreeChildren(rootRuleItemNode.getChildList());
                 if (transform_rule_item.length > 0)
@@ -120,8 +122,8 @@ Lumens.services.factory('RuleTreeService', ['FormatService', function (FormatSer
                 for (var i in entryListKeys) {
                     var entry = entryList.map[entryListKeys[i]];
                     var currentRuleItem = {format_name: entry.data.name};
-                    if (entry.script)
-                        currentRuleItem.script = entry.script;
+                    if (entry.getScript())
+                        currentRuleItem.script = entry.getScript();
                     if (entry.for_each)
                         currentRuleItem.for_each = entry.for_each;
                     var transform_rule_item = this.buildTransformRuleTreeChildren(entry.getChildList());
