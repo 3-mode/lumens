@@ -1,4 +1,21 @@
 Lumens.i18n = {
+    id_no: "No.",
+    id_name: "Name",
+    id_in: "Input",
+    id_out: "Output",
+    id_direction: "Direction",
+    id_timestamp: "Timestamp",
+    id_resources: "Resources",
+    id_instruments: "Instruments",
+    id_dashboad: "Dashboard",
+    id_management: "Management",
+    id_business: "Business Design",
+    id_project_summary: "Project Summary",
+    id_component_props: "Component Properties",
+    id_transform: "Transformations",
+    id_exec_once: "Execute Once Result",
+    id_configuration: "Configuration",
+    id_to_select: "To select",
     // Ctrls label
     // Project,Task
     id_loading: "Loading",

@@ -1,4 +1,22 @@
 Lumens.i18n = {
+    id_no: "编号",
+    id_name: "名字",
+    id_in: "输入",
+    id_out: "输出",
+    id_data: "数据",
+    id_timestamp: "时间戳",
+    id_direction: "数据流向",
+    id_resources: "数据源",
+    id_instruments: "工具集",
+    id_dashboad: "系统监控",
+    id_management: "业务管理",
+    id_business: "业务设计",
+    id_project_summary: "项目概述",
+    id_component_props: "组件属性",
+    id_transform: "数据转换",
+    id_exec_once: "测试执行",
+    id_configuration: "配置",
+    id_to_select: "请选取组件",
     // Ctrls label
     // Project,Task
     id_loading: "正在加载",
@@ -60,7 +78,7 @@ Lumens.i18n = {
     // Component Config
     id_comp_apply: "使用",
     // Script Ctrls
-    id_script_back: "Back",
+    id_script_back: "返回",
     id_script_apply: "使用",
     id_script_validate: "验证",
     id_rule_fmt_save: "保存",

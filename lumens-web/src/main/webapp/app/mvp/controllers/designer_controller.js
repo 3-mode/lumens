@@ -21,8 +21,8 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         panelStyle: {width: "100%", height: "100%"}
     });
     // Init variable
-    $scope.categoryInfo = {name: "to select"};
-    $scope.componentProps = {Name: {value: "to select"}};
+    $scope.categoryInfo = {name: i18n.id_to_select};
+    $scope.componentProps = {Name: {value: i18n.id_to_select}};
     $scope.projectChanged = false;
     // Load templates
     TransformListTemplate.get(function (templ) {
@@ -42,171 +42,169 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         $scope.$broadcast("ProjectChanged", true);
     };
 
-    // Load menu category
-    DesignNavMenu.get(function (menu) {
-        // Load data source category
-        DatasourceCategory.get(function (data_source_items) {
-            //Load instrument category
-            InstrumentCategory.get(function (instrument_items) {
-                menu.sections[0].items = data_source_items.items;
-                menu.sections[1].items = instrument_items.items;
-                TemplateService.getItems(instrument_items.items);
-                // Create a dictionary to find the correct icon
-                $scope.compCagegory = {};
-                $.each(data_source_items.items, function () {
-                    $scope.compCagegory[this.type] = this;
-                });
-                $.each(instrument_items.items, function () {
-                    $scope.compCagegory[this.type] = this;
-                });
-                desgin.barPanel = new Lumens.SplitLayout(Lumens.system.workspaceLayout.getPart2Element()).configure({
-                    mode: "vertical",
-                    part1Size: 48
-                });
-                DesignButtons.get(function (design_command_tmpl) {
-                    $compile(design_command_tmpl)($scope).appendTo(desgin.barPanel.getPart1Element());
-                });
+    // Load data source category
+    DatasourceCategory.get(function (data_source_items) {
+        var navMenu = Lumens.DesignNav_Config;
+        //Load instrument category
+        InstrumentCategory.get(function (instrument_items) {
+            navMenu.sections[0].items = data_source_items.items;
+            navMenu.sections[1].items = instrument_items.items;
+            TemplateService.getItems(instrument_items.items);
+            // Create a dictionary to find the correct icon
+            $scope.compCagegory = {};
+            $.each(data_source_items.items, function () {
+                $scope.compCagegory[this.type] = this;
+            });
+            $.each(instrument_items.items, function () {
+                $scope.compCagegory[this.type] = this;
+            });
+            desgin.barPanel = new Lumens.SplitLayout(Lumens.system.workspaceLayout.getPart2Element()).configure({
+                mode: "vertical",
+                part1Size: 48
+            });
+            DesignButtons.get(function (design_command_tmpl) {
+                $compile(design_command_tmpl)($scope).appendTo(desgin.barPanel.getPart1Element());
+            });
 
-                desgin.designAndInfoPanel = new Lumens.ResizableVSplitLayoutExt(desgin.barPanel.getPart2Element())
-                .configure({
-                    mode: "vertical",
-                    useRatio: true,
-                    part1Size: "40%"
-                });
-                // Create desgin workspace panel
-                desgin.designPanel = new Lumens.ComponentPanel(desgin.designAndInfoPanel.getPart1Element())
-                .configure({
-                    panelStyle: {width: "100%", height: "100%"},
-                    onComponentDblclick: function (component) {
-                        LumensLog.log("Dblclick:", component);
-                        if ($scope.currentUIComponent === component)
-                            return;
-                        if ($scope.currentUIComponent)
-                            $scope.currentUIComponent.updateSelect(false);
-                        $scope.currentUIComponent = component;
-                        $scope.currentUIComponent.updateSelect(true);
-                        var config = component.configure;
-                        $scope.$apply(function () {
-                            $scope.componentForm = $compile(component.getFormHtml())($scope);
-                            $scope.categoryInfo = config.category_info;
-                            $scope.componentProps = ComponentPropertyList(config);
-                            $scope.currentComponent = config.component_info ? config.component_info : $scope.currentComponent
+            desgin.designAndInfoPanel = new Lumens.ResizableVSplitLayoutExt(desgin.barPanel.getPart2Element())
+            .configure({
+                mode: "vertical",
+                useRatio: true,
+                part1Size: "40%"
+            });
+            // Create desgin workspace panel
+            desgin.designPanel = new Lumens.ComponentPanel(desgin.designAndInfoPanel.getPart1Element())
+            .configure({
+                panelStyle: {width: "100%", height: "100%"},
+                onComponentDblclick: function (component) {
+                    LumensLog.log("Dblclick:", component);
+                    if ($scope.currentUIComponent === component)
+                        return;
+                    if ($scope.currentUIComponent)
+                        $scope.currentUIComponent.updateSelect(false);
+                    $scope.currentUIComponent = component;
+                    $scope.currentUIComponent.updateSelect(true);
+                    var config = component.configure;
+                    $scope.$apply(function () {
+                        $scope.componentForm = $compile(component.getFormHtml())($scope);
+                        $scope.categoryInfo = config.category_info;
+                        $scope.componentProps = ComponentPropertyList(config);
+                        $scope.currentComponent = config.component_info ? config.component_info : $scope.currentComponent
+                    });
+                    $scope.$broadcast("UIComponentSelect", {UI: component});
+                },
+                onBeforeComponentAdd: function () {
+                    if ($scope.project)
+                        return true;
+                    Notifier.message("warn", "Warning", i18n.id_no_project_warning);
+                    return false;
+                },
+                onAfterComponentAdd: function (component) {
+                    $scope.projectOperator.add(component);
+                }
+            });
+            $scope.projectOperator = new Lumens.ProjectOperator($scope.compCagegory, desgin.designPanel, $scope);
+            // **************************************************************************************************************
+            // Try to load the project on local when refresh the currrent view if already there is a project is opened.
+            if (sessionStorage.local_project_storage) {
+                var local_project_storage = angular.fromJson(sessionStorage.local_project_storage);
+                ProjectById.get({project_id: local_project_storage.id}, function (projectData) {
+                    if ($scope.projectOperator)
+                        $scope.projectOperator.import(projectData);
+                    if (local_project_storage.is_active)
+                        ProjectById.operate({project_id: local_project_storage.id}, {action: 'active'}, function (result) {
+                            LumensLog.log(result);
                         });
-                        $scope.$broadcast("UIComponentSelect", {UI: component});
-                    },
-                    onBeforeComponentAdd: function () {
-                        if ($scope.project)
-                            return true;
-                        Notifier.message("warn", "Warning", i18n.id_no_project_warning);
-                        return false;
-                    },
-                    onAfterComponentAdd: function (component) {
-                        $scope.projectOperator.add(component);
+                });
+            }
+            // **************************************************************************************************************
+            // Create left navMenu
+            desgin.navMenu = new Lumens.NavMenu({
+                container: desgin.leftPanel.getElement(),
+                width: "100%",
+                height: "auto"
+            }).configure(navMenu, function (item, data) {
+                item.find("a").addClass("data-comp-node").draggable({
+                    appendTo: $("#id-data-comp-container"),
+                    helper: "clone"
+                }).data("item-data", data);
+            });
+
+            // Create info form panel
+            var nameTmpl = '<span class="lumens-icon-project lumens-icon-gap"></span><b>{{project.name}}</b><b ng-if="projectChanged">*</b>';
+            desgin.designAndInfoPanel.getTitleElement().append($compile(nameTmpl)($scope));
+            desgin.tabsContainer = new Lumens.Panel(desgin.designAndInfoPanel.getPart2Element())
+            .configure({
+                panelStyle: {"height": "100%", "width": "100%", "position": "relative", "overflow-y": "scroll", "overflow-x": "auto"}
+            });
+            function tabSummary($tabContent) {
+                desgin.tabs.projSummaryList = new Lumens.List($tabContent).configure({
+                    IdList: [
+                        "id-configuration",
+                        "id-resources",
+                        "id-instruments"
+                    ],
+                    titleList: [
+                        "<i class='lumens-icon-desc lumens-icon-gap'></i>" + i18n.id_configuration,
+                        "<i class='lumens-icon-resource lumens-icon-gap'></i>" + i18n.id_resources,
+                        "<i class='lumens-icon-instrucment lumens-icon-gap'></i>" + i18n.id_instruments
+                    ],
+                    buildContent: function (itemContent, id, isExpand, title) {
+                        if (isExpand) {
+                            if (id === "id-configuration") {
+                                $http.get("app/templates/designer/project_config_tmpl.html").success(function (project_desc_tmpl) {
+                                    itemContent.append($compile(project_desc_tmpl)($scope));
+                                });
+                            }
+                            else if (id === "id-resources") {
+                                $http.get("app/templates/designer/resources_tmpl.html").success(function (resources_tmpl) {
+                                    itemContent.append($compile(resources_tmpl)($scope));
+                                });
+                            }
+                            else if (id === "id-instruments") {
+                                $http.get("app/templates/designer/instruments_tmpl.html").success(function (instruments_tmpl) {
+                                    itemContent.append($compile(instruments_tmpl)($scope));
+                                });
+                            }
+                        }
                     }
                 });
-                $scope.projectOperator = new Lumens.ProjectOperator($scope.compCagegory, desgin.designPanel, $scope);
-                // **************************************************************************************************************
-                // Try to load the project on local when refresh the currrent view if already there is a project is opened.
-                if (sessionStorage.local_project_storage) {
-                    var local_project_storage = angular.fromJson(sessionStorage.local_project_storage);
-                    ProjectById.get({project_id: local_project_storage.id}, function (projectData) {
-                        if ($scope.projectOperator)
-                            $scope.projectOperator.import(projectData);
-                        if (local_project_storage.is_active)
-                            ProjectById.operate({project_id: local_project_storage.id}, {action: 'active'}, function (result) {
-                                LumensLog.log(result);
-                            });
-                    });
-                }
-                // **************************************************************************************************************
-                // Create left menu
-                desgin.navMenu = new Lumens.NavMenu({
-                    container: desgin.leftPanel.getElement(),
-                    width: "100%",
-                    height: "auto"
-                }).configure(menu, function (item, data) {
-                    item.find("a").addClass("data-comp-node").draggable({
-                        appendTo: $("#id-data-comp-container"),
-                        helper: "clone"
-                    }).data("item-data", data);
-                });
-
-                // Create info form panel
-                var nameTmpl = '<span class="lumens-icon-project lumens-icon-gap"></span><b>{{project.name}}</b><b ng-if="projectChanged">*</b>';
-                desgin.designAndInfoPanel.getTitleElement().append($compile(nameTmpl)($scope));
-                desgin.tabsContainer = new Lumens.Panel(desgin.designAndInfoPanel.getPart2Element())
-                .configure({
-                    panelStyle: {"height": "100%", "width": "100%", "position": "relative", "overflow-y": "scroll", "overflow-x": "auto"}
-                });
-                function tabSummary($tabContent) {
-                    desgin.tabs.projSummaryList = new Lumens.List($tabContent).configure({
-                        IdList: [
-                            "Configuration",
-                            "Resources",
-                            "Instruments"
-                        ],
-                        titleList: [
-                            "<i class='lumens-icon-desc lumens-icon-gap'></i>Configuration",
-                            "<i class='lumens-icon-resource lumens-icon-gap'></i>Resources",
-                            "<i class='lumens-icon-instrucment lumens-icon-gap'></i>Instruments"
-                        ],
-                        buildContent: function (itemContent, id, isExpand, title) {
-                            if (isExpand) {
-                                if (id === "Configuration") {
-                                    $http.get("app/templates/designer/project_config_tmpl.html").success(function (project_desc_tmpl) {
-                                        itemContent.append($compile(project_desc_tmpl)($scope));
-                                    });
-                                }
-                                else if (id === "Resources") {
-                                    $http.get("app/templates/designer/resources_tmpl.html").success(function (resources_tmpl) {
-                                        itemContent.append($compile(resources_tmpl)($scope));
-                                    });
-                                }
-                                else if (id === "Instruments") {
-                                    $http.get("app/templates/designer/instruments_tmpl.html").success(function (instruments_tmpl) {
-                                        itemContent.append($compile(instruments_tmpl)($scope));
-                                    });
-                                }
+            }
+            function tabConfiguration($tabContent) {
+                desgin.tabs.compPropsList = new Lumens.List($tabContent).configure({
+                    IdList: [
+                        "ComponentProps"
+                    ],
+                    titleList: [
+                        $compile('<span data-bind="categoryInfo.name"><i class="lumens-icon-props lumens-icon-gap"></i>{{categoryInfo.name}}</span>')($scope)
+                    ],
+                    buildContent: function (itemContent, id, isExpand, title) {
+                        if (isExpand) {
+                            if (id === "ComponentProps") {
+                                PropFormTemplate.get(function (propFormTmpl) {
+                                    itemContent.append($compile(propFormTmpl)($scope));
+                                })
                             }
                         }
-                    });
-                }
-                function tabConfiguration($tabContent) {
-                    desgin.tabs.compPropsList = new Lumens.List($tabContent).configure({
-                        IdList: [
-                            "ComponentProps"
-                        ],
-                        titleList: [
-                            $compile('<span data-bind="categoryInfo.name"><i class="lumens-icon-props lumens-icon-gap"></i>{{categoryInfo.name}}</span>')($scope)
-                        ],
-                        buildContent: function (itemContent, id, isExpand, title) {
-                            if (isExpand) {
-                                if (id === "ComponentProps") {
-                                    PropFormTemplate.get(function (propFormTmpl) {
-                                        itemContent.append($compile(propFormTmpl)($scope));
-                                    })
-                                }
-                            }
-                        }
-                    });
-                }
-                function tabTransformationList($tabContent) {
-                    $tabContent.append($compile($scope.transformListTemplate)($scope));
-                }
-                function tabExecOnceResult($tabContent) {
-                    $tabContent.append($compile(TemplateService.get("app/templates/designer/exec_log_tmpl.html"))($scope));
-                }
-                desgin.tabs = new Lumens.TabPanel(desgin.tabsContainer.getElement());
-                desgin.tabs.configure({
-                    tab: [
-                        {id: "id-project-info", label: "Project Summary", content: tabSummary},
-                        {id: "id-component-selected-props", label: "Component Properties", content: tabConfiguration},
-                        {id: "id-component-transformation-list", label: "Transformations", content: tabTransformationList},
-                        {id: "id-component-exec-once-result", label: "Execute Once Result", content: tabExecOnceResult}
-                    ]
+                    }
                 });
-            })
-        });
+            }
+            function tabTransformationList($tabContent) {
+                $tabContent.append($compile($scope.transformListTemplate)($scope));
+            }
+            function tabExecOnceResult($tabContent) {
+                $tabContent.append($compile(TemplateService.get("app/templates/designer/exec_log_tmpl.html"))($scope));
+            }
+            desgin.tabs = new Lumens.TabPanel(desgin.tabsContainer.getElement());
+            desgin.tabs.configure({
+                tab: [
+                    {id: "id-project-info", label: i18n.id_project_summary, content: tabSummary},
+                    {id: "id-component-selected-props", label: i18n.id_component_props, content: tabConfiguration},
+                    {id: "id-component-transformation-list", label: i18n.id_transform, content: tabTransformationList},
+                    {id: "id-component-exec-once-result", label: i18n.id_exec_once, content: tabExecOnceResult}
+                ]
+            });
+        })
     });
     // <******* Design View ------------------------------------------------------------
 })

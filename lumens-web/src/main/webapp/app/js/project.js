@@ -14,9 +14,9 @@ Lumens.ProjectOperator = Class.$extend({
     close: function () {
         this.componentPanel.emptyComponent();
         this.projectId = undefined;
-        this.$scope.componentProps = {Name: {value: "to select"}};
-        this.$scope.categoryInfo = {name: "to select"};
-        this.$scope.currentComponent = {name: "to select"};
+        this.$scope.componentProps = {Name: {value: Lumens.i18n.id_to_select}};
+        this.$scope.categoryInfo = {name: Lumens.i18n.id_to_select};
+        this.$scope.currentComponent = {name: Lumens.i18n.id_to_select};
         this.$scope.project = undefined;
         this.$scope.componentForm = undefined;
     },
@@ -31,9 +31,9 @@ Lumens.ProjectOperator = Class.$extend({
             start_entry: []
         };
         this.$scope.componentForm = null;
-        this.$scope.componentProps = {Name: {value: "to select"}};
-        this.$scope.categoryInfo = {name: "to select"};
-        this.$scope.currentComponent = {name: "to select"};
+        this.$scope.componentProps = {Name: {value: Lumens.i18n.id_to_select}};
+        this.$scope.categoryInfo = {name: Lumens.i18n.id_to_select};
+        this.$scope.currentComponent = {name: Lumens.i18n.id_to_select};
         this.$scope.$broadcast("InitProject");
     },
     get: function () {

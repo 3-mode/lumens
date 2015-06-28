@@ -130,25 +130,6 @@ Lumens.isMultipleLink = function (class_type) {
     return false;
 };
 
-Lumens.SysToolbar_Config = {
-    event_type: "SysToolbar",
-    buttons:
-    [
-        {
-            name: "Dashboad",
-            module_id: "id-dashboard-view"
-        },
-        {
-            name: "Management",
-            module_id: "id-management-view"
-        },
-        {
-            name: "Business Design",
-            module_id: "id-desinger-view"
-        }
-    ]
-};
-
 Lumens.system = {
     designView: {}
 };
