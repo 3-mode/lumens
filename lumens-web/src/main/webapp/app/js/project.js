@@ -89,8 +89,8 @@ Lumens.ProjectOperator = Class.$extend({
     updateStartEntryListFromDiscoverStartEntryList: function (saveValidStartEntryList, discoverStartEntryList) {
         for (var i in discoverStartEntryList) {
             var entry = this.getContainedStartEntry(discoverStartEntryList[i], saveValidStartEntryList)
-            if (entry)
-                saveValidStartEntryList.push(entry);
+            if (!entry)
+                saveValidStartEntryList.push(discoverStartEntryList[i]);
         }
     },
     getStartEntryList: function () {
