@@ -3,7 +3,7 @@
  */
 
 Lumens.controllers
-.controller("ManageViewCtrl", function ($scope, $route, SyncGet, ManageNavMenu) {
+.controller("ManageViewCtrl", function ($scope, $route, SyncGet) {
     LumensLog.log("in ManageViewCtrl");
     Lumens.system.navToolbar.active($route.current.$$route.originalPath.substring(1));
     Lumens.system.switchTo(Lumens.system.AngularJSView);
@@ -19,26 +19,25 @@ Lumens.controllers
     $scope.jobListHolder = new Lumens.List($("#jobList"));
     $scope.job_config = SyncGet.get("app/config/json/job_config.json", "application/json");
     $scope.job = {};
-    ManageNavMenu.get(function (menu) {
-        var manageMavMenu = $("#manageNavMenu");
-        $(window).resize(function (e) {
-            if (e && e.target !== this)
-                return;
-            manageMavMenu.trigger("resize");
-        })
-        $scope.navMenu = new Lumens.NavMenu({
-            container: manageMavMenu,
-            width: "100%",
-            height: "auto",
-            item_selected: true
-        }).configure(menu)
-        .onItemClick(function (evt) {
-            LumensLog.log(evt);
-            $scope.$apply(function () {
-                $scope.manageSelection = evt.module_id;
-            })
-        });
+    var menu = Lumens.Manage_Config;
+    var manageNavMenu = $("#manageNavMenu");
+    $(window).resize(function (e) {
+        if (e && e.target !== this)
+            return;
+        manageNavMenu.trigger("resize");
     })
+    $scope.navMenu = new Lumens.NavMenu({
+        container: manageNavMenu,
+        width: "100%",
+        height: "auto",
+        item_selected: true
+    }).configure(menu)
+    .onItemClick(function (evt) {
+        LumensLog.log(evt);
+        $scope.$apply(function () {
+            $scope.manageSelection = evt.module_id;
+        })
+    });
 })
 .controller("JobManagementCtrl", function ($scope, $compile, TemplateService, JobService, LogFileService, ProjectList, Notifier) {
     if (sessionStorage.local_log_storage) {

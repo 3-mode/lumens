@@ -55,6 +55,8 @@ Lumens.i18n = {
     id_job_repeat_yearly: "年",
     id_up: "上移",
     id_down: "下移",
+    id_section_manage: "管理",
+    id_job_manage: "任务管理",
     // Log
     id_server_log: "系统日志",
     id_job_log: "任务日志",

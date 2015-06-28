@@ -4,11 +4,6 @@
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
 // Services
-Lumens.services.factory('DesignNavMenu', function ($resource) {
-    return $resource("app/config/json/desgin_nav_menu.json", {}, {
-        get: {method: 'GET', isArray: false}
-    });
-});
 Lumens.services.factory('DesignButtons', function ($http, $q) {
     return createGetTemplateObject($http, $q, "app/templates/designer/design_command_tmpl.html");
 });
@@ -95,11 +90,6 @@ Lumens.services.factory('LogFileService', function ($resource) {
 });
 Lumens.services.factory('JobConfig', function ($resource) {
     return $resource("app/config/json/job_config.json?pagesize=:pagesize", {});
-});
-Lumens.services.factory('ManageNavMenu', function ($resource) {
-    return $resource("app/config/json/manage_nav_menu.json", {}, {
-        get: {method: 'GET', isArray: false}
-    });
 });
 Lumens.services.factory('CpuCount', function ($resource) {
     return $resource("rest/server_resources/cpu_perc", {}, {

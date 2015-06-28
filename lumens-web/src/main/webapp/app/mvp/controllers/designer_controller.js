@@ -3,7 +3,7 @@
  */
 
 Lumens.controllers.controller("DesignViewCtrl", function ($scope, $route, $http, $compile,
-DesignNavMenu, Notifier, PropFormTemplate, TransformListTemplate,
+Notifier, PropFormTemplate, TransformListTemplate,
 DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectById) {
     Lumens.system.switchTo(Lumens.system.NormalView);
     // Set the default page view as dashboard view

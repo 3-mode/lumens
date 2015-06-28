@@ -27,4 +27,20 @@ Lumens.DesignNav_Config = {
         {name: Lumens.i18n.id_resources},
         {name: Lumens.i18n.id_instruments}
     ]
-}
+};
+
+Lumens.Manage_Config = {
+    event_type: "NavMenu_Management",
+    sections: [
+        {
+            name: Lumens.i18n.id_section_manage,
+            items: [
+                {
+                    id: "job-management",
+                    name: Lumens.i18n.id_job_manage,
+                    item_icon_url: "app/css/img/Transform24x24.png"
+                }
+            ]
+        }
+    ]
+};

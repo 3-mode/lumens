@@ -52,6 +52,8 @@ Lumens.i18n = {
     id_job_repeat_weekly: "Weekly",
     id_job_repeat_monthly: "Monthly",
     id_job_repeat_yearly: "Yearly",
+    id_section_manage: "Management",
+    id_job_manage: "Job Management",
     id_up: "Up",
     id_down: "Down",
     // Log

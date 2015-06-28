@@ -102,6 +102,9 @@ a, a:focus, a:hover {
 .lumens .icon-grip-button:before {
     content: "\e70e";
 }
+.lumens .tab-header-bg {
+    background-color: #E4E4E4;
+}
 .lumens .lumens-gradient{
     width:300px;
     height:150px;
