@@ -1,5 +1,92 @@
-/* 
- * Copyright Lumens Team, Inc. All Rights Reserved.
- */
-
-
+Lumens.i18n = {
+    // Ctrls label
+    // Project,Task
+    id_loading: "正在加载",
+    id_new: "新建",
+    id_open: "打开",
+    id_deploy: "部署",
+    id_execute: "执行",
+    id_save: "保存",
+    id_import: "导入",
+    id_export: "导出",
+    id_active: "激活",
+    id_close: "关闭",
+    id_delete: "删除",
+    id_start: "开始",
+    id_stop: "停止",
+    id_edit: "编辑",
+    id_detail: "详细",
+    id_more: "更多",
+    id_job_desc_placeholder: "为任务添加描述",
+    id_create_job: "创建",
+    id_save_job: "保存",
+    id_job_description: "描述",
+    id_job_name: "任务名字",
+    id_job_create_title: "新建任务",
+    id_job_start_time: "开始时间",
+    id_job_end_time: "结束时间",
+    id_job_interval_time: "间隔",
+    id_job_repeat: "重复",
+    id_job_repeat_never: "从不",
+    id_job_repeat_secondly: "秒",
+    id_job_repeat_minutely: "分",
+    id_job_repeat_hourly: "小时",
+    id_job_repeat_daily: "每天",
+    id_job_repeat_weekly: "每周",
+    id_job_repeat_monthly: "每月",
+    id_job_repeat_yearly: "每年",
+    id_up: "上移",
+    id_down: "下移",
+    // Log
+    id_server_log: "系统日志",
+    id_job_log: "任务日志",
+    // Project
+    id_project_import: "项目导入",
+    id_project_catalog: "项目目录",
+    id_project_new_title: "新建项目",
+    id_project_name: "名字",
+    id_project_create: "创建",
+    id_project_close: "关闭",
+    id_project_open: "打开",
+    id_project_name_placeholder: "项目名字",
+    id_project_desc: "描述",
+    id_project_config: "配置",
+    id_project_exec_seq: "执行顺序配置",
+    id_project_seq: "顺序",
+    id_project_comp_name: "组件名字",
+    id_project_format_name: "格式名字",
+    id_project_seq_close: "关闭",
+    id_project_seq_save: "保存",
+    // Component Config
+    id_comp_apply: "使用",
+    // Script Ctrls
+    id_script_back: "Back",
+    id_script_apply: "使用",
+    id_script_validate: "验证",
+    id_rule_fmt_save: "保存",
+    id_rule_foreach: "循环",
+    id_rule_index: "索引",
+    id_rule_script: "脚本",
+    // Rule list Ctrls
+    id_rule_new: "新建",
+    id_rule_edit: "编辑",
+    id_rule_delete: "删除",
+    // Format list Ctrls
+    id_format_new: "新建",
+    id_format_delete: "删除",
+    // Format registry
+    id_format_reg_edit_btn: "编辑",
+    id_format_reg_filter_btn: "过滤",
+    id_rule_reg_edit_btn: "编辑",
+    id_prop_title: "属性",
+    // Exec log
+    id_exec_log_refresh: "刷新",
+    id_exec_log_clear: "清除",
+    // Messages
+    id_no_project_warning: "再设计业务之前，请创建一个新项目",
+    id_new_project_successfully: "新项目创建成功",
+    id_no_project_select_warning: "没有打开任何项目",
+    id_save_project: "项目 '{0}' 保存成功",
+    id_save_proj_err: "项目 '{0}' 不能保存 !",
+    id_no_project_name: "必须填写项目名字 !"
+};
