@@ -106,10 +106,8 @@ public class ProjectService implements ServiceConstants {
             JsonNode actionJson = messageJson.get(ACTION);
             if (JsonUtility.isNotNull(actionJson)) {
                 String action = actionJson.asText();
-                if (CREATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
-                    return createProject(contentJson);
-                else if (UPDATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
-                    return updateProject(projectID, contentJson);
+               if (UPDATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
+                    return updateProject(projectID, contentJson, req);
                 else if (DELETE.equalsIgnoreCase(action))
                     return deleteProject(projectID, req);
                 else if (CLOSE.equalsIgnoreCase(action))
@@ -188,7 +186,7 @@ public class ProjectService implements ServiceConstants {
         return Response.ok().entity(utility.toUTF8String()).build();
     }
 
-    private Response updateProject(long projectID, JsonNode contentJson) throws Exception {
+    private Response updateProject(long projectID, JsonNode contentJson, HttpServletRequest req) throws Exception {
         ByteArrayInputStream bais = new ByteArrayInputStream(contentJson.asText().getBytes(UTF_8));
         TransformProject project = new TransformProject();
         ProjectSerializer projSerial = new ProjectSerializer(project);
@@ -211,6 +209,7 @@ public class ProjectService implements ServiceConstants {
         json.writeEndArray();
         json.writeEndObject();
         json.writeEndObject();
+        this.deployProject(projectID, req);
         return Response.ok().entity(utility.toUTF8String()).build();
     }
 
