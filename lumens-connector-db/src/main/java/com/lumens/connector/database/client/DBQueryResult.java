@@ -52,7 +52,7 @@ public class DBQueryResult implements OperationResult, SupportAccessory {
     public boolean hasNext() {
         // Handle current input data if query finished then check if the input data is the last in the input data list
         return (result != null && result.size() == pageSize)
-               || (input.getStart() < input.getData().size());
+               || ((input.getStart() + 1) < input.getData().size());
     }
 
     @Override

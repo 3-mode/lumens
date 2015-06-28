@@ -30,13 +30,17 @@ public class TransformRuleItem {
         this.format = format;
     }
 
-    public void setScript(String scriptText) throws Exception {
-        orignalScriptText = scriptText == null ? "" : scriptText;
-        String trimedScriptText = orignalScriptText.trim();
-        if (ProcessorUtils.isPathFormat(trimedScriptText)) {
-            this.script = new AccessPathScript(ProcessorUtils.getAccessPath(trimedScriptText));
-        } else {
-            this.script = new JavaScript(rule.getJavaScriptContext(), format.getFullPath().toString(), trimedScriptText);
+    public void setScript(String scriptText) {
+        try {
+            orignalScriptText = scriptText == null ? "" : scriptText;
+            String trimedScriptText = orignalScriptText.trim();
+            if (ProcessorUtils.isPathFormat(trimedScriptText)) {
+                this.script = new AccessPathScript(ProcessorUtils.getAccessPath(trimedScriptText));
+            } else {
+                this.script = new JavaScript(rule.getJavaScriptContext(), format.getFullPath().toString(), trimedScriptText);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
         }
     }
 

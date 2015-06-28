@@ -6,7 +6,6 @@ package test;
 import com.lumens.backend.ApplicationContext;
 import com.lumens.backend.service.LogService;
 import com.lumens.backend.service.ProjectService;
-import com.lumens.connector.Direction;
 import com.lumens.sysdb.DAOFactory;
 import com.lumens.sysdb.dao.InOutLogDAO;
 import com.lumens.sysdb.dao.ProjectDAO;
@@ -22,7 +21,6 @@ import com.lumens.scheduler.JobConfiguration;
 import com.lumens.sysdb.dao.JobDAO;
 import com.lumens.sysdb.entity.Job;
 import com.lumens.engine.DBHelper;
-import com.lumens.model.Format;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -31,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import javax.ws.rs.core.Response;
 import org.junit.Test;
 
@@ -48,7 +45,7 @@ public class ServiceTest {
     // The methods must be annotated with annotation @Test. For example:
     //
     public void testCase() throws Exception {
-        testProject("/projects/rapsync.mota");
+        testProject("/projects/ora_2_csv.mota");
     }
 
     public void testProject(String projectPath) throws Exception {
