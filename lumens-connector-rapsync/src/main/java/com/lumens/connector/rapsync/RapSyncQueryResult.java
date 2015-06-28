@@ -74,8 +74,7 @@ public class RapSyncQueryResult implements OperationResult, SupportAccessory {
         } else if (hasNext() && result.size() == builder.getPageSize()) {
             pageStart += builder.getPageSize();
             String sql = String.format(builder.generateSelectSQL(input.getData().get(input.getStart())), builder.getPageSize() + pageStart, pageStart);
-            ResultSet resultSet = miner.query(sql);
-            try {
+            try (ResultSet resultSet = miner.query(sql)) {
                 this.result = new DBElementBuilder().buildElement(builder.getFormat(), resultSet);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
