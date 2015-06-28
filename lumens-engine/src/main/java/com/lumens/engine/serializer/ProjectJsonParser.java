@@ -294,7 +294,11 @@ public class ProjectJsonParser {
                 if (fEntry != null) {
                     Format format = fEntry.getFormat();
                     TransformRule rule = new TransformRule(format);
-                    readTransformRuleItemFromJson(rule, transformRuleJson.get("transform_rule_item"), format.getName());
+                    JsonNode rootRuleItem = transformRuleJson.get("transform_rule_item");
+                    JsonNode scriptJson = rootRuleItem.get("script");
+                    if (isNotNull(scriptJson))
+                        rule.getRootRuleItem().setScript(scriptJson.asText());
+                    readTransformRuleItemFromJson(rule, rootRuleItem, format.getName());
                     return rule;
                 }
             }
@@ -315,13 +319,8 @@ public class ProjectJsonParser {
                         formatName = pathToken + '.' + formatName;
                     TransformRuleItem ritem = rule.getRuleItem(formatName);
                     JsonNode scriptJson = ti.get("script");
-                    if (isNotNull(scriptJson)) {
-                        try {
-                            ritem.setScript(scriptJson.asText());
-                        } catch (Exception ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    }
+                    if (isNotNull(scriptJson))
+                        ritem.setScript(scriptJson.asText());
                     JsonNode foreachArray = ti.get("for_each");
                     if (isNotNull(foreachArray) && foreachArray.isArray()) {
                         readTransformForeachList(ritem, foreachArray);
