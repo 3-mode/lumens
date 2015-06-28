@@ -36,8 +36,10 @@ public class TransformMapper extends AbstractProcessor {
             if (input == null) {
                 TransformMapperContext ctx = new TransformMapperContext(rootRuleItem, null);
                 Element result = processTransformItem(null, ctx);
-                if (result != null)
+                if (result != null) {
+                    transformAccessoryToTarget(ctx, result);
                     results.add(result);
+                }
             } else {
                 Element currentElement = null;
                 for (Element rootSourceElement : input) {
