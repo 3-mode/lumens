@@ -1,0 +1,14 @@
+--------------------------------------------------------
+DROP TABLE "LUMENS"."COUNTRIES" cascade constraints;
+DROP TABLE "LUMENS"."DEPARTMENTS" cascade constraints;
+DROP TABLE "LUMENS"."EMPLOYEES" cascade constraints;
+DROP TABLE "LUMENS"."JOBS" cascade constraints;
+DROP TABLE "LUMENS"."JOB_HISTORY" cascade constraints;
+DROP TABLE "LUMENS"."LOCATIONS" cascade constraints;
+DROP TABLE "LUMENS"."REGIONS" cascade constraints;
+DROP SEQUENCE "LUMENS"."DEPARTMENTS_SEQ";
+DROP SEQUENCE "LUMENS"."EMPLOYEES_SEQ";
+DROP SEQUENCE "LUMENS"."LOCATIONS_SEQ";
+DROP VIEW "LUMENS"."EMP_DETAILS_VIEW";
+DROP PROCEDURE "LUMENS"."ADD_JOB_HISTORY";
+DROP PROCEDURE "LUMENS"."SECURE_DML";
