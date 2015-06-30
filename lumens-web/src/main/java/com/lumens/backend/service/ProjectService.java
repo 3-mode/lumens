@@ -72,7 +72,7 @@ public class ProjectService implements ServiceConstants {
             new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes(UTF_8)));
             return Response.ok()
             .header("Content-Disposition", String.format("attachment; filename=%s.%s", Long.toString(projectID), "mota"))
-            .header("Set-Cookie", "fileDownload=true; Path=/").entity(project.data.getBytes()).build();
+            .header("Set-Cookie", "fileDownload=true; Path=/").entity(project.data.getBytes(UTF_8)).build();
         } catch (Exception ex) {
             return ServerUtils.getErrorMessageResponse(ex);
         }
