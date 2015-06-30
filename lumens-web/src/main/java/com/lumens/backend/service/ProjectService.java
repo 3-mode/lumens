@@ -69,7 +69,7 @@ public class ProjectService implements ServiceConstants {
             ProjectDAO pDAO = DAOFactory.getProjectDAO();
             Project project = pDAO.getProject(projectID);
             TransformProject projectInstance = new TransformProject();
-            new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
+            new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes(UTF_8)));
             return Response.ok()
             .header("Content-Disposition", String.format("attachment; filename=%s.%s", Long.toString(projectID), "mota"))
             .header("Set-Cookie", "fileDownload=true; Path=/").entity(project.data.getBytes()).build();
@@ -84,7 +84,7 @@ public class ProjectService implements ServiceConstants {
     public Response importProject(@FormDataParam("project") InputStream fileInputStream) {
         String message = null;
         try {
-            message = IOUtils.toString(fileInputStream, "UTF-8");
+            message = IOUtils.toString(fileInputStream, UTF_8);
             if (log.isDebugEnabled())
                 log.debug("Project json content is: " + message);
             return this.createProject(message);
@@ -106,7 +106,7 @@ public class ProjectService implements ServiceConstants {
             JsonNode actionJson = messageJson.get(ACTION);
             if (JsonUtility.isNotNull(actionJson)) {
                 String action = actionJson.asText();
-               if (UPDATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
+                if (UPDATE.equalsIgnoreCase(action) && JsonUtility.isNotNull(contentJson))
                     return updateProject(projectID, contentJson, req);
                 else if (DELETE.equalsIgnoreCase(action))
                     return deleteProject(projectID, req);
@@ -143,7 +143,7 @@ public class ProjectService implements ServiceConstants {
         ProjectDAO pDAO = DAOFactory.getProjectDAO();
         Project project = pDAO.getProject(projectID);
         TransformProject projectInstance = new TransformProject();
-        new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
+        new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes(UTF_8)));
         // Execute all start rules to drive the ws connector
         List<InspectionHandler> handlers = new ArrayList<>();
         handlers.add(new TransformComponentDBLogHandler(project.id, project.name));
@@ -194,7 +194,7 @@ public class ProjectService implements ServiceConstants {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         projSerial.writeToJson(baos);
         ProjectDAO pDAO = DAOFactory.getProjectDAO();
-        long projectId = pDAO.update(new Project(projectID, project.getName(), project.getDescription(), baos.toString()));
+        long projectId = pDAO.update(new Project(projectID, project.getName(), project.getDescription(), baos.toString(UTF_8)));
         JsonUtility utility = JsonUtility.createJsonUtility();
         JsonGenerator json = utility.getGenerator();
         json.writeStartObject();
@@ -307,7 +307,7 @@ public class ProjectService implements ServiceConstants {
         Project project = pDAO.getProject(projectID);
         TransformProject projectInstance = new TransformProject();
         try {
-            new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
+            new ProjectSerializer(projectInstance).readFromJson(new ByteArrayInputStream(project.data.getBytes(UTF_8)));
             Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
             if (attr != null)
                 ((Pair<Long, TransformProject>) attr).getSecond().close();
@@ -336,8 +336,7 @@ public class ProjectService implements ServiceConstants {
                                            @QueryParam("format_name") String formatName,
                                            @QueryParam("format_path") String formatPath,
                                            @QueryParam("direction") String direction,
-                                           @Context HttpServletRequest req
-    ) {
+                                           @Context HttpServletRequest req) {
         if (componentId != null && direction != null) {
             Object attr = req.getSession().getAttribute(CURRENT__EDITING__PROJECT);
             if (attr != null) {
