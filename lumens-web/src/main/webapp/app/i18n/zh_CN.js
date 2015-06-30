@@ -78,10 +78,10 @@ Lumens.i18n = {
     id_project_seq_close: "关闭",
     id_project_seq_save: "保存",
     // Component Config
-    id_comp_apply: "使用",
+    id_comp_apply: "应用",
     // Script Ctrls
     id_script_back: "返回",
-    id_script_apply: "使用",
+    id_script_apply: "应用",
     id_script_validate: "验证",
     id_rule_fmt_save: "保存",
     id_rule_foreach: "循环",
