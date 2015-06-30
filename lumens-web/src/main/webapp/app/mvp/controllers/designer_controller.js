@@ -666,7 +666,7 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
         }
     }
 })
-.controller("RuleScriptCtrl", function ($scope, TransformMapperStorageService, Notifier) {
+.controller("RuleScriptCtrl", function ($scope, TransformMapperStorageService, Notifier, Messages) {
     $scope.onCommand = function (id_script_btn) {
         if (id_script_btn === "id_script_apply") {
             $scope.$broadcast("ApplyScriptToRuleItem");
@@ -682,9 +682,9 @@ FormatList, RuleEditTemplate, ScriptEditTemplate, FormatRegistryModal, RuleRegis
         else if (id_script_btn === "id_rule_fmt_save") {
             try {
                 TransformMapperStorageService.save($scope);
-                Notifier.message("info", "Success", "Apply the rule and format configuration successfully");
+                Notifier.message("info", "Success", Messages.get("id_transform_save_success"));
             } catch (e) {
-                Notifier.message("error", "Error", "Failed to apply the rule and format configuration");
+                Notifier.message("error", "Error", e);
             }
         }
         else if (id_script_btn === "id_rule_script") {

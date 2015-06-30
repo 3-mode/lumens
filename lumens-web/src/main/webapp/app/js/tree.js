@@ -194,8 +194,7 @@ Lumens.Tree = Class.$extend({
         return this.selectNode;
     },
     remove: function () {
-        this.$parentContainer.unbind();
-        this.$parentContainer.remove();
+        this.$tree.remove();
     },
     getElement: function () {
         return this.$tree;
