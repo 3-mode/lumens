@@ -53,10 +53,15 @@ Lumens.i18n = {
     id_job_repeat_weekly: "周",
     id_job_repeat_monthly: "月",
     id_job_repeat_yearly: "年",
-    id_up: "上移",
-    id_down: "下移",
     id_section_manage: "管理",
     id_job_manage: "任务管理",
+    id_up: "上移",
+    id_down: "下移",
+    id_rule_reg: "添加规则",
+    id_rule_reg_name: "规则别名",
+    id_format_reg: "添加格式",
+    id_format_reg_name: "格式别名",
+    id_format_list: "格式列表",
     // Log
     id_server_log: "系统日志",
     id_job_log: "任务日志",
@@ -108,5 +113,7 @@ Lumens.i18n = {
     id_no_project_select_warning: "没有打开任何项目",
     id_save_project: "项目 '{0}' 保存成功",
     id_save_proj_err: "项目 '{0}' 不能保存 !",
-    id_no_project_name: "必须填写项目名字 !"
+    id_no_project_name: "必须填写项目名字 !",
+    id_no_mandatory_for_transform: "转换映射规则名字，输出格式名字必须填写。如果使用输入格式则输入格式名字必须填写。否则不能保存。",
+    id_transform_save_success: "转换规则保存成功"
 };

@@ -103,8 +103,8 @@ Lumens.services.factory('RuleTreeService', ['FormatService', function (FormatSer
                     throw "Wrong transform rule configruation it must equal 1";
                 var rootRuleItemNode = entryList.map[childKeys[0]];
                 var rootRuleItem = {format_name: rootRuleItemNode.data.name};
-                if(rootRuleItemNode.getScript())
-                  rootRuleItem.script = rootRuleItemNode.getScript();
+                if (rootRuleItemNode.getScript())
+                    rootRuleItem.script = rootRuleItemNode.getScript();
                 // Build child item rules
                 var transform_rule_item = this.buildTransformRuleTreeChildren(rootRuleItemNode.getChildList());
                 if (transform_rule_item.length > 0)
@@ -304,9 +304,24 @@ Lumens.services.factory('RuleTreeService', ['FormatService', function (FormatSer
         };
     }]
 );
-Lumens.services.factory('TransformMapperStorageService', ['RuleTreeService', function (RuleTreeService) {
+Lumens.services.factory('TransformMapperStorageService', ['RuleTreeService', 'Messages', function (RuleTreeService, Messages) {
         return {
             pathEnding: "+-*/ &|!<>\n\r\t^%=;:?,",
+            save: function ($scope) {
+                // Validate the mapping information
+                if(($scope.inputSelectedFormatName && (!$scope.inputFormatRegName || $scope.inputFormatRegName === ""))
+                || (!$scope.outputSelectedFormatName || !$scope.outputFormatRegName || $scope.outputFormatRegName === "")
+                || !$scope.ruleRegName || $scope.ruleRegName === "") {
+                    throw Messages.get("id_no_mandatory_for_transform");
+                }
+                var required = this.buildRequiredInfo($scope);
+                var sourceFormatInfo = this.discoverSourceFormat(required);
+                var targetFormatInfo = this.discoverTargetFormat(required);
+                var ruleInfo = this.discoverRule(required);
+                this.saveToFormatList($scope, sourceFormatInfo);
+                this.saveToFormatList($scope, targetFormatInfo);
+                this.saveToTransformList($scope, ruleInfo);
+            },
             findRootFormat: function (formatList, formatName) {
                 if (formatList) {
                     for (var i = 0; i < formatList.length; ++i)
@@ -426,15 +441,6 @@ Lumens.services.factory('TransformMapperStorageService', ['RuleTreeService', fun
                         rule_entry: required.ruleEntry
                     };
                 }
-            },
-            save: function ($scope) {
-                var required = this.buildRequiredInfo($scope);
-                var sourceFormatInfo = this.discoverSourceFormat(required);
-                var targetFormatInfo = this.discoverTargetFormat(required);
-                var ruleInfo = this.discoverRule(required);
-                this.saveToFormatList($scope, sourceFormatInfo);
-                this.saveToFormatList($scope, targetFormatInfo);
-                this.saveToTransformList($scope, ruleInfo);
             },
             isValidEndComponent: function ($scope, formatInfo) {
                 if (!$scope.currentUIComponent || !formatInfo || !formatInfo.format_entry.name)

@@ -56,6 +56,11 @@ Lumens.i18n = {
     id_job_manage: "Job Management",
     id_up: "Up",
     id_down: "Down",
+    id_rule_reg: "Rule Registry",
+    id_rule_reg_name: "Rule Alias",
+    id_format_reg: "Format Registry",
+    id_format_reg_name: "Format Alias",
+    id_format_list: "Format List",
     // Log
     id_server_log: "Server Log",
     id_job_log: "Job Log",
@@ -107,5 +112,7 @@ Lumens.i18n = {
     id_no_project_select_warning: "No project is selected to open",
     id_save_project: "The project '{0}' is saved successfully",
     id_save_proj_err: "The project '{0}' can't be saved !",
-    id_no_project_name: "The project name is must !"
+    id_no_project_name: "The project name is must !",
+    id_no_mandatory_for_transform: "Transform registry name, output format registry name must be given. If input format is used then its registry name must be given also!",
+    id_transform_save_success: "Apply the rule and format configuration successfully"
 };

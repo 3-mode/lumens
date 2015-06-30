@@ -3,13 +3,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myModalLabel">Rule Registry</h4>
+                <h4 class="modal-title" id="myModalLabel">{{i18n.id_rule_reg}}</h4>
             </div>
             <div class="modal-body table-responsive" ng-init="projectDescription=''">
                 <form role="form">
                     <div class="form-group" ng-init="registeredRuleName = ruleRegName">
-                        <label for="registeredRuleName">Registered Rule Name</label>
-                        <input ng-model="registeredRuleName" type="text" class="form-control input-lg" id="registeredRuleName" placeholder="Registered Rule Name">
+                        <label for="registeredRuleName">{{i18n.id_rule_reg_name}}</label>
+                        <input ng-model="registeredRuleName" type="text" class="form-control input-lg" id="registeredRuleName">
                     </div>
                 </form>
             </div>

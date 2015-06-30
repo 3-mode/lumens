@@ -17,12 +17,23 @@ Lumens.services.factory('Notifier', function () {
         }
     }
 });
+Lumens.services.factory('Messages', function () {
+    return {
+        get: function (id) {
+            return Lumens.i18n[id];
+        }
+    }
+});
 Lumens.services.factory('ViewUtils', function ($resource) {
     return {
         removeRuleNode: function (treeNode) {
             var selectNode = treeNode.getSelectNode();
-            if (selectNode)
-                selectNode.remove();
+            if (selectNode) {
+                if (selectNode.getLevel() <= 0)
+                    selectNode.getTree().remove();
+                else
+                    selectNode.remove();
+            }
             console.log(selectNode);
         },
         updateDisplayFormatList: function (displayFormatList, validDisplayFmtList) {
