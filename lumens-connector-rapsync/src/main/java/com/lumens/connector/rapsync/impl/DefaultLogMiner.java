@@ -87,7 +87,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
                 return;
             }
             String buildList = redolog.buildLogMinerStringFromList(query.next(), true);
-            
+
             // checking added redo logs
             if (log.isDebugEnabled()) {
                 ResultSet addedLogsResult = dbClient.executeGetResult(SQL_QUERY_LOG_INFO);
@@ -108,10 +108,10 @@ public class DefaultLogMiner implements LogMiner, Constants {
     }
 
     @Override
-    public boolean hasNextBuild(){
+    public boolean hasNextBuild() {
         return redolog.getQuery().hasNext();
     }
-    
+
     @Override
     public void start() {
         log.debug("Start redolog analysis.");
@@ -163,9 +163,19 @@ public class DefaultLogMiner implements LogMiner, Constants {
         if (value.SCN < LAST_SCN) {
             return;
         }
+        if(value.SQL_REDO.isEmpty()){
+            log.warn("Skip empty REDO log record with SCN:" + value.SCN);
+            return;
+        }
         if (!isSupportedOperation(value.OPERATION)) {
             log.warn("Unsupported operation: SCN is " + value.SCN + ", OPERATION is " + value.OPERATION);
             return;
+        }
+        String user = dbClient.getUser();
+        if (!value.SEG_OWNER.isEmpty()) {            
+            if (!user.equalsIgnoreCase(value.SEG_OWNER.toLowerCase())) {
+                value.SQL_REDO.replaceAll(value.SEG_OWNER, ORACLE_CLASS);
+            }
         }
         // JDBC Driver bug: invalid character exception while SQL end with comma
         String SQL = value.SQL_REDO.replaceAll(";", "");
@@ -191,7 +201,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
                 log.error("Failed on statement:" + value.SQL_REDO);
                 log.info("Trying to find out failure reason...");
 
-                if (!meta.checkTableExist(value.SEG_OWNER, value.TABLE_NAME)) {
+                if (!meta.checkTableExist(user, value.TABLE_NAME)) {
                     log.info(String.format("Table %s not exist.", value.TABLE_NAME));
                     if (value.OPERATION.equalsIgnoreCase("delete")) {
                         log.warn("Skip sync for 'delete' operation.");

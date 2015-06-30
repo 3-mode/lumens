@@ -8,7 +8,6 @@ import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import static com.lumens.connector.database.DBConstants.ACTION;
 import static com.lumens.connector.database.DBConstants.SQLPARAMS;
-import com.lumens.connector.database.client.DBWriteResult;
 import com.lumens.connector.rapsync.api.LogMiner;
 import com.lumens.connector.rapsync.api.RedoValue;
 import com.lumens.model.Element;
@@ -50,8 +49,8 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
             if (strOper == null || QUERY.equalsIgnoreCase(strOper)) {
                 return new RapSyncQueryResult(this, miner, new RapSyncQuerySQLBuilder(output), input);
             } else if (SYNC.equalsIgnoreCase(strOper)) { // sync here
-                List<Element> outList = processSync(dataList, output);
-                return new DBWriteResult(input, outList);
+                List<Element> outList = processSync(dataList, input.getData().get(0).getFormat());
+                return new RapSyncWriteResult(input, outList);
             } else {
                 throw new UnsupportedOperationException("Error, not supported action : " + strOper);
             }
@@ -61,13 +60,27 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
 
     private List<Element> processSync(List<Element> inList, Format output) throws Exception {
         List<Element> outList = new ArrayList<>();
+        // Check before sync
+        if (inList.size() > 0) {
+            Element firstElem = inList.get(0);
+            if (firstElem.getChild(COLUMN_REDO) == null || firstElem.getChild(COLUMN_REDO).getValue().getString().isEmpty()) {
+                throw new RuntimeException(COLUMN_REDO + " has not been defined. It is what to be synced to destination database.");
+            }
+            if (firstElem.getChild(COLUMN_OPERATION) == null || firstElem.getChild(COLUMN_OPERATION).getValue().getString().isEmpty()) {
+                throw new RuntimeException(COLUMN_OPERATION + " has not been defined. It is necessary to filter redundant records");
+            }
+            if (firstElem.getChild(COLUMN_SCN) == null || firstElem.getChild(COLUMN_SCN).getValue().getString().isEmpty()) {
+                throw new RuntimeException(COLUMN_SCN + " has not been defined. It is necessary to perform incremental sync.");
+            }
+        }
+
         for (Element elem : inList) {
             RedoValue value = new RedoValue();
-            value.SCN = elem.getChildByPath(COLUMN_SCN).getValue().getInt();
-            value.SQL_REDO = elem.getChildByPath(COLUMN_REDO).getValue().toString();
-            value.OPERATION = elem.getChildByPath(COLUMN_OPERATION).getValue().toString();
-            value.SEG_OWNER = elem.getChildByPath(COLUMN_SEG_OWNER).getValue().toString();
-            value.TABLE_NAME = elem.getChildByPath(COLUMN_TABLE_NAME).getValue().toString();
+            value.SCN = elem.getChild(COLUMN_SCN).getValue().getInt();
+            value.SQL_REDO = elem.getChild(COLUMN_REDO).getValue().toString();
+            value.OPERATION = elem.getChild(COLUMN_OPERATION).getValue().toString();
+            value.SEG_OWNER = elem.getChild(COLUMN_SEG_OWNER) != null ? elem.getChild(COLUMN_SEG_OWNER).getValue().toString() : "";
+            value.TABLE_NAME = elem.getChild(COLUMN_TABLE_NAME) != null ? elem.getChild(COLUMN_TABLE_NAME).getValue().toString() : "";
             if (value.OPERATION.equalsIgnoreCase("ddl")) {
                 miner.buildDictionary();
             }

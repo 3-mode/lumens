@@ -15,6 +15,7 @@ public interface Constants {//extends DBConstants {
 
     public String DICTIONARY_FILE = "dictionary.ora";
     public String SQL_GEG_VERSION = "SELECT version FROM sys.v$instance";  // need sys privelege
+    public String SQL_GEG_SCHEMA = "select SYS_CONTEXT('USERENV','CURRENT_SCHEMA') CURRENT_SCHEMA from dual";  // need sys privelege
     public String SQL_CHECK_SUPPLEMENTAL_LOG = "SELECT supplemental_log_data_min FROM sys.v_$database";  // need sys priveledge
     public String SQL_CHECK_LOG_MODE = "SELECT log_mode FROM sys.v_$database";
     public String SQL_ENABLE_SUPPLEMENTAL_LOG = "ALTER DATABASE ADD SUPPLEMENTAL LOG DATA";
