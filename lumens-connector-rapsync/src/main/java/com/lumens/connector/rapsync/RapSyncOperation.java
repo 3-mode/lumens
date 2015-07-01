@@ -64,12 +64,15 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
         // Check before sync
         if (inList.size() > 0) {
             Element firstElem = inList.get(0);
-            if (checkMandatoryField(firstElem, COLUMN_REDO))
+            if (checkMandatoryField(firstElem, COLUMN_REDO)) {
                 throw new RuntimeException(COLUMN_REDO + " has not been defined. It is what to be synced to destination database.");
-            if (checkMandatoryField(firstElem, COLUMN_OPERATION))
+            }
+            if (checkMandatoryField(firstElem, COLUMN_OPERATION)) {
                 throw new RuntimeException(COLUMN_OPERATION + " has not been defined. It is necessary to filter redundant records");
-            if (checkMandatoryField(firstElem, COLUMN_SCN))
+            }
+            if (checkMandatoryField(firstElem, COLUMN_SCN)) {
                 throw new RuntimeException(COLUMN_SCN + " has not been defined. It is necessary to perform incremental sync.");
+            }
         }
 
         for (Element elem : inList) {
