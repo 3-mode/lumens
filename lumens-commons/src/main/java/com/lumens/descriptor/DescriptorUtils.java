@@ -43,7 +43,7 @@ public class DescriptorUtils {
         }
     }
 
-    public static Map<String, Object> processDescriptor(Class clazz, String configRoot, String compType) {
+    public static Map<String, Object> processDescriptor(String lang, String configRoot, String compType, Class clazz) {
         Map<String, Object> props = new HashMap<>();
         JsonUtility utility = JsonUtility.createJsonUtility();
         JsonGenerator generator = utility.getGenerator();

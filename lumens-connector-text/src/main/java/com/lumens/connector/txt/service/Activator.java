@@ -17,7 +17,7 @@ public class Activator implements AddinActivator {
     public void start(AddinContext context) {
         addinContext = context;
         ConnectorFactory factory = new TextConnectorFactory();
-        addinContext.registerService(factory.getComponentType(), factory, DescriptorUtils.processDescriptor(Activator.class, "text", factory.getComponentType()));
+        addinContext.registerService(factory.getComponentType(), factory, DescriptorUtils.processDescriptor(context.getLanguage(), "text", factory.getComponentType(), Activator.class));
     }
 
     @Override

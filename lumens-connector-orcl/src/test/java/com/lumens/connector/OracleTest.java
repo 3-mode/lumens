@@ -6,9 +6,6 @@ package com.lumens.connector;
 import com.lumens.addin.AddinContext;
 import com.lumens.addin.AddinEngine;
 import com.lumens.addin.ServiceEntity;
-import com.lumens.connector.ConnectorFactory;
-import com.lumens.connector.Direction;
-import com.lumens.connector.MockOracleConnector;
 import com.lumens.connector.database.client.oracle.OracleClient;
 import com.lumens.connector.database.client.oracle.service.Activator;
 import com.lumens.model.Format;
@@ -27,7 +24,7 @@ public class OracleTest {
 
     @Test
     public void testAddin() throws Exception {
-        AddinEngine ae = new AddinEngine(OracleTest.class.getClassLoader());
+        AddinEngine ae = new AddinEngine("en_US", OracleTest.class.getClassLoader());
         ae.start();
         AddinContext ac = ae.getAddinContext();
         Activator activator = new Activator();

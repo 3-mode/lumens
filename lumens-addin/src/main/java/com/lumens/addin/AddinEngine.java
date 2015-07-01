@@ -21,9 +21,9 @@ public class AddinEngine implements Addin {
     private final AddinContext addinContext;
     private List<AddinURLClassLoader> classLoaderList;
     
-    public AddinEngine(ClassLoader parentClassLoader) {
+    public AddinEngine(String lang, ClassLoader parentClassLoader) {
         engineClassLoader = new AddinURLClassLoader(new URL[]{}, parentClassLoader == null ? ClassLoader.getSystemClassLoader() : parentClassLoader);
-        addinContext = new AddinDefaultContext(this);
+        addinContext = new AddinDefaultContext(lang, this);
     }
 
     public AddinURLClassLoader getEngineClassLoader() {
