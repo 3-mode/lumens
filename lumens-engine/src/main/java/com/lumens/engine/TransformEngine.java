@@ -16,14 +16,16 @@ import java.net.MalformedURLException;
  */
 public class TransformEngine {
 
+    private final String lang;
     private AddinEngine addinEngine;
     private ClassLoader addinClassLoader;
 
     public TransformEngine() {
-        this(TransformEngine.class.getClassLoader());
+        this("en_US", TransformEngine.class.getClassLoader());
     }
 
-    public TransformEngine(ClassLoader addinClassLoader) {
+    public TransformEngine(String lang, ClassLoader addinClassLoader) {
+        this.lang = lang;
         this.addinClassLoader = addinClassLoader;
     }
 
@@ -35,7 +37,7 @@ public class TransformEngine {
         try {
             AddinContext ac = null;
             if (addinPath != null && !addinPath.isEmpty()) {
-                addinEngine = new AddinEngine(addinClassLoader);
+                addinEngine = new AddinEngine(lang, addinClassLoader);
                 addinEngine.start();
                 ac = addinEngine.getAddinContext();
                 System.out.println("Addin path: " + addinPath);

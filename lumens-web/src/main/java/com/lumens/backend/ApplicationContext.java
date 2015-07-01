@@ -20,7 +20,10 @@ public class ApplicationContext {
 
     public static String LUMENS_BASE = System.getProperty("lumens.base", System.getProperty("user.dir"));
     public static String LUMENS_LOG = System.getProperty("lumens.log", "console");
-    static { SysLogFactory.start(LUMENS_LOG, LUMENS_BASE); }
+
+    static {
+        SysLogFactory.start(LUMENS_LOG, LUMENS_BASE);
+    }
     public static String LUMENS_ADDIN = "/addin";
     public static String LUMENS_JNI = "/module/manage/jni";
     private final List<String> resultCache = new ArrayList<>();
@@ -49,7 +52,7 @@ public class ApplicationContext {
     public ApplicationContext(String realPath, ClassLoader classLoader) {
         System.out.println("Application Context is initializing ...");
         strRealPath = realPath;
-        transformEngine = new TransformEngine(classLoader);
+        transformEngine = new TransformEngine("en_US", classLoader);
         projectContext = new ProjectContext();
         jobScheduler = SchedulerFactory.get().createScheduler(transformEngine);
         System.out.println("Application Context completed initializing .");

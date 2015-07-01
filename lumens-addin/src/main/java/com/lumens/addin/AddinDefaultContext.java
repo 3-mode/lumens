@@ -23,6 +23,12 @@ public class AddinDefaultContext implements AddinContext {
     private Map<String, ServiceEntity> services;
     private List<Addin> addinList;
     private final AddinEngine addinEngine;
+    private final String lang;
+
+    @Override
+    public String getLanguage() {
+        return this.lang;
+    }
 
     @Override
     public List<Addin> getAddins() {
@@ -113,7 +119,8 @@ public class AddinDefaultContext implements AddinContext {
         }
     }
 
-    public AddinDefaultContext(AddinEngine engine) {
+    public AddinDefaultContext(String lang, AddinEngine engine) {
+        this.lang = lang;
         this.services = new HashMap<>();
         this.addinList = new ArrayList<>();
         this.addinEngine = engine;
