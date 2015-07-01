@@ -61,7 +61,7 @@ public class DBHelper {
         for (Project project : projectList) {
             TransformProject projectInst = new TransformProject();
             projectInst.setID(project.id);
-            new ProjectSerializer(projectInst).readFromJson(new ByteArrayInputStream(project.data.getBytes()));
+            new ProjectSerializer(projectInst).readFromJson(new ByteArrayInputStream(project.data.getBytes("UTF-8")));
             transformProjectList.add(projectInst);
         }
         return transformProjectList;

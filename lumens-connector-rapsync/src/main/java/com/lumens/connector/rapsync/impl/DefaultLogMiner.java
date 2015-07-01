@@ -158,7 +158,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
         if (value.SCN < LAST_SCN) {
             return;
         }
-        if(value.SQL_REDO.isEmpty()){
+        if (value.SQL_REDO.isEmpty()) {
             log.warn("Skip empty REDO log record with SCN:" + value.SCN);
             return;
         }
@@ -167,9 +167,9 @@ public class DefaultLogMiner implements LogMiner, Constants {
             return;
         }
         String user = dbClient.getUser();
-        if (!value.SEG_OWNER.isEmpty()) {            
+        if (!value.SEG_OWNER.isEmpty()) {
             if (!user.equalsIgnoreCase(value.SEG_OWNER)) {
-                value.SQL_REDO.replaceAll(value.SEG_OWNER, ORACLE_CLASS);
+                value.SQL_REDO = value.SQL_REDO.replaceAll(value.SEG_OWNER, user);
             }
         }
         // JDBC Driver bug: invalid character exception while SQL end with comma
@@ -177,6 +177,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
 
         // Dictionary was changed, need to rebuild 
         if (value.OPERATION.equalsIgnoreCase("ddl")) {
+            dbClient.commit();
             buildDictionary();
         }
         if (value.OPERATION.equalsIgnoreCase("corrupted_blocks") || value.STATUS == 1343) {
@@ -196,7 +197,9 @@ public class DefaultLogMiner implements LogMiner, Constants {
                 log.error("Failed on statement:" + value.SQL_REDO);
                 log.info("Trying to find out failure reason...");
 
-                if (!meta.checkTableExist(user, value.TABLE_NAME)) {
+                if (value.TABLE_NAME.isEmpty()) {
+                    log.warn("TABLE_NAME is not mapped. Suggest to map table name so that to deal with known situation while encouner errors.");
+                } else if (!meta.checkTableExist(user, value.TABLE_NAME)) {
                     log.info(String.format("Table %s not exist.", value.TABLE_NAME));
                     if (value.OPERATION.equalsIgnoreCase("delete")) {
                         log.warn("Skip sync for 'delete' operation.");

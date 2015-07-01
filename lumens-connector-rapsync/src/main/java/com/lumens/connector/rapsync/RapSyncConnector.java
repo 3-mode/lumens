@@ -82,7 +82,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
     private void prepareDatabase() {
         if (sessionAlter != null && !sessionAlter.isEmpty() && dbClient != null) {
             try {
-                String[] alterList = sessionAlter.split(";");
+                String[] alterList = sessionAlter.split(";|\n");
                 for (String alter : alterList) {
                     alter = alter.trim();
                     if (!alter.isEmpty()) {

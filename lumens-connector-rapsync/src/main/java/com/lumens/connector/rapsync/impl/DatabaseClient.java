@@ -99,6 +99,16 @@ public class DatabaseClient implements Constants {
         return version;
     }
 
+    public void commit() {
+        try {
+            if (!conn.getAutoCommit()) {
+                DBUtils.commit(conn);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     public void releaseStatement() {
         DBUtils.releaseStatement(stat);
         stat = null;
