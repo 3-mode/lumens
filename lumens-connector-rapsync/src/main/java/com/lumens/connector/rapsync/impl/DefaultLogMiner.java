@@ -21,7 +21,6 @@ public class DefaultLogMiner implements LogMiner, Constants {
 
     private final Logger log = SysLogFactory.getLogger(DefaultLogMiner.class);
     private int LAST_SCN = 0;
-    private ResultSet result = null;
     private Config config = null;
     private Dictionary dict = null;
     private DatabaseClient dbClient = null;
@@ -133,13 +132,9 @@ public class DefaultLogMiner implements LogMiner, Constants {
     @Override
     public ResultSet query(String sql) {
         log.debug("Start redolog query.");
-        if (result != null) {
-            DBUtils.releaseResultSet(result);
-        }
         try {
             //String defaultCondition = " WHERE seg_type_name='TABLE' AND operation !='SELECT_FOR_UPDATE'";
-            result = dbClient.executeGetResult(sql);
-            return result;
+            return dbClient.executeGetResult(sql);
         } catch (Exception ex) {
             log.error("Fail to query log miner results. Error message:");
             log.error(ex.getMessage());
@@ -173,7 +168,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
         }
         String user = dbClient.getUser();
         if (!value.SEG_OWNER.isEmpty()) {            
-            if (!user.equalsIgnoreCase(value.SEG_OWNER.toLowerCase())) {
+            if (!user.equalsIgnoreCase(value.SEG_OWNER)) {
                 value.SQL_REDO.replaceAll(value.SEG_OWNER, ORACLE_CLASS);
             }
         }

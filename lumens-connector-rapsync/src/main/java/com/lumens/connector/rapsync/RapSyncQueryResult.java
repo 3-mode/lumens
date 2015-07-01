@@ -33,8 +33,9 @@ public class RapSyncQueryResult implements OperationResult, SupportAccessory {
         this.builder = builder;
 
         String sql = String.format(builder.generateSelectSQL(input.getData().get(input.getStart())), builder.getPageSize(), 1);
-        ResultSet resultSet = miner.query(sql);
-        this.result = new DBElementBuilder().buildElement(builder.getFormat(), resultSet);
+        try (ResultSet resultSet = miner.query(sql)) {
+            this.result = new DBElementBuilder().buildElement(builder.getFormat(), resultSet);
+        }
     }
 
     @Override
@@ -50,7 +51,7 @@ public class RapSyncQueryResult implements OperationResult, SupportAccessory {
     @Override
     public boolean hasNext() {
         return (result != null && result.size() == operation.getPageSize())
-                || miner.hasNextBuild() || (input.getStart() < input.getData().size() - 1);
+               || miner.hasNextBuild() || (input.getStart() < input.getData().size() - 1);
     }
 
     @Override
@@ -61,8 +62,9 @@ public class RapSyncQueryResult implements OperationResult, SupportAccessory {
                 if (miner.hasNextBuild()) {
                     miner.build();
                     String sql = String.format(builder.generateSelectSQL(input.getData().get(input.getStart())), builder.getPageSize(), 1);
-                    ResultSet resultSet = miner.query(sql);
-                    this.result = new DBElementBuilder().buildElement(builder.getFormat(), resultSet);
+                    try (ResultSet resultSet = miner.query(sql)) {
+                        this.result = new DBElementBuilder().buildElement(builder.getFormat(), resultSet);
+                    }
                 } else {
                     // Get next query condition
                     this.input.setStart(input.getStart() + 1);

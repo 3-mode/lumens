@@ -25,7 +25,6 @@ import com.lumens.model.Type;
 import com.lumens.model.Value;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +39,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
     private final Logger log = SysLogFactory.getLogger(RapSyncConnector.class);
 
-    private List<String> enforceFormatList = new ArrayList();
+    private final List<String> enforceFormatList = new ArrayList();
     protected Map<String, Format> inFormat;
     protected Map<String, Format> outFormat;
     private Config config = null;
@@ -57,7 +56,6 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
     public RapSyncConnector() {
         config = ConfigFactory.createDefaultConfig();
-        buildFormatEnforcementList();
     }
 
     @Override
@@ -69,7 +67,8 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
     public void open() {
         try {
             dbClient = new DatabaseClient(dbDriver, dbUrl, dbUserName, dbPassword);
-            PrepareDatabase();
+            prepareFormatEnforcementList();
+            prepareDatabase();
             miner = LogMinerFactory.createLogMiner(dbClient, config);
 
             isOpen = true;
@@ -80,14 +79,14 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
         }
     }
 
-    private void PrepareDatabase() {
+    private void prepareDatabase() {
         if (sessionAlter != null && !sessionAlter.isEmpty() && dbClient != null) {
             try {
                 String[] alterList = sessionAlter.split(";");
                 for (String alter : alterList) {
                     alter = alter.trim();
                     if (!alter.isEmpty()) {
-                        dbClient.execute(alter.trim());
+                        dbClient.execute(alter);
                     }
                 }
             } catch (SQLException e) {
@@ -142,10 +141,10 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
         if (direction == Direction.OUT) {
             outFormat = formatList;
         } else if (direction == Direction.IN) {
-            Format SQLParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
-            SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
-            SQLParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
-            SQLParams.addChild(TABLE_LIST, Format.Form.FIELD, Type.STRING);
+            Format sqlParams = rootFmt.addChild(SQLPARAMS, Format.Form.STRUCT);
+            sqlParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
+            sqlParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
+            sqlParams.addChild(TABLE_LIST, Format.Form.FIELD, Type.STRING);
             inFormat = formatList;
         }
         formatList.put(FORMAT_NAME, rootFmt);
@@ -155,7 +154,7 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
     }
 
     // TODO: read from file
-    public void buildFormatEnforcementList() {
+    public void prepareFormatEnforcementList() {
         enforceFormatList.clear();
         for (String item : DISPLAY_FIELDS.split(",")) {
             enforceFormatList.add(item.trim());
@@ -254,9 +253,9 @@ public class RapSyncConnector implements Connector, RapSyncConstants {
 
     private Type toType(String dataType) {
         if (CHAR.equalsIgnoreCase(dataType)
-                || CLOB.equalsIgnoreCase(dataType)
-                || dataType.startsWith(VARCHAR2)
-                || dataType.startsWith(NVARCHAR2)) {
+            || CLOB.equalsIgnoreCase(dataType)
+            || dataType.startsWith(VARCHAR2)
+            || dataType.startsWith(NVARCHAR2)) {
             return Type.STRING;
         } else if (DATE.equalsIgnoreCase(dataType)) {
             return Type.DATE;

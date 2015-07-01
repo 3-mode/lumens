@@ -30,12 +30,11 @@ public class LogMinerTest extends RapSyncTestBase {
         config.setStartSCN("3940324");
         config.setEndSCN("3949568");
 
-        LogMiner miner = LogMinerFactory.createLogMiner(sourceDatabase, config);       
+        LogMiner miner = LogMinerFactory.createLogMiner(sourceDatabase, config);
         miner.buildDictionary();
         miner.build();
         miner.start();
-        ResultSet result = miner.query("SELECT SQL_REDO, SCN, OPERATION, SEG_OWNER, TABLE_NAME FROM v$logmnr_contents WHERE ( seg_type_name='TABLE' AND operation !='SELECT_FOR_UPDATE' AND seg_owner='LUMENS')  ORDER BY SCN ASC");
-        try {
+        try (ResultSet result = miner.query("SELECT SQL_REDO, SCN, OPERATION, SEG_OWNER, TABLE_NAME FROM v$logmnr_contents WHERE ( seg_type_name='TABLE' AND operation !='SELECT_FOR_UPDATE' AND seg_owner='LUMENS')  ORDER BY SCN ASC")) {
             System.out.println("Querying redo log:");
             int max = 1000;
             while (result.next() && max-- < 0) {
