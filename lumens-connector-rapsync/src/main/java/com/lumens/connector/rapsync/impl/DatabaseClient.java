@@ -100,13 +100,8 @@ public class DatabaseClient implements Constants {
     }
 
     public void commit() {
-        try {
-            if (!conn.getAutoCommit()) {
-                DBUtils.commit(conn);
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+        // Default is no auto commit
+        DBUtils.commit(conn);
     }
 
     public void releaseStatement() {
