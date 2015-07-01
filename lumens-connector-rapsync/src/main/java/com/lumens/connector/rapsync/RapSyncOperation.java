@@ -13,6 +13,7 @@ import com.lumens.connector.rapsync.api.RedoValue;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.ModelUtils;
+import com.lumens.model.Value;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,15 +64,12 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
         // Check before sync
         if (inList.size() > 0) {
             Element firstElem = inList.get(0);
-            if (firstElem.getChild(COLUMN_REDO) == null || firstElem.getChild(COLUMN_REDO).getValue().getString().isEmpty()) {
+            if (checkMandatoryField(firstElem, COLUMN_REDO))
                 throw new RuntimeException(COLUMN_REDO + " has not been defined. It is what to be synced to destination database.");
-            }
-            if (firstElem.getChild(COLUMN_OPERATION) == null || firstElem.getChild(COLUMN_OPERATION).getValue().getString().isEmpty()) {
+            if (checkMandatoryField(firstElem, COLUMN_OPERATION))
                 throw new RuntimeException(COLUMN_OPERATION + " has not been defined. It is necessary to filter redundant records");
-            }
-            if (firstElem.getChild(COLUMN_SCN) == null || firstElem.getChild(COLUMN_SCN).getValue().getString().isEmpty()) {
+            if (checkMandatoryField(firstElem, COLUMN_SCN))
                 throw new RuntimeException(COLUMN_SCN + " has not been defined. It is necessary to perform incremental sync.");
-            }
         }
 
         for (Element elem : inList) {
@@ -79,13 +77,21 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
             value.SCN = elem.getChild(COLUMN_SCN).getValue().getInt();
             value.SQL_REDO = elem.getChild(COLUMN_REDO).getValue().toString();
             value.OPERATION = elem.getChild(COLUMN_OPERATION).getValue().toString();
-            value.SEG_OWNER = elem.getChild(COLUMN_SEG_OWNER) != null ? elem.getChild(COLUMN_SEG_OWNER).getValue().toString() : "";
-            value.TABLE_NAME = elem.getChild(COLUMN_TABLE_NAME) != null ? elem.getChild(COLUMN_TABLE_NAME).getValue().toString() : "";
+            value.SEG_OWNER = getRequiredFieldValue(elem, COLUMN_SEG_OWNER).getString();
+            value.TABLE_NAME = getRequiredFieldValue(elem, COLUMN_TABLE_NAME).getString();
             if (value.OPERATION.equalsIgnoreCase("ddl")) {
                 miner.buildDictionary();
             }
             miner.sync(value);
         }
         return outList;
+    }
+
+    private boolean checkMandatoryField(Element parent, String fieldName) {
+        return parent.getChild(fieldName) == null || parent.getChild(fieldName).getValue().getString().isEmpty();
+    }
+
+    private Value getRequiredFieldValue(Element elem, String fieldName) {
+        return elem.getChild(fieldName) != null ? elem.getChild(fieldName).getValue() : new Value("");
     }
 }
