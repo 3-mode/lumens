@@ -169,7 +169,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
         String user = dbClient.getUser();
         if (!value.SEG_OWNER.isEmpty()) {            
             if (!user.equalsIgnoreCase(value.SEG_OWNER)) {
-                value.SQL_REDO.replaceAll(value.SEG_OWNER, ORACLE_CLASS);
+                value.SQL_REDO = value.SQL_REDO.replaceAll(value.SEG_OWNER, user);
             }
         }
         // JDBC Driver bug: invalid character exception while SQL end with comma
