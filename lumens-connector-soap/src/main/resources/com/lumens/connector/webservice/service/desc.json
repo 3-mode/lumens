@@ -5,7 +5,7 @@
         "item_icon": "img/Web24x24.png",
         "instance_icon": "img/Web64x64.png",
         "html_url": "html/soap.html",
-        "i18n": "i18n/soap.json",
+        "i18n": "i18n/en_US.json",
         "property": [
             {
                 "name": "WSDL",

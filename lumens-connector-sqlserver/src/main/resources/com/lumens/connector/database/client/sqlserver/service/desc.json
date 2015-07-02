@@ -4,8 +4,8 @@
         "class_type": "datasource",
         "item_icon": "img/SqlServer24x24.png",
         "instance_icon": "img/SqlServer64x64.png",
-        "html_url": "html/SqlServer.html",
-        "i18n": "i18n/SqlServer.json",
+        "html_url": "html/mssql.html",
+        "i18n": "i18n/en_US.json",
         "property": [
             {
                 "name": "OJDBC",

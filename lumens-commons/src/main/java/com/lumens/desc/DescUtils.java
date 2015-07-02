@@ -1,7 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.descriptor;
+package com.lumens.desc;
 
 import com.lumens.LumensException;
 import com.lumens.io.JsonUtility;
@@ -17,9 +17,10 @@ import org.codehaus.jackson.JsonNode;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class DescriptorUtils {
+public class DescUtils {
 
     public static String DESCRIPTOR = "descriptor";
+    public static String DESC = "desc";
     public static String CLASS_TYPE_PROPERTY = "class_type";
     public static String COMP_TYPE_PROPERTY = "type";
     public static String NAME_PROPERTY = "name";
@@ -31,19 +32,19 @@ public class DescriptorUtils {
     public static String HTML_PROPERTY = "html";
     public static String HTML_URL_PROPERTY = "html_url";
 
-    private static InputStream getResource(Class clazz, String configRoot, String path) {
-        return clazz.getClassLoader().getResourceAsStream(configRoot + "/" + path);
+    private static InputStream getResource(Class clazz, String path) {
+        return clazz.getResourceAsStream(path);
     }
 
-    public static JsonNode discoverDescriptor(Class clazz, String configRoot) {
-        try (InputStream in = clazz.getClassLoader().getResourceAsStream(configRoot + "/descriptor.json")) {
+    public static JsonNode discoverDesc(Class clazz) {
+        try (InputStream in = getResource(clazz, "desc.json")) {
             return JsonUtility.createJson(IOUtils.toString(in));
         } catch (IOException ex) {
             throw new LumensException(ex);
         }
     }
 
-    public static Map<String, Object> processDescriptor(String lang, String configRoot, String compType, Class clazz) {
+    public static Map<String, Object> loadDesc(String lang, String compType, Class clazz) {
         Map<String, Object> props = new HashMap<>();
         JsonUtility utility = JsonUtility.createJsonUtility();
         JsonGenerator generator = utility.getGenerator();
@@ -52,13 +53,13 @@ public class DescriptorUtils {
             generator.writeStartObject();
             {
                 // TODO need to check if the property exists
-                descJson = discoverDescriptor(clazz, configRoot);
+                descJson = discoverDesc(clazz);
                 descJson = descJson.get(compType);
                 if (JsonUtility.isNull(descJson))
                     throw new LumensException("Descriptor file is invalid, the resource id is not matched!");
                 generator.writeStringField(COMP_TYPE_PROPERTY, compType);
                 JsonNode i18nJson = null;
-                try (InputStream in = getResource(clazz, configRoot, "i18n/" + lang + ".json")) {
+                try (InputStream in = getResource(clazz, "i18n/" + lang + ".json")) {
                     i18nJson = JsonUtility.createJson(IOUtils.toString(in));
                 } catch (IOException ex) {
                     throw new LumensException(ex);
@@ -67,17 +68,17 @@ public class DescriptorUtils {
                 generator.writeStringField(CLASS_TYPE_PROPERTY, descJson.get(CLASS_TYPE_PROPERTY).asText());
                 generator.writeObjectField(PROPS_PROPERTY, descJson.get(PROPS_PROPERTY));
                 generator.writeObjectField(I18N_PROPERTY, i18nJson);
-                try (InputStream in = getResource(clazz, configRoot, descJson.get(HTML_URL_PROPERTY).asText())) {
+                try (InputStream in = getResource(clazz, descJson.get(HTML_URL_PROPERTY).asText())) {
                     generator.writeStringField(HTML_PROPERTY, IOUtils.toString(in));
                 } catch (IOException ex) {
                     throw new LumensException(ex);
                 }
-                try (InputStream in = getResource(clazz, configRoot, descJson.get(ITEM_ICON_PROPERTY).asText())) {
+                try (InputStream in = getResource(clazz, descJson.get(ITEM_ICON_PROPERTY).asText())) {
                     generator.writeBinaryField(ITEM_ICON_PROPERTY, IOUtils.toByteArray(in));
                 } catch (IOException ex) {
                     throw new LumensException(ex);
                 }
-                try (InputStream in = getResource(clazz, configRoot, descJson.get(INSTANCE_ICON_PROPERTY).asText())) {
+                try (InputStream in = getResource(clazz, descJson.get(INSTANCE_ICON_PROPERTY).asText())) {
                     generator.writeBinaryField(INSTANCE_ICON_PROPERTY, IOUtils.toByteArray(in));
                 } catch (IOException ex) {
                     throw new LumensException(ex);

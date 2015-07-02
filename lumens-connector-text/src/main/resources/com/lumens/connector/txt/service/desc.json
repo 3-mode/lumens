@@ -5,7 +5,6 @@
         "item_icon": "img/Text24x24.png",
         "instance_icon": "img/Text64x64.png",
         "html_url": "html/text.html",
-        "i18n": "i18n/text.json",
         "property": [
             {
                 "name": "EscapeChar",

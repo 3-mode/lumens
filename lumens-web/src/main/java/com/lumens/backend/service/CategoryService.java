@@ -5,7 +5,7 @@ package com.lumens.backend.service;
 
 import com.lumens.addin.ServiceEntity;
 import com.lumens.backend.ApplicationContext;
-import com.lumens.descriptor.DescriptorUtils;
+import com.lumens.desc.DescUtils;
 import com.lumens.io.JsonUtility;
 import com.lumens.backend.ServerUtils;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class CategoryService {
             json.writeArrayFieldStart("items");
             for (ServiceEntity service : ApplicationContext.get().getTransformEngine().getAddinEngine().getAddinContext().getServices()) {
                 Map<String, Object> props = service.getPropertList();
-                json.writeObject(props.get(DescriptorUtils.DESCRIPTOR));
+                json.writeObject(props.get(DescUtils.DESCRIPTOR));
             }
             json.writeEndArray();
             json.writeEndObject();
