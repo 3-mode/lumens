@@ -40,7 +40,6 @@ public class TransformEngine {
                 addinEngine = new AddinEngine(lang, addinClassLoader);
                 addinEngine.start();
                 ac = addinEngine.getAddinContext();
-                System.out.println("Addin path: " + addinPath);
                 File addinPathFile = new File(addinPath);
                 if (addinPathFile.exists()) {
                     for (File addinItemFile : addinPathFile.listFiles()) {

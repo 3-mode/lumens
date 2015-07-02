@@ -58,7 +58,7 @@ public class DescriptorUtils {
                     throw new LumensException("Descriptor file is invalid, the resource id is not matched!");
                 generator.writeStringField(COMP_TYPE_PROPERTY, compType);
                 JsonNode i18nJson = null;
-                try (InputStream in = getResource(clazz, configRoot, descJson.get(I18N_PROPERTY).asText())) {
+                try (InputStream in = getResource(clazz, configRoot, "i18n/" + lang + ".json")) {
                     i18nJson = JsonUtility.createJson(IOUtils.toString(in));
                 } catch (IOException ex) {
                     throw new LumensException(ex);
