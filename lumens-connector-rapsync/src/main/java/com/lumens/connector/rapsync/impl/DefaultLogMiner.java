@@ -187,10 +187,11 @@ public class DefaultLogMiner implements LogMiner, Constants {
 
         boolean doAgain = false;
         do {
-            try {
+            try {                
                 dbClient.execute(SQL);
                 LAST_SCN = value.SCN;
                 log.info(String.format("SCN %s synced : %s", LAST_SCN, SQL));
+                dbClient.commit();
             } catch (Exception ex) {
                 log.error("Fail to sync to destination. Error message:");
                 log.error(ex.getMessage());
@@ -224,7 +225,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
                     log.warn(String.format("Record not exist. Skip sync for ''%s", value.OPERATION));
                     break;
                 }
-
+                
                 log.error(String.format("Fail to sync to destination. Fail on : SCN = %s, REDO = %s", value.SCN, value.SQL_REDO));
                 throw new RuntimeException("Fail to sync to destination. Error message:" + ex);
             }
