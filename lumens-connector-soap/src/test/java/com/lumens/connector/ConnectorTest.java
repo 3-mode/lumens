@@ -98,7 +98,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
         TransformRule rule = new TransformRule(retrieveIncident);
         rule.getRuleItem("RetrieveIncident.RetrieveIncidentRequest.attachmentData").setScript("true");
         rule.getRuleItem("RetrieveIncident.RetrieveIncidentRequest.model.instance.AssigneeName").setScript("\'test\'");
-        rule.getRuleItem("RetrieveIncident.RetrieveIncidentRequest.model.instance.ClosedTime").setScript("dateToString(now(), \"yyyy-MM-dd HH:mm:ss\")");
+        rule.getRuleItem("RetrieveIncident.RetrieveIncidentRequest.model.instance.ClosedTime").setScript("$DateToString($Now(), \"yyyy-MM-dd HH:mm:ss\")");
         Processor transformProcessor = new TransformMapper();
         List<Element> result = (List<Element>) transformProcessor.execute(new ProcessorExecutionContext(rule, null));
         new ElementSerializer(result.get(0), true).writeToXml(System.out);
@@ -165,7 +165,7 @@ public class ConnectorTest extends TestCase implements SoapConstants {
     }
 
     public void testAddin() throws Exception {
-        AddinEngine ae = new AddinEngine(ConnectorTest.class.getClassLoader());
+        AddinEngine ae = new AddinEngine("en_US", ConnectorTest.class.getClassLoader());
         ae.start();
         AddinContext ac = ae.getAddinContext();
         Activator activator = new Activator();

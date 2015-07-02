@@ -21,7 +21,7 @@ public class AddinApplicationTest {
     // public void testHello() {}
 
     public void testAddinEngine() throws Exception {
-        AddinEngine ae = new AddinEngine(AddinApplicationTest.class.getClassLoader()).loadSystemClass(new File("../dist/lumens/module/server/lib").toURI().toURL());
+        AddinEngine ae = new AddinEngine("en_US", AddinApplicationTest.class.getClassLoader()).loadSystemClass(new File("../dist/lumens/module/server/lib").toURI().toURL());
         ae.start();
         AddinContext ac = ae.getAddinContext();
         Addin addin = ac.installAddIn(new File("../dist/lumens/addin/orcl").toURI().toURL());
@@ -37,7 +37,7 @@ public class AddinApplicationTest {
 
     @Test
     public void testAddinActivator() throws Exception {
-        AddinEngine ae = new AddinEngine(AddinApplicationTest.class.getClassLoader());
+        AddinEngine ae = new AddinEngine("en_US", AddinApplicationTest.class.getClassLoader());
         ae.start();
         AddinContext ac = ae.getAddinContext();
         AddinActivator aa = new MyAddinActivator();
