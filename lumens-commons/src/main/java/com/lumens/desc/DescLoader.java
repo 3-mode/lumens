@@ -44,6 +44,14 @@ public class DescLoader {
         }
     }
 
+    private static InputStream getI18N(Class clazz, String lang) {
+        String i18nPath = "i18n/" + lang + ".json";
+        InputStream i18nStream = getResource(clazz, i18nPath);
+        if (i18nStream == null)
+            i18nStream = getResource(clazz, "i18n/en_US.json");
+        return i18nStream;
+    }
+
     public static Map<String, Object> load(String lang, String compType, Class clazz) {
         Map<String, Object> props = new HashMap<>();
         JsonUtility utility = JsonUtility.createJsonUtility();
@@ -59,7 +67,7 @@ public class DescLoader {
                     throw new LumensException("Descriptor file is invalid, the resource id is not matched!");
                 generator.writeStringField(COMP_TYPE_PROPERTY, compType);
                 JsonNode i18nJson = null;
-                try (InputStream in = getResource(clazz, "i18n/" + lang + ".json")) {
+                try (InputStream in = getI18N(clazz, lang)) {
                     i18nJson = JsonUtility.createJson(IOUtils.toString(in));
                 } catch (IOException ex) {
                     throw new LumensException(ex);
