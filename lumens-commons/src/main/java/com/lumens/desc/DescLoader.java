@@ -19,18 +19,19 @@ import org.codehaus.jackson.JsonNode;
  */
 public class DescLoader {
 
-    public static String DESCRIPTOR = "descriptor";
-    public static String DESC = "desc";
-    public static String CLASS_TYPE_PROPERTY = "class_type";
-    public static String COMP_TYPE_PROPERTY = "type";
-    public static String NAME_PROPERTY = "name";
-    public static String CLASS_NAME_PROPERTY = "class_name";
-    public static String INSTANCE_ICON_PROPERTY = "instance_icon";
-    public static String ITEM_ICON_PROPERTY = "item_icon";
-    public static String PROPS_PROPERTY = "property";
-    public static String I18N_PROPERTY = "i18n";
-    public static String HTML_PROPERTY = "html";
-    public static String HTML_URL_PROPERTY = "html_url";
+    public final static String UTF_8 = "UTF-8";
+    public final static String DESCRIPTOR = "descriptor";
+    public final static String DESC = "desc";
+    public final static String CLASS_TYPE_PROPERTY = "class_type";
+    public final static String COMP_TYPE_PROPERTY = "type";
+    public final static String NAME_PROPERTY = "name";
+    public final static String CLASS_NAME_PROPERTY = "class_name";
+    public final static String INSTANCE_ICON_PROPERTY = "instance_icon";
+    public final static String ITEM_ICON_PROPERTY = "item_icon";
+    public final static String PROPS_PROPERTY = "property";
+    public final static String I18N_PROPERTY = "i18n";
+    public final static String HTML_PROPERTY = "html";
+    public final static String HTML_URL_PROPERTY = "html_url";
 
     private static InputStream getResource(Class clazz, String path) {
         return clazz.getResourceAsStream(path);
@@ -68,7 +69,7 @@ public class DescLoader {
                 generator.writeStringField(COMP_TYPE_PROPERTY, compType);
                 JsonNode i18nJson = null;
                 try (InputStream in = getI18N(clazz, lang)) {
-                    i18nJson = JsonUtility.createJson(IOUtils.toString(in));
+                    i18nJson = JsonUtility.createJson(IOUtils.toString(in, UTF_8));
                 } catch (IOException ex) {
                     throw new LumensException(ex);
                 }
