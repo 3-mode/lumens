@@ -5,7 +5,7 @@ package com.lumens.connector;
 
 import com.lumens.addin.AddinActivator;
 import com.lumens.addin.AddinContext;
-import com.lumens.desc.DescUtils;
+import com.lumens.desc.DescLoader;
 import java.util.Map;
 
 /**
@@ -26,7 +26,7 @@ public class ConnectorActivator implements AddinActivator {
     @Override
     public void start(AddinContext context) {
         addinContext = context;
-        Map<String, Object> props = DescUtils.loadDesc(context.getLanguage(), factory.getComponentType(), clazz);
+        Map<String, Object> props = DescLoader.load(context.getLanguage(), factory.getComponentType(), clazz);
         addinContext.registerService(factory.getComponentType(), factory, props);
     }
 

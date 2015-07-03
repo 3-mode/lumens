@@ -17,7 +17,7 @@ import org.codehaus.jackson.JsonNode;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class DescUtils {
+public class DescLoader {
 
     public static String DESCRIPTOR = "descriptor";
     public static String DESC = "desc";
@@ -36,7 +36,7 @@ public class DescUtils {
         return clazz.getResourceAsStream(path);
     }
 
-    public static JsonNode discoverDesc(Class clazz) {
+    private static JsonNode discoverDesc(Class clazz) {
         try (InputStream in = getResource(clazz, "desc.json")) {
             return JsonUtility.createJson(IOUtils.toString(in));
         } catch (IOException ex) {
@@ -44,7 +44,7 @@ public class DescUtils {
         }
     }
 
-    public static Map<String, Object> loadDesc(String lang, String compType, Class clazz) {
+    public static Map<String, Object> load(String lang, String compType, Class clazz) {
         Map<String, Object> props = new HashMap<>();
         JsonUtility utility = JsonUtility.createJsonUtility();
         JsonGenerator generator = utility.getGenerator();

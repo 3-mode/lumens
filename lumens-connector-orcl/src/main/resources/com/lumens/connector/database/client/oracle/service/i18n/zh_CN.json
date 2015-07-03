@@ -1,0 +1,12 @@
+{
+    "OracleName": "Oracle",
+    "Name": "名字",
+    "OJDBC": "JDBC驱动包",
+    "ConnectionURL": "JDBC链接串",
+    "User": "用户",
+    "Password": "密码",
+    "PageSize": "分页大小",
+    "SessionAlter": "Session修改语句",
+    "FullLoad": "加载表所有字段",
+    "Description": "描述"
+}
