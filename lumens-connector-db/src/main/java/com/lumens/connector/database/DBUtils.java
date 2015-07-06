@@ -7,7 +7,7 @@ import static com.lumens.connector.database.DBConstants.DELETE_ONLY;
 import static com.lumens.connector.database.DBConstants.INSERT_ONLY;
 import static com.lumens.connector.database.DBConstants.SELECT;
 import static com.lumens.connector.database.DBConstants.UPDATE_ONLY;
-import static com.lumens.connector.database.DBConstants.UPDATE_OR_INSERT;
+import static com.lumens.connector.database.DBConstants.UPDATE_ELSE_INSERT;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -121,7 +121,7 @@ public class DBUtils {
     public static boolean isWrite(String strAction) {
         return INSERT_ONLY.equalsIgnoreCase(strAction)
                || UPDATE_ONLY.equalsIgnoreCase(strAction)
-               || UPDATE_OR_INSERT.equalsIgnoreCase(strAction)
+               || UPDATE_ELSE_INSERT.equalsIgnoreCase(strAction)
                || DELETE_ONLY.equalsIgnoreCase(strAction);
     }
 
@@ -133,8 +133,8 @@ public class DBUtils {
         return UPDATE_ONLY.equalsIgnoreCase(strAction);
     }
 
-    public static boolean isInsertOrUpdate(String strAction) {
-        return UPDATE_OR_INSERT.equalsIgnoreCase(strAction);
+    public static boolean isUpdateElseInsert(String strAction) {
+        return UPDATE_ELSE_INSERT.equalsIgnoreCase(strAction);
     }
 
     public static boolean isDelete(String strAction) {

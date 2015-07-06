@@ -45,6 +45,7 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
         String tableName = input.getFormat().getName();
         StringBuilder sql = new StringBuilder();
         StringBuilder values = new StringBuilder();
+        Element sqlParams = input.getChild(DBConstants.SQLPARAMS);
         for (Element e : input.getChildren()) {
             if (DBConstants.SQLPARAMS.equals(e.getFormat().getName()))
                 continue;
@@ -60,15 +61,32 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
             }
         }
         sql.append("UPDATE ").append(tableName).append(" SET ").append(values.toString());
-        if (input != null) {
-            Element whereElem = input.getChild(DBConstants.WHERE);
+        if (sqlParams != null) {
+            Element whereElem = sqlParams.getChild(DBConstants.WHERE);
             if (!ModelUtils.isNullValue(whereElem)) {
                 String strWhere = whereElem.getValue().getString();
-                if (StringUtils.isNotEmpty(strWhere) && StringUtils.isNotBlank(strWhere)) {
-                    sql.append(' ').append(strWhere);
-                }
+                if (StringUtils.isNotEmpty(strWhere) && StringUtils.isNotBlank(strWhere))
+                    sql.append(" WHERE ").append(strWhere);
             }
         }
         return sql.toString();
     }
+
+    @Override
+    public String generateDeleteSQL(Element input) {
+        String tableName = input.getFormat().getName();
+        StringBuilder sql = new StringBuilder();
+        Element sqlParams = input.getChild(DBConstants.SQLPARAMS);
+        sql.append("DELETE FROM ").append(tableName);
+        if (sqlParams != null) {
+            Element whereElem = sqlParams.getChild(DBConstants.WHERE);
+            if (!ModelUtils.isNullValue(whereElem)) {
+                String strWhere = whereElem.getValue().getString();
+                if (StringUtils.isNotEmpty(strWhere) && StringUtils.isNotBlank(strWhere))
+                    sql.append(" WHERE ").append(strWhere);
+            }
+        }
+        return sql.toString();
+    }
+
 }

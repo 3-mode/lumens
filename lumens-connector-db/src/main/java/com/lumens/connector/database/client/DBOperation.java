@@ -58,14 +58,16 @@ public abstract class DBOperation implements Operation, DBConstants {
                 client.execute(getWriteSQLBuilder().generateInsertSQL(elem));
             } else if (DBUtils.isUpdate(strAction)) {
                 client.execute(getWriteSQLBuilder().generateUpdateSQL(elem));
+            } else if (DBUtils.isDelete(strAction)) {
+                client.execute(getWriteSQLBuilder().generateDeleteSQL(elem));
             } else if (DBUtils.isQuery(strAction)) {
                 // If i < input.getStart then there are some input alreadly handled as update or insert
                 // No such useful business logic for this behavior so rollback and throw exception
                 client.rollback();
-                throw new RuntimeException("Not supported behavior, the 'Query' can't be mixed with 'Insert' or 'Update'");
+                throw new RuntimeException("Not supported behavior, the 'Operation' can't be mixed with 'INSERT', 'DELETE' or 'UPDATE'");
             } else {
                 client.rollback();
-                throw new RuntimeException("'Update_Or_Insert' and 'Delete_Only' are not supported now!");
+                throw new RuntimeException("'UPDATE_ELSE_INSERT' are not supported now!");
             }
             if (output != null)
                 outList.add(new DataElement(output));

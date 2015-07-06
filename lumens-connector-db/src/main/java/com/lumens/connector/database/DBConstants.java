@@ -18,10 +18,10 @@ public interface DBConstants {
 
     // Key field words
     public String SELECT = "SELECT";
-    public String INSERT_ONLY = "INSERT_ONLY";
-    public String UPDATE_ONLY = "UPDATE_ONLY";
-    public String DELETE_ONLY = "DELETE_ONLY";
-    public String UPDATE_OR_INSERT = "UPDATE_OR_INSERT";
+    public String INSERT_ONLY = "INSERT";
+    public String UPDATE_ONLY = "UPDATE";
+    public String DELETE_ONLY = "DELETE";
+    public String UPDATE_ELSE_INSERT = "UPDATE_ELSE_INSERT";
     // Constants node names
     public String SQLPARAMS = "SQLParams";
     public String ORDERBY = "orderby";
