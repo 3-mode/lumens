@@ -70,8 +70,9 @@ public class ConnectorTest implements OracleConstants {
             cntr.close();
         }
     }
-    
+
     // TODO need to mock db ENV
+    @Test
     public void testOracleSQLBuilder() throws Exception {
         // Test select SQL generating
         Format employeeFmt = new DataFormat("Testtable", Form.STRUCT);
@@ -79,6 +80,7 @@ public class ConnectorTest implements OracleConstants {
         sqlParams.addChild(WHERE, Form.FIELD, Type.STRING);
         sqlParams.addChild(ORDERBY, Form.FIELD, Type.STRING);
         sqlParams.addChild(GROUPBY, Form.FIELD, Type.STRING);
+        sqlParams.addChild(ACTION, Form.FIELD, Type.STRING);
         employeeFmt.addChild(new DataFormat("Id", Form.FIELD, Type.STRING));
         employeeFmt.addChild(new DataFormat("name", Form.FIELD, Type.STRING));
         employeeFmt.addChild(new DataFormat("job_title", Form.FIELD, Type.STRING));
@@ -102,12 +104,14 @@ public class ConnectorTest implements OracleConstants {
         employee.addChild("name").setValue("James");
         employee.addChild("job_title").setValue("Software engineer");
         employee.addChild("department").setValue("Software R&D");
+        employee.getChild(SQLPARAMS).addChild(ACTION).setValue("INSERT");
         DBWriteSQLBuilder sqlWrite = new DBWriteSQLBuilder();
         String sqlInsert = sqlWrite.generateInsertSQL(employee);
         System.out.println("Generated insert SQL: " + sqlInsert);
 
         // Test update SQL generating
-        employee.setValue("where name like 'J%'");
+        employee.getChild(SQLPARAMS).getChild(ACTION).setValue("UPDATE");
+        employee.getChild(SQLPARAMS).getChild(WHERE).setValue("name LIKE 'J%'");
         String sqlUpdate = sqlWrite.generateUpdateSQL(employee);
         System.out.println("Generated update SQL: " + sqlUpdate);
 
@@ -138,10 +142,10 @@ public class ConnectorTest implements OracleConstants {
         OracleOperation oo = new OracleOperation(client);
         OperationResult result = oo.execute(new ElementChunk(Arrays.asList(select)), employeeFmtTest);
         assertTrue(result.getData().size() == 50);
-        while (result.hasData()) {
-            System.out.println("current query size: " + result.getData().size());
-            result.executeNext();
-        }
+        //while (result.hasData()) {
+        //    System.out.println("current query size: " + result.getData().size());
+        //    result.executeNext();
+        //}
         client.close();
     }
 
