@@ -67,7 +67,8 @@ public abstract class DBOperation implements Operation, DBConstants {
                 client.rollback();
                 throw new RuntimeException("'Update_Or_Insert' and 'Delete_Only' are not supported now!");
             }
-            outList.add(new DataElement(output));
+            if (output != null)
+                outList.add(new DataElement(output));
         }
         return outList;
     }
