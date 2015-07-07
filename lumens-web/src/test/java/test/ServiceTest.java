@@ -4,6 +4,7 @@
 package test;
 
 import com.lumens.backend.ApplicationContext;
+import com.lumens.backend.service.CategoryService;
 import com.lumens.backend.service.LogService;
 import com.lumens.backend.service.ProjectService;
 import com.lumens.sysdb.DAOFactory;
@@ -44,6 +45,7 @@ public class ServiceTest {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
+    
     public void testCase() throws Exception {
         testProject("/projects/ora_2_csv.mota");
     }
@@ -52,6 +54,8 @@ public class ServiceTest {
         if (true) {
             System.setProperty("lumens.base", "../dist/lumens");
             ApplicationContext.createInstance(ServiceTest.class.getClassLoader());
+            CategoryService cs = new CategoryService();
+            cs.getComponentCategories();
             TransformProject projectInstance = new TransformProject();
             try (InputStream in = ServiceTest.class.getResourceAsStream(projectPath)) {
                 new ProjectSerializer(projectInstance).readFromJson(in);

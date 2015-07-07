@@ -130,6 +130,14 @@ Lumens.isMultipleLink = function (class_type) {
     return false;
 };
 
+$.ajax({
+    async: false,
+    url: "rest/i18n/json",
+    contentType: "application/json"
+}).done(function (data) {
+    Lumens.i18n = data;
+});
+
 Lumens.system = {
     designView: {}
 };

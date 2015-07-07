@@ -20,7 +20,6 @@ public class ApplicationContext {
 
     public static String LUMENS_BASE = System.getProperty("lumens.base", System.getProperty("user.dir"));
     public static String LUMENS_LOG = System.getProperty("lumens.log", "console");
-    public static String LUMENS_LANG = System.getProperty("lumens.lang", "en_US");
 
     static {
         SysLogFactory.start(LUMENS_LOG, LUMENS_BASE);
@@ -29,6 +28,7 @@ public class ApplicationContext {
     public static String LUMENS_JNI = "/module/manage/jni";
     private final List<String> resultCache = new ArrayList<>();
     private final String strRealPath;
+    private final String strLang;
     private final JobScheduler jobScheduler;
     private TransformEngine transformEngine;
     private ProjectContext projectContext;
@@ -52,11 +52,16 @@ public class ApplicationContext {
 
     public ApplicationContext(String realPath, ClassLoader classLoader) {
         System.out.println("Application Context is initializing ...");
+        strLang = System.getProperty("lumens.lang", "en_US");
         strRealPath = realPath;
-        transformEngine = new TransformEngine(LUMENS_LANG, classLoader);
+        transformEngine = new TransformEngine(getLang(), classLoader);
         projectContext = new ProjectContext();
         jobScheduler = SchedulerFactory.get().createScheduler(transformEngine);
         System.out.println("Application Context completed initializing .");
+    }
+
+    public final String getLang() {
+        return this.strLang;
     }
 
     public ProjectContext getProjectContext() {
@@ -116,5 +121,4 @@ public class ApplicationContext {
 
     public void stop() {
     }
-
 }
