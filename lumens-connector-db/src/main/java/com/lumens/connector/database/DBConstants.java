@@ -23,7 +23,7 @@ public interface DBConstants {
     public String DELETE_ONLY = "DELETE";
     public String UPDATE_ELSE_INSERT = "UPDATE_ELSE_INSERT";
     // Constants node names
-    public String SQLPARAMS = "SQLParams";
+    public String SQLPARAMS = "$SQLParams";
     public String ORDERBY = "orderby";
     public String GROUPBY = "groupby";
     public String WHERE = "where";
