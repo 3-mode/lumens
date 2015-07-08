@@ -10,8 +10,8 @@ package com.lumens.model;
 class FormatUtils {
 
     public static final String STATUS = "$Status";
-    public static final String CODE = "Code";
-    public static final String MESSAGE = "Message";
+    public static final String CODE = "code";
+    public static final String MESSAGE = "message";
 
     public static Format buildStautsFormat(Format format) {
         if (format == null)
