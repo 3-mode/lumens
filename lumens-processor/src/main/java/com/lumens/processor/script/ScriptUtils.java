@@ -48,18 +48,18 @@ public class ScriptUtils {
         return ctx.getRootSourceElement();
     }
 
-    public static Object getAccessory(MapperContext ctx, String name) {
+    public static Object getCarrier(MapperContext ctx, String name) {
         ctx = ctx.getRoot();
-        return ctx.getAccessoryManager().getValue(name);
+        return ctx.getCarrierManager().getValue(name);
     }
 
-    public static Object setAccessory(MapperContext ctx, String name, Object value) {
+    public static Object setCarrier(MapperContext ctx, String name, Object value) {
         ctx = ctx.getRoot();
-        return ctx.getAccessoryManager().setValue(name, value);
+        return ctx.getCarrierManager().setValue(name, value);
     }
 
-    public static Object removeAccessory(MapperContext ctx, String name, Object value) {
+    public static Object removeCarrier(MapperContext ctx, String name, Object value) {
         ctx = ctx.getRoot();
-        return ctx.getAccessoryManager().remove(name);
+        return ctx.getCarrierManager().remove(name);
     }
 }

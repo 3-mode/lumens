@@ -32,14 +32,14 @@ function $StringToDate(string, format) {
     return dateFormat.parse(string);
 }
 
-function $GetAccessory(ctx, name) {
-    return ScriptUtils.getAccessory(ctx, name);
+function $GetCarrier(ctx, name) {
+    return ScriptUtils.getCarrier(ctx, name);
 }
 
-function $SetAccessory(ctx, name, value) {
-    ScriptUtils.setAccessory(ctx, name, value);
+function $SetCarrier(ctx, name, value) {
+    ScriptUtils.setCarrier(ctx, name, value);
 }
 
-function $RemoveAccessory(ctx, name) {
-    return ScriptUtils.removeAccessory(ctx, name);
+function $RemoveCarrier(ctx, name) {
+    return ScriptUtils.removeCarrier(ctx, name);
 }

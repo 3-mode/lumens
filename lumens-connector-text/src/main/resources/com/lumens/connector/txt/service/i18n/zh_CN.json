@@ -1,0 +1,14 @@
+{
+    "Name": "名字",
+    "TextName": "CSV",
+    "EscapeChar": "转义字符",
+    "FieldDelimiter": "字段分割符",
+    "SchemaPath": "Schema路径",
+    "Path": "路径",
+    "Encoding": "文本编码",
+    "LineDelimiter": "行分割符",
+    "AlwaysQuoteMode": "双括号模式",
+    "Description": "描述",
+    "Yes": "是",
+    "No": "否"
+}

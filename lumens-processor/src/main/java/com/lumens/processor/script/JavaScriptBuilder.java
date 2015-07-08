@@ -10,7 +10,7 @@ public class JavaScriptBuilder {
 
     private final String functionPrefix = "function fLumensScript_";
     private final String pathEnding = "+-*/ &|!<>\n\r\t^%=;:?,";
-    private final String[] functions = {"$GetAccessory", "$SetAccessory", "$RemoveAccessory"};
+    private final String[] functions = {"$GetCarrier", "$SetCarrier", "$RemoveCarrier"};
 
     public String build(String script) {
         // TODO prepare the script and convert it to javascript function

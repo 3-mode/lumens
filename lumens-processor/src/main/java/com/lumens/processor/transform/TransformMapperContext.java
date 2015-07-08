@@ -3,7 +3,7 @@
  */
 package com.lumens.processor.transform;
 
-import com.lumens.model.AccessoryManager;
+import com.lumens.model.CarrierManager;
 import com.lumens.model.Element;
 import org.mozilla.javascript.Scriptable;
 
@@ -15,7 +15,7 @@ public class TransformMapperContext implements MapperContext {
     private final TransformRuleItem rootRuleItem;
     private final Element rootSourceElement;
     private TransformRuleItem currentRuleItem;
-    private AccessoryManager accessoryMgr;
+    private CarrierManager carrierManager;
     protected TransformMapperContext parent;
 
     public TransformMapperContext(TransformMapperContext parent, TransformRuleItem currentRuleItem) {
@@ -28,8 +28,8 @@ public class TransformMapperContext implements MapperContext {
     public TransformMapperContext(TransformRuleItem rootRuleItem, Element rootSrcElement) {
         this.rootRuleItem = rootRuleItem;
         this.rootSourceElement = rootSrcElement;
-        this.accessoryMgr = (rootSrcElement != null && rootSrcElement.getAccessoryManager() != null)
-                            ? rootSrcElement.getAccessoryManager() : new AccessoryManager();
+        this.carrierManager = (rootSrcElement != null && rootSrcElement.getCarrierManager() != null)
+                            ? rootSrcElement.getCarrierManager() : new CarrierManager();
     }
 
     @Override
@@ -42,8 +42,8 @@ public class TransformMapperContext implements MapperContext {
     }
 
     @Override
-    public AccessoryManager getAccessoryManager() {
-        return this.accessoryMgr;
+    public CarrierManager getCarrierManager() {
+        return this.carrierManager;
     }
 
     @Override

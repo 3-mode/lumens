@@ -37,7 +37,7 @@ public class TransformMapper extends AbstractProcessor {
                 TransformMapperContext ctx = new TransformMapperContext(rootRuleItem, null);
                 Element result = processTransformItem(null, ctx);
                 if (result != null) {
-                    transformAccessoryToTarget(ctx, result);
+                    carryToTarget(ctx, result);
                     results.add(result);
                 }
             } else {
@@ -55,7 +55,7 @@ public class TransformMapper extends AbstractProcessor {
                             TransformMapperContext ctx = new TransformMapperContext(rootRuleItem, rootSourceElement);
                             Element result = processTransformItem(null, ctx);
                             if (result != null) {
-                                transformAccessoryToTarget(ctx, result);
+                                carryToTarget(ctx, result);
                                 results.add(result);
                             }
                         }
@@ -69,8 +69,8 @@ public class TransformMapper extends AbstractProcessor {
         throw new MapperException("Unsupported input data !");
     }
 
-    private void transformAccessoryToTarget(MapperContext ctx, Element rootDst) {
-        rootDst.passAccessory(ctx.getRoot().getAccessoryManager());
+    private void carryToTarget(MapperContext ctx, Element rootDst) {
+        rootDst.carry(ctx.getRoot().getCarrierManager());
     }
 
     private void processRootForeachList(TransformMapperContext ctx, List<Element> results,
@@ -93,7 +93,7 @@ public class TransformMapper extends AbstractProcessor {
                 } else if (foreachLevel == foreachLevelDepth) {
                     Element result = processTransformItem(null, foreachCtx);
                     if (result != null) {
-                        transformAccessoryToTarget(ctx, result);
+                        carryToTarget(ctx, result);
                         results.add(result);
                     }
                 }

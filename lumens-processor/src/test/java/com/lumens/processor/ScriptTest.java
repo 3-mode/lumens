@@ -3,7 +3,7 @@
  */
 package com.lumens.processor;
 
-import com.lumens.model.AccessoryManager;
+import com.lumens.model.CarrierManager;
 import com.lumens.processor.transform.MapperContext;
 import com.lumens.model.DataElement;
 import com.lumens.model.DataFormat;
@@ -91,7 +91,7 @@ public class ScriptTest {
                     }
 
                     @Override
-                    public AccessoryManager getAccessoryManager() {
+                    public CarrierManager getCarrierManager() {
                         return null;
                     }
 

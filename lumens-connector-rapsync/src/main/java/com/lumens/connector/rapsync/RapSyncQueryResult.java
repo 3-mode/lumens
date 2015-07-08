@@ -5,7 +5,7 @@ package com.lumens.connector.rapsync;
 
 import com.lumens.connector.ElementChunk;
 import com.lumens.connector.OperationResult;
-import com.lumens.connector.SupportAccessory;
+import com.lumens.connector.SupportCarrier;
 import com.lumens.connector.rapsync.api.LogMiner;
 import com.lumens.connector.database.client.DBElementBuilder;
 import com.lumens.model.Element;
@@ -16,7 +16,7 @@ import java.sql.ResultSet;
  *
  * @author Xiaoxin
  */
-public class RapSyncQueryResult implements OperationResult, SupportAccessory {
+public class RapSyncQueryResult implements OperationResult, SupportCarrier {
 
     private List<Element> result;
     private final ElementChunk input;

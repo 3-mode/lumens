@@ -7,7 +7,7 @@ package com.lumens.connector;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public interface SupportAccessory {
+public interface SupportCarrier {
 
     public boolean isOneToOneForInOut();
 

@@ -16,7 +16,7 @@ import java.util.Map;
 public class DataElement implements Element {
 
     protected Map<String, Element> children;
-    protected AccessoryManager accessoryMgr;
+    protected CarrierManager carrierManager;
     protected List<Element> childrenList;
     protected List<Element> arrayItems;
     protected Format format;
@@ -30,26 +30,26 @@ public class DataElement implements Element {
     }
 
     @Override
-    public void passAccessory(AccessoryManager mgr) {
-        if (accessoryMgr == null)
-            accessoryMgr = mgr;
-        else if (accessoryMgr != mgr)
-            accessoryMgr.pass(mgr);
+    public void carry(CarrierManager mgr) {
+        if (carrierManager == null)
+            carrierManager = mgr;
+        else if (carrierManager != mgr)
+            carrierManager.take(mgr);
     }
 
     @Override
-    public void passAccessory(Element srcElement) {
-        passAccessory(srcElement.getAccessoryManager());
+    public void carry(Element srcElement) {
+        DataElement.this.carry(srcElement.getCarrierManager());
     }
 
     @Override
-    public void createAccessory() {
-        accessoryMgr = new AccessoryManager();
+    public void createCarrier() {
+        carrierManager = new CarrierManager();
     }
 
     @Override
-    public AccessoryManager getAccessoryManager() {
-        return accessoryMgr;
+    public CarrierManager getCarrierManager() {
+        return carrierManager;
     }
 
     @Override

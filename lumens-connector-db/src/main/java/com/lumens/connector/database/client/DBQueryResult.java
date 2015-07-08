@@ -5,7 +5,7 @@ package com.lumens.connector.database.client;
 
 import com.lumens.connector.ElementChunk;
 import com.lumens.connector.OperationResult;
-import com.lumens.connector.SupportAccessory;
+import com.lumens.connector.SupportCarrier;
 import com.lumens.model.Element;
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class DBQueryResult implements OperationResult, SupportAccessory {
+public class DBQueryResult implements OperationResult, SupportCarrier {
 
     private final DBOperation operation;
     private final DBQuerySQLBuilder sqlBuilder;

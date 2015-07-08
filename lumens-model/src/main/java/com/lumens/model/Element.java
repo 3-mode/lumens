@@ -64,11 +64,11 @@ public interface Element {
 
     public boolean isArrayItem();
 
-    public AccessoryManager getAccessoryManager();
+    public CarrierManager getCarrierManager();
 
-    public void createAccessory();
+    public void createCarrier();
 
-    public void passAccessory(Element srcElement);
+    public void carry(Element srcElement);
     
-    public void passAccessory(AccessoryManager mgr);
+    public void carry(CarrierManager mgr);
 }

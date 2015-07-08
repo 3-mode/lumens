@@ -3,7 +3,7 @@
  */
 package com.lumens.processor.transform;
 
-import com.lumens.model.AccessoryManager;
+import com.lumens.model.CarrierManager;
 import com.lumens.model.Element;
 import org.mozilla.javascript.Scriptable;
 
@@ -19,7 +19,7 @@ public interface MapperContext {
 
     public MapperContext getRoot();
 
-    public AccessoryManager getAccessoryManager();
+    public CarrierManager getCarrierManager();
 
     public void declareVariables(Scriptable scope);
 

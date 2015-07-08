@@ -9,7 +9,7 @@ import com.lumens.connector.Direction;
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
 import com.lumens.connector.ElementChunk;
-import com.lumens.connector.SupportAccessory;
+import com.lumens.connector.SupportCarrier;
 import com.lumens.engine.TransformEngineContext;
 import com.lumens.engine.TransformExecuteContext;
 import com.lumens.engine.component.AbstractTransformComponent;
@@ -181,20 +181,20 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
     }
 
     private void passAccessories(OperationResult opRet, List<Element> results) {
-        if (opRet != null && opRet instanceof SupportAccessory) {
-            SupportAccessory sa = (SupportAccessory) opRet;
+        if (opRet != null && opRet instanceof SupportCarrier) {
+            SupportCarrier sa = (SupportCarrier) opRet;
             ElementChunk inChunk = sa.getInput();
             if (sa.isOneToOneForInOut()) {
                 List<Element> inList = inChunk.getData();
                 if (inList.size() != results.size())
                     throw new RuntimeException("Error logic, the input and output size is not matched for writing operation!");
                 for (int i = 0; i < inList.size(); ++i)
-                    results.get(i).passAccessory(inList.get(i));
+                    results.get(i).carry(inList.get(i));
             } else {
                 if (inChunk != null && inChunk.getData() != null) {
                     Element inElem = inChunk.getData().get(inChunk.getStart());
                     for (Element outElem : results)
-                        outElem.passAccessory(inElem);
+                        outElem.carry(inElem);
                 }
             }
         }

@@ -14,12 +14,12 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Shaofeng Wang <shaofeng.wang@outlook.com>
  */
-public class AccessoryManager {
+public class CarrierManager {
 
-    private final Logger log = SysLogFactory.getLogger(AccessoryManager.class);
+    private final Logger log = SysLogFactory.getLogger(CarrierManager.class);
     private final Map<String, Object> values = new HashMap<>();
 
-    public void pass(AccessoryManager mgr) {
+    public void take(CarrierManager mgr) {
         if (mgr == null)
             return;
         Iterator<Entry<String, Object>> it = mgr.iterator();
