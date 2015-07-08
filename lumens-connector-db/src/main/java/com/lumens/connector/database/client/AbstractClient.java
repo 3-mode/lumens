@@ -82,11 +82,11 @@ public abstract class AbstractClient implements Client, DBConstants {
                     Format table = createTableFormat(ret);
                     tables.put(table.getName(), table);
                     if (direction == Direction.IN) {
-                        Format SQLParams = table.addChild(SQLPARAMS, Format.Form.STRUCT);
-                        SQLParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
-                        SQLParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
-                        SQLParams.addChild(ORDERBY, Format.Form.FIELD, Type.STRING);
-                        SQLParams.addChild(GROUPBY, Format.Form.FIELD, Type.STRING);
+                        Format sqlParams = table.addChild(SQLPARAMS, Format.Form.STRUCT);
+                        sqlParams.addChild(ACTION, Format.Form.FIELD, Type.STRING);
+                        sqlParams.addChild(WHERE, Format.Form.FIELD, Type.STRING);
+                        sqlParams.addChild(ORDERBY, Format.Form.FIELD, Type.STRING);
+                        sqlParams.addChild(GROUPBY, Format.Form.FIELD, Type.STRING);
                     }
                     if (fullLoad) {
                         getFormat(table, direction);
