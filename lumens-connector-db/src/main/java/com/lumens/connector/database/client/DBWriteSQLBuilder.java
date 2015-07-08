@@ -15,6 +15,10 @@ import org.apache.commons.lang.StringUtils;
  */
 public class DBWriteSQLBuilder extends DBSQLBuilder {
 
+    public String escapeString(String value) {
+        return value;
+    }
+
     @Override
     public String generateInsertSQL(Element input) {
         String tableName = input.getFormat().getName();
@@ -32,7 +36,7 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
                 if (values.length() > 0)
                     values.append(", ");
                 if (v.isString() || v.isDate())
-                    values.append("'").append(v.isNull() ? "" : v.getString()).append("'");
+                    values.append("'").append(v.isNull() ? "" : escapeString(v.getString())).append("'");
                 else
                     values.append(v.isNull() ? "" : v.getString());
             }
