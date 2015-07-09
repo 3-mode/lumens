@@ -82,9 +82,7 @@ public class RapSyncOperation implements Operation, RapSyncConstants {
             value.OPERATION = elem.getChild(COLUMN_OPERATION).getValue().toString();
             value.SEG_OWNER = getRequiredFieldValue(elem, COLUMN_SEG_OWNER).getString();
             value.TABLE_NAME = getRequiredFieldValue(elem, COLUMN_TABLE_NAME).getString();
-            if (value.OPERATION.equalsIgnoreCase("ddl")) {
-                miner.buildDictionary();
-            }
+
             miner.sync(value);
         }
         return outList;
