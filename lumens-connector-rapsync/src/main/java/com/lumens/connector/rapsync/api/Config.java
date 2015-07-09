@@ -26,6 +26,7 @@ public class Config {
     private boolean isContinuousMine = false;
     private boolean isSkipCorruption = true;
     private int pageSize = 1000;
+    private boolean isDDLTracking = false;
 
     public void setPageSize(int size) {
         this.pageSize = size;
@@ -94,6 +95,8 @@ public class Config {
     }
 
     public String buildParameters() {
+        isDDLTracking = dict_type != DICT_TYPE.ONLINE;
+
         StringBuilder parameter = new StringBuilder();
         if (startSCN != null) {
             parameter.append(String.format("STARTSCN =>%s", startSCN));
@@ -152,6 +155,13 @@ public class Config {
             }
             option.append("DBMS_LOGMNR.CONTINUOUS_MINE");
         }
+        if (isDDLTracking) {
+            if (option.length() > 0) {
+                option.append(" + ");
+            }
+            option.append("DBMS_LOGMNR.DDL_DICT_TRACKING");
+        }
+        
         if (option.length() > 0) {
             parameter.append(", OPTIONS => ").append(option);
         }

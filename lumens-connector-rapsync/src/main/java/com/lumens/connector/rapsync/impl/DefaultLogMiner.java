@@ -158,6 +158,9 @@ public class DefaultLogMiner implements LogMiner, Constants {
         if (value.SCN < LAST_SCN) {
             return;
         }
+        if (!validateValue(value)) {
+            return;
+        }
         if (value.SQL_REDO.isEmpty()) {
             log.warn("Skip empty REDO log record with SCN:" + value.SCN);
             return;
@@ -187,7 +190,7 @@ public class DefaultLogMiner implements LogMiner, Constants {
 
         boolean doAgain = false;
         do {
-            try {                
+            try {
                 dbClient.execute(SQL);
                 LAST_SCN = value.SCN;
                 log.info(String.format("SCN %s synced : %s", LAST_SCN, SQL));
@@ -225,11 +228,21 @@ public class DefaultLogMiner implements LogMiner, Constants {
                     log.warn(String.format("Record not exist. Skip sync for ''%s", value.OPERATION));
                     break;
                 }
-                
+
                 log.error(String.format("Fail to sync to destination. Fail on : SCN = %s, REDO = %s", value.SCN, value.SQL_REDO));
                 throw new RuntimeException("Fail to sync to destination. Error message:" + ex);
             }
         } while (doAgain);
+    }
+
+    private boolean validateValue(RedoValue value) {
+        boolean isValid = true;
+
+        if (value.STATUS == 2) {
+            log.error("Binary Redo value caused by 'Dictionary Version Mismatch'. Skip sync for" + value.SCN);
+            isValid = false;
+        }
+        return isValid;
     }
 
     private boolean isSupportedOperation(String operation) {
