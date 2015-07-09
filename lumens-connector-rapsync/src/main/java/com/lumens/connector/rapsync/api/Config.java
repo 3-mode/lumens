@@ -26,7 +26,8 @@ public class Config {
     private boolean isContinuousMine = false;
     private boolean isSkipCorruption = true;
     private int pageSize = 1000;
-    private boolean isDDLTracking = false;
+    private boolean isDDLTracking = false;   // Database must be opened if true
+    private boolean isOfflineDatabase = false;
 
     public void setPageSize(int size) {
         this.pageSize = size;
@@ -34,6 +35,11 @@ public class Config {
 
     public int getPageSize() {
         return pageSize;
+    }
+    
+    public void setOfflineDatabase(boolean isOffline)
+    {
+        isOfflineDatabase = isOffline;
     }
 
     public DICT_TYPE getDictType() {
@@ -95,7 +101,7 @@ public class Config {
     }
 
     public String buildParameters() {
-        isDDLTracking = dict_type != DICT_TYPE.ONLINE;
+        isDDLTracking = dict_type != DICT_TYPE.ONLINE && !isOfflineDatabase;
 
         StringBuilder parameter = new StringBuilder();
         if (startSCN != null) {
