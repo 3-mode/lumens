@@ -97,7 +97,7 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
     public String generateSelectSQL(Element input) {
         if (input != null) {
             StringBuilder querySQL = new StringBuilder();
-            querySQL.append("SELECT COUNT(1) FROM ").append(input.getFormat().getName());
+            querySQL.append("SELECT COUNT(1) as COUNTER FROM ").append(input.getFormat().getName());
             Element sqlParams = input.getChild(SQLPARAMS);
             if (sqlParams != null) {
                 Element whereElem = sqlParams.getChild(WHERE);
