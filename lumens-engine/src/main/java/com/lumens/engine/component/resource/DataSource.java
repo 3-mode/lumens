@@ -143,7 +143,7 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
         // Get the transform results
         results = (opRet != null && opRet.hasData()) ? opRet.getData() : new ArrayList<Element>();
-        passAccessories(opRet, results);
+        carryCarriers(opRet, results);
 
         if (log.isDebugEnabled())
             log.debug(String.format("Datasource '%s' result chunk size '%d'.", getName(), results.size()));
@@ -180,8 +180,8 @@ public class DataSource extends AbstractTransformComponent implements RegisterFo
 
     }
 
-    private void passAccessories(OperationResult opRet, List<Element> results) {
-        if (opRet != null && opRet instanceof SupportCarrier) {
+    private void carryCarriers(OperationResult opRet, List<Element> results) {
+        if (opRet != null && results.size() > 0 && opRet instanceof SupportCarrier) {
             SupportCarrier sa = (SupportCarrier) opRet;
             ElementChunk inChunk = sa.getInput();
             if (sa.isOneToOneForInOut()) {
