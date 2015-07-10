@@ -5,7 +5,6 @@ package com.lumens.connector.database.client;
 
 import com.lumens.model.ModelUtils;
 import com.lumens.connector.ElementChunk;
-import org.apache.logging.log4j.Logger;
 
 import com.lumens.connector.Operation;
 import com.lumens.connector.OperationResult;
@@ -17,11 +16,9 @@ import com.lumens.model.Element;
 import com.lumens.model.Format;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
 
 public abstract class DBOperation implements Operation, DBConstants {
 
-    private static final Logger log = LogManager.getLogger(DBOperation.class);
     private final Client client;
 
     public DBOperation(Client client) {

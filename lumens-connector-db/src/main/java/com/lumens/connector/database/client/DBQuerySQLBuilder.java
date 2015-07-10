@@ -7,6 +7,8 @@ import com.lumens.connector.database.DBConstants;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
 import com.lumens.model.ModelUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -14,6 +16,7 @@ import com.lumens.model.ModelUtils;
  */
 public abstract class DBQuerySQLBuilder extends DBSQLBuilder implements DBConstants {
 
+    private static final Logger log = LogManager.getLogger(DBOperation.class);
     private final Format output;
 
     public DBQuerySQLBuilder(Format output) {
@@ -28,7 +31,7 @@ public abstract class DBQuerySQLBuilder extends DBSQLBuilder implements DBConsta
     @Override
     public String generateSelectSQL(Element input) {
         StringBuilder queryFields = new StringBuilder();
-        if (output != null) {
+        if (output != null && output.getChildren() != null) {
             for (Format child : output.getChildren()) {
                 if (SQLPARAMS.equals(child.getName()))
                     continue;
@@ -37,7 +40,8 @@ public abstract class DBQuerySQLBuilder extends DBSQLBuilder implements DBConsta
                 queryFields.append(child.getName());
             }
         } else {
-            throw new RuntimeException("Error no output format");
+            queryFields.append("COUNT(1)");
+            log.warn("No field is configured");
         }
         String strWhere = null, strOrderBy = null, strGroupBy = null;
         if (input != null) {
