@@ -5,6 +5,7 @@ package com.lumens.connector.database.client;
 
 import com.lumens.connector.database.DBConstants;
 import com.lumens.connector.database.DBUtils;
+import com.lumens.logsys.SysLogFactory;
 import com.lumens.model.DataElement;
 import com.lumens.model.Element;
 import com.lumens.model.Format;
@@ -13,12 +14,15 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author shaofeng.wang@outlook.com
  */
 public class DBElementBuilder {
+
+    private final Logger log = SysLogFactory.getLogger(DBElementBuilder.class);
 
     public List<Element> buildElement(Format output, ResultSet ret) throws Exception {
         List<Element> result = new ArrayList<>();
@@ -35,8 +39,9 @@ public class DBElementBuilder {
     private void buildFieldList(Element record, ResultSet ret) throws Exception {
         int fieldIndex = 1;
         for (Format field : record.getFormat().getChildren()) {
-            if (DBConstants.SQLPARAMS.equals(field.getName()))
+            if (DBConstants.SQLPARAMS.equals(field.getName())) {
                 continue;
+            }
             record.addChild(field.getName()).setValue(getValue(field, ret, fieldIndex));
             ++fieldIndex;
         }
@@ -62,7 +67,9 @@ public class DBElementBuilder {
                 java.sql.Date date = ret.getDate(fieldIndex);
                 return new Value(date != null ? new Date(date.getTime()) : (Date) null);
             default:
-                throw new Exception("Not support data type");
+                String message = String.format("Not supported data type:%s for format:%s", format.getType().toString(), format.getName());
+                log.error(message);
+                throw new Exception(message);
         }
     }
 }
