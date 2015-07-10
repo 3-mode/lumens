@@ -53,16 +53,14 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
         for (Element e : input.getChildren()) {
             if (DBConstants.SQLPARAMS.equals(e.getFormat().getName()))
                 continue;
-            if (values.length() > 0) {
+            if (values.length() > 0)
                 values.append(", ");
-            }
             values.append(e.getFormat().getName()).append('=');
             Value v = e.getValue();
-            if (v.isString()) {
-                values.append("'").append(v.getString()).append("'");
-            } else {
-                values.append(v.getString());
-            }
+            if (v.isString())
+                values.append("'").append(escapeString(v.getString())).append("'");
+            else
+                values.append(escapeString(v.getString()));
         }
         sql.append("UPDATE ").append(tableName).append(" SET ").append(values.toString());
         if (sqlParams != null) {
