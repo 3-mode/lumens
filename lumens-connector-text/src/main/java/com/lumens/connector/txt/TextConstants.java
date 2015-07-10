@@ -33,13 +33,13 @@ public interface TextConstants {
     public static final String OPTION_QUOTE_MODE = "AlwaysQuoteMode";
 
     // connector operation    
-    public static final String OPERATION = "Operation";
-    public static final String OPERATION_READ = "Read";
-    public static final String OPERATION_APPEND = "Append";
-    public static final String OPERATION_OVERWRITE = "OverWrite";
+    public static final String ACTION = "action";
+    public static final String ACTION_READ = "READ";
+    public static final String ACTION_APPEND = "APPEND";
+    public static final String ACTION_OVERWRITE = "OVERWRITE";
 
     // end use seen options
-    public static final String FORMAT_PARAMS = "TextParams";
+    public static final String FORMAT_PARAMS = "$TextParams";
     public static final String FORMAT_MESSAGE = "TextMessage";
     public static final String FORMAT_FIELD = "field";
     public static final String FORMAT_NAME = "name";

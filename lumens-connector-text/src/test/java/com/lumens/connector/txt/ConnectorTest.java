@@ -166,7 +166,7 @@ public class ConnectorTest implements TextConstants {
             Element elemMultiRead = new DataElement(fmtR);
             Element paramsMultiR = elemMultiRead.addChild(FORMAT_PARAMS);
             paramsMultiR.setValue(new Value(FORMAT_MESSAGE));
-            paramsMultiR.addChild(OPERATION).setValue(new Value(OPERATION_READ));
+            paramsMultiR.addChild(ACTION).setValue(new Value(ACTION_READ));
             paramsMultiR.addChild(PATH).setValue(new Value(folder2read));
             resultR = operR.execute(new ElementChunk(Arrays.asList(elemMultiRead)), fmtR);
             assertTrue("Fail to executre source element read: multi files read folder", resultR.hasData());
@@ -239,7 +239,7 @@ public class ConnectorTest implements TextConstants {
             Element elemRead = new DataElement(fmtR);
             Element paramsR = elemRead.addChild(FORMAT_PARAMS);
             paramsR.setValue(new Value(FORMAT_MESSAGE));
-            paramsR.addChild(OPERATION).setValue(new Value(OPERATION_READ));
+            paramsR.addChild(ACTION).setValue(new Value(ACTION_READ));
             paramsR.addChild(PATH).setValue(new Value(path2read));
 
             resultR = operR.execute(new ElementChunk(Arrays.asList(elemRead)), fmtR);
@@ -300,7 +300,7 @@ public class ConnectorTest implements TextConstants {
             }
             Element elemWrite = new DataElement(fmtW);
             Element paramsW = elemWrite.addChild(FORMAT_PARAMS);
-            paramsW.addChild(OPERATION).setValue(new Value(OPERATION_OVERWRITE));
+            paramsW.addChild(ACTION).setValue(new Value(ACTION_OVERWRITE));
             paramsW.addChild(PATH).setValue(new Value(path2write));
 
             elemWrite.addChild("number").setValue(new Value("100"));
@@ -340,7 +340,7 @@ public class ConnectorTest implements TextConstants {
             Element elemAppend = new DataElement(fmtA);
             Element paramsA = elemAppend.addChild(FORMAT_PARAMS);
             paramsA.setValue(new Value(FORMAT_MESSAGE));
-            paramsA.addChild(OPERATION).setValue(new Value(OPERATION_APPEND));
+            paramsA.addChild(ACTION).setValue(new Value(ACTION_APPEND));
             paramsA.addChild(PATH).setValue(new Value(path2write));
 
             elemAppend.addChild("number").setValue(new Value("99"));
@@ -440,7 +440,7 @@ public class ConnectorTest implements TextConstants {
             Element elemRead = new DataElement(fmtR);
             Element paramsR = elemRead.addChild(FORMAT_PARAMS);
             paramsR.setValue(new Value(FORMAT_MESSAGE));
-            paramsR.addChild(OPERATION).setValue(new Value(OPERATION_READ));
+            paramsR.addChild(ACTION).setValue(new Value(ACTION_READ));
             paramsR.addChild(PATH).setValue(new Value(path2read));
 
             resultR = operR.execute(new ElementChunk(Arrays.asList(elemRead)), fmtR);

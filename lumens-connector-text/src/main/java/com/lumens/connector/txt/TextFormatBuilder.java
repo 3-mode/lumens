@@ -70,7 +70,7 @@ public class TextFormatBuilder implements FormatBuilder, TextConstants {
             rootFmt.setProperty(SCHEMA_ENCODING, new Value(encoding));
             Format params = rootFmt.addChild(FORMAT_PARAMS, Form.STRUCT);            
             params.addChild(PATH, Form.FIELD, Type.STRING);
-            params.addChild(OPERATION, Form.FIELD, Type.STRING);
+            params.addChild(ACTION, Form.FIELD, Type.STRING);
 
             getFormat(rootFmt, null, direction);
         }

@@ -31,17 +31,17 @@ public class TextOperation implements Operation, TextConstants {
                 Element params = elem.getChild(FORMAT_PARAMS);
                 if (params == null)
                     break;
-                Element oper = params.getChild(OPERATION);
+                Element oper = params.getChild(ACTION);
                 if (oper == null || oper.getValue() == null)
                     throw new Exception("'operation' is mandatory");
 
                 String operation = oper.getValue().toString();
-                if (OPERATION_READ.equalsIgnoreCase(operation)) {
+                if (ACTION_READ.equalsIgnoreCase(operation)) {
                     result.addAll(client.read(elem, fmt));
-                } else if (OPERATION_APPEND.equalsIgnoreCase(operation)) {
+                } else if (ACTION_APPEND.equalsIgnoreCase(operation)) {
                     client.write(elem, true);
                 }
-                if (OPERATION_OVERWRITE.equalsIgnoreCase(operation)) {
+                if (ACTION_OVERWRITE.equalsIgnoreCase(operation)) {
                     client.write(elem, false);
                 }
             }
