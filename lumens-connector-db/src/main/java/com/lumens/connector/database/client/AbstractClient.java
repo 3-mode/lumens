@@ -143,7 +143,16 @@ public abstract class AbstractClient implements Client, DBConstants {
              ResultSet ret = stat.executeQuery(SQL)) {
             return elementBuilder.buildElement(output, ret);
         } catch (Exception e) {
-            DBUtils.rollback(conn);
+            throw new RuntimeException("[" + e.getMessage() + "] : " + SQL, e);
+        }
+    }
+
+    @Override
+    public boolean hasRecord(String SQL) {
+        try (Statement stat = conn.createStatement();
+             ResultSet ret = stat.executeQuery(SQL)) {
+            return ret.next();
+        } catch (Exception e) {
             throw new RuntimeException("[" + e.getMessage() + "] : " + SQL, e);
         }
     }

@@ -4,6 +4,8 @@
 package com.lumens.connector.database.client;
 
 import com.lumens.connector.database.DBConstants;
+import static com.lumens.connector.database.DBConstants.SQLPARAMS;
+import static com.lumens.connector.database.DBConstants.WHERE;
 import com.lumens.model.ModelUtils;
 import com.lumens.model.Element;
 import com.lumens.model.Value;
@@ -49,9 +51,9 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
         String tableName = input.getFormat().getName();
         StringBuilder sql = new StringBuilder();
         StringBuilder values = new StringBuilder();
-        Element sqlParams = input.getChild(DBConstants.SQLPARAMS);
+        Element sqlParams = input.getChild(SQLPARAMS);
         for (Element e : input.getChildren()) {
-            if (DBConstants.SQLPARAMS.equals(e.getFormat().getName()))
+            if (SQLPARAMS.equals(e.getFormat().getName()))
                 continue;
             if (values.length() > 0)
                 values.append(", ");
@@ -64,7 +66,7 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
         }
         sql.append("UPDATE ").append(tableName).append(" SET ").append(values.toString());
         if (sqlParams != null) {
-            Element whereElem = sqlParams.getChild(DBConstants.WHERE);
+            Element whereElem = sqlParams.getChild(WHERE);
             if (!ModelUtils.isNullValue(whereElem)) {
                 String strWhere = whereElem.getValue().getString();
                 if (StringUtils.isNotEmpty(strWhere) && StringUtils.isNotBlank(strWhere))
@@ -78,10 +80,10 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
     public String generateDeleteSQL(Element input) {
         String tableName = input.getFormat().getName();
         StringBuilder sql = new StringBuilder();
-        Element sqlParams = input.getChild(DBConstants.SQLPARAMS);
+        Element sqlParams = input.getChild(SQLPARAMS);
         sql.append("DELETE FROM ").append(tableName);
         if (sqlParams != null) {
-            Element whereElem = sqlParams.getChild(DBConstants.WHERE);
+            Element whereElem = sqlParams.getChild(WHERE);
             if (!ModelUtils.isNullValue(whereElem)) {
                 String strWhere = whereElem.getValue().getString();
                 if (StringUtils.isNotEmpty(strWhere) && StringUtils.isNotBlank(strWhere))
@@ -91,4 +93,22 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
         return sql.toString();
     }
 
+    @Override
+    public String generateSelectSQL(Element input) {
+        if (input != null) {
+            StringBuilder querySQL = new StringBuilder();
+            querySQL.append("SELECT COUNT(1) FROM ").append(input.getFormat().getName());
+            Element sqlParams = input.getChild(SQLPARAMS);
+            if (sqlParams != null) {
+                Element whereElem = sqlParams.getChild(WHERE);
+                if (!ModelUtils.isNullValue(whereElem)) {
+                    String strWhere = whereElem.getValue().getString();
+                    if (StringUtils.isNotEmpty(strWhere) && StringUtils.isNotBlank(strWhere))
+                        querySQL.append(" WHERE ").append(strWhere);
+                    return querySQL.toString();
+                }
+            }
+        }
+        throw new RuntimeException("Please check the 'WHERE' clause, make sure the condition exist!");
+    }
 }

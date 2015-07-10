@@ -28,7 +28,6 @@ public abstract class DBQuerySQLBuilder extends DBSQLBuilder implements DBConsta
     @Override
     public String generateSelectSQL(Element input) {
         StringBuilder queryFields = new StringBuilder();
-        String tableName = null;
         if (output != null) {
             for (Format child : output.getChildren()) {
                 if (SQLPARAMS.equals(child.getName()))

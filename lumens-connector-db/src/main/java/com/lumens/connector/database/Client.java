@@ -28,6 +28,8 @@ public interface Client {
     public void execute(String SQL);
 
     public List<Element> executeQuery(String generatePageSQL, Format output);
+    
+    public boolean hasRecord(String SQL);
 
     public void commit();
     
