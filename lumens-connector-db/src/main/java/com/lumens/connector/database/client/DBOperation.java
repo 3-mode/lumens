@@ -34,9 +34,11 @@ public abstract class DBOperation implements Operation, DBConstants {
         List<Element> dataList = input == null ? null : input.getData();
         if (dataList != null && !dataList.isEmpty()) {
             String strAction = getSQLAction(dataList.get(input.getStart()));
-            if (DBUtils.isQuery(strAction))
+            if (DBUtils.isQuery(strAction)) {
+                if(output == null)
+                    throw new UnsupportedOperationException("The query output format can't be empty!");
                 return new DBQueryResult(this, getQuerySQLBuilder(output), input);
-            else if (DBUtils.isWrite(strAction)) {
+            } else if (DBUtils.isWrite(strAction)) {
                 List<Element> outList = processWrite(dataList, output);
                 if (input.isLast())
                     client.commit();
