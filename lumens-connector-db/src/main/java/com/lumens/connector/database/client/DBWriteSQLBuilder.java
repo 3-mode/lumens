@@ -59,7 +59,7 @@ public class DBWriteSQLBuilder extends DBSQLBuilder {
                 values.append(", ");
             values.append(e.getFormat().getName()).append('=');
             Value v = e.getValue();
-            if (v.isString())
+            if (v.isString() || v.isDate())
                 values.append("'").append(escapeString(v.getString())).append("'");
             else
                 values.append(escapeString(v.getString()));
