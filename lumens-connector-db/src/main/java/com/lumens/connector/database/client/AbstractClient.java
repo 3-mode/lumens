@@ -151,7 +151,7 @@ public abstract class AbstractClient implements Client, DBConstants {
     public boolean hasRecord(String SQL) {
         try (Statement stat = conn.createStatement();
              ResultSet ret = stat.executeQuery(SQL)) {
-            return ret.next();
+            return ret.next() ? (0 < ret.getInt(1)) : false;
         } catch (Exception e) {
             throw new RuntimeException("[" + e.getMessage() + "] : " + SQL, e);
         }
