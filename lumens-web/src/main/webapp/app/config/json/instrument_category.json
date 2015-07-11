@@ -8,8 +8,8 @@
             "instance_icon_url": "app/css/img/Transform64x64.png",
             "html_url": "app/config/html/transf.html",
             "i18n": {
-                "Name": "Name",
-                "Description": "Description"
+                "Name": "id_name",
+                "Description": "id_description"
             }
         },
         {
@@ -19,8 +19,8 @@
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png",
             "i18n": {
-                "Name": "Name",
-                "Description": "Description"
+                "Name": "id_name",
+                "Description": "id_description"
             }
         },
         {
@@ -30,8 +30,8 @@
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png",
             "i18n": {
-                "Name": "Name",
-                "Description": "Description"
+                "Name": "id_name",
+                "Description": "id_description"
             }
         },
         {
@@ -41,8 +41,8 @@
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png",
             "i18n": {
-                "Name": "Name",
-                "Description": "Description"
+                "Name": "id_name",
+                "Description": "id_description"
             }
         },
         {
@@ -52,8 +52,8 @@
             "item_icon_url": "app/css/img/Transform24x24.png",
             "instance_icon_url": "app/css/img/Transform64x64.png",
             "i18n": {
-                "Name": "Name",
-                "Description": "Description"
+                "Name": "id_name",
+                "Description": "id_description"
             }
         }
     ]

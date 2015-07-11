@@ -56,6 +56,8 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
                 $scope.compCagegory[this.type] = this;
             });
             $.each(instrument_items.items, function () {
+                for (prop in this.i18n)
+                    this.i18n[prop] = i18n[this.i18n[prop]];
                 $scope.compCagegory[this.type] = this;
             });
             desgin.barPanel = new Lumens.SplitLayout(Lumens.system.workspaceLayout.getPart2Element()).configure({

@@ -1,6 +1,7 @@
 {
     "id_no": "编号",
     "id_name": "名字",
+	"id_description": "描述",
     "id_in": "输入",
     "id_out": "输出",
     "id_data": "数据",

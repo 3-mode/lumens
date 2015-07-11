@@ -1,6 +1,7 @@
 {
     "id_no": "No.",
     "id_name": "Name",
+	"id_description": "Description",
     "id_in": "Input",
     "id_out": "Output",
     "id_direction": "Direction",
