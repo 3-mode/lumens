@@ -321,6 +321,7 @@ Lumens.services.factory('TransformMapperStorageService', ['RuleTreeService', 'Me
                 this.saveToFormatList($scope, sourceFormatInfo);
                 this.saveToFormatList($scope, targetFormatInfo);
                 this.saveToTransformList($scope, ruleInfo);
+                $scope.$emit("ApplyProperty", {UI: $scope.currentUIComponent});
             },
             findRootFormat: function (formatList, formatName) {
                 if (formatList) {
