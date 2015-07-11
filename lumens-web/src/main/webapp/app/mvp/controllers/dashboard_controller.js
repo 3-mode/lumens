@@ -12,6 +12,7 @@ Lumens.controllers
 })
 .controller("ServerMonitorCtrl", function ($scope, $interval, CpuPerc, CpuCount, MemPerc, Disk) {
     console.log("In ServerMonitorCtrl");
+    var i18n = $scope.i18n;
     // Line charts of CPU
     function getRedrawData(historyData) {
         var data = [];
@@ -27,14 +28,14 @@ Lumens.controllers
     }
     // { "combined"  : 6,  "sys" : 3,  "user" : 3,  "idle" : 94  },{ "combined"  : 0,  "sys" : 0,  "user" : 0,  "idle" : 100  },{ "combined"  : 3,  "sys" : 0,  "user" : 3,  "idle" : 97  },{ "combined"  : 0,  "sys" : 0,  "user" : 0,  "idle" : 100  },{ "combined"  : 28,  "sys" : 16,  "user" : 12,  "idle" : 72  },{ "combined"  : 3,  "sys" : 3,  "user" : 0,  "idle" : 97  },{ "combined"  : 9,  "sys" : 3,  "user" : 6,  "idle" : 91  },{ "combined"  : 0,  "sys" : 0,  "user" : 0,  "idle" : 100  }
     CpuCount.get(function (result) {
-        $scope.cpuCount = result.cpu_count
+        $scope.cpuCount = i18n.id_cpu_statis.format(result.cpu_count);
         $scope.cpuCountArray = [];
         for (var i = 0; i < result.cpu_count; ++i)
             $scope.cpuCountArray.push(i);
         CpuPerc.get(function (cpu_perc) {
             var cpuTotalHistory = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, cpu_perc.cpu_usage];
             var cpuTotalPolt = $.jqplot('cpuInfoTotal', [cpuTotalHistory], {
-                title: 'CPU Total Usage ( ' + cpu_perc.cpu_usage + '% )',
+                title: i18n.id_cpu_total_usage.format(cpu_perc.cpu_usage),
                 stackSeries: true,
                 showMarker: false,
                 grid: {
@@ -87,7 +88,7 @@ Lumens.controllers
                 CpuPerc.get(function (cpu_perc) {
                     putInfoIntoCache(cpuTotalHistory, cpu_perc.cpu_usage);
                     cpuTotalPolt.series[0].data = getRedrawData(cpuTotalHistory);
-                    cpuTotalPolt.title.text = 'CPU Total Usage ( ' + cpu_perc.cpu_usage + '% )';
+                    cpuTotalPolt.title.text = i18n.id_cpu_total_usage.format(cpu_perc.cpu_usage);
                     cpuTotalPolt.replot();
                     for (var i = 0; i < cpuPlotList.length; ++i) {
                         putInfoIntoCache(cpuHistoryList[i], cpu_perc.cpu_perc_list[i].combined);
@@ -101,12 +102,11 @@ Lumens.controllers
     //{ "memory" : { "used"  : 40,  "free" : 60,  "ram" : 11.932617  } }
     MemPerc.get(function (memInfo) {
         // { "memory" : { "used"  : 40,  "free" : 60,  "ram" : 12224  }}
-        $scope.RAM = Math.round((memInfo.memory.ram / 1024.00) * 100) / 100;
+        $scope.RAM = i18n.id_mem_statis.format(Math.round((memInfo.memory.ram / 1024.00) * 100) / 100);
         var memTotalHistory = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, memInfo.memory.used];
-        var titleTextTempl = 'Memory Total Usage ( ';
         var memUsed = Math.round((memInfo.memory.ram * memInfo.memory.used / 100.0 / 1024) * 100) / 100;
         var memTotalPolt = $.jqplot('memInfo', [memTotalHistory], {
-            title: titleTextTempl + memInfo.memory.used + '% --- ' + memUsed + 'G )',
+            title: i18n.id_mem_usage.format(memInfo.memory.used, memUsed),
             stackSeries: true,
             showMarker: false,
             grid: {
@@ -138,7 +138,7 @@ Lumens.controllers
                 putInfoIntoCache(memTotalHistory, memInfo.memory.used);
                 memTotalPolt.series[0].data = getRedrawData(memTotalHistory);
                 memUsed = Math.round((memInfo.memory.ram * memInfo.memory.used / 100.0 / 1024) * 100) / 100;
-                memTotalPolt.title.text = titleTextTempl + memInfo.memory.used + '% --- ' + memUsed + 'G )';
+                memTotalPolt.title.text = i18n.id_mem_usage.format(memInfo.memory.used, memUsed);
                 memTotalPolt.replot();
             });
         }, 5000);
@@ -153,11 +153,11 @@ Lumens.controllers
             var diskPlotList = [];
             for (var i = 0; i < diskInfo.disk_list.length; ++i) {
                 var data = [
-                    ['Used', diskInfo.disk_list[i].use_perc],
-                    ['Free', 100 - diskInfo.disk_list[i].use_perc]
+                    [i18n.id_disk_chart_usage, diskInfo.disk_list[i].use_perc],
+                    [i18n.id_disk_chart_free, 100 - diskInfo.disk_list[i].use_perc]
                 ];
                 var diskPlot = $.jqplot('diskInfo_' + i, [data], {
-                    title: '( ' + diskInfo.disk_list[i].name + ' --- ' + diskInfo.disk_list[i].total + 'G ) Usage ( ' + diskInfo.disk_list[i].use_perc + '% )',
+                    title: i18n.id_disk_usage.format(diskInfo.disk_list[i].name, diskInfo.disk_list[i].total, diskInfo.disk_list[i].use_perc),
                     seriesDefaults: {
                         // make this a donut chart.
                         renderer: $.jqplot.DonutRenderer,
