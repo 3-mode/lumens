@@ -145,7 +145,7 @@ public class CSVHelper implements TextConstants {
     private void initOption() {
         options.put(QUOTE_CHAR, new Value("\""));
         options.put(FIELDELIMITER, new Value(","));
-        options.put(LINEDELIMITER, new Value("\\r\\n"));
+        options.put(LINEDELIMITER, new Value(System.getProperty("line.separator")));
         options.put(OPTION_IGNORE_EMPTYLINE, new Value(false));
         options.put(OPTION_SKIP_COMMENTS, new Value(false));
         options.put(OPTION_SURROUNDING_SPACES_NEED_QUOTES, new Value(false));
@@ -163,8 +163,8 @@ public class CSVHelper implements TextConstants {
         boolean alwaysQuoteMode = options.get(OPTION_QUOTE_MODE).getBoolean();
 
         CsvPreference.Builder builder = new CsvPreference.Builder(quoteChar, delimiterChar, endOfLineSymbols)
-                .ignoreEmptyLines(ignoreEmptyLines)
-                .surroundingSpacesNeedQuotes(surroundingSpacesNeedQuotes);
+        .ignoreEmptyLines(ignoreEmptyLines)
+        .surroundingSpacesNeedQuotes(surroundingSpacesNeedQuotes);
 
         if (skipComments) {
             builder.skipComments(new CommentStartsWith("#"));

@@ -131,7 +131,7 @@ public class TextConnector implements Connector, TextConstants {
         if (props.containsKey(OPTION_QUOTE_MODE))
             quoteMode = props.get(OPTION_QUOTE_MODE).getBoolean();
 
-        if (delimiter.equalsIgnoreCase(escape))
+        if (delimiter != null && delimiter.equalsIgnoreCase(escape))
             throw new RuntimeException("Delimiter should not be equal to escape char.");
     }
 
