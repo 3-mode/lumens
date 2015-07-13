@@ -2,6 +2,7 @@
 
 # Package Files #
 *.jar
+*.log
 *.war
 *.ear
 *.prefs
