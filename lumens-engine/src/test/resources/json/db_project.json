@@ -19,7 +19,7 @@
                     {
                         "name": "OJDBC",
                         "type": "String",
-                        "value": "file:///C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server\\jdbc\\lib\\ojdbc6.jar"
+                        "value": "file:///X:\\lumens\\dist\\3rdparty\\oracle\\jdbc\\ojdbc6.jar"
                     },
                     {
                         "name": "ConnectionURL",
@@ -323,7 +323,7 @@
                     {
                         "name": "OJDBC",
                         "type": "String",
-                        "value": "file:///C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server\\jdbc\\lib\\ojdbc6.jar"
+                        "value": "file:///X:\\lumens\\dist\\3rdparty\\oracle\\jdbc\\ojdbc6.jar"
                     },
                     {
                         "name": "ConnectionURL",
