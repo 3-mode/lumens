@@ -19,6 +19,7 @@ import org.junit.Before;
  */
 public class SchedulerTest {
 
+    // To run test, you need to have db ready : jdbc:derby://localhost:1527/lumens
     @Before
     public void Before() {
         ProjectDAO projectDAO = DAOFactory.getProjectDAO();
