@@ -37,7 +37,7 @@ public class OracleTest {
     public void testFormatList() throws Exception {
         StringBuilder alterSession = new StringBuilder();
         alterSession.append("alter session set NLS_DATE_FORMAT='yyyy-mm-dd'");
-        OracleClient client = new OracleClient(new MockOracleConnector("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar",
+        OracleClient client = new OracleClient(new MockOracleConnector("file:///X:\\lumens\\dist\\3rdparty\\oracle\\jdbc\\ojdbc6.jar",
                                                                        "jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr", alterSession.toString(), 100));
         client.open();
         Map<String, Format> tables = client.getFormatList(Direction.IN, true);
