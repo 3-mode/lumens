@@ -20,4 +20,58 @@ public interface SQLServerConstants {
     public String SQLSERVER_XTYPE = "XTYPE";
     public String SQLSERVER_ID = "ID";
     public String SQLSERVER_PK = "PRIMARY_KEY";
+
+    // SQL Server datatypes 
+    // Exact numberics
+    public String BIGINT = "bigint";
+    public String BIT = "bit";
+    public String DECIMAL = "decimal";
+    public String INT = "int";  // INT4
+    public String MONEY = "money";
+    public String NUMERIC = "numeric";
+    public String SMALLINT = "smallint"; // INT2
+    public String SMALLMONEY = "smallmoney";
+    public String TINYINT = "tinyint";  // INT1
+
+    // Approximate numberics
+    public String FLOAT = "float";
+    public String REAL = "real";
+
+    // Date and Time
+    public String DATETIME = "datetime";
+    public String SMALLDATETIME = "smalldatetime";
+    public String DATE = "date";
+    public String TIME = "time";
+    public String DATATIMEOFFSET = "datatimeoffset";
+    public String DATETIME2 = "datetime2";
+
+    // Character Strings
+    public String CHAR = "char";
+    public String VARCHAR = "varchar";
+    public String TEXT = "text";
+
+    // Unicode character strings
+    public String NCHAR = "nchar";
+    public String NVARCHAR = "nvarchar";
+    public String NTEXT = "ntext";
+
+    // Binary stings
+    public String BINARY = "binary";
+    public String IMAGE = "image";
+    public String VARBINARY = "varbinary";
+
+    // others
+    public String TIMESTAMP = "timestamp";
+    public String UNIQUEIDENTIFIER = "uniqueidentifier";
+    public String SQL_VARIANT = "sql_variant";
+    public String XML = "xml";    
+    public String HIERARCHYID = "hierarchyid";
+
+    // user defined datatype
+    public String CLR_UDT = "clr udt";
+    
+    // Applies To: SQL Server 2014, SQL Server 2016 Preview
+    // There more types: cursor/table
+    public String GEOGRAPH = "geography";
+    public String CURSOR = "cursor";    
 }
