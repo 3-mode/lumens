@@ -3,8 +3,8 @@
  */
 package com.lumens.connector.database.client.sqlserver.service;
 
+import com.lumens.connector.database.client.sqlserver.SQLServerConnectorFactory;
 import com.lumens.connector.ConnectorActivator;
-import com.lumens.connector.database.sqlserver.SQLServerConnectorFactory;
 
 /**
  *

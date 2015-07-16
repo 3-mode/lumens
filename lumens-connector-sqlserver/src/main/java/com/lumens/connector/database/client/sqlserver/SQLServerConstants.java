@@ -1,7 +1,7 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.database.sqlserver;
+package com.lumens.connector.database.client.sqlserver;
 
 /**
  *
