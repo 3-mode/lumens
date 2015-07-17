@@ -24,12 +24,41 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
 
     @Override
     protected Type toType(String dataType) {
-        if (dataType.contains("int"))
-            return Type.INTEGER;
-        else if (dataType.contains("char") || dataType.contains("text"))
+        if (dataType.equalsIgnoreCase(CHAR)
+                || dataType.equalsIgnoreCase(VARCHAR)
+                || dataType.equalsIgnoreCase(TEXT)
+                || dataType.equalsIgnoreCase(NCHAR)
+                || dataType.equalsIgnoreCase(NVARCHAR)
+                || dataType.equalsIgnoreCase(NTEXT)) {
             return Type.STRING;
-
-        return Type.STRING;
+        } else if (dataType.equalsIgnoreCase(DATETIME)
+                || dataType.equalsIgnoreCase(SMALLDATETIME)
+                || dataType.equalsIgnoreCase(DATE)
+                || dataType.equalsIgnoreCase(TIME)
+                || dataType.equalsIgnoreCase(DATATIMEOFFSET)
+                || dataType.equalsIgnoreCase(DATETIME2)) {
+            return Type.DATE;
+        } else if (dataType.equalsIgnoreCase(BINARY)
+                || dataType.equalsIgnoreCase(IMAGE)
+                || dataType.equalsIgnoreCase(VARBINARY)
+                || dataType.equalsIgnoreCase(TIMESTAMP)
+                || dataType.equalsIgnoreCase(ROWVERSION)){
+            return Type.BINARY;
+        } else if (dataType.equalsIgnoreCase(FLOAT)
+                || dataType.equalsIgnoreCase(REAL)) {
+            return Type.DOUBLE;
+        } else if (dataType.equalsIgnoreCase(BIGINT)
+                || dataType.equalsIgnoreCase(BIT)
+                || dataType.equalsIgnoreCase(DECIMAL)
+                || dataType.equalsIgnoreCase(INT)
+                || dataType.equalsIgnoreCase(MONEY)
+                || dataType.equalsIgnoreCase(NUMERIC)
+                || dataType.equalsIgnoreCase(SMALLINT)
+                || dataType.equalsIgnoreCase(SMALLMONEY)
+                || dataType.equalsIgnoreCase(TINYINT)) {
+            return Type.INTEGER;
+        }
+        return Type.NONE;
     }
 
     @Override
@@ -51,15 +80,17 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
         table.setProperty(SQLSERVER_ID, new Value(tableId));
         table.setProperty(SQLSERVER_XTYPE, new Value(tableXType));
         try (Statement stat = conn.createStatement();
-             ResultSet primaryKeyRet = stat.executeQuery(String.format(SQLSERVER_PRIMARYKEY, tableName))) {
+                ResultSet primaryKeyRet = stat.executeQuery(String.format(SQLSERVER_PRIMARYKEY, tableName))) {
             StringBuilder primaryKeyList = new StringBuilder();
             while (primaryKeyRet.next()) {
-                if (primaryKeyList.length() > 0)
+                if (primaryKeyList.length() > 0) {
                     primaryKeyList.append(", ");
+                }
                 primaryKeyList.append(primaryKeyRet.getString(1));
             }
-            if (primaryKeyList.length() > 0)
+            if (primaryKeyList.length() > 0) {
                 table.setProperty(SQLSERVER_PK, new Value(primaryKeyList.toString()));
+            }
         }
 
         return table;

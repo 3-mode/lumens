@@ -48,6 +48,6 @@ public class SQLServerQuerySQLBuilder extends DBQuerySQLBuilder {
 
     @Override
     public String generatePageSQL(String SQL, int start, int page) {
-        return String.format(SQL, start + page - 1, start);
+        return String.format(SQL, start + page, start);
     }
 }

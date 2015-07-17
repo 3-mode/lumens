@@ -61,7 +61,8 @@ public interface SQLServerConstants {
     public String VARBINARY = "varbinary";
 
     // others
-    public String TIMESTAMP = "timestamp";
+    public String TIMESTAMP = "timestamp";   // It is not the same time type as SQL-92 standard
+    public String ROWVERSION = "rowversion "; // To replace timestamp from SQL Server 2000
     public String UNIQUEIDENTIFIER = "uniqueidentifier";
     public String SQL_VARIANT = "sql_variant";
     public String XML = "xml";    
