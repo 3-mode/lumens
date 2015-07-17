@@ -37,6 +37,13 @@ Lumens.Link = Class.$extend({
     },
     getFrom: function () {
         return this.$from;
+    },
+    remove: function () {
+        if (this.$from)
+            this.$from.removeToLink(this);
+        if (this.$to)
+            this.$to.removeFromLink(this);
+        this.$paper.remove();
     }
 });
 
@@ -161,6 +168,15 @@ Lumens.Component = Class.$extend({
             "width": 260,
             "height": 90
         }
+    },
+    remove: function () {
+        if (this.hasFrom())
+            for (var i in this.getFromLinkList())
+                this.getFromLinkList()[i].remove();
+        if (this.hasTo())
+            for (var i in this.getToLinkList())
+                this.getToLinkList()[i].remove();
+        this.$elem.remove();
     },
     to: function (link) {
         this.$to_list.push(link);

@@ -958,6 +958,11 @@ svg path {
     float: right;
     margin-right: 10px;
 }
+.lumens .lumens-button-delete2 {
+    background-color: #B8B8B8 !important;
+    float: left;
+    margin-left: 10px;
+}
 .lumens .lumens-button:hover {
     background-color: #3276b1 !important;
 }
