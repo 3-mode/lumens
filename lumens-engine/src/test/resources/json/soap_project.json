@@ -21,7 +21,7 @@
                     {
                         "name": "WSDL",
                         "type": "String",
-                        "value": "file:/X:/PRODUCT/3MODE/lumens/lumens-engine/src/test/resources/wsdl/ChinaOpenFundWS.asmx"
+                        "value": "file:/X:/lumens/lumens-engine/src/test/resources/wsdl/ChinaOpenFundWS.asmx"
                     },
                     {
                         "name": "ProxyPort",

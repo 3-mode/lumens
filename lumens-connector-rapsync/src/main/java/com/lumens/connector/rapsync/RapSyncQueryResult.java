@@ -61,6 +61,7 @@ public class RapSyncQueryResult implements OperationResult, SupportCarrier {
                 // Build next query from redo log list
                 if (miner.hasNextBuild()) {
                     miner.build();
+                    miner.start();
                     String sql = String.format(builder.generateSelectSQL(input.getData().get(input.getStart())), builder.getPageSize(), 1);
                     try (ResultSet resultSet = miner.query(sql)) {
                         this.result = new DBElementBuilder().buildElement(builder.getFormat(), resultSet);
