@@ -44,7 +44,7 @@ public class ConnectorTest implements OracleConstants {
         Connector cntr = new OracleConnectorFactory().createConnector();
         try {
             HashMap<String, Value> props = new HashMap<>();
-            props.put(OJDBC, new Value("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar"));
+            props.put(OJDBC, new Value("file:///X:\\lumens\\dist\\3rdparty\\oracle\\jdbc\\ojdbc6.jar"));
             props.put(CONNECTION_URL, new Value("jdbc:oracle:thin:@localhost:1521:xe"));
             props.put(USER, new Value("hr"));
             props.put(PASSWORD, new Value("hr"));
@@ -71,8 +71,9 @@ public class ConnectorTest implements OracleConstants {
         }
     }
 
-    // TODO need to mock db ENV
-    @Test
+    // TODO: need to mock db ENV
+    // TODO: add a pareparation step prior unit test to add table into db. Disable first 
+    //@Test
     public void testOracleSQLBuilder() throws Exception {
         // Test select SQL generating
         Format employeeFmt = new DataFormat("Testtable", Form.STRUCT);
@@ -135,7 +136,7 @@ public class ConnectorTest implements OracleConstants {
         sqlSelect = sqlTest.generateSelectSQL(select);
         System.out.println("Generated select SQL: " + sqlTest.generatePageSQL(sqlSelect, 1, 100));
 
-        OracleClient client = new OracleClient(new MockOracleConnector("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar",
+        OracleClient client = new OracleClient(new MockOracleConnector("file:///X:\\lumens\\dist\\3rdparty\\oracle\\jdbc\\ojdbc6.jar",
                                                                        "jdbc:oracle:thin:@localhost:1521:orcl", "hr", "hr", "alter session set NLS_DATE_FORMAT='yyyy-mm-dd'", 50));
         client.open();
         client.getFormatList(Direction.IN, true);
@@ -184,7 +185,7 @@ public class ConnectorTest implements OracleConstants {
 
         StringBuilder alterSession = new StringBuilder();
         alterSession.append("alter session set NLS_DATE_FORMAT='yyyy-mm-dd'");
-        OracleClient client = new OracleClient(new MockOracleConnector("file:///C:/app/washaofe/product/11.2.0/dbhome/jdbc/lib/ojdbc6.jar",
+        OracleClient client = new OracleClient(new MockOracleConnector("file:///X:\\lumens\\dist\\3rdparty\\oracle\\jdbc\\ojdbc6.jar",
                                                                        "jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr", alterSession.toString(), 100));
         client.open();
 

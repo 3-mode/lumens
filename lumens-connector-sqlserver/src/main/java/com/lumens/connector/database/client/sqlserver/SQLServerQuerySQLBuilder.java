@@ -1,10 +1,10 @@
 /*
  * Copyright Lumens Team, Inc. All Rights Reserved.
  */
-package com.lumens.connector.database.sqlserver;
+package com.lumens.connector.database.client.sqlserver;
 
 import com.lumens.connector.database.client.DBQuerySQLBuilder;
-import static com.lumens.connector.database.sqlserver.SQLServerConstants.SQLSERVER_PK;
+import static com.lumens.connector.database.client.sqlserver.SQLServerConstants.SQLSERVER_PK;
 import com.lumens.model.Format;
 import com.lumens.model.Value;
 import org.apache.commons.lang.StringUtils;
@@ -48,6 +48,6 @@ public class SQLServerQuerySQLBuilder extends DBQuerySQLBuilder {
 
     @Override
     public String generatePageSQL(String SQL, int start, int page) {
-        return String.format(SQL, start + page - 1, start);
+        return String.format(SQL, start + page, start);
     }
 }

@@ -24,7 +24,7 @@
 			{
 				"name": "OJDBC",
 				"type": "String",
-				"value": "file:///C:\\app\\washaofe\\product\\11.2.0\\dbhome\\jdbc\\lib\\ojdbc6.jar"
+				"value": "file:///file:///X:\\lumens\\dist\\3rdparty\\oracle\\jdbc\\ojdbc6.jar"
 			},
 			{
 				"name": "ConnectionURL",
@@ -286,7 +286,7 @@
 			{
 				"name": "OJDBC",
 				"type": "String",
-				"value": "file:///C:\\app\\washaofe\\product\\11.2.0\\dbhome\\jdbc\\lib\\ojdbc6.jar"
+				"value": "file:///X:\\lumens\\dist\\3rdparty\\oracle\\jdbc\\ojdbc6.jar"
 			},
 			{
 				"name": "ConnectionURL",

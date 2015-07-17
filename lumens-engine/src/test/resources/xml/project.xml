@@ -9,7 +9,7 @@
             </description>
             <position x="0" y="0"/>
             <property-list>
-                <property name="WSDL" type="String">file:/X:/PRODUCT/3MODE/lumens/lumens-engine/src/test/resources/wsdl/ChinaOpenFundWS.asmx</property>
+                <property name="WSDL" type="String">file:/X:/lumens/lumens-engine/src/test/resources/wsdl/ChinaOpenFundWS.asmx</property>
                 <!--<property name="ProxyAddress" type="String">web-proxy.atl.hp.com</property>
                 <property name="ProxyPort" type="Integer">8080</property>-->
             </property-list>
