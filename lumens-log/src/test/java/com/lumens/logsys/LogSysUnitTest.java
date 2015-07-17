@@ -16,7 +16,7 @@ public class LogSysUnitTest {
     private final Logger log = SysLogFactory.getLogger(LogSysUnitTest.class);
 
     static {
-        SysLogFactory.start("console", "X:/lumens/dist/lumens");
+        SysLogFactory.start("console", LogSysUnitTest.class.getResource("/").getPath() + "../classes");
     }
 
     // TODO add test methods here.
