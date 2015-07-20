@@ -6,8 +6,9 @@
 *.war
 *.ear
 *.prefs
-/lumens-server/nb-configuration.xml
-/lumens-server/nbactions.xml
+/dist/
+lumens-server/nb-configuration.xml
+lumens-server\nbactions.xml
 
 /lumens-connector-orcl/target/
 /lumens-connector-ws/target/
