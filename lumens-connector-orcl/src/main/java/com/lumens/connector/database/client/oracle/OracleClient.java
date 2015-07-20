@@ -34,8 +34,9 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                 String[] alterList = sessionAlter.split("\n");
                 for (String alter : alterList) {
                     alter = alter.trim();
-                    if (!alter.isEmpty())
+                    if (!alter.isEmpty()) {
                         stat.execute(alter.trim());
+                    }
                 }
                 DBUtils.commit(conn);
             } catch (SQLException e) {
@@ -47,18 +48,22 @@ public class OracleClient extends AbstractClient implements OracleConstants {
     @Override
     protected Type toType(String dataType) {
         if (CHAR.equalsIgnoreCase(dataType)
-            || CLOB.equalsIgnoreCase(dataType)
-            || dataType.startsWith(VARCHAR2)
-            || dataType.startsWith(NVARCHAR2)) {
+                || CLOB.equalsIgnoreCase(dataType)
+                || LONG.equalsIgnoreCase(dataType)
+                || NCLOB.equalsIgnoreCase(dataType)
+                || dataType.startsWith(VARCHAR2)
+                || dataType.startsWith(NVARCHAR2)) {
             return Type.STRING;
-        } else if (DATE.equalsIgnoreCase(dataType)) {
+        } else if (DATE.equalsIgnoreCase(dataType)
+                || dataType.startsWith(TIMESTAMP)) {  // TODO: support 'TIMESTAMP WITH TIME ZONE' and 'TIMESTAMP WITH LOCAL TIME ZONE'
             return Type.DATE;
-        } else if (BLOB.equalsIgnoreCase(dataType)) {
+        } else if (BLOB.equalsIgnoreCase(dataType)
+                || BFILE.equalsIgnoreCase(dataType)) {  // Added but not support well so far. TODO: support file retrived from disk
             return Type.BINARY;
         } else if (dataType.startsWith(NUMBERIC)) {
             return Type.DOUBLE;
         } else if (dataType.startsWith(NUMBER)) {
-            return Type.INTEGER;
+            return Type.BIGDECIMAL;
         }
         return Type.NONE;
     }
