@@ -25,11 +25,11 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
 
     @Override
     protected Type toType(String dataType) {
-        if (dataType.equalsIgnoreCase(CHAR)
-                || dataType.equalsIgnoreCase(VARCHAR)
+        if (dataType.startsWith(CHAR)
+                || dataType.startsWith(NCHAR)
+                || dataType.startsWith(VARCHAR)
+                || dataType.startsWith(NVARCHAR)
                 || dataType.equalsIgnoreCase(TEXT)
-                || dataType.equalsIgnoreCase(NCHAR)
-                || dataType.equalsIgnoreCase(NVARCHAR)
                 || dataType.equalsIgnoreCase(SQL_VARIANT) // There may be a bug here, as variant could also conver int, binary
                 || dataType.equalsIgnoreCase(UNIQUEIDENTIFIER)
                 || dataType.equalsIgnoreCase(NTEXT)) {
@@ -37,13 +37,13 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
         } else if (dataType.equalsIgnoreCase(DATETIME)
                 || dataType.equalsIgnoreCase(SMALLDATETIME)
                 || dataType.equalsIgnoreCase(DATE)
-                || dataType.equalsIgnoreCase(TIME)
-                || dataType.equalsIgnoreCase(DATATIMEOFFSET)
-                || dataType.equalsIgnoreCase(DATETIME2)) {
+                || dataType.startsWith(TIME)
+                || dataType.startsWith(DATATIMEOFFSET)
+                || dataType.startsWith(DATETIME2)) {
             return Type.DATE;
-        } else if (dataType.equalsIgnoreCase(BINARY)
+        } else if (dataType.startsWith(BINARY)
+                || dataType.startsWith(VARBINARY)
                 || dataType.equalsIgnoreCase(IMAGE)
-                || dataType.equalsIgnoreCase(VARBINARY)
                 || dataType.equalsIgnoreCase(TIMESTAMP)
                 || dataType.equalsIgnoreCase(ROWVERSION)
                 || dataType.equalsIgnoreCase(XML)) {
@@ -51,8 +51,8 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
         } else if (dataType.equalsIgnoreCase(FLOAT)
                 || dataType.equalsIgnoreCase(REAL)) {  // Convert to max in JAVA
             return Type.DOUBLE;
-        } else if (dataType.equalsIgnoreCase(DECIMAL)
-                || dataType.equalsIgnoreCase(NUMERIC)
+        } else if (dataType.startsWith(DECIMAL)
+                || dataType.startsWith(NUMERIC)
                 || dataType.equalsIgnoreCase(SMALLMONEY)
                 || dataType.equalsIgnoreCase(MONEY)) {
             return Type.BIGDECIMAL;
