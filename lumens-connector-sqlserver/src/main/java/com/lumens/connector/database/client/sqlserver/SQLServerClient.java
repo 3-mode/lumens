@@ -42,19 +42,20 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
                 || dataType.equalsIgnoreCase(IMAGE)
                 || dataType.equalsIgnoreCase(VARBINARY)
                 || dataType.equalsIgnoreCase(TIMESTAMP)
-                || dataType.equalsIgnoreCase(ROWVERSION)){
+                || dataType.equalsIgnoreCase(ROWVERSION)) {
             return Type.BINARY;
         } else if (dataType.equalsIgnoreCase(FLOAT)
-                || dataType.equalsIgnoreCase(REAL)) {
+                || dataType.equalsIgnoreCase(REAL)
+                || dataType.equalsIgnoreCase(SMALLMONEY)
+                || dataType.equalsIgnoreCase(MONEY)) {
             return Type.DOUBLE;
-        } else if (dataType.equalsIgnoreCase(BIGINT)
-                || dataType.equalsIgnoreCase(BIT)
+        } else if (dataType.equalsIgnoreCase(BIGINT)) {
+            return Type.LONG;
+        } else if (dataType.equalsIgnoreCase(BIT)
                 || dataType.equalsIgnoreCase(DECIMAL)
                 || dataType.equalsIgnoreCase(INT)
-                || dataType.equalsIgnoreCase(MONEY)
                 || dataType.equalsIgnoreCase(NUMERIC)
                 || dataType.equalsIgnoreCase(SMALLINT)
-                || dataType.equalsIgnoreCase(SMALLMONEY)
                 || dataType.equalsIgnoreCase(TINYINT)) {
             return Type.INTEGER;
         }
