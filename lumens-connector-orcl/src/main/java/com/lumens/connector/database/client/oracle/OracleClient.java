@@ -48,9 +48,6 @@ public class OracleClient extends AbstractClient implements OracleConstants {
     @Override
     protected Type toType(String dataType) {
         if (CHAR.equalsIgnoreCase(dataType)
-                || CLOB.equalsIgnoreCase(dataType)
-                || LONG.equalsIgnoreCase(dataType)
-                || NCLOB.equalsIgnoreCase(dataType) // TODO: support large clob data
                 || CHARACTER.equalsIgnoreCase(dataType)
                 || STRING.equalsIgnoreCase(dataType)
                 || XMLTYPE.equalsIgnoreCase(dataType)
@@ -65,8 +62,11 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                 || dataType.startsWith(TIMESTAMP)) {  // TODO: support 'TIMESTAMP WITH TIME ZONE' and 'TIMESTAMP WITH LOCAL TIME ZONE'
             return Type.DATE;
         } else if (BLOB.equalsIgnoreCase(dataType)
-                || RAW.equalsIgnoreCase(dataType)  // RAW and LONG RAW could be represented string but not automatically convert under locale
-                || LONG_RAW.equalsIgnoreCase(dataType)  
+                || CLOB.equalsIgnoreCase(dataType)
+                || LONG.equalsIgnoreCase(dataType)
+                || NCLOB.equalsIgnoreCase(dataType) // TODO: support large clob data
+                || RAW.equalsIgnoreCase(dataType) // RAW and LONG RAW could be represented string but not automatically convert under locale
+                || LONG_RAW.equalsIgnoreCase(dataType)
                 || BFILE.equalsIgnoreCase(dataType)) {  // Added but not support well so far. TODO: support file retrived from disk
             return Type.BINARY;
         } else if (dataType.startsWith(BINARY_FLOAT)
