@@ -41,6 +41,10 @@ DatasourceCategory, InstrumentCategory, TemplateService, DesignButtons, ProjectB
         $scope.$broadcast("ApplyProperty", {UI: $scope.currentUIComponent});
         $scope.$broadcast("ProjectChanged", true);
     };
+    $scope.onDeleteComponent = function () {
+        var projectOperator = $scope.projectOperator;
+        projectOperator.removeComponent($scope.currentUIComponent);
+    }
 
     // Load data source category
     DatasourceCategory.get(function (data_source_items) {

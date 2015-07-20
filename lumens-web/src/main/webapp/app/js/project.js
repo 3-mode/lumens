@@ -51,6 +51,32 @@ Lumens.ProjectOperator = Class.$extend({
         else
             console.error("Not supported type", component);
     },
+    removeComponent: function (component) {
+        this.componentPanel.removeComponent(component);
+        var project = this.$scope.project;
+        if (component.isDataSource()) {
+            var ds = component.getCompData();
+            var length = project.datasource.length;
+            while (length > 0) {
+                if (project.datasource[--length] === ds)
+                    break;
+            }
+            if (length >= 0)
+                project.datasource.splice(length, 1);
+        }
+        else if (component.isTransformer()) {
+            var ts = component.getCompData();
+            var length = project.transformer.length;
+            while (length > 0) {
+                if (project.transformer[--length] === ts)
+                    break;
+            }
+            if (length >= 0)
+                project.transformer.splice(length, 1);
+        }
+        else
+            console.error("Not supported type", component);
+    },
     sync: function () {
         // Sync data from client before saving the project
         console.log("Sync data from web client before saving the project '" + this.$scope.project.name + "'");
