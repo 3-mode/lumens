@@ -11,6 +11,7 @@ import com.lumens.model.Value;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.math.BigDecimal;
 
 /**
  *
@@ -29,6 +30,8 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
                 || dataType.equalsIgnoreCase(TEXT)
                 || dataType.equalsIgnoreCase(NCHAR)
                 || dataType.equalsIgnoreCase(NVARCHAR)
+                || dataType.equalsIgnoreCase(SQL_VARIANT) // There may be a bug here, as variant could also conver int, binary
+                || dataType.equalsIgnoreCase(UNIQUEIDENTIFIER)
                 || dataType.equalsIgnoreCase(NTEXT)) {
             return Type.STRING;
         } else if (dataType.equalsIgnoreCase(DATETIME)
@@ -42,21 +45,28 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
                 || dataType.equalsIgnoreCase(IMAGE)
                 || dataType.equalsIgnoreCase(VARBINARY)
                 || dataType.equalsIgnoreCase(TIMESTAMP)
-                || dataType.equalsIgnoreCase(ROWVERSION)) {
+                || dataType.equalsIgnoreCase(ROWVERSION)
+                || dataType.equalsIgnoreCase(XML)) {
             return Type.BINARY;
         } else if (dataType.equalsIgnoreCase(FLOAT)
-                || dataType.equalsIgnoreCase(REAL)
+                || dataType.equalsIgnoreCase(REAL)) {  // Convert to max in JAVA
+            return Type.DOUBLE;
+        } else if (dataType.equalsIgnoreCase(DECIMAL)
+                || dataType.equalsIgnoreCase(NUMERIC)
                 || dataType.equalsIgnoreCase(SMALLMONEY)
                 || dataType.equalsIgnoreCase(MONEY)) {
-            return Type.DOUBLE;
+            return Type.BIGDECIMAL;
         } else if (dataType.equalsIgnoreCase(BIGINT)) {
             return Type.LONG;
-        } else if (dataType.equalsIgnoreCase(BIT)
-                || dataType.equalsIgnoreCase(DECIMAL)
-                || dataType.equalsIgnoreCase(INT)
-                || dataType.equalsIgnoreCase(NUMERIC)
+        } else if (dataType.equalsIgnoreCase(BIT)) {
+            return Type.BOOLEAN;
+        } else if (dataType.equalsIgnoreCase(INT)
+                || dataType.equalsIgnoreCase(INT2)
+                || dataType.equalsIgnoreCase(INT2)
+                || dataType.equalsIgnoreCase(INT4)
                 || dataType.equalsIgnoreCase(SMALLINT)
-                || dataType.equalsIgnoreCase(TINYINT)) {
+                || dataType.equalsIgnoreCase(TINYINT)
+                || dataType.equalsIgnoreCase(HIERARCHYID)) {
             return Type.INTEGER;
         }
         return Type.NONE;
