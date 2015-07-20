@@ -73,7 +73,20 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                 || dataType.startsWith(BINARY_DOUBLE)) {
             return Type.DOUBLE;
         } else if (dataType.startsWith(NUMBERIC)
-                || dataType.startsWith(NUMBER)) {
+                || dataType.startsWith(NUMBER)
+                || dataType.startsWith(BINARY_FLOAT)
+                || dataType.startsWith(BINARY_DOUBLE)
+                || dataType.startsWith(BINARY_INTEGER)
+                || dataType.startsWith(NATURAL)
+                || dataType.startsWith(NATURALN)
+                || dataType.startsWith(PLS_INTEGER)
+                || dataType.startsWith(POSITIVE)
+                || dataType.startsWith(POSITIVEN)
+                || dataType.startsWith(SIGNTYPE)
+                || dataType.startsWith(INT)
+                || dataType.startsWith(INTEGER)
+                || dataType.startsWith(DEC)
+                || dataType.startsWith(DECIMAL)) {
             return Type.BIGDECIMAL;
         }
         return Type.NONE;

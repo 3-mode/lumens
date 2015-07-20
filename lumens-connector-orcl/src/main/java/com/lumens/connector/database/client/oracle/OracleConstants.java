@@ -38,8 +38,22 @@ public interface OracleConstants extends DBConstants {
     // Numeric Datatypes
     public String NUMBER = "NUMBER";  // +/- 1 x 10-130 to 9.99...9 x 10125 with up to 38 significant digits
     public String NUMBERIC = "NUMBERIC";
+    
+    // backwards compatible numeric Datatypes, some are not supported in new version of Oracle
     public String BINARY_FLOAT = "BINARY_FLOAT"; // 32-bit, 5 bytes
     public String BINARY_DOUBLE = "BINARY_DOUBLE"; // 64-bit, 9 bytes
+    public String BINARY_INTEGER = "BINARY_INTEGER";
+    public String NATURAL = "NATURAL";
+    public String NATURALN = "NATURALN";
+    public String PLS_INTEGER = "PLS_INTEGER";
+    public String POSITIVE = "POSITIVE";
+    public String POSITIVEN = "POSITIVEN";
+    public String SIGNTYPE = "SIGNTYPE";
+    public String INT = "INT";
+    public String INTEGER = "INTEGER";
+    public String DEC = "DEC";
+    public String DECIMAL = "DECIMAL";
+    
 
     // DATE Datatype
     public String DATE = "DATE";  // Eliminated Centuries and the Year 2000 issue\
