@@ -57,6 +57,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                 || UROWID.equalsIgnoreCase(dataType)
                 || UNIVERSAL_ROWID.equalsIgnoreCase(dataType)
                 || ROWID.equalsIgnoreCase(dataType)
+                || dataType.startsWith(INTERVAL)
                 || dataType.startsWith(VARCHAR2)
                 || dataType.startsWith(NVARCHAR2)) {
             return Type.STRING;

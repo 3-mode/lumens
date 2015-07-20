@@ -22,7 +22,7 @@ public interface OracleConstants extends DBConstants {
     public String NVARCHAR2 = "NVARCHAR2";
     public String CHARACTER = "CHARACTER";
     public String STRING = "STRING";
-    
+
     // XML
     public String XMLTYPE = "XMLType";
 
@@ -49,7 +49,8 @@ public interface OracleConstants extends DBConstants {
     public String TIMESTAMP_WITH_LOCAL_TIME_ZONE = "TIMESTAMP WITH LOCAL TIME ZONE"; // TODO: support TIMESTAMP(x) WITH LOCAL TIME ZONE
     public String INTERVAL = "INTERVAL";  // TODO: support oracle interval
     public String INTERVAL_DAY_TO_SECOND = "INTERVAL DAY TO SECOND";
-    
+    public String INTERVAL_YEAR_TO_SECOND = "INTERVAL YEAR TO SECOND";
+
     // ROWID supported from 8.1 or higher 
     // UROWID Format: OOOOOOFFFBBBBBBRRR 
     // OOOOOO: The data object number that identifies the database segment, Schema objects in the same segment/a cluster of tables
@@ -57,7 +58,7 @@ public interface OracleConstants extends DBConstants {
     // BBBBBB: The data block that contains the row. Block numbers are relative to their datafile, not tablespace. 
     // RRR: The row in the block.
     public String UROWID = "UROWID";   // Oracle 8i, Supports both logical and physical rowids, as well as rowids of foreign tables
-    public String UNIVERSAL_ROWID = "universal rowid";     
+    public String UNIVERSAL_ROWID = "universal rowid";
     // Format: AAAAAAAA.BBBB.CCCC => block,row,file
     // AAAAAAAA: data block that contains the row. Block numbers are relative to their datafile, not tablespace.
     // BBBB: The row in the block that contains the row. Row numbers of a given block always start with 0.
