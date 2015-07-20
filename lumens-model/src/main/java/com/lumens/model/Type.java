@@ -19,6 +19,7 @@ public enum Type {
     DOUBLE("Double"),
     STRING("String"),
     BINARY("Binary"),
+    BIGDECIMAL("BigDecimal"),
     DATE("Date");
     private final String name;
 
