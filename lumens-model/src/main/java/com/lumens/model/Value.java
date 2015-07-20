@@ -5,6 +5,7 @@ package com.lumens.model;
 
 import java.util.Date;
 import org.apache.commons.codec.binary.Base64;
+import java.math.BigDecimal;
 
 /**
  *
@@ -58,6 +59,11 @@ public final class Value {
         this.value = value;
     }
 
+    public Value(BigDecimal value) {
+        this.type = Type.BIGDECIMAL;
+        this.value = value;
+    }
+
     public Value(float value) {
         this.type = Type.FLOAT;
         this.value = value;
@@ -89,15 +95,16 @@ public final class Value {
 
     public void set(Object value) {
         if ((isBoolean() && value instanceof Boolean)
-            || (isByte() && value instanceof Byte)
-            || (isShort() && value instanceof Short)
-            || (isInt() && value instanceof Integer)
-            || (isLong() && value instanceof Long)
-            || (isFloat() && value instanceof Float)
-            || (isDouble() && value instanceof Double)
-            || (isDate() && value instanceof Date)
-            || (isBinary() && value instanceof byte[])
-            || (isString() && value instanceof String)) {
+                || (isByte() && value instanceof Byte)
+                || (isShort() && value instanceof Short)
+                || (isInt() && value instanceof Integer)
+                || (isLong() && value instanceof Long)
+                || (isBigDecimal() && value instanceof BigDecimal)
+                || (isFloat() && value instanceof Float)
+                || (isDouble() && value instanceof Double)
+                || (isDate() && value instanceof Date)
+                || (isBinary() && value instanceof byte[])
+                || (isString() && value instanceof String)) {
             this.value = value;
         } else if (value != null && value instanceof String) {
             this.value = parseString(value.toString());
@@ -141,6 +148,13 @@ public final class Value {
         this.value = value;
     }
 
+    public void set(BigDecimal value) {
+        if (!isBigDecimal()) {
+            throw new IllegalArgumentException("Error, data type is not BigDecimal !");
+        }
+        this.value = value;
+    }
+    
     public void set(float value) {
         if (!isFloat()) {
             throw new IllegalArgumentException("Error, data type is not float !");
@@ -247,6 +261,10 @@ public final class Value {
         return type() == Type.LONG;
     }
 
+    public boolean isBigDecimal() {
+        return type() == Type.BIGDECIMAL;
+    }
+
     public boolean isFloat() {
         return type() == Type.FLOAT;
     }
@@ -282,6 +300,8 @@ public final class Value {
             return Integer.parseInt(value);
         } else if (isLong()) {
             return Long.parseLong(value);
+        } else if (isBigDecimal()) {
+            return new BigDecimal(value);   // Warning: it is nessary to ensure no ',' in string, for instance, value.replaceAll(",", "")
         } else if (isFloat()) {
             return Float.parseFloat(value);
         } else if (isDouble()) {
