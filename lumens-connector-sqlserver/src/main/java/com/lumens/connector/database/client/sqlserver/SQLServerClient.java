@@ -29,44 +29,44 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
                 || dataType.startsWith(NCHAR)
                 || dataType.startsWith(VARCHAR)
                 || dataType.startsWith(NVARCHAR)
-                || dataType.equalsIgnoreCase(TEXT)
-                || dataType.equalsIgnoreCase(SQL_VARIANT) // There may be a bug here, as variant could also conver int, binary
-                || dataType.equalsIgnoreCase(UNIQUEIDENTIFIER)
-                || dataType.equalsIgnoreCase(NTEXT)) {
+                || TEXT.equalsIgnoreCase(dataType)
+                || SQL_VARIANT.equalsIgnoreCase(dataType) // There may be a bug here, as variant could also conver int, binary
+                || UNIQUEIDENTIFIER.equalsIgnoreCase(dataType)
+                || NTEXT.equalsIgnoreCase(dataType)) {
             return Type.STRING;
-        } else if (dataType.equalsIgnoreCase(DATETIME)
-                || dataType.equalsIgnoreCase(SMALLDATETIME)
-                || dataType.equalsIgnoreCase(DATE)
+        } else if (DATETIME.equalsIgnoreCase(dataType)
+                || SMALLDATETIME.equalsIgnoreCase(dataType)
+                || DATE.equalsIgnoreCase(dataType)
                 || dataType.startsWith(TIME)
                 || dataType.startsWith(DATATIMEOFFSET)
                 || dataType.startsWith(DATETIME2)) {
             return Type.DATE;
         } else if (dataType.startsWith(BINARY)
                 || dataType.startsWith(VARBINARY)
-                || dataType.equalsIgnoreCase(IMAGE)
-                || dataType.equalsIgnoreCase(TIMESTAMP)
-                || dataType.equalsIgnoreCase(ROWVERSION)
-                || dataType.equalsIgnoreCase(XML)) {
+                || IMAGE.equalsIgnoreCase(dataType)
+                || TIMESTAMP.equalsIgnoreCase(dataType)
+                || ROWVERSION.equalsIgnoreCase(dataType)
+                || XML.equalsIgnoreCase(dataType)) {
             return Type.BINARY;
-        } else if (dataType.equalsIgnoreCase(FLOAT)
-                || dataType.equalsIgnoreCase(REAL)) {  // Convert to max in JAVA
+        } else if (FLOAT.equalsIgnoreCase(dataType)
+                || REAL.equalsIgnoreCase(dataType)) {  // Convert to max in JAVA
             return Type.DOUBLE;
         } else if (dataType.startsWith(DECIMAL)
                 || dataType.startsWith(NUMERIC)
-                || dataType.equalsIgnoreCase(SMALLMONEY)
-                || dataType.equalsIgnoreCase(MONEY)) {
+                || SMALLMONEY.equalsIgnoreCase(dataType)
+                || MONEY.equalsIgnoreCase(dataType)) {
             return Type.BIGDECIMAL;
-        } else if (dataType.equalsIgnoreCase(BIGINT)) {
+        } else if (BIGINT.equalsIgnoreCase(dataType)) {
             return Type.LONG;
-        } else if (dataType.equalsIgnoreCase(BIT)) {
+        } else if (BIT.equalsIgnoreCase(dataType)) {
             return Type.BOOLEAN;
-        } else if (dataType.equalsIgnoreCase(INT)
-                || dataType.equalsIgnoreCase(INT2)
-                || dataType.equalsIgnoreCase(INT2)
-                || dataType.equalsIgnoreCase(INT4)
-                || dataType.equalsIgnoreCase(SMALLINT)
-                || dataType.equalsIgnoreCase(TINYINT)
-                || dataType.equalsIgnoreCase(HIERARCHYID)) {
+        } else if (INT.equalsIgnoreCase(dataType)
+                || INT2.equalsIgnoreCase(dataType)
+                || INT2.equalsIgnoreCase(dataType)
+                || INT4.equalsIgnoreCase(dataType)
+                || SMALLINT.equalsIgnoreCase(dataType)
+                || TINYINT.equalsIgnoreCase(dataType)
+                || HIERARCHYID.equalsIgnoreCase(dataType)) {
             return Type.INTEGER;
         }
         return Type.NONE;
