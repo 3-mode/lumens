@@ -70,9 +70,8 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                 || BFILE.equalsIgnoreCase(dataType)) {  // Added but not support well so far. TODO: support file retrived from disk
             return Type.BINARY;
         } else if (dataType.startsWith(BINARY_FLOAT)
-                || dataType.startsWith(BINARY_DOUBLE)) {
-            return Type.DOUBLE;
-        } else if (dataType.startsWith(NUMBERIC)
+                || dataType.startsWith(BINARY_DOUBLE)
+                || dataType.startsWith(NUMBERIC)
                 || dataType.startsWith(NUMBER)
                 || dataType.startsWith(BINARY_FLOAT)
                 || dataType.startsWith(BINARY_DOUBLE)
@@ -87,7 +86,7 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                 || dataType.startsWith(INTEGER)
                 || dataType.startsWith(DEC)
                 || dataType.startsWith(DECIMAL)) {
-            return Type.BIGDECIMAL;
+            return Type.DOUBLE;
         }
         return Type.NONE;
     }

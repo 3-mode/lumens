@@ -49,13 +49,12 @@ public class SQLServerClient extends AbstractClient implements SQLServerConstant
                 || XML.equalsIgnoreCase(dataType)) {
             return Type.BINARY;
         } else if (FLOAT.equalsIgnoreCase(dataType)
-                || REAL.equalsIgnoreCase(dataType)) {  // Convert to max in JAVA
-            return Type.DOUBLE;
-        } else if (dataType.startsWith(DECIMAL)
+                || REAL.equalsIgnoreCase(dataType) // Convert to max in JAVA
+                || dataType.startsWith(DECIMAL)
                 || dataType.startsWith(NUMERIC)
                 || SMALLMONEY.equalsIgnoreCase(dataType)
                 || MONEY.equalsIgnoreCase(dataType)) {
-            return Type.BIGDECIMAL;
+            return Type.DOUBLE;
         } else if (BIGINT.equalsIgnoreCase(dataType)) {
             return Type.LONG;
         } else if (BIT.equalsIgnoreCase(dataType)) {
