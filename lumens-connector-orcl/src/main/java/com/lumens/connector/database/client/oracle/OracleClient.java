@@ -69,24 +69,31 @@ public class OracleClient extends AbstractClient implements OracleConstants {
                 || LONG_RAW.equalsIgnoreCase(dataType)
                 || BFILE.equalsIgnoreCase(dataType)) {  // Added but not support well so far. TODO: support file retrived from disk
             return Type.BINARY;
-        } else if (dataType.startsWith(BINARY_FLOAT)
-                || dataType.startsWith(BINARY_DOUBLE)
-                || dataType.startsWith(NUMBERIC)
-                || dataType.startsWith(NUMBER)
-                || dataType.startsWith(BINARY_FLOAT)
-                || dataType.startsWith(BINARY_DOUBLE)
-                || dataType.startsWith(BINARY_INTEGER)
-                || dataType.startsWith(NATURAL)
-                || dataType.startsWith(NATURALN)
-                || dataType.startsWith(PLS_INTEGER)
-                || dataType.startsWith(POSITIVE)
-                || dataType.startsWith(POSITIVEN)
-                || dataType.startsWith(SIGNTYPE)
-                || dataType.startsWith(INT)
-                || dataType.startsWith(INTEGER)
-                || dataType.startsWith(DEC)
-                || dataType.startsWith(DECIMAL)) {
+        } else if (dataType.startsWith(NUMBERIC)
+                || dataType.startsWith(NUMBER)) {
+            if (!dataType.contains("(") && !dataType.contains(",0)")) {
+                return Type.INTEGER;
+            }
             return Type.DOUBLE;
+        } else if (BINARY_FLOAT.equalsIgnoreCase(dataType)
+                || BINARY_DOUBLE.equalsIgnoreCase(dataType)
+                || FLOAT.equalsIgnoreCase(dataType)
+                || REAL.equalsIgnoreCase(dataType)
+                || BINARY_DOUBLE.equalsIgnoreCase(dataType)
+                || SMALLINT.equalsIgnoreCase(dataType)
+                || INT.equalsIgnoreCase(dataType)
+                || DOUBLE_PRECISION.equalsIgnoreCase(dataType)
+                || INTEGER.equalsIgnoreCase(dataType)
+                || DEC.equalsIgnoreCase(dataType)
+                || DECIMAL.equalsIgnoreCase(dataType)) {
+            return Type.DOUBLE;
+        } else if (BINARY_INTEGER.equalsIgnoreCase(dataType)
+                || SIGNTYPE.equalsIgnoreCase(dataType)
+                || PLS_INTEGER.equalsIgnoreCase(dataType)
+                || NATURALN.equalsIgnoreCase(dataType)
+                || POSITIVE.equalsIgnoreCase(dataType)
+                || NATURAL.equalsIgnoreCase(dataType)) {
+            return Type.INTEGER;
         }
         return Type.NONE;
     }

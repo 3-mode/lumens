@@ -42,17 +42,21 @@ public interface OracleConstants extends DBConstants {
     // backwards compatible numeric Datatypes, some are not supported in new version of Oracle
     public String BINARY_FLOAT = "BINARY_FLOAT"; // 32-bit, 5 bytes
     public String BINARY_DOUBLE = "BINARY_DOUBLE"; // 64-bit, 9 bytes
-    public String BINARY_INTEGER = "BINARY_INTEGER";
-    public String NATURAL = "NATURAL";
-    public String NATURALN = "NATURALN";
-    public String PLS_INTEGER = "PLS_INTEGER";
-    public String POSITIVE = "POSITIVE";
-    public String POSITIVEN = "POSITIVEN";
-    public String SIGNTYPE = "SIGNTYPE";
-    public String INT = "INT";
-    public String INTEGER = "INTEGER";
-    public String DEC = "DEC";
-    public String DECIMAL = "DECIMAL";
+    public String BINARY_INTEGER = "BINARY_INTEGER";  // 32bit
+    public String NATURAL = "NATURAL";  // 32bit
+    public String NATURALN = "NATURALN";  // // 32bit
+    public String PLS_INTEGER = "PLS_INTEGER";  // 32 bit
+    public String POSITIVE = "POSITIVE";  // 32bit
+    public String POSITIVEN = "POSITIVEN";  // 32bit
+    public String SIGNTYPE = "SIGNTYPE";  // -1, 0, +1
+    public String INT = "INT";  // 38bit
+    public String INTEGER = "INTEGER";  // 38 bit
+    public String DEC = "DEC";  // 38bit
+    public String DECIMAL = "DECIMAL"; // 38bit
+    public String SMALLINT = "SMALLINT";  //38bit
+    public String DOUBLE_PRECISION = "DOUBLE PRECISION";  // 126 bit
+    public String FLOAT = "FLOAT";  // 126bit
+    public String REAL = "REAL"; // 63 bit
     
 
     // DATE Datatype
